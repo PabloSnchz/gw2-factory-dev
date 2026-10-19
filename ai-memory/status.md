@@ -1,24 +1,24 @@
 # STATUS
 
-Estado: IDLE
+Estado: BLOQUEADO (esperando decisiones de Pablo)
 
 Fase actual:
-- F0 — Fundación (memoria fundacional completada; pendiente de decisiones de Pablo)
+- F0 — Fundación
 
 Feature actual:
-- Ninguna
+- Preparación del entorno DEV (propuestas, sin cambios de código)
 
 Etapa actual:
-- DOCUMENTATION completada (inicialización de ai-memory)
+- DOCUMENTATION completada — propuestas DEC-005, DEC-006, DEC-007 registradas
 
 Última actualización:
-- 2026-10-19 — Inicialización de la memoria fundacional (DEC-001..004, LES-001..008, FEAT-000, roadmap). Codificación de ai-memory corregida a UTF-8.
+- 2026-10-19 — Relevamiento de gw2-agents-dashboard y del uso de GA4. Propuestas de publicación de DEV, desacople de GA y adaptación del dashboard. Nuevos riesgos: origen compartido (BL-011), main de producción sin protección (BL-010), datos del dashboard sin actualizar desde 2026-10-09 (BL-012).
 
 Bloqueos:
-- BL-001: rol futuro de gw2-wallet-agents y fuente del dashboard (decisión de Pablo).
-- BL-002: workflow GA4 en DEV (decisión de Pablo).
-- BL-003: publicación de DEV en GitHub Pages (decisión de Pablo).
+- BL-001 / DEC-007: fuente del dashboard y rol de gw2-wallet-agents.
+- BL-002 / DEC-006: telemetría en DEV.
+- BL-003 / DEC-005: hosting de DEV (opción A, B o C).
 
 Próxima acción:
-- Esperar decisiones de Pablo sobre BL-001, BL-002 y BL-003.
-- Sin bloqueo: BL-004 (sincronizar documentación de producto con el código real).
+- Pablo: decidir DEC-005, DEC-006, DEC-007 y revisar BL-010.
+- Factory (tras aprobación): implementar DEC-006 en DEV → publicar DEV según DEC-005 → perfil de fuente en el dashboard (DEC-007).

@@ -12,6 +12,9 @@ Planificación: [roadmap.md](roadmap.md).
 - [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) — Estructura, IDs (DEC/LES/FEAT/BL), formato y codificación UTF-8 de ai-memory.
 - [DEC-003](decisions/DEC-003-docs-vs-ai-memory.md) — `docs/` documenta el producto; `ai-memory/` es la memoria de la Factory. Se enlazan, no se duplican.
 - [DEC-004](decisions/DEC-004-invariantes-de-arquitectura.md) — Invariantes técnicas: CSS 3 capas, router-first, `gn:tokenchange`, Storage API, IIFE + `window.*`.
+- [DEC-005](decisions/DEC-005-entorno-dev-publicado.md) — PROPUESTA: publicar DEV con origen propio (Vercel) para no compartir `localStorage` con PROD.
+- [DEC-006](decisions/DEC-006-desacople-google-analytics.md) — PROPUESTA: GA solo en el host de producción (allowlist en runtime) + guard de repo en el workflow GA4.
+- [DEC-007](decisions/DEC-007-dashboard-fuente-factory.md) — PROPUESTA: perfil de fuente `legacy`/`factory` en el dashboard; FEAT-001 extiende la pestaña "Salud" existente.
 
 ## LESSONS
 
@@ -23,6 +26,7 @@ Planificación: [roadmap.md](roadmap.md).
 - [LES-006](lessons/LES-006-no-forzar-features-sin-datos.md) — Si la API no provee los datos, no insistir: descartar o buscar alternativa.
 - [LES-007](lessons/LES-007-cambios-quirurgicos.md) — Cambios quirúrgicos; no reescribir archivos completos.
 - [LES-008](lessons/LES-008-ai-memory-en-utf8.md) — ai-memory debe guardarse en UTF-8 (status.md original era ilegible).
+- [LES-009](lessons/LES-009-relevar-antes-de-proponer.md) — Relevar el código real del destino antes de proponer una funcionalidad.
 
 ## FEATURES
 

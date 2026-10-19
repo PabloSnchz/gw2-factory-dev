@@ -10,16 +10,22 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-006] [MEDIO] Validación automática mínima en PRs: `node --check` sobre `js/*.js` y chequeo de UTF-8 + archivos obligatorios en `ai-memory/`. · LES-008
 - [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity: `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000
 - [BL-008] [BAJO] Varios commits heredados usan el email placeholder "TU EMAIL DE LA CUENTA PRINCIPAL"; configurar `git user.email` en los entornos de agentes.
-- [BL-009] [MEDIO] FEAT-001 — Vista "Salud del Ecosistema" en gw2-agents-dashboard (estado general, problemas críticos, riesgos, últimas decisiones). Requiere BL-001. · roadmap F1
+- [BL-013] [BAJO] `js/analytics.js` empieza con BOM (U+FEFF); `js/activities.js` usa como fallback de PSNA una URL raw de `gw2-wallet-ligero/main`. · DEC-005
+- [BL-014] [BAJO] Dashboard: `getFeaturesUrl()` duplicado en `js/config.js`; README desactualizado (dice 7 archivos monitoreados). · DEC-007
 
 ## IN_PROGRESS
 
 ## BLOCKED
 
-- [BL-001] [ALTO] Definir el rol futuro de `gw2-wallet-agents` y reapuntar `gw2-agents-dashboard` (hoy lee los .md de gw2-wallet-agents). · DEC-001 — Bloqueado: decisión de Pablo.
-- [BL-002] [MEDIO] `.github/workflows/github-metrics-to-ga4.yml` corre a diario (00:00 UTC) también en DEV: falla si faltan los secrets o mezcla métricas de DEV con las de producción. · DEC-001 — Bloqueado: decisión de Pablo.
-- [BL-003] [MEDIO] Publicar DEV en GitHub Pages para evaluación humana. Riesgo asociado: `index.html` usa el GA4 de producción (`G-LB782QT9TR`), por lo que las visitas a DEV contaminarían métricas. · DEC-001 — Bloqueado: decisión de Pablo.
+- [BL-001] [ALTO] Definir el rol futuro de `gw2-wallet-agents` y la fuente por defecto de `gw2-agents-dashboard`. · DEC-001, DEC-007 — Bloqueado: decisión de Pablo.
+- [BL-002] [MEDIO] Desacoplar GA4 por entorno (frontend con allowlist de host + guard de repo en `github-metrics-to-ga4.yml`). · DEC-006 — Bloqueado: decisión de Pablo.
+- [BL-003] [MEDIO] Publicar DEV con origen propio (propuesta: Vercel). · DEC-005 — Bloqueado: decisión de Pablo; depende de BL-002.
+- [BL-009] [MEDIO] FEAT-001 — Extender la pestaña "Salud" existente del dashboard con un bloque "Factory" (estado general, problemas críticos, riesgos, últimas decisiones) leído de ai-memory. · DEC-007, LES-009 — Depende de BL-001.
+- [BL-010] [ALTO] `main` de `gw2-wallet-ligero` (producción) figura sin protección de rama (`protected: false` en `data/git.json` del dashboard, 2026-10-09). Recomendación: activar branch protection. · Acción exclusiva de Pablo.
+- [BL-011] [ALTO] DEV en GitHub Pages compartiría origen `pablosnchz.github.io` con PROD ⇒ mismo `localStorage` (API keys, cuentas, settings). Hoy ya ocurre con `gw2-wallet-agents` publicado. · DEC-005 — Se resuelve con la opción de hosting.
+- [BL-012] [MEDIO] Datos del dashboard sin actualizar desde 2026-10-09 09:29 UTC (`salud.json`, `git.json`): los generadores locales `_eco\*.py` no están corriendo. · DEC-007 — Confirmar con Pablo si siguen vigentes.
 
 ## DONE
 
 - [BL-000] [ALTO] Inicializar la memoria fundacional de la Factory (estructura, roadmap, DEC-001..004, LES-001..008, FEAT-000, corrección de codificación). — 2026-10-19
+- [BL-015] [MEDIO] Proponer estrategias de entorno DEV: publicación (DEC-005), GA (DEC-006), dashboard (DEC-007). — 2026-10-19
