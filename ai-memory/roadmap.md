@@ -25,3 +25,4 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 - 2026-10-20 — Pablo decide DEC-005 (Vercel), DEC-006 (DEV sin Analytics) y BL-001 (repos históricos a LEGACY, activos como benchmark): F0 deja de estar bloqueada por decisiones. MC-2 publica el Gato Design System 1.0 (DEC-010).
 - 2026-10-20 — MC-3: intercambio de decisiones (DEC-011). Lo que la Factory necesita de Pablo pasa a ser un pedido en requests/ con respuesta en responses/; primeros pedidos REQ-001 y REQ-002.
 - 2026-10-20 — MC-4: Pablo responde desde el panel con un botón (DEC-012). Se cierra el ciclo Factory trabaja → panel propone → Pablo responde → Factory continúa sin crear archivos a mano.
+- 2026-10-20 — MC-5: el panel pasa a ser un Centro de decisiones sobre el Gato Design System (DEC-013). Lo que necesita a Pablo va primero, con lenguaje sin códigos internos y los errores del canal visibles. Queda MC-6 (revisión y cierre de FACTORY-001B).
