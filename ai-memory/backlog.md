@@ -13,7 +13,6 @@ Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC
 
 ## IN_PROGRESS
 
-- [BL-035] [ALTO] Discovery Engine — FACTORY-RESEARCH-001: `discovery.md`, `discovery-archive.md`, límites de carga, promoción y gobierno del backlog; límites verificados en CI. · DEC-015, DEC-016, DEC-017
 
 ## BLOCKED
 
@@ -49,3 +48,4 @@ Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC
 - [BL-010] [ALTO] Rechazado por Pablo: proteger `main` de producción — RESP-002 ("de momento no lo veo necesario"). El riesgo queda aceptado y se vuelve a conversar el 2026-11-20 (RSK-001). · REQ-001, RSK-001 — 2026-10-20
 - [BL-023] [MEDIO] Devuelto a discovery: ubicación canónica del Gato Design System — consideración futura, no tarea ejecutable; sigue como DISC-007 en `discovery.md`. · DEC-010, DEC-017 — 2026-10-20
 - [BL-025] [BAJO] Devuelto a discovery: verificación medida `dev_sin_pages` — postergada sin fecha desde MC-5; sigue como DISC-008 en `discovery.md`. · DEC-011, DEC-017 — 2026-10-20
+- [BL-035] [ALTO] Discovery Engine (FACTORY-RESEARCH-001) — `discovery.md` y `discovery-archive.md`, límites verificados en CI (READY ≤ 5, abiertas ≤ 15; 13 tests, 8/8 mutaciones), backlog dentro del límite (READY 8 → 4), ronda inicial con 2 promovidas (BL-013, BL-034). Informe en `missions/FACTORY-RESEARCH-001-informe.md`. · DEC-015, DEC-016, DEC-017, LES-020, LES-021 — 2026-10-20
