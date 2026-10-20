@@ -20,7 +20,6 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 
 ## BLOCKED
 
-- [BL-030] [ALTO] Modo operativo después de FACTORY-001B — la Factory propone autonomía continua acotada en DEV (DEC-014). No se inicia ninguna misión nueva hasta que Pablo responda REQ-003. · DEC-014, REQ-003 — Bloqueado: decisión de Pablo.
 - [BL-003] [ALTO] Publicar DEV en Vercel — decidido por Pablo (DEC-005 opción B, 2026-10-20). Presentado como pedido REQ-002: falta que Pablo cree el proyecto en su cuenta de Vercel y apague GitHub Pages en gw2-factory-dev. · DEC-005, RSK-002, REQ-002 — Bloqueado: acción de Pablo.
 - [BL-011] [ALTO] Origen compartido DEV/PROD — ocurre hoy (GitHub Pages activo en gw2-factory-dev). Se cierra cuando BL-003 esté hecho y Pages apagado en DEV. Mientras tanto: usar DEV solo en incógnito. · RSK-002, DEC-005, REQ-002 — Depende de BL-003.
 - [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado: validación de Pablo.
@@ -44,3 +43,4 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-029] [ALTO] Panel migrado al Gato Design System — Hoy ordenado por decisión, lenguaje sin códigos internos, foco y anuncios accesibles, `css/app.css` solo con tokens, GDS 1.0.1; 72 tests y 16 mutaciones; gw2-factory-dashboard @ `9c8726b`. · DEC-013, LES-017 — 2026-10-20
 - [BL-024] [MEDIO] Documentación del panel consolidada — README, `docs/ARCHITECTURE.md`, `docs/DATA-CONTRACT.md` v3 y CHANGELOG 2.0.0 en gw2-factory-dashboard @ `cfdd1fa`. · DEC-011, DEC-013 — 2026-10-20
 - [BL-020] [ALTO] FACTORY-001B cerrada — Gato Design System 1.0.1 y Centro de Decisiones 2.0.0 en 6 micro-ciclos; revisión final de accesibilidad y textos (74 tests, 20 mutaciones); informe en `missions/FACTORY-001B-informe-final.md`. · DEC-010, DEC-011, DEC-012, DEC-013, LES-018 — 2026-10-20
+- [BL-030] [ALTO] Modo operativo después de FACTORY-001B — Pablo aprobó la opción B, autonomía continua acotada (RESP-001). Se activa cuando Pablo lo indique, después de la validación final. · DEC-014, REQ-003 — 2026-10-20
