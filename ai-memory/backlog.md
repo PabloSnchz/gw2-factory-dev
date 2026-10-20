@@ -6,7 +6,6 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 ## READY
 
 - [BL-002] [ALTO] DEV sin Analytics — cargar GA4 solo en el host de producción (allowlist en runtime) + guard de repo en `github-metrics-to-ga4.yml`. Decidido por Pablo (DEC-006, 2026-10-20). Cambio de código de la app: se ejecuta con ciclo completo después de FACTORY-001B (Dashboard First). · DEC-006, RSK-003
-- [BL-024] [MEDIO] Consolidar la documentación del panel con el contrato v3 y el Centro de decisiones — `docs/DATA-CONTRACT.md`, `docs/ARCHITECTURE.md`, README y CHANGELOG de gw2-factory-dashboard todavía no mencionan pedidos/respuestas ni el GDS aplicado, y dicen "5 llamadas" (hoy son 6). Se hace en MC-6. · DEC-011, DEC-013
 - [BL-025] [BAJO] Verificación medida `dev_sin_pages` — permitiría cerrar REQ-002 sin respuesta; requiere 1 llamada más a la API por lectura (metadatos del repo DEV). Evaluado en MC-5 y postergado: el canal ya sumó 1 llamada (6 por carga) y REQ-002 se puede responder con un botón. · DEC-011, REQ-002
 - [BL-023] [MEDIO] Consideración futura: ubicación canónica del Gato Design System — hoy vive en gw2-factory-dashboard/gds; cuando gw2-factory-dev lo adopte hay que decidir una única fuente (repo o paquete propio, o vendorizado con versión) para evitar que diverjan. Pedido por Pablo el 2026-10-20: registrar, no resolver todavía. · DEC-010
 - [BL-004] [MEDIO] Sincronizar documentación de producto con el código real — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen v6.6.2 (ej. `api-gw2.js` v2.15.0) pero `index.html` carga `api-gw2.js?v=2.33.0`; la Armería Legendaria no figura en `CHANGELOG.md`. · LES-003, DEC-003
@@ -19,13 +18,12 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 
 ## IN_PROGRESS
 
-- [BL-020] [ALTO] FACTORY-001B — Gato Design System y Centro de Decisiones; MC-1 a MC-5 hechos (2026-10-20); siguiente MC-6 (revisión y cierre) tras validación de Pablo. · LES-012, DEC-010, DEC-011, DEC-012, DEC-013
-
 ## BLOCKED
 
+- [BL-030] [ALTO] Modo operativo después de FACTORY-001B — la Factory propone autonomía continua acotada en DEV (DEC-014). No se inicia ninguna misión nueva hasta que Pablo responda REQ-003. · DEC-014, REQ-003 — Bloqueado: decisión de Pablo.
 - [BL-003] [ALTO] Publicar DEV en Vercel — decidido por Pablo (DEC-005 opción B, 2026-10-20). Presentado como pedido REQ-002: falta que Pablo cree el proyecto en su cuenta de Vercel y apague GitHub Pages en gw2-factory-dev. · DEC-005, RSK-002, REQ-002 — Bloqueado: acción de Pablo.
 - [BL-011] [ALTO] Origen compartido DEV/PROD — ocurre hoy (GitHub Pages activo en gw2-factory-dev). Se cierra cuando BL-003 esté hecho y Pages apagado en DEV. Mientras tanto: usar DEV solo en incógnito. · RSK-002, DEC-005, REQ-002 — Depende de BL-003.
-- [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación — GitHub Pages ya está activo en gw2-factory-dashboard (medido 2026-10-20); falta que Pablo valide el criterio de 60 segundos, idealmente sobre la versión con GDS (BL-020). · FEAT-001, DEC-008 — Bloqueado: validación de Pablo.
+- [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado: validación de Pablo.
 - [BL-010] [ALTO] Proteger `main` de producción — `gw2-wallet-ligero` sin branch protection (medido en vivo por el dashboard). Presentado como pedido REQ-001; se cierra solo cuando el panel mida la protección. · RSK-001, REQ-001 — Acción exclusiva de Pablo.
 
 ## DONE
@@ -44,3 +42,5 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-021] [ALTO] Centro de Decisiones — contrato v3 (MC-3), respuesta con un botón (MC-4) e interfaz de decisión con GDS (MC-5). La cola ya no esconde un pendiente propio dentro de otro ítem que lo cita. · DEC-011, DEC-012, DEC-013, FEAT-001 — 2026-10-20
 - [BL-028] [BAJO] Respuestas sin registrar visibles en el panel — "Registrando" o "no se pudo registrar" con enlace, en Hoy, en la tarjeta del pedido y en Salud (1 llamada más a la API). · DEC-013, RSK-014 — 2026-10-20
 - [BL-029] [ALTO] Panel migrado al Gato Design System — Hoy ordenado por decisión, lenguaje sin códigos internos, foco y anuncios accesibles, `css/app.css` solo con tokens, GDS 1.0.1; 72 tests y 16 mutaciones; gw2-factory-dashboard @ `9c8726b`. · DEC-013, LES-017 — 2026-10-20
+- [BL-024] [MEDIO] Documentación del panel consolidada — README, `docs/ARCHITECTURE.md`, `docs/DATA-CONTRACT.md` v3 y CHANGELOG 2.0.0 en gw2-factory-dashboard @ `cfdd1fa`. · DEC-011, DEC-013 — 2026-10-20
+- [BL-020] [ALTO] FACTORY-001B cerrada — Gato Design System 1.0.1 y Centro de Decisiones 2.0.0 en 6 micro-ciclos; revisión final de accesibilidad y textos (74 tests, 20 mutaciones); informe en `missions/FACTORY-001B-informe-final.md`. · DEC-010, DEC-011, DEC-012, DEC-013, LES-018 — 2026-10-20
