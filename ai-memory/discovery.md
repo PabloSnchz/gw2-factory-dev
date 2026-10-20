@@ -11,7 +11,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Fecha, Última revisión
 
 - Abiertas: 6 de 15 (operación normal)
 - READY: 4 de 5 (modo restringido: solo oportunidades ALTA)
-- Rondas autónomas: en espera de REQ-004
+- Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004); hoy en modo restringido
 
 ## Rondas
 
@@ -37,7 +37,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Fecha, Última revisión
 
 - Estado: ANALIZADO
 - Fecha: 2026-10-20
-- Última revisión: 2026-10-20
+- Última revisión: 2026-10-20 (DEV en Vercel, RESP-003)
 - Fuente:
   - la propia app la promete ("Próximas funciones: Historial y variación");
   - herramientas: Blish HUD Farming Tracker (67,2 mil descargas) y CurrencyViewer (37,2 mil), que siguen cambios de divisas;
@@ -48,7 +48,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Fecha, Última revisión
 - Alternativa: Blish HUD (requiere instalar un overlay) y gw2efficiency (en inglés, con cuenta)
 - Prioridad: MEDIA
 - Costo: M
-- Requiere decisión: guardar instantáneas cambia los datos del usuario en `localStorage` (DEC-014). Mientras DEV comparta origen con producción (RSK-002), no se implementa. Se promueve como pedido cuando DEV esté en Vercel (BL-003).
+- Requiere decisión: guardar instantáneas cambia los datos del usuario en `localStorage` (DEC-014). Ya no hay origen compartido con producción (BL-003 hecho), así que se puede plantear como pedido de producto cuando haya lugar en READY.
 
 ## DISC-005 — Avance hacia cada legendaria con lo que ya tenés
 
@@ -80,7 +80,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Fecha, Última revisión
 - Alternativa: escribir `Estado: IDLE` al cerrar cada sesión (se aplica desde hoy) y aceptar el aviso crítico
 - Prioridad: MEDIA (infraestructura; Producto > Dashboard)
 - Costo: S
-- Nota: es la tarea de panel propuesta en la conversación del 2026-10-20, que no llegó a registrarse en el backlog. Fusiona también el aviso de riesgo aceptado.
+- Nota: es la tarea de panel propuesta en la conversación del 2026-10-20, que no llegó a registrarse en el backlog. Avance: el panel 2.1.0 (DEC-018) ya separa decisiones de validaciones y muestra el riesgo aceptado como información. Falta el resumen de la última sesión.
 
 ## DISC-007 — Ubicación canónica del Gato Design System
 
