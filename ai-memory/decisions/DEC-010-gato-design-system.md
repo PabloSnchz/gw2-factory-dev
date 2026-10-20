@@ -4,6 +4,7 @@
 - Fecha: 2026-10-20
 - Ámbito: Sistema visual del ecosistema (dashboard primero, webapp después)
 - Misión: FACTORY-001B (MC-2)
+- Aplicada en: Dashboard Factory desde MC-5 (DEC-013, 2026-10-20). Versión vigente 1.0.1 (PATCH: botones y métricas usados como enlace conservan su color).
 - Especificación: `gw2-factory-dashboard/gds/GDS_FOUNDATION.md`
 
 ## Contexto
