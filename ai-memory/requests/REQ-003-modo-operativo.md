@@ -1,10 +1,11 @@
 # REQ-003 — ¿Cómo querés que trabaje la Factory a partir de ahora?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-20
 - Prioridad: ALTO
 - Relacionado: DEC-014, BL-030
+- Cerrado: 2026-10-20 · RESP-001
 
 ## Qué pasó
 
