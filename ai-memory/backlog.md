@@ -13,6 +13,7 @@ Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC
 
 ## IN_PROGRESS
 
+- [BL-036] [ALTO] Soberanía de decisiones en el panel — FACTORY-DASHBOARD-REFINEMENT-001: "Necesita tu decisión" muestra 6 ítems y solo 1 es un pedido de decisión. Clasificar lo pendiente en decisión, acción, validación e información; exigir contexto, impacto, recomendación y justificación a cada decisión; la Factory resuelve lo técnico. · FEAT-001, DEC-011, DEC-013, DEC-014
 
 ## BLOCKED
 
