@@ -6,7 +6,7 @@ Motivo: El dashboard histórico observa agentes que ya no existen y su dato medi
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION completada
 Inicio: 2026-10-20T00:10Z
-Última actualización: 2026-10-20T00:25Z
+Última actualización: 2026-10-20T00:38Z
 Próxima acción: Pablo habilita GitHub Pages en gw2-factory-dashboard (Settings → Pages → Deploy from branch → main / root) y valida el panel (BL-016).
 
 ## Esperando a Pablo
