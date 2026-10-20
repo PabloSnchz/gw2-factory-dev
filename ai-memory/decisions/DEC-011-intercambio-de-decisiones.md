@@ -33,4 +33,4 @@ Hasta ahora la Factory pedía decisiones a Pablo por tres vías mezcladas: DEC e
 - El panel muestra los pedidos primero en "Necesita tu decisión" y reporta en Salud: pedido sin respuesta > 7 días, respuesta sin procesar > 48 h, respuesta procesada con pedido abierto, respuestas huérfanas o fuera de formato, DEC PROPUESTA sin pedido.
 - Cero llamadas extra a la API de GitHub.
 - Nuevos IDs: REQ-XXX (pedidos) y RESP-XXX (respuestas). No se registran en memory-index.md: su índice es la carpeta y el panel.
-- Primeros pedidos: REQ-001 (proteger producción, verificado por medición) y REQ-002 (DEV en Vercel y apagar GitHub Pages en DEV).
+- Primeros pedidos: REQ-001 (proteger producción, verificado por medición) y REQ-002 (DEV en Vercel y apagar Pages en DEV).
