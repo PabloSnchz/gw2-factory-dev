@@ -2,19 +2,18 @@
 
 Formato: `- [ID] [PRIORIDAD] Título — contexto · referencia` (ver DEC-009)
 Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
+Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC-017). Las ideas viven en [discovery.md](discovery.md).
 
 ## READY
 
-- [BL-025] [BAJO] Verificación medida `dev_sin_pages` — permitiría cerrar REQ-002 sin respuesta; requiere 1 llamada más a la API por lectura (metadatos del repo DEV). Evaluado en MC-5 y postergado: el canal ya sumó 1 llamada (6 por carga) y REQ-002 se puede responder con un botón. · DEC-011, REQ-002
-- [BL-023] [MEDIO] Consideración futura: ubicación canónica del Gato Design System — hoy vive en gw2-factory-dashboard/gds; cuando gw2-factory-dev lo adopte hay que decidir una única fuente (repo o paquete propio, o vendorizado con versión) para evitar que diverjan. Pedido por Pablo el 2026-10-20: registrar, no resolver todavía. · DEC-010
+- [BL-013] [ALTO] PSNA del día equivocado — el panel Actividades muestra, todos los días, los puntos de ruta del 2026-03-17 como si fueran de hoy: `assets/data/psna-schedule.json` cubre solo una semana de marzo y `js/activities.js` usa el primer día cuando no encuentra la fecha. Además, en cualquier sitio publicado lee el archivo del repo de producción. Hacer: calcular el día con la rotación de 7 días, con cambio a las 08:00 UTC; mostrar "sin datos" en lugar de un día equivocado; leer primero el archivo propio; corregir los códigos contra la wiki; agregar tests. Antes de publicar, confirmar qué conjunto corresponde a cada día de la semana. Ya hecho: BOM de `js/analytics.js` (`a3eea2d`). · DEC-015, RSK-018
+- [BL-034] [ALTO] Metas de Janthir Wilds y Visions of Eternity — `assets/meta-events.json` no tiene metas de Janthir Wilds, tiene una sola de Visions of Eternity y etiqueta "Convergencia: Monte Balrior" como SotO. El filtro de expansión de `index.html` no ofrece las dos expansiones nuevas. Hacer: completar las metas con horarios verificados en la wiki, corregir la etiqueta, agregar las opciones al filtro y tests de datos. · DEC-015, RSK-018
 - [BL-004] [MEDIO] Sincronizar documentación de producto con el código real — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen v6.6.2 (ej. `api-gw2.js` v2.15.0) pero `index.html` carga `api-gw2.js?v=2.33.0`; la Armería Legendaria no figura en `CHANGELOG.md`. · LES-003, DEC-003
-- [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). · FEAT-000
-- [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000
-- [BL-008] [BAJO] Email placeholder en commits heredados — varios usan "TU EMAIL DE LA CUENTA PRINCIPAL"; configurar `git user.email` en los entornos de agentes.
-- [BL-017] [BAJO] Ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` (mismo contenido que `main` @ b9599d2) y `factory/bl-002-dev-sin-analytics` (mismo contenido que lo publicado en `main` para BL-002; no se pudo abrir PR). La Factory no tiene herramienta para borrar ramas.
-- [BL-013] [BAJO] Detalles heredados en la app — queda el fallback de PSNA a una URL raw de `gw2-wallet-ligero/main` en `js/activities.js` (cambia comportamiento: analizar antes). El BOM de `js/analytics.js` se quitó el 2026-10-20 (`a3eea2d`). · DEC-005
+- [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). El archivo tiene guardas contra doble aplicación, así que el efecto es menor: duplica observadores y listeners. · FEAT-000
 
 ## IN_PROGRESS
+
+- [BL-035] [ALTO] Discovery Engine — FACTORY-RESEARCH-001: `discovery.md`, `discovery-archive.md`, límites de carga, promoción y gobierno del backlog; límites verificados en CI. · DEC-015, DEC-016, DEC-017
 
 ## BLOCKED
 
@@ -22,7 +21,9 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-003] [ALTO] Publicar DEV en Vercel — decidido por Pablo (DEC-005 opción B, 2026-10-20). Presentado como pedido REQ-002: falta que Pablo cree el proyecto en su cuenta de Vercel y apague GitHub Pages en gw2-factory-dev. · DEC-005, RSK-002, REQ-002 — Bloqueado: acción de Pablo.
 - [BL-011] [ALTO] Origen compartido DEV/PROD — ocurre hoy (GitHub Pages activo en gw2-factory-dev). Se cierra cuando BL-003 esté hecho y Pages apagado en DEV. Mientras tanto: usar DEV solo en incógnito. · RSK-002, DEC-005, REQ-002 — Depende de BL-003.
 - [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado: validación de Pablo.
-- [BL-010] [ALTO] Proteger `main` de producción — `gw2-wallet-ligero` sin branch protection (medido en vivo por el dashboard). Presentado como pedido REQ-001; se cierra solo cuando el panel mida la protección. · RSK-001, REQ-001 — Acción exclusiva de Pablo.
+- [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000, DEC-017 — Bloqueado: las CDN responden 403 desde el entorno de la Factory (probado 2026-10-20) y un hash sin verificar rompería la carga de `crypto-js`.
+- [BL-008] [BAJO] Email placeholder en commits heredados — varios usan "TU EMAIL DE LA CUENTA PRINCIPAL"; se corrige configurando `git user.email` en cada entorno que hace commits. · DEC-017 — Bloqueado: fuera del alcance de la Factory.
+- [BL-017] [BAJO] Ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` (mismo contenido que `main` @ b9599d2) y `factory/bl-002-dev-sin-analytics` (mismo contenido que lo publicado en `main` para BL-002; no se pudo abrir PR). · DEC-017 — Bloqueado: la Factory no tiene herramienta para borrar ramas.
 
 ## DONE
 
@@ -45,3 +46,6 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-030] [ALTO] Modo operativo después de FACTORY-001B — Pablo aprobó la opción B, autonomía continua acotada (RESP-001). Se activa cuando Pablo lo indique, después de la validación final. · DEC-014, REQ-003 — 2026-10-20
 - [BL-002] [ALTO] DEV sin Analytics — GA4 solo en el host de producción, métricas GA4 solo en el repo de producción, 5 tests y workflow `app-checks`; 8/8 mutaciones detectadas. gw2-factory-dev `6d2f63e`…`2399afc`. · DEC-006, FEAT-002, RSK-003 — 2026-10-20
 - [BL-006] [MEDIO] Validación automática de `ai-memory/` en CI — `tests/ai-memory.test.cjs` en `app-checks`: archivos obligatorios, UTF-8 sin BOM, enlaces del índice y claves de status; 4 tests, 5/5 mutaciones detectadas; gw2-factory-dev `3f63d54`. El `node --check` de `js/*.js` pasa a BL-031. · LES-008, RSK-006 — 2026-10-20
+- [BL-010] [ALTO] Rechazado por Pablo: proteger `main` de producción — RESP-002 ("de momento no lo veo necesario"). El riesgo queda aceptado y se vuelve a conversar el 2026-11-20 (RSK-001). · REQ-001, RSK-001 — 2026-10-20
+- [BL-023] [MEDIO] Devuelto a discovery: ubicación canónica del Gato Design System — consideración futura, no tarea ejecutable; sigue como DISC-007 en `discovery.md`. · DEC-010, DEC-017 — 2026-10-20
+- [BL-025] [BAJO] Devuelto a discovery: verificación medida `dev_sin_pages` — postergada sin fecha desde MC-5; sigue como DISC-008 en `discovery.md`. · DEC-011, DEC-017 — 2026-10-20
