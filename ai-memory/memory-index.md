@@ -21,6 +21,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-009](decisions/DEC-009-contrato-de-datos-ai-memory.md) — Contrato de datos v2 de ai-memory: status.md por claves, risks.md, formatos de backlog y entradas.
 - [DEC-010](decisions/DEC-010-gato-design-system.md) — Gato Design System 1.0: tokens en 3 niveles, paleta La Bóveda ajustada a AA, componentes y reglas verificadas en CI.
 - [DEC-011](decisions/DEC-011-intercambio-de-decisiones.md) — Contrato v3: la Factory pide en requests/, Pablo responde en responses/, la Factory procesa al iniciar cada sesión.
+- [DEC-012](decisions/DEC-012-canal-de-respuesta.md) — Pablo responde desde el panel: botón → issue prellenado → workflow escribe el RESP, comenta y cierra. Sin tokens en el navegador.
 
 ## LESSONS
 
@@ -39,6 +40,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-013](lessons/LES-013-contraste-se-calcula.md) — El contraste se calcula para cada par real, incluidos los fondos translúcidos; la paleta propuesta falló AA en 7 usos.
 - [LES-014](lessons/LES-014-base-publicada-verificada.md) — Trabajar sobre la versión publicada verificada por SHA; los borradores locales no son base.
 - [LES-015](lessons/LES-015-commit-atomico.md) — Un cambio y sus tests van en el mismo commit; armar la lista de archivos comparando SHA.
+- [LES-016](lessons/LES-016-probar-canal-por-el-error.md) — Un canal que actúa en nombre de Pablo se prueba en real por el camino de error; nunca con un pedido real.
 
 ## FEATURES
 

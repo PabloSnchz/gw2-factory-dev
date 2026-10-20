@@ -9,6 +9,7 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-024] [MEDIO] Consolidar la documentación del panel con el contrato v3 — `docs/DATA-CONTRACT.md`, `docs/ARCHITECTURE.md`, README y CHANGELOG de gw2-factory-dashboard todavía no mencionan pedidos/respuestas (hoy viven en `docs/DECISIONS.md`). Se hace en MC-6. · DEC-011
 - [BL-025] [BAJO] Verificación medida `dev_sin_pages` — permitiría cerrar REQ-002 sin respuesta; requiere 1 llamada más a la API por lectura (metadatos del repo DEV). Evaluar en MC-5 junto con la vista de entornos. · DEC-011, REQ-002
 - [BL-023] [MEDIO] Consideración futura: ubicación canónica del Gato Design System — hoy vive en gw2-factory-dashboard/gds; cuando gw2-factory-dev lo adopte hay que decidir una única fuente (repo o paquete propio, o vendorizado con versión) para evitar que diverjan. Pedido por Pablo el 2026-10-20: registrar, no resolver todavía. · DEC-010
+- [BL-028] [BAJO] Mostrar en el panel los issues de respuesta abiertos — si el workflow `decision-response` rechaza una respuesta, hoy solo se ve en el issue. Mostrar "Tu respuesta tiene un problema" con el enlace (1 llamada más a la API: issues abiertos con la marca). Evaluar en MC-5. · DEC-012, RSK-014
 - [BL-004] [MEDIO] Sincronizar documentación de producto con el código real — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen v6.6.2 (ej. `api-gw2.js` v2.15.0) pero `index.html` carga `api-gw2.js?v=2.33.0`; la Armería Legendaria no figura en `CHANGELOG.md`. · LES-003, DEC-003
 - [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). · FEAT-000
 - [BL-006] [MEDIO] Validación automática mínima en PRs de gw2-factory-dev — `node --check` sobre `js/*.js` y chequeo de UTF-8 + archivos obligatorios en `ai-memory/`. · LES-008
@@ -19,8 +20,8 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 
 ## IN_PROGRESS
 
-- [BL-020] [ALTO] FACTORY-001B — Gato Design System y Centro de Decisiones; MC-1, MC-2 y MC-3 hechos (2026-10-20); siguiente MC-4 tras validación de Pablo. · LES-012, DEC-010, DEC-011, BL-021
-- [BL-021] [ALTO] Centro de Decisiones — MC-3 hecho: contrato v3 (pedidos y respuestas), ciclo de vida, protocolo, panel lee y prioriza pedidos. Falta: responder desde el panel (MC-4) e interfaz con GDS (MC-5). Hallazgo para MC-5: la cola heredada (v2) agrupa una línea de "Esperando a Pablo" dentro de otro ítem que la cita (hoy BL-020 queda dentro de BL-016). · DEC-011, FEAT-001
+- [BL-020] [ALTO] FACTORY-001B — Gato Design System y Centro de Decisiones; MC-1 a MC-4 hechos (2026-10-20); siguiente MC-5 tras validación de Pablo. · LES-012, DEC-010, DEC-011, DEC-012, BL-021
+- [BL-021] [ALTO] Centro de Decisiones — MC-3 y MC-4 hechos: contrato v3 (pedidos y respuestas) y respuesta desde el panel con un botón (DEC-012). Falta: interfaz con GDS (MC-5). Hallazgo para MC-5: la cola heredada (v2) agrupa una línea de "Esperando a Pablo" dentro de otro ítem que la cita (hoy BL-020 queda dentro de BL-016). · DEC-011, FEAT-001
 
 ## BLOCKED
 
@@ -41,3 +42,4 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-001] [ALTO] Futuro de `gw2-wallet-agents` y `gw2-agents-dashboard` — decidido por Pablo: pasan a LEGACY y se mantienen activos como benchmark histórico. La Factory no los modifica ni los usa como fuente. · DEC-001, DEC-008, RSK-008 — 2026-10-20
 - [BL-022] [ALTO] GDS 1.0.0 fundamentos — tokens en 3 niveles, 23 componentes, íconos, contraste calculado (57 pares AA), GDS_FOUNDATION.md y 12 tests en gw2-factory-dashboard/gds. · DEC-010, LES-013 — 2026-10-20
 - [BL-026] [ALTO] Intercambio de decisiones (contrato v3) — js/decisions.js, integración en modelo y cola, 13 tests, docs/DECISIONS.md en gw2-factory-dashboard; requests/ y responses/ en ai-memory con REQ-001 y REQ-002. · DEC-011, LES-014, LES-015 — 2026-10-20
+- [BL-027] [ALTO] Responder desde el panel — botones por pedido (js/respond.js, "Ya respondiste") en gw2-factory-dashboard `0775d5d`; workflow `decision-response` + script + 9 tests en gw2-factory-dev `cf5a533`; textos dorados espejo en ambos repos; 8/8 mutaciones detectadas; prueba real del camino de error (issue #1). · DEC-012, LES-016 — 2026-10-20

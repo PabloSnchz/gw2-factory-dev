@@ -4,6 +4,7 @@
 - Fecha: 2026-10-20
 - Ámbito: Memoria oficial y Dashboard Factory
 - Amplía: DEC-009
+- Ampliada por: DEC-012 (canal de respuesta desde el panel, 2026-10-20)
 - Misión: FACTORY-001B (MC-3)
 - Especificación: `gw2-factory-dashboard/docs/DECISIONS.md`
 
@@ -19,7 +20,7 @@ Hasta ahora la Factory pedía decisiones a Pablo por tres vías mezcladas: DEC e
 4. **Verificaciones medidas**: una acción que el panel puede comprobar (hoy: `prod_protegida`) se da por hecha sin que Pablo responda.
 5. **Protocolo de la Factory** (obligatorio al iniciar cada sesión, después de status/backlog/índice): procesar las respuestas PENDIENTE en orden de fecha, aplicar su efecto, marcarlas PROCESADA con `## Efecto`, cerrar el pedido (`Estado: CERRADA`, `- Cerrado: fecha · RESP-XXX`) salvo POSTPONED, y cerrar los pedidos verificados por medición.
 6. **Regla v3**: toda DEC en estado PROPUESTA debe estar cubierta por un pedido no cerrado. Las líneas de "Esperando a Pablo" en status.md siguen permitidas, pero lo que necesita una respuesta va como pedido.
-7. **Canal**: mientras no exista el canal desde el panel (MC-4), Pablo responde creando el archivo desde GitHub con la plantilla de `responses/README.md`. El formato es el mismo que generará el canal (`buildResponseMarkdown`), así el protocolo no cambia.
+7. **Canal**: mientras no exista el canal desde el panel (MC-4), Pablo responde creando el archivo desde GitHub con la plantilla de `responses/README.md`. El formato es el mismo que generará el canal (`buildResponseMarkdown`), así el protocolo no cambia. Actualización 2026-10-20: el canal existe (DEC-012); el archivo manual queda como alternativa.
 
 ## Alternativas descartadas
 
@@ -32,4 +33,4 @@ Hasta ahora la Factory pedía decisiones a Pablo por tres vías mezcladas: DEC e
 - El panel muestra los pedidos primero en "Necesita tu decisión" y reporta en Salud: pedido sin respuesta > 7 días, respuesta sin procesar > 48 h, respuesta procesada con pedido abierto, respuestas huérfanas o fuera de formato, DEC PROPUESTA sin pedido.
 - Cero llamadas extra a la API de GitHub.
 - Nuevos IDs: REQ-XXX (pedidos) y RESP-XXX (respuestas). No se registran en memory-index.md: su índice es la carpeta y el panel.
-- Primeros pedidos: REQ-001 (proteger producción, verificado por medición) y REQ-002 (DEV en Vercel y apagar Pages en DEV).
+- Primeros pedidos: REQ-001 (proteger producción, verificado por medición) y REQ-002 (DEV en Vercel y apagar GitHub Pages en DEV).

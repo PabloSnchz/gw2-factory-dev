@@ -24,3 +24,4 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 - 2026-10-20 — Misión FACTORY-001B (GDS y Centro de Decisiones) registrada tras una interrupción de plataforma (LES-012); se ejecuta en 6 micro-ciclos (ver status.md). Medido: Pages activo en DEV y en el panel.
 - 2026-10-20 — Pablo decide DEC-005 (Vercel), DEC-006 (DEV sin Analytics) y BL-001 (repos históricos a LEGACY, activos como benchmark): F0 deja de estar bloqueada por decisiones. MC-2 publica el Gato Design System 1.0 (DEC-010).
 - 2026-10-20 — MC-3: intercambio de decisiones (DEC-011). Lo que la Factory necesita de Pablo pasa a ser un pedido en requests/ con respuesta en responses/; primeros pedidos REQ-001 y REQ-002.
+- 2026-10-20 — MC-4: Pablo responde desde el panel con un botón (DEC-012). Se cierra el ciclo Factory trabaja → panel propone → Pablo responde → Factory continúa sin crear archivos a mano.

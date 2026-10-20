@@ -5,7 +5,8 @@
 - Repositorio: https://github.com/PabloSnchz/gw2-factory-dashboard
 - URL: https://pablosnchz.github.io/gw2-factory-dashboard/ (GitHub Pages activo, medido 2026-10-20)
 - Evolución: FACTORY-001B (BL-020, BL-021) — Gato Design System y Centro de Decisiones
-- Decisiones: DEC-008, DEC-009
+- Decisiones: DEC-008, DEC-009, DEC-010, DEC-011, DEC-012
+- Responder desde el panel (MC-4, 2026-10-20): cada pedido abierto tiene botones (Aprobar / Rechazar / Posponer 7 días / Ya lo hice) que abren un issue prellenado; el workflow `decision-response` de gw2-factory-dev escribe la respuesta en `ai-memory/responses/`. Después aparece en "Ya respondiste" (DEC-012).
 
 ## Qué resuelve
 
