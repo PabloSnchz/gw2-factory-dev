@@ -53,6 +53,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-019](lessons/LES-019-ci-no-observable.md) — Sin PR ni lectura de CI, todo se verifica en local antes de publicar; no publicar chequeos que solo CI puede correr.
 - [LES-020](lessons/LES-020-ideas-mas-rapidas-que-cierres.md) — Un backlog crece sin control cuando generar ideas cuesta menos que cerrarlas; cada idea necesita salida y límites verificables por máquina.
 - [LES-021](lessons/LES-021-datos-estaticos-envejecen.md) — Los datos estáticos del producto envejecen sin dar error; discovery empieza comparando el repo con fuentes vivas.
+- [LES-022](lessons/LES-022-borrador-recuperado-se-revisa.md) — Un borrador que sobrevive a una interrupción se revisa antes de usarlo; si el panel endurece una regla, primero se publica la memoria que ya la cumple.
 
 ## FEATURES
 
