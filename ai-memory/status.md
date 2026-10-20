@@ -1,30 +1,29 @@
 # STATUS
 
-Estado: ESPERANDO_VALIDACIÓN
-Tarea actual: BL-020 — FACTORY-001B cerrada · esperando la validación final de Pablo
-Motivo: Pablo aprobó FACTORY-001B funcionalmente y eligió desde el panel la opción B, autonomía continua acotada (RESP-001, issue #2). La Factory procesó la respuesta: DEC-014 está aceptada, REQ-003 cerrada y BL-030 hecho. Fue la primera decisión real del canal y quedó verificado el ciclo completo (informe, sección 8). Por instrucción de Pablo no se inicia trabajo autónomo, ninguna misión nueva ni FACTORY-LIVE-001.
-Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION (completada)
-Inicio: 2026-10-20T05:31Z
-Última actualización: 2026-10-20T05:37Z
-Próxima acción: Esperar la validación final de Pablo y su instrucción explícita para activar la autonomía (DEC-014). Al activarse, la primera tarea es BL-002 (DEV sin Analytics).
+Estado: EN_CURSO
+Tarea actual: BL-002 — FACTORY-LIVE-001 · L1: DEV sin Analytics (GA4 solo en el host de producción + guard de repo en el workflow GA4)
+Motivo: Pablo validó FACTORY-001B el 2026-10-20 y activó la autonomía continua acotada (DEC-014). Primera misión autónoma: tomar la tarea de mayor valor del backlog que no requiera decisión humana. BL-002 es la de mayor prioridad en READY, ya decidida (DEC-006), y corta un daño activo: las visitas de DEV llegan al GA4 de producción (RSK-003).
+Fase: F0 — Fundación
+Etapa actual: ARCHITECTURE
+Inicio: 2026-10-20T05:45Z
+Última actualización: 2026-10-20T05:45Z
+Próxima acción: Implementar el cargador de GA condicionado al host en `index.html`, el guard de repo en `github-metrics-to-ga4.yml` y un test que lo verifique; registrar FEAT-002.
 
-## Plan de micro-ciclos (FACTORY-001B) — CERRADO
+## Plan de micro-ciclos (FACTORY-LIVE-001)
 
-- MC-1 — Registrar arranque, riesgos y lecciones (gw2-factory-dev). HECHO 2026-10-20.
-- MC-2 — GDS: tokens, componentes, GDS_FOUNDATION.md, contraste calculado, test de reglas; DEC-010 (dashboard + dev). HECHO 2026-10-20.
-- MC-3 — Intercambio de decisiones: contrato v3 (requests/ y responses/), ciclo de vida, protocolo de la Factory; DEC-011 (dev + dashboard). HECHO 2026-10-20.
-- MC-4 — Responder desde el panel: Aprobar / Rechazar / Posponer / Hecho persisten en responses/ sin crear archivos a mano; DEC-012 (dashboard `0775d5d` + dev `cf5a533`). HECHO 2026-10-20.
-- MC-5 — Interfaz con GDS: centro de decisión, jerarquía, lenguaje, cola sin agrupaciones confusas, errores del canal visibles; DEC-013 (dashboard `9c8726b`). HECHO 2026-10-20.
-- MC-6 — Revisión WCAG AA y de textos, documentación del panel consolidada (BL-024), CHANGELOG 2.0.0, informe final, modo operativo (DEC-014, aceptada por RESP-001), verificación del ciclo completo; LES-018 (dashboard `cfdd1fa`). HECHO 2026-10-20.
+Modo: autonomía continua acotada (DEC-014). Los ciclos se encadenan sin aprobación; la Factory se detiene ante una decisión humana, un riesgo CRÍTICO, producción, una dependencia externa, un cambio arquitectónico mayor o un bloqueo operativo.
+
+- L1 — BL-002 DEV sin Analytics: cargador de GA por host, guard de repo en el workflow GA4, test y workflow de CI de la app. EN CURSO.
+- L2 — BL-006 Validación automática en gw2-factory-dev: `node --check` de `js/*.js`, UTF-8 y archivos obligatorios de `ai-memory/`.
+- L3 — Limpiezas sin cambio de comportamiento: BL-005 (script incluido dos veces) y BOM de `js/analytics.js` (parte de BL-013).
+- L4 — Cierre de la misión: informe, memoria y estado.
 
 ## Esperando a Pablo
 
-- [BL-020] Validación final de FACTORY-001B (informe en `missions/FACTORY-001B-informe-final.md`).
 - [BL-016] Mirar el panel en un navegador real, también en el celular (RSK-015 sigue abierto hasta entonces).
 - [REQ-002] Publicar la versión de prueba en Vercel y apagar GitHub Pages en DEV (se responde desde el panel).
 - [REQ-001] Proteger la rama principal de producción (el panel lo detecta solo cuando esté hecho).
 
 ## Bloqueos
 
-- Ninguno técnico. La autonomía (DEC-014) está aprobada y en espera de la instrucción de Pablo.
+- Ninguno.
