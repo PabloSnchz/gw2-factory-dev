@@ -1,20 +1,19 @@
 # STATUS
 
 Estado: EN_CURSO
-Tarea actual: FACTORY-GOVERNANCE-002 — GV-1: registrar la gobernanza aprobada (REQ-005) en memoria y CI
-Motivo: Pablo aprobó REQ-005 en la conversación con un cambio: la ronda forzada de discovery es a los 14 días sin investigar, no a los 7. Se registra su respuesta (RESP-005), las decisiones y lecciones aprobadas, la reclasificación de pendientes y los chequeos en CI. Después, trabajo de producto: BL-013.
+Tarea actual: FACTORY-GOVERNANCE-003 — propuesta de límites para el tamaño de un micro-ciclo. GV-1 en pausa por pedido de Pablo
+Motivo: GV-1 se planificó como un solo micro-ciclo de 14 archivos y 7 objetivos, y una interrupción lo cortó con 6 publicados. Pablo pidió frenarlo y definir límites operativos antes de seguir.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
-Inicio: 2026-10-20T18:27Z
-Última actualización: 2026-10-20T18:30Z
-Próxima acción: GV-1 — RESP-005 y REQ-005; DEC-019, DEC-020, LES-023, LES-024; reclasificar pendientes y bloqueos con dueño; campo Área en discovery; tests de CI (clase obligatoria, justificación, máximo 3 decisiones abiertas). Cierra BL-036.
+Etapa actual: ARCHITECTURE
+Inicio: 2026-10-20T23:25Z
+Última actualización: 2026-10-20T23:30Z
+Próxima acción: Publicar la propuesta en `missions/FACTORY-GOVERNANCE-003-propuesta.md` y el pedido de decisión. Después esperar la respuesta de Pablo antes de retomar GV-1.
 
-## Plan de micro-ciclos (FACTORY-GOVERNANCE-002)
+## Estado de GV-1 (reconstruido desde el repositorio)
 
-- GV-1 — Memoria y CI de la gobernanza aprobada. Cierra BL-036 (absorbe su SD-3). EN CURSO.
-- BL-013 — PSNA del día equivocado (producto primero).
-- GV-2 — Panel: bloqueos por dueño, "Para mirar", avisos que vencen, "La Factory decidió…".
-- GV-3 — Vista "Ideas" de solo lectura, con análisis y promoción explícitos.
+- Publicado (6 de 14): este checkpoint anterior, DEC-019, DEC-020, LES-023, LES-024 y memory-index.md, verificados por SHA.
+- Sin publicar (8): RESP-005, cierre de REQ-005, ampliación de DEC-018, FEAT-002, backlog.md, discovery.md, la propuesta aprobada de FACTORY-GOVERNANCE-001 y `tests/ai-memory.test.cjs`. Las copias locales están completas y verificadas (17 tests, 15/15 mutaciones).
+- Efecto visible mientras tanto: REQ-005 sigue abierta en el panel aunque Pablo ya la aprobó, y LES-023 y DEC-019 citan RESP-005, que todavía no existe. CI no se ve afectado: el test publicado es el anterior.
 
 ## Esperando a Pablo
 
