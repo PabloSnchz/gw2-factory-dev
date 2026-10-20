@@ -8,6 +8,9 @@ on:
 
 jobs:
   send-metrics:
+    # Solo producción envía métricas (DEC-006). En otros repos (DEV) el job se omite
+    # y el archivo sigue siendo idéntico entre repos, así se puede promover sin editarlo.
+    if: github.repository == 'PabloSnchz/gw2-wallet-ligero'
     runs-on: ubuntu-latest
     permissions:
       contents: read
