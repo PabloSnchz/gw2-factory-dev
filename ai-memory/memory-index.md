@@ -6,6 +6,7 @@ Convenciones: ver [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) y contr
 Lectura obligatoria antes de cualquier trabajo: `status.md` → `backlog.md` → `memory-index.md` → respuestas de Pablo pendientes en `responses/` (procesarlas primero, DEC-011).
 Pedidos a Pablo: [requests/](requests/). Respuestas de Pablo: [responses/](responses/README.md).
 Planificación: [roadmap.md](roadmap.md). Riesgos: [risks.md](risks.md). Informes de misión: [missions/](missions/FACTORY-001B-informe-final.md).
+Oportunidades: [discovery.md](discovery.md) (abiertas) y [discovery-archive.md](discovery-archive.md) (historial). Reglas en DEC-015, DEC-016 y DEC-017.
 Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 
 ## DECISIONS
@@ -23,7 +24,10 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-011](decisions/DEC-011-intercambio-de-decisiones.md) — Contrato v3: la Factory pide en requests/, Pablo responde en responses/, la Factory procesa al iniciar cada sesión.
 - [DEC-012](decisions/DEC-012-canal-de-respuesta.md) — Pablo responde desde el panel: botón → issue prellenado → workflow escribe el RESP, comenta y cierra. Sin tokens en el navegador.
 - [DEC-013](decisions/DEC-013-centro-de-decisiones-gds.md) — El panel es un Centro de decisiones sobre el GDS: lo que necesita a Pablo primero, IDs como referencia, errores del canal visibles.
-- [DEC-014](decisions/DEC-014-autonomia-continua.md) — ACEPTADA (2026-10-20, RESP-001): autonomía continua acotada en DEV; pregunta por producción, alcance, dependencias, arquitectura y datos del usuario. Se activa cuando Pablo lo indique.
+- [DEC-014](decisions/DEC-014-autonomia-continua.md) — ACEPTADA (2026-10-20, RESP-001): autonomía continua acotada en DEV; pregunta por producción, alcance, dependencias, arquitectura y datos del usuario. Activada por Pablo el 2026-10-20.
+- [DEC-015](decisions/DEC-015-discovery-engine.md) — Discovery Engine: la Factory descubre oportunidades en rondas acotadas, sin un agente nuevo; fuentes clasificadas, la de producto primero.
+- [DEC-016](decisions/DEC-016-limites-y-promocion.md) — Límites: READY ≤ 5, oportunidades abiertas ≤ 15 (verificados en CI); prioridad ALTA/MEDIA/BAJA; promoción, archivo a 30 días y descarte con motivo.
+- [DEC-017](decisions/DEC-017-gobierno-del-backlog.md) — READY contiene solo trabajo ejecutable; ideas y postergados vuelven a discovery; rechazos y devoluciones quedan en DONE con prefijo.
 
 ## LESSONS
 
@@ -46,6 +50,8 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-017](lessons/LES-017-publicacion-grande-por-dependencias.md) — Una publicación que no entra en un commit se parte por dependencias, de modo que cada commit deje el sitio funcionando.
 - [LES-018](lessons/LES-018-escrituras-en-serie.md) — Las escrituras a una misma rama van en serie; paralelizar solo lecturas.
 - [LES-019](lessons/LES-019-ci-no-observable.md) — Sin PR ni lectura de CI, todo se verifica en local antes de publicar; no publicar chequeos que solo CI puede correr.
+- [LES-020](lessons/LES-020-ideas-mas-rapidas-que-cierres.md) — Un backlog crece sin control cuando generar ideas cuesta menos que cerrarlas; cada idea necesita salida y límites verificables por máquina.
+- [LES-021](lessons/LES-021-datos-estaticos-envejecen.md) — Los datos estáticos del producto envejecen sin dar error; discovery empieza comparando el repo con fuentes vivas.
 
 ## FEATURES
 
