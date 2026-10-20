@@ -1,21 +1,21 @@
 # STATUS
 
 Estado: EN_CURSO
-Tarea actual: BL-002 — FACTORY-LIVE-001 · L1: DEV sin Analytics (GA4 solo en el host de producción + guard de repo en el workflow GA4)
-Motivo: Pablo validó FACTORY-001B el 2026-10-20 y activó la autonomía continua acotada (DEC-014). Primera misión autónoma: tomar la tarea de mayor valor del backlog que no requiera decisión humana. BL-002 es la de mayor prioridad en READY, ya decidida (DEC-006), y corta un daño activo: las visitas de DEV llegan al GA4 de producción (RSK-003).
-Fase: F0 — Fundación
-Etapa actual: ARCHITECTURE
+Tarea actual: BL-013 — FACTORY-LIVE-001 · L3: quitar el BOM de `js/analytics.js`
+Motivo: L2 terminó: la memoria oficial ya está protegida en CI (`tests/ai-memory.test.cjs`, BL-006 hecho; el `node --check` pasa a BL-031). L3 es una limpieza sin cambio de comportamiento: el BOM al inicio de `js/analytics.js` es un resto heredado que ninguna otra pieza del código usa.
+Fase: F2 — Calidad
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-20T05:45Z
-Última actualización: 2026-10-20T05:45Z
-Próxima acción: Implementar el cargador de GA condicionado al host en `index.html`, el guard de repo en `github-metrics-to-ga4.yml` y un test que lo verifique; registrar FEAT-002.
+Última actualización: 2026-10-20T06:00Z
+Próxima acción: Publicar `js/analytics.js` sin BOM (SHA esperado `d34f9b0`, `node --check` OK) y pasar a L4: cierre de la misión con informe.
 
 ## Plan de micro-ciclos (FACTORY-LIVE-001)
 
 Modo: autonomía continua acotada (DEC-014). Los ciclos se encadenan sin aprobación; la Factory se detiene ante una decisión humana, un riesgo CRÍTICO, producción, una dependencia externa, un cambio arquitectónico mayor o un bloqueo operativo.
 
-- L1 — BL-002 DEV sin Analytics: cargador de GA por host, guard de repo en el workflow GA4, test y workflow de CI de la app. EN CURSO.
-- L2 — BL-006 Validación automática en gw2-factory-dev: `node --check` de `js/*.js`, UTF-8 y archivos obligatorios de `ai-memory/`.
-- L3 — Limpiezas sin cambio de comportamiento: BL-005 (script incluido dos veces) y BOM de `js/analytics.js` (parte de BL-013).
+- L1 — BL-002 DEV sin Analytics: cargador de GA por host, guard de repo en el workflow GA4, 5 tests y workflow `app-checks` (FEAT-002, gw2-factory-dev `6d2f63e`…`2399afc`). HECHO 2026-10-20.
+- L2 — BL-006 Validación de `ai-memory/` en CI: 4 tests, 5/5 mutaciones (gw2-factory-dev `3f63d54`). El `node --check` de `js/*.js` pasa a BL-031 (RSK-016, LES-019). HECHO 2026-10-20.
+- L3 — BL-013 parcial: quitar el BOM de `js/analytics.js` (sin cambio de comportamiento). EN CURSO.
 - L4 — Cierre de la misión: informe, memoria y estado.
 
 ## Esperando a Pablo
@@ -26,4 +26,4 @@ Modo: autonomía continua acotada (DEC-014). Los ciclos se encadenan sin aprobac
 
 ## Bloqueos
 
-- Ninguno.
+- Ninguno que detenga la misión. Limitación operativa: sin PR ni lectura de CI (RSK-016).
