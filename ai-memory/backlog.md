@@ -9,18 +9,16 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-023] [MEDIO] Consideración futura: ubicación canónica del Gato Design System — hoy vive en gw2-factory-dashboard/gds; cuando gw2-factory-dev lo adopte hay que decidir una única fuente (repo o paquete propio, o vendorizado con versión) para evitar que diverjan. Pedido por Pablo el 2026-10-20: registrar, no resolver todavía. · DEC-010
 - [BL-004] [MEDIO] Sincronizar documentación de producto con el código real — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen v6.6.2 (ej. `api-gw2.js` v2.15.0) pero `index.html` carga `api-gw2.js?v=2.33.0`; la Armería Legendaria no figura en `CHANGELOG.md`. · LES-003, DEC-003
 - [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). · FEAT-000
-- [BL-006] [MEDIO] Validación automática mínima en PRs de gw2-factory-dev — `node --check` sobre `js/*.js` y chequeo de UTF-8 + archivos obligatorios en `ai-memory/`. · LES-008
 - [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000
 - [BL-008] [BAJO] Email placeholder en commits heredados — varios usan "TU EMAIL DE LA CUENTA PRINCIPAL"; configurar `git user.email` en los entornos de agentes.
-- [BL-013] [BAJO] Detalles heredados en la app — `js/analytics.js` empieza con BOM (U+FEFF); `js/activities.js` usa como fallback de PSNA una URL raw de `gw2-wallet-ligero/main`. · DEC-005
-- [BL-017] [BAJO] Rama duplicada `chore/init-ai-memory` en gw2-factory-dev — mismo contenido que `main` @ b9599d2; la Factory no tiene herramienta para borrar ramas.
+- [BL-017] [BAJO] Ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` (mismo contenido que `main` @ b9599d2) y `factory/bl-002-dev-sin-analytics` (mismo contenido que lo publicado en `main` para BL-002; no se pudo abrir PR). La Factory no tiene herramienta para borrar ramas.
+- [BL-013] [BAJO] Detalles heredados en la app — queda el fallback de PSNA a una URL raw de `gw2-wallet-ligero/main` en `js/activities.js` (cambia comportamiento: analizar antes). El BOM de `js/analytics.js` se quitó el 2026-10-20 (`a3eea2d`). · DEC-005
 
 ## IN_PROGRESS
 
-- [BL-002] [ALTO] DEV sin Analytics — cargar GA4 solo en el host de producción (allowlist en runtime) + guard de repo en `github-metrics-to-ga4.yml`. Decidido por Pablo (DEC-006, 2026-10-20). FACTORY-LIVE-001, ciclo L1. · DEC-006, RSK-003
-
 ## BLOCKED
 
+- [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado: lectura de CI o PR.
 - [BL-003] [ALTO] Publicar DEV en Vercel — decidido por Pablo (DEC-005 opción B, 2026-10-20). Presentado como pedido REQ-002: falta que Pablo cree el proyecto en su cuenta de Vercel y apague GitHub Pages en gw2-factory-dev. · DEC-005, RSK-002, REQ-002 — Bloqueado: acción de Pablo.
 - [BL-011] [ALTO] Origen compartido DEV/PROD — ocurre hoy (GitHub Pages activo en gw2-factory-dev). Se cierra cuando BL-003 esté hecho y Pages apagado en DEV. Mientras tanto: usar DEV solo en incógnito. · RSK-002, DEC-005, REQ-002 — Depende de BL-003.
 - [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado: validación de Pablo.
@@ -45,3 +43,5 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-024] [MEDIO] Documentación del panel consolidada — README, `docs/ARCHITECTURE.md`, `docs/DATA-CONTRACT.md` v3 y CHANGELOG 2.0.0 en gw2-factory-dashboard @ `cfdd1fa`. · DEC-011, DEC-013 — 2026-10-20
 - [BL-020] [ALTO] FACTORY-001B cerrada — Gato Design System 1.0.1 y Centro de Decisiones 2.0.0 en 6 micro-ciclos; revisión final de accesibilidad y textos (74 tests, 20 mutaciones); informe en `missions/FACTORY-001B-informe-final.md`. · DEC-010, DEC-011, DEC-012, DEC-013, LES-018 — 2026-10-20
 - [BL-030] [ALTO] Modo operativo después de FACTORY-001B — Pablo aprobó la opción B, autonomía continua acotada (RESP-001). Se activa cuando Pablo lo indique, después de la validación final. · DEC-014, REQ-003 — 2026-10-20
+- [BL-002] [ALTO] DEV sin Analytics — GA4 solo en el host de producción, métricas GA4 solo en el repo de producción, 5 tests y workflow `app-checks`; 8/8 mutaciones detectadas. gw2-factory-dev `6d2f63e`…`2399afc`. · DEC-006, FEAT-002, RSK-003 — 2026-10-20
+- [BL-006] [MEDIO] Validación automática de `ai-memory/` en CI — `tests/ai-memory.test.cjs` en `app-checks`: archivos obligatorios, UTF-8 sin BOM, enlaces del índice y claves de status; 4 tests, 5/5 mutaciones detectadas; gw2-factory-dev `3f63d54`. El `node --check` de `js/*.js` pasa a BL-031. · LES-008, RSK-006 — 2026-10-20
