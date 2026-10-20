@@ -39,3 +39,4 @@ Reglas de uso de DEV (independientes de la opción):
 - Contexto al decidir: GitHub Pages ya estaba activo en gw2-factory-dev (medido 2026-10-20), así que el riesgo de origen compartido estaba materializado (RSK-002).
 - Próximos pasos (BL-003): Pablo crea el proyecto en su cuenta de Vercel (repo gw2-factory-dev, rama `main`, raíz, sin build); con Vercel activo, Pablo apaga GitHub Pages en gw2-factory-dev. Recién entonces se cierran BL-011 y RSK-002.
 - Las reglas de uso de DEV de arriba siguen vigentes.
+- Implementada el 2026-10-20 (RESP-003): DEV en `https://gw2-factory-dev.vercel.app/`, GitHub Pages apagado en gw2-factory-dev. BL-003 y BL-011 cerrados, RSK-002 mitigado.
