@@ -7,7 +7,7 @@
 
 El canal de respuesta escribe decisiones de Pablo en la memoria. Había que comprobar en GitHub real que el workflow se dispara y tiene permisos. Sin embargo, la Factory no puede responder ningún pedido real (REQ-001, REQ-002) en nombre de Pablo, ni crear pedidos o respuestas falsas que ensucien la memoria oficial.
 
-Se probó con un issue marcado como prueba que apunta a un pedido inexistente (REQ-999):
+Se probó con un issue marcado como prueba que apunta a un pedido inexistente (el número 999):
 
 - el workflow corrió y comentó el error en 3 s (eso prueba el disparador, el filtro por dueño y la marca, la lectura del repo y el permiso de issues);
 - no escribió nada en `ai-memory/` ni generó commits;
