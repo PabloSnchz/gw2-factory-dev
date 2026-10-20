@@ -5,7 +5,7 @@ Convenciones: ver [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) y contr
 
 Lectura obligatoria antes de cualquier trabajo: `status.md` → `backlog.md` → `memory-index.md` → respuestas de Pablo pendientes en `responses/` (procesarlas primero, DEC-011).
 Pedidos a Pablo: [requests/](requests/). Respuestas de Pablo: [responses/](responses/README.md).
-Planificación: [roadmap.md](roadmap.md). Riesgos: [risks.md](risks.md).
+Planificación: [roadmap.md](roadmap.md). Riesgos: [risks.md](risks.md). Informes de misión: [missions/](missions/FACTORY-001B-informe-final.md).
 Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 
 ## DECISIONS
@@ -23,6 +23,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-011](decisions/DEC-011-intercambio-de-decisiones.md) — Contrato v3: la Factory pide en requests/, Pablo responde en responses/, la Factory procesa al iniciar cada sesión.
 - [DEC-012](decisions/DEC-012-canal-de-respuesta.md) — Pablo responde desde el panel: botón → issue prellenado → workflow escribe el RESP, comenta y cierra. Sin tokens en el navegador.
 - [DEC-013](decisions/DEC-013-centro-de-decisiones-gds.md) — El panel es un Centro de decisiones sobre el GDS: lo que necesita a Pablo primero, IDs como referencia, errores del canal visibles.
+- [DEC-014](decisions/DEC-014-autonomia-continua.md) — PROPUESTA: autonomía continua acotada en DEV; pregunta por producción, alcance, dependencias, arquitectura y datos del usuario (REQ-003).
 
 ## LESSONS
 
@@ -43,6 +44,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-015](lessons/LES-015-commit-atomico.md) — Un cambio y sus tests van en el mismo commit; armar la lista de archivos comparando SHA.
 - [LES-016](lessons/LES-016-probar-canal-por-el-error.md) — Un canal que actúa en nombre de Pablo se prueba en real por el camino de error; nunca con un pedido real.
 - [LES-017](lessons/LES-017-publicacion-grande-por-dependencias.md) — Una publicación que no entra en un commit se parte por dependencias, de modo que cada commit deje el sitio funcionando.
+- [LES-018](lessons/LES-018-escrituras-en-serie.md) — Las escrituras a una misma rama van en serie; paralelizar solo lecturas.
 
 ## FEATURES
 
