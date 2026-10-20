@@ -1,13 +1,18 @@
 # STATUS
 
 Estado: EN_CURSO
-Tarea actual: BL-036 — FACTORY-DASHBOARD-REFINEMENT-001 · SD-2 hecho; sigue SD-3 (cierre)
-Motivo: El panel 2.1.0 ya aplica la soberanía de decisiones (DEC-018). A Pablo le llega 1 decisión (REQ-004, con su justificación) y 2 validaciones; lo demás es información. Recuperado tras una interrupción de plataforma (LES-022); RESP-003 procesada: DEV en Vercel.
+Tarea actual: FACTORY-GOVERNANCE-001 — análisis y propuesta de gobernanza (taxonomía de pendientes, política y visibilidad de Discovery). Sin implementar, por pedido de Pablo
+Motivo: Pablo pidió refinar la clasificación de pendientes, la autonomía de Discovery y su visibilidad. Antes llegó RESP-004 (REQ-004 aprobada, opción B con reglas propias), que se procesa primero (DEC-011). BL-036 queda en pausa con SD-3 pendiente.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
-Inicio: 2026-10-20T14:40Z
-Última actualización: 2026-10-20T16:05Z
-Próxima acción: SD-3 — que `tests/ai-memory.test.cjs` de gw2-factory-dev falle si un pedido de decisión abierto no tiene "Por qué te lo pregunto" o si una línea de "Esperando a Pablo" no tiene clase; informe de misión y BL-036 a DONE. Después, autonomía continua: BL-013 (PSNA).
+Etapa actual: PRODUCT
+Inicio: 2026-10-20T16:53Z
+Última actualización: 2026-10-20T16:55Z
+Próxima acción: G-1 — procesar RESP-004 (REQ-004 cerrada, DEC-015 §5 reemplazado por las reglas de Pablo). G-2 — escribir la propuesta en `missions/FACTORY-GOVERNANCE-001-propuesta.md` y esperar la validación de Pablo. Pendiente después: SD-3 de BL-036 y BL-013.
+
+## Plan de micro-ciclos (FACTORY-GOVERNANCE-001)
+
+- G-1 — Procesar RESP-004 (REQ-004 aprobada, opción B con reglas de Pablo). EN CURSO.
+- G-2 — Análisis y propuesta: taxonomía de pendientes, política de Discovery, visibilidad de Discovery, DEC y LES propuestas. Sin implementar.
 
 ## Plan de micro-ciclos (FACTORY-DASHBOARD-REFINEMENT-001)
 
