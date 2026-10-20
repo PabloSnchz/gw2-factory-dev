@@ -28,6 +28,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-015](decisions/DEC-015-discovery-engine.md) — Discovery Engine: la Factory descubre oportunidades en rondas acotadas, sin un agente nuevo; fuentes clasificadas, la de producto primero.
 - [DEC-016](decisions/DEC-016-limites-y-promocion.md) — Límites: READY ≤ 5, oportunidades abiertas ≤ 15 (verificados en CI); prioridad ALTA/MEDIA/BAJA; promoción, archivo a 30 días y descarte con motivo.
 - [DEC-017](decisions/DEC-017-gobierno-del-backlog.md) — READY contiene solo trabajo ejecutable; ideas y postergados vuelven a discovery; rechazos y devoluciones quedan en DONE con prefijo.
+- [DEC-018](decisions/DEC-018-soberania-de-decisiones.md) — Soberanía de decisiones: la Factory decide lo técnico; a Pablo le llegan decisiones (con contexto, impacto, motivo y recomendación), acciones, validaciones e información, separadas.
 
 ## LESSONS
 
