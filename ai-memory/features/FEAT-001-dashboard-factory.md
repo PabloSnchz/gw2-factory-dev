@@ -1,11 +1,13 @@
 # FEAT-001 — Dashboard Factory
 
-- Estado: DISPONIBLE PARA EVALUACIÓN (publicado; pendiente: validación de Pablo, BL-016)
+- Estado: DISPONIBLE PARA EVALUACIÓN (versión 2.0.0 publicada; pendiente: validación visual de Pablo, BL-016, RSK-015)
+- Versión: 2.0.0 — Centro de Decisiones (2026-10-20, gw2-factory-dashboard @ `cfdd1fa`; ver CHANGELOG)
 - Fecha: 2026-10-20
 - Repositorio: https://github.com/PabloSnchz/gw2-factory-dashboard
 - URL: https://pablosnchz.github.io/gw2-factory-dashboard/ (GitHub Pages activo, medido 2026-10-20)
 - Evolución: FACTORY-001B (BL-020, BL-021) — Gato Design System y Centro de Decisiones
-- Decisiones: DEC-008, DEC-009, DEC-010, DEC-011, DEC-012
+- Decisiones: DEC-008, DEC-009, DEC-010, DEC-011, DEC-012, DEC-013
+- Revisión final (MC-6, 2026-10-20): un test recorre todas las vistas y exige un solo h1 y títulos sin saltear niveles; corrigió dos errores reales. Tablas con scroll propio en pantallas chicas. Textos sin códigos internos y documentación consolidada (BL-024). Informe en gw2-factory-dev `ai-memory/missions/FACTORY-001B-informe-final.md`.
 - Centro de decisiones con GDS (MC-5, 2026-10-20, DEC-013): Hoy empieza con una frase que dice qué hacer y una tarjeta por pendiente (por qué importa, qué recomienda la Factory, botones). Los IDs pasan a ser referencias secundarias y los estados se dicen en palabras. Las respuestas que no se registraron se ven en el panel. Panel @ `9c8726b`.
 - Responder desde el panel (MC-4, 2026-10-20): cada pedido abierto tiene botones (Aprobar / Rechazar / Posponer 7 días / Ya lo hice) que abren un issue prellenado; el workflow `decision-response` de gw2-factory-dev escribe la respuesta en `ai-memory/responses/`. Después aparece en "Ya respondiste" (DEC-012).
 
@@ -32,5 +34,6 @@ Centro de decisiones de la Factory. Pablo entiende en menos de 60 segundos qué 
 
 ## Verificación realizada
 
-- Tests en node (`node --test tests/`) sobre parsers, modelo y vistas con la memoria real como fixture.
+- 74 tests en node (`node --test tests/`) sobre parsers, decisiones, modelo, vistas, GDS, accesibilidad y textos, con la memoria real como fixture; 20 mutaciones detectadas en MC-5 y MC-6.
+- Revisión de accesibilidad de las 87 páginas que genera la memoria real (MC-6): un solo h1 por página y niveles de título sin saltear.
 - Prueba de punta a punta del pipeline (loader → modelo → vistas) con fetch simulado, incluido el caso sin API (cuota agotada).
