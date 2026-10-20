@@ -1,20 +1,19 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: Ninguna — FACTORY-RESEARCH-001 (Discovery Engine) cerrada; la próxima sesión toma BL-013
-Motivo: La Factory ya descubre trabajo por sí misma con límites verificados en CI (DEC-015, DEC-016, DEC-017). La ronda inicial encontró dos errores de datos que el usuario ve hoy: PSNA del día equivocado (BL-013) y metas faltantes de Janthir Wilds y Visions of Eternity (BL-034). Informe en `missions/FACTORY-RESEARCH-001-informe.md`.
-Fase: F2 — Calidad
-Etapa actual: DOCUMENTATION
-Inicio: 2026-10-20T07:52Z
-Última actualización: 2026-10-20T08:30Z
-Próxima acción: Autonomía continua (DEC-014): BL-013 — calcular el PSNA con la rotación de 7 días y cambio a las 08:00 UTC, mostrar "sin datos" en lugar de un día equivocado, leer el archivo propio y corregir códigos con tests. Antes de publicar, confirmar qué conjunto corresponde a cada día de la semana. Después: BL-034, BL-004, BL-005.
+Estado: EN_CURSO
+Tarea actual: BL-036 — FACTORY-DASHBOARD-REFINEMENT-001 · Soberanía de decisiones: a Pablo solo le llegan decisiones de producto, negocio o estrategia
+Motivo: Pablo detectó que "Necesita tu decisión" le presenta cosas que no requieren su criterio. Medido el 2026-10-20 sobre la memoria real: 6 ítems en esa sección; solo 1 es un pedido de decisión, y trata de un proceso interno de la Factory. Los demás son 1 acción manual, 2 validaciones y 2 avisos informativos.
+Fase: F1 — Visibilidad
+Etapa actual: ARCHITECTURE
+Inicio: 2026-10-20T14:40Z
+Última actualización: 2026-10-20T14:55Z
+Próxima acción: SD-2 — en el panel, clasificar lo pendiente en decisión, acción, validación e información; exigir contexto, impacto, recomendación y justificación a todo pedido de decisión; rediseñar Hoy. Publicar compatible con la memoria actual.
 
-## Plan de micro-ciclos (FACTORY-RESEARCH-001)
+## Plan de micro-ciclos (FACTORY-DASHBOARD-REFINEMENT-001)
 
-- R1 — Investigación: fuentes externas y memoria del producto; ronda inicial de discovery. HECHO 2026-10-20.
-- R2 — Gobernanza: DEC-015, DEC-016, DEC-017; `discovery.md` y `discovery-archive.md`; backlog dentro de los límites (READY 8 → 4); REQ-004. HECHO 2026-10-20.
-- R3 — Control automático: el test de memoria verifica READY ≤ 5, abiertas ≤ 15, formato y salida con motivo (`99f3220`, 13/13, 8/8 mutaciones). HECHO 2026-10-20.
-- R4 — Cierre: lecciones, riesgos, informe y estado. HECHO 2026-10-20.
+- SD-1 — Producto y arquitectura: relevar los pendientes, clasificarlos y definir la regla. HECHO 2026-10-20.
+- SD-2 — Panel: clasificación en el modelo, pedidos de decisión con justificación obligatoria, Hoy rediseñado, riesgo aceptado como información; tests y contrato de datos v4. EN CURSO.
+- SD-3 — Memoria: status.md con pendientes clasificados, pedidos revisados con la regla nueva, DEC-018, chequeo en CI, documentación y cierre.
 
 ## Esperando a Pablo
 
