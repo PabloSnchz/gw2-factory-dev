@@ -1,6 +1,6 @@
 # DEC-014 — Modo operativo después de FACTORY-001B: autonomía continua acotada
 
-- Estado: PROPUESTA
+- Estado: ACEPTADA — opción B, decidida por Pablo el 2026-10-20 desde el panel (RESP-001)
 - Fecha: 2026-10-20
 - Ámbito: Forma de trabajo de la Factory en gw2-factory-dev y gw2-factory-dashboard
 - Misión: cierre de FACTORY-001B (MC-6)
@@ -63,7 +63,12 @@ Una restricción real: la Factory no corre sola. Cada sesión empieza cuando Pab
 - **A — Seguir por misiones y micro-ciclos aprobados de a uno.** Máximo control, pero Pablo sigue siendo el cuello de botella para trabajo de bajo riesgo. Razonable si Pablo prefiere revisar todo.
 - **C — Autonomía total en DEV.** La Factory también decide qué funcionalidades construir sin consulta. Se descarta por ahora: el producto es de Pablo y el alcance debe seguir siendo suyo.
 
-## Consecuencias si se acepta
+## Resultado
+
+- 2026-10-20T05:28Z — Pablo aprobó la opción B desde el Centro de Decisiones (issue #2 → RESP-001).
+- Activación: Pablo pidió además no iniciar trabajo autónomo ni misiones nuevas hasta la validación final de FACTORY-001B. La autonomía queda aprobada pero en espera: la Factory empieza a tomar tareas del backlog solo cuando Pablo lo indique.
+
+## Consecuencias al activarse
 
 - Primeras tareas del backlog READY en orden de prioridad:
   - BL-002 (DEV sin Analytics; toca código de la app con el ciclo completo);
