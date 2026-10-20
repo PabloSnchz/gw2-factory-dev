@@ -1,6 +1,6 @@
 # DEC-006 — Desacople de Google Analytics por entorno
 
-- Estado: PROPUESTA (requiere decisión de Pablo — BL-002)
+- Estado: ACEPTADA — DEV sin Analytics, decidida por Pablo el 2026-10-20
 - Fecha: 2026-10-19
 - Ámbito: Telemetría
 
@@ -32,6 +32,12 @@ Restricción clave: la promoción a producción es una **copia de contenido** de
 
 Ambos cambios tocan código de la app/CI ⇒ se implementan como FEAT con ciclo completo y **solo tras aprobación de Pablo**. Mientras tanto, DEV no debe publicarse (DEC-005).
 
-## Pendiente de Pablo
+## Pendiente de Pablo (original, 2026-10-19)
 
 - ¿Telemetría en DEV: ninguna (recomendado) o propiedad GA4 separada?
+
+## Resolución (2026-10-20)
+
+- Pablo decidió: **DEV sin Analytics**. No se crea una propiedad GA4 separada.
+- Se implementa la propuesta tal cual (allowlist de host en runtime + guard de repo en el workflow) como BL-002, con ciclo completo de la Factory, después de FACTORY-001B (Dashboard First).
+- Contexto: DEV ya está publicado en GitHub Pages y envía visitas al GA4 de producción (RSK-003, materializado). El efecto cesa también cuando DEV deje GitHub Pages (DEC-005), pero el cambio de código sigue siendo necesario para Vercel y sus previews.

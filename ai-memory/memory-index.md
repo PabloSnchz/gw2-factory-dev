@@ -13,11 +13,12 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) — Estructura, IDs (DEC/LES/FEAT/BL), formato y codificación UTF-8 de ai-memory.
 - [DEC-003](decisions/DEC-003-docs-vs-ai-memory.md) — `docs/` documenta el producto; `ai-memory/` es la memoria de la Factory. Se enlazan, no se duplican.
 - [DEC-004](decisions/DEC-004-invariantes-de-arquitectura.md) — Invariantes técnicas: CSS 3 capas, router-first, `gn:tokenchange`, Storage API, IIFE + `window.*`.
-- [DEC-005](decisions/DEC-005-entorno-dev-publicado.md) — PROPUESTA: publicar DEV con origen propio (Vercel) para no compartir `localStorage` con PROD.
-- [DEC-006](decisions/DEC-006-desacople-google-analytics.md) — PROPUESTA: GA solo en el host de producción (allowlist en runtime) + guard de repo en el workflow GA4.
+- [DEC-005](decisions/DEC-005-entorno-dev-publicado.md) — ACEPTADA (2026-10-20): DEV en Vercel con origen propio para no compartir `localStorage` con PROD.
+- [DEC-006](decisions/DEC-006-desacople-google-analytics.md) — ACEPTADA (2026-10-20): DEV sin Analytics; GA solo en el host de producción + guard de repo en el workflow GA4.
 - [DEC-007](decisions/DEC-007-dashboard-fuente-factory.md) — REEMPLAZADA por DEC-008: adaptar el dashboard histórico.
 - [DEC-008](decisions/DEC-008-dashboard-factory.md) — Dashboard nuevo (gw2-factory-dashboard): observa el trabajo, no a los trabajadores; sin scripts locales.
 - [DEC-009](decisions/DEC-009-contrato-de-datos-ai-memory.md) — Contrato de datos v2 de ai-memory: status.md por claves, risks.md, formatos de backlog y entradas.
+- [DEC-010](decisions/DEC-010-gato-design-system.md) — Gato Design System 1.0: tokens en 3 niveles, paleta La Bóveda ajustada a AA, componentes y reglas verificadas en CI.
 
 ## LESSONS
 
@@ -33,6 +34,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-010](lessons/LES-010-observar-el-trabajo-no-a-los-trabajadores.md) — Un panel debe observar el trabajo y sus decisiones, no la coordinación entre trabajadores.
 - [LES-011](lessons/LES-011-dato-medido-sin-infraestructura-local.md) — El dato medido no puede depender de una máquina local; leer por SHA da snapshots consistentes. Corregida 2026-10-20: el histórico sigue activo.
 - [LES-012](lessons/LES-012-checkpoint-por-micro-ciclo.md) — Sin checkpoint persistido por micro-ciclo, una interrupción borra el trabajo; al recuperar, contrastar memoria con lo medido.
+- [LES-013](lessons/LES-013-contraste-se-calcula.md) — El contraste se calcula para cada par real, incluidos los fondos translúcidos; la paleta propuesta falló AA en 7 usos.
 
 ## FEATURES
 

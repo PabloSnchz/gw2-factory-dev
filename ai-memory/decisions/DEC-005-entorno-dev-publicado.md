@@ -1,6 +1,6 @@
 # DEC-005 — Estrategia de publicación del entorno DEV
 
-- Estado: PROPUESTA (requiere decisión de Pablo — BL-003)
+- Estado: ACEPTADA — opción B (Vercel), decidida por Pablo el 2026-10-20
 - Fecha: 2026-10-19
 - Ámbito: Infraestructura de DEV
 
@@ -29,6 +29,13 @@ Reglas de uso de DEV (independientes de la opción):
 2. Si se elige A, **no publicar** hasta implementar el namespace de storage por entorno (cambio de código → ciclo completo de la Factory).
 3. GA desacoplado antes de publicar (DEC-006).
 
-## Pendiente de Pablo
+## Pendiente de Pablo (original, 2026-10-19)
 
 - Elegir A, B o C. Para B: crear el proyecto en Vercel (requiere su cuenta) o autorizar a la Factory a preparar la configuración.
+
+## Resolución (2026-10-20)
+
+- Pablo aprobó la **opción B: Vercel**.
+- Contexto al decidir: GitHub Pages ya estaba activo en gw2-factory-dev (medido 2026-10-20), así que el riesgo de origen compartido estaba materializado (RSK-002).
+- Próximos pasos (BL-003): Pablo crea el proyecto en su cuenta de Vercel (repo gw2-factory-dev, rama `main`, raíz, sin build); con Vercel activo, Pablo apaga GitHub Pages en gw2-factory-dev. Recién entonces se cierran BL-011 y RSK-002.
+- Las reglas de uso de DEV de arriba siguen vigentes.
