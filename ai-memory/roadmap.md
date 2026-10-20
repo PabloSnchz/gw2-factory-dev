@@ -5,7 +5,7 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 
 | Fase | Objetivo | Criterio de salida | Estado |
 |---|---|---|---|
-| F0 — Fundación | Memoria oficial operativa y entorno DEV definido | ai-memory inicializada; DEC-005 y DEC-006 decididas por Pablo (hecho 2026-10-20); GA desacoplado (BL-002, hecho 2026-10-20); DEV publicado en Vercel y Pages apagado en DEV (BL-003) | PENDIENTE |
+| F0 — Fundación | Memoria oficial operativa y entorno DEV definido | ai-memory inicializada; DEC-005 y DEC-006 decididas por Pablo (hecho 2026-10-20); GA desacoplado (BL-002, hecho 2026-10-20); DEV publicado en Vercel y Pages apagado en DEV (BL-003, hecho 2026-10-20) | HECHA |
 | F1 — Visibilidad | Pablo entiende el estado de la Factory en menos de 60 segundos | gw2-factory-dashboard publicado (hecho 2026-10-20) y validado por Pablo (FEAT-001, BL-016); Pablo decide desde el panel (Centro de Decisiones, BL-020, BL-021) | EN CURSO |
 | F2 — Calidad | Cada cambio se valida automáticamente | validación de ai-memory en CI (BL-006, hecho 2026-10-20) y `node --check` (BL-031); CI del dashboard (BL-018, hecho); documentación de producto sincronizada (BL-004) | EN CURSO |
 | F3 — Evolución | Funcionalidades nuevas listas para evaluación humana en DEV | ≥1 FEAT nueva con ciclo Product→Architecture→Development→Review→Documentation completo | PENDIENTE |
@@ -13,8 +13,8 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 ## Dependencias
 
 - F1 depende de BL-020/BL-021 (FACTORY-001B) y de la validación de Pablo (BL-016). Pages ya está activo en el panel.
-- F0 se volvió más urgente: DEV ya está publicado en el dominio de producción (RSK-002, RSK-003). Decisiones tomadas; falta crear el proyecto de Vercel (Pablo, BL-003) y desacoplar GA (Factory, BL-002, después de FACTORY-001B).
-- F3 depende de BL-003 (DEV evaluable) o de un mecanismo alternativo de evaluación acordado con Pablo.
+- F0 cumplida el 2026-10-20: DEV en Vercel con origen propio (`https://gw2-factory-dev.vercel.app/`), GA desacoplado (BL-002) y RSK-002 mitigado.
+- F3 ya tiene dónde evaluarse: DEV en Vercel (BL-003, hecho).
 
 ## Historial
 
@@ -30,3 +30,4 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 - 2026-10-20 — Pablo aprueba FACTORY-001B funcionalmente y elige la opción B desde el panel (RESP-001, primera decisión real del canal). DEC-014 queda aceptada; la autonomía se activa cuando Pablo lo indique, después de la validación final.
 - 2026-10-20 — Pablo valida FACTORY-001B y activa la autonomía continua acotada. FACTORY-LIVE-001 (sesión 1): DEV sin Analytics (FEAT-002, BL-002), validación de la memoria en CI (BL-006) y BOM de `analytics.js`. F2 pasa a EN CURSO. Informe en `missions/FACTORY-LIVE-001-informe.md`.
 - 2026-10-20 — FACTORY-RESEARCH-001 (Discovery Engine): la Factory descubre oportunidades sin un agente nuevo (DEC-015), con límites verificados en CI (DEC-016) y un backlog que solo contiene trabajo ejecutable (DEC-017, READY 8 → 4). La ronda inicial encontró datos de producto desactualizados (PSNA y metas, RSK-018), promovidos a BL-013 y BL-034: el próximo trabajo de producto corrige información que el usuario ve hoy. Las rondas autónomas esperan REQ-004. Informe en `missions/FACTORY-RESEARCH-001-informe.md`.
+- 2026-10-20 — Pablo publica DEV en Vercel y apaga Pages en DEV (RESP-003): F0 queda HECHA, RSK-002 mitigado. Se procesa al recuperar FACTORY-DASHBOARD-REFINEMENT-001 tras una interrupción de plataforma.
