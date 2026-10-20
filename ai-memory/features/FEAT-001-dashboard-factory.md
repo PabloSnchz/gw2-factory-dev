@@ -1,9 +1,10 @@
 # FEAT-001 — Dashboard Factory
 
-- Estado: DISPONIBLE PARA EVALUACIÓN (pendiente: habilitar GitHub Pages, BL-016)
+- Estado: DISPONIBLE PARA EVALUACIÓN (publicado; pendiente: validación de Pablo, BL-016)
 - Fecha: 2026-10-20
 - Repositorio: https://github.com/PabloSnchz/gw2-factory-dashboard
-- URL esperada: https://pablosnchz.github.io/gw2-factory-dashboard/
+- URL: https://pablosnchz.github.io/gw2-factory-dashboard/ (GitHub Pages activo, medido 2026-10-20)
+- Evolución: FACTORY-001B (BL-020, BL-021) — Gato Design System y Centro de Decisiones
 - Decisiones: DEC-008, DEC-009
 
 ## Qué resuelve
@@ -23,7 +24,7 @@ Centro de observación de la Factory. Pablo entiende en menos de 60 segundos qu�
 
 ## Cómo evaluarlo
 
-1. Habilitar Pages: gw2-factory-dashboard → Settings → Pages → Deploy from a branch → `main` / `/ (root)`.
+1. GitHub Pages ya está activo (medido 2026-10-20): abrir https://pablosnchz.github.io/gw2-factory-dashboard/.
 2. Abrir la URL y verificar las preguntas de la misión en la vista "Hoy".
 3. Modificar `ai-memory/status.md` en gw2-factory-dev y pulsar "Refrescar": el panel lee el nuevo commit.
 

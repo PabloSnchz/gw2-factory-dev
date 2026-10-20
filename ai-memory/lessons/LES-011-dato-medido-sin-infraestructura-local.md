@@ -16,3 +16,9 @@ Los datos medidos del dashboard histórico los generaban scripts `_eco\*.py` eje
 
 - El Dashboard Factory mide en el navegador en cada lectura y fija la memoria al SHA del último commit (FEAT-001).
 - Si alguna vez se necesita precálculo, hacerlo con GitHub Actions, nunca con scripts locales.
+
+## Corrección (2026-10-20)
+
+Durante FACTORY-RECOVERY-001 se midió que `gw2-agents-dashboard` recibe commits "chore(dashboard): pulso automatico" cada ~15 minutos (2026-10-20T01:34Z, 01:36Z, 01:51Z) y que `gw2-wallet-agents` registró un heartbeat a las 01:13Z. La afirmación "dejaron de correr el 2026-10-09" no se sostiene hoy: los scripts se reanudaron o el diagnóstico original fue incompleto. No se puede determinar cuál desde el repositorio.
+
+La lección no cambia: el panel histórico estuvo días mostrando datos viejos con apariencia de vigentes, que es exactamente el modo de falla descrito. Lo que cambia es el hecho: el sistema histórico sigue activo y eso es un riesgo propio (RSK-008, BL-001).

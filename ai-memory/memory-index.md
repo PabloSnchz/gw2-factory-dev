@@ -31,7 +31,8 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-008](lessons/LES-008-ai-memory-en-utf8.md) — ai-memory debe guardarse en UTF-8 (status.md original era ilegible).
 - [LES-009](lessons/LES-009-relevar-antes-de-proponer.md) — Relevar el código real del destino antes de proponer una funcionalidad.
 - [LES-010](lessons/LES-010-observar-el-trabajo-no-a-los-trabajadores.md) — Un panel debe observar el trabajo y sus decisiones, no la coordinación entre trabajadores.
-- [LES-011](lessons/LES-011-dato-medido-sin-infraestructura-local.md) — El dato medido no puede depender de una máquina local; leer por SHA da snapshots consistentes.
+- [LES-011](lessons/LES-011-dato-medido-sin-infraestructura-local.md) — El dato medido no puede depender de una máquina local; leer por SHA da snapshots consistentes. Corregida 2026-10-20: el histórico sigue activo.
+- [LES-012](lessons/LES-012-checkpoint-por-micro-ciclo.md) — Sin checkpoint persistido por micro-ciclo, una interrupción borra el trabajo; al recuperar, contrastar memoria con lo medido.
 
 ## FEATURES
 
