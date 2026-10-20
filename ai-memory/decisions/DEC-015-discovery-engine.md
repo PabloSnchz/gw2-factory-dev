@@ -1,6 +1,6 @@
 # DEC-015 — Discovery Engine: la Factory descubre oportunidades sin un agente nuevo
 
-- Estado: ACEPTADA — encargada por Pablo en FACTORY-RESEARCH-001 (2026-10-20). Las condiciones de bloqueo del punto 5 esperan la respuesta a REQ-004
+- Estado: ACEPTADA — encargada por Pablo en FACTORY-RESEARCH-001 (2026-10-20). Punto 5 definido por Pablo en RESP-004 (2026-10-20)
 - Fecha: 2026-10-20
 - Ámbito: Cómo encuentra trabajo nuevo la Factory cuando el backlog no alcanza
 - Misión: FACTORY-RESEARCH-001
@@ -49,16 +49,22 @@ Discovery puede correr si se cumple alguna de estas condiciones (DEC-016 fija lo
 - se cerró una misión;
 - quedó tiempo libre entre micro-ciclos.
 
-### 5. Cuándo no investigar
+### 5. Qué detiene discovery
 
-No se ejecuta si se da alguna de estas condiciones:
+Definido por Pablo en RESP-004 (2026-10-20), que reemplaza la lista original. La Factory puede investigar mientras:
 
-- READY > 5;
-- hay riesgos CRÍTICOS abiertos;
-- hay decisiones humanas pendientes;
-- hay tareas bloqueadas por resolver.
+- no haya riesgos CRÍTICOS abiertos;
+- haya capacidad en READY (READY < 5);
+- la propia tarea de discovery no esté bloqueada.
 
-Leídas al pie de la letra, las dos últimas casi nunca se cumplen: siempre hay acciones de Pablo pendientes y tareas bloqueadas por el entorno. La interpretación queda a decisión de Pablo (REQ-004). Hasta su respuesta, la Factory aplica la lectura literal y **no inicia rondas autónomas**. La ronda de esta misión se hizo por encargo explícito.
+Y además:
+
+- las decisiones pendientes **no** detienen discovery, salvo que bloqueen directamente la investigación;
+- las acciones humanas **no** detienen discovery;
+- las validaciones funcionales **no** detienen discovery;
+- las decisiones estratégicas solo detienen **el área afectada**.
+
+Lista original, reemplazada: READY > 5, riesgos CRÍTICOS, decisiones humanas pendientes, tareas bloqueadas. Leídas al pie de la letra, las dos últimas casi nunca dejaban investigar (REQ-004).
 
 ### 6. Cómo es una ronda
 
