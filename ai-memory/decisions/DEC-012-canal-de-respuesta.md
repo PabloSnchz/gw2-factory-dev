@@ -46,5 +46,5 @@ El panel es un sitio estático: no tiene backend ni puede guardar secretos.
 - Responder pasa de "crear un archivo con plantilla" a **un botón y Submit**. Sin tokens ni infraestructura nueva.
 - Cada respuesta deja rastro doble: el issue (cerrado, con el enlace) y el RESP, que incluye `Issue:` y `Autor:`.
 - El commit de cada RESP lo firma `github-actions[bot]` y aparece en la actividad de DEV.
-- Si el workflow falla, el error solo se ve en el issue: el panel todavía no lo muestra (BL-028, RSK-014).
-- Verificado en GitHub real el 2026-10-20 con el issue #1 de prueba (REQ-999 inexistente): el workflow corrió, comentó el error en 3 s, no escribió nada y el issue quedó abierto hasta cerrarse a mano. La escritura del RESP está probada con un GitHub simulado; la primera respuesta real de Pablo la confirma en producción del canal.
+- Si el workflow falla, el error queda en el issue. Desde MC-5 el panel también lo muestra (BL-028, DEC-013).
+- Verificado en GitHub real el 2026-10-20 con el issue #1 de prueba (pedido inexistente número 999): el workflow corrió, comentó el error en 3 s, no escribió nada y el issue quedó abierto hasta cerrarse a mano. La escritura del RESP está probada con un GitHub simulado; la primera respuesta real de Pablo la confirma en producción del canal.
