@@ -1,10 +1,11 @@
 # REQ-002 — Publicar la versión de prueba en Vercel y apagar GitHub Pages en DEV
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: acción
 - Fecha: 2026-10-20
 - Prioridad: ALTO
 - Relacionado: DEC-005, BL-003, BL-011, RSK-002
+- Cerrado: 2026-10-20 · RESP-003
 
 ## Qué pasó
 
