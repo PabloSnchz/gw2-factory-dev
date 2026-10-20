@@ -6,23 +6,25 @@ Motivo: Una interrupción de plataforma cortó SD-2 a las ~14:50. Reconstruido d
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-20T14:40Z
-Última actualización: 2026-10-20T15:45Z
-Próxima acción: SD-2 — revisar el borrador local contra la base publicada (`cfdd1fa`), ajustar los 4 tests que cambian por diseño, agregar tests de la regla y publicar el panel en commits compatibles.
+Última actualización: 2026-10-20T15:50Z
+Próxima acción: SD-2 — publicar el panel en orden de dependencias (parse → decisions → model → views → tests → documentación) y verificar por SHA. Borrador revisado: 82/82 tests, 9/9 mutaciones. La memoria ya está en contrato v4 (DEC-018, REQ-004 justificado, pendientes clasificados).
 
 ## Plan de micro-ciclos (FACTORY-DASHBOARD-REFINEMENT-001)
 
 - SD-1 — Producto y arquitectura: relevar los pendientes, clasificarlos y definir la regla. HECHO 2026-10-20.
 - SD-R — Recuperación: estado reconstruido desde el repositorio; RESP-003 procesada (REQ-002 cerrado, BL-003 y BL-011 hechos, RSK-002 mitigado, F0 cumplida). HECHO 2026-10-20.
-- SD-2 — Panel: clasificación en el modelo, pedidos de decisión con justificación obligatoria, Hoy rediseñado, riesgo aceptado como información; tests y contrato de datos v4. Borrador local sin publicar (70/74 tests; los 4 que fallan reflejan el cambio buscado). EN CURSO.
-- SD-3 — Memoria: status.md con pendientes clasificados, pedidos revisados con la regla nueva, decisión de soberanía registrada, chequeo en CI, documentación y cierre.
+- SD-2 — Panel: clasificación en el modelo, pedidos de decisión con justificación obligatoria, Hoy rediseñado, riesgo aceptado como información; tests y contrato de datos v4. Revisión: REQ-004 habría quedado oculto y DEC-018 no existía; se publica antes la memoria. Se cerró un hueco: una decisión sin pedido podía colarse como línea de status.md. EN CURSO.
+- SD-3 — Cierre: chequeo en CI de la memoria (pedido de decisión sin "Por qué te lo pregunto" o línea sin clase), lección, documentación e informe. Ya adelantado en SD-2: DEC-018, REQ-004 y status.md clasificados.
 
 ## Esperando a Pablo
 
-- [REQ-004] Elegir cuándo puede investigar sola la Factory (se responde desde el panel). Hasta entonces, sin rondas autónomas de discovery.
-- [FEAT-002] Evaluar DEV sin Analytics: en DEV no debe haber peticiones a Google Analytics y `window.__gaEnabled` vale `false`.
-- [RSK-016] Confirmar en GitHub Actions que `app-checks` está en verde (la Factory no puede ver CI).
-- [BL-016] Mirar el panel en un navegador real, también en el celular (RSK-015 sigue abierto hasta entonces).
-- [RSK-001] Revisión acordada el 2026-11-20: protección de `main` de producción con una propuesta más acotada (RESP-002).
+- [REQ-004] Decisión: Elegir cuándo puede investigar sola la Factory (se responde desde el panel). Hasta entonces, sin rondas autónomas de discovery.
+- [FEAT-002] Validación: Abrí DEV en https://gw2-factory-dev.vercel.app/ y confirmá que no carga Google Analytics (en la consola, `window.__gaEnabled` vale `false`).
+- [BL-016] Validación: Mirá el panel en un navegador real, también en el celular, y confirmá que entendés el estado en menos de 60 segundos (RSK-015 sigue abierto hasta entonces).
+
+## Para tu información
+
+- [RSK-016] La Factory no puede ver el resultado de CI. No hace falta que lo revises: si alguna vez ves `app-checks` en rojo en GitHub Actions, avisá.
 
 ## Bloqueos
 
