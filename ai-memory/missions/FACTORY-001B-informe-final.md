@@ -1,17 +1,17 @@
 # FACTORY-001B — Gato Design System y Centro de Decisiones · Informe final
 
-- Estado: CERRADA (2026-10-20), pendiente la validación final de Pablo
-- Período: 2026-10-20T02:51Z → 2026-10-20T04:55Z (seis micro-ciclos después de la recuperación)
+- Estado: CERRADA (2026-10-20). Aprobada funcionalmente por Pablo; pendiente su validación final
+- Período: 2026-10-20T02:51Z → 2026-10-20T05:36Z (seis micro-ciclos después de la recuperación)
 - Repositorios: gw2-factory-dashboard (panel) · gw2-factory-dev (memoria y workflow del canal)
 - Producción: no se tocó
-- Decisiones: DEC-010, DEC-011, DEC-012, DEC-013 (aceptadas) · DEC-014 (propuesta, REQ-003)
+- Decisiones: DEC-010, DEC-011, DEC-012, DEC-013, DEC-014 (todas aceptadas; DEC-014 por RESP-001)
 
 ## 1. Qué se pidió y qué se entregó
 
 | Criterio de éxito de la misión | Resultado | Evidencia | Pendiente |
 |---|---|---|---|
 | Pablo entiende el estado de la Factory en menos de 60 segundos | **Cumplido en estructura** | La vista Hoy abre con una frase que dice qué hacer y sigue con una tarjeta por pendiente; jerarquía verificada por test en todas las vistas | Verlo en un navegador real (RSK-015, BL-016) |
-| Pablo decide desde el panel | **Cumplido** | Botones Aprobar / Rechazar / Posponer / Ya lo hice → issue prellenado → `responses/` (DEC-012). Flujo validado por Pablo en MC-4. Errores del canal visibles (DEC-013) | La primera respuesta real confirma la escritura en GitHub (hasta ahora probada con GitHub simulado y por el camino de error) |
+| Pablo decide desde el panel | **Cumplido y verificado en real** | Botones Aprobar / Rechazar / Posponer / Ya lo hice → issue prellenado → `responses/` (DEC-012). Primera decisión real: REQ-003 aprobada desde el panel y procesada (sección 8). Errores del canal visibles (DEC-013) | — |
 | Identidad visual propia: La Bóveda del Gato Negro | **Cumplido** | GDS 1.0.1: paleta Obsidian / Arcane, marca del gato, estados con ícono + texto (DEC-010) | Revisión visual humana |
 | Un Gato Design System documentado y reutilizable | **Cumplido** | `gds/` con tokens en 3 niveles, 23 componentes, `GDS_FOUNDATION.md` y 12 tests propios | Decidir su ubicación canónica antes de que la webapp lo adopte (BL-023) |
 
@@ -33,7 +33,7 @@ Lo que pedía la misión, punto por punto:
 | MC-3 | Contrato v3: pedidos (`requests/`) y respuestas (`responses/`) | panel `b8e0e08`, `e2275b1` · dev `e5ffb8e` |
 | MC-4 | Responder desde el panel: workflow `decision-response` y botones | panel `0775d5d` · dev `cf5a533`, `90fcca6` |
 | MC-5 | Centro de Decisiones sobre el GDS: jerarquía, lenguaje, cola, canal visible | panel `4018d5a` … `9c8726b` · dev `8d29395` |
-| MC-6 | Revisión de accesibilidad y textos, documentación, CHANGELOG 2.0.0, cierre | panel `3a9f2ea` … `cfdd1fa` · dev (este informe) |
+| MC-6 | Revisión de accesibilidad y textos, documentación, CHANGELOG 2.0.0, cierre; procesamiento de RESP-001 | panel `3a9f2ea` … `cfdd1fa` · dev `855104e` … `4d8794c`, `78f7676` … (este informe) |
 
 Cada ciclo tuvo su checkpoint en `status.md` antes de empezar, su commit al terminar y la validación de Pablo antes del siguiente (LES-012).
 
@@ -101,22 +101,46 @@ Lo que funcionó y conviene conservar:
 | Ver el panel en un navegador real, también en el celular | Pablo | RSK-015, BL-016 |
 | Proteger `main` de producción | Pablo | REQ-001 |
 | Publicar DEV en Vercel y apagar Pages en DEV | Pablo | REQ-002 |
-| Elegir el modo operativo siguiente | Pablo | REQ-003, DEC-014 |
-| Confirmar la escritura real del canal con la primera respuesta | Pablo responde, la Factory verifica | DEC-012 |
+| Indicar cuándo se activa la autonomía aprobada | Pablo | DEC-014 |
 | Ubicación canónica del GDS antes de que la webapp lo adopte | Factory propone, Pablo decide | BL-023 |
 | CI en rojo en commits intermedios | Factory | RSK-012 |
 
-## 7. Recomendación para el siguiente modo operativo
+## 7. Modo operativo futuro
 
-**Autonomía continua acotada** (opción B de REQ-003, detalle en DEC-014):
+**Autonomía continua acotada**: opción B de REQ-003, aprobada por Pablo el 2026-10-20 (RESP-001); el detalle está en DEC-014.
 
 - **Qué hace la Factory sola**: en cada sesión toma la siguiente tarea del backlog y encadena ciclos completos en DEV, con checkpoint y commit, sin pedir aprobación por ciclo.
 - **Qué te pregunta**: todo lo que toque producción, el alcance del producto, dependencias o costos nuevos, la arquitectura, el formato de los datos del usuario o lo que solo vos podés hacer.
 - **Cómo te informa**: el panel muestra el avance; cada sesión termina con un resumen en `status.md` y cada hito con un informe como este.
 - **Revisión del acuerdo**: después de 3 sesiones.
-- **Primeras tareas** si se aprueba:
+- **Primeras tareas** al activarse:
   - BL-002: DEV sin Analytics;
   - BL-006: validación automática en gw2-factory-dev;
   - BL-004: documentación de producto sincronizada.
 
-La Factory no inicia ninguna misión nueva hasta que respondas REQ-003, desde el panel o en la conversación.
+**Activación en espera.** Pablo indicó no iniciar trabajo autónomo, misiones nuevas ni FACTORY-LIVE-001 hasta su validación final. La Factory queda detenida hasta su próxima instrucción.
+
+Recomendación final:
+
+- Activar la autonomía con una instrucción explícita después de la validación visual del panel (BL-016), para que la primera sesión autónoma ya cuente con un panel confirmado en pantalla.
+- Mantener el límite de una tarea por vez durante las 3 sesiones de prueba.
+
+## 8. Verificación del ciclo completo de decisiones
+
+Fue la primera decisión real, de punta a punta, con evidencia en GitHub:
+
+| Paso | Qué pasó | Evidencia |
+|---|---|---|
+| Factory trabaja | Cierra MC-6 y registra el pedido REQ-003 con su recomendación | dev `1caa0e2` (REQ-003), `1386ca0` (DEC-014) |
+| Dashboard propone | REQ-003 aparece en "Necesita tu decisión" con los botones A / B / C | panel `cfdd1fa`; el issue #2 lo generó el botón del panel (marca `gds:decision-response`, "desde el Centro de Decisiones") |
+| Pablo responde | Aprueba la opción B desde el panel: issue #2, 2026-10-20T05:28:00Z | issue #2 (autor PabloSnchz, OWNER) |
+| Canal registra | El workflow `decision-response` escribe RESP-001, comenta el enlace y cierra el issue a las 05:28:13Z (13 s) | dev `a36b68a` (github-actions[bot]) |
+| Panel refleja la respuesta | Antes del procesamiento: REQ-003 en "Ya respondiste", "Respondido · la Factory lo está procesando" | simulación con la memoria publicada |
+| Factory procesa | RESP-001 → PROCESADA con Efecto; REQ-003 → CERRADA · RESP-001; DEC-014 → ACEPTADA; BL-030 → DONE | dev `49ab3bc`, `ad99877`, `8231b7b`, `768edcd`, `4b1a664` |
+| Panel refleja el nuevo estado | REQ-003 en Cerrados, sin respuestas pendientes; DEC-014 aceptada; Salud sin avisos del canal (`req:notclosed`, respuestas sin procesar) | simulación con la memoria publicada (SHA verificados); 0 issues abiertos del canal |
+| Factory continúa | Queda en espera por instrucción de Pablo: no toma trabajo autónomo hasta su validación final | `status.md` |
+
+Notas:
+
+- La verificación del panel se hizo con su mismo código (`buildModel` y vistas) sobre los archivos publicados, cuyos SHA coinciden con los de GitHub. No se vio en un navegador: RSK-015 sigue abierto.
+- Con esta respuesta se confirmó por primera vez la escritura real del canal (RSK-014).
