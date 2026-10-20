@@ -1,11 +1,12 @@
 # REQ-001 — Proteger la rama principal de producción
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: acción
 - Fecha: 2026-10-20
 - Prioridad: ALTO
 - Relacionado: RSK-001, BL-010
 - Verificación: prod_protegida
+- Cerrado: 2026-10-20 · RESP-002
 
 ## Qué pasó
 
