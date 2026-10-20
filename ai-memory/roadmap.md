@@ -5,9 +5,9 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 
 | Fase | Objetivo | Criterio de salida | Estado |
 |---|---|---|---|
-| F0 — Fundación | Memoria oficial operativa y entorno DEV definido | ai-memory inicializada; DEC-005 y DEC-006 decididas por Pablo (hecho 2026-10-20); GA desacoplado (BL-002); DEV publicado en Vercel y Pages apagado en DEV (BL-003) | PENDIENTE |
+| F0 — Fundación | Memoria oficial operativa y entorno DEV definido | ai-memory inicializada; DEC-005 y DEC-006 decididas por Pablo (hecho 2026-10-20); GA desacoplado (BL-002, hecho 2026-10-20); DEV publicado en Vercel y Pages apagado en DEV (BL-003) | PENDIENTE |
 | F1 — Visibilidad | Pablo entiende el estado de la Factory en menos de 60 segundos | gw2-factory-dashboard publicado (hecho 2026-10-20) y validado por Pablo (FEAT-001, BL-016); Pablo decide desde el panel (Centro de Decisiones, BL-020, BL-021) | EN CURSO |
-| F2 — Calidad | Cada cambio se valida automáticamente | `node --check` + validación de ai-memory en CI (BL-006); CI del dashboard (BL-018); documentación de producto sincronizada (BL-004) | PENDIENTE |
+| F2 — Calidad | Cada cambio se valida automáticamente | validación de ai-memory en CI (BL-006, hecho 2026-10-20) y `node --check` (BL-031); CI del dashboard (BL-018, hecho); documentación de producto sincronizada (BL-004) | EN CURSO |
 | F3 — Evolución | Funcionalidades nuevas listas para evaluación humana en DEV | ≥1 FEAT nueva con ciclo Product→Architecture→Development→Review→Documentation completo | PENDIENTE |
 
 ## Dependencias
@@ -28,3 +28,4 @@ La promoción a producción no forma parte de este roadmap: es decisión exclusi
 - 2026-10-20 — MC-5: el panel pasa a ser un Centro de decisiones sobre el Gato Design System (DEC-013). Lo que necesita a Pablo va primero, con lenguaje sin códigos internos y los errores del canal visibles. Queda MC-6 (revisión y cierre de FACTORY-001B).
 - 2026-10-20 — MC-6: FACTORY-001B cerrada (informe en `missions/`). Panel 2.0.0 con revisión de accesibilidad y textos y documentación consolidada. F1 sigue EN CURSO hasta la validación visual de Pablo (BL-016). La Factory propone autonomía continua acotada (DEC-014, REQ-003) y no inicia misiones nuevas hasta la respuesta.
 - 2026-10-20 — Pablo aprueba FACTORY-001B funcionalmente y elige la opción B desde el panel (RESP-001, primera decisión real del canal). DEC-014 queda aceptada; la autonomía se activa cuando Pablo lo indique, después de la validación final.
+- 2026-10-20 — Pablo valida FACTORY-001B y activa la autonomía continua acotada. FACTORY-LIVE-001 (sesión 1): DEV sin Analytics (FEAT-002, BL-002), validación de la memoria en CI (BL-006) y BOM de `analytics.js`. F2 pasa a EN CURSO. Informe en `missions/FACTORY-LIVE-001-informe.md`.
