@@ -5,7 +5,6 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 
 ## READY
 
-- [BL-002] [ALTO] DEV sin Analytics — cargar GA4 solo en el host de producción (allowlist en runtime) + guard de repo en `github-metrics-to-ga4.yml`. Decidido por Pablo (DEC-006, 2026-10-20). Cambio de código de la app: se ejecuta con ciclo completo después de FACTORY-001B (Dashboard First). · DEC-006, RSK-003
 - [BL-025] [BAJO] Verificación medida `dev_sin_pages` — permitiría cerrar REQ-002 sin respuesta; requiere 1 llamada más a la API por lectura (metadatos del repo DEV). Evaluado en MC-5 y postergado: el canal ya sumó 1 llamada (6 por carga) y REQ-002 se puede responder con un botón. · DEC-011, REQ-002
 - [BL-023] [MEDIO] Consideración futura: ubicación canónica del Gato Design System — hoy vive en gw2-factory-dashboard/gds; cuando gw2-factory-dev lo adopte hay que decidir una única fuente (repo o paquete propio, o vendorizado con versión) para evitar que diverjan. Pedido por Pablo el 2026-10-20: registrar, no resolver todavía. · DEC-010
 - [BL-004] [MEDIO] Sincronizar documentación de producto con el código real — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen v6.6.2 (ej. `api-gw2.js` v2.15.0) pero `index.html` carga `api-gw2.js?v=2.33.0`; la Armería Legendaria no figura en `CHANGELOG.md`. · LES-003, DEC-003
@@ -17,6 +16,8 @@ Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 - [BL-017] [BAJO] Rama duplicada `chore/init-ai-memory` en gw2-factory-dev — mismo contenido que `main` @ b9599d2; la Factory no tiene herramienta para borrar ramas.
 
 ## IN_PROGRESS
+
+- [BL-002] [ALTO] DEV sin Analytics — cargar GA4 solo en el host de producción (allowlist en runtime) + guard de repo en `github-metrics-to-ga4.yml`. Decidido por Pablo (DEC-006, 2026-10-20). FACTORY-LIVE-001, ciclo L1. · DEC-006, RSK-003
 
 ## BLOCKED
 
