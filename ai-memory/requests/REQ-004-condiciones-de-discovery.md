@@ -1,10 +1,11 @@
 # REQ-004 — ¿Cuándo puede investigar sola la Factory?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-20
 - Prioridad: MEDIO
 - Relacionado: DEC-015, DEC-016
+- Cerrado: 2026-10-20 · RESP-004
 
 ## Qué pasó
 
