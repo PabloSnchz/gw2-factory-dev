@@ -23,7 +23,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-011](decisions/DEC-011-intercambio-de-decisiones.md) — Contrato v3: la Factory pide en requests/, Pablo responde en responses/, la Factory procesa al iniciar cada sesión.
 - [DEC-012](decisions/DEC-012-canal-de-respuesta.md) — Pablo responde desde el panel: botón → issue prellenado → workflow escribe el RESP, comenta y cierra. Sin tokens en el navegador.
 - [DEC-013](decisions/DEC-013-centro-de-decisiones-gds.md) — El panel es un Centro de decisiones sobre el GDS: lo que necesita a Pablo primero, IDs como referencia, errores del canal visibles.
-- [DEC-014](decisions/DEC-014-autonomia-continua.md) — PROPUESTA: autonomía continua acotada en DEV; pregunta por producción, alcance, dependencias, arquitectura y datos del usuario (REQ-003).
+- [DEC-014](decisions/DEC-014-autonomia-continua.md) — ACEPTADA (2026-10-20, RESP-001): autonomía continua acotada en DEV; pregunta por producción, alcance, dependencias, arquitectura y datos del usuario. Se activa cuando Pablo lo indique.
 
 ## LESSONS
 
