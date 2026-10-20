@@ -1,24 +1,22 @@
 # STATUS
 
-Estado: BLOQUEADO (esperando decisiones de Pablo)
+Estado: ESPERANDO_VALIDACIÓN
+Tarea actual: FEAT-001 — Dashboard Factory (misión FACTORY-001)
+Motivo: El dashboard histórico observa agentes que ya no existen y su dato medido depende de scripts locales detenidos desde 2026-10-09. Pablo necesita entender el estado de la Factory en menos de 60 segundos (DEC-008).
+Fase: F1 — Visibilidad
+Etapa actual: DOCUMENTATION completada
+Inicio: 2026-10-20T00:10Z
+Última actualización: 2026-10-20T00:25Z
+Próxima acción: Pablo habilita GitHub Pages en gw2-factory-dashboard (Settings → Pages → Deploy from branch → main / root) y valida el panel (BL-016).
 
-Fase actual:
-- F0 — Fundación
+## Esperando a Pablo
 
-Feature actual:
-- Preparación del entorno DEV (propuestas, sin cambios de código)
+- [BL-016] Habilitar GitHub Pages en gw2-factory-dashboard y validar el panel.
+- [RSK-001] Activar protección de rama en main de producción.
+- [DEC-005] Elegir hosting de DEV (A, B o C).
+- [DEC-006] Telemetría en DEV: ninguna o propiedad GA4 separada.
+- [BL-001] Futuro de gw2-wallet-agents y gw2-agents-dashboard (archivo histórico o activo).
 
-Etapa actual:
-- DOCUMENTATION completada — propuestas DEC-005, DEC-006, DEC-007 registradas
+## Bloqueos
 
-Última actualización:
-- 2026-10-19 — Relevamiento de gw2-agents-dashboard y del uso de GA4. Propuestas de publicación de DEV, desacople de GA y adaptación del dashboard. Nuevos riesgos: origen compartido (BL-011), main de producción sin protección (BL-010), datos del dashboard sin actualizar desde 2026-10-09 (BL-012).
-
-Bloqueos:
-- BL-001 / DEC-007: fuente del dashboard y rol de gw2-wallet-agents.
-- BL-002 / DEC-006: telemetría en DEV.
-- BL-003 / DEC-005: hosting de DEV (opción A, B o C).
-
-Próxima acción:
-- Pablo: decidir DEC-005, DEC-006, DEC-007 y revisar BL-010.
-- Factory (tras aprobación): implementar DEC-006 en DEV → publicar DEV según DEC-005 → perfil de fuente en el dashboard (DEC-007).
+- F0 detenida hasta decisiones sobre DEC-005 y DEC-006 (Dashboard First, misión FACTORY-001).

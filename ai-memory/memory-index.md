@@ -1,10 +1,11 @@
 # MEMORY INDEX
 
 Índice de la memoria oficial de la Factory. Una línea por entrada. El detalle vive en cada archivo.
-Convenciones: ver [DEC-002](decisions/DEC-002-convenciones-ai-memory.md).
+Convenciones: ver [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) y contrato de datos [DEC-009](decisions/DEC-009-contrato-de-datos-ai-memory.md).
 
 Lectura obligatoria antes de cualquier trabajo: `status.md` → `backlog.md` → `memory-index.md`.
-Planificación: [roadmap.md](roadmap.md).
+Planificación: [roadmap.md](roadmap.md). Riesgos: [risks.md](risks.md).
+Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 
 ## DECISIONS
 
@@ -14,7 +15,9 @@ Planificación: [roadmap.md](roadmap.md).
 - [DEC-004](decisions/DEC-004-invariantes-de-arquitectura.md) — Invariantes técnicas: CSS 3 capas, router-first, `gn:tokenchange`, Storage API, IIFE + `window.*`.
 - [DEC-005](decisions/DEC-005-entorno-dev-publicado.md) — PROPUESTA: publicar DEV con origen propio (Vercel) para no compartir `localStorage` con PROD.
 - [DEC-006](decisions/DEC-006-desacople-google-analytics.md) — PROPUESTA: GA solo en el host de producción (allowlist en runtime) + guard de repo en el workflow GA4.
-- [DEC-007](decisions/DEC-007-dashboard-fuente-factory.md) — PROPUESTA: perfil de fuente `legacy`/`factory` en el dashboard; FEAT-001 extiende la pestaña "Salud" existente.
+- [DEC-007](decisions/DEC-007-dashboard-fuente-factory.md) — REEMPLAZADA por DEC-008: adaptar el dashboard histórico.
+- [DEC-008](decisions/DEC-008-dashboard-factory.md) — Dashboard nuevo (gw2-factory-dashboard): observa el trabajo, no a los trabajadores; sin scripts locales.
+- [DEC-009](decisions/DEC-009-contrato-de-datos-ai-memory.md) — Contrato de datos v2 de ai-memory: status.md por claves, risks.md, formatos de backlog y entradas.
 
 ## LESSONS
 
@@ -27,7 +30,10 @@ Planificación: [roadmap.md](roadmap.md).
 - [LES-007](lessons/LES-007-cambios-quirurgicos.md) — Cambios quirúrgicos; no reescribir archivos completos.
 - [LES-008](lessons/LES-008-ai-memory-en-utf8.md) — ai-memory debe guardarse en UTF-8 (status.md original era ilegible).
 - [LES-009](lessons/LES-009-relevar-antes-de-proponer.md) — Relevar el código real del destino antes de proponer una funcionalidad.
+- [LES-010](lessons/LES-010-observar-el-trabajo-no-a-los-trabajadores.md) — Un panel debe observar el trabajo y sus decisiones, no la coordinación entre trabajadores.
+- [LES-011](lessons/LES-011-dato-medido-sin-infraestructura-local.md) — El dato medido no puede depender de una máquina local; leer por SHA da snapshots consistentes.
 
 ## FEATURES
 
 - [FEAT-000](features/FEAT-000-inventario-inicial.md) — Inventario inicial del producto (línea base de DEV).
+- [FEAT-001](features/FEAT-001-dashboard-factory.md) — Dashboard Factory: centro de observación de la Factory (gw2-factory-dashboard).

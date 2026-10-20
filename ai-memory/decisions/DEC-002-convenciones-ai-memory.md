@@ -3,6 +3,7 @@
 - Estado: ACEPTADA
 - Fecha: 2026-10-19
 - Ámbito: Memoria oficial de la Factory
+- Ampliada por: DEC-009 (risks.md obligatorio y status.md por claves)
 
 ## Decisión
 

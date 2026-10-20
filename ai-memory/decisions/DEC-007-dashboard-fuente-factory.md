@@ -1,8 +1,10 @@
 # DEC-007 — Adaptación de gw2-agents-dashboard para gw2-factory-dev
 
-- Estado: PROPUESTA (requiere decisión de Pablo — BL-001)
+- Estado: REEMPLAZADA (por DEC-008, 2026-10-20)
 - Fecha: 2026-10-19
 - Ámbito: Dashboard
+
+> Reemplazada: Pablo pidió un dashboard nuevo para la Factory en lugar de adaptar el histórico (misión FACTORY-001). El relevamiento de abajo se conserva como antecedente de DEC-008.
 
 ## Estado actual del dashboard (relevado 2026-10-19)
 
