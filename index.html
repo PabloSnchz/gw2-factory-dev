@@ -21,13 +21,25 @@
   <link rel="stylesheet" href="css/themes/boveda.css?v=1.0.0" id="themeStylesheet">
   
 
-    <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LB782QT9TR"></script>
-  <script>
+    <!-- Google tag (gtag.js): solo en producción (DEC-006).
+       En cualquier otro host (DEV, previews, localhost) no se carga GA:
+       gtag() solo encola en dataLayer y nada sale del navegador. -->
+  <script id="ga-loader">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-LB782QT9TR');
+    (function () {
+      var GA_ID = 'G-LB782QT9TR';
+      var isProd = location.hostname === 'pablosnchz.github.io' &&
+        /^\/gw2-wallet-ligero(\/|$)/.test(location.pathname);
+      window.__gaEnabled = isProd;
+      if (!isProd) return;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(s);
+      gtag('js', new Date());
+      gtag('config', GA_ID);
+    })();
   </script>
 
   <!-- Eventos personalizados -->
