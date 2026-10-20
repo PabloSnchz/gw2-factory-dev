@@ -4,6 +4,7 @@
 - Fecha: 2026-10-20
 - Ámbito: Memoria oficial de la Factory
 - Amplía: DEC-002
+- Ampliada por: DEC-011 (contrato v3: pedidos y respuestas)
 
 ## Contexto
 
