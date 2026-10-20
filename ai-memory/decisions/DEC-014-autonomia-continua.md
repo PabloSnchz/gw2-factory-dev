@@ -67,6 +67,12 @@ Una restricción real: la Factory no corre sola. Cada sesión empieza cuando Pab
 
 - 2026-10-20T05:28Z — Pablo aprobó la opción B desde el Centro de Decisiones (issue #2 → RESP-001).
 - Activación: Pablo pidió además no iniciar trabajo autónomo ni misiones nuevas hasta la validación final de FACTORY-001B. La autonomía queda aprobada pero en espera: la Factory empieza a tomar tareas del backlog solo cuando Pablo lo indique.
+- 2026-10-20 (FACTORY-TRANSITION-001) — Pablo validó FACTORY-001B, activó la autonomía y aprobó esta interpretación:
+  - una decisión pendiente frena la tarea afectada, no la sesión;
+  - "riesgo crítico" es uno nuevo o causado por la Factory;
+  - el panel se actualiza manteniendo la memoria;
+  - la elección de trabajo respeta Producto > Dashboard > Documentación > Procesos > Infraestructura.
+- 2026-10-20 (FACTORY-RESEARCH-001) — Cuando el backlog no alcanza, el trabajo nuevo sale de discovery (DEC-015).
 
 ## Consecuencias al activarse
 
