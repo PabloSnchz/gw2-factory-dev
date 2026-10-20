@@ -6,7 +6,7 @@ Convenciones: ver [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) y contr
 Lectura obligatoria antes de cualquier trabajo: `status.md` → `backlog.md` → `memory-index.md` → respuestas de Pablo pendientes en `responses/` (procesarlas primero, DEC-011).
 Pedidos a Pablo: [requests/](requests/). Respuestas de Pablo: [responses/](responses/README.md).
 Planificación: [roadmap.md](roadmap.md). Riesgos: [risks.md](risks.md). Informes de misión: [missions/](missions/FACTORY-001B-informe-final.md).
-Oportunidades: [discovery.md](discovery.md) (abiertas) y [discovery-archive.md](discovery-archive.md) (historial). Reglas en DEC-015, DEC-016 y DEC-017.
+Oportunidades: [discovery.md](discovery.md) (abiertas) y [discovery-archive.md](discovery-archive.md) (historial). Reglas en DEC-015, DEC-016, DEC-017 y DEC-020.
 Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 
 ## DECISIONS
@@ -29,6 +29,8 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-016](decisions/DEC-016-limites-y-promocion.md) — Límites: READY ≤ 5, oportunidades abiertas ≤ 15 (verificados en CI); prioridad ALTA/MEDIA/BAJA; promoción, archivo a 30 días y descarte con motivo.
 - [DEC-017](decisions/DEC-017-gobierno-del-backlog.md) — READY contiene solo trabajo ejecutable; ideas y postergados vuelven a discovery; rechazos y devoluciones quedan en DONE con prefijo.
 - [DEC-018](decisions/DEC-018-soberania-de-decisiones.md) — Soberanía de decisiones: la Factory decide lo técnico; a Pablo le llegan decisiones (con contexto, impacto, motivo y recomendación), acciones, validaciones e información, separadas.
+- [DEC-019](decisions/DEC-019-taxonomia-de-pendientes.md) — Taxonomía: filtro de 3 preguntas; decisión, acción, validación funcional e información van a Pablo; validación técnica, bloqueos (con dueño) y riesgos no; máximo 3 decisiones abiertas.
+- [DEC-020](decisions/DEC-020-discovery-v2.md) — Discovery v2: áreas; lo detienen solo una decisión estratégica del área, un riesgo CRÍTICO o una restricción explícita; latido de 14 días; vista Ideas sin promoción automática.
 
 ## LESSONS
 
@@ -54,6 +56,8 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-020](lessons/LES-020-ideas-mas-rapidas-que-cierres.md) — Un backlog crece sin control cuando generar ideas cuesta menos que cerrarlas; cada idea necesita salida y límites verificables por máquina.
 - [LES-021](lessons/LES-021-datos-estaticos-envejecen.md) — Los datos estáticos del producto envejecen sin dar error; discovery empieza comparando el repo con fuentes vivas.
 - [LES-022](lessons/LES-022-borrador-recuperado-se-revisa.md) — Un borrador que sobrevive a una interrupción se revisa antes de usarlo; si el panel endurece una regla, primero se publica la memoria que ya la cumple.
+- [LES-023](lessons/LES-023-comentario-normativo.md) — El comentario de una respuesta es parte de la decisión; si refina la opción elegida, manda el comentario.
+- [LES-024](lessons/LES-024-validacion-tecnica-es-de-la-factory.md) — Si una verificación necesita herramientas de desarrollador, es de la Factory; a Pablo solo se le pide su mirada de usuario.
 
 ## FEATURES
 
