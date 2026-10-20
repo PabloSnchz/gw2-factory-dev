@@ -1,0 +1,26 @@
+# Tests de los scripts de la Factory (.github/scripts). No toca la aplicación.
+name: factory-scripts
+
+on:
+  push:
+    paths:
+      - '.github/scripts/**'
+      - '.github/workflows/factory-scripts.yml'
+      - '.github/workflows/decision-response.yml'
+  pull_request:
+    paths:
+      - '.github/scripts/**'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    if: github.repository == 'PabloSnchz/gw2-factory-dev'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test .github/scripts/*.test.cjs
