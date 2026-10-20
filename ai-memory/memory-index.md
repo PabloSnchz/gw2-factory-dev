@@ -22,6 +22,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-010](decisions/DEC-010-gato-design-system.md) — Gato Design System 1.0: tokens en 3 niveles, paleta La Bóveda ajustada a AA, componentes y reglas verificadas en CI.
 - [DEC-011](decisions/DEC-011-intercambio-de-decisiones.md) — Contrato v3: la Factory pide en requests/, Pablo responde en responses/, la Factory procesa al iniciar cada sesión.
 - [DEC-012](decisions/DEC-012-canal-de-respuesta.md) — Pablo responde desde el panel: botón → issue prellenado → workflow escribe el RESP, comenta y cierra. Sin tokens en el navegador.
+- [DEC-013](decisions/DEC-013-centro-de-decisiones-gds.md) — El panel es un Centro de decisiones sobre el GDS: lo que necesita a Pablo primero, IDs como referencia, errores del canal visibles.
 
 ## LESSONS
 
@@ -41,8 +42,9 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-014](lessons/LES-014-base-publicada-verificada.md) — Trabajar sobre la versión publicada verificada por SHA; los borradores locales no son base.
 - [LES-015](lessons/LES-015-commit-atomico.md) — Un cambio y sus tests van en el mismo commit; armar la lista de archivos comparando SHA.
 - [LES-016](lessons/LES-016-probar-canal-por-el-error.md) — Un canal que actúa en nombre de Pablo se prueba en real por el camino de error; nunca con un pedido real.
+- [LES-017](lessons/LES-017-publicacion-grande-por-dependencias.md) — Una publicación que no entra en un commit se parte por dependencias, de modo que cada commit deje el sitio funcionando.
 
 ## FEATURES
 
 - [FEAT-000](features/FEAT-000-inventario-inicial.md) — Inventario inicial del producto (línea base de DEV).
-- [FEAT-001](features/FEAT-001-dashboard-factory.md) — Dashboard Factory: centro de observación de la Factory (gw2-factory-dashboard).
+- [FEAT-001](features/FEAT-001-dashboard-factory.md) — Dashboard Factory: Centro de decisiones de la Factory (gw2-factory-dashboard).
