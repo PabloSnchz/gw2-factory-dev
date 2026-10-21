@@ -74,3 +74,4 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [FEAT-001](features/FEAT-001-dashboard-factory.md) — Dashboard Factory: Centro de decisiones de la Factory (gw2-factory-dashboard).
 - [FEAT-002](features/FEAT-002-dev-sin-analytics.md) — DEV sin Analytics: GA4 solo en el host de producción y métricas GA4 solo en el repo de producción (DEC-006).
 - [FEAT-003](features/FEAT-003-psna-dia-correcto.md) — PSNA: el panel Actividades muestra el día correcto (rotación semanal, cambio a las 08:00 UTC, archivo propio).
+- [FEAT-004](features/FEAT-004-identidad-gato-negro-en-la-boveda.md) — La Bóveda con la identidad de Gato Negro: gato oficial, theme oficial por defecto, guías y mi voz donde le hablo al jugador.
