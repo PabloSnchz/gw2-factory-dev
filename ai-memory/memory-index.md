@@ -68,6 +68,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-026](lessons/LES-026-fuentes-en-desacuerdo.md) — Un dato de referencia se toma de al menos 3 fuentes; las páginas con caché pueden estar desfasadas; se valida lo publicado, no la copia local.
 - [LES-027](lessons/LES-027-limite-fisico-de-la-autonomia.md) — La autonomía tiene un límite físico: Shiruvana solo trabaja cuando alguien la abre; lo que no necesita criterio se automatiza en GitHub.
 - [LES-028](lessons/LES-028-archivos-grandes-y-publicacion.md) — Un archivo que no entra en una publicación se cambia desde otro lugar: lo que depende de datos se deriva de los datos, no del HTML.
+- [LES-029](lessons/LES-029-lo-heredado-se-verifica.md) — Lo heredado no está terminado ni verificado hasta que lo compruebo: los hechos vencen (el 9478 sí existe) y un dato que no se muestra en pantalla no es una funcionalidad.
 
 ## FEATURES
 
