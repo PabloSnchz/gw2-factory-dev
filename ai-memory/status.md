@@ -6,24 +6,23 @@ Motivo: Pablo aprobó FACTORY-GOVERNANCE-004 y autorizó GV-1a a GV-1d y luego B
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T00:26Z
-Última actualización: 2026-10-21T00:34Z
-Próxima acción: GV-1b, reclasificar pendientes: FEAT-002, DEC-018 y DEC-019 según v2. Después GV-1c.
+Última actualización: 2026-10-21T00:37Z
+Próxima acción: GV-1c, bloqueos con dueño y áreas en discovery (backlog y discovery). Después GV-1d.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: GV-1b — reclasificar pendientes: FEAT-002, DEC-018 y DEC-019 según v2
+Micro-ciclo: GV-1c — bloqueos con dueño y áreas en discovery (backlog y discovery)
 Archivos:
-- ai-memory/features/FEAT-002-dev-sin-analytics.md
-- ai-memory/decisions/DEC-018-soberania-de-decisiones.md
-- ai-memory/decisions/DEC-019-taxonomia-de-pendientes.md
-G5-A cerrado: DEC-022 publicada, índice actualizado y FACTORY-GOVERNANCE-004 APROBADA.
+- ai-memory/backlog.md
+- ai-memory/discovery.md
+GV-1b cerrado: FEAT-002, DEC-018 y DEC-019 publicadas.
 
 Plan, un micro-ciclo por vez:
 
 - GV-1a — registrar tu aprobación de REQ-005 (RESP-005 y cierre del pedido). Hecho.
 - G5-A — registrar DEC-022 (conflictos entre reglas) y la aprobación de FACTORY-GOVERNANCE-004. Hecho.
-- GV-1b — reclasificar pendientes: FEAT-002, DEC-018 y DEC-019 según v2. En curso.
-- GV-1c — bloqueos con dueño y áreas en discovery (backlog y discovery).
+- GV-1b — reclasificar pendientes: FEAT-002, DEC-018 y DEC-019 según v2. Hecho.
+- GV-1c — bloqueos con dueño y áreas en discovery (backlog y discovery). En curso.
 - GV-1d — CI verifica la gobernanza nueva y la propuesta 001 queda APROBADA.
 - BL-013a — PSNA: datos de la rotación verificados contra la wiki.
 - BL-013b — PSNA: cálculo del día con la rotación y su test.
