@@ -6,12 +6,12 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T05:42Z
+Última actualización: 2026-10-21T05:36Z
 Próxima acción: retomar con BOV-6, mi componente de voz en La Bóveda y su test. Después BOV-7.
 
 ## Micro-ciclo actual
 
-Ninguno abierto. BOV-1 a BOV-5 están publicados y verificados por SHA: la marca oficial (logo, pie y favicon) y el theme Gato Negro por defecto ya se ven en DEV (`index.html` `6eb6922`, test `bf6c246`; 48/48 tests en local). Sesión pausada por límite físico de la sesión (LES-027), sin trabajo a medias. Al despertar: BOV-6, con su manifiesto y checkpoint antes de empezar.
+Ninguno abierto. DEV pasa a GitHub Pages (DEC-026, decisión de Pablo): Vercel agotó su límite de 100 publicaciones por día y BOV-2 a BOV-5 no llegaron a DEV. Publicado `.github/workflows/dev-pages.yml` (`6fadd75`). BOV-1 a BOV-5 están publicados y verificados por SHA: la marca oficial (logo, pie y favicon) y el theme Gato Negro por defecto se publican en DEV cuando Pages esté activo (`index.html` `6eb6922`, test `bf6c246`; 48/48 tests en local). Sesión pausada por límite físico de la sesión (LES-027), sin trabajo a medias. Al despertar: BOV-6, con su manifiesto y checkpoint antes de empezar.
 
 Plan, un micro-ciclo por vez:
 
@@ -26,8 +26,9 @@ Plan, un micro-ciclo por vez:
 
 ## Esperando a Pablo
 
-- [FEAT-003] Validación: Abrí DEV (https://gw2-factory-dev.vercel.app/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
-- [FEAT-002] Validación: Usá DEV (https://gw2-factory-dev.vercel.app/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
+- [DEC-026] Acción: En gw2-factory-dev, Settings → Pages → Source: "GitHub Actions". Después avisame y publico DEV en https://pablosnchz.github.io/gw2-factory-dev/.
+- [FEAT-003] Validación: Abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
+- [FEAT-002] Validación: Usá DEV (https://pablosnchz.github.io/gw2-factory-dev/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
 
 ## Para tu información
 

@@ -15,7 +15,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-002](decisions/DEC-002-convenciones-ai-memory.md) — Estructura, IDs (DEC/LES/FEAT/BL), formato y codificación UTF-8 de ai-memory.
 - [DEC-003](decisions/DEC-003-docs-vs-ai-memory.md) — `docs/` documenta el producto; `ai-memory/` es la memoria de la Factory. Se enlazan, no se duplican.
 - [DEC-004](decisions/DEC-004-invariantes-de-arquitectura.md) — Invariantes técnicas: CSS 3 capas, router-first, `gn:tokenchange`, Storage API, IIFE + `window.*`.
-- [DEC-005](decisions/DEC-005-entorno-dev-publicado.md) — ACEPTADA (2026-10-20): DEV en Vercel con origen propio para no compartir `localStorage` con PROD.
+- [DEC-005](decisions/DEC-005-entorno-dev-publicado.md) — REEMPLAZADA por DEC-026 (2026-10-21): DEV en Vercel con origen propio para no compartir `localStorage` con PROD.
 - [DEC-006](decisions/DEC-006-desacople-google-analytics.md) — ACEPTADA (2026-10-20): DEV sin Analytics; GA solo en el host de producción + guard de repo en el workflow GA4.
 - [DEC-007](decisions/DEC-007-dashboard-fuente-factory.md) — REEMPLAZADA por DEC-008: adaptar el dashboard histórico.
 - [DEC-008](decisions/DEC-008-dashboard-factory.md) — Dashboard nuevo (gw2-factory-dashboard): observa el trabajo, no a los trabajadores; sin scripts locales.
@@ -36,6 +36,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-023](decisions/DEC-023-modelo-operativo.md) — Modelo operativo de largo plazo: despierta cuando escribe Pablo + vigilia diaria en GitHub Actions; arranque fijo; producto ≥ 60 % y soporte ≤ 15 % por semana; sesiones de 60 min o 12 micro-ciclos; qué detiene la Factory o un área; métricas.
 - [DEC-024](decisions/DEC-024-voz-de-shiruvana.md) — Identidad visual: el gato es la marca, Shiruvana la voz; avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones (48/56 px, uno por sección); nunca en datos, métricas ni navegación.
 - [DEC-025](decisions/DEC-025-identidad-en-la-boveda.md) — La Bóveda adopta la identidad Gato Negro: gato oficial como logo y favicon, theme oficial "Gato Negro" por defecto (Bóveda queda como opción) y mi voz donde le hablo al jugador; reemplaza la regla de DEC-024 que me dejaba fuera de La Bóveda.
+- [DEC-026](decisions/DEC-026-dev-en-github-pages.md) — Decidida por Pablo: DEV vuelve a GitHub Pages (`pablosnchz.github.io/gw2-factory-dev/`) publicado con un workflow propio, sin límite diario; acepta compartir `localStorage` con producción en su navegador. Reemplaza DEC-005.
 
 ## LESSONS
 
