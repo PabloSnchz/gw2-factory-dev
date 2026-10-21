@@ -32,6 +32,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-019](decisions/DEC-019-taxonomia-de-pendientes.md) — Taxonomía: filtro de 3 preguntas; decisión, acción, validación funcional e información van a Pablo; validación técnica, bloqueos (con dueño) y riesgos no; máximo 3 decisiones abiertas.
 - [DEC-020](decisions/DEC-020-discovery-v2.md) — Discovery v2: áreas; lo detienen solo una decisión estratégica del área, un riesgo CRÍTICO o una restricción explícita; latido de 14 días; vista Ideas sin promoción automática.
 - [DEC-021](decisions/DEC-021-tamano-de-micro-ciclo.md) — Tamaño de micro-ciclo: 1 objetivo, ≤ 3 archivos, 1 repo, ≤ 1 DEC, ≤ 20 min y ≤ 40 KB, todos a la vez; escrituras en serie, publicación incremental y manifiesto en status.md.
+- [DEC-022](decisions/DEC-022-conflictos-entre-reglas.md) — Conflictos entre reglas: prevalece la aprobada más recientemente; primera aplicación, la reconciliación con las instrucciones v2 (discovery restringido con READY 4–5, ALTO se mitiga pero no detiene, GDS y DEC técnicas de la Factory, riesgo en cada decisión).
 
 ## LESSONS
 
