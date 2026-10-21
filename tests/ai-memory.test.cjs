@@ -4,6 +4,8 @@
 // - Todo enlace relativo de memory-index.md apunta a un archivo que existe.
 // - status.md tiene las claves que lee el panel (DEC-009).
 // - Límites de carga y formato de discovery (DEC-016, DEC-017).
+// - Gobernanza de pendientes (DEC-018, DEC-019) y áreas de discovery (DEC-020).
+// - Manifiesto de micro-ciclo con ≤ 3 archivos (DEC-021) y riesgo en pedidos nuevos (DEC-022).
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -16,6 +18,35 @@ const MAX_READY = 5;
 const MAX_OPEN_DISC = 15;
 const OPEN_STATES = ['PENDIENTE', 'ANALIZADO'];
 const CLOSED_STATES = ['PROMOVIDO', 'ARCHIVADO', 'DESCARTADO'];
+const MAX_OPEN_DECISIONS = 3;
+const MAX_MANIFEST_FILES = 3;
+const RISK_REQUIRED_FROM = '2026-10-21';
+const AREAS = ['cartera', 'actividades y metas', 'legendarias', 'personajes', 'comercio', 'app', 'panel', 'infraestructura'];
+const CLASS_RE = /^(?:\[[A-Z]+-\d{3}\]\s*)?(Decisi[oó]n|Acci[oó]n|Validaci[oó]n|Info):\s*\S/;
+
+// Líneas "- ..." de una sección "## Título" de status.md.
+function statusSection(title) {
+  const m = read('status.md').match(new RegExp('^## ' + title + '\\s*\\n([\\s\\S]*?)(?=^## |(?![\\s\\S]))', 'm'));
+  return m ? m[1].split('\n').filter((l) => /^- /.test(l)).map((l) => l.slice(2).trim()) : [];
+}
+
+// Pedidos de requests/ con su estado, tipo y secciones.
+function requests() {
+  const dir = path.join(MEM, 'requests');
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir).filter((f) => /^REQ-\d{3}.*\.md$/.test(f)).map((f) => {
+    const txt = fs.readFileSync(path.join(dir, f), 'utf8');
+    const meta = (k) => ((txt.match(new RegExp('^- ' + k + ':\\s*(.*)$', 'mi')) || [])[1] || '').trim();
+    return {
+      file: f,
+      abierta: /^ABIERTA/i.test(meta('Estado')),
+      decision: /^decisi[oó]n/i.test(meta('Tipo')),
+      justificada: /^##\s+Por qu[eé] te lo pregunto\s*$/mi.test(txt),
+      fecha: meta('Fecha').slice(0, 10),
+      conRiesgo: /^##\s+Riesgo\s*$/mi.test(txt),
+    };
+  });
+}
 
 function read(name) { return fs.readFileSync(path.join(MEM, name), 'utf8'); }
 
@@ -106,4 +137,44 @@ test('cada DISC aparece una sola vez entre discovery y su archivo', () => {
   const ids = [...discEntries('discovery.md'), ...discEntries('discovery-archive.md')].map((e) => e.id);
   const dup = ids.filter((id, i) => ids.indexOf(id) !== i);
   assert.deepEqual(dup, [], 'DISC duplicados: ' + dup.join(', '));
+});
+
+test('status.md: cada línea de "Esperando a Pablo" declara su clase (DEC-018, DEC-019)', () => {
+  for (const l of statusSection('Esperando a Pablo')) {
+    assert.match(l, CLASS_RE, 'línea sin clase (Decisión:, Acción:, Validación: o Info:): ' + l.slice(0, 80));
+  }
+});
+
+test('pedidos de decisión abiertos: justificados y como máximo 3 (DEC-018, DEC-019)', () => {
+  const open = requests().filter((r) => r.abierta && r.decision);
+  for (const r of open) assert.ok(r.justificada, `${r.file}: decisión sin "## Por qué te lo pregunto"`);
+  assert.ok(open.length <= MAX_OPEN_DECISIONS, `${open.length} decisiones abiertas para Pablo (máximo ${MAX_OPEN_DECISIONS})`);
+});
+
+test('backlog: cada tarea bloqueada declara su dueño (DEC-019)', () => {
+  for (const l of backlogSection('BLOCKED')) {
+    const m = l.match(/Bloqueado por (Pablo|Factory|entorno):/);
+    assert.ok(m, 'BLOCKED sin dueño ("Bloqueado por Pablo|Factory|entorno:"): ' + l.slice(2, 12));
+    if (m[1] !== 'Pablo') assert.doesNotMatch(l, /pablo/i, `${l.slice(2, 12)}: bloqueado por ${m[1]} no debe mencionar a Pablo (llegaría a su cola)`);
+  }
+});
+
+test('discovery.md: cada idea abierta tiene un área válida (DEC-020)', () => {
+  for (const { id, fields } of discEntries('discovery.md')) {
+    if (!OPEN_STATES.includes(fields.Estado)) continue;
+    assert.ok(AREAS.includes((fields['Área'] || '').toLowerCase()), `${id}: área inválida o ausente "${fields['Área'] || ''}"`);
+  }
+});
+
+test('status.md: el manifiesto del micro-ciclo lista como máximo 3 archivos (DEC-021)', () => {
+  const m = read('status.md').match(/^Archivos:\s*\n((?:- .*\n?)*)/m);
+  if (!m) return;
+  const files = m[1].split('\n').filter((l) => /^- \S/.test(l));
+  assert.ok(files.length <= MAX_MANIFEST_FILES, `el manifiesto lista ${files.length} archivos (máximo ${MAX_MANIFEST_FILES}): dividir el micro-ciclo`);
+});
+
+test('pedidos de decisión abiertos desde el 2026-10-21 traen "## Riesgo" (DEC-022)', () => {
+  for (const r of requests().filter((q) => q.abierta && q.decision && q.fecha >= RISK_REQUIRED_FROM)) {
+    assert.ok(r.conRiesgo, `${r.file}: decisión sin "## Riesgo"`);
+  }
 });
