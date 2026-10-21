@@ -1,6 +1,6 @@
 # FEAT-004 — La Bóveda con la identidad de Gato Negro y mi voz
 
-- Estado: DISPONIBLE PARA EVALUACIÓN (en gw2-factory-dev `main`)
+- Estado: EN PRODUCCIÓN desde 2026-10-21 06:45Z (gw2-wallet-ligero `4629e7e`), por orden de Pablo (BL-039)
 - Fecha: 2026-10-21
 - Backlog: BL-038 (FACTORY-BOVEDA-UI-001) · Decisiones: DEC-025, DEC-024, DEC-010, DEC-026
 - Commits (gw2-factory-dev): `css/themes/gato.css` · `js/theme-selector.js` 1.2.0 · `assets/brand/gato-negro.svg` · `index.html` (`e881e38`, `10ef622`) · guías (`84c5a4e`) · `js/shiruvana.js` (`2f467d2`) · `js/shiruvana-places.js` (`57dd06c`)
@@ -37,6 +37,6 @@ Verificado por la Factory, sin herramientas de Pablo: contraste del theme calcul
 
 ## Riesgos y notas
 
-- **Mismo origen que producción (DEC-026):** DEV y producción comparten `localStorage` en `pablosnchz.github.io`. Al abrir DEV queda guardado `gn:theme` = `gato`. Producción todavía no tiene `gato.css`, así que en ese navegador puede verse sin theme hasta que se promueva o se elija otro theme ahí.
-- **Promoción:** la decide Pablo. Significa copiar los archivos de esta funcionalidad a `gw2-wallet-ligero`. GA ya está protegido por host (DEC-006), así que no hace falta editar nada al promover.
+- **Mismo origen que producción (DEC-026):** DEV y producción comparten `localStorage` en `pablosnchz.github.io`. Al abrir DEV queda guardado `gn:theme` = `gato`. Desde la promoción, producción también tiene `gato.css`, así que ese caso ya no deja a producción sin theme.
+- **Promoción (hecha, BL-039):** 5 commits en gw2-wallet-ligero (`f1b0a32`, `be8ad33`, `b763e14`, `873028b`, `4629e7e`), cada uno deja el sitio funcionando. Todos los archivos son blobs idénticos a DEV salvo `index.html`, que es el de producción con solo los cambios de esta funcionalidad (su bloque de GA no se tocó). Los tests de FEAT-004 pasan contra el `index.html` de producción. Vuelta atrás: `c0471e0` (index.html `41b65b8b`, theme-selector.js `a7d0457a`, guías `aac11f59` y `214cd6ef`; los archivos nuevos se borran).
 - `js/welcome-panel.js` todavía dibuja sus propias insignias con colores anteriores y un error de estilo (`var(--tx-1)fff`). Queda como mejora menor fuera de esta funcionalidad.
