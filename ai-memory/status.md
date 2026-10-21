@@ -1,26 +1,26 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: errores que encontró Pablo en DEV (2026-10-21 20:23Z): Armería (BL-045, BL-046, BL-047) y PSNA (BL-044). La migración del legado (BL-043) queda en pausa hasta cerrarlos.
-Motivo: Pablo validó FEAT-004 y, al revisar FEAT-003 y usar DEV, encontró 5 problemas. El producto va primero: un error que el jugador ve vale más que la migración.
+Tarea actual: árbol de receta de la Armería con el diseño que aprobó Pablo (BL-047). La migración del legado (BL-043) sigue en pausa hasta cerrarlo.
+Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-21T20:45Z
-Próxima acción: PSN-1 — el panel del PSNA dice de qué día son los lugares y se actualiza solo a las 08:00 UTC (BL-044).
+Última actualización: 2026-10-21T22:40Z
+Próxima acción: ARM-4 — árbol de receta con el diseño aprobado, en `js/legendary-tree-ui.js` (BL-047).
 
 Micro-ciclo:
-PSN-1 — el PSNA dice qué día muestra y se actualiza en el cambio (archivo grande dedicado, DEC-021 §1 bis)
+ARM-4 — árbol de receta y totales con el diseño aprobado (mismo modal; cambia el contenido)
 Archivos:
-js/activities.js
-tests/psna-day.test.cjs
+js/legendary-tree-ui.js
+tests/legendary-tree-ui.test.cjs
 
 Plan (orden por valor para el jugador):
 
 - ARM-1 "Tengo" siempre en 0 (BL-045). Hecho (`52363f5`).
 - ARM-2 chips "Abalorio" y "Espaldar" y expansión real de cada legendaria (BL-046, partes 1 y 2 juntas: mismo archivo). Hecho (`4db8e88`).
-- PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044).
-- ARM-4 propuesta visual del árbol de receta para que Pablo la valide (BL-047).
+- PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044). Hecho (`7cbf9c8`).
+- ARM-4 árbol de receta: propuesta aprobada por Pablo (22:14Z); sigue la implementación (BL-047).
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -35,6 +35,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Pablo validó en pantalla la Armería (BL-045 y BL-046) y aprobó la propuesta del árbol de receta (BL-047). PSNA: el panel ahora dice de qué día son los lugares y se actualiza solo a las 08:00 UTC (BL-044).
 - Armería en DEV: la columna "Tengo" ya lee tu banco y tu almacén de materiales; los chips dicen Abalorio y Espaldar; cada legendaria tiene su expansión real (Klobjarne Geirr en Janthir Wilds, Verano Infinito en Visions of Eternity) y el catálogo se ordena por expansión.
 - Pablo validó FEAT-004 en producción y encontró 5 problemas en DEV: 4 en la Armería y 1 en el PSNA. Los registré (BL-044 a BL-047) y los atiendo antes de seguir con la migración.
 - Hechos de la API del legado en DEV, verificados de nuevo (MIG-1): el límite real es 300 pedidos por minuto por IP, y el modo legendario de Nexus tiene dos logros (9472 y 9478), no uno.
@@ -48,10 +49,8 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [BL-045] Validación: abrí DEV → Armería → una legendaria → Materiales totales. La columna "Tengo" tiene que mostrar lo que tenés en el banco y en el almacén de materiales (todavía no cuenta lo que llevan tus personajes encima).
-- [BL-046] Validación: en el catálogo de la Armería, fijate los chips (Abalorio, Espaldar), los filtros de expansión y que Klobjarne Geirr diga Janthir Wilds y Verano Infinito diga Visions of Eternity.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
-- [FEAT-003] Validación: cuando publique BL-044, abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades. El panel va a decir de qué día son los lugares y a qué hora cambian; comparalos con esa fila de la wiki.
+- [FEAT-003] Validación: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades (Ctrl+F5 si no ves el cambio). Arriba de los lugares del PSNA dice de qué día son y en cuánto cambian; comparalos con esa fila de la wiki.
 
 ## Para tu información
 

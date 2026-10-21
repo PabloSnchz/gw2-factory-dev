@@ -16,6 +16,7 @@ const DATA = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'data', 'psna-
 
 const block = SRC.match(/\/\/ PSNA-DAY:BEGIN[\s\S]*?\/\/ PSNA-DAY:END/);
 const pick = block ? new Function(block[0] + '\nreturn psnaPickDay;')() : null;
+const fns = block ? new Function(block[0] + '\nreturn { psnaNextChange, psnaDayText };')() : {};
 const at = (iso) => new Date(iso);
 const first = (r) => r && r.waypoints[0].name;
 
@@ -100,4 +101,31 @@ test('psna-day: lee solo el archivo propio, no el repo de producción', () => {
   assert.doesNotMatch(SRC, /gw2-wallet-ligero/);
   assert.match(SRC, /PSNA_DATA_PATHS:\s*\[\s*'assets\/data\/psna-schedule\.json'\s*\]/);
   assert.doesNotMatch(SRC, /url\.startsWith\('assets\/'\)/);
+});
+
+test('psna-day: el próximo cambio es a las 08:00 UTC de hoy o de mañana (BL-044)', () => {
+  const nx = fns.psnaNextChange;
+  assert.equal(nx(DATA, at('2026-10-21T07:59:00Z')).toISOString(), '2026-10-21T08:00:00.000Z');
+  assert.equal(nx(DATA, at('2026-10-21T08:00:00Z')).toISOString(), '2026-10-22T08:00:00.000Z');
+  assert.equal(nx(DATA, at('2026-10-21T22:14:00Z')).toISOString(), '2026-10-22T08:00:00.000Z');
+  assert.equal(nx(null, at('2026-10-21T03:00:00Z')).toISOString(), '2026-10-21T08:00:00.000Z');
+  assert.equal(nx(DATA, new Date('x')), null);
+});
+
+test('psna-day: el panel dice de qué día son los lugares y cuándo cambian (BL-044)', () => {
+  const now = at('2026-10-21T22:14:00Z');
+  const day = pick(DATA, now);
+  const txt = fns.psnaDayText(day, fns.psnaNextChange(DATA, now), now);
+  assert.equal(txt, 'Lugares del miércoles 21/10 · cambian en 9 h 46 min (08:00 UTC)');
+  const early = at('2026-10-21T07:15:00Z');
+  assert.equal(fns.psnaDayText(pick(DATA, early), fns.psnaNextChange(DATA, early), early),
+    'Lugares del martes 20/10 · cambian en 45 min (08:00 UTC)');
+  assert.equal(fns.psnaDayText(null, null, now), '');
+});
+
+test('psna-day: el panel muestra el texto del día y se actualiza solo en el cambio (BL-044)', () => {
+  assert.match(SRC, /psnaDayText\(state\.daily\.psnaDay/);
+  assert.match(SRC, /if \(dayTxt\) status\.innerHTML = /);
+  assert.match(SRC, /state\._psnaTimer = setTimeout/);
+  assert.match(SRC, /clearTimeout\(state\._psnaTimer\)/);
 });
