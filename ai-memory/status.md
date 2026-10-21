@@ -6,13 +6,13 @@ Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propu
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-21T23:45Z
-Próxima acción: ARM-5 — en la cabecera del modal, "Receta" y "Materiales totales" como pestañas al lado de "Agregar a la cola" (`js/legendary-tracker.js`, archivo grande dedicado). Después, validación de Pablo.
+Última actualización: 2026-10-21T23:25Z
+Próxima acción: ARM-5 — ficha de pantalla completa en `js/legendary-tree-ui.js` (renderHeroHTML y renderSheetHTML); después ARM-6 la conecta en `js/legendary-tracker.js` (archivo grande dedicado).
 
 Micro-ciclo:
-ARM-5 — pestañas Receta / Materiales totales en la cabecera del modal (BL-047)
+ARM-5 — ficha de pantalla completa: cabecera grande, resumen, Receta y Materiales totales lado a lado (BL-047)
 Archivos:
-js/legendary-tracker.js
+js/legendary-tree-ui.js
 tests/legendary-tree-ui.test.cjs
 
 Plan (orden por valor para el jugador):
@@ -22,7 +22,9 @@ Plan (orden por valor para el jugador):
 - PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044). Hecho (`7cbf9c8`).
 - PSN-2 PSNA renovado (BL-048): ícono local del waypoint, día y cuenta regresiva en grande, lugares como botones. Hecho (`8d03631`).
 - ARM-4 árbol de receta y totales con el diseño aprobado (BL-047): `js/legendary-tree-ui.js` 2.0.0 y `tests/legendary-tree-ui.test.cjs` (9 tests, 12/12 mutaciones). Hecho.
-- ARM-5 pestañas en la cabecera del modal (BL-047). Sigue.
+- Pablo vio ARM-4 (23:18Z): el diseño gusta pero dentro del modal de 680 px queda comprimido, sin aire. Pidió ir a algo como la propuesta: una ficha grande de pantalla completa. Me dio vía libre para rediseñar sin consultarle; lo prueba al volver.
+- ARM-5 ficha de pantalla completa en `legendary-tree-ui.js` (BL-047). En curso.
+- ARM-6 la ficha en el tracker: diálogo de pantalla completa, cabecera grande con ícono, tipo y expansión, y respaldo de ícono y nombre en español desde el catálogo (en la captura de Pablo no había íconos). Sigue.
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
