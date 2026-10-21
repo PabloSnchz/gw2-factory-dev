@@ -1,24 +1,24 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: Ninguna — REQ-009 procesada (opción A, avatar 48/56 px, DEC-024); implementación en BL-037
-Motivo: Sin decisiones abiertas. El trabajo de producto sigue: BL-034 es la próxima tarea.
+Estado: EN_CURSO
+Tarea actual: Dejar explícito en DEC-024 que la marca actual de Gato Negro Factory no se modifica
+Motivo: Pablo pidió que la cabecera (ícono del gato, nombre y subtítulo) quede exactamente como está; el mockup v2 la había dibujado distinta.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
-Inicio: 2026-10-21T04:01Z
-Última actualización: 2026-10-21T04:09Z
-Próxima acción: BL-034 en la próxima sesión (metas de Janthir Wilds y Visions of Eternity). Después DISC-003 (producto, ALTA, tiene reservado el último lugar de READY), la implementación de DEC-023 y BL-037 (voz de Shiruvana en el panel), dentro del 15 % semanal de soporte.
+Inicio: 2026-10-21T04:11Z
+Última actualización: 2026-10-21T04:14Z
+Próxima acción: G10-D, registrar en DEC-024 que la marca no se modifica. Después, cierre de sesión.
 
-## Resumen de la sesión
+## Micro-ciclo actual
 
-- REQ-009 aprobada (opción A): RESP-009 procesada con las reglas de Pablo, REQ-009 cerrada.
-- DEC-024 (voz de Shiruvana):
-  - el gato sigue siendo la marca y Shiruvana es la voz;
-  - avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones;
-  - 48 px en general y 56 px en resúmenes y decisiones importantes, en columna propia para no perder densidad;
-  - un avatar por sección visible.
-- Propuesta de identidad actualizada a v2. BL-037 en READY: READY 4, discovery restringido a ideas ALTA.
-- 3 micro-ciclos (G10-A, G10-B, G10-C), escrituras en serie, cada una verificada por SHA. 31/31 tests en local.
+Micro-ciclo: G10-D — registrar en DEC-024 que la marca actual no se modifica
+Archivos:
+- ai-memory/decisions/DEC-024-voz-de-shiruvana.md
+El mockup se corrige fuera del repositorio con el mismo dibujo de `brandMark()` (gds/icons.js).
+
+Plan, un micro-ciclo por vez:
+
+- G10-D — registrar en DEC-024 que la marca actual no se modifica. En curso.
 
 ## Esperando a Pablo
 
