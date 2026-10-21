@@ -35,6 +35,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-022](decisions/DEC-022-conflictos-entre-reglas.md) — Conflictos entre reglas: prevalece la aprobada más recientemente; primera aplicación, la reconciliación con las instrucciones v2 (discovery restringido con READY 4–5, ALTO se mitiga pero no detiene, GDS y DEC técnicas de la Factory, riesgo en cada decisión).
 - [DEC-023](decisions/DEC-023-modelo-operativo.md) — Modelo operativo de largo plazo: despierta cuando escribe Pablo + vigilia diaria en GitHub Actions; arranque fijo; producto ≥ 60 % y soporte ≤ 15 % por semana; sesiones de 60 min o 12 micro-ciclos; qué detiene la Factory o un área; métricas.
 - [DEC-024](decisions/DEC-024-voz-de-shiruvana.md) — Identidad visual: el gato es la marca, Shiruvana la voz; avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones (48/56 px, uno por sección); nunca en datos, métricas ni navegación.
+- [DEC-025](decisions/DEC-025-identidad-en-la-boveda.md) — La Bóveda adopta la identidad Gato Negro: gato oficial como logo y favicon, theme oficial "Gato Negro" por defecto (Bóveda queda como opción) y mi voz donde le hablo al jugador; reemplaza la regla de DEC-024 que me dejaba fuera de La Bóveda.
 
 ## LESSONS
 
