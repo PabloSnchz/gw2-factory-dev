@@ -88,6 +88,48 @@ for (const [id, exp] of Object.entries(EXPECTED)) {
   });
 }
 
+// Carga meta.js en un sandbox mínimo (sin DOM real) para probar la función pura del filtro.
+function loadMetaModule() {
+  const vm = require('node:vm');
+  const noop = () => {};
+  const document = {
+    querySelector: () => null,
+    querySelectorAll: () => [],
+    addEventListener: noop,
+    createElement: () => ({ style: {}, classList: { add: noop, remove: noop, toggle: noop }, appendChild: noop, setAttribute: noop }),
+    body: { classList: { add: noop, remove: noop, toggle: noop, contains: () => false } }
+  };
+  const window = { addEventListener: noop };
+  const ctx = {
+    window, document, console: { info: noop, warn: noop, error: noop, log: noop },
+    Storage: { get: () => null, set: noop, STORAGE_KEYS: {} },
+    setTimeout: noop, setInterval: noop, clearInterval: noop, clearTimeout: noop,
+    location: { hash: '' }, navigator: {}, fetch: () => Promise.reject(new Error('sin red'))
+  };
+  vm.runInNewContext(metaJs, ctx, { filename: 'meta.js' });
+  return window.Meta;
+}
+
+test('meta.js completa el filtro de expansión con lo que trae meta-events.json', () => {
+  const expSelect = indexHtml.match(/<select id="metaExp">([\s\S]*?)<\/select>/)[1];
+  const fromHtml = [...expSelect.matchAll(/value="([^"]*)"/g)].map(m => m[1]);
+  const Meta = loadMetaModule();
+  assert.equal(typeof Meta._expansionOptions, 'function');
+  const added = Meta._expansionOptions(fromHtml, metas);
+  const all = new Set([...fromHtml, ...added.map(o => o.value)]);
+  for (const m of metas) assert.ok(all.has(m.expansion), `sin opción de filtro: "${m.expansion}"`);
+  assert.ok(added.some(o => o.value === 'Visions of Eternity'), 'falta Visions of Eternity');
+  assert.ok(!added.some(o => fromHtml.includes(o.value)), 'no duplica opciones existentes');
+  // Orden cronológico: Visions of Eternity va al final.
+  assert.equal(added[added.length - 1].value, 'Visions of Eternity');
+});
+
+test('meta.js pide la versión nueva de meta-events.json (sin caché vieja)', () => {
+  const m = metaJs.match(/assets\/meta-events\.json\?v=([\d.]+)/);
+  assert.ok(m, 'no encuentro el fetch de meta-events.json');
+  assert.notEqual(m[1], '2.5.0', 'la versión 2.5.0 sirve los datos viejos desde caché');
+});
+
 test('cobertura mínima: 3 entradas de Janthir y 5 de Visions of Eternity', () => {
   assert.ok(metas.filter(m => m.expansion === 'Janthir').length >= 3);
   assert.ok(metas.filter(m => m.expansion === 'Visions of Eternity').length >= 5);
