@@ -87,3 +87,8 @@ Un riesgo con "ACEPTADO por Pablo" en su mitigación se sigue midiendo, pero dej
 | RSK-001 · revisión 2026-11-20 | "Pendiente tuyo" y problema crítico | Información (riesgo aceptado) |
 
 Resultado: de 6 "decisiones" a 1 decisión y 2 validaciones, más 2 avisos informativos que no piden nada.
+
+## Ampliación
+
+- 2026-10-20: DEC-019 amplía esta decisión con el filtro de tres preguntas, la validación técnica como trabajo exclusivo de la Factory, bloqueos con dueño, riesgos fuera de la cola y como máximo 3 decisiones abiertas (RESP-005).
+- 2026-10-21: DEC-022 (instrucciones v2) agrega el **riesgo** a lo que debe traer cada decisión para Pablo: contexto, recomendación, impacto, riesgo y justificación. Los pedidos de decisión nuevos llevan una sección `## Riesgo`.
