@@ -31,6 +31,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-018](decisions/DEC-018-soberania-de-decisiones.md) — Soberanía de decisiones: la Factory decide lo técnico; a Pablo le llegan decisiones (con contexto, impacto, motivo y recomendación), acciones, validaciones e información, separadas.
 - [DEC-019](decisions/DEC-019-taxonomia-de-pendientes.md) — Taxonomía: filtro de 3 preguntas; decisión, acción, validación funcional e información van a Pablo; validación técnica, bloqueos (con dueño) y riesgos no; máximo 3 decisiones abiertas.
 - [DEC-020](decisions/DEC-020-discovery-v2.md) — Discovery v2: áreas; lo detienen solo una decisión estratégica del área, un riesgo CRÍTICO o una restricción explícita; latido de 14 días; vista Ideas sin promoción automática.
+- [DEC-021](decisions/DEC-021-tamano-de-micro-ciclo.md) — Tamaño de micro-ciclo: 1 objetivo, ≤ 3 archivos, 1 repo, ≤ 1 DEC, ≤ 20 min y ≤ 40 KB, todos a la vez; escrituras en serie, publicación incremental y manifiesto en status.md.
 
 ## LESSONS
 
@@ -58,6 +59,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-022](lessons/LES-022-borrador-recuperado-se-revisa.md) — Un borrador que sobrevive a una interrupción se revisa antes de usarlo; si el panel endurece una regla, primero se publica la memoria que ya la cumple.
 - [LES-023](lessons/LES-023-comentario-normativo.md) — El comentario de una respuesta es parte de la decisión; si refina la opción elegida, manda el comentario.
 - [LES-024](lessons/LES-024-validacion-tecnica-es-de-la-factory.md) — Si una verificación necesita herramientas de desarrollador, es de la Factory; a Pablo solo se le pide su mirada de usuario.
+- [LES-025](lessons/LES-025-tamano-se-decide-antes.md) — El tamaño de un micro-ciclo se decide antes de comenzar; dividir durante la publicación deja el repositorio a medias.
 
 ## FEATURES
 
