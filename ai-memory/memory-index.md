@@ -34,6 +34,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-021](decisions/DEC-021-tamano-de-micro-ciclo.md) — Tamaño de micro-ciclo: 1 objetivo, ≤ 3 archivos, 1 repo, ≤ 1 DEC, ≤ 20 min y ≤ 40 KB, todos a la vez; escrituras en serie, publicación incremental y manifiesto en status.md.
 - [DEC-022](decisions/DEC-022-conflictos-entre-reglas.md) — Conflictos entre reglas: prevalece la aprobada más recientemente; primera aplicación, la reconciliación con las instrucciones v2 (discovery restringido con READY 4–5, ALTO se mitiga pero no detiene, GDS y DEC técnicas de la Factory, riesgo en cada decisión).
 - [DEC-023](decisions/DEC-023-modelo-operativo.md) — Modelo operativo de largo plazo: despierta cuando escribe Pablo + vigilia diaria en GitHub Actions; arranque fijo; producto ≥ 60 % y soporte ≤ 15 % por semana; sesiones de 60 min o 12 micro-ciclos; qué detiene la Factory o un área; métricas.
+- [DEC-024](decisions/DEC-024-voz-de-shiruvana.md) — Identidad visual: el gato es la marca, Shiruvana la voz; avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones (48/56 px, uno por sección); nunca en datos, métricas ni navegación.
 
 ## LESSONS
 
