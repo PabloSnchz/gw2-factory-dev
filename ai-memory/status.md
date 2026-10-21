@@ -4,19 +4,19 @@ Estado: EN_CURSO
 Tarea actual: BL-037 — Voz de Shiruvana en el panel (gw2-factory-dashboard)
 Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. Es una orden explícita: no cuenta contra el 15 % de soporte (DEC-023 §4) y prevalece sobre el orden anterior (DEC-022).
 Fase: F1 — Visibilidad
-Etapa actual: REVIEW
+Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T04:15Z
-Última actualización: 2026-10-21T04:52Z
-Próxima acción: BL-037e, tests del panel para la voz de Shiruvana (dashboard). Después BL-037f.
+Última actualización: 2026-10-21T04:58Z
+Próxima acción: BL-037f, versiones en index.html, CHANGELOG y README (dashboard). Después BL-037g.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BL-037e — tests del panel para la voz de Shiruvana (dashboard)
+Micro-ciclo: BL-037f — versiones en index.html, CHANGELOG y README (dashboard)
 Archivos:
-- gw2-factory-dashboard: tests/voice.test.mjs
-- gw2-factory-dashboard: tests/panel.test.mjs
-- gw2-factory-dashboard: tests/sovereignty.test.mjs
-BL-037d publicado (views.js `c0d65d5`, SHA verificado). Tests del panel: un avatar por sección, 48/56 px, resumen de hasta 3 viñetas, solo decisiones de la Factory, nada en cabecera ni métricas. Los 2 tests viejos pasan a esperar "Shiruvana recomienda". 92/92 tests, 9/9 mutaciones.
+- gw2-factory-dashboard: index.html
+- gw2-factory-dashboard: CHANGELOG.md
+- gw2-factory-dashboard: README.md
+BL-037e publicado (sovereignty `46c7e4f`, panel `6e31dc8`, voice.test `d7c8a88`): CI vuelve a verde. index.html solo cambia versiones de caché (GDS 1.1.0, app 2.2.0); la cabecera y la marca no se tocan.
 
 Plan, un micro-ciclo por vez:
 
@@ -24,8 +24,8 @@ Plan, un micro-ciclo por vez:
 - BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). Hecho.
 - BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard). Hecho.
 - BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande). Hecho.
-- BL-037e — tests del panel para la voz de Shiruvana (dashboard). En curso.
-- BL-037f — versiones en index.html, CHANGELOG y README (dashboard).
+- BL-037e — tests del panel para la voz de Shiruvana (dashboard). Hecho.
+- BL-037f — versiones en index.html, CHANGELOG y README (dashboard). En curso.
 - BL-037g — cierre en memoria: backlog, FEAT-001 y roadmap.
 
 ## Esperando a Pablo
