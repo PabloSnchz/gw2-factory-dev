@@ -6,18 +6,17 @@ Motivo: Pablo aprobó REQ-007 (opción A): un archivo que solo supera 40 KB ocup
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T00:53Z
-Última actualización: 2026-10-21T01:12Z
-Próxima acción: BL-013d, PSNA: FEAT-003 y la lección LES-026, con su índice. Después BL-013e.
+Última actualización: 2026-10-21T01:14Z
+Próxima acción: BL-013e, PSNA: cierre de BL-013 en backlog, riesgos y roadmap.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BL-013d — PSNA: FEAT-003 y la lección LES-026, con su índice
+Micro-ciclo: BL-013e — PSNA: cierre de BL-013 en backlog, riesgos y roadmap
 Archivos:
-- ai-memory/features/FEAT-003-psna-dia-correcto.md
-- ai-memory/lessons/LES-026-fuentes-en-desacuerdo.md
-- ai-memory/memory-index.md
-BL-013c cerrado: `tests/psna-day.test.cjs` publicado (9 tests) y nota de fuente corregida en `assets/data/psna-schedule.json`. En CI corren 4 archivos de test: memoria (19), datos y cálculo del PSNA (3 y 9) y Analytics (5).
-Orden: FEAT-003 y LES-026 antes que el backlog, para que ninguna referencia quede rota (DEC-021 §2.3).
+- ai-memory/backlog.md
+- ai-memory/risks.md
+- ai-memory/roadmap.md
+BL-013d cerrado: FEAT-003 y LES-026 publicadas, con su índice.
 
 Plan, un micro-ciclo por vez:
 
@@ -25,8 +24,8 @@ Plan, un micro-ciclo por vez:
 - G6-B — anotar en DEC-021 la excepción de archivo grande y liberar el área en discovery. Hecho.
 - BL-013b — PSNA: `js/activities.js` calcula el día con la rotación y lee el archivo propio (archivo grande, micro-ciclo dedicado). Hecho.
 - BL-013c — PSNA: test del cálculo del día. Hecho.
-- BL-013d — PSNA: FEAT-003 y la lección LES-026, con su índice. En curso.
-- BL-013e — PSNA: cierre de BL-013 en backlog, riesgos y roadmap.
+- BL-013d — PSNA: FEAT-003 y la lección LES-026, con su índice. Hecho.
+- BL-013e — PSNA: cierre de BL-013 en backlog, riesgos y roadmap. En curso.
 
 ## Esperando a Pablo
 
