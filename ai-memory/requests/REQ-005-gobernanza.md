@@ -1,10 +1,11 @@
 # REQ-005 — ¿Aprobás la propuesta de gobernanza (pendientes y discovery)?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-20
 - Prioridad: MEDIO
 - Relacionado: DEC-015, DEC-018, RESP-004
+- Cerrado: 2026-10-21 · RESP-005
 
 ## Qué pasó
 
