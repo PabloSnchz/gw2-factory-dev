@@ -1,6 +1,11 @@
 /*!
  * js/legendary-tracker.js — Armería Legendaria
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * Versión: 1.2.0 (2026-10-21) — BL-047: la legendaria se abre en una FICHA de
+ *   pantalla completa (antes un modal de 680 px): cabecera grande con ícono,
+ *   tipo, expansión y generación, resumen, y Receta y Materiales totales lado a
+ *   lado (LegendaryTreeUI.renderSheetHTML). Ícono y nombre en español con
+ *   respaldo del catálogo cuando la API todavía no los trajo.
  * Versión: 1.1.1 (2026-10-21) — BL-045: "Tengo" de Materiales totales lee el banco
  *   y el almacén de materiales (stockMap), no las legendarias desbloqueadas.
  * Versión: 1.1.0 (2026-09-30) — T3+T4 (ALERT-84): contrato de registro + render real
@@ -28,7 +33,7 @@
   // 1.1.0 (ALERT-84 T3+T4): la puerta de registro existe y el render usa las
   // funciones registradas. NO es la T3 completa del PO (sigue sin datos de API:
   // loadLegendaryData() es un stub) — es el CONTRATO y el cableado.
-  var VER = '1.1.1';
+  var VER = '1.2.0';
 
   // ========================================================================
   // 1. CONFIGURACIÓN / ESTADO
@@ -519,7 +524,10 @@
     m.hidden = true;
     m.innerHTML =
       '<div class="modal__backdrop" data-close="1"></div>' +
-      '<div class="modal__dialog" style="max-width: 680px;">' +
+      // Ficha de pantalla completa (BL-047): en 680 px el árbol quedaba
+      // comprimido y sin aire. 96vw hasta 1320 px y casi todo el alto.
+      '<div class="modal__dialog lt-sheet-dialog" style="width:min(1320px,96vw);max-width:min(1320px,96vw);' +
+        'height:94vh;max-height:94vh;">' +
         // El header va STICKY, y va por estilo en linea y NO por una regla de
         // theme-polish.css: `.modal__header` es compartido con el conversor y
         // con los demas dialogos, y hacer sticky el de todos cambiaria el
@@ -531,8 +539,7 @@
         // pantalla y agregar pasa a ser un trabajo de cuatro clics.
         '<header class="modal__header" style="position:sticky;top:0;z-index:2;' +
           'background:var(--panel);">' +
-          '<h3 id="ltItemModalTitle" style="font-size:0.95rem;flex:1;' +
-            'min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Legendaria</h3>' +
+          '<div id="ltItemModalTitle" style="flex:1;min-width:0;padding:6px 0;">Legendaria</div>' +
           '<div id="ltItemModalActions" style="display:flex;align-items:center;gap:6px;' +
             'flex-shrink:0;"></div>' +
           '<button type="button" class="modal__close" aria-label="Cerrar" data-close="1">✕</button>' +
@@ -619,6 +626,47 @@
   // despacha a LegendaryTreeUI para el arbol o los totales. Con el mismo nombre
   // habria dos cosas distintas con un solo nombre, que es la confusion que ese
   // invariante existe para evitar.
+  // Ícono, nombre en español y color de una pieza. Primero lo que trajo la API
+  // (ItemIcons); si todavía no llegó o falló, lo que ya tiene el catálogo para
+  // las 206 legendarias (icono y nameEs vienen en legendary-data.js). Sin esto
+  // la raíz del árbol salía en inglés y sin ícono (captura de Pablo, 23:18Z).
+  var _catPorId = null;
+  function itemDelCatalogo(iid) {
+    if (!_catPorId) {
+      var items = (root.LegendaryCatalog && root.LegendaryCatalog.items) || [];
+      if (!items.length) return null;
+      _catPorId = {};
+      items.forEach(function (x) { _catPorId[String(x.id)] = x; });
+    }
+    return _catPorId[String(iid)] || null;
+  }
+  function infoPieza(iid) {
+    var Icons = root.ItemIcons;
+    var info = Icons && Icons.de ? Icons.de(iid) : null;
+    var cat = itemDelCatalogo(iid);
+    if (!cat) return info;
+    return {
+      icon: (info && info.icon) || cat.icon || null,
+      name: (info && info.name) || cat.nameEs || cat.name || null,
+      color: (info && info.color) || '#974EFF',
+      rarity: (info && info.rarity) || null
+    };
+  }
+  function metaCabecera(id) {
+    var item = itemDelCatalogo(id);
+    var info = infoPieza(id) || {};
+    var CUI = root.LegendaryCatalogUI;
+    var exp = item ? ((CUI && CUI.expansionReal) ? CUI.expansionReal(item) : item.expansion) : null;
+    return {
+      name: info.name || (item ? (item.nameEs || item.name) : '#' + id),
+      icon: info.icon || null,
+      color: info.color || 'var(--tx-1)',
+      tipo: item && CUI && CUI.TYPE_LABELS ? (CUI.TYPE_LABELS[item.type] || item.type) : (item ? item.type : null),
+      expansion: exp,
+      generation: item ? item.generation : null
+    };
+  }
+
   function pintarModalLegendaria() {
     var body = document.getElementById('ltItemModalBody');
     var actions = document.getElementById('ltItemModalActions');
@@ -642,14 +690,22 @@
     // los dos lo piden al mismo resolvedor, no hay dos caminos. Si todavia no
     // esta, `de` es null y la vista dibuja sin icono y sin color, que es lo
     // que tiene que pasar mientras la red responde o si nunca responde.
-    var Icons = root.ItemIcons;
     var opts = {
       esc: esc,
       abiertos: abiertosArbol,
-      de: Icons ? function (iid) { return Icons.de(iid); } : null
+      vista: vistaModal,
+      de: infoPieza
     };
 
-    body.innerHTML = (vistaModal === 'totales')
+    // La cabecera grande se repinta con la ficha: cuando llegan los íconos de
+    // la API, también cambia el de la cabecera.
+    var titleEl = document.getElementById('ltItemModalTitle');
+    if (titleEl && UI.renderHeroHTML) titleEl.innerHTML = UI.renderHeroHTML(metaCabecera(id), esc);
+
+    // Ficha completa (BL-047): Receta y Materiales totales lado a lado.
+    // "Tengo" es el inventario de materiales (stockMap, BL-045).
+    if (UI.renderSheetHTML) body.innerHTML = UI.renderSheetHTML(res, stockMap(), opts);
+    else body.innerHTML = (vistaModal === 'totales')
       // "Tengo" es el inventario de materiales (banco + almacen), no las
       // legendarias desbloqueadas: con ownedMap() la columna salia siempre en 0
       // (BL-045, tests/legendary-totals-stock.test.cjs).
@@ -663,11 +719,13 @@
       var enCola = state.queue.indexOf(Number(id)) !== -1;
       var btn = 'padding:5px 11px;border-radius:20px;font-size:0.68rem;cursor:pointer;' +
         'border:1px solid var(--bd-1);white-space:nowrap;';
-      actions.innerHTML =
+      // Con la ficha, Receta y Materiales totales se ven juntos (y en pantalla
+      // angosta las pestañas están dentro de la ficha): en la cabecera queda la cola.
+      actions.innerHTML = (UI.renderSheetHTML ? '' :
         '<button type="button" data-lt-view="' + (vistaModal === 'totales' ? 'arbol' : 'totales') +
           '" style="' + btn + 'background:var(--bg-1);color:var(--tx-2);">' +
-          (vistaModal === 'totales' ? 'Ver árbol' : 'Materiales totales') + '</button>' +
-        '<button type="button" data-lt-queue="' + Number(id) + '" style="' + btn +
+          (vistaModal === 'totales' ? 'Ver árbol' : 'Materiales totales') + '</button>') +
+        '<button type="button" data-lt-queue="' + Number(id) + '" style="' + btn + 'padding:8px 16px;font-size:0.8rem;' +
           'background:var(--bg-2);color:var(--tx-1);">' +
           (enCola ? 'Quitar de la cola' : 'Agregar a la cola') + '</button>';
     }
