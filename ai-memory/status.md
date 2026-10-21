@@ -6,27 +6,29 @@ Motivo: Pablo aprobó la opción A (RESP-010) y apagó el GitHub Pages de gw2-wa
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T14:10Z
-Última actualización: 2026-10-21T14:10Z
-Próxima acción: MIG-1 — hechos de la API verificados en `docs/GW2-API-HECHOS.md`.
+Última actualización: 2026-10-21T14:20Z
+Próxima acción: MIG-2a — primeros 3 generadores de la Armería en `tools/legendary/`, revisados y probados en local.
 
 Micro-ciclo:
-MIG-1 — hechos de la API del legado en DEV
+MIG-2a — generadores de la Armería (datos, precursores, descarga de ítems)
 Archivos:
-docs/GW2-API-HECHOS.md
-ai-memory/lessons/LES-029.md
-ai-memory/memory-index.md
+tools/legendary/build_legendary_data.py
+tools/legendary/build_legendary_precursors.py
+tools/legendary/fetch_legendary_items.py
 
 Plan FACTORY-ASSET-001 (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
 - ASSET-1 — inventario de los dos repos (estructura, documentos, herramientas, workflows, actividad). Hecho.
 - ASSET-2 — clasificación con motivo: conocimiento, documentación, herramientas, producto solo en agents, qué archivar. Hecho.
 - ASSET-3 — informe y REQ-010. Hecho.
-- Aprobado (RESP-010): MIG-1 hechos de la API → MIG-2 generadores de la Armería → MIG-3 arreglo de totales → MIG-4 tests por tandas → MIG-5 documentación (BL-004) → MIG-6 discovery → archivo (acción de Pablo).
+- MIG-1 hechos de la API. Hecho (`20d53ff`): `docs/GW2-API-HECHOS.md` y LES-029. Al verificar, corregí el legado: el logro 9478 sí existe (desafío legendario de Vloxx) y el 9472 es el modo desafío.
+- Aprobado (RESP-010), sigue: MIG-2 generadores de la Armería → MIG-3 arreglo de totales → MIG-4 tests por tandas → MIG-5 documentación (BL-004) → MIG-6 discovery → archivo (acción de Pablo).
 
 Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab20f`; vuelta atrás `4629e7e`).
 
 ## Resumen de la sesión
 
+- Hechos de la API del legado en DEV, verificados de nuevo (MIG-1): el límite real es 300 pedidos por minuto por IP, y el modo legendario de Nexus tiene dos logros (9472 y 9478), no uno.
 - Pablo aprobó la migración del legado de QwenPaw (REQ-010, opción A) y apagó el GitHub Pages de los dos repos: la copia vieja de La Bóveda ya no comparte datos con producción.
 - FACTORY-ASSET-001: analicé el legado de QwenPaw. Lo más valioso: unos 90 archivos de tests del producto, los generadores de datos de la Armería y un panel de Homestead sin validar. Propuesta en REQ-010.
 - FEAT-005 en producción por orden de Pablo (BL-042).

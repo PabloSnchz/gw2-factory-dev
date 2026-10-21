@@ -13,6 +13,8 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
+- [BL-043] [ALTO] Migración del legado de QwenPaw a DEV — REQ-010 aprobada (RESP-010, opción A). Orden: MIG-1 hechos de la API (hecho, `20d53ff`: `docs/GW2-API-HECHOS.md`, LES-029) → MIG-2 generadores de la Armería en `tools/legendary/` → MIG-3 arreglo de totales (`stockMap`) si el error existe en DEV → MIG-4 tests por tandas que pasen en DEV → MIG-5 documentación (cierra BL-004) → MIG-6 discovery. Al terminar, Pablo archiva gw2-wallet-agents y gw2-agents-dashboard. Los dos repos son solo lectura. · FACTORY-ASSET-001, REQ-010, RSK-018
+
 ## BLOCKED
 
 - [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado por entorno: la Factory no puede leer CI ni abrir PR.

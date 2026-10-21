@@ -23,7 +23,7 @@ Hechos verificados contra la API por el modelo anterior:
 
 | Hecho | Fuente en agents | Uso hoy |
 |---|---|---|
-| El modo legendario del raid Nexus of Eternity es el logro **9472** ("Legendary Nexus of Eternity"). El 9478 no existe: el rango 9478–9485 da 404 | ALERT-272, BACKLOG | Seguimiento del modo legendario en Raids |
+| ~~El modo legendario del raid Nexus of Eternity es el logro **9472** ("Legendary Nexus of Eternity"). El 9478 no existe: el rango 9478–9485 da 404~~ **Corregido en MIG-1 (2026-10-21):** el 9472 es el modo desafío y el 9478 existe ("Legendary Conqueror of Vloxx", desafío legendario). Ver `docs/GW2-API-HECHOS.md` y LES-029 | ALERT-272, BACKLOG | Seguimiento del modo legendario en Raids |
 | `/v2/account/buildstorage` pide el permiso `account`, no `inventories` | ALERT-270 | Plantillas guardadas |
 | Homestead: existen `/v2/account/homestead/decorations`, `/v2/homestead/glyphs` y `/v2/homestead/decorations/categories`. Los glyphs llegan como texto, no como objetos | DECISIONS_LOG, commit `ca673ac` | Panel de Homestead |
 | El 429 de la API es por cantidad de pedidos en el tiempo, no por pedidos simultáneos. Con 27 cuentas, una vista de colecciones serían 324 pedidos | ALERT-27 | Cualquier vista que consulte todas las cuentas |
