@@ -16,9 +16,9 @@ APROBADA la opción D. Queda aprobado el modelo operativo híbrido por etapas pr
 
 ## Efecto
 
-Procesada por la Factory el 2026-10-21T03:42Z (G9-A).
+Procesada por la Factory el 2026-10-21T03:44Z (G9-B).
 
 - REQ-008 queda CERRADA con referencia a esta respuesta.
-- Se registran DEC-023 y LES-027 en G9-B.
+- DEC-023 y LES-027 quedaron registradas antes, en G9-A.
 - La implementación sigue el orden aprobado: después de BL-034 (producto primero), la vigilia diaria, el arranque fijo en el índice y las métricas en el panel.
 - Las sesiones programadas (etapa 2) no se habilitan: requieren que Pablo configure la plataforma y acepte su costo.
