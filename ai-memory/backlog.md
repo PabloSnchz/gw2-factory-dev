@@ -3,6 +3,7 @@
 Formato: `- [ID] [PRIORIDAD] Título — contexto · referencia` (ver DEC-009)
 Prioridades: CRÍTICO · ALTO · MEDIO · BAJO
 Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC-017). Las ideas viven en [discovery.md](discovery.md).
+Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por Factory` o `por entorno` (DEC-019).
 
 ## READY
 
@@ -13,15 +14,11 @@ Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC
 
 ## IN_PROGRESS
 
-- [BL-036] [ALTO] Soberanía de decisiones en el panel — FACTORY-DASHBOARD-REFINEMENT-001: "Necesita tu decisión" muestra 6 ítems y solo 1 es un pedido de decisión. Clasificar lo pendiente en decisión, acción, validación e información; exigir contexto, impacto, recomendación y justificación a cada decisión; la Factory resuelve lo técnico. Hecho: panel 2.1.0 (`ff077b8`), DEC-018, LES-022, memoria clasificada. Falta: chequeo en CI e informe. · FEAT-001, DEC-011, DEC-013, DEC-014, DEC-018
-
 ## BLOCKED
 
-- [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado: lectura de CI o PR.
-- [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado: validación de Pablo.
-- [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000, DEC-017 — Bloqueado: las CDN responden 403 desde el entorno de la Factory (probado 2026-10-20) y un hash sin verificar rompería la carga de `crypto-js`.
-- [BL-008] [BAJO] Email placeholder en commits heredados — varios usan "TU EMAIL DE LA CUENTA PRINCIPAL"; se corrige configurando `git user.email` en cada entorno que hace commits. · DEC-017 — Bloqueado: fuera del alcance de la Factory.
-- [BL-017] [BAJO] Ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` (mismo contenido que `main` @ b9599d2) y `factory/bl-002-dev-sin-analytics` (mismo contenido que lo publicado en `main` para BL-002; no se pudo abrir PR). · DEC-017 — Bloqueado: la Factory no tiene herramienta para borrar ramas.
+- [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado por entorno: la Factory no puede leer CI ni abrir PR.
+- [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado por Pablo: validación funcional.
+- [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000, DEC-017 — Bloqueado por entorno: las CDN responden 403 desde el entorno de la Factory (probado 2026-10-20) y un hash sin verificar rompería la carga de `crypto-js`.
 
 ## DONE
 
@@ -50,3 +47,6 @@ Gobierno: READY solo contiene trabajo ejecutable, máximo 5 tareas (DEC-016, DEC
 - [BL-035] [ALTO] Discovery Engine (FACTORY-RESEARCH-001) — `discovery.md` y `discovery-archive.md`, límites verificados en CI (READY ≤ 5, abiertas ≤ 15; 13 tests, 8/8 mutaciones), backlog dentro del límite (READY 8 → 4), ronda inicial con 2 promovidas (BL-013, BL-034). Informe en `missions/FACTORY-RESEARCH-001-informe.md`. · DEC-015, DEC-016, DEC-017, LES-020, LES-021 — 2026-10-20
 - [BL-003] [ALTO] DEV publicado en Vercel — Pablo creó el proyecto y apagó GitHub Pages en gw2-factory-dev (RESP-003): `https://gw2-factory-dev.vercel.app/`. · DEC-005, REQ-002, RSK-002 — 2026-10-20
 - [BL-011] [ALTO] Origen compartido DEV/PROD resuelto — DEV tiene origen propio en Vercel y ya no comparte `localStorage` con producción; deja de hacer falta usar DEV en incógnito. Verificación medida de Pages apagado: DISC-008. · RSK-002, DEC-005, REQ-002 — 2026-10-20
+- [BL-036] [ALTO] Soberanía de decisiones en el panel (FACTORY-DASHBOARD-REFINEMENT-001) — panel 2.1.0 con decisiones, tareas e información separadas (gw2-factory-dashboard `1f59031`…`ff077b8`, 82 tests, 9/9 mutaciones); DEC-018; el chequeo en CI quedó en GV-1 de FACTORY-GOVERNANCE-002. · DEC-018, DEC-019, LES-022 — 2026-10-20
+- [BL-008] [BAJO] Cerrado por la Factory: email placeholder en commits heredados — no afecta al producto y no vale un pedido a Pablo (DEC-019). Si se configura `git user.email` en un entorno nuevo, que sea con el email real. · DEC-019 — 2026-10-20
+- [BL-017] [BAJO] Cerrado por la Factory: ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` y `factory/bl-002-dev-sin-analytics` no afectan nada; borrarlas no vale un pedido (DEC-019). Quedan como están. · DEC-019 — 2026-10-20
