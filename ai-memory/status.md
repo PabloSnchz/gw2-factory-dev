@@ -1,19 +1,21 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: ninguna. BL-034 cerrada: Meta & Eventos tiene las metas de Janthir Wilds y Visions of Eternity (FEAT-005, solo DEV).
-Motivo: Pablo lo pidió (2026-10-21). Faltaban las metas de JW y casi todas las de VoE, Secretos del Bosque tenía horarios incorrectos, Monte Balrior figuraba como SotO y el filtro "Convergence" no mostraba nada.
+Estado: EN_CURSO
+Tarea actual: BL-042 — FEAT-005 a producción, por orden de Pablo (2026-10-21 07:30Z). Después, FACTORY-ASSET-001.
+Motivo: Pablo validó FEAT-005 ("quedó perfecto") y ordenó promoverla.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION (cerrada)
-Inicio: 2026-10-21T07:10Z
-Última actualización: 2026-10-21T07:30Z
-Próxima acción: BL-041 (metas que cruzan la medianoche UTC), salvo que Pablo priorice otra cosa.
+Etapa actual: DEVELOPMENT
+Inicio: 2026-10-21T07:31Z
+Última actualización: 2026-10-21T07:31Z
+Próxima acción: PRD-1.
 
-Plan BL-034, un micro-ciclo por vez:
+Plan BL-042 (gw2-wallet-ligero, copia de contenido desde DEV, cada commit deja el sitio funcionando). Vuelta atrás: `4629e7e` (meta-events.json `f612bebf`, meta.js `15da703c`).
 
-- MET-1 — datos y tests (`b04ffbf`). Hecho.
-- MET-2 — filtro de expansión desde los datos en `js/meta.js` 3.5.0 (`faaee56`) y sus tests (`c6b24b6`). Hecho. `index.html` (69 KB) no entraba en una publicación: LES-028.
-- MET-3 — cierre: FEAT-005, LES-028, backlog, riesgos y estado. Hecho.
+- PRD-1 — `assets/meta-events.json` (blob `cd504a6a`). Con el `meta.js` anterior funciona igual: las metas nuevas se ven en "Todas".
+- PRD-2 — `js/meta.js` 3.5.0 (blob `188c80ee`): filtro de expansión desde los datos y versión nueva del JSON.
+- PRD-3 — cierre: FEAT-005 en producción, backlog y estado.
+
+Después: FACTORY-ASSET-001 — analizar gw2-wallet-agents y gw2-agents-dashboard (QwenPaw dado de baja por Pablo el 2026-10-21; los dos repos quedan para mí). Solo proponer, no migrar.
 
 ## Resumen de la sesión
 
