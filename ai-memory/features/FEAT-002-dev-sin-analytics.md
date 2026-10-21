@@ -22,9 +22,13 @@ Los archivos son los mismos para DEV y PROD: se pueden promover sin editarlos (r
 
 ## Cómo evaluarlo
 
-1. Abrir la versión DEV con las herramientas del navegador (pestaña Red): no debe aparecer ninguna petición a `googletagmanager.com` ni a `google-analytics.com`. En la consola, `window.__gaEnabled` vale `false`.
-2. En Actions de gw2-factory-dev, el workflow "Send GitHub Metrics to GA4" aparece como omitido (skipped).
-3. En Actions, `app-checks` corre los tests en cada push.
+Para mirar (Pablo): abrí DEV en https://gw2-factory-dev.vercel.app/ y usala como siempre. Si algo no carga o se ve distinto a producción, avisá.
+
+Verificado por la Factory, sin herramientas de Pablo (DEC-019, LES-024):
+
+1. Sin peticiones a `googletagmanager.com` ni a `google-analytics.com` fuera del host de producción, y `window.__gaEnabled` en `false`: lo cubren los tests de `tests/ga-loader.test.cjs`.
+2. El workflow "Send GitHub Metrics to GA4" solo corre en el repo de producción: guard verificado por test.
+3. `app-checks` corre en cada push. La Factory no puede leer su resultado (RSK-016, bloqueo de entorno).
 
 ## Verificación realizada
 
