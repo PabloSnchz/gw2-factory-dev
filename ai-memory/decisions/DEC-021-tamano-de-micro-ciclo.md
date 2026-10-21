@@ -1,6 +1,6 @@
 # DEC-021 — Gobernanza del tamaño de un micro-ciclo
 
-- Estado: ACEPTADA — aprobada por Pablo con una modificación: los límites se cumplen todos a la vez (conversación, 2026-10-21; REQ-006)
+- Estado: ACEPTADA — aprobada por Pablo con una modificación: los límites se cumplen todos a la vez (conversación, 2026-10-21; REQ-006). Excepción de archivo grande aprobada por Pablo (RESP-007, 2026-10-21)
 - Fecha: 2026-10-21
 - Ámbito: Tamaño, orden y publicación de cada micro-ciclo en gw2-factory-dev y gw2-factory-dashboard
 - Misión: FACTORY-GOVERNANCE-003 (propuesta) y FACTORY-GOVERNANCE-004 (registro)
@@ -25,6 +25,18 @@ GV-1 se planificó como un solo micro-ciclo con 7 objetivos y 14 archivos. Una i
 | Volumen enviado | ≤ 40 KB; un archivo de más de 20 KB va solo |
 
 Si un límite no se cumple, el micro-ciclo se **divide antes de empezar**, nunca durante la publicación.
+
+### 1 bis. Excepción: archivo grande indivisible (RESP-007, 2026-10-21)
+
+Los límites siguen vigentes. Cuando **un único archivo supera por sí solo los 40 KB**:
+
+- puede ocupar un micro-ciclo completo;
+- debe ser el **único archivo funcional** modificado en ese micro-ciclo (ningún otro archivo de la app ni de tests; `status.md` se escribe igual, porque es el checkpoint);
+- tiene **revisión dedicada**: se revisa el diff completo del archivo antes de publicar;
+- tiene **validación dedicada**: sintaxis, comportamiento y regresión verificados en local sobre el archivo completo;
+- tiene **publicación dedicada**: una sola escritura de contenido, verificada por SHA.
+
+Su test va en el micro-ciclo inmediatamente siguiente: es la única excepción al par "código y test" de §2.4. La excepción aplica solo a archivos cuyo tamaño individual supera el límite; **no aplica a grupos de archivos**. Hoy alcanza a `js/activities.js` (59,6 KB) e `index.html` (68,9 KB).
 
 ### 2. Publicación
 
@@ -57,7 +69,7 @@ Al cerrar cada micro-ciclo se actualiza `status.md` con el próximo paso. Backlo
 
 ## Verificación
 
-Pendiente: un test en `tests/ai-memory.test.cjs` que falle si el manifiesto lista más de 3 rutas. Entra con GV-1d. Hasta entonces, la Factory lo controla al escribir cada checkpoint.
+`tests/ai-memory.test.cjs` falla si el manifiesto lista más de 3 rutas (publicado en GV-1d, 2026-10-21). Un micro-ciclo de archivo grande lista una sola ruta, así que también lo cumple.
 
 ## Consecuencias
 
