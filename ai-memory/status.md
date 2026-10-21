@@ -6,16 +6,16 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T06:25Z
-Próxima acción: BOV-7a, cargar mi componente en index.html y aparecer en la bienvenida. Después BOV-7b (API Keys) y BOV-7c (ayuda).
+Última actualización: 2026-10-21T06:40Z
+Próxima acción: BOV-7b, cargar mi voz en index.html (archivo grande, solo). Ahí empiezo a aparecer en DEV.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-6 — mi componente de voz en La Bóveda (js/shiruvana.js) y su test
+Micro-ciclo: BOV-7a — dónde le hablo al jugador (js/shiruvana-places.js): bienvenida, modal de API Keys y modal de guías
 Archivos:
-- js/shiruvana.js
-- tests/shiruvana-voice.test.cjs
-BOV-5c publicado (`84c5a4e`, `bcec16b`). Componente `Shiruvana.voice({kind, text, avatar, size})`: mismo avatar que el panel, rótulo visible ("Shiruvana", "te explica", "te recomienda", "te avisa"), texto siempre como texto, estilos con las variables del theme activo, un avatar por sección. Todavía no se carga en ninguna página: eso es BOV-7. Validado en local: 61/61 tests, 7/7 mutaciones.
+- js/shiruvana-places.js
+- tests/shiruvana-places.test.cjs
+BOV-6 publicado (`2f467d2`). Mis textos: en la bienvenida me presento (sin API Key te digo cómo empezar; con API Key te saludo de nuevo); en API Keys explico qué necesito y que la clave solo viaja a ArenaNet y, si se sincroniza, al Gist privado; en guías recomiendo por cuál empezar. No toco el código de cada módulo: aparezco al principio de cada lugar, una vez, y reaparezco si la bienvenida se vuelve a dibujar. Validado en local: 69/69 tests, 8/8 mutaciones.
 
 Plan, un micro-ciclo por vez:
 
@@ -28,8 +28,9 @@ Plan, un micro-ciclo por vez:
 - BOV-5d — enlace a la bio con los colores oficiales. Hecho.
 - BOV-5e — página de la bio (repo bio) con el theme oficial y el gato. Hecho.
 - BOV-5c — guía avanzada con la identidad Gato Negro y el theme activo. Hecho.
-- BOV-6 — mi componente de voz en La Bóveda y su test. En curso.
-- BOV-7 — mi voz en la bienvenida, el modal de API Keys y la ayuda.
+- BOV-6 — mi componente de voz en La Bóveda y su test. Hecho.
+- BOV-7a — dónde le hablo al jugador: bienvenida, API Keys y guías. En curso.
+- BOV-7b — index.html carga mi voz (archivo grande).
 - BOV-8 — cierre: funcionalidad, backlog y estado.
 
 ## Esperando a Pablo
