@@ -1,25 +1,21 @@
 # STATUS
 
-Estado: EN_CURSO
-Tarea actual: FACTORY-GOVERNANCE-004 — registrar la aprobación de FACTORY-GOVERNANCE-003 y reconciliar el estado con las instrucciones v2 consolidadas (solo análisis, sin implementar)
-Motivo: Pablo aprobó los límites de micro-ciclo (todos simultáneos) y pidió releer las instrucciones v2 antes de retomar GV-1 o BL-013.
+Estado: IDLE
+Tarea actual: Ninguna — FACTORY-GOVERNANCE-004 entregó su análisis (sin implementar). Esperando la validación de Pablo antes de retomar el trabajo operativo
+Motivo: Pablo pidió reconciliar el estado con las instrucciones v2 antes de continuar con GV-1 o BL-013. El análisis está en `missions/FACTORY-GOVERNANCE-004-reconciliacion.md`.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T00:04Z
-Última actualización: 2026-10-21T00:14Z
-Próxima acción: G4-C, publicar el análisis de reconciliación. G4-A y G4-B cerrados: DEC-021, LES-025, RESP-006 y REQ-006 cerrada. GV-1 y BL-013 siguen en pausa hasta que Pablo valide el análisis.
+Última actualización: 2026-10-21T00:16Z
+Próxima acción: Con la validación, GV-1a (RESP-005 y cierre de REQ-005) y después BL-013 en 4 micro-ciclos (datos contra la wiki, cálculo del día, archivo propio, documentación). Luego DEC 022 (reconciliación v2), GV-1b a GV-1d ajustados, BL-034 y el panel.
 
-## Micro-ciclo actual
+## Resumen de la misión
 
-Micro-ciclo: G4-C — publicar el análisis de reconciliación con las instrucciones v2
-Archivos:
-- ai-memory/missions/FACTORY-GOVERNANCE-004-reconciliacion.md
-
-Plan de la misión, un micro-ciclo por vez y con escrituras en serie:
-
-- G4-A — DEC-021, LES-025 e índice. Hecho.
-- G4-B — RESP-006 y cierre de REQ-006 (van juntos). Hecho.
-- G4-C — `missions/FACTORY-GOVERNANCE-004-reconciliacion.md`.
+- G4-A: DEC-021 (tamaño de micro-ciclo, límites simultáneos) y LES-025, con índice.
+- G4-B: RESP-006 registrada y REQ-006 cerrada.
+- G4-C: análisis de reconciliación con v2. Detectó 1 diferencia (capacidad de discovery con READY 4–5), 4 reglas que cambian o son nuevas (cuándo se detiene la Factory, soberanía de GDS y DEC técnicas, autoconstrucción limitada, campo "riesgo" en decisiones) y propone 4 lecturas.
+- Corregido: `status.md` volvía a pedirte consola y Actions (contradecía DEC-019); ya no lo hace.
+- Todas las escrituras fueron en serie; cada micro-ciclo tuvo como máximo 3 archivos de contenido.
 
 ## Esperando a Pablo
 
