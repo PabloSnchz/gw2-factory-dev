@@ -124,8 +124,82 @@ test('psna-day: el panel dice de qué día son los lugares y cuándo cambian (BL
 });
 
 test('psna-day: el panel muestra el texto del día y se actualiza solo en el cambio (BL-044)', () => {
-  assert.match(SRC, /psnaDayText\(state\.daily\.psnaDay/);
-  assert.match(SRC, /if \(dayTxt\) status\.innerHTML = /);
+  assert.match(SRC, /psnaDayText\(day, next, now\)/);
   assert.match(SRC, /state\._psnaTimer = setTimeout/);
   assert.match(SRC, /clearTimeout\(state\._psnaTimer\)/);
+});
+
+// ---- Panel renovado (BL-048) ------------------------------------------------
+// Ejecuta el renderPSNA real (bloque "8. RENDERIZADO PSNA") con un DOM mínimo.
+test('psna-day: cuánto falta se escribe en horas y minutos (BL-048)', () => {
+  const f = new Function(block[0] + '\nreturn psnaFalta;')();
+  assert.equal(f(at('2026-10-22T08:00:00Z'), at('2026-10-21T22:38:00Z')), '9 h 22 min');
+  assert.equal(f(at('2026-10-22T08:00:00Z'), at('2026-10-22T06:55:00Z')), '1 h 05 min');
+  assert.equal(f(at('2026-10-22T08:00:00Z'), at('2026-10-22T07:15:00Z')), '45 min');
+  assert.equal(f(null, at('2026-10-22T07:15:00Z')), '');
+});
+
+function renderAt(iso, chats) {
+  const r = SRC.match(/  \/\/ 8\. RENDERIZADO PSNA[\s\S]*?(?=  \/\/ =+\n  \/\/ 9\. )/);
+  assert.ok(r, 'falta el bloque 8. RENDERIZADO PSNA');
+  const els = {};
+  const el = () => ({ innerHTML: '', disabled: false, title: '', querySelectorAll: () => [] });
+  ['#psnaGrid', '#psnaStatus', '#psnaCopyAll'].forEach((k) => { els[k] = el(); });
+  const head = [];
+  const document = { getElementById: (id) => head.find((n) => n.id === id) || null,
+    createElement: () => ({}), head: { appendChild: (n) => head.push(n) } };
+  const RealDate = Date;
+  const FakeDate = function (...a) { return a.length ? new RealDate(...a) : new RealDate(iso); };
+  FakeDate.UTC = RealDate.UTC;
+  const now = new RealDate(iso);
+  const DATA2 = DATA;
+  const day = pick(DATA2, now);
+  const list = day.waypoints.map((w, i) => ({ region: 'R' + i, npc: 'N' + i, name: w.name, wpName: w.name,
+    chat: chats ? chats[i] : w.code }));
+  const state = { active: true, daily: { psna: list, psnaData: DATA2, psnaDay: day } };
+  const esc = (x) => String(x == null ? '' : x).replace(/[&<>"']/g, (m) => '&#' + m.charCodeAt(0) + ';');
+  const timers = [];
+  const run = new Function('$', 'esc', 'state', 'document', 'LOG', 'copyToClipboard', 'Date', 'setInterval', 'clearInterval',
+    block[0] + '\n' + r[0] + '\nrenderPSNA();');
+  run((k) => els[k] || null, esc, state, document, '[t]', () => {}, FakeDate,
+    (fn, ms) => { timers.push(ms); return 1; }, () => {});
+  return { grid: els['#psnaGrid'].innerHTML, status: els['#psnaStatus'].innerHTML, copyAll: els['#psnaCopyAll'],
+    style: head.find((n) => n.id === 'psnaStyle'), timers };
+}
+
+test('psna-day: cada lugar es un botón con el ícono local del waypoint, no "WP" (BL-048)', () => {
+  const out = renderAt('2026-10-21T22:38:00Z');
+  const buttons = out.grid.match(/<button type="button" class="psna-wp"/g) || [];
+  assert.equal(buttons.length, 6);
+  assert.equal((out.grid.match(/src="assets\/icons\/733330\.png"/g) || []).length, 6);
+  assert.doesNotMatch(out.grid, /alt="WP"/);
+  assert.doesNotMatch(SRC, /wiki\.guildwars2\.com\/images\/thumb\/d\/d2\/Waypoint/);
+  assert.match(out.grid, /Town of Prosperity/);
+  assert.match(out.grid, /aria-label="Copiar waypoint de Town of Prosperity"/);
+  assert.equal((out.grid.match(/>Copiar<\/span>/g) || []).length, 6);
+  // El ícono existe en el repo (se sirve desde GitHub Pages, no de la wiki).
+  assert.ok(fs.existsSync(path.join(ROOT, 'assets', 'icons', '733330.png')), 'falta assets/icons/733330.png');
+});
+
+test('psna-day: el día y la cuenta regresiva se ven en grande y corren solos (BL-048)', () => {
+  const out = renderAt('2026-10-21T22:38:00Z');
+  assert.match(out.status, /class="psna-day"/);
+  assert.match(out.status, /<strong class="psna-day__name">Miércoles 21\/10<\/strong>/);
+  assert.match(out.status, /<strong class="psna-day__count" data-psna-falta>9 h 22 min<\/strong>/);
+  assert.match(out.status, /08:00 UTC · /);
+  assert.match(out.status, /aria-label="Lugares del miércoles 21\/10 · cambian en 9 h 22 min \(08:00 UTC\)"/);
+  assert.match(out.status, /6\/6 waypoints/);
+  assert.deepEqual(out.timers, [30000]);
+  assert.ok(out.style && /\.psna-wp:focus-visible/.test(out.style.textContent), 'faltan los estilos con foco visible');
+  assert.match(SRC, /clearInterval\(state\._psnaTick\); state\._psnaTick = null;/);
+});
+
+test('psna-day: un lugar sin código queda deshabilitado y se avisa (BL-048)', () => {
+  const out = renderAt('2026-10-21T22:38:00Z', ['[&a]', '', '[&c]', '[&d]', '[&e]', '[&f]']);
+  assert.equal((out.grid.match(/ disabled>/g) || []).length, 1);
+  assert.match(out.grid, />Sin código<\/span>/);
+  assert.match(out.status, /5\/6 waypoints/);
+  const none = renderAt('2026-10-21T22:38:00Z', ['', '', '', '', '', '']);
+  assert.equal(none.copyAll.disabled, true);
+  assert.match(none.status, /Ningún waypoint disponible/);
 });

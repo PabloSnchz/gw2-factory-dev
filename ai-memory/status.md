@@ -1,26 +1,26 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: PSNA renovado (BL-048) y después el árbol de receta de la Armería con el diseño que aprobó Pablo (BL-047). La migración del legado (BL-043) sigue en pausa hasta cerrarlo.
+Tarea actual: árbol de receta de la Armería con el diseño que aprobó Pablo (BL-047). La migración del legado (BL-043) sigue en pausa hasta cerrarlo.
 Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-21T22:55Z
-Próxima acción: PSN-2 — publicar `js/activities.js` 3.23.0 (archivo grande dedicado) y después su test; sigue ARM-4 (BL-047).
+Última actualización: 2026-10-21T23:20Z
+Próxima acción: ARM-4 — árbol de receta con el diseño aprobado, en `js/legendary-tree-ui.js` (BL-047).
 
 Micro-ciclo:
-PSN-2 — PSNA renovado: ícono local del waypoint, día y cuenta regresiva en grande, lugares como botones (BL-048)
+ARM-4 — árbol de receta y totales con el diseño aprobado (mismo modal; cambia el contenido)
 Archivos:
-js/activities.js
-tests/psna-day.test.cjs
+js/legendary-tree-ui.js
+tests/legendary-tree-ui.test.cjs
 
 Plan (orden por valor para el jugador):
 
 - ARM-1 "Tengo" siempre en 0 (BL-045). Hecho (`52363f5`).
 - ARM-2 chips "Abalorio" y "Espaldar" y expansión real de cada legendaria (BL-046, partes 1 y 2 juntas: mismo archivo). Hecho (`4db8e88`).
 - PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044). Hecho (`7cbf9c8`).
-- PSN-2 PSNA renovado (BL-048): Pablo validó los lugares contra la wiki y pidió más presencia y el ícono del waypoint. En curso.
+- PSN-2 PSNA renovado (BL-048): ícono local del waypoint, día y cuenta regresiva en grande, lugares como botones. Hecho (`8d03631`).
 - ARM-4 árbol de receta: propuesta aprobada por Pablo (22:14Z); Pablo pidió avanzar (22:42Z). Sigue después de PSN-2 (BL-047).
 - Después: sigue BL-043 en MIG-2a.
 
@@ -36,6 +36,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- PSNA renovado (BL-048): volvió el ícono del waypoint (el de la wiki dejó de cargar; ahora se sirve desde La Bóveda), el día y la cuenta regresiva se ven en grande y corren solos, y cada lugar es un botón grande que dice "Copiar" y confirma "✓ Copiado".
 - Pablo validó en pantalla la Armería (BL-045 y BL-046) y aprobó la propuesta del árbol de receta (BL-047). PSNA: el panel ahora dice de qué día son los lugares y se actualiza solo a las 08:00 UTC (BL-044).
 - Armería en DEV: la columna "Tengo" ya lee tu banco y tu almacén de materiales; los chips dicen Abalorio y Espaldar; cada legendaria tiene su expansión real (Klobjarne Geirr en Janthir Wilds, Verano Infinito en Visions of Eternity) y el catálogo se ordena por expansión.
 - Pablo validó FEAT-004 en producción y encontró 5 problemas en DEV: 4 en la Armería y 1 en el PSNA. Los registré (BL-044 a BL-047) y los atiendo antes de seguir con la migración.
@@ -51,7 +52,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 ## Esperando a Pablo
 
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
-- [FEAT-003] Validación: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades (Ctrl+F5 si no ves el cambio). Arriba de los lugares del PSNA dice de qué día son y en cuánto cambian; comparalos con esa fila de la wiki.
+- [FEAT-003] Validación: los lugares ya coinciden con la wiki (lo validaste a las 22:42Z). Falta el PSNA renovado: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades (Ctrl+F5 si no ves el cambio) y mirá el ícono del waypoint, el día y la cuenta regresiva, y el botón "Copiar" de cada lugar, también en el celular.
 
 ## Para tu información
 
