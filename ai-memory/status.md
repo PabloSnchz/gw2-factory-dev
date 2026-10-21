@@ -6,21 +6,22 @@ Motivo: Pablo aprobó FACTORY-GOVERNANCE-004 y autorizó GV-1a a GV-1d y luego B
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T00:26Z
-Última actualización: 2026-10-21T00:28Z
-Próxima acción: GV-1a, registrar tu aprobación de REQ-005 (RESP-005 y cierre del pedido). Después G5-A.
+Última actualización: 2026-10-21T00:31Z
+Próxima acción: G5-A, registrar DEC-022 (conflictos entre reglas) y la aprobación de FACTORY-GOVERNANCE-004. Después GV-1b.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: GV-1a — registrar tu aprobación de REQ-005 (RESP-005 y cierre del pedido)
+Micro-ciclo: G5-A — registrar DEC-022 (conflictos entre reglas) y la aprobación de FACTORY-GOVERNANCE-004
 Archivos:
-- ai-memory/responses/RESP-005.md
-- ai-memory/requests/REQ-005-gobernanza.md
-Orden: primero la respuesta, después el cierre del pedido (par inseparable, DEC-021).
+- ai-memory/decisions/DEC-022-conflictos-entre-reglas.md
+- ai-memory/memory-index.md
+- ai-memory/missions/FACTORY-GOVERNANCE-004-reconciliacion.md
+GV-1a cerrado: RESP-005 publicada y REQ-005 cerrada.
 
 Plan, un micro-ciclo por vez:
 
-- GV-1a — registrar tu aprobación de REQ-005 (RESP-005 y cierre del pedido). En curso.
-- G5-A — registrar DEC-022 (conflictos entre reglas) y la aprobación de FACTORY-GOVERNANCE-004.
+- GV-1a — registrar tu aprobación de REQ-005 (RESP-005 y cierre del pedido). Hecho.
+- G5-A — registrar DEC-022 (conflictos entre reglas) y la aprobación de FACTORY-GOVERNANCE-004. En curso.
 - GV-1b — reclasificar pendientes: FEAT-002, DEC-018 y DEC-019 según v2.
 - GV-1c — bloqueos con dueño y áreas en discovery (backlog y discovery).
 - GV-1d — CI verifica la gobernanza nueva y la propuesta 001 queda APROBADA.
@@ -31,7 +32,6 @@ Plan, un micro-ciclo por vez:
 
 ## Esperando a Pablo
 
-- [REQ-005] Info: Ya la aprobaste; la Factory la cierra en este micro-ciclo (GV-1a).
 - [BL-016] Validación: Mirá el panel en un navegador real, también en el celular, y confirmá que entendés el estado en menos de 60 segundos (RSK-015 sigue abierto hasta entonces).
 - [FEAT-002] Validación: Usá DEV (https://gw2-factory-dev.vercel.app/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
 
