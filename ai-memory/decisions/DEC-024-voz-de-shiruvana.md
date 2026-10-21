@@ -17,6 +17,7 @@ Pablo pidió darle identidad visual a Shiruvana sin convertir el panel en un per
 - **Gato Negro Factory es la marca principal.** El ícono del gato sigue en la cabecera y representa al sistema.
 - **Shiruvana es la voz operativa de la Factory.** No reemplaza la identidad visual del sistema ni usa los tokens de marca del gato.
 - **La voz visible es Shiruvana; la marca visible es Gato Negro Factory.**
+- **La marca actual no se modifica** (pedido de Pablo, 2026-10-21 04:11Z): la cabecera queda como está, con el ícono del gato de `brandMark()` en `gds/icons.js` (bóveda obsidiana con marco arcano, gato negro y ojos ámbar), el nombre "Gato Negro Factory" y el subtítulo "Centro de decisiones". BL-037 no toca la cabecera ni la marca, y los mockups usan el mismo dibujo.
 
 ### 2. Regla de autoría
 
