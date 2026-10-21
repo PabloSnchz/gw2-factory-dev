@@ -6,24 +6,22 @@ Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. 
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T04:15Z
-Última actualización: 2026-10-21T04:36Z
-Próxima acción: BL-037c, componente gds-voice, avatar oficial y sus tests (dashboard). Después BL-037d.
+Última actualización: 2026-10-21T04:48Z
+Próxima acción: BL-037d, views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande). Después BL-037e.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard)
+Micro-ciclo: BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande)
 Archivos:
-- gw2-factory-dashboard: gds/components.css
-- gw2-factory-dashboard: gds/voice.js
-- gw2-factory-dashboard: tests/gds.test.mjs
-BL-037b publicado (tokens.css `22c8163`, GDS_FOUNDATION.md `cd84006`; GDS 1.1.0). Este micro-ciclo suma el componente, el avatar oficial (WebP de 112 px embebido, 3,9 KB) y 3 tests, incluida la huella de brandMark() para que la marca no cambie sin decisión de Pablo. 86/86 tests, 8/8 mutaciones.
+- gw2-factory-dashboard: js/views.js
+Micro-ciclo de archivo grande (DEC-021 §1 bis): views.js pesa 48 KB y es el único archivo funcional. BL-037c publicado (components.css `72e2475`, voice.js `5c5d6e9`, gds.test.mjs `b107927`). Validado en local con los tests de BL-037e: 92/92 tests, 9/9 mutaciones. Entre este commit y BL-037e, 2 tests viejos esperan el texto anterior ("La Factory recomienda"): el CI queda en rojo unos minutos, hasta publicar BL-037e.
 
 Plan, un micro-ciclo por vez:
 
 - BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard). Hecho.
 - BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). Hecho.
-- BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard). En curso.
-- BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande).
+- BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard). Hecho.
+- BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande). En curso.
 - BL-037e — tests del panel para la voz de Shiruvana (dashboard).
 - BL-037f — versiones en index.html, CHANGELOG y README (dashboard).
 - BL-037g — cierre en memoria: backlog, FEAT-001 y roadmap.
