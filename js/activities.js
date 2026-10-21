@@ -1,5 +1,8 @@
 /*!
  * js/activities.js — Panel de Actividades (Objetivos / Home Nodes)
+ * v3.22.0 (2026-10-21) - El PSNA dice de que dia son los lugares y cuando cambian,
+ *   y se actualiza solo en el cambio de las 08:00 UTC aunque la pagina quede
+ *   abierta (BL-044). Funciones puras psnaNextChange y psnaDayText.
  * v3.21.0 (2026-10-21) - Fix: el PSNA muestra el dia correcto (BL-013)
  *
  * CAMBIOS v3.21.0:
@@ -248,6 +251,32 @@
       if (d && !isNaN(d.getTime()) && PSNA_WEEKDAYS[d.getUTCDay()] === wd && six(list[i].waypoints)) return out(list[i].waypoints, 'weekday');
     }
     return null;
+  }
+
+  // Proximo cambio de ubicacion (Date) despues de `now`, o null.
+  function psnaNextChange(data, now) {
+    if (!now || isNaN(now.getTime())) return null;
+    var hour = (data && typeof data.resetUtcHour === 'number') ? data.resetUtcHour : 8;
+    var n = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, 0, 0));
+    if (n.getTime() <= now.getTime()) n = new Date(n.getTime() + 86400000);
+    return n;
+  }
+
+  // Texto para el jugador: de que dia son los lugares y cuanto falta para el cambio.
+  // Ej.: "Lugares del miércoles 21/10 · cambian en 3 h 05 min (08:00 UTC)".
+  var PSNA_DIAS_ES = { sunday: 'domingo', monday: 'lunes', tuesday: 'martes', wednesday: 'miércoles',
+    thursday: 'jueves', friday: 'viernes', saturday: 'sábado' };
+  function psnaDayText(day, next, now) {
+    if (!day || !day.date) return '';
+    var p = day.date.split('-');
+    var txt = 'Lugares del ' + (PSNA_DIAS_ES[day.weekday] || day.weekday) + ' ' + p[2] + '/' + p[1];
+    if (next && now) {
+      var min = Math.max(0, Math.ceil((next.getTime() - now.getTime()) / 60000));
+      var h = Math.floor(min / 60), m = min % 60;
+      txt += ' · cambian en ' + (h ? h + ' h ' + String(m).padStart(2, '0') + ' min' : m + ' min') +
+        ' (' + String(next.getUTCHours()).padStart(2, '0') + ':00 UTC)';
+    }
+    return txt;
   }
   // PSNA-DAY:END
 
@@ -626,7 +655,19 @@
     load: async function(forceRefresh) {
       console.log(LOG, '📅 PSNA.load llamado');
       await this.loadSchedule(forceRefresh);
-      var todayData = psnaPickDay(state.daily.psnaData, new Date());
+      var now = new Date();
+      var todayData = psnaPickDay(state.daily.psnaData, now);
+      state.daily.psnaDay = todayData;
+      // Se actualiza solo en el proximo cambio (BL-044): sin esto, una pestana
+      // abierta desde la noche sigue mostrando los lugares del dia anterior.
+      if (state._psnaTimer) clearTimeout(state._psnaTimer);
+      var next = psnaNextChange(state.daily.psnaData, now);
+      if (next) {
+        state._psnaTimer = setTimeout(function () {
+          state._psnaTimer = null;
+          if (state.active) PSNA.load(false);
+        }, Math.min(next.getTime() - now.getTime() + 2000, 2147483000));
+      }
       var psnaManual = [];
       if (!todayData) {
         console.warn(LOG, '⚠️ No hay datos PSNA para hoy: no se muestra un día equivocado');
@@ -732,6 +773,11 @@
       if (valid === 0) status.innerHTML = '<span class="pill s-error">❌ Ningún waypoint disponible</span>';
       else if (valid < total) status.innerHTML = '<span class="pill s-warn">⚠️ ' + valid + '/' + total + ' waypoints disponibles</span>';
       else status.innerHTML = '<span class="pill s-ok">✅ Todos los waypoints disponibles</span>';
+      // De que dia son y cuando cambian (BL-044).
+      var now = new Date();
+      var dayTxt = psnaDayText(state.daily.psnaDay, psnaNextChange(state.daily.psnaData, now), now);
+      if (dayTxt) status.innerHTML = '<div data-psna-day style="font-size:0.78rem;color:var(--tx-2);margin-bottom:6px;">' +
+        esc(dayTxt) + '</div>' + status.innerHTML;
     }
   }
 
@@ -1227,6 +1273,7 @@
   
   function deactivate() {
     state.active = false;
+    if (state._psnaTimer) { clearTimeout(state._psnaTimer); state._psnaTimer = null; }
     var panel = $('#activitiesPanel');
     if (panel) panel.setAttribute('hidden', '');
     state.homeNodesRendered = false;
@@ -1335,6 +1382,8 @@
     },
     _renderPSNA: renderPSNA,
     _psnaPickDay: psnaPickDay,
+    _psnaNextChange: psnaNextChange,
+    _psnaDayText: psnaDayText,
     _forceReload: function() { PSNA.load(true); }
   };
   
