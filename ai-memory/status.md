@@ -6,13 +6,13 @@ Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propu
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-21T23:20Z
-Próxima acción: ARM-4 — árbol de receta con el diseño aprobado, en `js/legendary-tree-ui.js` (BL-047).
+Última actualización: 2026-10-21T23:45Z
+Próxima acción: ARM-5 — en la cabecera del modal, "Receta" y "Materiales totales" como pestañas al lado de "Agregar a la cola" (`js/legendary-tracker.js`, archivo grande dedicado). Después, validación de Pablo.
 
 Micro-ciclo:
-ARM-4 — árbol de receta y totales con el diseño aprobado (mismo modal; cambia el contenido)
+ARM-5 — pestañas Receta / Materiales totales en la cabecera del modal (BL-047)
 Archivos:
-js/legendary-tree-ui.js
+js/legendary-tracker.js
 tests/legendary-tree-ui.test.cjs
 
 Plan (orden por valor para el jugador):
@@ -21,7 +21,8 @@ Plan (orden por valor para el jugador):
 - ARM-2 chips "Abalorio" y "Espaldar" y expansión real de cada legendaria (BL-046, partes 1 y 2 juntas: mismo archivo). Hecho (`4db8e88`).
 - PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044). Hecho (`7cbf9c8`).
 - PSN-2 PSNA renovado (BL-048): ícono local del waypoint, día y cuenta regresiva en grande, lugares como botones. Hecho (`8d03631`).
-- ARM-4 árbol de receta: propuesta aprobada por Pablo (22:14Z); Pablo pidió avanzar (22:42Z). Sigue después de PSN-2 (BL-047).
+- ARM-4 árbol de receta y totales con el diseño aprobado (BL-047): `js/legendary-tree-ui.js` 2.0.0 y `tests/legendary-tree-ui.test.cjs` (9 tests, 12/12 mutaciones). Hecho.
+- ARM-5 pestañas en la cabecera del modal (BL-047). Sigue.
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -36,6 +37,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Armería: el árbol de receta ya tiene el diseño que aprobaste (BL-047): íconos grandes, líneas guía, columnas Cantidad y Origen, chips "Material", "Se compra" y "Receta · N", leyenda arriba; en Materiales totales, barra por material, "✓ 0" y "Completo: X de Y". Falta pasar los botones de la cabecera a pestañas (ARM-5).
 - PSNA renovado (BL-048): volvió el ícono del waypoint (el de la wiki dejó de cargar; ahora se sirve desde La Bóveda), el día y la cuenta regresiva se ven en grande y corren solos, y cada lugar es un botón grande que dice "Copiar" y confirma "✓ Copiado".
 - Pablo validó en pantalla la Armería (BL-045 y BL-046) y aprobó la propuesta del árbol de receta (BL-047). PSNA: el panel ahora dice de qué día son los lugares y se actualiza solo a las 08:00 UTC (BL-044).
 - Armería en DEV: la columna "Tengo" ya lee tu banco y tu almacén de materiales; los chips dicen Abalorio y Espaldar; cada legendaria tiene su expansión real (Klobjarne Geirr en Janthir Wilds, Verano Infinito en Visions of Eternity) y el catálogo se ordena por expansión.
