@@ -8,7 +8,7 @@ const vm = require('node:vm');
 
 const ROOT = path.join(__dirname, '..');
 // Se agregan acá a medida que cada guía se migra.
-const GUIDES = ['docs/user-guide.html'];
+const GUIDES = ['docs/user-guide.html', 'docs/user-guide-avanzado.html'];
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const styleOf = (html) => html.slice(html.indexOf('<style>'), html.indexOf('</style>'));

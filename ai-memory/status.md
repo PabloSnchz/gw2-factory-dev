@@ -6,16 +6,16 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T06:00Z
-Próxima acción: BOV-5e, la página de la bio (repo PabloSnchz/bio) con el theme oficial y el gato en el enlace a La Bóveda. Después BOV-5c.
+Última actualización: 2026-10-21T06:15Z
+Próxima acción: BOV-6, mi componente de voz en La Bóveda y su test. Después BOV-7.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-5d — el enlace a la bio en la cabecera usa los colores oficiales de Gato Negro, fijos (no siguen el theme)
+Micro-ciclo: BOV-5c — la guía avanzada (docs/user-guide-avanzado.html) usa el gato oficial, el favicon y el theme que eligió el jugador
 Archivos:
-- index.html
-- tests/index-identity.test.cjs
-Pablo validó la guía básica con el theme (05:53Z) y pidió: el enlace a su bio con los colores oficiales, y la página de la bio (https://pablosnchz.github.io/bio/, repo PabloSnchz/bio) con el theme oficial y el gato en el enlace a La Bóveda. Me dio acceso a ese repo como parte del ecosistema. `index.html` publicado (`e881e38`, archivo grande, solo): lado obsidiana #232A3A con texto #F4F6FA y lado arcano #5A3DDB con texto blanco (6,7:1). Validado en local: 52/52 tests, 2/2 mutaciones.
+- docs/user-guide-avanzado.html
+- tests/guides-identity.test.cjs
+Pablo validó la bio (repo PabloSnchz/bio, `9551c57`) y el enlace con los colores oficiales (06:07Z). Anunció que si BOV-5c, BOV-6 y BOV-7 salen bien, hago mi primer pase a producción con estos cambios (espero su orden explícita). Más adelante también voy a cuidar La Guarida del Gato Negro, su multi-launcher; todavía sin repo. BOV-5c validado en local: 55/55 tests, 3/3 mutaciones.
 
 Plan, un micro-ciclo por vez:
 
@@ -25,9 +25,9 @@ Plan, un micro-ciclo por vez:
 - BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test. Hecho.
 - BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande). Hecho.
 - BOV-5b — guía básica con la identidad Gato Negro y el theme activo. Hecho.
-- BOV-5d — enlace a la bio con los colores oficiales. En curso.
-- BOV-5e — página de la bio (repo bio) con el theme oficial y el gato.
-- BOV-5c — guía avanzada con la identidad Gato Negro y el theme activo.
+- BOV-5d — enlace a la bio con los colores oficiales. Hecho.
+- BOV-5e — página de la bio (repo bio) con el theme oficial y el gato. Hecho.
+- BOV-5c — guía avanzada con la identidad Gato Negro y el theme activo. En curso.
 - BOV-6 — mi componente de voz en La Bóveda y su test.
 - BOV-7 — mi voz en la bienvenida, el modal de API Keys y la ayuda.
 - BOV-8 — cierre: funcionalidad, backlog y estado.
