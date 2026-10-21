@@ -1,12 +1,13 @@
 # REQ-010 — ¿Aprobás el plan para el legado de QwenPaw: migrar lo útil y después archivar los dos repos?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-21
 - Prioridad: ALTO
 - Área: producto
 - Relacionado: FACTORY-ASSET-001, BL-001, RSK-002, RSK-008, RSK-016, RSK-018, BL-004
 - Bloquea: la migración (MIG-1 a MIG-6) y el archivo de gw2-wallet-agents y gw2-agents-dashboard
+- Cerrado: 2026-10-21 · RESP-010 (opción A; Pages apagado en los dos repos)
 
 ## Qué pasó
 

@@ -1,25 +1,33 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: ninguna. FACTORY-ASSET-001 entregada: propuesta en `missions/FACTORY-ASSET-001-informe.md`, decisión en REQ-010.
-Motivo: Pablo dio de baja a QwenPaw (2026-10-21 07:30Z). Soy la única operadora del ecosistema y los dos repos, con todo lo que exploró el modelo anterior, quedan para mí.
+Estado: EN CURSO
+Tarea actual: FACTORY-ASSET-001 — migración del legado de QwenPaw a gw2-factory-dev (REQ-010 aprobada, opción A).
+Motivo: Pablo aprobó la opción A (RESP-010) y apagó el GitHub Pages de gw2-wallet-agents y gw2-agents-dashboard (verificado: `has_pages: false`).
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION (cerrada)
-Inicio: 2026-10-21T07:37Z
-Última actualización: 2026-10-21T08:05Z
-Próxima acción: BL-041 (metas que cruzan la medianoche UTC) mientras Pablo decide REQ-010; con REQ-010 aprobada, MIG-1.
+Etapa actual: DEVELOPMENT
+Inicio: 2026-10-21T14:10Z
+Última actualización: 2026-10-21T14:10Z
+Próxima acción: MIG-1 — hechos de la API verificados en `docs/GW2-API-HECHOS.md`.
 
-Plan FACTORY-ASSET-001 (solo lectura de los dos repos; no migré nada):
+Micro-ciclo:
+MIG-1 — hechos de la API del legado en DEV
+Archivos:
+docs/GW2-API-HECHOS.md
+ai-memory/lessons/LES-029.md
+ai-memory/memory-index.md
+
+Plan FACTORY-ASSET-001 (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
 - ASSET-1 — inventario de los dos repos (estructura, documentos, herramientas, workflows, actividad). Hecho.
 - ASSET-2 — clasificación con motivo: conocimiento, documentación, herramientas, producto solo en agents, qué archivar. Hecho.
 - ASSET-3 — informe y REQ-010. Hecho.
-- Si Pablo aprueba: MIG-1 hechos de la API → MIG-2 generadores de la Armería → MIG-3 arreglo de totales → MIG-4 tests por tandas → MIG-5 documentación (BL-004) → MIG-6 discovery → archivo (acción de Pablo).
+- Aprobado (RESP-010): MIG-1 hechos de la API → MIG-2 generadores de la Armería → MIG-3 arreglo de totales → MIG-4 tests por tandas → MIG-5 documentación (BL-004) → MIG-6 discovery → archivo (acción de Pablo).
 
 Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab20f`; vuelta atrás `4629e7e`).
 
 ## Resumen de la sesión
 
+- Pablo aprobó la migración del legado de QwenPaw (REQ-010, opción A) y apagó el GitHub Pages de los dos repos: la copia vieja de La Bóveda ya no comparte datos con producción.
 - FACTORY-ASSET-001: analicé el legado de QwenPaw. Lo más valioso: unos 90 archivos de tests del producto, los generadores de datos de la Armería y un panel de Homestead sin validar. Propuesta en REQ-010.
 - FEAT-005 en producción por orden de Pablo (BL-042).
 - Meta & Eventos en DEV: 5 metas nuevas de Janthir Wilds y Visions of Eternity, la Convergencia del Nexo de la Eternidad, Secretos del Bosque cada 2 h, Monte Balrior en Janthir y el filtro "Convergence" funcionando (FEAT-005, BL-034).
@@ -29,8 +37,6 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [REQ-010] Decisión: ¿Aprobás el plan para el legado de QwenPaw (migrar lo útil a DEV y después archivar gw2-wallet-agents y gw2-agents-dashboard)? Recomiendo A.
-- [REQ-010] Acción: Apagá el GitHub Pages de gw2-wallet-agents y de gw2-agents-dashboard (Settings → Pages → Unpublish site). La copia vieja de La Bóveda comparte con producción los datos guardados en tu navegador.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 - [FEAT-004] Validación: Abrí producción (https://pablosnchz.github.io/gw2-wallet-ligero/), en pantalla y en el celular. Fijate que aparezco en Inicio, en Gestión de API Keys y en Guía, y que el gato y el theme Gato Negro están en la app y en las dos guías.
 - [FEAT-003] Validación: Abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
