@@ -1,12 +1,13 @@
 # REQ-008 — ¿Aprobás el modelo operativo de largo plazo y cómo se despierta Shiruvana?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-21
 - Prioridad: MEDIO
 - Área: infraestructura
 - Relacionado: DEC-014, DEC-020, DEC-021, DEC-022, RSK-016
 - Bloquea: nada
+- Cerrado: 2026-10-21 · RESP-008
 
 ## Qué pasó
 
