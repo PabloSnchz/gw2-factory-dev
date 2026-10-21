@@ -66,3 +66,15 @@ La Factory se pregunta: **"¿Pablo tiene realmente la información, la autoridad
   - RSK-016 pasa a bloqueo de entorno;
   - BL-008 y BL-017 los cierra la Factory.
 - El panel adopta las secciones nuevas en GV-2. Hasta entonces, la memoria ya es compatible con el panel 2.1.0.
+
+## Ajuste por las instrucciones v2 (2026-10-21, DEC-022)
+
+Lo que sigue reemplaza solo las partes de esta decisión que contradice; el resto sigue vigente.
+
+- **Riesgos por severidad:**
+  - CRÍTICO: puede detener la autonomía; la Factory mitiga y aceptarlo es de Pablo;
+  - ALTO: no detiene, pero cada ALTO abierto necesita una mitigación concreta (una tarea o una aceptación de Pablo);
+  - MEDIO: se monitorea;
+  - BAJO: se registra.
+- **Validación técnica:** deja de ser una categoría de pendiente. Es una responsabilidad de la Factory (CI, Actions, tests, contrastes, consola, network, DevTools y logs). Si no puede hacerla, es un bloqueo con dueño "entorno". Las categorías visibles quedan en seis: decisión estratégica, acción manual, validación funcional, información, bloqueo y riesgo.
+- **"La Factory decidió…" (§3):** no lo exige v2 ni hay deuda que lo justifique (autoconstrucción limitada). Queda fuera de GV-2 y vuelve a discovery cuando haya capacidad.
