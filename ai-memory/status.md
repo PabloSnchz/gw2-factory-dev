@@ -6,22 +6,22 @@ Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. 
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T04:15Z
-Última actualización: 2026-10-21T04:24Z
-Próxima acción: BL-037a, parse.js lee el resumen de la sesión de status.md (dashboard). Después BL-037b.
+Última actualización: 2026-10-21T04:31Z
+Próxima acción: BL-037b, tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). Después BL-037c.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard)
+Micro-ciclo: BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard)
 Archivos:
-- gw2-factory-dashboard: js/parse.js
-- gw2-factory-dashboard: tests/parse.test.mjs
-Regla de marca (DEC-024 §1): la cabecera del panel (brandMark, nombre y subtítulo) no se toca en ningún micro-ciclo.
+- gw2-factory-dashboard: gds/tokens.css
+- gw2-factory-dashboard: gds/GDS_FOUNDATION.md
+BL-037a publicado (parse.js `aa154fa`, tests `422f017`; 83/83 tests, 3/3 mutaciones). El componente se partió en dos micro-ciclos para respetar los 40 KB (DEC-021): primero tokens y documentación, después CSS, voice.js y tests. La marca (brandMark) no se toca.
 
 Plan, un micro-ciclo por vez:
 
-- BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard). En curso.
-- BL-037b — componente gds-voice y avatar oficial en el GDS (dashboard).
-- BL-037c — tests y documentación del componente en el GDS (dashboard).
+- BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard). Hecho.
+- BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). En curso.
+- BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard).
 - BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande).
 - BL-037e — tests del panel para la voz de Shiruvana (dashboard).
 - BL-037f — versiones en index.html, CHANGELOG y README (dashboard).
