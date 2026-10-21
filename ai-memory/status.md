@@ -7,21 +7,20 @@ Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T03:40Z
 Última actualización: 2026-10-21T03:44Z
-Próxima acción: G9-A, registrar DEC-023 (modelo operativo) y LES-027, con su índice. Después G9-B.
+Próxima acción: G9-B, procesar RESP-008 y cerrar REQ-008. Después G9-C.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: G9-A — registrar DEC-023 (modelo operativo) y LES-027, con su índice
+Micro-ciclo: G9-B — procesar RESP-008 y cerrar REQ-008
 Archivos:
-- ai-memory/decisions/DEC-023-modelo-operativo.md
-- ai-memory/lessons/LES-027-limite-fisico-de-la-autonomia.md
-- ai-memory/memory-index.md
-Orden: primero las entradas nuevas y su índice; después la respuesta que las cita (G9-B), para no dejar referencias rotas.
+- ai-memory/responses/RESP-008.md
+- ai-memory/requests/REQ-008-modelo-operativo.md
+RESP-008 ya existe (la escribió el workflow del panel como PENDIENTE): se actualiza a PROCESADA, no se crea otra.
 
 Plan, un micro-ciclo por vez:
 
-- G9-A — registrar DEC-023 (modelo operativo) y LES-027, con su índice. En curso.
-- G9-B — procesar RESP-008 y cerrar REQ-008.
+- G9-A — registrar DEC-023 (modelo operativo) y LES-027, con su índice. Hecho.
+- G9-B — procesar RESP-008 y cerrar REQ-008. En curso.
 - G9-C — publicar la propuesta de identidad visual de Shiruvana y su pedido de decisión (REQ-009).
 
 ## Esperando a Pablo
