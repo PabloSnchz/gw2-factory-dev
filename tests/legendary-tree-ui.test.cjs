@@ -124,3 +124,46 @@ test('estilos: con variables del theme, foco visible y sin depender solo del col
   assert.match(UI.CSS, /\.lt-tree ul\{[^}]*border-left:2px solid/, 'líneas guía');
   assert.doesNotMatch(UI.CSS, /color-mix/, 'sin color-mix: navegadores viejos perderían las líneas');
 });
+
+// ---- Ficha de pantalla completa (v2.1.0) ----------------------------------
+test('ficha: cabecera grande con ícono de 64 px, nombre, tipo, expansión y generación', () => {
+  const h = UI.renderHeroHTML({ name: 'Chuka y Champawat', icon: 'c.png', color: '#974EFF', tipo: 'Arma', expansion: 'HoT', generation: 2 }, esc);
+  assert.match(h, /<img class="lt-hero__ic" src="c\.png" alt="" width="64" height="64">/);
+  assert.match(h, /<h3 class="lt-hero__name" style="color:#974EFF;">Chuka y Champawat<\/h3>/);
+  assert.match(h, /<span class="lt-tag">Arma<\/span><span class="lt-tag">Heart of Thorns<\/span><span class="lt-tag">Gen 2<\/span>/);
+  assert.doesNotMatch(UI.renderHeroHTML({ name: 'X' }, esc), /<img/);
+});
+
+test('ficha: resumen en tarjetas y Receta y Materiales totales lado a lado', () => {
+  const h = UI.renderSheetHTML(ejemplo(), { 21: 3, 31: 100 }, { esc, de });
+  assert.match(h, /Piezas en la receta<\/div><div class="lt-stat__val">6</);
+  assert.match(h, /Materiales base<\/div><div class="lt-stat__val">3</);
+  assert.match(h, /Completos<\/div><div class="lt-stat__val">1 <small>de 3<\/small>/);
+  assert.match(h, /aria-valuenow="33"/);
+  assert.match(h, /Unidades que faltan<\/div><div class="lt-stat__val">2\.550</);
+  assert.match(h, /Se compran a un NPC<\/div><div class="lt-stat__val">1 /);
+  const arbol = h.indexOf('lt-pane--arbol'), totales = h.indexOf('lt-pane--totales');
+  assert.ok(arbol > 0 && totales > arbol, 'las dos vistas están en la ficha, la receta primero');
+  assert.match(h, /class="lt-tree"/);
+  assert.match(h, /class="lt-tot"/);
+  assert.match(h, /class="lt-sheet lt-sheet--arbol"/);
+});
+
+test('ficha: las pestañas (pantalla angosta) usan data-lt-view y marcan la activa', () => {
+  const h = UI.renderSheetHTML(ejemplo(), {}, { esc, vista: 'totales' });
+  assert.match(h, /data-lt-view="arbol" aria-pressed="false">Receta</);
+  assert.match(h, /data-lt-view="totales" aria-pressed="true">Materiales totales</);
+  assert.match(h, /class="lt-sheet lt-sheet--totales"/);
+  assert.match(UI.CSS, /@media \(max-width:1000px\)\{[^\n]*\.lt-sheet--arbol \.lt-pane--totales/);
+  assert.match(UI.CSS, /\.lt-sheet\{display:grid;grid-template-columns:minmax\(0,1\.45fr\) minmax\(380px,1fr\)/);
+});
+
+test('ficha: todo completo se ve en verde; cargando y error no inventan una ficha', () => {
+  const h = UI.renderSheetHTML(ejemplo(), { 21: 1, 31: 250, 32: 2400 }, { esc });
+  assert.match(h, /lt-stat lt-stat--ok"><div class="lt-stat__lbl">Completos/);
+  assert.match(h, /Unidades que faltan<\/div><div class="lt-stat__val">✓ 0/);
+  const p = UI.renderSheetHTML({ needsPrecursors: true, node: null, totals: {} }, {}, { esc });
+  assert.match(p, /data-lt-retry="1"/);
+  assert.doesNotMatch(p, /lt-stats/);
+  assert.match(UI.renderSheetHTML(null, {}, { esc }), /No se pudo construir el árbol/);
+});

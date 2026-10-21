@@ -1,5 +1,12 @@
 /**
  * legendary-tree-ui.js — el árbol de fabricación y los totales, pintados.
+ * v2.1.0 (2026-10-21) - Ficha de pantalla completa (BL-047, pedido de Pablo:
+ *   "en el modal queda comprimido, no tiene aire"). renderHeroHTML pinta la
+ *   cabecera grande (ícono, nombre, tipo, expansión, generación) y
+ *   renderSheetHTML la ficha: resumen en tarjetas (piezas, materiales,
+ *   completos, unidades que faltan) y Receta y Materiales totales LADO A LADO,
+ *   cada uno con su scroll. En pantallas angostas se apilan y las pestañas
+ *   eligen cuál se ve (data-lt-view, el mismo atributo que ya escucha el tracker).
  * v2.0.0 (2026-10-21) - Diseño aprobado por Pablo (BL-047): íconos de 24 px
  *   (raíz 32, primer nivel 28), líneas guía, columnas Pieza / Cantidad / Origen
  *   con título, chips "Material", "Se compra", "Receta · N" (antes "+N"),
@@ -154,7 +161,40 @@
     '.lt-part{color:var(--color-amber,#e2b45a);font-weight:600}',
     '.lt-miss{color:var(--color-red,#e0855c);font-weight:600}',
     '.lt-sum{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:.78rem;color:var(--tx-3,#8a91a8)}',
-    '.lt-sum strong{color:var(--tx-1,#eceef5)}'
+    '.lt-sum strong{color:var(--tx-1,#eceef5)}',
+    // ---- Ficha de pantalla completa (v2.1.0) ----
+    '.lt-hero{display:flex;align-items:center;gap:16px;min-width:0}',
+    '.lt-hero__ic{width:64px;height:64px;flex-shrink:0;border-radius:12px;box-shadow:0 0 0 2px rgba(151,78,255,.55),0 0 22px rgba(151,78,255,.35)}',
+    '.lt-hero__txt{min-width:0}',
+    '.lt-hero__kicker{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--tx-3,#8a91a8)}',
+    '.lt-hero__name{margin:2px 0 6px;font-size:1.45rem;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '.lt-hero__tags{display:flex;flex-wrap:wrap;gap:6px}',
+    '.lt-tag{font-size:.72rem;padding:2px 9px;border-radius:999px;border:1px solid var(--bd-1,rgba(255,255,255,.14));color:var(--tx-2,#b9bfd3);background:var(--bg-2,rgba(255,255,255,.04))}',
+    '.lt-sheet-wrap{padding:16px 20px 20px}',
+    '.lt-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:16px}',
+    '.lt-stat{padding:12px 14px;border-radius:12px;background:var(--bg-2,rgba(255,255,255,.04));border:1px solid var(--bd-1,rgba(255,255,255,.1))}',
+    '.lt-stat__lbl{font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;color:var(--tx-3,#8a91a8)}',
+    '.lt-stat__val{font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums;color:var(--tx-1,#eceef5);margin-top:2px}',
+    '.lt-stat__val small{font-size:.8rem;font-weight:400;color:var(--tx-3,#8a91a8)}',
+    '.lt-stat--ok .lt-stat__val{color:var(--color-green,#5fd39a)}',
+    '.lt-stat--miss .lt-stat__val{color:var(--color-amber,#e2b45a)}',
+    '.lt-stat .lt-bar{height:6px;margin-top:8px}',
+    '.lt-tabs{display:none;gap:6px;margin-bottom:12px}',
+    '.lt-tab{padding:7px 14px;border-radius:999px;border:1px solid var(--bd-1,rgba(255,255,255,.14));background:var(--bg-2,rgba(255,255,255,.04));color:var(--tx-2,#b9bfd3);font:inherit;font-size:.8rem;cursor:pointer}',
+    '.lt-tab[aria-pressed="true"]{border-color:var(--accent,#9b7bff);color:var(--tx-1,#eceef5);background:rgba(155,123,255,.15)}',
+    '.lt-tab:focus-visible{outline:2px solid var(--accent,#9b7bff);outline-offset:2px}',
+    '.lt-sheet{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(380px,1fr);gap:16px;align-items:start}',
+    '.lt-pane{background:var(--bg-1,rgba(255,255,255,.02));border:1px solid var(--bd-1,rgba(255,255,255,.1));border-radius:14px;overflow:hidden;min-width:0}',
+    '.lt-pane__head{display:flex;align-items:baseline;justify-content:space-between;gap:8px;padding:12px 16px;border-bottom:1px solid var(--bd-1,rgba(255,255,255,.1))}',
+    '.lt-pane__title{margin:0;font-size:.95rem}',
+    '.lt-pane__hint{font-size:.72rem;color:var(--tx-3,#8a91a8)}',
+    '.lt-pane__body{max-height:calc(100vh - 330px);min-height:260px;overflow:auto}',
+    '.lt-pane .lt-tot th{position:sticky;top:0;z-index:1;background:var(--bg-1,#171a23)}',
+    '@media (max-width:1000px){.lt-sheet{grid-template-columns:minmax(0,1fr)}.lt-tabs{display:flex}' +
+      '.lt-sheet--arbol .lt-pane--totales,.lt-sheet--totales .lt-pane--arbol{display:none}' +
+      '.lt-pane__body{max-height:none;min-height:0}.lt-hero__ic{width:48px;height:48px}.lt-hero__name{font-size:1.15rem;white-space:normal}' +
+      '.lt-sheet-wrap{padding:12px}}',
+    '@media (max-width:560px){.lt-cols,.lt-node{grid-template-columns:minmax(0,1fr) 64px 96px;gap:6px}.lt-tree ul{margin-left:10px;padding-left:8px}.lt-tree ul .lt-node::before{left:-10px;width:8px}}'
   ].join('\n');
 
   function _ensureStyle() {
@@ -356,13 +396,108 @@
   }
 
   // ==========================================================================
-  // 7. API
+  // 7. FICHA DE PANTALLA COMPLETA (v2.1.0)
+  // ==========================================================================
+
+  // Mismas etiquetas que el catálogo (render-catologo.js EXPANSION_LABELS).
+  var EXP_LABELS = { Core: 'Clásico', HoT: 'Heart of Thorns', PoF: 'Path of Fire', EoD: 'End of Dragons',
+    SotO: 'Secrets of the Obscure', JW: 'Janthir Wilds', VoE: 'Visions of Eternity' };
+
+  // Cabecera de la ficha. `meta` lo arma el tracker con el catálogo:
+  // { name, icon, color, tipo, expansion, generation }.
+  function renderHeroHTML(meta, esc) {
+    meta = meta || {};
+    esc = esc || function (s) { return String(s == null ? '' : s); };
+    _ensureStyle();
+    var tags = [];
+    if (meta.tipo) tags.push(meta.tipo);
+    if (meta.expansion) tags.push(EXP_LABELS[meta.expansion] || meta.expansion);
+    if (meta.generation) tags.push('Gen ' + meta.generation);
+    return '<div class="lt-hero">' +
+      (meta.icon ? '<img class="lt-hero__ic" src="' + esc(meta.icon) + '" alt="" width="64" height="64">' : '') +
+      '<div class="lt-hero__txt"><div class="lt-hero__kicker">Armería legendaria</div>' +
+      '<h3 class="lt-hero__name" style="color:' + esc(meta.color || 'var(--tx-1)') + ';">' + esc(meta.name || '') + '</h3>' +
+      (tags.length ? '<div class="lt-hero__tags">' + tags.map(function (t) {
+        return '<span class="lt-tag">' + esc(t) + '</span>';
+      }).join('') + '</div>' : '') +
+      '</div></div>';
+  }
+
+  // Cuentas del resumen. Solo dependen del inventario: la receta la cuenta el motor.
+  function _resumen(res, owned) {
+    owned = owned || {};
+    var rows = (res && res.totals && res.totals.rows) || [];
+    var completos = 0, faltan = 0;
+    rows.forEach(function (r) {
+      var f = Math.max(0, (Number(r.need) || 0) - (Number(owned[r.itemId]) || 0));
+      faltan += f;
+      if (!f) completos++;
+    });
+    var vendor = (res && res.totals && res.totals.vendor) || [];
+    return {
+      piezas: res && res.node ? _descendientes(res.node) : 0,
+      materiales: rows.length,
+      completos: completos,
+      faltan: faltan,
+      compran: vendor.length,
+      pct: rows.length ? Math.floor(completos * 100 / rows.length) : 0
+    };
+  }
+
+  // La ficha: resumen + Receta y Materiales totales lado a lado. `opts.vista`
+  // ('arbol' | 'totales') decide cuál se ve en pantallas angostas.
+  function renderSheetHTML(res, owned, opts) {
+    opts = opts || {};
+    // Cargando o sin árbol: se dice lo mismo que en el árbol, sin inventar el resto.
+    if (!res || res.needsPrecursors || !res.node) return renderTreeHTML(res, opts);
+    _ensureStyle();
+    var vista = opts.vista === 'totales' ? 'totales' : 'arbol';
+    var s = _resumen(res, owned);
+
+    var stat = function (cls, lbl, val, extra) {
+      return '<div class="lt-stat' + (cls ? ' lt-stat--' + cls : '') + '"><div class="lt-stat__lbl">' + lbl +
+        '</div><div class="lt-stat__val">' + val + '</div>' + (extra || '') + '</div>';
+    };
+    var h = '<div class="lt-sheet-wrap" data-lt-sheet="1">';
+    h += '<div class="lt-stats">' +
+      stat('', 'Piezas en la receta', _num(s.piezas)) +
+      stat('', 'Materiales base', _num(s.materiales)) +
+      stat(s.materiales && s.completos === s.materiales ? 'ok' : '', 'Completos',
+        _num(s.completos) + ' <small>de ' + _num(s.materiales) + '</small>',
+        '<div class="lt-bar" role="progressbar" aria-label="Materiales completos" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' +
+          s.pct + '"><i style="width:' + s.pct + '%"></i></div>') +
+      stat(s.faltan ? 'miss' : 'ok', 'Unidades que faltan', s.faltan ? _num(s.faltan) : '✓ 0') +
+      (s.compran ? stat('', 'Se compran a un NPC', _num(s.compran) + ' <small>pieza(s)</small>') : '') +
+      '</div>';
+
+    h += '<div class="lt-tabs" role="group" aria-label="Qué ver">' +
+      '<button type="button" class="lt-tab" data-lt-view="arbol" aria-pressed="' + (vista === 'arbol') + '">Receta</button>' +
+      '<button type="button" class="lt-tab" data-lt-view="totales" aria-pressed="' + (vista === 'totales') + '">Materiales totales</button>' +
+      '</div>';
+
+    h += '<div class="lt-sheet lt-sheet--' + vista + '">' +
+      '<section class="lt-pane lt-pane--arbol" aria-label="Receta">' +
+        '<div class="lt-pane__head"><h4 class="lt-pane__title">Receta</h4>' +
+        '<span class="lt-pane__hint">Tocá una pieza para abrirla</span></div>' +
+        '<div class="lt-pane__body">' + renderTreeHTML(res, opts) + '</div></section>' +
+      '<section class="lt-pane lt-pane--totales" aria-label="Materiales totales">' +
+        '<div class="lt-pane__head"><h4 class="lt-pane__title">Materiales totales</h4>' +
+        '<span class="lt-pane__hint">Banco y almacén de materiales</span></div>' +
+        '<div class="lt-pane__body">' + renderTotalsHTML(res, owned, opts) + '</div></section>' +
+      '</div>';
+    return h + '</div>';
+  }
+
+  // ==========================================================================
+  // 8. API
   // ==========================================================================
 
   root.LegendaryTreeUI = {
     ensurePrecursors: ensurePrecursors,
     renderTreeHTML: renderTreeHTML,
     renderTotalsHTML: renderTotalsHTML,
+    renderHeroHTML: renderHeroHTML,
+    renderSheetHTML: renderSheetHTML,
     NIVEL_ABIERTO_POR_DEFECTO: NIVEL_ABIERTO_POR_DEFECTO,
     _resetCache: _resetCache,
     _num: _num,
