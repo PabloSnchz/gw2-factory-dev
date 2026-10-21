@@ -6,22 +6,22 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T05:12Z
-Próxima acción: BOV-2, theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. Después BOV-3.
+Última actualización: 2026-10-21T05:20Z
+Próxima acción: BOV-3, selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez. Después BOV-4.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste
+Micro-ciclo: BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez
 Archivos:
-- css/themes/gato.css
-- tests/theme-gato.test.cjs
-BOV-1 publicado (DEC-025, índice, backlog `5232db1`). BOV-2 validado en local: 36/36 tests, 6/6 mutaciones; contraste AA de 21 textos sobre 7 fondos.
+- js/theme-selector.js
+- tests/theme-selector.test.cjs
+BOV-2 publicado: `css/themes/gato.css` (`b553040`) y su test (`9ebf376`). BOV-3 validado en local: 42/42 tests, 7/7 mutaciones. Hasta BOV-5 el index.html sigue pidiendo la versión 1.1.0 del selector; el cambio se ve en DEV después de BOV-5.
 
 Plan, un micro-ciclo por vez:
 
 - BOV-1 — registrar DEC-025, BL-038 y el índice. Hecho.
-- BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. En curso.
-- BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez.
+- BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. Hecho.
+- BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez. En curso.
 - BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test.
 - BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande).
 - BOV-6 — mi componente de voz en La Bóveda y su test.
