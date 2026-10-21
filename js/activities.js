@@ -1,5 +1,24 @@
 /*!
  * js/activities.js — Panel de Actividades (Objetivos / Home Nodes)
+ * v3.21.0 (2026-10-21) - Fix: el PSNA muestra el dia correcto (BL-013)
+ *
+ * CAMBIOS v3.21.0:
+ * - El PSNA mostraba todos los dias los waypoints de otro dia: buscaba la fecha
+ *   exacta en psna-schedule.json (que cubria una semana de marzo) y, si no la
+ *   encontraba, usaba el primer dia de la lista.
+ * - Nueva funcion pura psnaPickDay(data, now): la ubicacion depende solo del
+ *   dia de la semana y cambia a las 08:00 UTC (antes de esa hora vale el dia
+ *   anterior). Usa la rotacion semanal del archivo; si no la hay, la fecha
+ *   exacta; si no, el mismo dia de la semana. Si no hay datos devuelve null y
+ *   el panel muestra "No hay datos PSNA disponibles": nunca un dia equivocado.
+ * - Lee solo el archivo propio (assets/data/psna-schedule.json). Antes, fuera de
+ *   localhost, saltaba ese archivo y leia el del repo de produccion.
+ * - El respaldo embebido pasa a ser la rotacion verificada contra la wiki
+ *   (2026-10-21); se quitan el calendario de marzo y la tabla de codigos, que
+ *   tenian 15 codigos y 2 nombres incorrectos.
+ * - Cache nueva 'psna:data:v4' (guarda el archivo completo); las claves viejas
+ *   se siguen limpiando. tests/psna-day.test.cjs prueba psnaPickDay.
+ *
  * v3.20.4 (2026-09-30) - Fix: activate() ya no borra la cache de logros de otro modulo
  *
  * CAMBIOS v3.20.3:
@@ -59,13 +78,13 @@
   // =======================================================================
   var CONFIG = {
     PSNA_DATA_PATHS: [
-      'assets/data/psna-schedule.json',
-      'https://raw.githubusercontent.com/PabloSnchz/gw2-wallet-ligero/main/assets/data/psna-schedule.json'
+      'assets/data/psna-schedule.json'
     ],
-    PSNA_CACHE_KEY: 'psna:schedule',
+    PSNA_CACHE_KEY: 'psna:data:v4',
     PSNA_LAST_UPDATE_KEY: 'psna:lastUpdate',
     PSNA_DAILY_CACHE_PREFIX: 'psna:',
     ACTIVITIES_CACHE_KEYS: [
+      'psna:data:v4',
       'psna:schedule',
       'psna:lastUpdate',
       'gn:wiki:thumbs'
@@ -83,6 +102,7 @@
     daily: {
       psna: null,
       psnaSchedule: null,
+      psnaData: null,
       psnaLastUpdate: null,
       fractals: {
         status: 'idle',
@@ -138,116 +158,98 @@
   // =======================================================================
   // 2. DATOS ESTÁTICOS DE RESPALDO
   // =======================================================================
-  var FALLBACK_PSNA_SCHEDULE = [
-    { date: '2026-03-17', waypoints: [
-      'Camp Resolve Waypoint',
-      'Desider Atum Waypoint',
-      'Waste Hollows Waypoint',
-      'Garenhoff',
-      'Travelen\'s Waypoint',
-      'Temperus Point Waypoint'
-    ]},
-    { date: '2026-03-18', waypoints: [
-      'Town of Prosperity',
-      'Swampwatch Post',
-      'Caer Shadowlain',
-      'Shieldbluff Waypoint',
-      'Mennerheim',
-      'Ferrusatos Village'
-    ]},
-    { date: '2026-03-19', waypoints: [
-      'Blue Oasis',
-      'Seraph Protectors',
-      'Armada Harbor',
-      'Altar Brook Trading Post',
-      'Rocklair',
-      'Village of Scalecatch Waypoint'
-    ]},
-    { date: '2026-03-20', waypoints: [
-      'Repair Station',
-      'Breth Ayahusasca',
-      'Shelter Docks',
-      'Pearl Islet Waypoint',
-      'Dolyak Pass Waypoint',
-      'Hawkgates Waypoint'
-    ]},
-    { date: '2026-03-21', waypoints: [
-      'Camp Resolve Waypoint',
-      'Gallant\'s Folly',
-      'Augur\'s Torch',
-      'Vigil Keep Waypoint',
-      'Baldstead',
-      'Bovarin Estate'
-    ]},
-    { date: '2026-03-22', waypoints: [
-      'Azarr\'s Arbor',
-      'Mabon Waypoint',
-      'Fort Trinity Waypoint',
-      'Mudflat Camp',
-      'Blue Ice Shining Waypoint',
-      'Snow Ridge Camp Waypoint'
-    ]},
-    { date: '2026-03-23', waypoints: [
-      'Restoration Refuge',
-      'Lionguard Waystation Waypoint',
-      'Rally Waypoint',
-      'Marshwatch Haven Waypoint',
-      'Ridgerock Camp Waypoint',
-      'Haymal Gore'
-    ]},
-    { date: '2026-03-24', waypoints: [
-      'Camp Resolve Waypoint',
-      'Desider Atum Waypoint',
-      'Waste Hollows Waypoint',
-      'Garenhoff',
-      'Travelen\'s Waypoint',
-      'Temperus Point Waypoint'
-    ]}
-  ];
-
-  var PSNA_CODES = {
-    'Camp Resolve Waypoint': '[&BH8HAAA=]',
-    'Desider Atum Waypoint': '[&BEgAAAA=]',
-    'Waste Hollows Waypoint': '[&BKgCAAA=]',
-    'Garenhoff': '[&BBEAAAA=]',
-    'Travelen\'s Waypoint': '[&BGQCAAA=]',
-    'Temperus Point Waypoint': '[&BIMBAAA=]',
-    'Town of Prosperity': '[&BH4HAAA=]',
-    'Swampwatch Post': '[&BMIAAAA=]',
-    'Caer Shadowlain': '[&BP0CAAA=]',
-    'Shieldbluff Waypoint': '[&BKYAAAA=]',
-    'Mennerheim': '[&BDgDAAA=]',
-    'Ferrusatos Village': '[&BPEBAAA=]',
-    'Blue Oasis': '[&BH8HAAA=]',
-    'Seraph Protectors': '[&BF0AAAA=]',
-    'Armada Harbor': '[&BO4CAAA=]',
-    'Altar Brook Trading Post': '[&BEUDAAA=]',
-    'Rocklair': '[&BJcBAAA=]',
-    'Village of Scalecatch Waypoint': '[&BOcBAAA=]',
-    'Repair Station': '[&BJcHAAA=]',
-    'Breth Ayahusasca': '[&BMwCAAA=]',
-    'Shelter Docks': '[&BKYCAAA=]',
-    'Pearl Islet Waypoint': '[&BNUGAAA=]',
-    'Dolyak Pass Waypoint': '[&BHsBAAA=]',
-    'Hawkgates Waypoint': '[&BNMAAAA=]',
-    'Gallant\'s Folly': '[&BNMCAAA=]',
-    'Augur\'s Torch': '[&BB8DAAA=]',
-    'Vigil Keep Waypoint': '[&BJIBAAA=]',
-    'Baldstead': '[&BE8CAAA=]',
-    'Bovarin Estate': '[&BF8BAAA=]',
-    'Azarr\'s Arbor': '[&BIYHAAA=]',
-    'Mabon Waypoint': '[&BDoBAAA=]',
-    'Fort Trinity Waypoint': '[&BO4CAAA=]',
-    'Mudflat Camp': '[&BKcBAAA=]',
-    'Blue Ice Shining Waypoint': '[&BIUCAAA=]',
-    'Snow Ridge Camp Waypoint': '[&BCECAAA=]',
-    'Restoration Refuge': '[&BIgHAAA=]',
-    'Lionguard Waystation Waypoint': '[&BEwDAAA=]',
-    'Rally Waypoint': '[&BNIEAAA=]',
-    'Marshwatch Haven Waypoint': '[&BKYBAAA=]',
-    'Ridgerock Camp Waypoint': '[&BIMCAAA=]',
-    'Haymal Gore': '[&BB4CAAA=]'
+  // Rotacion semanal verificada contra la wiki el 2026-10-21 (BL-013).
+  // Respaldo si assets/data/psna-schedule.json no se puede leer.
+  var FALLBACK_PSNA_DATA = {
+    resetUtcHour: 8,
+    rotation: {
+      monday: [
+        { name: 'Restoration Refuge', code: '[&BIcHAAA=]' },
+        { name: 'Lionguard Waystation Waypoint', code: '[&BEwDAAA=]' },
+        { name: 'Rally Waypoint', code: '[&BNIEAAA=]' },
+        { name: 'Marshwatch Haven Waypoint', code: '[&BKYBAAA=]' },
+        { name: 'Ridgerock Camp Waypoint', code: '[&BIMCAAA=]' },
+        { name: 'Haymal Gore', code: '[&BA8CAAA=]' }
+      ],
+      tuesday: [
+        { name: 'Camp Resolve Waypoint', code: '[&BH8HAAA=]' },
+        { name: 'Desider Atum Waypoint', code: '[&BEgAAAA=]' },
+        { name: 'Waste Hollows Waypoint', code: '[&BKgCAAA=]' },
+        { name: 'Garenhoff', code: '[&BBkAAAA=]' },
+        { name: 'Travelen\'s Waypoint', code: '[&BGQCAAA=]' },
+        { name: 'Temperus Point Waypoint', code: '[&BIMBAAA=]' }
+      ],
+      wednesday: [
+        { name: 'Town of Prosperity', code: '[&BH4HAAA=]' },
+        { name: 'Swampwatch Post', code: '[&BMIBAAA=]' },
+        { name: 'Caer Shadowfain', code: '[&BP0CAAA=]' },
+        { name: 'Shieldbluff Waypoint', code: '[&BKYAAAA=]' },
+        { name: 'Mennerheim', code: '[&BDgDAAA=]' },
+        { name: 'Ferrusatos Village', code: '[&BPEBAAA=]' }
+      ],
+      thursday: [
+        { name: 'Blue Oasis', code: '[&BKsHAAA=]' },
+        { name: 'Seraph Protectors', code: '[&BF0AAAA=]' },
+        { name: 'Armada Harbor', code: '[&BO4CAAA=]' },
+        { name: 'Altar Brook Trading Post', code: '[&BIMAAAA=]' },
+        { name: 'Rocklair', code: '[&BF0GAAA=]' },
+        { name: 'Village of Scalecatch Waypoint', code: '[&BOcBAAA=]' }
+      ],
+      friday: [
+        { name: 'Repair Station', code: '[&BJQHAAA=]' },
+        { name: 'Breth Ayahusasca', code: '[&BMwCAAA=]' },
+        { name: 'Shelter Docks', code: '[&BJsCAAA=]' },
+        { name: 'Pearl Islet Waypoint', code: '[&BNUGAAA=]' },
+        { name: 'Dolyak Pass Waypoint', code: '[&BHsBAAA=]' },
+        { name: 'Hawkgates Waypoint', code: '[&BNMAAAA=]' }
+      ],
+      saturday: [
+        { name: 'Camp Resolve Waypoint', code: '[&BH8HAAA=]' },
+        { name: 'Gallant\'s Folly', code: '[&BLkCAAA=]' },
+        { name: 'Augur\'s Torch', code: '[&BBEDAAA=]' },
+        { name: 'Vigil Keep Waypoint', code: '[&BJIBAAA=]' },
+        { name: 'Balddistead', code: '[&BEICAAA=]' },
+        { name: 'Bovarin Estate', code: '[&BBABAAA=]' }
+      ],
+      sunday: [
+        { name: 'Azarr\'s Arbor', code: '[&BIkHAAA=]' },
+        { name: 'Mabon Waypoint', code: '[&BDoBAAA=]' },
+        { name: 'Fort Trinity Waypoint', code: '[&BO4CAAA=]' },
+        { name: 'Mudflat Camp', code: '[&BC0AAAA=]' },
+        { name: 'Blue Ice Shining Waypoint', code: '[&BIUCAAA=]' },
+        { name: 'Snow Ridge Camp Waypoint', code: '[&BCECAAA=]' }
+      ]
+    }
   };
+
+  // PSNA-DAY:BEGIN — funcion pura, la prueba tests/psna-day.test.cjs (BL-013)
+  // Devuelve { date, weekday, waypoints, source } con los 6 lugares vigentes en
+  // `now`, o null si no hay datos. La ubicacion cambia a las 08:00 UTC (o
+  // data.resetUtcHour): antes de esa hora vale el dia anterior.
+  // Orden: rotacion semanal -> fecha exacta en schedule -> mismo dia de la
+  // semana en schedule. Nunca devuelve el dia equivocado.
+  var PSNA_WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+  function psnaPickDay(data, now) {
+    if (!data || !now || isNaN(now.getTime())) return null;
+    var hour = typeof data.resetUtcHour === 'number' ? data.resetUtcHour : 8;
+    var t = new Date(now.getTime() - hour * 3600000);
+    var key = t.getUTCFullYear() + '-' + String(t.getUTCMonth() + 1).padStart(2, '0') + '-' + String(t.getUTCDate()).padStart(2, '0');
+    var wd = PSNA_WEEKDAYS[t.getUTCDay()];
+    function six(w) { return Array.isArray(w) && w.length === 6 ? w : null; }
+    function out(w, source) { return { date: key, weekday: wd, waypoints: w, source: source }; }
+    if (data.rotation && six(data.rotation[wd])) return out(data.rotation[wd], 'rotation');
+    var list = Array.isArray(data.schedule) ? data.schedule : [];
+    var i;
+    for (i = 0; i < list.length; i++) {
+      if (list[i] && list[i].date === key && six(list[i].waypoints)) return out(list[i].waypoints, 'date');
+    }
+    for (i = 0; i < list.length; i++) {
+      var d = list[i] && list[i].date ? new Date(list[i].date + 'T12:00:00Z') : null;
+      if (d && !isNaN(d.getTime()) && PSNA_WEEKDAYS[d.getUTCDay()] === wd && six(list[i].waypoints)) return out(list[i].waypoints, 'weekday');
+    }
+    return null;
+  }
+  // PSNA-DAY:END
 
   var PSNA_REGIONS = ['Maguuma Wastes', 'Maguuma Jungle', 'Ruins of Orr', 'Kryta', 'Shiverpeaks', 'Ascalon'];
   var PSNA_NPCS = ['Mehem the Traveled', 'The Fox', 'Specialist Yana', 'Lady Derwena', 'Despina Katelyn', 'Verma Giftrender'];
@@ -572,7 +574,7 @@
   }
 
   // =======================================================================
-  // 7. SERVICIO PSNA (sin cambios)
+  // 7. SERVICIO PSNA (v3.21.0: dia por rotacion semanal, ver PSNA-DAY)
   // =======================================================================
   var PSNA = {
     loadSchedule: async function(force) {
@@ -584,26 +586,30 @@
         try {
           var cached = localStorage.getItem(CONFIG.PSNA_CACHE_KEY);
           if (cached) {
-            state.daily.psnaSchedule = JSON.parse(cached);
-            console.log(LOG, '📦 Usando schedule cacheado');
-            return true;
+            var cachedData = JSON.parse(cached);
+            if (cachedData && (cachedData.rotation || Array.isArray(cachedData.schedule))) {
+              state.daily.psnaData = cachedData;
+              state.daily.psnaSchedule = cachedData.schedule || null;
+              console.log(LOG, '📦 Usando datos PSNA cacheados');
+              return true;
+            }
           }
         } catch (e) { console.warn(LOG, 'Error reading cache', e); }
       }
       for (var i = 0; i < CONFIG.PSNA_DATA_PATHS.length; i++) {
         var url = CONFIG.PSNA_DATA_PATHS[i];
-        if (url.startsWith('assets/') && window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) continue;
         try {
           console.log(LOG, '🌐 Cargando PSNA desde:', url);
           var response = await fetch(url + '?t=' + Date.now());
           if (!response.ok) continue;
           var data = await response.json();
-          if (data && data.schedule && Array.isArray(data.schedule)) {
+          if (data && (data.rotation || Array.isArray(data.schedule))) {
             if (fetchId !== state._psnaFetchId) return false;
-            state.daily.psnaSchedule = data.schedule;
+            state.daily.psnaData = data;
+            state.daily.psnaSchedule = data.schedule || null;
             state.daily.psnaLastUpdate = data.lastUpdated || today;
             try {
-              localStorage.setItem(CONFIG.PSNA_CACHE_KEY, JSON.stringify(data.schedule));
+              localStorage.setItem(CONFIG.PSNA_CACHE_KEY, JSON.stringify(data));
               localStorage.setItem(CONFIG.PSNA_LAST_UPDATE_KEY, today);
             } catch (e) { console.warn(LOG, 'No se pudo guardar en localStorage'); }
             console.log(LOG, '✅ Schedule actualizado desde:', url);
@@ -612,28 +618,27 @@
         } catch (e) { console.warn(LOG, '⚠️ Error cargando desde', url, e.message); }
       }
       if (fetchId !== state._psnaFetchId) return false;
-      console.warn(LOG, '⚠️ Usando schedule de respaldo');
-      state.daily.psnaSchedule = FALLBACK_PSNA_SCHEDULE;
+      console.warn(LOG, '⚠️ Usando rotación de respaldo');
+      state.daily.psnaData = FALLBACK_PSNA_DATA;
+      state.daily.psnaSchedule = null;
       return false;
     },
     load: async function(forceRefresh) {
       console.log(LOG, '📅 PSNA.load llamado');
       await this.loadSchedule(forceRefresh);
-      var today = new Date();
-      var todayStr = today.getUTCFullYear() + '-' + pad2(today.getUTCMonth() + 1) + '-' + pad2(today.getUTCDate());
-      var todayData = null;
-      for (var i = 0; i < state.daily.psnaSchedule.length; i++) {
-        if (state.daily.psnaSchedule[i].date === todayStr) { todayData = state.daily.psnaSchedule[i]; break; }
-      }
-      if (!todayData) {
-        console.warn(LOG, '⚠️ No hay datos para hoy, usando primero');
-        todayData = state.daily.psnaSchedule[0];
-      }
+      var todayData = psnaPickDay(state.daily.psnaData, new Date());
       var psnaManual = [];
+      if (!todayData) {
+        console.warn(LOG, '⚠️ No hay datos PSNA para hoy: no se muestra un día equivocado');
+        state.daily.psna = psnaManual;
+        renderPSNA();
+        renderDailyKPI();
+        return;
+      }
       for (var j = 0; j < 6; j++) {
         var waypoint = todayData.waypoints[j];
-        var name = typeof waypoint === 'object' ? waypoint.name : waypoint;
-        var code = typeof waypoint === 'object' ? waypoint.code : PSNA_CODES[name];
+        var name = waypoint && typeof waypoint === 'object' ? waypoint.name : String(waypoint || '');
+        var code = waypoint && typeof waypoint === 'object' ? (waypoint.code || '') : '';
         psnaManual.push({
           region: PSNA_REGIONS[j],
           npc: PSNA_NPCS[j],
@@ -1316,6 +1321,7 @@
       return {
         psna: state.daily.psna,
         psnaSchedule: state.daily.psnaSchedule,
+        psnaData: state.daily.psnaData,
         token: state.token,
         active: state.active,
         weeklyKey: state.weekly.key,
@@ -1328,6 +1334,7 @@
       };
     },
     _renderPSNA: renderPSNA,
+    _psnaPickDay: psnaPickDay,
     _forceReload: function() { PSNA.load(true); }
   };
   
