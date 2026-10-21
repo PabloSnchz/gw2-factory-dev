@@ -6,16 +6,12 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T05:35Z
-Próxima acción: BOV-5, index.html: logo, pie, favicon y theme por defecto (archivo grande). Después BOV-6.
+Última actualización: 2026-10-21T05:42Z
+Próxima acción: retomar con BOV-6, mi componente de voz en La Bóveda y su test. Después BOV-7.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande)
-Archivos:
-- index.html
-- tests/index-identity.test.cjs
-BOV-4 publicado: `assets/brand/gato-negro.svg` (`b94ebfe`) y su test (`742e419`). BOV-5 es un micro-ciclo de archivo grande (DEC-021 §1 bis): index.html (68.964 bytes) es el único archivo funcional. Validado en local: 48/48 tests, 6/6 mutaciones.
+Ninguno abierto. BOV-1 a BOV-5 están publicados y verificados por SHA: la marca oficial (logo, pie y favicon) y el theme Gato Negro por defecto ya se ven en DEV (`index.html` `6eb6922`, test `bf6c246`; 48/48 tests en local). Sesión pausada por límite físico de la sesión (LES-027), sin trabajo a medias. Al despertar: BOV-6, con su manifiesto y checkpoint antes de empezar.
 
 Plan, un micro-ciclo por vez:
 
@@ -23,8 +19,8 @@ Plan, un micro-ciclo por vez:
 - BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. Hecho.
 - BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez. Hecho.
 - BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test. Hecho.
-- BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande). En curso.
-- BOV-6 — mi componente de voz en La Bóveda y su test.
+- BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande). Hecho.
+- BOV-6 — mi componente de voz en La Bóveda y su test. Siguiente.
 - BOV-7 — mi voz en la bienvenida, el modal de API Keys y la ayuda.
 - BOV-8 — cierre: funcionalidad, backlog y estado.
 
