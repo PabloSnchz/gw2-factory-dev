@@ -10,8 +10,8 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 ## Estado actual
 
 - Abiertas: 6 de 15 (operación normal)
-- READY: 4 de 5 (modo restringido: solo oportunidades ALTA; BL-037 entró el 2026-10-21)
-- Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004, DEC-020). Capacidad según las instrucciones v2 (DEC-022): READY ≤ 3 activo, 4–5 restringido, más de 5 detenido. Hoy: restringido
+- READY: 3 de 5 (modo activo; BL-037 se hizo y cerró el 2026-10-21)
+- Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004, DEC-020). Capacidad según las instrucciones v2 (DEC-022): READY ≤ 3 activo, 4–5 restringido, más de 5 detenido. Hoy: activo
 - Ideas pendientes sin analizar: 1 de 5 (se puede hacer ronda)
 - Áreas detenidas: ninguna (REQ-007 respondida el 2026-10-21; no hay decisiones estratégicas abiertas ni riesgos CRÍTICOS)
 - Próxima ronda obligatoria (latido): 2026-11-03, si no hubo otra antes
@@ -35,7 +35,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 - Alternativa: quitar la sección, o dejar solo lo que de verdad está planeado (por ejemplo "Historial y variación", ver DISC-004)
 - Prioridad: ALTA (corrige información incorrecta)
 - Costo: XS
-- Nota: no se promueve todavía para dejar un lugar libre en READY. Es la siguiente en entrar. Con READY 4 (2026-10-21), el último lugar queda reservado para ella: es producto y ALTA, y va antes que BL-037 (panel).
+- Nota: no se promueve todavía para dejar un lugar libre en READY. Es la siguiente en entrar. Es producto y ALTA: entra a READY después de BL-034.
 
 ## DISC-004 — Historial y variación de la cartera
 
