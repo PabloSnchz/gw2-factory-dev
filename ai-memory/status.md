@@ -1,25 +1,31 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: Ninguna — REQ-009 procesada (opción A, avatar 48/56 px, DEC-024); la marca actual de Gato Negro Factory no se modifica; implementación en BL-037
-Motivo: Sin decisiones abiertas. El trabajo de producto sigue: BL-034 es la próxima tarea.
+Estado: EN_CURSO
+Tarea actual: BL-037 — Voz de Shiruvana en el panel (gw2-factory-dashboard)
+Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. Es una orden explícita: no cuenta contra el 15 % de soporte (DEC-023 §4) y prevalece sobre el orden anterior (DEC-022).
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
-Inicio: 2026-10-21T04:01Z
-Última actualización: 2026-10-21T04:14Z
-Próxima acción: BL-034 en la próxima sesión (metas de Janthir Wilds y Visions of Eternity). Después DISC-003 (producto, ALTA, tiene reservado el último lugar de READY), la implementación de DEC-023 y BL-037 (voz de Shiruvana en el panel), dentro del 15 % semanal de soporte.
+Etapa actual: DEVELOPMENT
+Inicio: 2026-10-21T04:15Z
+Última actualización: 2026-10-21T04:24Z
+Próxima acción: BL-037a, parse.js lee el resumen de la sesión de status.md (dashboard). Después BL-037b.
 
-## Resumen de la sesión
+## Micro-ciclo actual
 
-- REQ-009 aprobada (opción A): RESP-009 procesada con las reglas de Pablo, REQ-009 cerrada.
-- DEC-024 (voz de Shiruvana):
-  - el gato sigue siendo la marca y Shiruvana es la voz;
-  - avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones;
-  - 48 px en general y 56 px en resúmenes y decisiones importantes, en columna propia para no perder densidad;
-  - un avatar por sección visible.
-- DEC-024 amplía la regla de marca a pedido de Pablo: la cabecera actual (ícono `brandMark()`, nombre y subtítulo) queda exactamente como está, y BL-037 no la toca.
-- Propuesta de identidad actualizada a v2. BL-037 en READY: READY 4, discovery restringido a ideas ALTA.
-- 4 micro-ciclos (G10-A a G10-D), escrituras en serie, cada una verificada por SHA. 31/31 tests en local.
+Micro-ciclo: BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard)
+Archivos:
+- gw2-factory-dashboard: js/parse.js
+- gw2-factory-dashboard: tests/parse.test.mjs
+Regla de marca (DEC-024 §1): la cabecera del panel (brandMark, nombre y subtítulo) no se toca en ningún micro-ciclo.
+
+Plan, un micro-ciclo por vez:
+
+- BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard). En curso.
+- BL-037b — componente gds-voice y avatar oficial en el GDS (dashboard).
+- BL-037c — tests y documentación del componente en el GDS (dashboard).
+- BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande).
+- BL-037e — tests del panel para la voz de Shiruvana (dashboard).
+- BL-037f — versiones en index.html, CHANGELOG y README (dashboard).
+- BL-037g — cierre en memoria: backlog, FEAT-001 y roadmap.
 
 ## Esperando a Pablo
 
