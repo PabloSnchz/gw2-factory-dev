@@ -1,27 +1,24 @@
 # STATUS
 
-Estado: EN_CURSO
-Tarea actual: Registrar la aprobación de REQ-009 (identidad visual de Shiruvana, opción A con avatar más grande)
-Motivo: Pablo aprobó usar su imagen como avatar oficial, con reglas de jerarquía y tamaños de 48/56 px. Implementación después de BL-034.
+Estado: IDLE
+Tarea actual: Ninguna — REQ-009 procesada (opción A, avatar 48/56 px, DEC-024); implementación en BL-037
+Motivo: Sin decisiones abiertas. El trabajo de producto sigue: BL-034 es la próxima tarea.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T04:01Z
-Última actualización: 2026-10-21T04:07Z
-Próxima acción: G10-C, agregar BL-037 (implementar la voz de Shiruvana en el panel) a READY y actualizar la capacidad de discovery. Después, cierre de sesión.
+Última actualización: 2026-10-21T04:09Z
+Próxima acción: BL-034 en la próxima sesión (metas de Janthir Wilds y Visions of Eternity). Después DISC-003 (producto, ALTA, tiene reservado el último lugar de READY), la implementación de DEC-023 y BL-037 (voz de Shiruvana en el panel), dentro del 15 % semanal de soporte.
 
-## Micro-ciclo actual
+## Resumen de la sesión
 
-Micro-ciclo: G10-C — agregar BL-037 (implementar la voz de Shiruvana en el panel) a READY y actualizar la capacidad de discovery
-Archivos:
-- ai-memory/backlog.md
-- ai-memory/discovery.md
-BL-037 entra último en READY: el producto (BL-034) va primero. Con READY 4, discovery pasa a restringido (solo ALTA).
-
-Plan, un micro-ciclo por vez:
-
-- G10-A — registrar DEC-024 (voz de Shiruvana) y actualizar la propuesta de identidad con los tamaños aprobados. Hecho.
-- G10-B — procesar RESP-009 y cerrar REQ-009. Hecho.
-- G10-C — agregar BL-037 (implementar la voz de Shiruvana en el panel) a READY y actualizar la capacidad de discovery. En curso.
+- REQ-009 aprobada (opción A): RESP-009 procesada con las reglas de Pablo, REQ-009 cerrada.
+- DEC-024 (voz de Shiruvana):
+  - el gato sigue siendo la marca y Shiruvana es la voz;
+  - avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones;
+  - 48 px en general y 56 px en resúmenes y decisiones importantes, en columna propia para no perder densidad;
+  - un avatar por sección visible.
+- Propuesta de identidad actualizada a v2. BL-037 en READY: READY 4, discovery restringido a ideas ALTA.
+- 3 micro-ciclos (G10-A, G10-B, G10-C), escrituras en serie, cada una verificada por SHA. 31/31 tests en local.
 
 ## Esperando a Pablo
 
