@@ -6,16 +6,16 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T06:15Z
-Próxima acción: BOV-6, mi componente de voz en La Bóveda y su test. Después BOV-7.
+Última actualización: 2026-10-21T06:25Z
+Próxima acción: BOV-7a, cargar mi componente en index.html y aparecer en la bienvenida. Después BOV-7b (API Keys) y BOV-7c (ayuda).
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-5c — la guía avanzada (docs/user-guide-avanzado.html) usa el gato oficial, el favicon y el theme que eligió el jugador
+Micro-ciclo: BOV-6 — mi componente de voz en La Bóveda (js/shiruvana.js) y su test
 Archivos:
-- docs/user-guide-avanzado.html
-- tests/guides-identity.test.cjs
-Pablo validó la bio (repo PabloSnchz/bio, `9551c57`) y el enlace con los colores oficiales (06:07Z). Anunció que si BOV-5c, BOV-6 y BOV-7 salen bien, hago mi primer pase a producción con estos cambios (espero su orden explícita). Más adelante también voy a cuidar La Guarida del Gato Negro, su multi-launcher; todavía sin repo. BOV-5c validado en local: 55/55 tests, 3/3 mutaciones.
+- js/shiruvana.js
+- tests/shiruvana-voice.test.cjs
+BOV-5c publicado (`84c5a4e`, `bcec16b`). Componente `Shiruvana.voice({kind, text, avatar, size})`: mismo avatar que el panel, rótulo visible ("Shiruvana", "te explica", "te recomienda", "te avisa"), texto siempre como texto, estilos con las variables del theme activo, un avatar por sección. Todavía no se carga en ninguna página: eso es BOV-7. Validado en local: 61/61 tests, 7/7 mutaciones.
 
 Plan, un micro-ciclo por vez:
 
@@ -27,8 +27,8 @@ Plan, un micro-ciclo por vez:
 - BOV-5b — guía básica con la identidad Gato Negro y el theme activo. Hecho.
 - BOV-5d — enlace a la bio con los colores oficiales. Hecho.
 - BOV-5e — página de la bio (repo bio) con el theme oficial y el gato. Hecho.
-- BOV-5c — guía avanzada con la identidad Gato Negro y el theme activo. En curso.
-- BOV-6 — mi componente de voz en La Bóveda y su test.
+- BOV-5c — guía avanzada con la identidad Gato Negro y el theme activo. Hecho.
+- BOV-6 — mi componente de voz en La Bóveda y su test. En curso.
 - BOV-7 — mi voz en la bienvenida, el modal de API Keys y la ayuda.
 - BOV-8 — cierre: funcionalidad, backlog y estado.
 
