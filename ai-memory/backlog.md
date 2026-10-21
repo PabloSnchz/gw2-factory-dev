@@ -10,6 +10,7 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 - [BL-034] [ALTO] Metas de Janthir Wilds y Visions of Eternity — `assets/meta-events.json` no tiene metas de Janthir Wilds, tiene una sola de Visions of Eternity y etiqueta "Convergencia: Monte Balrior" como SotO. El filtro de expansión de `index.html` no ofrece las dos expansiones nuevas. Hacer: completar las metas con horarios verificados en la wiki, corregir la etiqueta, agregar las opciones al filtro y tests de datos. · DEC-015, RSK-018
 - [BL-004] [MEDIO] Sincronizar documentación de producto con el código real — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen v6.6.2 (ej. `api-gw2.js` v2.15.0) pero `index.html` carga `api-gw2.js?v=2.33.0`; la Armería Legendaria no figura en `CHANGELOG.md`. · LES-003, DEC-003
 - [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). El archivo tiene guardas contra doble aplicación, así que el efecto es menor: duplica observadores y listeners. · FEAT-000
+- [BL-037] [BAJO] Voz de Shiruvana en el panel (gw2-factory-dashboard) — avatar oficial aprobado (REQ-009, opción A) solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones; 48/56 px en columna propia, uno por sección visible, nunca en datos ni métricas. 3 micro-ciclos: componente y avatar; Hoy y pedidos; historial, Ideas y tests. Va después de BL-034 y dentro del 15 % semanal de soporte (DEC-023). · DEC-024, FEAT-001
 
 ## IN_PROGRESS
 
