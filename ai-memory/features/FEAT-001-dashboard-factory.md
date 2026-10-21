@@ -1,12 +1,13 @@
 # FEAT-001 — Dashboard Factory
 
-- Estado: DISPONIBLE PARA EVALUACIÓN (versión 2.0.0 publicada; pendiente: validación visual de Pablo, BL-016, RSK-015)
-- Versión: 2.0.0 — Centro de Decisiones (2026-10-20, gw2-factory-dashboard @ `cfdd1fa`; ver CHANGELOG)
+- Estado: DISPONIBLE PARA EVALUACIÓN (versión 2.2.0 publicada; pendiente: validación visual de Pablo, BL-016, RSK-015)
+- Versión: 2.2.0 — Voz de Shiruvana (2026-10-21, gw2-factory-dashboard @ `800088e`; ver CHANGELOG). Antes: 2.1.0 soberanía de decisiones; 2.0.0 Centro de Decisiones (`cfdd1fa`)
 - Fecha: 2026-10-20
 - Repositorio: https://github.com/PabloSnchz/gw2-factory-dashboard
 - URL: https://pablosnchz.github.io/gw2-factory-dashboard/ (GitHub Pages activo, medido 2026-10-20)
 - Evolución: FACTORY-001B (BL-020, BL-021) — Gato Design System y Centro de Decisiones
-- Decisiones: DEC-008, DEC-009, DEC-010, DEC-011, DEC-012, DEC-013
+- Decisiones: DEC-008, DEC-009, DEC-010, DEC-011, DEC-012, DEC-013, DEC-018, DEC-024
+- Voz de Shiruvana (BL-037, 2026-10-21, DEC-024): la marca Gato Negro Factory no cambia (huella de `brandMark()` verificada por test). Componente `gds-voice` (GDS 1.1.0) con el avatar oficial: 48 px en recomendaciones y advertencias, 56 px en el resumen de la última sesión y en la última decisión de la Factory; un avatar por sección; nunca en datos, métricas ni navegación. Hoy suma "Última sesión" (lee `## Resumen de la sesión` de status.md) y "Decidido por la Factory" (excluye las decisiones de Pablo). 92 tests, 17 mutaciones detectadas.
 - Revisión final (MC-6, 2026-10-20): un test recorre todas las vistas y exige un solo h1 y títulos sin saltear niveles; corrigió dos errores reales. Tablas con scroll propio en pantallas chicas. Textos sin códigos internos y documentación consolidada (BL-024). Informe en gw2-factory-dev `ai-memory/missions/FACTORY-001B-informe-final.md`.
 - Centro de decisiones con GDS (MC-5, 2026-10-20, DEC-013): Hoy empieza con una frase que dice qué hacer y una tarjeta por pendiente (por qué importa, qué recomienda la Factory, botones). Los IDs pasan a ser referencias secundarias y los estados se dicen en palabras. Las respuestas que no se registraron se ven en el panel. Panel @ `9c8726b`.
 - Responder desde el panel (MC-4, 2026-10-20): cada pedido abierto tiene botones (Aprobar / Rechazar / Posponer 7 días / Ya lo hice) que abren un issue prellenado; el workflow `decision-response` de gw2-factory-dev escribe la respuesta en `ai-memory/responses/`. Después aparece en "Ya respondiste" (DEC-012).
@@ -19,7 +20,7 @@ Centro de decisiones de la Factory. Pablo entiende en menos de 60 segundos qué 
 
 | Vista | Responde |
 |---|---|
-| Hoy | Frase de resumen; respuestas sin registrar; "Necesita tu decisión" (tarjetas con recomendación y botones); "Ya respondiste"; qué hace la Factory (tarea, motivo, etapa, tiempo, próxima acción); "Qué debería preocuparte"; hoy / esta semana; números; entornos DEV/PROD/panel |
+| Hoy | Frase de resumen; respuestas sin registrar; advertencias de Shiruvana (riesgos CRÍTICOS); "Necesita tu decisión" (tarjetas con "Shiruvana recomienda" y botones); "Ya respondiste"; qué hace la Factory (tarea, motivo, etapa, tiempo, próxima acción); "Última sesión"; "Decidido por la Factory"; "Qué debería preocuparte"; hoy / esta semana; números; entornos DEV/PROD/panel |
 | Trabajo | Roadmap por fases y backlog READY / IN_PROGRESS / BLOCKED / DONE |
 | Conocimiento | Decisiones, lecciones y funcionalidades, con detalle renderizado y "citado por" |
 | Riesgos | Críticos, altos, otros abiertos y mitigados (`risks.md`) |
