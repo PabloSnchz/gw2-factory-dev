@@ -1,0 +1,49 @@
+# DEV en GitHub Pages (DEC-026, decidido por Pablo 2026-10-21).
+# Publica la app en https://pablosnchz.github.io/gw2-factory-dev/ con un workflow propio:
+# así no aplica el límite blando de 10 publicaciones por hora de Pages.
+# Solo publica cuando cambia la app: la memoria (ai-memory), los tests y los .md no disparan publicación.
+# Requisito único: Settings → Pages → Source: "GitHub Actions".
+name: dev-pages
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'ai-memory/**'
+      - 'tests/**'
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: dev-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Armar el sitio (sin memoria, tests ni workflows)
+        run: |
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'ai-memory' --exclude 'tests' --exclude '_site' ./ _site/
+          touch _site/.nojekyll
+          test -f _site/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
