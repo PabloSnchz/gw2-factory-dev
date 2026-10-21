@@ -13,10 +13,11 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
+- [BL-038] [ALTO] Alineación de UI de La Bóveda (FACTORY-BOVEDA-UI-001) — pedida por Pablo antes de BL-034: gato oficial como logo y favicon, theme oficial "Gato Negro" basado en el GDS (Bóveda queda como opción) y mi voz en bienvenida, API Keys, ayuda, errores resolubles y avisos. Solo DEV; producción la decide Pablo. · DEC-025, DEC-024, DEC-010
+
 ## BLOCKED
 
 - [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado por entorno: la Factory no puede leer CI ni abrir PR.
-- [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — el Centro de Decisiones 2.0.0 está publicado (`cfdd1fa`); falta que Pablo lo mire en un navegador real, también en el celular, y confirme el criterio de 60 segundos. · FEAT-001, DEC-013, RSK-015 — Bloqueado por Pablo: validación funcional.
 - [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000, DEC-017 — Bloqueado por entorno: las CDN responden 403 desde el entorno de la Factory (probado 2026-10-20) y un hash sin verificar rompería la carga de `crypto-js`.
 
 ## DONE
@@ -51,3 +52,4 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 - [BL-017] [BAJO] Cerrado por la Factory: ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` y `factory/bl-002-dev-sin-analytics` no afectan nada; borrarlas no vale un pedido (DEC-019). Quedan como están. · DEC-019 — 2026-10-20
 - [BL-013] [ALTO] PSNA del día equivocado — el panel Actividades muestra el día correcto. Datos: rotación semanal verificada en `assets/data/psna-schedule.json` v4 (15 códigos y 2 nombres corregidos; `7edc496`) y `tests/psna-data.test.cjs` (3 tests, 7/7 mutaciones). Código: `js/activities.js` v3.21.0 (`bf1480a`, micro-ciclo de archivo grande, DEC-021 §1 bis) calcula el día con la rotación y el cambio de las 08:00 UTC, muestra "sin datos" en lugar de un día equivocado y lee solo el archivo propio, no el de producción. `tests/psna-day.test.cjs` (9 tests, 12/12 mutaciones). · FEAT-003, DEC-015, DEC-021, RSK-018 — 2026-10-21
 - [BL-037] [BAJO] Voz de Shiruvana en el panel — hecha por orden de Pablo (2026-10-21 04:14Z), antes de BL-034. Panel 2.2.0 y GDS 1.1.0 (gw2-factory-dashboard `aa154fa`…`800088e`): componente `gds-voice` con el avatar oficial (48/56 px, uno por sección, nunca en datos), recomendación "Shiruvana recomienda", advertencias por riesgos CRÍTICOS, "Última sesión" y "Decidido por la Factory"; la marca no cambia (huella de `brandMark()` en test). 92 tests, 17 mutaciones. · DEC-024, FEAT-001 — 2026-10-21
+- [BL-016] [ALTO] FEAT-001 Dashboard Factory: validación visual — Pablo lo validó en pantalla y en el celular con el panel 2.2.0 (2026-10-21 04:52Z): "se entiende clarísimo cuándo hablás vos y cuándo son datos del sistema". · FEAT-001, DEC-013, DEC-024, RSK-015 — 2026-10-21
