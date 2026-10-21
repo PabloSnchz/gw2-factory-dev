@@ -1,37 +1,24 @@
 # STATUS
 
-Estado: EN_CURSO
-Tarea actual: BL-037 — Voz de Shiruvana en el panel (gw2-factory-dashboard)
-Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. Es una orden explícita: no cuenta contra el 15 % de soporte (DEC-023 §4) y prevalece sobre el orden anterior (DEC-022).
+Estado: IDLE
+Tarea actual: Ninguna — BL-037 hecha: la voz de Shiruvana ya está en el panel (2.2.0)
+Motivo: Pablo ordenó implementarla antes de BL-034. Sin decisiones abiertas; el producto sigue con BL-034.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T04:15Z
-Última actualización: 2026-10-21T05:04Z
-Próxima acción: BL-037g, cierre en memoria: backlog, FEAT-001 y discovery. Después, cierre de sesión.
+Última actualización: 2026-10-21T05:08Z
+Próxima acción: BL-034 en la próxima sesión (metas de Janthir Wilds y Visions of Eternity). Después DISC-003 (producto, ALTA) y la implementación de DEC-023 (vigilia diaria, arranque fijo, métricas).
 
-## Micro-ciclo actual
+## Resumen de la sesión
 
-Micro-ciclo: BL-037g — cierre en memoria: backlog, FEAT-001 y discovery
-Archivos:
-- ai-memory/features/FEAT-001-dashboard-factory.md
-- ai-memory/backlog.md
-- ai-memory/discovery.md
-BL-037f publicado (index.html `6543d8b`, CHANGELOG `c0cfee2`, README `800088e`). Panel 2.2.0 completo en gw2-factory-dashboard; ahora el cierre en la memoria.
-
-Plan, un micro-ciclo por vez:
-
-- BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard). Hecho.
-- BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). Hecho.
-- BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard). Hecho.
-- BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande). Hecho.
-- BL-037e — tests del panel para la voz de Shiruvana (dashboard). Hecho.
-- BL-037f — versiones en index.html, CHANGELOG y README (dashboard). Hecho.
-- BL-037g — cierre en memoria: backlog, FEAT-001 y discovery. En curso.
+- La voz de Shiruvana está en el panel 2.2.0: recomienda en cada pedido, advierte si hay riesgos CRÍTICOS, resume la última sesión y muestra lo que decidió la Factory. Avatar de 48 px (56 px en resumen y decisión), uno por sección, nunca en datos.
+- La marca Gato Negro Factory no cambió: un test guarda la huella del gato de la cabecera.
+- 7 micro-ciclos, escrituras en serie verificadas por SHA; 92 tests y 17 mutaciones detectadas en el panel, 31 en la memoria.
 
 ## Esperando a Pablo
 
+- [BL-016] Validación: Mirá el panel en un navegador real, también en el celular: la voz de Shiruvana (avatar y rótulo) y que entendés el estado en menos de 60 segundos (RSK-015 sigue abierto hasta entonces).
 - [FEAT-003] Validación: Abrí DEV (https://gw2-factory-dev.vercel.app/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
-- [BL-016] Validación: Mirá el panel en un navegador real, también en el celular, y confirmá que entendés el estado en menos de 60 segundos (RSK-015 sigue abierto hasta entonces).
 - [FEAT-002] Validación: Usá DEV (https://gw2-factory-dev.vercel.app/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
 
 ## Para tu información
