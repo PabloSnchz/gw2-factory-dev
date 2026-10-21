@@ -13,8 +13,6 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
-- [BL-013] [ALTO] PSNA del día equivocado — el panel Actividades muestra los waypoints de otro día: `js/activities.js` busca la fecha exacta y, si no la encuentra, usa el primer día; en sitios publicados lee el archivo del repo de producción. Ya hecho (BL-013a, 2026-10-21): rotación semanal verificada contra la wiki en `assets/data/psna-schedule.json` v4 (15 códigos y 2 nombres corregidos) y `tests/psna-data.test.cjs` (3 tests, 7/7 mutaciones). Falta: calcular el día con la rotación y el cambio de las 08:00 UTC, leer primero el archivo propio y su test, en `js/activities.js` (59,6 KB). Desbloqueado por RESP-007: el archivo va en un micro-ciclo dedicado (DEC-021). · DEC-015, DEC-021, RSK-018
-
 ## BLOCKED
 
 - [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado por entorno: la Factory no puede leer CI ni abrir PR.
@@ -51,3 +49,4 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 - [BL-036] [ALTO] Soberanía de decisiones en el panel (FACTORY-DASHBOARD-REFINEMENT-001) — panel 2.1.0 con decisiones, tareas e información separadas (gw2-factory-dashboard `1f59031`…`ff077b8`, 82 tests, 9/9 mutaciones); DEC-018; el chequeo en CI quedó en GV-1 de FACTORY-GOVERNANCE-002. · DEC-018, DEC-019, LES-022 — 2026-10-20
 - [BL-008] [BAJO] Cerrado por la Factory: email placeholder en commits heredados — no afecta al producto y no vale un pedido a Pablo (DEC-019). Si se configura `git user.email` en un entorno nuevo, que sea con el email real. · DEC-019 — 2026-10-20
 - [BL-017] [BAJO] Cerrado por la Factory: ramas sobrantes en gw2-factory-dev — `chore/init-ai-memory` y `factory/bl-002-dev-sin-analytics` no afectan nada; borrarlas no vale un pedido (DEC-019). Quedan como están. · DEC-019 — 2026-10-20
+- [BL-013] [ALTO] PSNA del día equivocado — el panel Actividades muestra el día correcto. Datos: rotación semanal verificada en `assets/data/psna-schedule.json` v4 (15 códigos y 2 nombres corregidos; `7edc496`) y `tests/psna-data.test.cjs` (3 tests, 7/7 mutaciones). Código: `js/activities.js` v3.21.0 (`bf1480a`, micro-ciclo de archivo grande, DEC-021 §1 bis) calcula el día con la rotación y el cambio de las 08:00 UTC, muestra "sin datos" en lugar de un día equivocado y lee solo el archivo propio, no el de producción. `tests/psna-day.test.cjs` (9 tests, 12/12 mutaciones). · FEAT-003, DEC-015, DEC-021, RSK-018 — 2026-10-21
