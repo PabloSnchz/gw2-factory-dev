@@ -10,10 +10,10 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 ## Estado actual
 
 - Abiertas: 6 de 15 (operación normal)
-- READY: 4 de 5 (modo restringido: solo oportunidades ALTA)
-- Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004, DEC-020). Capacidad según las instrucciones v2 (DEC-022): READY ≤ 3 activo, 4–5 restringido, más de 5 detenido. Hoy: restringido
+- READY: 3 de 5 (modo activo; BL-013 pasó a BLOCKED el 2026-10-21)
+- Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004, DEC-020). Capacidad según las instrucciones v2 (DEC-022): READY ≤ 3 activo, 4–5 restringido, más de 5 detenido. Hoy: activo
 - Ideas pendientes sin analizar: 1 de 5 (se puede hacer ronda)
-- Áreas detenidas: ninguna (no hay decisiones estratégicas abiertas ni riesgos CRÍTICOS)
+- Áreas detenidas: actividades y metas, mientras REQ-007 esté abierta (DEC-020). Sin riesgos CRÍTICOS
 - Próxima ronda obligatoria (latido): 2026-11-03, si no hubo otra antes
 
 ## Rondas
