@@ -6,21 +6,20 @@ Motivo: Pablo validó FEAT-004 y, al revisar FEAT-003 y usar DEV, encontró 5 pr
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-21T20:30Z
-Próxima acción: ARM-1 — la columna "Tengo" de Materiales totales lee el banco y el almacén (BL-045).
+Última actualización: 2026-10-21T20:45Z
+Próxima acción: PSN-1 — el panel del PSNA dice de qué día son los lugares y se actualiza solo a las 08:00 UTC (BL-044).
 
 Micro-ciclo:
-ARM-1 — "Tengo" con el inventario real (archivo grande dedicado, DEC-021 §1 bis)
+PSN-1 — el PSNA dice qué día muestra y se actualiza en el cambio (archivo grande dedicado, DEC-021 §1 bis)
 Archivos:
-js/legendary-tracker.js
-tests/legendary-totals-stock.test.cjs
+js/activities.js
+tests/psna-day.test.cjs
 
 Plan (orden por valor para el jugador):
 
-- ARM-1 "Tengo" siempre en 0 (BL-045).
-- ARM-2 chips "Abalorio" y "Espaldar" (BL-046, parte 1).
+- ARM-1 "Tengo" siempre en 0 (BL-045). Hecho (`52363f5`).
+- ARM-2 chips "Abalorio" y "Espaldar" y expansión real de cada legendaria (BL-046, partes 1 y 2 juntas: mismo archivo). Hecho (`4db8e88`).
 - PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044).
-- ARM-3 expansión de cada legendaria con 3 fuentes y filtros ordenados (BL-046, parte 2).
 - ARM-4 propuesta visual del árbol de receta para que Pablo la valide (BL-047).
 - Después: sigue BL-043 en MIG-2a.
 
@@ -36,6 +35,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Armería en DEV: la columna "Tengo" ya lee tu banco y tu almacén de materiales; los chips dicen Abalorio y Espaldar; cada legendaria tiene su expansión real (Klobjarne Geirr en Janthir Wilds, Verano Infinito en Visions of Eternity) y el catálogo se ordena por expansión.
 - Pablo validó FEAT-004 en producción y encontró 5 problemas en DEV: 4 en la Armería y 1 en el PSNA. Los registré (BL-044 a BL-047) y los atiendo antes de seguir con la migración.
 - Hechos de la API del legado en DEV, verificados de nuevo (MIG-1): el límite real es 300 pedidos por minuto por IP, y el modo legendario de Nexus tiene dos logros (9472 y 9478), no uno.
 - Pablo aprobó la migración del legado de QwenPaw (REQ-010, opción A) y apagó el GitHub Pages de los dos repos: la copia vieja de La Bóveda ya no comparte datos con producción.
@@ -48,6 +48,8 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
+- [BL-045] Validación: abrí DEV → Armería → una legendaria → Materiales totales. La columna "Tengo" tiene que mostrar lo que tenés en el banco y en el almacén de materiales (todavía no cuenta lo que llevan tus personajes encima).
+- [BL-046] Validación: en el catálogo de la Armería, fijate los chips (Abalorio, Espaldar), los filtros de expansión y que Klobjarne Geirr diga Janthir Wilds y Verano Infinito diga Visions of Eternity.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 - [FEAT-003] Validación: cuando publique BL-044, abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades. El panel va a decir de qué día son los lugares y a qué hora cambian; comparalos con esa fila de la wiki.
 
