@@ -1,26 +1,27 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: árbol de receta de la Armería con el diseño que aprobó Pablo (BL-047). La migración del legado (BL-043) sigue en pausa hasta cerrarlo.
+Tarea actual: PSNA renovado (BL-048) y después el árbol de receta de la Armería con el diseño que aprobó Pablo (BL-047). La migración del legado (BL-043) sigue en pausa hasta cerrarlo.
 Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-21T22:40Z
-Próxima acción: ARM-4 — árbol de receta con el diseño aprobado, en `js/legendary-tree-ui.js` (BL-047).
+Última actualización: 2026-10-21T22:55Z
+Próxima acción: PSN-2 — publicar `js/activities.js` 3.23.0 (archivo grande dedicado) y después su test; sigue ARM-4 (BL-047).
 
 Micro-ciclo:
-ARM-4 — árbol de receta y totales con el diseño aprobado (mismo modal; cambia el contenido)
+PSN-2 — PSNA renovado: ícono local del waypoint, día y cuenta regresiva en grande, lugares como botones (BL-048)
 Archivos:
-js/legendary-tree-ui.js
-tests/legendary-tree-ui.test.cjs
+js/activities.js
+tests/psna-day.test.cjs
 
 Plan (orden por valor para el jugador):
 
 - ARM-1 "Tengo" siempre en 0 (BL-045). Hecho (`52363f5`).
 - ARM-2 chips "Abalorio" y "Espaldar" y expansión real de cada legendaria (BL-046, partes 1 y 2 juntas: mismo archivo). Hecho (`4db8e88`).
 - PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044). Hecho (`7cbf9c8`).
-- ARM-4 árbol de receta: propuesta aprobada por Pablo (22:14Z); sigue la implementación (BL-047).
+- PSN-2 PSNA renovado (BL-048): Pablo validó los lugares contra la wiki y pidió más presencia y el ícono del waypoint. En curso.
+- ARM-4 árbol de receta: propuesta aprobada por Pablo (22:14Z); Pablo pidió avanzar (22:42Z). Sigue después de PSN-2 (BL-047).
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
