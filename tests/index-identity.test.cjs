@@ -29,6 +29,18 @@ test('el enlace a la bio usa los colores oficiales de Gato Negro, fijos y legibl
   assert.doesNotMatch(HTML, /#E1306C|#555555/, 'sin los colores anteriores');
 });
 
+test('index.html carga mi voz después de la bienvenida, con la versión de cada archivo', () => {
+  const at = (re) => { const m = HTML.match(re); assert.ok(m, String(re)); return m.index; };
+  const welcome = at(/<script defer src="js\/welcome-panel\.js\?v=[\d.]+"><\/script>/);
+  const voice = at(/<script defer src="js\/shiruvana\.js\?v=1\.0\.0"><\/script>/);
+  const places = at(/<script defer src="js\/shiruvana-places\.js\?v=1\.0\.0"><\/script>/);
+  assert.ok(welcome < voice && voice < places, 'orden: bienvenida, componente, lugares');
+  for (const f of ['shiruvana.js', 'shiruvana-places.js']) {
+    const src = fs.readFileSync(path.join(ROOT, 'js', f), 'utf8');
+    assert.match(src, /Versión: 1\.0\.0/, f + ': la versión del archivo coincide con la de index.html (caché)');
+  }
+});
+
 test('index.html pide la versión del selector que trae el theme oficial', () => {
   const m = HTML.match(/js\/theme-selector\.js\?v=([\d.]+)/);
   assert.ok(m, 'falta el script del selector');
