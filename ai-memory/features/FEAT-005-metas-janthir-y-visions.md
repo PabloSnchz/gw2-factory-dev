@@ -1,6 +1,6 @@
 # FEAT-005 — Metas de Janthir Wilds y Visions of Eternity en Meta & Eventos
 
-- Estado: EN DEV desde 2026-10-21 07:23Z. Producción la decide Pablo.
+- Estado: EN PRODUCCIÓN desde 2026-10-21 07:35Z (gw2-wallet-ligero `36010ab` datos, `2bab20f` meta.js), por orden de Pablo (BL-042). Blobs idénticos a DEV. Vuelta atrás: `4629e7e` (meta-events.json `f612bebf`, meta.js `15da703c`).
 - Fecha: 2026-10-21
 - Backlog: BL-034 · Riesgo: RSK-018 · Lecciones: LES-026, LES-028
 - Commits (gw2-factory-dev): `b04ffbf` datos y tests · `faaee56` `js/meta.js` 3.5.0 · `c6b24b6` tests del filtro
