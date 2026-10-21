@@ -4,24 +4,23 @@ Estado: EN_CURSO
 Tarea actual: BL-038 — Alineación de UI de La Bóveda (FACTORY-BOVEDA-UI-001): marca Gato Negro, theme oficial y mi voz
 Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el enfoque a las 05:00Z (DEC-025). Es producto: lo ve el jugador. Solo DEV.
 Fase: F1 — Visibilidad
-Etapa actual: ARCHITECTURE
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T05:08Z
-Próxima acción: BOV-1, registrar DEC-025, BL-038 y el índice. Después BOV-2.
+Última actualización: 2026-10-21T05:12Z
+Próxima acción: BOV-2, theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. Después BOV-3.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-1 — registrar DEC-025, BL-038 y el índice
+Micro-ciclo: BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste
 Archivos:
-- ai-memory/decisions/DEC-025-identidad-en-la-boveda.md
-- ai-memory/memory-index.md
-- ai-memory/backlog.md
-Pablo validó el panel 2.2.0 en pantalla y en el celular: BL-016 pasa a DONE.
+- css/themes/gato.css
+- tests/theme-gato.test.cjs
+BOV-1 publicado (DEC-025, índice, backlog `5232db1`). BOV-2 validado en local: 36/36 tests, 6/6 mutaciones; contraste AA de 21 textos sobre 7 fondos.
 
 Plan, un micro-ciclo por vez:
 
-- BOV-1 — registrar DEC-025, BL-038 y el índice. En curso.
-- BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste.
+- BOV-1 — registrar DEC-025, BL-038 y el índice. Hecho.
+- BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. En curso.
 - BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez.
 - BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test.
 - BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande).
