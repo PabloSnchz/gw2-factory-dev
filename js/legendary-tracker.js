@@ -1,6 +1,8 @@
 /*!
  * js/legendary-tracker.js — Armería Legendaria
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * Versión: 1.1.1 (2026-10-21) — BL-045: "Tengo" de Materiales totales lee el banco
+ *   y el almacén de materiales (stockMap), no las legendarias desbloqueadas.
  * Versión: 1.1.0 (2026-09-30) — T3+T4 (ALERT-84): contrato de registro + render real
  *
  * Módulo que reemplaza al filtro Legendario dentro de Logros (achievements.js).
@@ -26,7 +28,7 @@
   // 1.1.0 (ALERT-84 T3+T4): la puerta de registro existe y el render usa las
   // funciones registradas. NO es la T3 completa del PO (sigue sin datos de API:
   // loadLegendaryData() es un stub) — es el CONTRATO y el cableado.
-  var VER = '1.1.0';
+  var VER = '1.1.1';
 
   // ========================================================================
   // 1. CONFIGURACIÓN / ESTADO
@@ -648,7 +650,10 @@
     };
 
     body.innerHTML = (vistaModal === 'totales')
-      ? UI.renderTotalsHTML(res, ownedMap(), opts)
+      // "Tengo" es el inventario de materiales (banco + almacen), no las
+      // legendarias desbloqueadas: con ownedMap() la columna salia siempre en 0
+      // (BL-045, tests/legendary-totals-stock.test.cjs).
+      ? UI.renderTotalsHTML(res, stockMap(), opts)
       : UI.renderTreeHTML(res, opts);
 
     // El boton de la cola va en el HEADER. No en el pie: Frostfang son 55
