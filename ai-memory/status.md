@@ -1,35 +1,39 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: ninguna. BL-038 (FACTORY-BOVEDA-UI-001) cerrada en DEV.
-Motivo: la identidad de Gato Negro y mi voz ya están en La Bóveda DEV (FEAT-004). Falta la mirada de Pablo y su decisión sobre producción.
+Estado: EN_CURSO
+Tarea actual: BL-039 — Promoción de FEAT-004 a producción (gw2-wallet-ligero): theme oficial, marca Gato Negro y mi voz
+Motivo: orden explícita de Pablo (2026-10-21 06:33Z): "vamos a PRD con todo lo nuevo, el tema gato oficial, la imagen de marca y la expansión de Shiruvana a la webapp". Es mi primer deploy a producción.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION (cerrada)
-Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T07:05Z
-Próxima acción: esperar la validación de Pablo en DEV y su orden sobre producción. Mientras tanto, BL-034 (metas de Janthir Wilds y Visions of Eternity).
+Etapa actual: DEVELOPMENT
+Inicio: 2026-10-21T06:35Z
+Última actualización: 2026-10-21T06:40Z
+Próxima acción: PRD-2 — mi voz: js/shiruvana.js y js/shiruvana-places.js (inertes hasta PRD-5).
 
-## Resumen de la sesión
+## Micro-ciclo actual
 
-- La Bóveda DEV ya tiene la identidad de Gato Negro: el gato oficial en la cabecera, el pie y el favicon; el theme "Gato Negro" por defecto ("Bóveda" sigue como opción); las dos guías con la marca y el theme activo; y la bio con los colores oficiales.
-- Ya le hablo al jugador en tres lugares: la bienvenida, el modal de API Keys y el de guías. Aparezco con avatar solo cuando hablo, nunca en datos (FEAT-004, 70 tests).
-- DEV volvió a GitHub Pages (DEC-026): cada cambio se ve en minutos, con un commit por micro-ciclo.
+Micro-ciclo: PRD-1 — theme oficial y gato: css/themes/gato.css, assets/brand/gato-negro.svg, js/theme-selector.js 1.2.0
+Repositorio: gw2-wallet-ligero (producción, por orden de Pablo)
+Archivos: css/themes/gato.css, assets/brand/gato-negro.svg, js/theme-selector.js. Son los mismos blobs verificados en DEV (672c21b7, 319f1b62, 8b8c8b7e). El selector migra una sola vez a Gato Negro y gato.css llega en el mismo commit.
 
-Plan, un micro-ciclo por vez:
+Alcance: solo FEAT-004. Quedan fuera FEAT-003 (PSNA, espera tu validación) y el cargador de GA de DEV (DEC-006): en producción GA sigue exactamente como está.
+Vuelta atrás: producción antes de empezar está en `c0471e0` (index.html `41b65b8b`, js/theme-selector.js `a7d0457a`, docs/user-guide.html `aac11f59`, docs/user-guide-avanzado.html `214cd6ef`). Los archivos nuevos se borran.
 
-- BOV-1 a BOV-7b — marca, theme oficial, guías, bio y mi voz. Hecho.
-- BOV-8 — cierre: funcionalidad, backlog, riesgos y estado. Hecho.
+Plan, un micro-ciclo por vez (escrituras en serie, cada commit deja el sitio funcionando):
+
+- PRD-1 — theme oficial y gato: css/themes/gato.css, assets/brand/gato-negro.svg, js/theme-selector.js 1.2.0. En curso.
+- PRD-2 — mi voz: js/shiruvana.js y js/shiruvana-places.js (inertes hasta PRD-5).
+- PRD-3 — guía básica con la identidad Gato Negro.
+- PRD-4 — guía avanzada con la identidad Gato Negro.
+- PRD-5 — index.html de producción: marca, theme, bio y mi voz (archivo grande; el bloque de GA de producción no se toca).
+- PRD-6 — cierre: FEAT-004 promovida, backlog, estado.
 
 ## Esperando a Pablo
 
-- [FEAT-004] Validación: Abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/), en pantalla y en el celular. Fijate que aparezco en Inicio, en Gestión de API Keys y en Guía, y que se me lee bien también con un theme claro.
-- [FEAT-004] Decisión: Promover la identidad de Gato Negro y mi voz a producción (gw2-wallet-ligero). Solo con tu orden explícita.
 - [FEAT-003] Validación: Abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
 - [FEAT-002] Validación: Usá DEV (https://pablosnchz.github.io/gw2-factory-dev/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
 
 ## Para tu información
 
-- [DEC-026] DEV y producción comparten el almacenamiento del navegador. Si abrís DEV, producción puede verse sin theme en ese navegador hasta que se promueva el theme "Gato Negro" o elijas otro theme ahí.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
 
 ## Bloqueos
