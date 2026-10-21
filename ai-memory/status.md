@@ -6,17 +6,17 @@ Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T04:15Z
-Última actualización: 2026-10-21T04:58Z
-Próxima acción: BL-037f, versiones en index.html, CHANGELOG y README (dashboard). Después BL-037g.
+Última actualización: 2026-10-21T05:04Z
+Próxima acción: BL-037g, cierre en memoria: backlog, FEAT-001 y discovery. Después, cierre de sesión.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BL-037f — versiones en index.html, CHANGELOG y README (dashboard)
+Micro-ciclo: BL-037g — cierre en memoria: backlog, FEAT-001 y discovery
 Archivos:
-- gw2-factory-dashboard: index.html
-- gw2-factory-dashboard: CHANGELOG.md
-- gw2-factory-dashboard: README.md
-BL-037e publicado (sovereignty `46c7e4f`, panel `6e31dc8`, voice.test `d7c8a88`): CI vuelve a verde. index.html solo cambia versiones de caché (GDS 1.1.0, app 2.2.0); la cabecera y la marca no se tocan.
+- ai-memory/features/FEAT-001-dashboard-factory.md
+- ai-memory/backlog.md
+- ai-memory/discovery.md
+BL-037f publicado (index.html `6543d8b`, CHANGELOG `c0cfee2`, README `800088e`). Panel 2.2.0 completo en gw2-factory-dashboard; ahora el cierre en la memoria.
 
 Plan, un micro-ciclo por vez:
 
@@ -25,8 +25,8 @@ Plan, un micro-ciclo por vez:
 - BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard). Hecho.
 - BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande). Hecho.
 - BL-037e — tests del panel para la voz de Shiruvana (dashboard). Hecho.
-- BL-037f — versiones en index.html, CHANGELOG y README (dashboard). En curso.
-- BL-037g — cierre en memoria: backlog, FEAT-001 y roadmap.
+- BL-037f — versiones en index.html, CHANGELOG y README (dashboard). Hecho.
+- BL-037g — cierre en memoria: backlog, FEAT-001 y discovery. En curso.
 
 ## Esperando a Pablo
 
