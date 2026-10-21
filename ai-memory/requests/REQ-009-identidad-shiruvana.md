@@ -1,12 +1,13 @@
 # REQ-009 — ¿Aprobás la identidad visual de Shiruvana en el panel y con qué imagen?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-21
 - Prioridad: BAJO
 - Área: panel
 - Relacionado: DEC-010, DEC-013, DEC-019, DEC-023
 - Bloquea: nada (solo la implementación de la identidad visual; el producto sigue)
+- Cerrado: 2026-10-21 · RESP-009 (opción A, avatar 48/56 px, DEC-024)
 
 ## Qué pasó
 
