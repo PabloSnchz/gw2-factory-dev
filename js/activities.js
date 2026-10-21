@@ -1,75 +1,20 @@
 /*!
  * js/activities.js — Panel de Actividades (Objetivos / Home Nodes)
+ * v3.23.0 (2026-10-21) - PSNA renovado (BL-048): el dia y la cuenta regresiva en
+ *   grande (se actualiza cada 30 s), lugares como botones grandes con "Copiar" y
+ *   el icono del waypoint servido desde assets/ (el de la wiki dejo de cargar y
+ *   se veia el texto "WP"). Estilos propios en <style id="psnaStyle">, con las
+ *   variables del theme. Funcion pura nueva psnaFalta.
  * v3.22.0 (2026-10-21) - El PSNA dice de que dia son los lugares y cuando cambian,
  *   y se actualiza solo en el cambio de las 08:00 UTC aunque la pagina quede
  *   abierta (BL-044). Funciones puras psnaNextChange y psnaDayText.
- * v3.21.0 (2026-10-21) - Fix: el PSNA muestra el dia correcto (BL-013)
- *
- * CAMBIOS v3.21.0:
- * - El PSNA mostraba todos los dias los waypoints de otro dia: buscaba la fecha
- *   exacta en psna-schedule.json (que cubria una semana de marzo) y, si no la
- *   encontraba, usaba el primer dia de la lista.
- * - Nueva funcion pura psnaPickDay(data, now): la ubicacion depende solo del
- *   dia de la semana y cambia a las 08:00 UTC (antes de esa hora vale el dia
- *   anterior). Usa la rotacion semanal del archivo; si no la hay, la fecha
- *   exacta; si no, el mismo dia de la semana. Si no hay datos devuelve null y
- *   el panel muestra "No hay datos PSNA disponibles": nunca un dia equivocado.
- * - Lee solo el archivo propio (assets/data/psna-schedule.json). Antes, fuera de
- *   localhost, saltaba ese archivo y leia el del repo de produccion.
- * - El respaldo embebido pasa a ser la rotacion verificada contra la wiki
- *   (2026-10-21); se quitan el calendario de marzo y la tabla de codigos, que
- *   tenian 15 codigos y 2 nombres incorrectos.
- * - Cache nueva 'psna:data:v4' (guarda el archivo completo); las claves viejas
- *   se siguen limpiando. tests/psna-day.test.cjs prueba psnaPickDay.
- *
- * v3.20.4 (2026-09-30) - Fix: activate() ya no borra la cache de logros de otro modulo
- *
- * CAMBIOS v3.20.3:
- * - activate() llamaba a cleanAchievementsCache(), que borra TODAS las claves
- *   localStorage con prefijo 'ach_'. Esa es exactamente la familia que escribe
- *   api-gw2.js putCache() para los logros: ach_acc:<fp> (TTL 2 min) y
- *   ach_meta_v2:es:<ids> (TTL 12 h, la cara). router.js invoca
- *   Activities.activate() en cada navegacion a #/activities, asi que abrir el
- *   panel dejaba sin cache de logros a TODAS las cuentas y la pagina de Logros
- *   arrancaba en frio (~433 requests) aunque acabas de cargar.
- * - cleanActivitiesCache() SE CONSERVA: borra prefijos 'psna:' y
- *   ACTIVITIES_CACHE_KEYS, que son datos de este mismo modulo. La regla
- *   aplicada es "un modulo no borra la cache de otro".
- * - cleanAchievementsCache() sigue definida, para cuando se quiera llamar a
- *   proposito. No se borro ninguna funcion.
- * - Sin cambio de UI: no toca CSS ni estructura. tests/idea49.activities-cache-wipe.test.js
- *
- *
- * CAMBIOS v3.20.2:
- * - El bloque de fractales escribia sus estilos en `style=` inline, mezclando las
- *   3 capas de CSS y metiendo literales rgba() de color semantico dentro del JS.
- *   El Code Reviewer lo marco en el COMM 019 (task-4a1841efc329).
- * - La estructura (padding, flex, grid, tipografia) se movio a main.css (capa 1)
- *   bajo .fractals-stack / .fractal-card y sus clases hijas.
- * - La piel (borde neutro, border-radius) se movio a theme-polish.css (capa 2).
- * - El color semantico se movio al nuevo js/fractal-tracker-theme.js, que es la
- *   UNICA capa autorizada a escribir `borderLeft`. activities.js solo marca el rol
- *   con `data-fl-color` ("info" | "t4" | "cm"); el theme lo resuelve.
- * - Sin cambio funcional: mismos datos, misma estructura, mismo texto.
- *
- * CAMBIOS v3.20.1:
- * - loadToday() y loadTomorrow() hardcodeaban 3 fractales T4 + 3 escalas cada una,
- *   de modo que el panel mostraba SIEMPRE los mismos nombres, presentados como los
- *   "dailies de hoy" y los "dailies de mañana". Era informacion falsa.
- * - La API GW2 no expone esa rotacion: /v2/fractals -> {"error":"not found"} y
- *   /v2/achievements/daily -> {"text":"API not active"} (retirado tras Wizard's Vault).
- * - Ahora la rotacion queda marcada rotationAvailable:false y el panel muestra un
- *   aviso explicito. El tracker de Solitary Throne CM NO se toca: ese es real
- *   (viene de getAccountAchievements).
- *
- * v3.19.6 (2026-04-05) - Persistencia robusta de Piedras Vetustas (sin Promesas como claves)
- *
- * CAMBIOS v3.19.6:
- * - Creada función síncrona hashToken16Sync() para evitar Promesas como claves de objeto
- * - Persistencia independiente de piedras en localStorage con clave gn_activities_stones_<hash>_<semana>
- * - setStones y setWeeklyKey ahora usan hash síncrono, garantizando claves strings
- * - Eliminado el bug que generaba "[object Promise]" en localStorage
- * - El contador de piedras persiste correctamente al recargar y al cambiar de API key
+ * v3.21.0 (2026-10-21) - Fix: el PSNA muestra el dia correcto (BL-013): funcion
+ *   pura psnaPickDay, lee solo assets/data/psna-schedule.json, cache 'psna:data:v4'.
+ * v3.20.4 (2026-09-30) - activate() ya no borra la cache de logros de otro modulo.
+ * v3.20.2 - Estilos de fractales movidos a main.css / theme-polish.css.
+ * v3.20.1 - La rotacion de fractales no esta en la API: aviso en vez de datos falsos.
+ * v3.19.6 (2026-04-05) - Persistencia de Piedras Vetustas con hash sincrono.
+ * Historial completo de cambios: git log de este archivo.
  */
 
 (function (root) {
@@ -101,7 +46,7 @@
     inited: false,
     active: false,
     token: null,
-    
+
     daily: {
       psna: null,
       psnaSchedule: null,
@@ -131,12 +76,12 @@
         collected: {}
       }
     },
-    
+
     weekly: {
       key: false,
       stones: 0
     },
-    
+
     toggles: {
       v: 2,
       date: null,
@@ -144,16 +89,16 @@
       homeNodesCollected: {},
       byKey: {}
     },
-    
+
     assets: {
       key: null,
       stone: null
     },
-    
+
     _psnaFetchId: 0,
     _fractalsFetchId: 0,
     _ectoFetchId: 0,
-    
+
     homeNodesLoaded: false,
     homeNodesRendered: false
   };
@@ -266,14 +211,19 @@
   // Ej.: "Lugares del miércoles 21/10 · cambian en 3 h 05 min (08:00 UTC)".
   var PSNA_DIAS_ES = { sunday: 'domingo', monday: 'lunes', tuesday: 'martes', wednesday: 'miércoles',
     thursday: 'jueves', friday: 'viernes', saturday: 'sábado' };
+  // Cuanto falta para `next`: "9 h 05 min" o "45 min" ('' si no hay datos).
+  function psnaFalta(next, now) {
+    if (!next || !now) return '';
+    var min = Math.max(0, Math.ceil((next.getTime() - now.getTime()) / 60000));
+    var h = Math.floor(min / 60), m = min % 60;
+    return h ? h + ' h ' + String(m).padStart(2, '0') + ' min' : m + ' min';
+  }
   function psnaDayText(day, next, now) {
     if (!day || !day.date) return '';
     var p = day.date.split('-');
     var txt = 'Lugares del ' + (PSNA_DIAS_ES[day.weekday] || day.weekday) + ' ' + p[2] + '/' + p[1];
     if (next && now) {
-      var min = Math.max(0, Math.ceil((next.getTime() - now.getTime()) / 60000));
-      var h = Math.floor(min / 60), m = min % 60;
-      txt += ' · cambian en ' + (h ? h + ' h ' + String(m).padStart(2, '0') + ' min' : m + ' min') +
+      txt += ' · cambian en ' + psnaFalta(next, now) +
         ' (' + String(next.getUTCHours()).padStart(2, '0') + ':00 UTC)';
     }
     return txt;
@@ -287,7 +237,7 @@
   // 3. UTILIDADES BÁSICAS
   // =======================================================================
   function $(s, r) { return (r || document).querySelector(s); }
-  
+
   function esc(s) {
     return String(s || '').replace(/[&<>"']/g, function(m) {
       if (m === '&') return '&amp;';
@@ -297,7 +247,7 @@
       return '&#39;';
     });
   }
-  
+
   function copyToClipboard(txt) {
     try {
       navigator.clipboard.writeText(txt);
@@ -307,14 +257,14 @@
       window.prompt('Copiar:', txt);
     }
   }
-  
+
   function pad2(n) { return String(n).padStart(2, '0'); }
-  
+
   function dayKeyUTC() {
     var d = new Date();
     return d.getUTCFullYear() + '-' + pad2(d.getUTCMonth() + 1) + '-' + pad2(d.getUTCDate());
   }
-  
+
   function weekKeyUTC() {
     var now = new Date();
     var d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
@@ -324,7 +274,7 @@
     var weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
     return d.getUTCFullYear() + '-W' + String(weekNo).padStart(2, '0');
   }
-  
+
   function withTimeout(promise, ms, label) {
     return Promise.race([
       promise,
@@ -335,7 +285,7 @@
       })
     ]);
   }
-  
+
   var requestIdle = (typeof window !== 'undefined' && window.requestIdleCallback) ?
     window.requestIdleCallback :
     function(cb) { return setTimeout(function() { cb({ didTimeout: false, timeRemaining: function() { return 0; } }); }, 250); };
@@ -343,7 +293,7 @@
   // =======================================================================
   // 4. PERSISTENCIA (CORREGIDA)
   // =======================================================================
-  
+
   // Versión síncrona del hash (evita Promesas como claves)
   function hashToken16Sync(token) {
     if (!token) return 'no-token';
@@ -354,7 +304,7 @@
     }
     return ('00000000' + (h >>> 0).toString(16)).slice(-8);
   }
-  
+
   // Versión asíncrona (se mantiene por si se necesita en el futuro, pero no se usa para claves)
   async function hashToken16(token) {
     if (!token) return 'no-token';
@@ -374,7 +324,7 @@
       var raw = JSON.parse(localStorage.getItem('gn_activities_toggles') || '{}');
       var today = dayKeyUTC();
       var thisWeek = weekKeyUTC();
-      
+
       var toggles = Object.assign({
         v: 2,
         date: today,
@@ -382,15 +332,15 @@
         homeNodesCollected: {},
         byKey: {}
       }, raw);
-      
+
       if (toggles.date !== today) {
         toggles.date = today;
         toggles.homeNodesCollected = {};
       }
-      
+
       state.toggles = toggles;
       state.daily.homeNodes.collected = toggles.homeNodesCollected;
-      
+
     } catch (e) {
       console.warn(LOG, 'loadToggles error', e);
     }
@@ -448,7 +398,7 @@
         return true;
       });
       const isClaimed = keyFarmers.length > 0;
-      console.log(LOG, '[Key Detection] Resultado:', isClaimed ? 'RECLAMADA ✓' : 'DISPONIBLE', 
+      console.log(LOG, '[Key Detection] Resultado:', isClaimed ? 'RECLAMADA ✓' : 'DISPONIBLE',
                   keyFarmers.length ? `(${keyFarmers.map(f => f.name).join(', ')})` : '');
       return isClaimed;
     } catch (error) {
@@ -494,7 +444,7 @@
   async function loadWeeklyForToken(token) {
     var keyId = hashToken16Sync(token);  // Usamos versión síncrona para la clave del bucket
     var bucket = state.toggles.byKey[keyId] || { week: weekKeyUTC(), weeklyKey: false, antiqueStoneCount: 0 };
-    
+
     var thisWeek = weekKeyUTC();
     if (bucket.week !== thisWeek) {
       bucket = { week: thisWeek, weeklyKey: false, antiqueStoneCount: 0 };
@@ -504,17 +454,17 @@
         console.log(LOG, `[Weekly] Nueva semana (${thisWeek}), detección automática:`, detected);
       }
     }
-    
+
     state.toggles.byKey[keyId] = bucket;
     state.weekly.key = bucket.weeklyKey;
-    
+
     // Cargar piedras desde storage independiente
     const stones = await loadStonesFromStorage(token);
     state.weekly.stones = stones;
     // Actualizar bucket por consistencia
     bucket.antiqueStoneCount = stones;
     state.toggles.byKey[keyId] = bucket;
-    
+
     saveToggles();
   }
 
@@ -543,12 +493,12 @@
   function setStones(value) {
     var newValue = Math.max(0, Math.min(5, Number(value || 0)));
     state.weekly.stones = newValue;
-    
+
     // Guardar en storage independiente
     if (state.token) {
       saveStonesToStorage(state.token, newValue);
     }
-    
+
     // Actualizar bucket por compatibilidad (usando hash síncrono)
     var keyId = hashToken16Sync(state.token);
     if (!state.toggles.byKey[keyId]) {
@@ -556,7 +506,7 @@
     }
     state.toggles.byKey[keyId].antiqueStoneCount = newValue;
     saveToggles();
-    
+
     renderWeekly();
   }
 
@@ -696,10 +646,46 @@
   };
 
   // =======================================================================
-  // 8. RENDERIZADO PSNA (sin cambios)
+  // 8. RENDERIZADO PSNA (BL-048)
   // =======================================================================
+  // Icono local: el thumbnail de la wiki dejo de cargar y se veia el alt "WP".
+  var PSNA_WP_ICON = 'assets/icons/733330.png';
+  var PSNA_CSS = [
+    '.psna{margin:20px 0;padding:16px;border:1px solid var(--bd-1,rgba(255,255,255,.08));border-radius:var(--card-radius,12px)}',
+    '.psna__head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}',
+    '.psna__titles{flex:1;min-width:200px}',
+    '.psna__title{margin:0;font-size:1.05rem}',
+    '.psna__sub{margin:2px 0 0;font-size:.8rem;color:var(--muted,#8E96A3)}',
+    '.psna-day{display:flex;align-items:center;gap:12px 28px;flex-wrap:wrap;padding:12px 16px;margin-bottom:12px;border-radius:10px;background:var(--bg-2,rgba(255,255,255,.04));border:1px solid var(--bd-1,rgba(255,255,255,.08));border-left:4px solid var(--gn-gold,#F2B94B)}',
+    '.psna-day__when,.psna-day__next{display:flex;flex-direction:column;gap:2px}',
+    '.psna-day__label{font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted,#8E96A3)}',
+    '.psna-day__name{font-size:1.25rem;color:var(--tx-1,#F4F6FA)}',
+    '.psna-day__count{font-size:1.25rem;color:var(--gn-gold,#F2B94B);font-variant-numeric:tabular-nums}',
+    '.psna-day__hour{font-size:.75rem;color:var(--tx-2,#C9D0DA)}',
+    '.psna-day .pill{margin-left:auto}',
+    '.psna__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}',
+    '.psna-wp{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;text-align:left;font:inherit;color:var(--tx-1,#F4F6FA);background:var(--bg-1,rgba(255,255,255,.03));border:1px solid var(--bd-1,rgba(255,255,255,.08));border-radius:10px;cursor:pointer;transition:border-color .15s,transform .15s}',
+    '.psna-wp:hover:not(:disabled){border-color:var(--gn-gold,#F2B94B);transform:translateY(-1px)}',
+    '.psna-wp:focus-visible{outline:2px solid var(--gn-gold,#F2B94B);outline-offset:2px}',
+    '.psna-wp:disabled{opacity:.6;cursor:not-allowed}',
+    '.psna-wp__icon{flex-shrink:0}',
+    '.psna-wp__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}',
+    '.psna-wp__name{font-weight:700;font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+    '.psna-wp__npc{font-size:.75rem;color:var(--tx-2,#C9D0DA);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+    '.psna-wp__act{flex-shrink:0;font-size:.72rem;padding:3px 8px;border-radius:999px;border:1px solid var(--bd-2,rgba(255,255,255,.14));color:var(--tx-2,#C9D0DA)}',
+    '.psna-wp.is-copied{border-color:var(--color-green,#3fb950)}',
+    '.psna-wp.is-copied .psna-wp__act{color:var(--color-green,#3fb950);border-color:currentColor}',
+    '@media (prefers-reduced-motion:reduce){.psna-wp{transition:none}.psna-wp:hover:not(:disabled){transform:none}}'
+  ].join('\n');
+  function ensurePsnaStyle() {
+    if (document.getElementById('psnaStyle')) return;
+    var st = document.createElement('style');
+    st.id = 'psnaStyle';
+    st.textContent = PSNA_CSS;
+    document.head.appendChild(st);
+  }
+
   function renderPSNA() {
-    console.log(LOG, '🎨 renderPSNA() llamado');
     var grid = $('#psnaGrid');
     var status = $('#psnaStatus');
     var copyAll = $('#psnaCopyAll');
@@ -707,78 +693,78 @@
       console.error(LOG, '❌ psnaGrid no encontrado en el DOM');
       return;
     }
+    ensurePsnaStyle();
     var list = state.daily.psna || [];
     if (list.length === 0) {
       grid.innerHTML = '<p class="muted">No hay datos PSNA disponibles</p>';
       if (status) status.innerHTML = '<span class="pill s-error">❌ Sin datos</span>';
       return;
     }
-    grid.style.display = 'grid';
-    grid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
-    grid.style.gap = '10px';
     var html = '';
     for (var i = 0; i < list.length; i++) {
       var item = list[i];
-      var hasChat = item.chat && item.chat.length > 0;
-      var disabled = hasChat ? '' : ' disabled';
-      var tooltip = hasChat ? 'Copiar waypoint' : 'Código no disponible';
-      html += `
-        <article class="card psna-card" data-psna-region="${esc(item.region)}" style="padding: 10px; display: flex; flex-direction: column; width: 100%; border: 1px solid rgba(255,255,255,0.08); border-left: 3px solid rgba(123,194,255,0.5); box-shadow: 0 0 8px rgba(90,110,154,0.12);">
-          <div style="display: flex; align-items: center; gap: 8px; width: 100%;">
-            <img src="https://wiki.guildwars2.com/images/thumb/d/d2/Waypoint_%28map_icon%29.png/32px-Waypoint_%28map_icon%29.png" 
-                 width="24" height="24" alt="WP" loading="lazy" style="flex-shrink: 0;">
-            <button class="btn btn--ghost btn--xs psna-copy-btn" 
-                    data-psna-copy data-psna-index="${i}" 
-                    title="${tooltip}" data-tip="${tooltip}"${disabled}
-                    style="flex: 1; text-align: left; justify-content: flex-start; padding: 4px 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-              ${esc(item.wpName)}
-            </button>
-          </div>
-          <div class="muted" style="margin-top: 6px; font-size: 0.7rem; line-height: 1.3;">
-            <div><strong>${esc(item.npc)}</strong> — ${esc(item.region)}</div>
-            <div style="color: var(--muted); font-size: 0.65rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${esc(item.name)}</div>
-          </div>
-          ${!hasChat ? '<div class="pill s-error" style="margin-top: 6px; font-size: 0.6rem; text-align: center;">❌ Sin código</div>' : ''}
-        </article>
-      `;
+      var hasChat = !!(item.chat && item.chat.length);
+      var tip = hasChat ? 'Copiar waypoint ' + item.chat : 'Código no disponible';
+      html += '<button type="button" class="psna-wp" data-psna-copy data-psna-index="' + i + '"' +
+        ' data-psna-region="' + esc(item.region) + '" title="' + esc(tip) + '"' +
+        ' aria-label="' + esc((hasChat ? 'Copiar waypoint de ' : 'Sin código: ') + item.wpName) + '"' +
+        (hasChat ? '' : ' disabled') + '>' +
+        '<img class="psna-wp__icon" src="' + PSNA_WP_ICON + '" width="32" height="32" alt="" loading="lazy">' +
+        '<span class="psna-wp__body"><span class="psna-wp__name">' + esc(item.wpName) + '</span>' +
+        '<span class="psna-wp__npc">' + esc(item.npc) + ' · ' + esc(item.region) + '</span></span>' +
+        '<span class="psna-wp__act">' + (hasChat ? 'Copiar' : 'Sin código') + '</span></button>';
     }
     grid.innerHTML = html;
     var buttons = grid.querySelectorAll('[data-psna-copy]');
     for (var b = 0; b < buttons.length; b++) {
-      var btn = buttons[b];
-      if (btn.__wired) continue;
-      btn.__wired = true;
-      btn.addEventListener('click', function(e) {
+      buttons[b].addEventListener('click', function(e) {
         e.preventDefault();
-        var idx = this.getAttribute('data-psna-index');
-        if (idx === null) return;
-        var item = state.daily.psna[parseInt(idx, 10)];
-        if (item && item.chat) {
-          copyToClipboard(item.chat);
-          this.classList.add('btn--success');
-          setTimeout((function(btn) { return function() { btn.classList.remove('btn--success'); }; })(this), 200);
-        }
+        var it = state.daily.psna[parseInt(this.getAttribute('data-psna-index'), 10)];
+        if (!it || !it.chat) return;
+        copyToClipboard(it.chat);
+        var btn = this, act = btn.querySelector('.psna-wp__act');
+        btn.classList.add('is-copied');
+        if (act) act.textContent = '✓ Copiado';
+        setTimeout(function() {
+          btn.classList.remove('is-copied');
+          if (act) act.textContent = 'Copiar';
+        }, 1500);
       });
     }
+    var valid = 0;
+    for (var v = 0; v < list.length; v++) { if (list[v].chat) valid++; }
     if (copyAll) {
-      var chats = [];
-      for (var c = 0; c < list.length; c++) { if (list[c].chat) chats.push(list[c].chat); }
-      copyAll.disabled = chats.length === 0;
-      copyAll.title = chats.length + '/' + list.length + ' waypoints disponibles';
+      copyAll.disabled = valid === 0;
+      copyAll.title = valid + '/' + list.length + ' waypoints disponibles';
     }
-    if (status) {
-      var total = list.length;
-      var valid = 0;
-      for (var v = 0; v < list.length; v++) { if (list[v].chat) valid++; }
-      if (valid === 0) status.innerHTML = '<span class="pill s-error">❌ Ningún waypoint disponible</span>';
-      else if (valid < total) status.innerHTML = '<span class="pill s-warn">⚠️ ' + valid + '/' + total + ' waypoints disponibles</span>';
-      else status.innerHTML = '<span class="pill s-ok">✅ Todos los waypoints disponibles</span>';
-      // De que dia son y cuando cambian (BL-044).
-      var now = new Date();
-      var dayTxt = psnaDayText(state.daily.psnaDay, psnaNextChange(state.daily.psnaData, now), now);
-      if (dayTxt) status.innerHTML = '<div data-psna-day style="font-size:0.78rem;color:var(--tx-2);margin-bottom:6px;">' +
-        esc(dayTxt) + '</div>' + status.innerHTML;
-    }
+    if (!status) return;
+    var pill = valid === list.length ? '<span class="pill s-ok">✅ ' + valid + '/' + list.length + ' waypoints</span>'
+      : valid ? '<span class="pill s-warn">⚠️ ' + valid + '/' + list.length + ' waypoints</span>'
+      : '<span class="pill s-error">❌ Ningún waypoint disponible</span>';
+    // De que dia son y cuando cambian (BL-044), en grande (BL-048).
+    var now = new Date();
+    var next = psnaNextChange(state.daily.psnaData, now);
+    var day = state.daily.psnaDay;
+    var dayTxt = psnaDayText(day, next, now);
+    if (!dayTxt) { status.innerHTML = pill; return; }
+    var p = day.date.split('-');
+    var dia = PSNA_DIAS_ES[day.weekday] || day.weekday;
+    var hora = next ? next.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+    status.innerHTML = '<div class="psna-day" data-psna-day role="group" aria-label="' + esc(dayTxt) + '">' +
+      '<div class="psna-day__when"><span class="psna-day__label">Lugares del día</span>' +
+      '<strong class="psna-day__name">' + esc(dia.charAt(0).toUpperCase() + dia.slice(1)) + ' ' + p[2] + '/' + p[1] + '</strong></div>' +
+      (next ? '<div class="psna-day__next"><span class="psna-day__label">Cambian en</span>' +
+        '<strong class="psna-day__count" data-psna-falta>' + esc(psnaFalta(next, now)) + '</strong>' +
+        '<span class="psna-day__hour">' + String(next.getUTCHours()).padStart(2, '0') + ':00 UTC · ' + esc(hora) + ' tu hora</span></div>' : '') +
+      pill + '</div>';
+    // La cuenta regresiva corre sola; el cambio de lugares lo hace state._psnaTimer.
+    if (state._psnaTick) clearInterval(state._psnaTick);
+    state._psnaTick = setInterval(function() {
+      var el = $('[data-psna-falta]');
+      if (!el || !state.active) return;
+      var t = new Date();
+      el.textContent = psnaFalta(psnaNextChange(state.daily.psnaData, t), t);
+    }, 30000);
   }
 
   // =======================================================================
@@ -1122,10 +1108,16 @@
             '</div>' +
             '<div class="bar"><div class="bar-fill" id="barLeivas" style="width:0%"></div></div>' +
           '</section>' +
-          '<div class="panel-head"><h3>Agente de red de suministros del Pacto</h3></div>' +
-          '<p class="muted"><button id="psnaCopyAll" class="btn btn--ghost btn--xs">Copiar todos</button></p>' +
-          '<div id="psnaStatus" class="muted"></div>' +
-          '<div id="psnaGrid" class="grid"></div>' +
+          '<section class="card psna" id="psnaPanel">' +
+            '<div class="psna__head">' +
+              '<img src="assets/icons/733330.png" width="32" height="32" alt="">' +
+              '<div class="psna__titles"><h3 class="psna__title">Agente de red de suministros del Pacto</h3>' +
+              '<p class="psna__sub">Seis agentes, uno por región. Hacé clic en un lugar para copiar su waypoint.</p></div>' +
+              '<button id="psnaCopyAll" class="btn btn--xs">Copiar todos</button>' +
+            '</div>' +
+            '<div id="psnaStatus"></div>' +
+            '<div id="psnaGrid" class="psna__grid"></div>' +
+          '</section>' +
           '<div class="panel-head"><h3>Refinamiento de Ecto</h3></div>' +
           '<div id="ectoStatus" class="muted">Cargando…</div>' +
           '<div id="ectoGrid" class="grid"></div>' +
@@ -1270,10 +1262,11 @@
     renderDailyKPI();
     console.log(LOG, '✅ activate() completado');
   }
-  
+
   function deactivate() {
     state.active = false;
     if (state._psnaTimer) { clearTimeout(state._psnaTimer); state._psnaTimer = null; }
+    if (state._psnaTick) { clearInterval(state._psnaTick); state._psnaTick = null; }
     var panel = $('#activitiesPanel');
     if (panel) panel.setAttribute('hidden', '');
     state.homeNodesRendered = false;
@@ -1386,7 +1379,7 @@
     _psnaDayText: psnaDayText,
     _forceReload: function() { PSNA.load(true); }
   };
-  
+
   root.Activities = Activities;
 
   if (document.readyState === 'loading') {
