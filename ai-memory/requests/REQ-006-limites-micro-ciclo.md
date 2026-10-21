@@ -1,11 +1,12 @@
 # REQ-006 — ¿Aprobás los límites de tamaño de un micro-ciclo?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-20
 - Prioridad: ALTO
 - Relacionado: LES-012, LES-018, LES-022, RSK-009, RSK-012
 - Bloquea: nada
+- Cerrado: 2026-10-21 · RESP-006
 
 ## Qué pasó
 
