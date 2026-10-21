@@ -1,6 +1,6 @@
 # FACTORY-GOVERNANCE-001 — Propuesta de gobernanza
 
-- Estado: PROPUESTA — esperando la validación de Pablo. Nada de esto está implementado.
+- Estado: APROBADA por Pablo con un cambio (RESP-005, 2026-10-20): el latido de discovery es de 14 días, no de 7. Registrada en DEC-019 y DEC-020.
 - Fecha: 2026-10-20
 - Base: DEC-014 (autonomía), DEC-015/016/017 (discovery), DEC-018 (soberanía de decisiones), RESP-004 (reglas de Pablo para discovery)
 - Antes de esta propuesta se procesó RESP-004: REQ-004 quedó cerrada y DEC-015 §5 tiene las reglas de Pablo, tal como las escribió.
@@ -136,7 +136,7 @@ Solo se detiene la tarea concreta que depende de esa acción.
   - **como máximo 1 promoción a READY por ronda**.
 
 **6. ¿Cómo evitar que Discovery quede apagado para siempre?**
-- **Latido:** si pasan 7 días sin ronda y las condiciones lo permiten, la próxima sesión hace una ronda obligatoria.
+- **Latido:** si pasan 14 días sin ronda (Pablo cambió 7 por 14 en RESP-005) y las condiciones lo permiten, la próxima sesión hace una ronda obligatoria.
 - **Ronda omitida con motivo:** si una condición la frena, la tabla de rondas registra "omitida: motivo". Si el motivo es un riesgo, se lo nombra. Así nunca hay un apagado silencioso.
 - **Aviso en el panel:** "Sin rondas hace 14 días" aparece en Salud si READY ≤ 3.
 - **El mantenimiento nunca se frena:** archivar, fusionar y analizar ideas pendientes siempre está permitido, porque reduce carga.
@@ -181,13 +181,13 @@ Pablo ya la respondió: RESP-004, opción B con reglas propias, procesada. La re
 
 1. "Capacidad en READY" significa READY < 5. Se aplica así desde hoy.
 2. "Bloquea directamente la investigación" y "área afectada" se definen como en el punto 3.
-3. El latido de 7 días y los dos límites nuevos (3 decisiones abiertas, 5 pendientes sin analizar).
+3. El latido (14 días, según RESP-005) y los dos límites nuevos (3 decisiones abiertas, 5 pendientes sin analizar).
 
 ## 6. Decisiones y lecciones propuestas
 
-Se registran solo si Pablo valida esta propuesta. Se escriben sin guion porque todavía no existen en la memoria.
+Se registran solo si Pablo valida esta propuesta. Registradas el 2026-10-20 tras la aprobación.
 
-- **DEC 019 — Taxonomía de pendientes, bloqueos y riesgos.** Extiende DEC-018 con:
+- **DEC-019 — Taxonomía de pendientes, bloqueos y riesgos.** Extiende DEC-018 con:
   - el filtro de tres preguntas;
   - la validación técnica como trabajo exclusivo de la Factory;
   - bloqueos con dueño (Pablo, Factory o entorno);
@@ -195,21 +195,21 @@ Se registran solo si Pablo valida esta propuesta. Se escriben sin guion porque t
   - como máximo 3 decisiones abiertas;
   - el campo `Bloquea:`;
   - el registro visible de las decisiones técnicas recientes.
-- **DEC 020 — Discovery v2: áreas, latido y visibilidad.** Define:
+- **DEC-020 — Discovery v2: áreas, latido y visibilidad.** Define:
   - las áreas;
   - qué frena y qué no frena;
   - los límites nuevos;
-  - el latido de 7 días y la ronda omitida con motivo;
+  - el latido de 14 días (era 7 en la propuesta; lo cambió Pablo) y la ronda omitida con motivo;
   - la vista "Ideas" de solo lectura.
-- **LES 023 — El comentario de una respuesta puede ser normativo.** Pablo eligió B, pero en el comentario escribió reglas más precisas que las opciones. La Factory las procesó como texto de la decisión, no como nota. Al plantear opciones, hay que esperar que la respuesta las refine.
-- **LES 024 — Una validación que pide herramientas de desarrollador es técnica.** FEAT-002 le pedía a Pablo mirar la pestaña Red y la consola. Si la verificación necesita herramientas de desarrollo, le corresponde a la Factory o se resuelve con un test.
+- **LES-023 — El comentario de una respuesta puede ser normativo.** Pablo eligió B, pero en el comentario escribió reglas más precisas que las opciones. La Factory las procesó como texto de la decisión, no como nota. Al plantear opciones, hay que esperar que la respuesta las refine.
+- **LES-024 — Una validación que pide herramientas de desarrollador es técnica.** FEAT-002 le pedía a Pablo mirar la pestaña Red y la consola. Si la verificación necesita herramientas de desarrollo, le corresponde a la Factory o se resuelve con un test.
 
 ## 7. Implementación propuesta, si se aprueba
 
 Orden según Producto > Dashboard:
 
 1. **GV-1 — Memoria y CI (chico).**
-   - DEC 019, DEC 020, LES 023 y LES 024.
+   - DEC-019, DEC-020, LES-023 y LES-024.
    - Campos `Área:`, `Bloquea:` y `Bloqueado: entorno|Pablo|Factory`.
    - Reclasificar lo actual y cerrar BL-008 y BL-017.
    - Chequeos en CI: clase obligatoria, justificación y ≤ 3 decisiones abiertas.
