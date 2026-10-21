@@ -6,25 +6,24 @@ Motivo: Pablo aprobó los límites de micro-ciclo (todos simultáneos) y pidió 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T00:04Z
-Última actualización: 2026-10-21T00:10Z
-Próxima acción: G4-B, registrar RESP-006 y cerrar REQ-006. Después G4-C (análisis de reconciliación). G4-A cerrado: DEC-021 y LES-025 publicadas. GV-1 y BL-013 siguen en pausa hasta que Pablo valide el análisis.
+Última actualización: 2026-10-21T00:14Z
+Próxima acción: G4-C, publicar el análisis de reconciliación. G4-A y G4-B cerrados: DEC-021, LES-025, RESP-006 y REQ-006 cerrada. GV-1 y BL-013 siguen en pausa hasta que Pablo valide el análisis.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: G4-B — registrar la aprobación de REQ-006
+Micro-ciclo: G4-C — publicar el análisis de reconciliación con las instrucciones v2
 Archivos:
-- ai-memory/responses/RESP-006.md
-- ai-memory/requests/REQ-006-limites-micro-ciclo.md
+- ai-memory/missions/FACTORY-GOVERNANCE-004-reconciliacion.md
 
 Plan de la misión, un micro-ciclo por vez y con escrituras en serie:
 
 - G4-A — DEC-021, LES-025 e índice. Hecho.
-- G4-B — RESP-006 y cierre de REQ-006 (van juntos).
+- G4-B — RESP-006 y cierre de REQ-006 (van juntos). Hecho.
 - G4-C — `missions/FACTORY-GOVERNANCE-004-reconciliacion.md`.
 
 ## Esperando a Pablo
 
-- [REQ-006] Info: Ya la aprobaste en la conversación; la Factory la registra en G4-B y deja de aparecer como pendiente. REQ-005 también está aprobada y se cierra en GV-1a.
+- [REQ-005] Info: Ya la aprobaste; sigue apareciendo abierta hasta GV-1a, el primer micro-ciclo después de tu validación.
 - [BL-016] Validación: Mirá el panel en un navegador real, también en el celular, y confirmá que entendés el estado en menos de 60 segundos (RSK-015 sigue abierto hasta entonces).
 - [FEAT-002] Validación: Usá DEV (https://gw2-factory-dev.vercel.app/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
 
