@@ -1,12 +1,13 @@
 # REQ-007 — ¿Cómo se publica un archivo que pesa más de 40 KB?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-21
 - Prioridad: ALTO
 - Área: actividades y metas
 - Relacionado: DEC-021, DEC-022, BL-013, BL-034, BL-005, RSK-018
 - Bloquea: actividades y metas
+- Cerrado: 2026-10-21 · RESP-007
 
 ## Qué pasó
 
