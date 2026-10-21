@@ -6,22 +6,23 @@ Motivo: Pablo ordenó implementarla ahora (2026-10-21 04:14Z), antes de BL-034. 
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T04:15Z
-Última actualización: 2026-10-21T04:31Z
-Próxima acción: BL-037b, tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). Después BL-037c.
+Última actualización: 2026-10-21T04:36Z
+Próxima acción: BL-037c, componente gds-voice, avatar oficial y sus tests (dashboard). Después BL-037d.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard)
+Micro-ciclo: BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard)
 Archivos:
-- gw2-factory-dashboard: gds/tokens.css
-- gw2-factory-dashboard: gds/GDS_FOUNDATION.md
-BL-037a publicado (parse.js `aa154fa`, tests `422f017`; 83/83 tests, 3/3 mutaciones). El componente se partió en dos micro-ciclos para respetar los 40 KB (DEC-021): primero tokens y documentación, después CSS, voice.js y tests. La marca (brandMark) no se toca.
+- gw2-factory-dashboard: gds/components.css
+- gw2-factory-dashboard: gds/voice.js
+- gw2-factory-dashboard: tests/gds.test.mjs
+BL-037b publicado (tokens.css `22c8163`, GDS_FOUNDATION.md `cd84006`; GDS 1.1.0). Este micro-ciclo suma el componente, el avatar oficial (WebP de 112 px embebido, 3,9 KB) y 3 tests, incluida la huella de brandMark() para que la marca no cambie sin decisión de Pablo. 86/86 tests, 8/8 mutaciones.
 
 Plan, un micro-ciclo por vez:
 
 - BL-037a — parse.js lee el resumen de la sesión de status.md (dashboard). Hecho.
-- BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). En curso.
-- BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard).
+- BL-037b — tokens de tamaño del avatar y documentación del componente en el GDS (dashboard). Hecho.
+- BL-037c — componente gds-voice, avatar oficial y sus tests (dashboard). En curso.
 - BL-037d — views.js usa la voz de Shiruvana: recomienda, advierte, decidió y resume (dashboard, archivo grande).
 - BL-037e — tests del panel para la voz de Shiruvana (dashboard).
 - BL-037f — versiones en index.html, CHANGELOG y README (dashboard).
