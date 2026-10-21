@@ -22,6 +22,13 @@ test('la página arranca con el theme oficial Gato Negro (sin parpadeo antes del
   assert.match(HTML, /<meta name="theme-color" content="#0F1117"\/>/);
 });
 
+test('el enlace a la bio usa los colores oficiales de Gato Negro, fijos y legibles', () => {
+  const badge = HTML.slice(HTML.indexOf('href="https://pablosnchz.github.io/bio/"'));
+  assert.match(badge, /background-color: #232A3A; color: #F4F6FA;/, 'lado obsidiana');
+  assert.match(badge, /background-color: #5A3DDB; color: #FFFFFF;/, 'lado arcano (6,7:1)');
+  assert.doesNotMatch(HTML, /#E1306C|#555555/, 'sin los colores anteriores');
+});
+
 test('index.html pide la versión del selector que trae el theme oficial', () => {
   const m = HTML.match(/js\/theme-selector\.js\?v=([\d.]+)/);
   assert.ok(m, 'falta el script del selector');
