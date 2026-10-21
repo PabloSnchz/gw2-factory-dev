@@ -6,20 +6,19 @@ Motivo: Pablo aprobó los límites de micro-ciclo (todos simultáneos) y pidió 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T00:04Z
-Última actualización: 2026-10-21T00:07Z
-Próxima acción: G4-A, registrar DEC-021 y LES-025. Después G4-B (RESP-006 y cierre de REQ-006) y G4-C (análisis de reconciliación). GV-1 y BL-013 siguen en pausa hasta que Pablo valide el análisis.
+Última actualización: 2026-10-21T00:10Z
+Próxima acción: G4-B, registrar RESP-006 y cerrar REQ-006. Después G4-C (análisis de reconciliación). G4-A cerrado: DEC-021 y LES-025 publicadas. GV-1 y BL-013 siguen en pausa hasta que Pablo valide el análisis.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: G4-A — registrar DEC-021 y LES-025 (límites de micro-ciclo aprobados)
+Micro-ciclo: G4-B — registrar la aprobación de REQ-006
 Archivos:
-- ai-memory/decisions/DEC-021-tamano-de-micro-ciclo.md
-- ai-memory/lessons/LES-025-tamano-se-decide-antes.md
-- ai-memory/memory-index.md
+- ai-memory/responses/RESP-006.md
+- ai-memory/requests/REQ-006-limites-micro-ciclo.md
 
 Plan de la misión, un micro-ciclo por vez y con escrituras en serie:
 
-- G4-A — DEC-021, LES-025 e índice.
+- G4-A — DEC-021, LES-025 e índice. Hecho.
 - G4-B — RESP-006 y cierre de REQ-006 (van juntos).
 - G4-C — `missions/FACTORY-GOVERNANCE-004-reconciliacion.md`.
 
