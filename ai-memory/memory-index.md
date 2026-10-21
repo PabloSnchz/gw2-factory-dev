@@ -67,6 +67,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-025](lessons/LES-025-tamano-se-decide-antes.md) — El tamaño de un micro-ciclo se decide antes de comenzar; dividir durante la publicación deja el repositorio a medias.
 - [LES-026](lessons/LES-026-fuentes-en-desacuerdo.md) — Un dato de referencia se toma de al menos 3 fuentes; las páginas con caché pueden estar desfasadas; se valida lo publicado, no la copia local.
 - [LES-027](lessons/LES-027-limite-fisico-de-la-autonomia.md) — La autonomía tiene un límite físico: Shiruvana solo trabaja cuando alguien la abre; lo que no necesita criterio se automatiza en GitHub.
+- [LES-028](lessons/LES-028-archivos-grandes-y-publicacion.md) — Un archivo que no entra en una publicación se cambia desde otro lugar: lo que depende de datos se deriva de los datos, no del HTML.
 
 ## FEATURES
 
@@ -75,3 +76,4 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [FEAT-002](features/FEAT-002-dev-sin-analytics.md) — DEV sin Analytics: GA4 solo en el host de producción y métricas GA4 solo en el repo de producción (DEC-006).
 - [FEAT-003](features/FEAT-003-psna-dia-correcto.md) — PSNA: el panel Actividades muestra el día correcto (rotación semanal, cambio a las 08:00 UTC, archivo propio).
 - [FEAT-004](features/FEAT-004-identidad-gato-negro-en-la-boveda.md) — La Bóveda con la identidad de Gato Negro: gato oficial, theme oficial por defecto, guías y mi voz donde le hablo al jugador.
+- [FEAT-005](features/FEAT-005-metas-janthir-y-visions.md) — Metas de Janthir Wilds y Visions of Eternity con horarios verificados, convergencias corregidas y filtro de expansión generado desde los datos.
