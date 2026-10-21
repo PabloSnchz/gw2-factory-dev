@@ -1,6 +1,6 @@
 # FACTORY-GOVERNANCE-004 — Reconciliación con las instrucciones v2
 
-- Estado: ANÁLISIS — esperando la validación de Pablo. No se implementó nada de lo que propone.
+- Estado: APROBADA — por Pablo el 2026-10-21, completa y con sus 4 lecturas. Agregó la regla de conflictos (DEC-022) y autorizó GV-1a a GV-1d y luego BL-013. Las referencias a "DEC 022" de este análisis quedaron cubiertas por DEC-022.
 - Fecha: 2026-10-21
 - Base: instrucciones consolidadas v2, `status.md`, `backlog.md`, `roadmap.md`, `risks.md`, `memory-index.md`, DEC-011, DEC-014 a DEC-021, LES-023 a LES-025
 - Ya registrado en esta misión: DEC-021, LES-025 (G4-A), RESP-006 y cierre de REQ-006 (G4-B)
