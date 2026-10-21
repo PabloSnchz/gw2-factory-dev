@@ -1,31 +1,32 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: Ninguna — FACTORY-OPS-001 entregó su propuesta (sin implementar). Esperando REQ-008
-Motivo: El modelo operativo define autonomía y posible costo de la plataforma: decide Pablo. REQ-008 no bloquea nada; el trabajo de producto sigue.
+Estado: EN_CURSO
+Tarea actual: Registrar la aprobación de REQ-008 y preparar FACTORY-DASHBOARD-IDENTITY-001 (identidad visual de Shiruvana: solo análisis y propuesta)
+Motivo: Pablo aprobó el modelo operativo (opción D) y pidió una propuesta para integrar visualmente a Shiruvana en el panel, sin implementarla.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
-Inicio: 2026-10-21T03:23Z
-Última actualización: 2026-10-21T03:33Z
-Próxima acción: BL-034 en la próxima sesión (metas de Janthir Wilds y Visions of Eternity). Con la respuesta a REQ-008, DEC 023, LES 027 y la vigilia diaria, después de BL-034.
+Inicio: 2026-10-21T03:40Z
+Última actualización: 2026-10-21T03:44Z
+Próxima acción: G9-A, registrar DEC-023 (modelo operativo) y LES-027, con su índice. Después G9-B.
 
-## Resumen de la sesión
+## Micro-ciclo actual
 
-- FACTORY-OPS-001: propuesta del modelo operativo en `missions/FACTORY-OPS-001-modelo-operativo.md`:
-  - arranque fijo y orden de elección del trabajo;
-  - presupuesto semanal: 60 % o más de producto, 15 % o menos de soporte;
-  - Discovery por nivel de READY, con la regla "1 promovida por 1 cerrada";
-  - qué detiene la Factory y qué detiene solo un área;
-  - qué hacer sin READY;
-  - sesiones de 60 min o 12 micro-ciclos;
-  - 11 métricas.
-- Scheduler recomendado: D híbrido por etapas. Despertar cuando escribe Pablo, más una vigilia diaria en GitHub Actions; sesiones programadas solo si la plataforma lo permite y Pablo acepta el costo.
-- Hallazgo: Shiruvana no se despierta sola; la autonomía de largo plazo depende de la plataforma (LES 027 propuesta).
-- 1 micro-ciclo de 2 archivos, escrituras en serie.
+Micro-ciclo: G9-A — registrar DEC-023 (modelo operativo) y LES-027, con su índice
+Archivos:
+- ai-memory/decisions/DEC-023-modelo-operativo.md
+- ai-memory/lessons/LES-027-limite-fisico-de-la-autonomia.md
+- ai-memory/memory-index.md
+Orden: primero las entradas nuevas y su índice; después la respuesta que las cita (G9-B), para no dejar referencias rotas.
+
+Plan, un micro-ciclo por vez:
+
+- G9-A — registrar DEC-023 (modelo operativo) y LES-027, con su índice. En curso.
+- G9-B — procesar RESP-008 y cerrar REQ-008.
+- G9-C — publicar la propuesta de identidad visual de Shiruvana y su pedido de decisión (REQ-009).
 
 ## Esperando a Pablo
 
-- [REQ-008] Decisión: Aprobar el modelo operativo de largo plazo y elegir cómo se despierta Shiruvana (se responde desde el panel).
+- [REQ-008] Info: Ya la aprobaste (opción D) desde el panel y en la conversación; la Factory la cierra en G9-B.
 - [FEAT-003] Validación: Abrí DEV (https://gw2-factory-dev.vercel.app/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
 - [BL-016] Validación: Mirá el panel en un navegador real, también en el celular, y confirmá que entendés el estado en menos de 60 segundos (RSK-015 sigue abierto hasta entonces).
 - [FEAT-002] Validación: Usá DEV (https://gw2-factory-dev.vercel.app/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
