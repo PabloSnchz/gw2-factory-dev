@@ -6,23 +6,23 @@ Motivo: Pablo lo priorizó antes de BL-034 (2026-10-21 04:52Z) y confirmó el en
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T05:01Z
-Última actualización: 2026-10-21T05:20Z
-Próxima acción: BOV-3, selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez. Después BOV-4.
+Última actualización: 2026-10-21T05:27Z
+Próxima acción: BOV-4, gato oficial como asset (assets/brand/gato-negro.svg) y su test. Después BOV-5.
 
 ## Micro-ciclo actual
 
-Micro-ciclo: BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez
+Micro-ciclo: BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test
 Archivos:
-- js/theme-selector.js
-- tests/theme-selector.test.cjs
-BOV-2 publicado: `css/themes/gato.css` (`b553040`) y su test (`9ebf376`). BOV-3 validado en local: 42/42 tests, 7/7 mutaciones. Hasta BOV-5 el index.html sigue pidiendo la versión 1.1.0 del selector; el cambio se ve en DEV después de BOV-5.
+- assets/brand/gato-negro.svg
+- tests/brand.test.cjs
+BOV-3 publicado: `js/theme-selector.js` 1.2.0 (`ca246fe`) y su test (`1c6428d`). BOV-4 validado en local: 45/45 tests, 6/6 mutaciones; geometría y colores idénticos a brandMark() del panel.
 
 Plan, un micro-ciclo por vez:
 
 - BOV-1 — registrar DEC-025, BL-038 y el índice. Hecho.
 - BOV-2 — theme oficial Gato Negro (css/themes/gato.css) y su test de contraste. Hecho.
-- BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez. En curso.
-- BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test.
+- BOV-3 — selector de themes 1.2.0: Gato Negro por defecto y migración de una sola vez. Hecho.
+- BOV-4 — gato oficial como asset (assets/brand/gato-negro.svg) y su test. En curso.
 - BOV-5 — index.html: logo, pie, favicon y theme por defecto (archivo grande).
 - BOV-6 — mi componente de voz en La Bóveda y su test.
 - BOV-7 — mi voz en la bienvenida, el modal de API Keys y la ayuda.
