@@ -1,22 +1,30 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: FACTORY-ASSET-001 — migración del legado de QwenPaw a gw2-factory-dev (REQ-010 aprobada, opción A).
-Motivo: Pablo aprobó la opción A (RESP-010) y apagó el GitHub Pages de gw2-wallet-agents y gw2-agents-dashboard (verificado: `has_pages: false`).
+Tarea actual: errores que encontró Pablo en DEV (2026-10-21 20:23Z): Armería (BL-045, BL-046, BL-047) y PSNA (BL-044). La migración del legado (BL-043) queda en pausa hasta cerrarlos.
+Motivo: Pablo validó FEAT-004 y, al revisar FEAT-003 y usar DEV, encontró 5 problemas. El producto va primero: un error que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
-Inicio: 2026-10-21T14:10Z
-Última actualización: 2026-10-21T14:20Z
-Próxima acción: MIG-2a — primeros 3 generadores de la Armería en `tools/legendary/`, revisados y probados en local.
+Inicio: 2026-10-21T20:30Z
+Última actualización: 2026-10-21T20:30Z
+Próxima acción: ARM-1 — la columna "Tengo" de Materiales totales lee el banco y el almacén (BL-045).
 
 Micro-ciclo:
-MIG-2a — generadores de la Armería (datos, precursores, descarga de ítems)
+ARM-1 — "Tengo" con el inventario real (archivo grande dedicado, DEC-021 §1 bis)
 Archivos:
-tools/legendary/build_legendary_data.py
-tools/legendary/build_legendary_precursors.py
-tools/legendary/fetch_legendary_items.py
+js/legendary-tracker.js
+tests/legendary-totals-stock.test.cjs
 
-Plan FACTORY-ASSET-001 (los dos repos siguen en solo lectura; migrar es copiar a DEV):
+Plan (orden por valor para el jugador):
+
+- ARM-1 "Tengo" siempre en 0 (BL-045).
+- ARM-2 chips "Abalorio" y "Espaldar" (BL-046, parte 1).
+- PSN-1 el PSNA dice qué día muestra y cambia solo a las 08:00 UTC (BL-044).
+- ARM-3 expansión de cada legendaria con 3 fuentes y filtros ordenados (BL-046, parte 2).
+- ARM-4 propuesta visual del árbol de receta para que Pablo la valide (BL-047).
+- Después: sigue BL-043 en MIG-2a.
+
+Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
 - ASSET-1 — inventario de los dos repos (estructura, documentos, herramientas, workflows, actividad). Hecho.
 - ASSET-2 — clasificación con motivo: conocimiento, documentación, herramientas, producto solo en agents, qué archivar. Hecho.
@@ -28,6 +36,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Pablo validó FEAT-004 en producción y encontró 5 problemas en DEV: 4 en la Armería y 1 en el PSNA. Los registré (BL-044 a BL-047) y los atiendo antes de seguir con la migración.
 - Hechos de la API del legado en DEV, verificados de nuevo (MIG-1): el límite real es 300 pedidos por minuto por IP, y el modo legendario de Nexus tiene dos logros (9472 y 9478), no uno.
 - Pablo aprobó la migración del legado de QwenPaw (REQ-010, opción A) y apagó el GitHub Pages de los dos repos: la copia vieja de La Bóveda ya no comparte datos con producción.
 - FACTORY-ASSET-001: analicé el legado de QwenPaw. Lo más valioso: unos 90 archivos de tests del producto, los generadores de datos de la Armería y un panel de Homestead sin validar. Propuesta en REQ-010.
@@ -40,12 +49,11 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 ## Esperando a Pablo
 
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
-- [FEAT-004] Validación: Abrí producción (https://pablosnchz.github.io/gw2-wallet-ligero/), en pantalla y en el celular. Fijate que aparezco en Inicio, en Gestión de API Keys y en Guía, y que el gato y el theme Gato Negro están en la app y en las dos guías.
-- [FEAT-003] Validación: Abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/), entrá a Actividades y fijate que los 6 lugares del Agente de red de suministros del Pacto sean los de hoy en el juego. Cambian a las 05:00 de Argentina.
-- [FEAT-002] Validación: Usá DEV (https://pablosnchz.github.io/gw2-factory-dev/) como siempre y avisá si algo no funciona. Lo de Analytics ya lo verificó la Factory con tests: no hace falta abrir herramientas de desarrollador.
+- [FEAT-003] Validación: cuando publique BL-044, abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades. El panel va a decir de qué día son los lugares y a qué hora cambian; comparalos con esa fila de la wiki.
 
 ## Para tu información
 
+- [FEAT-002] Usaste DEV y lo que encontraste es de la Armería, no de Analytics: doy FEAT-002 por validada.
 - [FACTORY-ASSET-001] Por un error mío quedó creada la rama `__never__` en gw2-wallet-agents. Es idéntica a `main` y no cambia nada. Se puede borrar desde GitHub o dejarla hasta archivar el repo (detalle en el informe).
 - [BL-042] Metas en producción: si no ves Visions of Eternity en el filtro, recargá con Ctrl+F5.
 - [BL-040] La Guarida: si no ves el cambio, recargá con Ctrl+F5. Tus favoritos, categorías y widgets no se tocaron.
