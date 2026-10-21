@@ -1,24 +1,25 @@
 # STATUS
 
-Estado: IDLE
-Tarea actual: ninguna. BL-040 cerrada: La Guarida tiene la identidad Gato Negro.
-Motivo: Pablo me dio La Guarida (2026-10-21 06:51Z) con la misma misión que La Bóveda. Con esto, todo el ecosistema (Bóveda, panel, bio y Guarida) lleva la misma marca y el mismo theme oficial.
+Estado: EN_CURSO
+Tarea actual: BL-034 — metas de Janthir Wilds y Visions of Eternity en Meta & Eventos (DEV).
+Motivo: Pablo lo pidió (2026-10-21). Hoy faltan las metas de JW y casi todas las de VoE, Secretos del Bosque tiene horarios incorrectos (cada 4h en vez de cada 2h), Monte Balrior figura como SotO y el filtro "Convergence" no muestra nada.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION (cerrada)
-Inicio: 2026-10-21T06:55Z
-Última actualización: 2026-10-21T07:05Z
-Próxima acción: BL-034 (metas de Janthir Wilds y Visions of Eternity).
+Etapa actual: DEVELOPMENT
+Inicio: 2026-10-21T07:10Z
+Última actualización: 2026-10-21T07:10Z
+Próxima acción: MET-1.
+
+Plan BL-034, un micro-ciclo por vez (horarios tomados de al menos 3 fuentes, LES-026: wiki oficial, GuildJen, Le Bus Magique, buildop, Aeronef, Convergence Corp):
+
+- MET-1 — `assets/meta-events.json` + `tests/meta-events.test.cjs`: 5 metas nuevas (De Nieblas y Monstruos, Un Viaje Titánico, Trifulca de Hammerhart, Grilletes de los Antiguos, Profundidades de la Crueldad), corrijo Secretos del Bosque, Monte Balrior pasa a Janthir y agrego Convergencia: Nexo de la Eternidad; las 3 convergencias pasan a tipo `convergence`.
+- MET-2 — `index.html` (solo): opción "Visions of Eternity" en el filtro de expansión.
+- MET-3 — cierre: FEAT-005, backlog, riesgos y estado.
 
 ## Resumen de la sesión
 
 - Primer deploy a producción: La Bóveda tiene la marca Gato Negro, el theme oficial y mi voz (FEAT-004, BL-039).
 - La Guarida (https://pablosnchz.github.io/la-guarida/) lleva el gato oficial, el theme Gato Negro por defecto (Bóveda queda como opción) y la bio con los colores oficiales; además, el theme guardado ahora se aplica al recargar.
 - Encontré credenciales de Twitch y YouTube publicadas en el código de La Guarida (RSK-019): necesito que las revoques o restrinjas.
-
-Plan, un micro-ciclo por vez:
-
-- GUA-1 a GUA-3 — gato y theme, migración y theme al abrir, index.html. Hecho.
-- GUA-4 — cierre: backlog, riesgos y estado. Hecho.
 
 ## Esperando a Pablo
 
