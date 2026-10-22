@@ -2,7 +2,7 @@
 
 Generado por `tools/legacy/census.cjs` en CI (`.github/workflows/legacy-tests.yml`). No editar a mano.
 
-- Fecha: 2026-10-22T13:58:08.715Z
+- Fecha: 2026-10-22T13:59:34.990Z
 - Legado: gw2-wallet-agents @ `eb91075`
 - Archivos: 88
 - En el legado: VERDE 85 · ROJO 3 · MIENTE 0 · TIEMPO 0 · DEPENDENCIA 0
@@ -108,9 +108,9 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-3nb9AT/dev/js/homestead-tracker.js'
+    path: '/tmp/censo-tLTRkt/dev/js/homestead-tracker.js'
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### arma-2-3-cola-contrato.test.js — ROJO (código 1)
 
@@ -128,7 +128,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     ... 13 more items
     ]
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### armeria-filtros-cola-card.test.js — ROJO (código 1)
 
@@ -137,7 +137,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
     at node:internal/main/run_main_module:36:49
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### armeria-modal-iconos-nombre.test.js — ROJO (código 1)
 
@@ -155,16 +155,16 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
     at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
     at node:internal/main/run_main_module:36:49
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### hb114-t17-t18.mjs — ROJO (código 1)
 
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '\\tmp\\censo-3nb9AT\\dev\\\\js\\raid-tracker.js'
+    path: '\\tmp\\censo-tLTRkt\\dev\\\\js\\raid-tracker.js'
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### hb119-t19a-cadena.test.js — ROJO (código 1)
 
@@ -180,36 +180,36 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-3nb9AT/dev/js/_build_legendary_recipes.py'
+    path: '/tmp/censo-tLTRkt/dev/js/_build_legendary_recipes.py'
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### hb134-cuento-po-refs.test.js — ROJO (código 1)
 
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-3nb9AT/dev/tools/hb116-union-po.mjs'
+    path: '/tmp/censo-tLTRkt/dev/tools/hb116-union-po.mjs'
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### hb204-alert204-veredicto.test.js — ROJO (código 1)
 
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-3nb9AT/dev/tools/hb100-suite.mjs'
+    path: '/tmp/censo-tLTRkt/dev/tools/hb100-suite.mjs'
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### hb205-ruta-no-atada.test.js — ROJO (código 1)
 
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-3nb9AT/dev/tools/hb100-suite.mjs'
+    path: '/tmp/censo-tLTRkt/dev/tools/hb100-suite.mjs'
     }
-    Node.js v22.23.3
+    Node.js v22.23.4
 
 ### idea50f.cacheclear-real.test.js — ROJO (código 1)
 
