@@ -1,21 +1,20 @@
 # STATUS
 
-Estado: EN CURSO
-Tarea actual: registrar las respuestas de Pablo al cierre del legado (MIG-6) y preparar la propuesta de restyle de la Cartera (BL-056).
-Motivo: Pablo respondió (2026-10-22 15:48Z): el Gist estaba decidido como deprecado y prefiere respaldo en una nube que todos tengan; Homestead pasa a módulo propio; la Cámara del Brujo no se toca; archivó los dos repos del legado. Y pide restyle de los módulos empezando por la Cartera (tarjetas, tabla, conversor y dashboard).
+Estado: ESPERANDO A PABLO
+Tarea actual: BL-056 restyle de la Cartera: propuesta CAR-0 presentada, espera aprobación de Pablo.
+Motivo: Pablo pidió propuestas de restyle por módulo, empezando por la Cartera; como en BL-047 y BL-052, primero se aprueba la propuesta visual y después se implementa.
 Fase: F1 — Visibilidad
-Etapa actual: PRODUCT
+Etapa actual: ARCHITECTURE
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T16:05Z
-Próxima acción: MEM-1 (discovery, archivo, backlog) → MEM-2 (DEC-030, LES-029, índice) → CAR-0 propuesta visual de la Cartera para aprobación de Pablo (no se implementa antes).
+Última actualización: 2026-10-22T16:06Z
+Próxima acción: con el sí de Pablo, CAR-1 `wallet-theme.js` 2.0.0 (cabecera con pestañas, franja de fijadas, barra de herramientas); si pide cambios, ajusto la propuesta. Mientras tanto, BL-041.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MEM-1 — respuestas de Pablo a MIG-6: DISC-009 pasa a respaldo en la nube popular (Gist deprecado), DISC-010 dice dónde se vería, DISC-011 se promueve a BL-055 (módulo Homestead), BL-054 se cierra (ya estaba resuelto en DEV: error mío), Cámara del Brujo sin cambios; BL-056 restyle de la Cartera.
+CAR-1 (no empieza hasta que Pablo apruebe CAR-0) — cabecera con pestañas, franja Destacadas, chips de categoría y arreglo de la cabecera de la tabla, montados desde `wallet-theme.js` 2.0.0 sin tocar `index.html` ni `app.js`.
 Archivos:
-ai-memory/discovery.md
-ai-memory/discovery-archive.md
-ai-memory/backlog.md
+js/wallet-theme.js
+tests/wallet-theme.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -52,6 +51,7 @@ Plan (orden por valor para el jugador):
 - MIG-5 hecho: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (`2b10aa1`; el storage salió de `storage.js`, la tabla vieja tenía claves que no existen) y `docs/CHANGELOG-FACTORY.md` (`e4a6d1a`) junta los cambios desde 2026-10-19; unirlo a `CHANGELOG.md` (79 KB) queda en BL-053. Cierra BL-004. Sin cambios visuales.
 - MIG-6 hecho: del PRE_BACKLOG y las alertas del legado, juzgados contra la app de hoy: DISC-009 restaurar la foto de seguridad del Gist (ALTA; la foto se saca pero ninguna pantalla la restaura), DISC-010 modo legendario de Nexus (MEDIA), DISC-011 Homestead (espera criterio de Pablo), BL-054 el import del Gist repite `applyImportData` (ALERT-179). Descartado: tracker de la Cámara del Brujo (ya existe). Colecciones y monturas, a la próxima ronda (límite de 3). Sin cambios visuales.
 - Pablo (15:48Z) archivó gw2-wallet-agents y gw2-agents-dashboard (verificado: `archived: true` en los dos). BL-043 cerrada del todo.
+- MEM-1 y MEM-2 hechos (ver backlog y DEC-030). CAR-0 presentada: `propuesta-cartera-bl056.html`, cuatro vistas (Mi cartera en tarjetas y en tabla, Cambio de divisas, Todas las cuentas) y plan CAR-1 a CAR-5.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -66,6 +66,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Pablo archivó los dos repos del legado. Registré sus respuestas: el Gist queda deprecado (DEC-030) y el respaldo va a una nube que todos tengan (DISC-009); Homestead pasa a módulo propio (BL-055); BL-054 se cierra porque ya estaba resuelto en DEV (error mío al leer el legado). Propuesta de restyle de la Cartera presentada (BL-056). Sin cambios visuales en la webapp.
 - Migración del legado de QwenPaw terminada (BL-043): 73 de sus 88 tests protegen DEV, los generadores de la Armería reproducen el catálogo, la documentación describe La Bóveda de hoy y sus ideas que siguen valiendo quedaron en discovery (DISC-009 a 011) y en el backlog (BL-054). Sin cambios visuales en la webapp. Ya podés archivar los dos repos.
 - Pablo validó la Bóveda en producción (BL-050: PSNA y Armería) y La Guarida (BL-052). Migración del legado: en DEV ya se puede volver a generar el catálogo de la Armería (MIG-2a y 2b), y encontré la fuente perdida de las recetas: el proyecto abierto crafty_legend.
 - La Guarida realineada (BL-052): sigue siendo tu lanzador, con el lenguaje visual del Centro de decisiones y sin datos de la Factory. Yo soy su anfitriona: el portal «¿A dónde vamos?» (Ctrl+K o /), «Lo de siempre» y un consejo de orden como mucho por día (DEC-028).
@@ -88,6 +89,8 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
+- [BL-056] Validación: revisá la propuesta de la Cartera (`propuesta-cartera-bl056.html`) y aprobala o pedí cambios. No se implementa antes.
+- [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
 ## Para tu información
