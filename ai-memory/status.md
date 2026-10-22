@@ -1,20 +1,17 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-056 restyle de la Cartera. CAR-1 y CAR-2 (A y B) publicados; sigue CAR-3 Todas las cuentas.
+Tarea actual: BL-056 restyle de la Cartera. CAR-1, CAR-2 y CAR-3 publicados; sigue CAR-4 (cierre).
 Motivo: Pablo aprobó la propuesta CAR-0 sin cambios y la ve como el disparador de un restyle de toda la webapp; también aprobó que yo aparezca dando consejos en la Cartera.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22 22:32Z
-Próxima acción: CAR-3 Todas las cuentas (`wallet-dashboard.js` 3.0.0) → CAR-4 cierre y aviso a Pablo para probar en DEV.
+Última actualización: 2026-10-22 22:50Z
+Próxima acción: CAR-4 cierre y aviso a Pablo para probar en DEV (no se analiza hasta que Pablo valide CAR-3).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo (siguiente, sin empezar):
-CAR-3 — Todas las cuentas: se analiza recién ahora.
-Archivos:
-js/wallet-dashboard.js
-tests/wallet-dashboard-view.test.cjs
+CAR-4 — cierre de BL-056. Sin analizar todavía, por pedido de Pablo.
 
 Plan (orden por valor para el jugador):
 
@@ -58,6 +55,8 @@ Plan (orden por valor para el jugador):
 - CAR-2A hecho tras CAR-2 RECOVERY (22:05Z: nada publicado; local validado intacto): 3 commits en serie para no cortar la salida, cada uno deja CI en verde: `0dca9f6` idea47 (blob 9a01768; pasa con la 1.2.0 y la 2.0.0), `49953fe` `js/converter-modal.js` 2.0.0 (blob e311da4, 48,7 KB), `8abdc38` `tests/converter-view.test.cjs` (blob 7692e3b). 11 tests, idea47 37/37, commerce-delivery 8/8, prueba de humo 58 comprobaciones, 23/23 mutaciones. Pendiente de registrar: RSK-020 (index.html no se publica entero, su ?v= del conversor queda en 1.2.0). Cambio visual: el botón Cambio de divisas abre la vista nueva en un modal ancho hasta CAR-2B.
 - Pablo (22:22Z) validó CAR-2A, aceptó RSK-020 como BAJO (registrado) y pidió seguir con CAR-2B, sin mezclarlo con CAR-2A y sin analizar CAR-3 hasta cerrarlo.
 - CAR-2B hecho (checkpoint `9450267` con RSK-020; código `17e75f0`): `js/wallet-theme.js` 2.1.0 (blob 3083c87) y `tests/wallet-view.test.cjs` (blob a1f6ddc). La pestaña Cambio de divisas muestra la vista del conversor dentro de la Cartera con `ConverterModal.mount`; `WalletTheme.showTab` es lo que usa `ConverterModal.open()`; al irse de la Cartera vuelve a Mi cartera. `converter-modal.js` no se tocó (sigue e311da4). 9 tests, prueba de humo 52 comprobaciones (incluye el conversor 2.0.0 real montado en la Cartera), 17/17 mutaciones. Un solo commit de 43,7 KB: partirlo dejaba un commit intermedio con CI en rojo (LES-017 pesa más que el tope de 40 KB de DEC-021; desvío registrado). Cambio visual: Cambio de divisas ya es una pestaña de la Cartera, sin modal.
+- Pablo (22:36Z) validó CAR-2B y pidió seguir con CAR-3 sin analizar ni preparar CAR-4. El checkpoint de CAR-3 fue el manifiesto ya publicado en `ac40b2b`.
+- CAR-3 hecho: `c371549` idea48b (blob 91d70cc; acepta el `?v=2.9.0` de index.html, RSK-020; pasa con la 2.9.0 y la 3.0.0), `84b39d6` `js/wallet-dashboard.js` 3.0.0 (blob dce7b5d, 52,5 KB, micro-ciclo de archivo grande), `7bb1f60` `tests/wallet-dashboard-view.test.cjs` (blob fb6696f). Solo cambia el dibujo; la lectura de cuentas, la ETA y los errores por columna quedan iguales (las aserciones de idea47-commit2, idea48b e idea57t2 pasan). Columnas como chips con «×» y «＋ Agregar divisa…» con buscador; cuenta, cabecera y totales fijos; mejor valor en dorado; «Total (n de m)» y «— ⚠» en las cuentas que fallan (antes, 0 falsos); tarjetas en el celular. Arreglos: estado sin divisas mal armado, borderLeft del KPI ignorado, un oyente nuevo en document por cada dibujo del selector. Comentarios largos del historial resumidos para que el archivo entre en una publicación. 9 tests, prueba de humo 35 comprobaciones, 23/23 mutaciones. Cambio visual: Todas las cuentas renovada.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
