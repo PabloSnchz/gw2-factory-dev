@@ -1,16 +1,16 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: ninguna. BL-056 (restyle de la Cartera) cerrada: CAR-1 a CAR-4 hechos.
-Motivo: Pablo aprobó la propuesta CAR-0 sin cambios y la ve como el disparador de un restyle de toda la webapp; también aprobó que yo aparezca dando consejos en la Cartera.
+Tarea actual: promoción de la Cartera a producción (FEAT-006), preparada en REQ-011; no se ejecuta sin el sí de Pablo.
+Motivo: Pablo aprobó BL-056 en DEV (2026-10-22 23:11Z) y autorizó preparar la promoción, sin ejecutarla.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
+Etapa actual: ARCHITECTURE
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22 23:08Z
-Próxima acción: esperar la dirección de Pablo para el siguiente módulo del restyle. Trabajo READY sin pedido nuevo: BL-055 (Homestead, empieza por una propuesta visual) y BL-041.
+Última actualización: 2026-10-22 23:20Z
+Próxima acción: con el sí de Pablo a REQ-011, PRD-0 (rama `rollback/pre-cartera` en `dd5c0c6`) y después PRD-11 a PRD-14, de a un archivo y verificando cada blob.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
-Micro-ciclo: ninguno en curso. El último fue CAR-4 (cerrado en este commit).
+Micro-ciclo: ninguno en curso. Plan de promoción en REQ-011: PRD-11 `wallet-theme.js` 2.0.0 (669467a) → PRD-12 `converter-modal.js` 2.0.0 (e311da4) → PRD-13 `wallet-theme.js` 2.1.0 (3083c87) → PRD-14 `wallet-dashboard.js` 3.0.0 (dce7b5d).
 
 Plan (orden por valor para el jugador):
 
@@ -58,6 +58,7 @@ Plan (orden por valor para el jugador):
 - CAR-3 hecho: `c371549` idea48b (blob 91d70cc; acepta el `?v=2.9.0` de index.html, RSK-020; pasa con la 2.9.0 y la 3.0.0), `84b39d6` `js/wallet-dashboard.js` 3.0.0 (blob dce7b5d, 52,5 KB, micro-ciclo de archivo grande), `7bb1f60` `tests/wallet-dashboard-view.test.cjs` (blob fb6696f). Solo cambia el dibujo; la lectura de cuentas, la ETA y los errores por columna quedan iguales (las aserciones de idea47-commit2, idea48b e idea57t2 pasan). Columnas como chips con «×» y «＋ Agregar divisa…» con buscador; cuenta, cabecera y totales fijos; mejor valor en dorado; «Total (n de m)» y «— ⚠» en las cuentas que fallan (antes, 0 falsos); tarjetas en el celular. Arreglos: estado sin divisas mal armado, borderLeft del KPI ignorado, un oyente nuevo en document por cada dibujo del selector. Comentarios largos del historial resumidos para que el archivo entre en una publicación. 9 tests, prueba de humo 35 comprobaciones, 23/23 mutaciones. Cambio visual: Todas las cuentas renovada.
 - Pablo (22:54Z) validó CAR-3 (RSK-020 sigue BAJO) y pidió la validación funcional antes de abrir CAR-4. Hecha (23:03Z) con los dos archivos publicados en el mismo DOM: `wallet-dashboard.js` 3.0.0 (dce7b5d) y `wallet-theme.js` 2.1.0 (3083c87). 27 comprobaciones: la cabecera de la Cartera queda una sola vez y arriba (al entrar, al refrescar, al quitar una columna y al salir y volver), la pestaña activa es «Todas las cuentas», «Mi cartera» lleva a `#/cards`, y lo que el theme oculta es solo la cabecera vieja y «Volver a Cartera» (actualizar, columnas, KPIs, tabla y avisos siguen a la vista). Mutaciones: 2 de 3 detectadas; la tercera es equivalente (`ensurePanelContent` corre una sola vez, desde `initOnce`). CAR-3 cerrado.
 - CAR-4 hecho (checkpoint `a2c38b8`): `5c823f6` FEAT-006 (blob 56e1526), `3a46dc4` BL-056 a DONE (blob 5e38bd4), `7ea80e5` CHANGELOG-FACTORY con la Cartera en «Solo en DEV» (blob e732be1). Al escribir FEAT-006 corregí una afirmación mía antes de publicarla: CAR-1 sí agregó una clave de `localStorage`, `gn:wallet:hidezero`; quedó dicha en FEAT-006, el backlog y el CHANGELOG. Sin código ni cambios visuales. BL-056 cerrada.
+- Pablo (23:11Z) aprobó BL-056 y pidió preparar la promoción sin ejecutarla. Evidencia (23:15Z): en `js/` de producción (HEAD `dd5c0c6`) solo difieren de DEV los tres archivos de la Cartera (más `analytics.js`, a propósito: DEC-006); `app.js` y `shiruvana.js` idénticos; los 5 íconos que usan existen; producción no tiene tests. En DEV, en CAR-1 el conversor y el dashboard eran idénticos a los de producción de hoy: el orden propuesto repite estados ya validados. Propuesta en REQ-011.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -96,6 +97,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
+- [REQ-011] Decisión: ¿llevo la Cartera renovada a producción con el plan de 4 pasos y la rama de vuelta atrás? La vuelta atrás del conversor viejo (68 KB) la tendrías que hacer vos con git.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
