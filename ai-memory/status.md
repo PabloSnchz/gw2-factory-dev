@@ -1,16 +1,17 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: la Cartera renovada en producción (FEAT-006, REQ-011); espera la validación funcional de Pablo.
-Motivo: Pablo aprobó REQ-011 (opción A) a las 23:17Z y autorizó PRD-0 y PRD-11 a PRD-14.
+Estado: EN CURSO
+Tarea actual: BL-057 restyle de Meta & Eventos — MET-0, propuesta visual para aprobación (sin implementar).
+Motivo: Pablo validó la Cartera en producción (23:37Z: BL-056 cerrada formalmente) y pidió la propuesta de Meta & Eventos: problemas, objetivos, propuesta visual, orden de la información, GDS y mi lugar en la pantalla.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22 23:32Z
-Próxima acción: esperar la validación de Pablo en producción. Con su visto bueno, BL-056 queda cerrada del todo y sigue BL-057 (restyle de Meta & Eventos, empieza por una propuesta visual).
+Última actualización: 2026-10-22 23:42Z
+Próxima acción: MET-0 — maqueta HTML con la propuesta; no se toca código de la app hasta el sí de Pablo.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
-Micro-ciclo: ninguno en curso. Promoción PRD-0 a PRD-14 terminada y verificada.
+Micro-ciclo (en curso, checkpoint de este commit):
+MET-0 — propuesta visual de Meta & Eventos (entregable: `propuesta-meta-bl057.html`; sin cambios en el repo de la app).
 
 Plan (orden por valor para el jugador):
 
@@ -60,6 +61,7 @@ Plan (orden por valor para el jugador):
 - CAR-4 hecho (checkpoint `a2c38b8`): `5c823f6` FEAT-006 (blob 56e1526), `3a46dc4` BL-056 a DONE (blob 5e38bd4), `7ea80e5` CHANGELOG-FACTORY con la Cartera en «Solo en DEV» (blob e732be1). Al escribir FEAT-006 corregí una afirmación mía antes de publicarla: CAR-1 sí agregó una clave de `localStorage`, `gn:wallet:hidezero`; quedó dicha en FEAT-006, el backlog y el CHANGELOG. Sin código ni cambios visuales. BL-056 cerrada.
 - Pablo (23:11Z) aprobó BL-056 y pidió preparar la promoción sin ejecutarla. Evidencia (23:15Z): en `js/` de producción (HEAD `dd5c0c6`) solo difieren de DEV los tres archivos de la Cartera (más `analytics.js`, a propósito: DEC-006); `app.js` y `shiruvana.js` idénticos; los 5 íconos que usan existen; producción no tiene tests. En DEV, en CAR-1 el conversor y el dashboard eran idénticos a los de producción de hoy: el orden propuesto repite estados ya validados. Propuesta en REQ-011.
 - Pablo (23:17Z) aprobó REQ-011 (opción A), aceptó RSK-020 como BAJO y el riesgo ALTO de la vuelta atrás del conversor. Checkpoint `8026658`. En gw2-wallet-ligero, en serie y con el blob verificado después de cada uno: PRD-0 rama `rollback/pre-cartera` en `dd5c0c6`; PRD-11 `d900b37` wallet-theme 2.0.0 (669467a); PRD-12 `e402e6b` converter-modal 2.0.0 (e311da4); PRD-13 `82da84c` wallet-theme 2.1.0 (3083c87); PRD-14 `a82c996` wallet-dashboard 3.0.0 (dce7b5d). Integridad final: `js/` de producción igual a DEV en 46 de 47 archivos (la diferencia es `analytics.js`, a propósito: DEC-006); la rama de vuelta atrás conserva d06748e, b42da9c y ff3d319. Documentación: FEAT-006 (`78d9b55`), CHANGELOG-FACTORY (`c711e02`) y backlog (`f5d7e67`, con BL-057 Meta & Eventos en READY, el próximo frente que fijó Pablo).
+- Pablo (23:37Z) validó la Cartera en producción: BL-056 cerrada formalmente. Pidió para BL-057 una propuesta visual de Meta & Eventos antes de implementar nada.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -99,7 +101,6 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [FEAT-006] Validación: probá la Cartera en producción con Ctrl+F5: Mi cartera, Cambio de divisas como pestaña y Todas las cuentas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
