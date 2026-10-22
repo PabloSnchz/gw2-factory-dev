@@ -1,21 +1,20 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-043 migración del legado de QwenPaw, MIG-4: tests del legado a DEV por tandas, por CI (DEC-029). MIG-2 (generadores de la Armería) terminado.
-Motivo: DEV tiene 22 archivos de tests; el legado tiene 88 que en su mayoría prueban el mismo código. Es la red de seguridad que le falta a La Bóveda para cambiar código sin miedo.
+Tarea actual: BL-043 migración del legado de QwenPaw, MIG-5: documentación del producto al día con La Bóveda de hoy (cierra BL-004). MIG-2 y MIG-4 terminados.
+Motivo: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen la v6.6.2 y no nombran la Armería, el PSNA nuevo, las metas nuevas ni mi voz; quien lea la documentación entiende una app que ya no existe.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T15:05Z
-Próxima acción: MIG-4h (herramienta audit-61 + idea61 + t19c; el resto de los ROJO se clasifica contra la app actual: historia o valor) → MIG-5 documentación (BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
+Última actualización: 2026-10-22T15:12Z
+Próxima acción: MIG-5a (BRIEFING y DESARROLLADORES) → MIG-5b (CHANGELOG, cierra BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-4h-1 — la importación también trae herramientas que un test necesita (`tools/<archivo>`), para `tools/audit-61-congeladas.mjs` (BL-043, DEC-029)
+MIG-5a — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (BL-004, BL-043). ONBOARDING (144 KB) y Módulos JS Referencia (102 KB) no entran en una publicación (LES-028): quedan como referencia histórica, señalados desde el BRIEFING. Las versiones del legado de esos dos documentos describen la app de QwenPaw (con Homestead): no se migran.
 Archivos:
-tools/legacy/census.cjs
-tests/legacy-census.test.cjs
-.github/workflows/legacy-tests.yml
+docs/BRIEFING.md
+docs/DESARROLLADORES.md
 
 Plan (orden por valor para el jugador):
 
@@ -48,6 +47,7 @@ Plan (orden por valor para el jugador):
 - MIG-4b hecho (`e816d33`): `importTests()` en `census.cjs` (copia la lista desde el legado fijado, la corre en DEV y deshace todo si algo no queda en VERDE) y paso de importación en el workflow, con el resultado en `tools/legacy/IMPORTACION.txt` (RSK-016). 5 tests; 11/11 y 8/8 mutaciones. CI corrió de punta a punta (`bacb188`). Blobs verificados.
 - MIG-4c a 4g hechos: 71 tests del legado importados por CI en 5 tandas (Armería 12 `3bcc78d`, caché y API 24 `a90709d`, cuentas/permisos/Gist 24 `7536e98`, raids y strikes 5 `e3f3515`, cartera/Cámara del Brujo/skins/inventario 6 `d11eab3`); app-checks corre `tests/*.test.js` y `*.smoke.js` (`f93ed64`). Dos rechazos de CI se deshicieron solos: hb106-censo-latch exige hb106-t13-invariante a su lado (se agregó) y t19c lee idea61 (pasa a 4h).
 - Pablo (15:00Z): no perder de vista la app actual; lo que el legado prueba de la app vieja es historia, no hallazgo. En cada cierre de MIG decir si hay cambios visuales para validar.
+- MIG-4h hecho: la importación trae también herramientas (`8de3867`); idea61 + t19c + `tools/audit-61-congeladas.mjs` importados (`9c800a5`): vigilan que la lista de cuentas no quede congelada en el backup del Gist. `tools/legacy/README.md` (`0f59136`) dice qué no se trae y por qué, juzgado contra la app de hoy: 9 historia (modal viejo de la Armería, generadores `_build_*.py`, Homestead que nunca llegó), 3 proceso de agentes, 3 rotos en origen (hb114, idea50f, hb90). MIG-4 terminado: 73 de 88 tests del legado protegen DEV. Sin cambios visuales.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
