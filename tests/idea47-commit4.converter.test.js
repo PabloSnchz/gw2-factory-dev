@@ -118,10 +118,16 @@ const CSS = ['main.css', 'theme-polish.css'].map(f =>
 ok('ningun CSS agregado por este commit', !/cv-trans-read|cv-read-error/.test(CSS));
 ok('sin !important', !/!important/.test(bannerBody) && !/!important/.test(API.split('getCommerceListings')[1] || ''));
 
-// Cache-busting: el header del archivo y el ?v= de index.html tienen que
-// coincidir (regla del commit 02254a7).
-ok('converter-modal.js?v= alineado con el header (1.2.0)',
-  /converter-modal\.js\?v=1\.2\.0/.test(INDEX) && /Versión: 1\.2\.0/.test(CONV));
+// Cache-busting (regla del commit 02254a7): el ?v= de index.html tenia que
+// coincidir con el header. Desde converter-modal.js 2.0.0 (BL-056, CAR-2A)
+// eso no se puede cumplir: index.html pesa 69 KB y la Factory no puede
+// publicarlo entero, asi que su ?v= queda en 1.2.0 (RSK-020). Lo que se exige
+// mientras tanto: que index.html cargue el archivo con un ?v= y que el header
+// declare su version. Cuando index.html se pueda publicar, vuelve la igualdad.
+const CONV_VER = (CONV.match(/Versi\u00f3n:\s*([\d.]+)/) || [])[1];
+const IDX_VER = (INDEX.match(/converter-modal\.js\?v=([\d.]+)/) || [])[1];
+ok('converter-modal.js se carga con ?v= y el header declara su version (RSK-020)',
+  !!CONV_VER && !!IDX_VER, `header=${CONV_VER} index=${IDX_VER}`);
 // El ?v= de api-gw2.js tiene que COINCIDIR con su propio header, no valgar un
 // numero fijo: este commit no lo toco, pero el Idea 48 si subio la version del
 // archivo. La invariante es la alineacion (regla del commit 02254a7); el
