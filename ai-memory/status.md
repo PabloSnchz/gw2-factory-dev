@@ -1,13 +1,13 @@
 # STATUS
 
-Estado: EN CURSO
-Tarea actual: BL-043 migración del legado de QwenPaw, MIG-6: lo que el legado pensó para el producto y sigue valiendo para La Bóveda de hoy, a discovery y backlog. MIG-2, MIG-4 y MIG-5 terminados.
-Motivo: antes de que Pablo archive los dos repos, sus ideas de producto (PRE_BACKLOG) y sus alertas abiertas (ALERTS_LOG) tienen que quedar juzgadas contra la app de hoy y registradas, o descartadas con motivo.
+Estado: ESPERANDO A PABLO
+Tarea actual: BL-043 migración del legado de QwenPaw: terminada (MIG-1 a MIG-6). Falta la acción de Pablo: archivar los dos repos.
+Motivo: todo lo que el legado tenía de valor para La Bóveda de hoy ya está en DEV (hechos de la API, generadores de la Armería, 73 tests, documentación) o registrado (DISC-009 a 011, BL-054). Lo demás es historia y queda en los repos archivados, legibles.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T15:40Z
-Próxima acción: MIG-6 (discovery y backlog) → cierre de memoria → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
+Última actualización: 2026-10-22T15:50Z
+Próxima acción: con BL-043 cerrado, READY tiene BL-054 y BL-041; empiezo por BL-054 salvo que Pablo priorice DISC-009 (restaurar la foto de seguridad del Gist).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
@@ -50,6 +50,7 @@ Plan (orden por valor para el jugador):
 - Pablo (15:00Z): no perder de vista la app actual; lo que el legado prueba de la app vieja es historia, no hallazgo. En cada cierre de MIG decir si hay cambios visuales para validar.
 - MIG-4h hecho: la importación trae también herramientas (`8de3867`); idea61 + t19c + `tools/audit-61-congeladas.mjs` importados (`9c800a5`): vigilan que la lista de cuentas no quede congelada en el backup del Gist. `tools/legacy/README.md` (`0f59136`) dice qué no se trae y por qué, juzgado contra la app de hoy: 9 historia (modal viejo de la Armería, generadores `_build_*.py`, Homestead que nunca llegó), 3 proceso de agentes, 3 rotos en origen (hb114, idea50f, hb90). MIG-4 terminado: 73 de 88 tests del legado protegen DEV. Sin cambios visuales.
 - MIG-5 hecho: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (`2b10aa1`; el storage salió de `storage.js`, la tabla vieja tenía claves que no existen) y `docs/CHANGELOG-FACTORY.md` (`e4a6d1a`) junta los cambios desde 2026-10-19; unirlo a `CHANGELOG.md` (79 KB) queda en BL-053. Cierra BL-004. Sin cambios visuales.
+- MIG-6 hecho: del PRE_BACKLOG y las alertas del legado, juzgados contra la app de hoy: DISC-009 restaurar la foto de seguridad del Gist (ALTA; la foto se saca pero ninguna pantalla la restaura), DISC-010 modo legendario de Nexus (MEDIA), DISC-011 Homestead (espera criterio de Pablo), BL-054 el import del Gist repite `applyImportData` (ALERT-179). Descartado: tracker de la Cámara del Brujo (ya existe). Colecciones y monturas, a la próxima ronda (límite de 3). Sin cambios visuales.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
@@ -63,6 +64,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Migración del legado de QwenPaw terminada (BL-043): 73 de sus 88 tests protegen DEV, los generadores de la Armería reproducen el catálogo, la documentación describe La Bóveda de hoy y sus ideas que siguen valiendo quedaron en discovery (DISC-009 a 011) y en el backlog (BL-054). Sin cambios visuales en la webapp. Ya podés archivar los dos repos.
 - Pablo validó la Bóveda en producción (BL-050: PSNA y Armería) y La Guarida (BL-052). Migración del legado: en DEV ya se puede volver a generar el catálogo de la Armería (MIG-2a y 2b), y encontré la fuente perdida de las recetas: el proyecto abierto crafty_legend.
 - La Guarida realineada (BL-052): sigue siendo tu lanzador, con el lenguaje visual del Centro de decisiones y sin datos de la Factory. Yo soy su anfitriona: el portal «¿A dónde vamos?» (Ctrl+K o /), «Lo de siempre» y un consejo de orden como mucho por día (DEC-028).
 - La Guarida tiene el aspecto del Centro de decisiones y arriba un resumen mío: qué te pide la Factory y en qué estoy, con un enlace al panel (BL-051, DEC-027). Los 19 themes siguen funcionando y widgets y lanzador ya no desaparecen en pantallas chicas.
@@ -84,12 +86,12 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
+- [BL-043] Acción: archivá `gw2-wallet-agents` y `gw2-agents-dashboard` (Settings → General → Archive this repository). Si querés, antes borrá la rama `__never__`. Archivados siguen legibles, y los tests importados están fijados al commit eb91075, así que nada en DEV se rompe.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
 ## Para tu información
 
 - [FEAT-002] Usaste DEV y lo que encontraste es de la Armería, no de Analytics: doy FEAT-002 por validada.
-- [FACTORY-ASSET-001] Por un error mío quedó creada la rama `__never__` en gw2-wallet-agents. Es idéntica a `main` y no cambia nada. Se puede borrar desde GitHub o dejarla hasta archivar el repo (detalle en el informe).
 - [BL-042] Metas en producción: si no ves Visions of Eternity en el filtro, recargá con Ctrl+F5.
 - [BL-040] La Guarida: si no ves el cambio, recargá con Ctrl+F5. Tus favoritos, categorías y widgets no se tocaron.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
