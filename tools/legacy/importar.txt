@@ -74,3 +74,11 @@ idea55.characters-ach-layer.test.js
 idea63-filtros-cuentas.test.js
 idea64-dos-pestanas.test.js
 idea78-puntos-logros-nan.test.js
+
+# Tanda 4 (MIG-4f) — raids y strikes
+hb136-escena2-solo-strikes.test.js
+hb94-raid-wing-card.test.js
+idea52.raid-encounter-ids.test.js
+idea56.f1-hint-permiso.test.js
+idea56.forma-raids.test.js
+t19c-lectores-legacy.test.js
