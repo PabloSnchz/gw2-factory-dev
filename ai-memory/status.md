@@ -1,19 +1,18 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: la Armería como pantalla propia, no modal (BL-049), y los íconos que no cargan. Sigue la migración del legado (BL-043, MIG-2a).
+Tarea actual: la legendaria como pantalla propia quedó publicada (BL-049) y espera la validación de Pablo. Sigue la migración del legado (BL-043, MIG-2a).
 Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T03:45Z
-Próxima acción: ARM-7 — estilos de la pantalla en `js/legendary-tree-ui.js` 2.2.0; después ARM-8 la pantalla y los íconos en `js/legendary-tracker.js` 1.3.0 (archivo grande dedicado).
+Última actualización: 2026-10-22T04:40Z
+Próxima acción: MIG-2a — generadores de la Armería del legado a `tools/legendary/` (BL-043). Si Pablo valida la pantalla o manda lo que dice el aviso de íconos, eso va primero.
 
 Micro-ciclo:
-ARM-7 — estilos de la pantalla de la legendaria y aviso de íconos (BL-049)
+MIG-2a — generadores de datos de la Armería a tools/legendary/ (BL-043)
 Archivos:
-js/legendary-tree-ui.js
-tests/legendary-tree-ui.test.cjs
+tools/legendary/README.md
 
 Plan (orden por valor para el jugador):
 
@@ -26,8 +25,8 @@ Plan (orden por valor para el jugador):
 - ARM-5 ficha de pantalla completa en `legendary-tree-ui.js` 2.1.0 (BL-047). Hecho (`08021c9`).
 - ARM-6 la ficha en el tracker 1.2.0: diálogo de 96vw × 94vh, cabecera grande, respaldo de ícono y nombre desde el catálogo. Hecho (`e4e2ede`); tests en el commit de cierre.
 - Pablo probó la ficha (03:34Z): los íconos siguen sin cargar y el tamaño todavía no lo convence; pidió que sea directamente una pantalla, como la propuesta, sin consultarle ("resolvé con tu criterio").
-- ARM-7 estilos de la pantalla (BL-049). En curso.
-- ARM-8 la legendaria se abre como pantalla dentro de la Armería (con "Volver" y Escape), íconos pedidos solo para el árbol abierto, respaldo directo a la API si el camino normal no responde y aviso visible con "Reintentar" (BL-049). Sigue.
+- ARM-7 estilos de la pantalla en `legendary-tree-ui.js` 2.2.0 (BL-049). Hecho (`21800ad`).
+- ARM-8 la legendaria como pantalla dentro de la Armería, íconos del árbol primero, respaldo directo y aviso con Reintentar, en `legendary-tracker.js` 1.3.0 (BL-049). Hecho (`3b96bf8`).
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -42,7 +41,8 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
-- Armería: la legendaria se abre en una ficha de pantalla completa (BL-047): cabecera grande con ícono, tipo y expansión, tarjetas de resumen, y Receta y Materiales totales lado a lado. En el celular se apilan con pestañas.
+- Armería: la legendaria ahora se abre como pantalla dentro de la Armería (BL-049), con "← Volver", la receta a página completa y Materiales totales fijo al costado. Los íconos se piden primero para el árbol abierto, con un respaldo directo a la API, y si fallan la pantalla lo dice con "Reintentar".
+- Pablo validó el PSNA renovado (23:18Z: "espectacular").
 - PSNA renovado (BL-048): volvió el ícono del waypoint (el de la wiki dejó de cargar; ahora se sirve desde La Bóveda), el día y la cuenta regresiva se ven en grande y corren solos, y cada lugar es un botón grande que dice "Copiar" y confirma "✓ Copiado".
 - Pablo validó en pantalla la Armería (BL-045 y BL-046) y aprobó la propuesta del árbol de receta (BL-047). PSNA: el panel ahora dice de qué día son los lugares y se actualiza solo a las 08:00 UTC (BL-044).
 - Armería en DEV: la columna "Tengo" ya lee tu banco y tu almacén de materiales; los chips dicen Abalorio y Espaldar; cada legendaria tiene su expansión real (Klobjarne Geirr en Janthir Wilds, Verano Infinito en Visions of Eternity) y el catálogo se ordena por expansión.
@@ -59,7 +59,8 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 ## Esperando a Pablo
 
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
-- [FEAT-003] Validación: los lugares ya coinciden con la wiki (lo validaste a las 22:42Z). Falta el PSNA renovado: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades (Ctrl+F5 si no ves el cambio) y mirá el ícono del waypoint, el día y la cuenta regresiva, y el botón "Copiar" de cada lugar, también en el celular.
+- [BL-049] Validación: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Armería (Ctrl+F5) y tocá una legendaria grande (Colmilloescarcha, Eternidad). Si los íconos no aparecen, mandame lo que dice el aviso amarillo ("N de M").
+- [FEAT-003] Decisión: PSNA validado en DEV (lugares 22:42Z, diseño 23:18Z). Si querés, se puede promover a producción cuando lo pidas.
 
 ## Para tu información
 
