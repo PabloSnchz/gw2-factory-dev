@@ -1,20 +1,20 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-056 restyle de la Cartera: propuesta CAR-0 presentada, espera aprobación de Pablo.
-Motivo: Pablo pidió propuestas de restyle por módulo, empezando por la Cartera; como en BL-047 y BL-052, primero se aprueba la propuesta visual y después se implementa.
+Estado: EN CURSO
+Tarea actual: BL-056 restyle de la Cartera, aprobado por Pablo (2026-10-22 16:19Z: «aplicala tal cual»). CAR-1: Mi cartera (tarjetas y tabla).
+Motivo: Pablo aprobó la propuesta CAR-0 sin cambios y la ve como el disparador de un restyle de toda la webapp; también aprobó que yo aparezca dando consejos en la Cartera.
 Fase: F1 — Visibilidad
-Etapa actual: ARCHITECTURE
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T16:06Z
-Próxima acción: con el sí de Pablo, CAR-1 `wallet-theme.js` 2.0.0 (cabecera con pestañas, franja de fijadas, barra de herramientas); si pide cambios, ajusto la propuesta. Mientras tanto, BL-041.
+Última actualización: 2026-10-22T16:23Z
+Próxima acción: CAR-1 `wallet-theme.js` 2.0.0 con su test → CAR-2 Cambio de divisas como pestaña → CAR-3 Todas las cuentas → CAR-4 cierre y aviso a Pablo para probar en DEV.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-CAR-1 (no empieza hasta que Pablo apruebe CAR-0) — cabecera con pestañas, franja Destacadas, chips de categoría y arreglo de la cabecera de la tabla, montados desde `wallet-theme.js` 2.0.0 sin tocar `index.html` ni `app.js`.
+CAR-1 — Mi cartera renovada (tarjetas y tabla): cabecera, pestañas (también en Todas las cuentas), Destacadas, buscador y chips de categoría en español, «Ocultar las que están en 0», grupos por categoría, tarjeta compacta con ★ y tabla agrupada con la cabecera arreglada. Vive en `wallet-theme.js` 2.0.0 como capa de vista sobre lo que dibuja `app.js`.
 Archivos:
 js/wallet-theme.js
-tests/wallet-theme.test.cjs
+tests/wallet-view.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -51,7 +51,8 @@ Plan (orden por valor para el jugador):
 - MIG-5 hecho: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (`2b10aa1`; el storage salió de `storage.js`, la tabla vieja tenía claves que no existen) y `docs/CHANGELOG-FACTORY.md` (`e4a6d1a`) junta los cambios desde 2026-10-19; unirlo a `CHANGELOG.md` (79 KB) queda en BL-053. Cierra BL-004. Sin cambios visuales.
 - MIG-6 hecho: del PRE_BACKLOG y las alertas del legado, juzgados contra la app de hoy: DISC-009 restaurar la foto de seguridad del Gist (ALTA; la foto se saca pero ninguna pantalla la restaura), DISC-010 modo legendario de Nexus (MEDIA), DISC-011 Homestead (espera criterio de Pablo), BL-054 el import del Gist repite `applyImportData` (ALERT-179). Descartado: tracker de la Cámara del Brujo (ya existe). Colecciones y monturas, a la próxima ronda (límite de 3). Sin cambios visuales.
 - Pablo (15:48Z) archivó gw2-wallet-agents y gw2-agents-dashboard (verificado: `archived: true` en los dos). BL-043 cerrada del todo.
-- MEM-1 y MEM-2 hechos (ver backlog y DEC-030). CAR-0 presentada: `propuesta-cartera-bl056.html`, cuatro vistas (Mi cartera en tarjetas y en tabla, Cambio de divisas, Todas las cuentas) y plan CAR-1 a CAR-5.
+- MEM-1 y MEM-2 hechos (ver backlog y DEC-030). CAR-0 presentada y aprobada: `propuesta-cartera-bl056.html`, cuatro vistas y plan.
+- Pablo aprobó CAR-0 tal cual (16:19Z). Ajuste técnico mío al plan: la vista nueva toma lo que dibuja `app.js` (mismos ids, mismos botones de fijar, mismos filtros) y lo reordena desde `wallet-theme.js`, que ya se carga. Así no hay que tocar `app.js` (66,8 KB, no se publica entero y varios tests del legado leen su código) y el plan queda en 4 pasos: CAR-1 Mi cartera, CAR-2 Cambio de divisas, CAR-3 Todas las cuentas, CAR-4 cierre.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -89,7 +90,6 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [BL-056] Validación: revisá la propuesta de la Cartera (`propuesta-cartera-bl056.html`) y aprobala o pedí cambios. No se implementa antes.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
