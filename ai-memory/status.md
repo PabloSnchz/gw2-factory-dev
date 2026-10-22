@@ -6,8 +6,9 @@ Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propu
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T04:10Z
-Próxima acción: PRD-6 a PRD-10 en gw2-wallet-ligero, un archivo por commit y en este orden compatible: psna-schedule.json, activities.js, render-catologo.js, legendary-tree-ui.js (sigue exportando lo que usa el tracker viejo), legendary-tracker.js. Vuelta atrás: `2bab20f`. `index.html` y `analytics.js` de producción no se tocan (DEC-006).
+Última actualización: 2026-10-22T04:25Z
+Próxima acción: PRD-9 `js/legendary-tree-ui.js` (blob `0195a1be`) y después PRD-10 `js/legendary-tracker.js` (blob `42313701`) en gw2-wallet-ligero. Vuelta atrás: `2bab20f`. `index.html` y `analytics.js` de producción no se tocan (DEC-006).
+Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035): verificado por blobs en producción `b57bc7b`: PRD-6 psna-schedule.json `aca6dd7` (09728754), PRD-7 activities.js `de1c34d` (489ee8ec), PRD-8 render-catologo.js `b57bc7b` (c337858f), idénticos a DEV. Pendientes por blob: legendary-tree-ui.js (prod e9f360e4) y legendary-tracker.js (prod 59d847f0). Estado intermedio compatible: el tracker viejo sigue registrando los renders del catálogo nuevo; index.html de producción carga los mismos scripts que DEV.
 
 Micro-ciclo:
 PRD-6 a PRD-10 — copia de contenido DEV → producción, un archivo por micro-ciclo, blobs idénticos (BL-050)
