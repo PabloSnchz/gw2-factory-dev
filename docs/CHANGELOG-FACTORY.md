@@ -34,6 +34,14 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ## Solo en DEV
 
+### Cartera renovada (2026-10-22, BL-056, FEAT-006)
+- **Una pantalla con tres pestañas**: Mi cartera, Todas las cuentas y Cambio de divisas. El conversor ya no es un modal.
+- **Mi cartera**: cabecera con la cuenta, chips por categoría, las divisas fijadas con ★ arriba, tarjetas y tabla con el lenguaje de la pantalla de la legendaria.
+- **Cambio de divisas**: dos columnas, «Shiruvana recomienda» y Populares plegado; Escape funciona.
+- **Todas las cuentas**: tarjetas de resumen, columnas como chips con «＋ Agregar divisa…» y buscador, cuenta, cabecera y totales fijos, el mayor valor en dorado y tarjetas en el celular. Una cuenta que no se pudo leer muestra «— ⚠» con el motivo y el total dice «Total (n de m)»; antes sumaba ceros.
+- Una preferencia nueva en el navegador: `gn:wallet:hidezero` («ocultar en cero»). Si no ves los cambios, Ctrl+F5 (RSK-020).
+
+### Otros
 - **Sin Analytics en DEV**: GA4 solo se carga en el host de producción (BL-002, FEAT-002).
 - **Generadores de la Armería** en `tools/legendary/`: catálogo, precios, recetas y precursores se regeneran cuando sale una legendaria nueva. Las recetas salen de crafty_legend (MIT), fijado a un commit (BL-043, MIG-2).
 - **Red de tests**: 95 archivos en CI, 73 traídos del legado de QwenPaw (BL-043, MIG-4).
