@@ -113,3 +113,25 @@ test('importTests: copia la lista a DEV solo si todo pasa ahí', async () => {
   assert.equal(fs.existsSync(path.join(dev, 'tests', 'c-miente.test.js')), false);
   assert.deepEqual(C.readList(path.join(dev, 'lista.txt')), ['nada.test.js']);
 });
+
+test('importTests: trae la herramienta que un test necesita, en tools/', async () => {
+  const legacy = tree({
+    'tools/audit.mjs': "console.log('LIMPIO: 0')",
+    'tests/h-usa-tool.test.js': "const r=require('child_process').spawnSync(process.execPath,[require('path').join(__dirname,'..','tools','audit.mjs')],{encoding:'utf8'});if(!/LIMPIO: 0/.test(r.stdout)){console.log('FAIL audit');process.exit(1)}console.log('OK audit');"
+  });
+  const dev = tree({ 'tools/legendary/x.py': '' });
+  const list = path.join(dev, 'lista.txt');
+
+  fs.writeFileSync(list, 'h-usa-tool.test.js\n');
+  await assert.rejects(C.importTests({ legacy, dev, list, timeoutMs: 5000 }), /h-usa-tool\.test\.js \(ROJO\)/, 'sin la herramienta, no pasa');
+
+  fs.writeFileSync(list, 'tools/audit.mjs\nh-usa-tool.test.js\n');
+  const r = await C.importTests({ legacy, dev, list, timeoutMs: 5000 });
+  assert.deepEqual(r.copied, ['tools/audit.mjs', 'h-usa-tool.test.js']);
+  assert.equal(fs.readFileSync(path.join(dev, 'tools', 'audit.mjs'), 'utf8'), "console.log('LIMPIO: 0')");
+
+  for (const malo of ['tools/sub/x.mjs', 'tools/../js/x.js', 'tools/x.py', 'js/app.js']) {
+    fs.writeFileSync(list, malo + '\n');
+    await assert.rejects(C.importTests({ legacy, dev, list, timeoutMs: 5000 }), /nombres no válidos/, malo);
+  }
+});

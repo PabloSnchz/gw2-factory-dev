@@ -171,22 +171,29 @@ function readList(file) {
   return fs.readFileSync(file, 'utf8').split(/\r?\n/).map(l => l.replace(/#.*/, '').trim()).filter(Boolean);
 }
 
+// Una entrada de la lista es un test (nombre suelto, va a tests/) o una herramienta
+// que un test necesita (tools/<archivo>.mjs|.cjs|.js, un solo nivel, va al mismo lugar).
+const TOOL_RE = /^tools\/[\w.-]+\.(mjs|cjs|js)$/;
+function entryPath(n) { return TOOL_RE.test(n) ? n : path.join('tests', n); }
+
 // MIG-4b: copia a DEV los tests de la lista, desde el legado fijado, y los corre en DEV.
 // Si alguno no queda en VERDE, no deja nada copiado y falla: a main solo llega lo que pasa.
 async function importTests({ legacy, dev, list, timeoutMs = 60000 }) {
   const names = readList(list);
-  const bad = names.filter(n => !TEST_RE.test(n) || n !== path.basename(n));
+  const bad = names.filter(n => !TOOL_RE.test(n) && (!TEST_RE.test(n) || n !== path.basename(n)));
   if (bad.length) throw new Error('nombres no válidos en la lista: ' + bad.join(', '));
-  const absent = names.filter(n => !fs.existsSync(path.join(legacy, 'tests', n)));
+  const absent = names.filter(n => !fs.existsSync(path.join(legacy, entryPath(n))));
   if (absent.length) throw new Error('no están en el legado: ' + absent.join(', '));
   const copied = [], unchanged = [], written = [];
   for (const n of names) {
-    const src = path.join(legacy, 'tests', n), dst = path.join(dev, 'tests', n);
+    const src = path.join(legacy, entryPath(n)), dst = path.join(dev, entryPath(n));
     if (sameFile(src, dst)) { unchanged.push(n); continue; }
+    fs.mkdirSync(path.dirname(dst), { recursive: true });
     fs.copyFileSync(src, dst); copied.push(n); written.push(dst);
   }
+  const tests = names.filter(n => !TOOL_RE.test(n));
   const fx = path.join(legacy, 'tests', 'fixtures');
-  const usesFixtures = names.some(n => /fixtures/.test(fs.readFileSync(path.join(legacy, 'tests', n), 'utf8')));
+  const usesFixtures = tests.some(n => /fixtures/.test(fs.readFileSync(path.join(legacy, 'tests', n), 'utf8')));
   if (usesFixtures && fs.existsSync(fx)) {
     for (const f of fs.readdirSync(fx)) {
       const dst = path.join(dev, 'tests', 'fixtures', f);
@@ -195,7 +202,7 @@ async function importTests({ legacy, dev, list, timeoutMs = 60000 }) {
       fs.copyFileSync(path.join(fx, f), dst); written.push(dst);
     }
   }
-  const results = await pool(names, 4, async n => ({ n, r: await runOne(dev, n, timeoutMs) }));
+  const results = await pool(tests, 4, async n => ({ n, r: await runOne(dev, n, timeoutMs) }));
   const failed = results.filter(x => x.r.state !== 'VERDE');
   if (failed.length) {
     written.forEach(f => fs.rmSync(f, { force: true }));
