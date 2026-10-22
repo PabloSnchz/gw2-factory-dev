@@ -1,0 +1,21 @@
+# Tests del legado que se importan a tests/ (MIG-4, BL-043, DEC-029).
+# Un archivo por línea, tal como se llama en gw2-wallet-agents/tests @ eb91075.
+# El workflow legacy-tests los copia y solo los deja si TODOS pasan contra DEV;
+# el resultado queda en tools/legacy/IMPORTACION.txt. Ver CENSO.md.
+#
+# Fuera a propósito: hb90-t9-mutex.test.js (ROJO en el legado y VERDE en DEV:
+# posible inestable; si entra, puede poner main en rojo sin que nadie lo vea).
+
+# Tanda 1 (MIG-4c) — Armería
+alert84.leyenda-estado-honesto.test.js
+alert84.t3t4-registro.test.js
+armeria-arbol-premisa.test.js
+armeria-cola.test.js
+armeria-item-icons.test.js
+armeria-motor-arbol.test.js
+hb119-1-1-precio-oro.test.js
+hb119-2-2-filtros-progreso.test.js
+hb119-alert2-1.test.js
+hb124-arme-1-2-modal-materiales.test.js
+hb126-cola-crafteo.test.js
+hb148-filtro05-guardia-cognitiva.test.js

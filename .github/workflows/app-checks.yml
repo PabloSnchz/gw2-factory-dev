@@ -1,4 +1,6 @@
 # Chequeos de la aplicación en cada push y PR. No despliega ni envía nada.
+# tests/*.test.cjs son los de DEV; tests/*.test.js y *.smoke.js son los del legado
+# importados por CI (MIG-4, DEC-029): scripts que fallan con código distinto de 0.
 name: app-checks
 
 on:
@@ -18,4 +20,6 @@ jobs:
         with:
           node-version: 22
       - name: Tests de la app
-        run: node --test tests/*.test.cjs
+        run: |
+          shopt -s nullglob
+          node --test tests/*.test.cjs tests/*.test.js tests/*.smoke.js
