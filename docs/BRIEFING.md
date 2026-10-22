@@ -49,6 +49,7 @@ Catálogo, recetas y precursores de la Armería se regeneran con `tools/legendar
 | Documento | Para qué |
 |---|---|
 | `DESARROLLADORES.md` | APIs públicas, eventos, storage y depuración |
+| `CHANGELOG-FACTORY.md` | Qué cambió desde 2026-10-19, separado en producción y DEV. Lo anterior, en `../CHANGELOG.md` |
 | `GW2-API-HECHOS.md` | Lo verificado de la API de GW2 (límites, logros, endpoints) |
 | `user-guide.html`, `user-guide-avanzado.html` | Guías para el jugador |
 | `PRIVACIDAD.md` | Qué datos se guardan y dónde |
