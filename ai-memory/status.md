@@ -1,19 +1,20 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-056 restyle de la Cartera, aprobado por Pablo (2026-10-22 16:19Z). CAR-1 publicado; sigue CAR-2: Cambio de divisas como pestaña.
+Tarea actual: BL-056 restyle de la Cartera (aprobado 2026-10-22 16:19Z). CAR-1 publicado. CAR-2 dividido en CAR-2A (conversor 2.0.0) y CAR-2B (pestaña en la Cartera); en curso CAR-2A.
 Motivo: Pablo aprobó la propuesta CAR-0 sin cambios y la ve como el disparador de un restyle de toda la webapp; también aprobó que yo aparezca dando consejos en la Cartera.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T18:42Z
-Próxima acción: CAR-2 Cambio de divisas como pestaña (`converter-modal.js`, 68 KB: primero achicarlo, micro-ciclo de archivo grande, DEC-021) → CAR-3 Todas las cuentas → CAR-4 cierre y aviso a Pablo para probar en DEV.
+Última actualización: 2026-10-22 18:56Z
+Próxima acción: CAR-2A `converter-modal.js` 2.0.0 + test → CAR-2B pestaña dentro de la Cartera → CAR-3 Todas las cuentas → CAR-4 cierre y aviso a Pablo para probar en DEV.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-CAR-2 — Cambio de divisas como pestaña de la Cartera: calculadora oro ↔ gemas con mi recomendación y tu Trading Post, sin la pestaña «Historial», con el Escape y el ícono de Transacciones arreglados. Primero se achica `converter-modal.js` (68 KB) para que entre en una publicación.
+CAR-2A — `converter-modal.js` 2.0.0 (micro-ciclo de archivo grande, DEC-021): el conversor se reescribe como vista montable (`mount(host)`) con el diseño aprobado en CAR-0 (dos columnas: calculadora con el precio de 400 gemas y mi recomendación; Trading Post con la caja para recoger y tus órdenes; Populares plegado; sin «Historial»). Estilos en clases en vez de inline, así el archivo baja de 68 KB. `open()` sigue funcionando: abre la pestaña si la Cartera la ofrece y, si no, la misma vista dentro de un modal. Arreglos: Escape que se borraba tras el primer cierre, ícono 155048 inexistente, y `renderSkeletonOfertas` sin definir (Populares quedaba colgado en «cargando»).
 Archivos:
 js/converter-modal.js
+tests/converter-view.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -53,6 +54,7 @@ Plan (orden por valor para el jugador):
 - MEM-1 y MEM-2 hechos (ver backlog y DEC-030). CAR-0 presentada y aprobada: `propuesta-cartera-bl056.html`, cuatro vistas y plan.
 - Pablo aprobó CAR-0 tal cual (16:19Z). Ajuste técnico mío al plan: la vista nueva toma lo que dibuja `app.js` (mismos ids, mismos botones de fijar, mismos filtros) y lo reordena desde `wallet-theme.js`, que ya se carga. Así no hay que tocar `app.js` (66,8 KB, no se publica entero y varios tests del legado leen su código) y el plan queda en 4 pasos: CAR-1 Mi cartera, CAR-2 Cambio de divisas, CAR-3 Todas las cuentas, CAR-4 cierre.
 - CAR-1 hecho (`ef04409`): `js/wallet-theme.js` 2.0.0 (blob 669467a) y `tests/wallet-view.test.cjs` (blob 59350c6), 8 tests, prueba de humo con el HTML real y las funciones reales de `app.js` (36 comprobaciones), 15/15 mutaciones detectadas. Recuperación CAR-1 RECOVERY (18:39Z): una interrupción cortó la publicación antes de llegar a GitHub; se reconstruyó desde commits y blobs (nada publicado, copia local intacta, mismas bases) y se publicó sin rehacer nada. Cambio visual: la Cartera ya se ve renovada en DEV.
+- CAR-2 dividido (DEC-021): el archivo grande va solo con su test (CAR-2A) y la pestaña que lo monta va aparte (CAR-2B). Cada paso deja DEV funcionando: con CAR-2A solo, la pestaña sigue llamando a `open()` y ve la vista nueva en un modal.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
