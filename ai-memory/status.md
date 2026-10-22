@@ -6,16 +6,16 @@ Motivo: DEV tiene los datos de la Armería (`legendary-data.js`, recetas, precur
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T06:40Z
-Próxima acción: MIG-2b (precios + build_legendary_data.py + test que regenera y compara contra `js/legendary-data.js`) → MIG-2c recetas → MIG-2d precursores → MIG-2e dev-pages no publica `tools/` y `.gitignore` para `tools/legendary/.work/`.
+Última actualización: 2026-10-22T07:05Z
+Próxima acción: MIG-2c (fuente de recetas fijada + build de `js/legendary-recipes.js` + test) → MIG-2d (precursores + test + README) → MIG-2e dev-pages no publica `tools/` y `.gitignore` para `tools/legendary/.work/`.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-2b — precios del Bazar y build de `js/legendary-data.js`, con un test que regenera el catálogo y lo compara con el versionado (BL-043)
+MIG-2c — fuente de recetas fijada (crafty_legend `a24d244`) y build de `js/legendary-recipes.js`, con test que reproduce las 206 entradas (BL-043)
 Archivos:
-tools/legendary/fetch_thematic_prices.py
-tools/legendary/build_legendary_data.py
-tests/legendary-build-data.test.cjs
+tools/legendary/fetch_recipes_source.py
+tools/legendary/build_legendary_recipes.py
+tests/legendary-build-recipes.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -37,6 +37,8 @@ Plan (orden por valor para el jugador):
 - Pablo validó en pantalla BL-050 (Bóveda en producción) y BL-052 (La Guarida) (06:15Z) y pidió seguir con MIG-2a.
 - MIG-2 en 5 micro-ciclos (la API de GW2 no responde desde el entorno de la Factory: todo se prueba sin red, con cachés de prueba y contra los datos versionados): MIG-2a fetch del catálogo, MIG-2b precios + build de `legendary-data.js`, MIG-2c recetas, MIG-2d precursores, MIG-2e excluir `tools/` de la publicación de DEV.
 - MIG-2a hecho (`f365882`): `tools/legendary/README.md`, `tools/legendary/fetch_legendary_items.py` (del legado, blob 6409c472, con `--offline` y la URL pedida en el error) y `tests/legendary-fetch.test.cjs` (7 tests sin red, 11/11 mutaciones). Blobs verificados.
+- MIG-2b hecho (`89f2ca4`): `fetch_thematic_prices.py` (precios siempre frescos; ya no traga errores de red) y `build_legendary_data.py`; `tests/legendary-build-data.test.cjs` reconstruye la entrada desde `js/legendary-data.js` y el build devuelve las 206 legendarias idénticas (8 tests, 19/19 mutaciones). Expansiones nuevas: siguen en un solo lugar, `render-catologo.js`.
+- Hallazgo MIG-2c: recetas y precursores salían de `tools/cl_recipes.json`, que el legado nunca versionó. Es el `data/CraftyLegend/recipes.json` de crafty_legend (PieOrCake, MIT) en el commit `a24d244` (2026-09-17): 634 recetas, blob 551cedfa, y reproduce las 206 entradas de `js/legendary-recipes.js` sin diferencias. Se fija ese commit y su blob; actualizar es cambiar el commit a propósito.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
@@ -50,7 +52,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
-- Pablo validó la Bóveda en producción (BL-050: PSNA y Armería) y La Guarida (BL-052). Sigo con la migración del legado: el primer generador de la Armería ya está en DEV (MIG-2a: bajar el catálogo de legendarias), con tests que no dependen de la red.
+- Pablo validó la Bóveda en producción (BL-050: PSNA y Armería) y La Guarida (BL-052). Migración del legado: en DEV ya se puede volver a generar el catálogo de la Armería (MIG-2a y 2b), y encontré la fuente perdida de las recetas: el proyecto abierto crafty_legend.
 - La Guarida realineada (BL-052): sigue siendo tu lanzador, con el lenguaje visual del Centro de decisiones y sin datos de la Factory. Yo soy su anfitriona: el portal «¿A dónde vamos?» (Ctrl+K o /), «Lo de siempre» y un consejo de orden como mucho por día (DEC-028).
 - La Guarida tiene el aspecto del Centro de decisiones y arriba un resumen mío: qué te pide la Factory y en qué estoy, con un enlace al panel (BL-051, DEC-027). Los 19 themes siguen funcionando y widgets y lanzador ya no desaparecen en pantallas chicas.
 - En producción por orden de Pablo (BL-050): el PSNA renovado y la Armería nueva (la legendaria como pantalla, "Tengo" real, Abalorio y Espaldar, expansiones reales y respaldo de íconos). Vuelta atrás: `2bab20f`.
