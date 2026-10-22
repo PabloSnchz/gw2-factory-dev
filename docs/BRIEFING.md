@@ -1,121 +1,60 @@
-# 🐈‍⬛ Briefing para nuevo agente — Bóveda del Gato Negro (v6.6.2 + Unreleased)
+# 🐈‍⬛ Briefing — La Bóveda del Gato Negro
 
-## Tu rol
+> Estado al 2026-10-22. Reemplaza al briefing de la v6.6.2. Lo mantiene la Factory (Shiruvana) en cada cierre de trabajo.
 
-Sos un desarrollador senior que trabaja dentro de las reglas del proyecto. No estás empezando de cero: El proyecto tiene **v6.6.2 + changelog Unreleased**, 45+ archivos, arquitectura modular IIFE vanilla JS, y reglas estrictas de CSS en 3 capas.
+## Qué es
 
-**Tu objetivo:** mantener compatibilidad, no romper nada, seguir la arquitectura existente, y proponer soluciones quirúrgicas (no reescribir archivos completos).
+Una webapp para jugadores de Guild Wars 2: cartera, inventario, metas, actividades, raids, la Cámara del Brujo y la Armería Legendaria, con varias cuentas a la vez. Vanilla JS en módulos IIFE (`window.*`), sin build ni dependencias de npm; todo corre en el navegador contra la API pública de GW2 con las API keys del jugador.
 
----
+| Entorno | Dónde | Quién decide |
+|---|---|---|
+| Producción | `gw2-wallet-ligero` → GitHub Pages | Pablo, siempre por instrucción explícita |
+| Desarrollo | `gw2-factory-dev` → https://pablosnchz.github.io/gw2-factory-dev/ (DEC-026) | La Factory |
 
-## Claves de metodología que funcionaron
+## Qué hay hoy
 
-### 1. Antes de tocar código, diagnosticar
-- Si algo no funciona, **ejecutar tests en consola** antes de proponer cambios. Ej: `InventoryHub._debug()`, `ConverterModal._debug()`, `WVObjectivesDashboard._debug()`, `document.querySelector(...)`.
-- Si hay un bug visual, **comparar con la versión que sí funciona** (ver diferencias en el DOM, CSS computado, clases).
-- No proponer cambios sin entender la causa raíz.
+| Área | Estado |
+|---|---|
+| Identidad | Gato Negro oficial como logo y favicon; theme oficial "Gato Negro" por defecto, "Bóveda" queda como opción. Mi voz aparece donde le hablo al jugador: bienvenida, modal de API Keys y guías (FEAT-004) |
+| Cartera, Logros, Cámara del Brujo, Dashboards | Estables desde la v6.6.2 |
+| Meta & Eventos | Metas de Janthir Wilds y Visions of Eternity, convergencias con tipo propio y filtro de expansión armado desde los datos (`meta.js` 3.5.0, FEAT-005) |
+| Actividades — PSNA | Dice de qué día son los lugares y cuándo cambian (08:00 UTC), cuenta regresiva, ícono del waypoint servido por La Bóveda y botones "Copiar" (`activities.js` 3.23.0, FEAT-003) |
+| Armería Legendaria | Catálogo de 206 legendarias con su expansión real y chips de la comunidad (Abalorio, Espaldar); cola de crafteo de hasta 5. Cada legendaria se abre como **pantalla** dentro de la Armería: receta en árbol a página completa y Materiales totales con lo que tenés en banco y almacén ("Tengo"). Si los íconos no cargan, la pantalla lo dice y ofrece Reintentar (`legendary-tracker.js` 1.3.0, `legendary-tree-ui.js` 2.2.0, `render-catologo.js` 1.1.0) |
+| Raids y Strikes | Estables; navegación cruzada |
+| Inventario y Personajes, Conversor, Cuentas, Gist Sync | Estables |
 
-### 2. Cambios quirúrgicos, no archivos completos
-- Usar **bloques de buscar/reemplazar** precisos. Si un bloque no matchea, pedir el código real.
-- No reescribir funciones enteras si con 3 líneas se arregla.
-- Si el archivo es nuevo (ej: `converter-modal.js`), ahí sí se puede dar el código completo.
+La versión real de cada archivo está en su encabezado. El `?v=` de `index.html` es solo para el caché del navegador y puede ir atrasado.
 
-### 3. Respetar la arquitectura existente
-- **CSS en 3 capas**: `main.css` (layout, sin bordes) → `theme-polish.css` (piel unificada) → `*-theme.js` (solo `borderLeft`). **Nunca usar `!important`** en temas.
-- **Router-first**: `router.js` es el orquestador. Los módulos se activan/desactivan por ruta. No tocar DOM ajeno.
-- **Un solo canal de cambio de cuenta**: `gn:tokenchange`.
-- **Sin localStorage innecesario**. Ya hay cuota limitada. Preferir caché en memoria con TTL.
+## Cómo se trabaja
 
-### 4. Documentar al final de cada sesión
-- Actualizar `ONBOARDING.md`, `README.md`, `CHANGELOG.md` con lo nuevo.
-- Siempre en bloques de buscar/reemplazar, sin reescribir el documento entero.
+### Antes de tocar código
+- **Verificar contra el código real** (LES-001). Los snippets de cualquier documento pueden estar viejos.
+- **Diagnosticar la causa** antes de probar arreglos (LES-002). Cada módulo tiene `_debug()` (ver `DESARROLLADORES.md`).
+- **CSS:** para ver qué regla gana, el panel Styles de DevTools, no mediciones (LES-005).
 
-### 5. Commits frecuentes
-- Al final de cada feature o fix, commit con mensaje descriptivo.
-- Ramas con nombres claros: `feature/...`, `fix/...`.
+### Al cambiar
+- **Cambios quirúrgicos**, no reescrituras (LES-007).
+- **Arquitectura** (DEC-004): CSS en 3 capas (`main.css` → `theme-polish.css` → `*-theme.js`, que solo toca `borderLeft`, nunca `!important`); router-first; un solo canal de cambio de cuenta, `gn:tokenchange`; claves nuevas con prefijo `gn:` por `storage.js`.
+- **Antes de reutilizar una clase CSS**, mirar qué trae (LES-004).
+- **Si la API no da el dato, no se fuerza la funcionalidad** (LES-006). Hechos verificados de la API: `GW2-API-HECHOS.md`.
 
----
+### Tests
+`node --test tests/*.test.cjs tests/*.test.js tests/*.smoke.js` corre todo, y CI (`app-checks`) lo hace en cada push. Son 95 archivos: los propios de DEV (`.test.cjs`) y 73 del legado de QwenPaw que siguen valiendo (ver `tools/legacy/README.md`).
 
-## Prácticas que NO funcionaron (EVITAR)
+### Datos que se generan
+Catálogo, recetas y precursores de la Armería se regeneran con `tools/legendary/` (ver su README). No se editan a mano.
 
-### 1. Proponer cambios sin ver el código real
-- Pasó varias veces: el agente sugería buscar/reemplazar bloques que no existían en el archivo porque estaba trabajando con una versión desactualizada o del onboarding.
-- **Regla:** si el primer bloque no matchea, **pedir el código real**. No intentar 3 variantes del mismo bloque.
+## Documentos
 
-### 2. Bucles de "prueba y error"
-- En el fix de paginación del Banco en Inventory Hub, se hicieron 5-6 iteraciones de cambios sin diagnosticar. El problema era una llave extra de un cambio anterior.
-- **Regla:** si un cambio no funciona a la primera, **diagnosticar en consola** antes de proponer otro cambio. No entrar en modo "prueba y error".
-
-### 3. Confiar en que el código del onboarding es exactamente igual al real
-- El onboarding tiene snippets de código que pueden estar desactualizados. Usarlo como referencia, pero siempre verificar contra el archivo real antes de proponer cambios.
-
-### 4. Cambiar clases CSS sin entender el impacto
-- Se agregó `class="card"` a las KPI cards del Purchase Detail pensando que heredarían el estilo unificado. Pero `.card` tiene `min-height: 126px` y eso rompió la altura compacta.
-- **Regla:** antes de agregar una clase del sistema de diseño, revisar qué estilos trae (padding, min-height, border, box-shadow).
-
-### 5. Diagnosticar problemas de CSS con mediciones en lugar del panel Styles
-
-- En el fix de espaciado de íconos en Meta cards, se hicieron decenas de mediciones con `getBoundingClientRect` y ajustes de padding/margin inline sin revisar qué regla CSS estaba aplicando el estilo real. Fueron 3 horas para resolver algo que tomaba 5 minutos.
-- **Regla:** si un cambio de estilo inline no se refleja en el DOM, **abrir el panel "Styles" del DevTools** (F12 → Elements → Styles) para ver:
-  1. Qué selector está aplicando el estilo actual (ej: `.m-foot { margin-top: 6px }`)
-  2. Si el estilo inline está tachado (sobrescrito por CSS con `!important` o mayor especificidad)
-  3. La cascada completa de reglas que afectan al elemento
-- **Nunca** ajustar valores a ciegas con `getBoundingClientRect` si el panel Styles te dice exactamente qué regla está ganando.
-
-### 6. Intentar features imposibles con los datos disponibles
-- La tab "Novedades de Gem Store" no se puede hacer sin un backend que scrapee ThatShaman o los archivos del juego. Se intentó 4 enfoques distintos antes de aceptarlo.
-- **Regla:** si una API no devuelve los datos necesarios, no insistir. Buscar alternativas realistas o descartar la feature.
-
----
-
-## Estado actual del proyecto (v6.6.2)
-
-| Módulo | Estado |
-|--------|--------|
-| Cartera (Wallet) | ✅ Estable |
-| Meta & Eventos | ✅ Cards rediseñadas estilo Raids, barra progreso interna, horarios hora local |
-| Logros | ✅ Estable |
-| Cámara del Brujo (WV) | ✅ Estable |
-| Actividades | ✅ Estable |
-| Inventario y Personajes | ✅ Buscador unificado, skeleton loader, filtros de peso en Armería |
-| Personajes | ✅ Subvista con botón "Volver al Inventario" |
-| Conversor (Modal) | ✅ 3 tabs: Cambio, Transacciones, Populares |
-| Dashboard Cartera | ✅ Estable |
-| Dashboard Inventario | ✅ 3 sets, sistema de tiers, carga en 2 fases, flash ámbar, **estilos migrados a CSS (clases `.id-*`)** |
-| Raid Tracker | ✅ Estable, método `_debug()` disponible, navegación integrada con Strikes |
-| **Migración inline→CSS** | ✅ Fase 1 completada: `wallet-dashboard.js` + `inventory-dashboard.js` sin estilos inline. Clases `.wd-*` y `.id-*` en `theme-polish.css` |
-| Strike Tracker | ✅ **NUEVO v6.6.2** — 15 strikes, grid optimizado, navegación integrada con Raids |
-| Panel de Cuentas | ✅ Estable |
-| Bienvenida | ✅ Estable |
-| Purchase Detail | ✅ KPI cards compactas, tabla sin scroll |
-| WV Objectives Dashboard | ✅ Tabla comparativa multi-cuenta, KPIs con íconos, countdown semanal |
-| Gist Sync | ✅ Estable |
-| Settings Manager | ✅ Estable |
-
----
-
-## Archivos clave
-
-| Archivo | Versión | Notas |
-|---------|---------|-------|
-| `api-gw2.js` | v2.15.0 | Cache con cap de 500 items, commerce endpoints |
-| `router.js` | v2.17.0 | WV Objectives Dashboard, Purchase Detail en nav tabs, sidebar sin conversor |
-| `converter-modal.js` | v1.0.0 | Modal con 3 tabs + placeholder Historial |
-| `wv-objectives-dashboard.js` | v1.0.0 | Dashboard de Objetivos Semanales Multi-Cuenta |
-| `inventory-hub.js` | v1.3.2 | Skeleton loader, búsqueda en banco, filtros peso |
-| `inventory-dashboard.js` | v1.0.0 | Dashboard multi-cuenta con 3 sets, sistema de tiers (T3-T6), carga en 2 fases. **Estilos migrados a CSS (clases `.id-*`)** |
-| `raid-tracker.js` | v1.8.0 | Raid Tracker con header unificado y navegación a Strikes |
-| `strike-tracker.js` | v1.0.0 | **NUEVO** — Strike Missions: 15 strikes, grid optimizado, KPIs, modal con detalles |
-| `theme-selector.js` | v1.1.0 | Selector de temas con modal rediseñado (filas), 18 temas + aleatorio |
-| `css/themes/` | v1.0.0 | 18 temas con variables CSS |
-| `wallet-theme.js` | v1.3.1 | Glow neutro para divisas sin color |
-| `wallet-dashboard.js` | v2.5.0 | Dashboard de Cartera. **Estilos inline eliminados, ahora usa `.wd-*` + `.card`** |
-| `css/theme-polish.css` | v2.2.0 | **Nuevas clases `.wd-*` y `.id-*` para KPIs, dropdowns, grids y skeletons** |
-| `app.js` | v2.7.0 | Conversor extraído |
-| `index.html` | — | Sidebar sin conversor, botón PD simplificado |
-
----
+| Documento | Para qué |
+|---|---|
+| `DESARROLLADORES.md` | APIs públicas, eventos, storage y depuración |
+| `GW2-API-HECHOS.md` | Lo verificado de la API de GW2 (límites, logros, endpoints) |
+| `user-guide.html`, `user-guide-avanzado.html` | Guías para el jugador |
+| `PRIVACIDAD.md` | Qué datos se guardan y dónde |
+| `ONBOARDING.md`, `Modulos JS Referencia.md` | **Referencia histórica** de la v6.6.2: sirven para entender el porqué de módulos viejos, no describen la Armería ni lo agregado después. Ante una diferencia, manda el código |
+| `../ai-memory/` | Memoria de la Factory: decisiones (DEC), lecciones (LES), backlog y estado |
 
 ## Si algo no se entiende
 
-Preguntar. Es mejor frenar 2 minutos a aclarar que pasar 20 minutos probando cambios que no funcionan. El dueño del proyecto prefiere explicar el contexto antes que recibir código roto.
+Preguntar antes de cambiar. Es mejor frenar dos minutos que entregar código roto.
