@@ -81,3 +81,35 @@ test('census + report: corre cada test en el legado y en una copia de DEV', asyn
   assert.match(md, /### b-cambio\.test\.js — ROJO \(código 1\)\n\n {4}FAIL x/);
   assert.doesNotMatch(md, /### a-igual/);
 });
+
+test('importTests: copia la lista a DEV solo si todo pasa ahí', async () => {
+  const legacy = tree({
+    'js/x.js': 'viejo',
+    'tests/fixtures/f.json': '{"a":1}',
+    'tests/a-igual.test.js': "console.log('OK uno');",
+    'tests/f-fixture.test.js': "const j=require('./fixtures/f.json');if(j.a!==1)process.exit(1);console.log('OK fixture');",
+    'tests/b-cambio.test.js': READ_X + "if(v==='viejo'){console.log('OK x')}else{console.log('FAIL x');process.exit(1)}",
+    'tests/c-miente.test.js': "console.log('FAIL pero sigo');"
+  });
+  const dev = tree({ 'js/x.js': 'nuevo', 'tests/a-igual.test.js': "console.log('OK uno');" });
+  const list = path.join(dev, 'lista.txt');
+
+  fs.writeFileSync(list, '# tanda 1\na-igual.test.js\n\nf-fixture.test.js  # usa fixtures\n');
+  const r = await C.importTests({ legacy, dev, list, timeoutMs: 5000 });
+  assert.deepEqual(r, { copied: ['f-fixture.test.js'], unchanged: ['a-igual.test.js'] });
+  assert.equal(fs.readFileSync(path.join(dev, 'tests', 'fixtures', 'f.json'), 'utf8'), '{"a":1}');
+
+  for (const [contenido, error] of [
+    ['b-cambio.test.js\n', /no pasan en DEV, no se importa nada: b-cambio\.test\.js \(ROJO\)/],
+    ['c-miente.test.js\n', /c-miente\.test\.js \(MIENTE\)/],
+    ['../js/x.js\n', /nombres no válidos en la lista: \.\.\/js\/x\.js/],
+    ['../tests/a-igual.test.js\n', /nombres no válidos en la lista: \.\.\/tests\/a-igual\.test\.js/],
+    ['nada.test.js\n', /no están en el legado: nada\.test\.js/]
+  ]) {
+    fs.writeFileSync(list, contenido);
+    await assert.rejects(C.importTests({ legacy, dev, list, timeoutMs: 5000 }), error);
+  }
+  assert.equal(fs.existsSync(path.join(dev, 'tests', 'b-cambio.test.js')), false, 'lo que falla no queda copiado');
+  assert.equal(fs.existsSync(path.join(dev, 'tests', 'c-miente.test.js')), false);
+  assert.deepEqual(C.readList(path.join(dev, 'lista.txt')), ['nada.test.js']);
+});

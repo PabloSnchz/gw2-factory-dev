@@ -166,12 +166,55 @@ function report(rows, { ref = '', date = new Date().toISOString() } = {}) {
   return L.join('\n') + '\n';
 }
 
-module.exports = { listTests, referencedFiles, verdicts, classify, census, report };
+// Lista de importación (tools/legacy/importar.txt): un archivo por línea; '#' comenta.
+function readList(file) {
+  return fs.readFileSync(file, 'utf8').split(/\r?\n/).map(l => l.replace(/#.*/, '').trim()).filter(Boolean);
+}
 
-if (require.main === module) {
+// MIG-4b: copia a DEV los tests de la lista, desde el legado fijado, y los corre en DEV.
+// Si alguno no queda en VERDE, no deja nada copiado y falla: a main solo llega lo que pasa.
+async function importTests({ legacy, dev, list, timeoutMs = 60000 }) {
+  const names = readList(list);
+  const bad = names.filter(n => !TEST_RE.test(n) || n !== path.basename(n));
+  if (bad.length) throw new Error('nombres no válidos en la lista: ' + bad.join(', '));
+  const absent = names.filter(n => !fs.existsSync(path.join(legacy, 'tests', n)));
+  if (absent.length) throw new Error('no están en el legado: ' + absent.join(', '));
+  const copied = [], unchanged = [], written = [];
+  for (const n of names) {
+    const src = path.join(legacy, 'tests', n), dst = path.join(dev, 'tests', n);
+    if (sameFile(src, dst)) { unchanged.push(n); continue; }
+    fs.copyFileSync(src, dst); copied.push(n); written.push(dst);
+  }
+  const fx = path.join(legacy, 'tests', 'fixtures');
+  const usesFixtures = names.some(n => /fixtures/.test(fs.readFileSync(path.join(legacy, 'tests', n), 'utf8')));
+  if (usesFixtures && fs.existsSync(fx)) {
+    for (const f of fs.readdirSync(fx)) {
+      const dst = path.join(dev, 'tests', 'fixtures', f);
+      if (sameFile(path.join(fx, f), dst)) continue;
+      fs.mkdirSync(path.dirname(dst), { recursive: true });
+      fs.copyFileSync(path.join(fx, f), dst); written.push(dst);
+    }
+  }
+  const results = await pool(names, 4, async n => ({ n, r: await runOne(dev, n, timeoutMs) }));
+  const failed = results.filter(x => x.r.state !== 'VERDE');
+  if (failed.length) {
+    written.forEach(f => fs.rmSync(f, { force: true }));
+    throw new Error('no pasan en DEV, no se importa nada: ' + failed.map(x => x.n + ' (' + x.r.state + ')').join(', '));
+  }
+  return { copied, unchanged };
+}
+
+module.exports = { listTests, referencedFiles, verdicts, classify, census, report, readList, importTests };
+
+if (require.main === module && process.argv.includes('--import')) {
+  importTests({ legacy: arg('--legacy'), dev: arg('--dev'), list: arg('--import'), timeoutMs: Number(arg('--timeout', '60')) * 1000 })
+    .then(r => console.log('Importados: ' + r.copied.length + ' nuevos o cambiados, ' + r.unchanged.length + ' sin cambios'))
+    .catch(e => { console.error('ImportError: ' + e.message); process.exit(1); });
+} else if (require.main === module) {
   const legacy = arg('--legacy'), dev = arg('--dev'), out = arg('--out');
   if (!legacy || !dev || !out) {
     console.error('Uso: census.cjs --legacy <dir> --dev <dir> --out <archivo> [--timeout s] [--jobs n] [--ref sha]');
+    console.error('     census.cjs --import <lista> --legacy <dir> --dev <dir> [--timeout s]');
     process.exit(2);
   }
   census({ legacy, dev, timeoutMs: Number(arg('--timeout', '60')) * 1000, jobs: Number(arg('--jobs', '4')) })
