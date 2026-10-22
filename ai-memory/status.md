@@ -6,16 +6,16 @@ Motivo: DEV tiene los datos de la Armería (`legendary-data.js`, recetas, precur
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T06:25Z
-Próxima acción: MIG-2a (README + fetch_legendary_items.py + test con caché de prueba) → MIG-2b (precios + build_legendary_data.py + test que regenera y compara contra `js/legendary-data.js`) → MIG-2c recetas → MIG-2d precursores → MIG-2e dev-pages no publica `tools/`.
+Última actualización: 2026-10-22T06:40Z
+Próxima acción: MIG-2b (precios + build_legendary_data.py + test que regenera y compara contra `js/legendary-data.js`) → MIG-2c recetas → MIG-2d precursores → MIG-2e dev-pages no publica `tools/` y `.gitignore` para `tools/legendary/.work/`.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-2a — tools/legendary/: cómo regenerar la Armería y el primer paso (bajar el catálogo) con test sin red (BL-043)
+MIG-2b — precios del Bazar y build de `js/legendary-data.js`, con un test que regenera el catálogo y lo compara con el versionado (BL-043)
 Archivos:
-tools/legendary/README.md
-tools/legendary/fetch_legendary_items.py
-tests/legendary-fetch.test.cjs
+tools/legendary/fetch_thematic_prices.py
+tools/legendary/build_legendary_data.py
+tests/legendary-build-data.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -36,6 +36,7 @@ Plan (orden por valor para el jugador):
 - GUA-4 a GUA-7 La Guarida realineada (BL-052, DEC-028, repo la-guarida): `06b0baa` shiruvana.js 2.0.0 + test (13 tests, 22/22 mutaciones), `7a5ce60` ui.js 1.0.0 + test (5 tests), `98b9e5b` index.html + styles.css 2.1.0, `a620948` README. Hecho, blobs verificados; prueba de humo con DOM simulado, data.js y app.js reales (38 comprobaciones).
 - Pablo validó en pantalla BL-050 (Bóveda en producción) y BL-052 (La Guarida) (06:15Z) y pidió seguir con MIG-2a.
 - MIG-2 en 5 micro-ciclos (la API de GW2 no responde desde el entorno de la Factory: todo se prueba sin red, con cachés de prueba y contra los datos versionados): MIG-2a fetch del catálogo, MIG-2b precios + build de `legendary-data.js`, MIG-2c recetas, MIG-2d precursores, MIG-2e excluir `tools/` de la publicación de DEV.
+- MIG-2a hecho (`f365882`): `tools/legendary/README.md`, `tools/legendary/fetch_legendary_items.py` (del legado, blob 6409c472, con `--offline` y la URL pedida en el error) y `tests/legendary-fetch.test.cjs` (7 tests sin red, 11/11 mutaciones). Blobs verificados.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
@@ -49,7 +50,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
-- Pablo validó la Bóveda en producción (BL-050: PSNA y Armería) y La Guarida (BL-052). Sigo con la migración del legado: los generadores de la Armería.
+- Pablo validó la Bóveda en producción (BL-050: PSNA y Armería) y La Guarida (BL-052). Sigo con la migración del legado: el primer generador de la Armería ya está en DEV (MIG-2a: bajar el catálogo de legendarias), con tests que no dependen de la red.
 - La Guarida realineada (BL-052): sigue siendo tu lanzador, con el lenguaje visual del Centro de decisiones y sin datos de la Factory. Yo soy su anfitriona: el portal «¿A dónde vamos?» (Ctrl+K o /), «Lo de siempre» y un consejo de orden como mucho por día (DEC-028).
 - La Guarida tiene el aspecto del Centro de decisiones y arriba un resumen mío: qué te pide la Factory y en qué estoy, con un enlace al panel (BL-051, DEC-027). Los 19 themes siguen funcionando y widgets y lanzador ya no desaparecen en pantallas chicas.
 - En producción por orden de Pablo (BL-050): el PSNA renovado y la Armería nueva (la legendaria como pantalla, "Tengo" real, Abalorio y Espaldar, expansiones reales y respaldo de íconos). Vuelta atrás: `2bab20f`.
