@@ -1,19 +1,20 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-050 hecho: PSNA y Armería en producción (5 archivos, blobs idénticos a DEV). Sigue BL-043 MIG-2a.
-Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
+Tarea actual: BL-051 — La Guarida con el lenguaje visual del Centro de decisiones y mi voz (pedido de Pablo, 2026-10-22 04:42Z), mientras él valida BL-050 en producción. Después sigue BL-043 MIG-2a.
+Motivo: Pablo pidió que La Guarida se parezca al Centro de decisiones y que yo decida dónde y cómo aparezco. Es su página de inicio: es el mejor lugar para que vea lo que la Factory le pide sin abrir el panel.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T04:35Z
-Próxima acción: MIG-2a — generadores de la Armería del legado a `tools/legendary/` (BL-043). Si Pablo manda lo que dice el aviso de íconos en producción, eso va primero.
+Última actualización: 2026-10-22T04:50Z
+Próxima acción: GUA-1 — `js/shiruvana.js` (resumen de la Factory con mi voz, lee `ai-memory/status.md` de gw2-factory-dev) y su test, sin conectar todavía. Después GUA-2 `index.html` + `css/styles.css` (el rediseño, conecta todo de una vez) y GUA-3 README.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-2a — generadores de datos de la Armería a tools/legendary/ (BL-043)
+GUA-1 — mi voz en La Guarida: resumen de la Factory (BL-051, repo la-guarida)
 Archivos:
-tools/legendary/README.md
+js/shiruvana.js
+tests/shiruvana.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -29,6 +30,7 @@ Plan (orden por valor para el jugador):
 - ARM-7 estilos de la pantalla en `legendary-tree-ui.js` 2.2.0 (BL-049). Hecho (`21800ad`).
 - ARM-8 la legendaria como pantalla dentro de la Armería, íconos del árbol primero, respaldo directo y aviso con Reintentar, en `legendary-tracker.js` 1.3.0 (BL-049). Hecho (`3b96bf8`).
 - PRD-6 a PRD-10 promoción a producción por orden de Pablo (BL-050): `aca6dd7` psna-schedule.json, `de1c34d` activities.js, `b57bc7b` render-catologo.js, `6277d33` legendary-tree-ui.js, `dd5c0c6` legendary-tracker.js. Hecho, blobs verificados.
+- GUA-1 a GUA-3 La Guarida como el Centro de decisiones y mi voz (BL-051, repo la-guarida). En curso.
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
