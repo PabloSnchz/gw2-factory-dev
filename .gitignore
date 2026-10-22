@@ -1,0 +1,4 @@
+# Cachés y fuentes bajadas por tools/legendary (ver tools/legendary/README.md).
+# No se versionan: con ellas el build "funcionaría" con datos viejos.
+tools/legendary/.work/
+__pycache__/
