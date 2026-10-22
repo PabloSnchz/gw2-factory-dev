@@ -20,3 +20,9 @@ Al llevar a DEV los hechos de la API que había reunido el modelo anterior, los 
 - Todo hecho que llega del legado se verifica contra la fuente antes de entrar a DEV, y se registra con la fecha de verificación (`docs/GW2-API-HECHOS.md`). Si no lo puedo verificar, queda marcado como "heredado, sin volver a verificar".
 - Una funcionalidad se considera terminada solo cuando el usuario la ve en pantalla. Un dato que no se muestra no se descarga.
 - Las conexiones nuevas del legado con la API no se migran tal cual: se rehacen junto con la pantalla que las usa.
+
+## Repetición (2026-10-22, MIG-6)
+
+- **Qué pasó:** registré BL-054 («el import del Gist repite las 7 escrituras de `applyImportData`») a partir de ALERT-179 del legado. Comprobé que `settings-manager.js` fuera idéntico en DEV, pero no leí la función. El arreglo ya estaba hecho: `importFromData` delega, y el comentario de ALERT-179 está en el código. Además, Pablo ya había decidido deprecar el Gist (DEC-030).
+- **Por qué es la misma lección:** una alerta heredada también es una pista, no un dato. Que el archivo sea idéntico solo dice que el código de los dos lados es el mismo. No dice si la alerta sigue abierta en ese código.
+- **Cómo aplicar, ahora más preciso:** antes de registrar algo que viene del legado, leo la función que nombra en el código de DEV de hoy y pregunto si la funcionalidad sigue viva para Pablo. Las dos cosas, no una.

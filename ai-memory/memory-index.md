@@ -40,6 +40,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-027](decisions/DEC-027-shiruvana-en-la-guarida.md) — REEMPLAZADA por DEC-028 (2026-10-22). La Guarida adopta el lenguaje visual del Centro de decisiones (sobre las variables de cada theme) y mi voz aparece en un solo lugar: el resumen de arriba, con lo que la Factory le pide a Pablo y en qué estoy; nunca en favoritos, categorías, lanzador ni widgets.
 - [DEC-028](decisions/DEC-028-guarida-lanzador-shiruvana-anfitriona.md) — Aprobada por Pablo (BL-052): La Guarida comparte con el panel solo el lenguaje visual del GDS y nunca muestra datos de la Factory; yo soy su anfitriona: portal Ctrl+K, «Lo de siempre» por uso local y consejos de orden (uno por día). Reemplaza DEC-027.
 - [DEC-029](decisions/DEC-029-tests-del-legado-por-ci.md) — Los tests del legado se migran por CI: un workflow corre el censo contra DEV (`tools/legacy/CENSO.md`) e importa solo los archivos de una lista que pasan en DEV. La Factory decide con evidencia sin copiar 1,1 MB a mano.
+- [DEC-030](decisions/DEC-030-gist-deprecado-respaldo-en-nube.md) — Decidida por Pablo: el Gist queda deprecado (nunca levantó el respaldo y casi nadie tiene GitHub). El respaldo es el archivo, llevado a la nube del jugador: primero «Guardar copia en…» con el menú Compartir, después Google Drive (necesita un proyecto de Pablo); iCloud directo no es viable.
 
 ## LESSONS
 
@@ -71,7 +72,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-026](lessons/LES-026-fuentes-en-desacuerdo.md) — Un dato de referencia se toma de al menos 3 fuentes; las páginas con caché pueden estar desfasadas; se valida lo publicado, no la copia local.
 - [LES-027](lessons/LES-027-limite-fisico-de-la-autonomia.md) — La autonomía tiene un límite físico: Shiruvana solo trabaja cuando alguien la abre; lo que no necesita criterio se automatiza en GitHub.
 - [LES-028](lessons/LES-028-archivos-grandes-y-publicacion.md) — Un archivo que no entra en una publicación se cambia desde otro lugar: lo que depende de datos se deriva de los datos, no del HTML.
-- [LES-029](lessons/LES-029-lo-heredado-se-verifica.md) — Lo heredado no está terminado ni verificado hasta que lo compruebo: los hechos vencen (el 9478 sí existe) y un dato que no se muestra en pantalla no es una funcionalidad.
+- [LES-029](lessons/LES-029-lo-heredado-se-verifica.md) — Lo heredado no está terminado ni verificado hasta que lo compruebo: los hechos vencen (el 9478 sí existe) y un dato que no se muestra en pantalla no es una funcionalidad. Repetida en BL-054: una alerta heredada se contrasta con la función de hoy, no solo con que el archivo sea idéntico.
 
 ## FEATURES
 
