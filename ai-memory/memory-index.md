@@ -37,6 +37,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-024](decisions/DEC-024-voz-de-shiruvana.md) — Identidad visual: el gato es la marca, Shiruvana la voz; avatar solo en recomendaciones, advertencias, decisiones, resúmenes y explicaciones (48/56 px, uno por sección); nunca en datos, métricas ni navegación.
 - [DEC-025](decisions/DEC-025-identidad-en-la-boveda.md) — La Bóveda adopta la identidad Gato Negro: gato oficial como logo y favicon, theme oficial "Gato Negro" por defecto (Bóveda queda como opción) y mi voz donde le hablo al jugador; reemplaza la regla de DEC-024 que me dejaba fuera de La Bóveda.
 - [DEC-026](decisions/DEC-026-dev-en-github-pages.md) — Decidida por Pablo: DEV vuelve a GitHub Pages (`pablosnchz.github.io/gw2-factory-dev/`) publicado con un workflow propio, sin límite diario; acepta compartir `localStorage` con producción en su navegador. Reemplaza DEC-005.
+- [DEC-027](decisions/DEC-027-shiruvana-en-la-guarida.md) — La Guarida adopta el lenguaje visual del Centro de decisiones (sobre las variables de cada theme) y mi voz aparece en un solo lugar: el resumen de arriba, con lo que la Factory le pide a Pablo y en qué estoy; nunca en favoritos, categorías, lanzador ni widgets.
 
 ## LESSONS
 
