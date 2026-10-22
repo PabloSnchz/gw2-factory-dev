@@ -1,6 +1,6 @@
 # DEC-027 — La Guarida con el lenguaje visual del panel y mi voz en el resumen
 
-- Estado: ACEPTADA — pedido de Pablo (2026-10-22 04:42Z): "que la Guarida sea un entorno gráfico más parecido al Centro de decisiones" e "incorporá a Shiruvana, pero definí estratégicamente cómo y dónde". Él me delegó el dónde y el cómo; esta decisión lo registra.
+- Estado: REEMPLAZADA por DEC-028 (2026-10-22): Pablo detectó que mezclaba funciones del Centro de decisiones con La Guarida. Antes: ACEPTADA — pedido de Pablo (2026-10-22 04:42Z): "que la Guarida sea un entorno gráfico más parecido al Centro de decisiones" e "incorporá a Shiruvana, pero definí estratégicamente cómo y dónde". Él me delegó el dónde y el cómo; esta decisión lo registra.
 - Fecha: 2026-10-22
 - Ámbito: la-guarida (lanzador personal de Pablo). No cambia La Bóveda ni el panel.
 - Relacionadas: DEC-024, DEC-025, BL-040, BL-051

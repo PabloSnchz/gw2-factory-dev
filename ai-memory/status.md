@@ -1,20 +1,19 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-052 aprobada por Pablo (05:36Z: "aprobado, llevala a prd de la guarida"). Implemento y publico en la-guarida (su único entorno es GitHub Pages desde main).
-Motivo: Pablo detectó una desviación en BL-051: copié funciones del Centro de decisiones (estado de la Factory, decisiones, validaciones) dentro de La Guarida. Lo que se comparte es solo el lenguaje visual del GDS; La Guarida sigue siendo un lanzador y yo vivo ahí como anfitriona, no como operadora.
+Tarea actual: BL-052 hecho y publicado en la-guarida (DEC-028); espera la validación de Pablo. Sigue BL-043 MIG-2a.
+Motivo: Pablo aprobó la propuesta de realineación (05:36Z) y pidió llevarla a La Guarida publicada: lanzador con el lenguaje visual del GDS, sin datos de la Factory, y yo como anfitriona.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T05:40Z
-Próxima acción: GUA-4 js/shiruvana.js 2.0.0 + tests/shiruvana.test.cjs → GUA-5 index.html + css/styles.css 2.1.0 → GUA-6 README → memoria (DEC-028, status, backlog). Después: BL-043 MIG-2a.
+Última actualización: 2026-10-22T06:20Z
+Próxima acción: MIG-2a — generadores de la Armería del legado a `tools/legendary/` (BL-043). Si Pablo manda lo que ve en producción (BL-050) o en La Guarida (BL-052), eso va primero.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-GUA-4 — Shiruvana anfitriona en La Guarida, sin datos de la Factory (BL-052)
+MIG-2a — generadores de datos de la Armería a tools/legendary/ (BL-043)
 Archivos:
-js/shiruvana.js
-tests/shiruvana.test.cjs
+tools/legendary/README.md
 
 Plan (orden por valor para el jugador):
 
@@ -32,7 +31,7 @@ Plan (orden por valor para el jugador):
 - PRD-6 a PRD-10 promoción a producción por orden de Pablo (BL-050): `aca6dd7` psna-schedule.json, `de1c34d` activities.js, `b57bc7b` render-catologo.js, `6277d33` legendary-tree-ui.js, `dd5c0c6` legendary-tracker.js. Hecho, blobs verificados.
 - GUA-1 a GUA-3 La Guarida como el Centro de decisiones y mi voz (BL-051, DEC-027, repo la-guarida): `593474c` shiruvana.js + test, `fb3533c` index.html + styles.css 2.0.0, `871a44b` README. Hecho, blobs verificados.
 - BL-052 (05:10Z): Pablo corrige la dirección de BL-051. Propuesta presentada (maqueta HTML): restyle GDS como launcher, sin datos de la Factory; Shiruvana anfitriona con portal Ctrl+K, «Lo de siempre» (uso local) y consejos de orden (1 por día). Espera aprobación.
-- Pablo aprobó BL-052 (05:36Z) y pidió publicarla. GUA-4 en curso; GUA-5 y GUA-6 después.
+- GUA-4 a GUA-7 La Guarida realineada (BL-052, DEC-028, repo la-guarida): `06b0baa` shiruvana.js 2.0.0 + test (13 tests, 22/22 mutaciones), `7a5ce60` ui.js 1.0.0 + test (5 tests), `98b9e5b` index.html + styles.css 2.1.0, `a620948` README. Hecho, blobs verificados; prueba de humo con DOM simulado, data.js y app.js reales (38 comprobaciones).
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -47,7 +46,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
-- BL-052: Pablo corrigió la dirección de La Guarida (no mezclar funciones con el Centro de decisiones). Presenté la propuesta de diseño; espera su aprobación antes de implementar.
+- La Guarida realineada (BL-052): sigue siendo tu lanzador, con el lenguaje visual del Centro de decisiones y sin datos de la Factory. Yo soy su anfitriona: el portal «¿A dónde vamos?» (Ctrl+K o /), «Lo de siempre» y un consejo de orden como mucho por día (DEC-028).
 - La Guarida tiene el aspecto del Centro de decisiones y arriba un resumen mío: qué te pide la Factory y en qué estoy, con un enlace al panel (BL-051, DEC-027). Los 19 themes siguen funcionando y widgets y lanzador ya no desaparecen en pantallas chicas.
 - En producción por orden de Pablo (BL-050): el PSNA renovado y la Armería nueva (la legendaria como pantalla, "Tengo" real, Abalorio y Espaldar, expansiones reales y respaldo de íconos). Vuelta atrás: `2bab20f`.
 - Armería: la legendaria ahora se abre como pantalla dentro de la Armería (BL-049), con "← Volver", la receta a página completa y Materiales totales fijo al costado. Los íconos se piden primero para el árbol abierto, con un respaldo directo a la API, y si fallan la pantalla lo dice con "Reintentar".
@@ -69,6 +68,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 - [BL-050] Validación: abrí producción (https://pablosnchz.github.io/gw2-wallet-ligero/) con Ctrl+F5: Actividades (PSNA) y Armería (tocá una legendaria). Si los íconos no aparecen, mandame lo que dice el aviso amarillo ("N de M").
+- [BL-052] Validación: abrí La Guarida (https://pablosnchz.github.io/la-guarida/) con Ctrl+F5: probá Ctrl+K y buscá algo, los menús «＋ Agregar», «Backup» y «Ecosistema», el modo edición y otro theme.
 
 ## Para tu información
 
