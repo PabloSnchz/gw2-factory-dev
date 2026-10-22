@@ -1,18 +1,19 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: la Armería como ficha de pantalla completa quedó publicada (BL-047) y espera la validación de Pablo. Sigue la migración del legado (BL-043, MIG-2a).
+Tarea actual: la Armería como pantalla propia, no modal (BL-049), y los íconos que no cargan. Sigue la migración del legado (BL-043, MIG-2a).
 Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T00:10Z
-Próxima acción: MIG-2a — generadores de la Armería del legado a `tools/legendary/` (BL-043). Si Pablo valida o pide cambios en la ficha, eso va primero.
+Última actualización: 2026-10-22T03:45Z
+Próxima acción: ARM-7 — estilos de la pantalla en `js/legendary-tree-ui.js` 2.2.0; después ARM-8 la pantalla y los íconos en `js/legendary-tracker.js` 1.3.0 (archivo grande dedicado).
 
 Micro-ciclo:
-MIG-2a — generadores de datos de la Armería a tools/legendary/ (BL-043)
+ARM-7 — estilos de la pantalla de la legendaria y aviso de íconos (BL-049)
 Archivos:
-tools/legendary/README.md
+js/legendary-tree-ui.js
+tests/legendary-tree-ui.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -24,6 +25,9 @@ Plan (orden por valor para el jugador):
 - Pablo vio ARM-4 (23:18Z): el diseño gusta pero dentro del modal de 680 px queda comprimido, sin aire. Pidió ir a algo como la propuesta: una ficha grande de pantalla completa. Me dio vía libre para rediseñar sin consultarle; lo prueba al volver.
 - ARM-5 ficha de pantalla completa en `legendary-tree-ui.js` 2.1.0 (BL-047). Hecho (`08021c9`).
 - ARM-6 la ficha en el tracker 1.2.0: diálogo de 96vw × 94vh, cabecera grande, respaldo de ícono y nombre desde el catálogo. Hecho (`e4e2ede`); tests en el commit de cierre.
+- Pablo probó la ficha (03:34Z): los íconos siguen sin cargar y el tamaño todavía no lo convence; pidió que sea directamente una pantalla, como la propuesta, sin consultarle ("resolvé con tu criterio").
+- ARM-7 estilos de la pantalla (BL-049). En curso.
+- ARM-8 la legendaria se abre como pantalla dentro de la Armería (con "Volver" y Escape), íconos pedidos solo para el árbol abierto, respaldo directo a la API si el camino normal no responde y aviso visible con "Reintentar" (BL-049). Sigue.
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -54,7 +58,6 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [BL-047] Validación: abrí DEV → Armería (Ctrl+F5) y tocá una legendaria grande, por ejemplo Colmilloescarcha o Eternidad. Mirá la ficha en la PC y en el celular.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 - [FEAT-003] Validación: los lugares ya coinciden con la wiki (lo validaste a las 22:42Z). Falta el PSNA renovado: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Actividades (Ctrl+F5 si no ves el cambio) y mirá el ícono del waypoint, el día y la cuenta regresiva, y el botón "Copiar" de cada lugar, también en el celular.
 
