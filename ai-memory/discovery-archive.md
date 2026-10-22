@@ -52,3 +52,19 @@ Una oportunidad archivada puede volver a discovery con su mismo ID si aparece ev
 - Alternativa: GW2Timer, gw2.app, gw2.guildwars.games/es (temporizadores en español)
 - Prioridad: ALTA
 - Costo: S (horarios a verificar en la wiki)
+
+## DISC-011 — Panel de Homestead
+
+- Estado: PROMOVIDO
+- Fecha: 2026-10-22
+- Fecha de salida: 2026-10-22
+- Motivo: promovida a BL-055 por decisión de Pablo (2026-10-22 15:48Z): módulo Homestead propio que, para empezar, muda los Home Nodes del panel de Actividades y suma lo que la comunidad valore
+- Responsable: Pablo (alcance funcional)
+- Área: app
+- Fuente: legado de QwenPaw: `js/homestead-tracker.js` (20 KB) y su panel, nunca validados por Pablo ni llegados a La Bóveda; endpoints `/v2/account/homestead/decorations`, `/v2/homestead/glyphs` y `/v2/homestead/decorations/categories` (los glyphs llegan como texto, no como número). Hoy La Bóveda solo muestra los Home Nodes, en la pestaña «Home Nodes» de Actividades
+- Problema: no hay forma de ver qué decoraciones y glyphs del homestead faltan
+- Beneficiario: jugadores de Janthir Wilds que decoran su homestead
+- Valor: probable; sin demanda medida todavía
+- Alternativa: la wiki y el juego
+- Prioridad: BAJA (provisoria; Pablo la priorizó al promoverla)
+- Costo: M

@@ -9,8 +9,8 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 
 ## Estado actual
 
-- Abiertas: 9 de 15 (operación normal)
-- READY: 2 de 5 (modo activo; BL-054 y BL-041)
+- Abiertas: 8 de 15 (operación normal)
+- READY: 2 de 5 (modo activo; BL-055 y BL-041; BL-056 en curso)
 - Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004, DEC-020). Capacidad según las instrucciones v2 (DEC-022): READY ≤ 3 activo, 4–5 restringido, más de 5 detenido. Hoy: activo
 - Ideas pendientes sin analizar: 1 de 5 (se puede hacer ronda)
 - Áreas detenidas: ninguna (REQ-007 respondida el 2026-10-21; no hay decisiones estratégicas abiertas ni riesgos CRÍTICOS)
@@ -21,7 +21,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 | Fecha | Tipo | Familias | Resultado |
 |---|---|---|---|
 | 2026-10-20 | Inicial, por encargo (FACTORY-RESEARCH-001) | Producto, ecosistema, herramientas, comunidad | 8 registradas: 2 promovidas (BL-013, BL-034), 6 abiertas (2 vienen del backlog) |
-| 2026-10-22 | Legado de QwenPaw (MIG-6, BL-043) | Producto heredado, juzgado contra La Bóveda de hoy | 3 registradas (DISC-009 a 011). Descartado por historia: el tracker de la Cámara del Brujo (La Bóveda ya lo tiene). Queda para la próxima ronda por el límite de 3: colecciones de la cuenta con monturas (PRE_BACKLOG ideas 2 y 5; ojo con la cuota: muchas cuentas × varios endpoints, ALERT-27). De las alertas del legado, solo una de producto sigue viva y es deuda técnica: BL-054 |
+| 2026-10-22 | Legado de QwenPaw (MIG-6, BL-043) | Producto heredado, juzgado contra La Bóveda de hoy | 3 registradas (DISC-009 a 011). Descartado por historia: el tracker de la Cámara del Brujo (La Bóveda ya lo tiene). Queda para la próxima ronda por el límite de 3: colecciones de la cuenta con monturas (PRE_BACKLOG ideas 2 y 5; ojo con la cuota: muchas cuentas × varios endpoints, ALERT-27). De las alertas del legado registré BL-054, que resultó ya resuelta en DEV (LES-029). Respuesta de Pablo (15:48Z): DISC-009 pasa a respaldo en la nube popular (Gist deprecado, DEC-030); DISC-011 promovida a BL-055; la Cámara del Brujo no se toca por ahora (Pablo no descarta renovarla más adelante) |
 
 ## DISC-003 — "Próximas funciones" anuncia como futuras funciones que ya existen
 
@@ -118,20 +118,24 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 - Prioridad: BAJA
 - Costo: S
 
-## DISC-009 — El backup del Gist guarda una foto de seguridad que no se puede restaurar desde la pantalla
+## DISC-009 — Respaldo en una nube que el jugador ya tiene (Google Drive, iCloud)
 
 - Estado: ANALIZADO
 - Área: app
 - Fecha: 2026-10-22
-- Última revisión: 2026-10-22
-- Fuente: legado de QwenPaw (ALERT-184, MIG-6), verificado contra DEV: `gist-sync.js` saca la foto `gn:github:gist_snapshot` antes de pisar los datos con el Gist, pero `index.html` no llama a `restoreSafetySnapshot` en ningún lado
-- Problema: si una descarga del Gist pisa datos buenos, la foto existe pero el jugador no tiene un botón para volver a ella
-- Beneficiario: todo jugador que usa el backup en la nube
-- Valor: completa una red de seguridad que hoy está a medias; protege la lista de cuentas
-- Alternativa: restaurar desde la consola del navegador (no es razonable pedírselo a un jugador)
+- Última revisión: 2026-10-22 (respuesta de Pablo, 15:48Z)
+- Fuente: legado de QwenPaw (ALERT-184) y Pablo. La idea original, restaurar la foto de seguridad del Gist, quedó sin objeto: Pablo ya había decidido deprecar el Gist (DEC-030). Nunca levantó el respaldo de verdad y casi ningún jugador tiene cuenta de GitHub
+- Problema: el respaldo por archivo existe («Backup» y «Restaurar» en la barra de herramientas, `SettingsManager.exportAll`), pero el jugador tiene que acordarse de guardar el archivo en algún lado. Si pierde el navegador, pierde sus claves y sus marcas
+- Beneficiario: todo jugador, sobre todo quien usa La Bóveda en el celular
+- Valor: protege las claves de API y todo lo marcado sin pedir cuentas nuevas
+- Alternativa: descargar el archivo y subirlo a mano a la nube
 - Prioridad: ALTA (protege datos del usuario)
-- Costo: S
-- Nota: la pantalla del Gist vive en `index.html` (69 KB, LES-028), así que el botón tiene que montarse desde un `.js`. Entra a READY cuando haya lugar.
+- Costo: S la etapa 1, M la etapa 2
+- Análisis (fuentes: guía oficial de Google Drive «Store application-specific data»; documentación oficial de CloudKit JS):
+  - **Etapa 1, «Guardar copia en…»**: el mismo archivo de hoy, entregado con el menú Compartir del sistema (Web Share API con archivos). En el celular aparecen Drive, iCloud (Archivos), WhatsApp o lo que el jugador tenga; en la PC, si no hay menú, se descarga como hoy. Sin cuentas, sin claves y sin costo. Restaurar sigue siendo elegir el archivo.
+  - **Etapa 2, sincronización con Google Drive**: el navegador puede escribir en la carpeta oculta de la app en el Drive del jugador (`appDataFolder`, alcance `drive.appdata`, que Google clasifica como no sensible), sin servidor. Necesita un proyecto de Google Cloud con un ID de cliente OAuth a nombre de Pablo: es un recurso externo, lo decide él.
+  - **iCloud directo no es viable**: CloudKit JS exige una app nativa de Apple con CloudKit ya existente (creada con Xcode) y una membresía activa del Apple Developer Program. iCloud queda cubierto por la etapa 1.
+- Esperando criterio: la etapa 2 necesita el proyecto de Google Cloud de Pablo. La etapa 1 entra a READY cuando haya lugar; mi recomendación es hacerla antes que la 2. Retirar el Gist de la pantalla va con la etapa 1: el botón nuevo ocupa su lugar.
 
 ## DISC-010 — Modo legendario del raid Nexus of Eternity
 
@@ -147,18 +151,4 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 - Prioridad: MEDIA
 - Costo: S
 - Nota: `raid-tracker.js` pesa 100 KB: o micro-ciclo de archivo grande (DEC-021) o un módulo aparte que se enganche a la pantalla de raids.
-
-## DISC-011 — Panel de Homestead
-
-- Estado: ANALIZADO
-- Área: app
-- Fecha: 2026-10-22
-- Última revisión: 2026-10-22
-- Fuente: legado de QwenPaw: `js/homestead-tracker.js` (20 KB) y su panel, nunca validados por Pablo ni llegados a La Bóveda; endpoints `/v2/account/homestead/decorations`, `/v2/homestead/glyphs` y `/v2/homestead/decorations/categories` (los glyphs llegan como texto, no como número)
-- Problema: no hay forma de ver qué decoraciones y glyphs del homestead faltan
-- Beneficiario: jugadores de Janthir Wilds que decoran su homestead
-- Valor: probable; sin demanda medida todavía
-- Alternativa: la wiki y el juego
-- Prioridad: BAJA (provisoria)
-- Costo: M
-- Esperando criterio: es una sección nueva de La Bóveda (alcance funcional), la decide Pablo. Mi recomendación: después de DISC-009 y DISC-010. Si se hace, se parte del código del legado y vuelve con él su test `alert86-censo-clasificacion`.
+- Dónde se ve (pregunta de Pablo, 2026-10-22): en Raids, dentro de la tarjeta del ala «Nexo de Eternidad», debajo de Vloxx. Hoy esa tarjeta muestra solo si Vloxx está hecho esta semana (`/v2/account/raids`). Se suman dos insignias que no se reinician: «Modo desafío» (logro 9472) y «Modo legendario» (logro 9478), cada una con ✓ o con su avance, leídas de `/v2/account/achievements`.
