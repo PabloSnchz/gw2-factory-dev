@@ -1,21 +1,21 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-043 migración del legado de QwenPaw, MIG-2: generadores de la Armería a `tools/legendary/`. Pablo validó BL-050 (Bóveda en producción) y BL-052 (La Guarida) el 2026-10-22 06:15Z.
-Motivo: DEV tiene los datos de la Armería (`legendary-data.js`, recetas, precursores) pero no la forma de regenerarlos cuando sale una legendaria nueva (RSK-018). Los scripts viven solo en el legado.
+Tarea actual: BL-043 migración del legado de QwenPaw, MIG-4: tests del legado a DEV por tandas, por CI (DEC-029). MIG-2 (generadores de la Armería) terminado.
+Motivo: DEV tiene 22 archivos de tests; el legado tiene 88 que en su mayoría prueban el mismo código. Es la red de seguridad que le falta a La Bóveda para cambiar código sin miedo.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T13:45Z
-Próxima acción: MIG-2e (dev-pages no publica `tools/`, `.gitignore` para `tools/legendary/.work/`, test que lo vigila) → MIG-4 tests del legado por tandas → MIG-5 documentación (BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
+Última actualización: 2026-10-22T13:55Z
+Próxima acción: MIG-4b (importación por lista en el workflow) → MIG-4c a 4g tandas (app-checks corre `tests/*.test.js`; lista `tools/legacy/importar.txt`) → MIG-4h los 15 ROJO uno por uno → MIG-5 documentación (BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-2e — DEV deja de publicar `tools/` y no se versiona `tools/legendary/.work/`, con test que lo vigila (BL-043)
+MIG-4b — el workflow `legacy-tests` importa a `tests/` los archivos de `tools/legacy/importar.txt`, solo si todos pasan en DEV (BL-043, DEC-029)
 Archivos:
-.github/workflows/dev-pages.yml
-.gitignore
-tests/dev-pages.test.cjs
+tools/legacy/census.cjs
+tests/legacy-census.test.cjs
+.github/workflows/legacy-tests.yml
 
 Plan (orden por valor para el jugador):
 
@@ -42,6 +42,9 @@ Plan (orden por valor para el jugador):
 - MIG-2c hecho (`3f3e0ab`): `fetch_recipes_source.py` (baja crafty_legend fijado a commit y huella, valida la forma) y `build_legendary_recipes.py` (del legado, blob fb02a142); `tests/legendary-build-recipes.test.cjs` (6 tests, 17/17 mutaciones). Con el archivo real de crafty_legend: huella verificada y 0 diferencias en las 206 entradas. Los textos que ve el jugador ya no nombran archivos internos y "Forja Mystica" pasa a "Forja Mística" (se ven al regenerar). Blobs verificados.
 - Pablo (13:27Z): seguir con MIG-2d, MIG-2e y MIG-4 a MIG-6, y avisarle al terminar para archivar los dos repos.
 - MIG-2d hecho (`f9277e5`): `build_legendary_precursors.py` (del legado, blob 93eecdd0; sin la variable global y sin el chequeo de huérfanas, que nunca podía fallar), `tests/legendary-build-precursors.test.cjs` (4 tests, 15/15 mutaciones) y `tools/legendary/README.md` con los seis pasos y el crédito MIT a crafty_legend. Con el archivo real: 0 diferencias en las 907 entradas (recipe 467, material 436, vendor 4). Blobs verificados.
+- MIG-2e hecho (`b1a5fe7`): `dev-pages.yml` ya no publica ni se dispara por `tools/`; `.gitignore` con `tools/legendary/.work/` y `__pycache__/`; `tests/dev-pages.test.cjs` (4 tests, uno arma el sitio con el rsync del workflow; 8/8 mutaciones). Blobs verificados. MIG-2 terminado.
+- MIG-4: el legado tiene 88 tests (~1,1 MB), scripts con OK/FAIL, no `node:test`. Pasarlos a mano por la Factory es el límite de LES-027. DEC-029: se migran por CI (el legado es público, MIT; 34 de 47 archivos .js son idénticos a DEV).
+- MIG-4a hecho (`da9b830`; publicado sin checkpoint previo: falta mía, registrada acá): `tools/legacy/census.cjs`, `.github/workflows/legacy-tests.yml`, `tests/legacy-census.test.cjs` (4 tests, 11/11 mutaciones). El censo de CI (`b34fc09`, `tools/legacy/CENSO.md`): en el legado 85 VERDE y 3 ROJO; contra DEV 73 VERDE y 15 ROJO; 0 mienten. ROJO: 6 dependen de archivos que solo están en el legado (homestead-tracker.js, tools/hb100-suite.mjs, hb116, los `_build_*.py`, idea84); 5 de la Armería cuya interfaz cambió (BL-047/049); hb114 usa rutas de Windows; para analizar: hb119-t19a (13 de 14 oyentes de `gn:tokenchange`), idea61 (9 FAIL) e idea50f (también ROJO en el legado).
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 

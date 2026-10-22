@@ -39,6 +39,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-026](decisions/DEC-026-dev-en-github-pages.md) — Decidida por Pablo: DEV vuelve a GitHub Pages (`pablosnchz.github.io/gw2-factory-dev/`) publicado con un workflow propio, sin límite diario; acepta compartir `localStorage` con producción en su navegador. Reemplaza DEC-005.
 - [DEC-027](decisions/DEC-027-shiruvana-en-la-guarida.md) — REEMPLAZADA por DEC-028 (2026-10-22). La Guarida adopta el lenguaje visual del Centro de decisiones (sobre las variables de cada theme) y mi voz aparece en un solo lugar: el resumen de arriba, con lo que la Factory le pide a Pablo y en qué estoy; nunca en favoritos, categorías, lanzador ni widgets.
 - [DEC-028](decisions/DEC-028-guarida-lanzador-shiruvana-anfitriona.md) — Aprobada por Pablo (BL-052): La Guarida comparte con el panel solo el lenguaje visual del GDS y nunca muestra datos de la Factory; yo soy su anfitriona: portal Ctrl+K, «Lo de siempre» por uso local y consejos de orden (uno por día). Reemplaza DEC-027.
+- [DEC-029](decisions/DEC-029-tests-del-legado-por-ci.md) — Los tests del legado se migran por CI: un workflow corre el censo contra DEV (`tools/legacy/CENSO.md`) e importa solo los archivos de una lista que pasan en DEV. La Factory decide con evidencia sin copiar 1,1 MB a mano.
 
 ## LESSONS
 
