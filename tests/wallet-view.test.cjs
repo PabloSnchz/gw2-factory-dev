@@ -1,4 +1,5 @@
-// Cartera renovada (BL-056): js/wallet-theme.js 2.0.0 es una capa de vista sobre lo que dibuja app.js.
+// Cartera renovada (BL-056): js/wallet-theme.js 2.1.0 es una capa de vista sobre lo que dibuja app.js.
+// Desde la 2.1.0 (CAR-2B) la pestaña Cambio de divisas monta converter-modal.js dentro de la Cartera.
 // Corre con: node --test tests/*.test.cjs
 // Prueba las reglas puras (categorías, oro, grupos, Destacadas) y el contrato con app.js e
 // index.html: si cambia una clase o un id del que depende la capa, este test lo dice.
@@ -23,7 +24,8 @@ const P = WT._pure;
 const M = (id, amount, cats, extra) => Object.assign({ id, name: 'D' + id, amount, cats, pinned: false, isMain: false }, extra || {});
 
 test('versión y nombres públicos de la 1.x siguen existiendo', () => {
-  assert.equal(WT.version, '2.0.0');
+  assert.equal(WT.version, '2.1.0');
+  assert.equal(typeof WT.showTab, 'function');
   for (const k of ['process', 'themeWalletNow', 'applyCurrencyTheme', 'migrateCategoriesToBadges', 'migrateWalletToCardClass']) {
     assert.equal(typeof WT[k], 'function', k);
   }
@@ -90,6 +92,30 @@ test('contrato con index.html: los ids que la capa muda o lee siguen ahí', () =
     assert.match(HTML, new RegExp('id="' + id + '"'), id);
   }
   assert.match(HTML, /<script src="js\/wallet-theme\.js[^"]*"><\/script>/, 'la capa se carga');
+});
+
+test('Cambio de divisas (CAR-2B): se monta en la Cartera con la API pública del conversor', () => {
+  const CONV = read('js/converter-modal.js');
+  // Lo que la capa usa del conversor existe, y el conversor le pide la pestaña a la capa.
+  assert.match(CONV, /function mount\(host\)/);
+  assert.match(CONV, /mount: mount,/);
+  assert.match(CONV, /wt\.showTab\('cambio'\)/);
+  const show = SRC.slice(SRC.indexOf('function showTab('), SRC.indexOf('function onHash('));
+  assert.match(show, /typeof CM\.mount !== 'function'\) return false;/, 'sin mount, el conversor cae a su modal');
+  assert.match(show, /CM\.mount\(host\);/);
+  assert.match(show, /panel\.classList\.add\('wn-cx-on'\)/);
+  assert.match(show, /panel\.classList\.remove\('wn-cx-on'\)/);
+  assert.match(show, /S\.pendingCambio = true; root\.location\.hash = '#\/cards';/, 'desde otra pantalla, primero la ruta de la Cartera');
+  assert.match(show, /setTabUI\(S\.tab\);\s*return true;\s*\}/);
+  // La pestaña: primero la vista en la Cartera; el modal solo si no se puede.
+  assert.match(SRC, /else if \(!showTab\('cambio'\) && root\.ConverterModal/);
+  // Al irse de la Cartera se vuelve a Mi cartera, salvo la navegación que pidió la pestaña.
+  const hash = SRC.slice(SRC.indexOf('function onHash('), SRC.indexOf('function inCambio('));
+  assert.match(hash, /if \(S\.pendingCambio\) S\.pendingCambio = false;\s*else if \(S\.tab === 'cambio'\) showTab\('cards'\);/);
+  assert.match(SRC, /addEventListener\('hashchange', onHash\)/);
+  // Lo que redibuja el conversor no reprocesa la Cartera.
+  assert.match(SRC, /recs\.every\(function \(r\) \{ return inCambio\(r\.target\); \}\)\) return;/);
+  assert.match(SRC, /#walletPanel\.wn-cx-on>\.panel__body,\.wn-cambio\[hidden\]\{display:none\}/);
 });
 
 test('la capa no pide datos ni escribe datos del jugador; solo su preferencia', () => {
