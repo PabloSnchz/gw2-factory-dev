@@ -83,3 +83,11 @@ hb94-raid-wing-card.test.js
 idea52.raid-encounter-ids.test.js
 idea56.f1-hint-permiso.test.js
 idea56.forma-raids.test.js
+
+# Tanda 5 (MIG-4g) — cartera, Cámara del Brujo, skins e inventario
+commerce-delivery.smoke.js
+hb98-wv-shop-view.test.js
+hb150-cuenta-skins.test.js
+hb154-skins-catalogo.test.js
+idea55.wv-online-parallel.test.js
+inventory-dashboard.abort.test.js
