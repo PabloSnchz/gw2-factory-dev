@@ -1,12 +1,13 @@
 # REQ-011 — ¿Aprobás el plan para llevar la Cartera renovada a producción?
 
-- Estado: ABIERTA
+- Estado: CERRADA
 - Tipo: decisión
 - Fecha: 2026-10-22
 - Prioridad: ALTO
 - Área: producto
 - Relacionado: BL-056, FEAT-006, RSK-020, DEC-006, LES-028
 - Bloquea: la promoción de la Cartera (PRD-11 a PRD-14)
+- Cerrado: 2026-10-22 23:17Z · aprobada la opción A. Pablo acepta RSK-020 como BAJO y el riesgo ALTO de la vuelta atrás del conversor (la 2.0.0 está validada y con tests; la vuelta atrás es la rama `rollback/pre-cartera`). Autoriza PRD-0 y PRD-11 a PRD-14 en ese orden. Al terminar: verificar integridad, pasar FEAT-006 y el CHANGELOG a producción y pedirle la validación final. Próximo frente después de cerrar BL-056 en producción: restyle de Meta & Eventos.
 
 ## Qué pasó
 
