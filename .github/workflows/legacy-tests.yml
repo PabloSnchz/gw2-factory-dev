@@ -1,0 +1,63 @@
+# Censo de los tests del legado de QwenPaw contra DEV (MIG-4a, BL-043, DEC-029).
+# Copia los tests de gw2-wallet-agents (público, MIT, fijado a un commit) a una copia
+# de DEV, los corre ahí y en el legado, y guarda el informe en tools/legacy/CENSO.md.
+# Así los ~90 archivos no pasan a mano por la Factory: se decide con evidencia.
+#
+# Seguridad:
+# - Solo corre en gw2-factory-dev.
+# - El legado se lee, nunca se escribe (checkout sin credenciales persistidas).
+# - Escribe un único archivo: tools/legacy/CENSO.md. No toca la app ni la memoria.
+# - Un push hecho con GITHUB_TOKEN no dispara otros workflows: no hay bucles.
+
+name: legacy-tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'tools/legacy/**'
+      - '!tools/legacy/CENSO.md'
+      - '.github/workflows/legacy-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: legacy-tests
+  cancel-in-progress: false
+
+env:
+  LEGACY_REF: eb91075f3e6a2d107ebdd8b994b4a1440fe29516
+
+jobs:
+  census:
+    if: github.repository == 'PabloSnchz/gw2-factory-dev'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/checkout@v4
+        with:
+          repository: PabloSnchz/gw2-wallet-agents
+          ref: ${{ env.LEGACY_REF }}
+          path: _legacy
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Censo
+        run: node tools/legacy/census.cjs --legacy _legacy --dev . --out tools/legacy/CENSO.md --ref "$LEGACY_REF" --timeout 90 --jobs 4
+
+      - name: Guardar el informe
+        run: |
+          git config user.name "shiruvana-factory[bot]"
+          git config user.email "shiruvana-factory@users.noreply.github.com"
+          git add tools/legacy/CENSO.md
+          if git diff --cached --quiet; then echo "Sin cambios"; exit 0; fi
+          git commit -m "MIG-4a: censo de los tests del legado (CI)"
+          for i in 1 2 3; do git pull --rebase origin main && git push origin HEAD:main && exit 0; sleep 5; done
+          exit 1
