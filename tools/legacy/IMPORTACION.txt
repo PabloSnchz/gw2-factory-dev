@@ -1,2 +1,1 @@
-ImportError: no pasan en DEV, no se importa nada: hb106-censo-latch.test.js (ROJO)
-RESULTADO: no se importó nada
+Importados: 24 nuevos o cambiados, 36 sin cambios
