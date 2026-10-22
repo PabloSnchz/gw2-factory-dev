@@ -1,21 +1,21 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-043 migración del legado de QwenPaw: terminada (MIG-1 a MIG-6). Falta la acción de Pablo: archivar los dos repos.
-Motivo: todo lo que el legado tenía de valor para La Bóveda de hoy ya está en DEV (hechos de la API, generadores de la Armería, 73 tests, documentación) o registrado (DISC-009 a 011, BL-054). Lo demás es historia y queda en los repos archivados, legibles.
+Estado: EN CURSO
+Tarea actual: registrar las respuestas de Pablo al cierre del legado (MIG-6) y preparar la propuesta de restyle de la Cartera (BL-056).
+Motivo: Pablo respondió (2026-10-22 15:48Z): el Gist estaba decidido como deprecado y prefiere respaldo en una nube que todos tengan; Homestead pasa a módulo propio; la Cámara del Brujo no se toca; archivó los dos repos del legado. Y pide restyle de los módulos empezando por la Cartera (tarjetas, tabla, conversor y dashboard).
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T15:50Z
-Próxima acción: con BL-043 cerrado, READY tiene BL-054 y BL-041; empiezo por BL-054 salvo que Pablo priorice DISC-009 (restaurar la foto de seguridad del Gist).
+Última actualización: 2026-10-22T16:05Z
+Próxima acción: MEM-1 (discovery, archivo, backlog) → MEM-2 (DEC-030, LES-029, índice) → CAR-0 propuesta visual de la Cartera para aprobación de Pablo (no se implementa antes).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-6 — discovery del legado: DISC-009 (restaurar la foto de seguridad del Gist), DISC-010 (modo legendario de Nexus), DISC-011 (Homestead, espera criterio de Pablo); BL-054 (ALERT-179, deuda del import del Gist); cierre de BL-004 y BL-053 bloqueado por entorno.
+MEM-1 — respuestas de Pablo a MIG-6: DISC-009 pasa a respaldo en la nube popular (Gist deprecado), DISC-010 dice dónde se vería, DISC-011 se promueve a BL-055 (módulo Homestead), BL-054 se cierra (ya estaba resuelto en DEV: error mío), Cámara del Brujo sin cambios; BL-056 restyle de la Cartera.
 Archivos:
 ai-memory/discovery.md
+ai-memory/discovery-archive.md
 ai-memory/backlog.md
-ai-memory/status.md
 
 Plan (orden por valor para el jugador):
 
@@ -51,6 +51,8 @@ Plan (orden por valor para el jugador):
 - MIG-4h hecho: la importación trae también herramientas (`8de3867`); idea61 + t19c + `tools/audit-61-congeladas.mjs` importados (`9c800a5`): vigilan que la lista de cuentas no quede congelada en el backup del Gist. `tools/legacy/README.md` (`0f59136`) dice qué no se trae y por qué, juzgado contra la app de hoy: 9 historia (modal viejo de la Armería, generadores `_build_*.py`, Homestead que nunca llegó), 3 proceso de agentes, 3 rotos en origen (hb114, idea50f, hb90). MIG-4 terminado: 73 de 88 tests del legado protegen DEV. Sin cambios visuales.
 - MIG-5 hecho: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (`2b10aa1`; el storage salió de `storage.js`, la tabla vieja tenía claves que no existen) y `docs/CHANGELOG-FACTORY.md` (`e4a6d1a`) junta los cambios desde 2026-10-19; unirlo a `CHANGELOG.md` (79 KB) queda en BL-053. Cierra BL-004. Sin cambios visuales.
 - MIG-6 hecho: del PRE_BACKLOG y las alertas del legado, juzgados contra la app de hoy: DISC-009 restaurar la foto de seguridad del Gist (ALTA; la foto se saca pero ninguna pantalla la restaura), DISC-010 modo legendario de Nexus (MEDIA), DISC-011 Homestead (espera criterio de Pablo), BL-054 el import del Gist repite `applyImportData` (ALERT-179). Descartado: tracker de la Cámara del Brujo (ya existe). Colecciones y monturas, a la próxima ronda (límite de 3). Sin cambios visuales.
+- Pablo (15:48Z) archivó gw2-wallet-agents y gw2-agents-dashboard (verificado: `archived: true` en los dos). BL-043 cerrada del todo.
+- Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
@@ -86,7 +88,6 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [BL-043] Acción: archivá `gw2-wallet-agents` y `gw2-agents-dashboard` (Settings → General → Archive this repository). Si querés, antes borrá la rama `__never__`. Archivados siguen legibles, y los tests importados están fijados al commit eb91075, así que nada en DEV se rompe.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
 ## Para tu información
