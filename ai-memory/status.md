@@ -1,20 +1,21 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-043 migración del legado de QwenPaw, MIG-5: documentación del producto al día con La Bóveda de hoy (cierra BL-004). MIG-2 y MIG-4 terminados.
-Motivo: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen la v6.6.2 y no nombran la Armería, el PSNA nuevo, las metas nuevas ni mi voz; quien lea la documentación entiende una app que ya no existe.
+Tarea actual: BL-043 migración del legado de QwenPaw, MIG-6: lo que el legado pensó para el producto y sigue valiendo para La Bóveda de hoy, a discovery y backlog. MIG-2, MIG-4 y MIG-5 terminados.
+Motivo: antes de que Pablo archive los dos repos, sus ideas de producto (PRE_BACKLOG) y sus alertas abiertas (ALERTS_LOG) tienen que quedar juzgadas contra la app de hoy y registradas, o descartadas con motivo.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T15:12Z
-Próxima acción: MIG-5a (BRIEFING y DESARROLLADORES) → MIG-5b (CHANGELOG, cierra BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
+Última actualización: 2026-10-22T15:40Z
+Próxima acción: MIG-6 (discovery y backlog) → cierre de memoria → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-5a — `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (BL-004, BL-043). ONBOARDING (144 KB) y Módulos JS Referencia (102 KB) no entran en una publicación (LES-028): quedan como referencia histórica, señalados desde el BRIEFING. Las versiones del legado de esos dos documentos describen la app de QwenPaw (con Homestead): no se migran.
+MIG-6 — discovery del legado: DISC-009 (restaurar la foto de seguridad del Gist), DISC-010 (modo legendario de Nexus), DISC-011 (Homestead, espera criterio de Pablo); BL-054 (ALERT-179, deuda del import del Gist); cierre de BL-004 y BL-053 bloqueado por entorno.
 Archivos:
-docs/BRIEFING.md
-docs/DESARROLLADORES.md
+ai-memory/discovery.md
+ai-memory/backlog.md
+ai-memory/status.md
 
 Plan (orden por valor para el jugador):
 
@@ -48,6 +49,7 @@ Plan (orden por valor para el jugador):
 - MIG-4c a 4g hechos: 71 tests del legado importados por CI en 5 tandas (Armería 12 `3bcc78d`, caché y API 24 `a90709d`, cuentas/permisos/Gist 24 `7536e98`, raids y strikes 5 `e3f3515`, cartera/Cámara del Brujo/skins/inventario 6 `d11eab3`); app-checks corre `tests/*.test.js` y `*.smoke.js` (`f93ed64`). Dos rechazos de CI se deshicieron solos: hb106-censo-latch exige hb106-t13-invariante a su lado (se agregó) y t19c lee idea61 (pasa a 4h).
 - Pablo (15:00Z): no perder de vista la app actual; lo que el legado prueba de la app vieja es historia, no hallazgo. En cada cierre de MIG decir si hay cambios visuales para validar.
 - MIG-4h hecho: la importación trae también herramientas (`8de3867`); idea61 + t19c + `tools/audit-61-congeladas.mjs` importados (`9c800a5`): vigilan que la lista de cuentas no quede congelada en el backup del Gist. `tools/legacy/README.md` (`0f59136`) dice qué no se trae y por qué, juzgado contra la app de hoy: 9 historia (modal viejo de la Armería, generadores `_build_*.py`, Homestead que nunca llegó), 3 proceso de agentes, 3 rotos en origen (hb114, idea50f, hb90). MIG-4 terminado: 73 de 88 tests del legado protegen DEV. Sin cambios visuales.
+- MIG-5 hecho: `docs/BRIEFING.md` y `docs/DESARROLLADORES.md` describen La Bóveda de hoy (`2b10aa1`; el storage salió de `storage.js`, la tabla vieja tenía claves que no existen) y `docs/CHANGELOG-FACTORY.md` (`e4a6d1a`) junta los cambios desde 2026-10-19; unirlo a `CHANGELOG.md` (79 KB) queda en BL-053. Cierra BL-004. Sin cambios visuales.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
