@@ -12,7 +12,7 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
-- [BL-043] [ALTO] Migración del legado de QwenPaw a DEV — retomada 2026-10-22 06:15Z (Pablo validó BL-050 y BL-052). REQ-010 aprobada (RESP-010, opción A). Orden: MIG-1 hechos de la API (hecho, `20d53ff`: `docs/GW2-API-HECHOS.md`, LES-029) → MIG-2 generadores de la Armería en `tools/legendary/` (MIG-2a hecho, `f365882`: fetch del catálogo + 7 tests sin red; siguen 2b build de legendary-data, 2c recetas, 2d precursores, 2e publicación) → MIG-3 arreglo de totales (`stockMap`): el error existe en DEV, lo resuelve BL-045 → MIG-4 tests por tandas que pasen en DEV → MIG-5 documentación (cierra BL-004) → MIG-6 discovery. Al terminar, Pablo archiva gw2-wallet-agents y gw2-agents-dashboard. Los dos repos son solo lectura. · FACTORY-ASSET-001, REQ-010, RSK-018
+- [BL-043] [ALTO] Migración del legado de QwenPaw a DEV — retomada 2026-10-22 06:15Z (Pablo validó BL-050 y BL-052). REQ-010 aprobada (RESP-010, opción A). Orden: MIG-1 hechos de la API (hecho, `20d53ff`: `docs/GW2-API-HECHOS.md`, LES-029) → MIG-2 generadores de la Armería en `tools/legendary/` (MIG-2a `f365882` fetch del catálogo; MIG-2b `89f2ca4` precios y build de legendary-data, reproduce las 206; MIG-2c `3f3e0ab` recetas desde crafty_legend `a24d244` (MIT, fijado por huella), reproduce las 206; siguen 2d precursores, 2e publicación) → MIG-3 arreglo de totales (`stockMap`): el error existe en DEV, lo resuelve BL-045 → MIG-4 tests por tandas que pasen en DEV → MIG-5 documentación (cierra BL-004) → MIG-6 discovery. Al terminar, Pablo archiva gw2-wallet-agents y gw2-agents-dashboard. Los dos repos son solo lectura. · FACTORY-ASSET-001, REQ-010, RSK-018
 
 ## BLOCKED
 
