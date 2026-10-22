@@ -1,6 +1,7 @@
 # FEAT-006 — La Cartera renovada
 
-- Estado: EN DEV, validada por Pablo en pantalla paso a paso (CAR-1, CAR-2A, CAR-2B, CAR-3). No está en producción: promover es decisión de Pablo.
+- Estado: EN PRODUCCIÓN desde 2026-10-22 23:28Z (gw2-wallet-ligero `d900b37` PRD-11, `e402e6b` PRD-12, `82da84c` PRD-13, `a82c996` PRD-14), por orden de Pablo (REQ-011, opción A). Blobs idénticos a DEV. Vuelta atrás: rama `rollback/pre-cartera` en `dd5c0c6` (wallet-theme `d06748e`, converter-modal `b42da9c`, wallet-dashboard `ff3d319`). Falta la validación funcional de Pablo en producción.
+- Validada por Pablo en DEV paso a paso (CAR-1, CAR-2A, CAR-2B, CAR-3) y aprobada en conjunto (2026-10-22 23:11Z).
 - Fecha: 2026-10-22
 - Backlog: BL-056 · Propuesta: CAR-0 (`propuesta-cartera-bl056.html`, aprobada tal cual a las 16:19Z) · Riesgo: RSK-020 (BAJO, aceptado) · Decisiones: DEC-021, DEC-024 · Lecciones: LES-017, LES-028
 - Commits (gw2-factory-dev): `ef04409` CAR-1 · `0dca9f6`, `49953fe`, `8abdc38` CAR-2A · `9450267`, `17e75f0` CAR-2B · `c371549`, `84b39d6`, `7bb1f60` CAR-3 · `a2c38b8` validación funcional de CAR-3
@@ -48,4 +49,5 @@ Todos los blobs publicados son idénticos a los validados en local.
 
 - **RSK-020 (BAJO, aceptado por Pablo):** `index.html` (69 KB) no se publica entero, así que sus `?v=` quedan viejos: converter-modal 1.2.0, wallet-dashboard 2.9.0, wallet-theme 1.3.1. GitHub Pages revalida, pero un navegador con caché puede mostrar lo anterior hasta Ctrl+F5. La próxima vez que se toque `index.html`, subir esas tres versiones.
 - **Desvíos de DEC-021 registrados:** CAR-2B en un commit de 43,7 KB para no dejar CI en rojo entre commits (LES-017); CAR-3 con un archivo de 52,5 KB (excepción de archivo grande).
-- **Promoción a producción:** son 3 archivos de código (`wallet-theme.js`, `converter-modal.js`, `wallet-dashboard.js`) más sus tests; cada uno cabe en una publicación propia.
+- **Promoción a producción (REQ-011):** repitió el camino de DEV para que cada estado intermedio fuera uno ya validado: PRD-11 `wallet-theme.js` 2.0.0, PRD-12 `converter-modal.js` 2.0.0, PRD-13 `wallet-theme.js` 2.1.0, PRD-14 `wallet-dashboard.js` 3.0.0. Producción no tiene tests: la garantía son los blobs idénticos a DEV. `index.html` de producción no se tocó (RSK-020: Ctrl+F5).
+- **Vuelta atrás del conversor (riesgo ALTO aceptado por Pablo):** la 1.2.0 pesa 68 KB y la Factory no la puede publicar; se corrige hacia adelante o Pablo la restaura con git desde `rollback/pre-cartera`.
