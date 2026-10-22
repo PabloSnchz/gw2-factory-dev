@@ -6,16 +6,15 @@ Motivo: DEV tiene 22 archivos de tests; el legado tiene 88 que en su mayoría pr
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T13:55Z
-Próxima acción: MIG-4b (importación por lista en el workflow) → MIG-4c a 4g tandas (app-checks corre `tests/*.test.js`; lista `tools/legacy/importar.txt`) → MIG-4h los 15 ROJO uno por uno → MIG-5 documentación (BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
+Última actualización: 2026-10-22T13:58Z
+Próxima acción: MIG-4c a 4g tandas → MIG-4h los 15 ROJO uno por uno → MIG-5 documentación (BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-4b — el workflow `legacy-tests` importa a `tests/` los archivos de `tools/legacy/importar.txt`, solo si todos pasan en DEV (BL-043, DEC-029)
+MIG-4c a 4g — tandas de tests del legado (BL-043, DEC-029). Cada tanda es una edición de `tools/legacy/importar.txt`; CI copia, verifica y deja el resultado en `tools/legacy/IMPORTACION.txt`. 4c además hace que app-checks corra `tests/*.test.js` y `tests/*.smoke.js`. Tandas: 4c Armería (12), 4d caché y API (24), 4e cuentas, permisos y Gist (23), 4f raids y strikes (7), 4g cartera, Cámara del Brujo y skins (6). Fuera: hb90-t9-mutex (ROJO en el legado y VERDE en DEV: posible inestable).
 Archivos:
-tools/legacy/census.cjs
-tests/legacy-census.test.cjs
-.github/workflows/legacy-tests.yml
+.github/workflows/app-checks.yml
+tools/legacy/importar.txt
 
 Plan (orden por valor para el jugador):
 
@@ -45,6 +44,7 @@ Plan (orden por valor para el jugador):
 - MIG-2e hecho (`b1a5fe7`): `dev-pages.yml` ya no publica ni se dispara por `tools/`; `.gitignore` con `tools/legendary/.work/` y `__pycache__/`; `tests/dev-pages.test.cjs` (4 tests, uno arma el sitio con el rsync del workflow; 8/8 mutaciones). Blobs verificados. MIG-2 terminado.
 - MIG-4: el legado tiene 88 tests (~1,1 MB), scripts con OK/FAIL, no `node:test`. Pasarlos a mano por la Factory es el límite de LES-027. DEC-029: se migran por CI (el legado es público, MIT; 34 de 47 archivos .js son idénticos a DEV).
 - MIG-4a hecho (`da9b830`; publicado sin checkpoint previo: falta mía, registrada acá): `tools/legacy/census.cjs`, `.github/workflows/legacy-tests.yml`, `tests/legacy-census.test.cjs` (4 tests, 11/11 mutaciones). El censo de CI (`b34fc09`, `tools/legacy/CENSO.md`): en el legado 85 VERDE y 3 ROJO; contra DEV 73 VERDE y 15 ROJO; 0 mienten. ROJO: 6 dependen de archivos que solo están en el legado (homestead-tracker.js, tools/hb100-suite.mjs, hb116, los `_build_*.py`, idea84); 5 de la Armería cuya interfaz cambió (BL-047/049); hb114 usa rutas de Windows; para analizar: hb119-t19a (13 de 14 oyentes de `gn:tokenchange`), idea61 (9 FAIL) e idea50f (también ROJO en el legado).
+- MIG-4b hecho (`e816d33`): `importTests()` en `census.cjs` (copia la lista desde el legado fijado, la corre en DEV y deshace todo si algo no queda en VERDE) y paso de importación en el workflow, con el resultado en `tools/legacy/IMPORTACION.txt` (RSK-016). 5 tests; 11/11 y 8/8 mutaciones. CI corrió de punta a punta (`bacb188`). Blobs verificados.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
