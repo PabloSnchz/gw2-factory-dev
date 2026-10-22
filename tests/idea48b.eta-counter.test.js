@@ -85,8 +85,14 @@ section('[3] ESTATICA — buster coherente con el header (ALERT-24)');
 const wdHeader = (WD.match(/Versión: (\d+\.\d+\.\d+)/) || [])[1];
 const wdBuster = (INDEX.match(/wallet-dashboard\.js\?v=(\d+\.\d+\.\d+)/) || [])[1];
 ok('el archivo declara una version', !!wdHeader, 'no se encontro "Versión: x.y.z"');
-ok('index.html sirve la MISMA version que el header declara',
-  wdHeader && wdHeader === wdBuster,
+// Desde wallet-dashboard.js 3.0.0 (BL-056, CAR-3) la igualdad no se puede cumplir:
+// index.html pesa 69 KB y la Factory no puede publicarlo entero, asi que su ?v= queda
+// en 2.9.0 (RSK-020, aceptado como BAJO). Mientras tanto se exige que index.html lo
+// cargue con un ?v= y que el header no sea MAS VIEJO que ese ?v=. Cuando index.html
+// se pueda publicar, vuelve la igualdad.
+const vnum = (v) => (v || '0.0.0').split('.').reduce((a, n) => a * 1000 + Number(n), 0);
+ok('index.html carga el archivo con ?v= y el header no es mas viejo (RSK-020)',
+  wdHeader && wdBuster && vnum(wdHeader) >= vnum(wdBuster),
   `header=${wdHeader} buster=${wdBuster}`);
 
 section('[4] EJECUCION — computeEta con el reloj controlado');
