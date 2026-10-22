@@ -1,2 +1,1 @@
-ImportError: no pasan en DEV, no se importa nada: t19c-lectores-legacy.test.js (ROJO)
-RESULTADO: no se importó nada
+Importados: 5 nuevos o cambiados, 60 sin cambios

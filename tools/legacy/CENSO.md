@@ -2,7 +2,7 @@
 
 Generado por `tools/legacy/census.cjs` en CI (`.github/workflows/legacy-tests.yml`). No editar a mano.
 
-- Fecha: 2026-10-22T13:59:34.990Z
+- Fecha: 2026-10-22T14:00:56.033Z
 - Legado: gw2-wallet-agents @ `eb91075`
 - Archivos: 88
 - En el legado: VERDE 85 · ROJO 3 · MIENTE 0 · TIEMPO 0 · DEPENDENCIA 0
@@ -108,7 +108,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-tLTRkt/dev/js/homestead-tracker.js'
+    path: '/tmp/censo-obEMBp/dev/js/homestead-tracker.js'
     }
     Node.js v22.23.4
 
@@ -162,7 +162,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '\\tmp\\censo-tLTRkt\\dev\\\\js\\raid-tracker.js'
+    path: '\\tmp\\censo-obEMBp\\dev\\\\js\\raid-tracker.js'
     }
     Node.js v22.23.4
 
@@ -180,7 +180,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-tLTRkt/dev/js/_build_legendary_recipes.py'
+    path: '/tmp/censo-obEMBp/dev/js/_build_legendary_recipes.py'
     }
     Node.js v22.23.4
 
@@ -189,7 +189,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-tLTRkt/dev/tools/hb116-union-po.mjs'
+    path: '/tmp/censo-obEMBp/dev/tools/hb116-union-po.mjs'
     }
     Node.js v22.23.4
 
@@ -198,7 +198,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-tLTRkt/dev/tools/hb100-suite.mjs'
+    path: '/tmp/censo-obEMBp/dev/tools/hb100-suite.mjs'
     }
     Node.js v22.23.4
 
@@ -207,7 +207,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-tLTRkt/dev/tools/hb100-suite.mjs'
+    path: '/tmp/censo-obEMBp/dev/tools/hb100-suite.mjs'
     }
     Node.js v22.23.4
 
