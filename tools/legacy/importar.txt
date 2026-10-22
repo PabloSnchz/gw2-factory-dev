@@ -5,6 +5,9 @@
 #
 # Fuera a propósito: hb90-t9-mutex.test.js (ROJO en el legado y VERDE en DEV:
 # posible inestable; si entra, puede poner main en rojo sin que nadie lo vea).
+#
+# Pares que van juntos: hb106-censo-latch exige que hb106-t13-invariante exista
+# en tests/ (sección 4: el censo y el test de comportamiento son archivos distintos).
 
 # Tanda 1 (MIG-4c) — Armería
 alert84.leyenda-estado-honesto.test.js
@@ -46,7 +49,7 @@ idea57t4-idioma-contrato.test.js
 idea57t5-cuenta-medida.test.js
 idea60b.forma-charcount.test.js
 
-# Tanda 3 (MIG-4e) — cuentas, permisos, pestañas y Gist
+# Tanda 3 (MIG-4e) — cuentas, permisos, pestañas, Gist y ciclo de vida al cambiar de cuenta
 hb75-permisos.test.js
 hb77-puerta-llega.test.js
 hb78-preferencia-pestana.test.js
@@ -58,6 +61,7 @@ hb101-t12-camino.test.js
 hb104-confirm-antes-de-escribir.test.js
 hb105-perms-persistidos.test.js
 hb106-censo-latch.test.js
+hb106-t13-invariante.test.js
 hb111-puerta-import.test.js
 hb119-t20a-confirm.test.js
 hb121-gist-cancel.test.js
