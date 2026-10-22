@@ -6,16 +6,16 @@ Motivo: DEV tiene los datos de la Armería (`legendary-data.js`, recetas, precur
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T06:58Z
-Próxima acción: MIG-2d (build de `js/legendary-precursors.js` + test que reproduce las 907 entradas + README con la tabla de pasos y el crédito MIT) → MIG-2e dev-pages no publica `tools/` y `.gitignore` para `tools/legendary/.work/`.
+Última actualización: 2026-10-22T13:45Z
+Próxima acción: MIG-2e (dev-pages no publica `tools/`, `.gitignore` para `tools/legendary/.work/`, test que lo vigila) → MIG-4 tests del legado por tandas → MIG-5 documentación (BL-004) → MIG-6 discovery → avisar a Pablo para archivar (pedido de Pablo 2026-10-22 13:27Z).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-MIG-2d — build de `js/legendary-precursors.js` desde la misma fuente, con test que reproduce las 907 entradas, y README de `tools/legendary/` al día (BL-043)
+MIG-2e — DEV deja de publicar `tools/` y no se versiona `tools/legendary/.work/`, con test que lo vigila (BL-043)
 Archivos:
-tools/legendary/build_legendary_precursors.py
-tests/legendary-build-precursors.test.cjs
-tools/legendary/README.md
+.github/workflows/dev-pages.yml
+.gitignore
+tests/dev-pages.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -40,6 +40,8 @@ Plan (orden por valor para el jugador):
 - MIG-2b hecho (`89f2ca4`): `fetch_thematic_prices.py` (precios siempre frescos; ya no traga errores de red) y `build_legendary_data.py`; `tests/legendary-build-data.test.cjs` reconstruye la entrada desde `js/legendary-data.js` y el build devuelve las 206 legendarias idénticas (8 tests, 19/19 mutaciones). Expansiones nuevas: siguen en un solo lugar, `render-catologo.js`.
 - Hallazgo MIG-2c: recetas y precursores salían de `tools/cl_recipes.json`, que el legado nunca versionó. Es el `data/CraftyLegend/recipes.json` de crafty_legend (PieOrCake, MIT) en el commit `a24d244` (2026-09-17): 634 recetas, blob 551cedfa, y reproduce las 206 entradas de `js/legendary-recipes.js` sin diferencias. Se fija ese commit y su blob; actualizar es cambiar el commit a propósito.
 - MIG-2c hecho (`3f3e0ab`): `fetch_recipes_source.py` (baja crafty_legend fijado a commit y huella, valida la forma) y `build_legendary_recipes.py` (del legado, blob fb02a142); `tests/legendary-build-recipes.test.cjs` (6 tests, 17/17 mutaciones). Con el archivo real de crafty_legend: huella verificada y 0 diferencias en las 206 entradas. Los textos que ve el jugador ya no nombran archivos internos y "Forja Mystica" pasa a "Forja Mística" (se ven al regenerar). Blobs verificados.
+- Pablo (13:27Z): seguir con MIG-2d, MIG-2e y MIG-4 a MIG-6, y avisarle al terminar para archivar los dos repos.
+- MIG-2d hecho (`f9277e5`): `build_legendary_precursors.py` (del legado, blob 93eecdd0; sin la variable global y sin el chequeo de huérfanas, que nunca podía fallar), `tests/legendary-build-precursors.test.cjs` (4 tests, 15/15 mutaciones) y `tools/legendary/README.md` con los seis pasos y el crédito MIT a crafty_legend. Con el archivo real: 0 diferencias en las 907 entradas (recipe 467, material 436, vendor 4). Blobs verificados.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
 
