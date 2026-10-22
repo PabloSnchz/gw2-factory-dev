@@ -9,8 +9,8 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 
 ## Estado actual
 
-- Abiertas: 6 de 15 (operación normal)
-- READY: 3 de 5 (modo activo; BL-037 se hizo y cerró el 2026-10-21)
+- Abiertas: 9 de 15 (operación normal)
+- READY: 2 de 5 (modo activo; BL-054 y BL-041)
 - Rondas autónomas: habilitadas desde el 2026-10-20 (RESP-004, DEC-020). Capacidad según las instrucciones v2 (DEC-022): READY ≤ 3 activo, 4–5 restringido, más de 5 detenido. Hoy: activo
 - Ideas pendientes sin analizar: 1 de 5 (se puede hacer ronda)
 - Áreas detenidas: ninguna (REQ-007 respondida el 2026-10-21; no hay decisiones estratégicas abiertas ni riesgos CRÍTICOS)
@@ -21,6 +21,7 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 | Fecha | Tipo | Familias | Resultado |
 |---|---|---|---|
 | 2026-10-20 | Inicial, por encargo (FACTORY-RESEARCH-001) | Producto, ecosistema, herramientas, comunidad | 8 registradas: 2 promovidas (BL-013, BL-034), 6 abiertas (2 vienen del backlog) |
+| 2026-10-22 | Legado de QwenPaw (MIG-6, BL-043) | Producto heredado, juzgado contra La Bóveda de hoy | 3 registradas (DISC-009 a 011). Descartado por historia: el tracker de la Cámara del Brujo (La Bóveda ya lo tiene). Queda para la próxima ronda por el límite de 3: colecciones de la cuenta con monturas (PRE_BACKLOG ideas 2 y 5; ojo con la cuota: muchas cuentas × varios endpoints, ALERT-27). De las alertas del legado, solo una de producto sigue viva y es deuda técnica: BL-054 |
 
 ## DISC-003 — "Próximas funciones" anuncia como futuras funciones que ya existen
 
@@ -116,3 +117,48 @@ Formato: `## DISC-XXX — título` y los campos Estado, Área, Fecha, Última re
 - Alternativa: responder REQ-002 con un botón
 - Prioridad: BAJA
 - Costo: S
+
+## DISC-009 — El backup del Gist guarda una foto de seguridad que no se puede restaurar desde la pantalla
+
+- Estado: ANALIZADO
+- Área: app
+- Fecha: 2026-10-22
+- Última revisión: 2026-10-22
+- Fuente: legado de QwenPaw (ALERT-184, MIG-6), verificado contra DEV: `gist-sync.js` saca la foto `gn:github:gist_snapshot` antes de pisar los datos con el Gist, pero `index.html` no llama a `restoreSafetySnapshot` en ningún lado
+- Problema: si una descarga del Gist pisa datos buenos, la foto existe pero el jugador no tiene un botón para volver a ella
+- Beneficiario: todo jugador que usa el backup en la nube
+- Valor: completa una red de seguridad que hoy está a medias; protege la lista de cuentas
+- Alternativa: restaurar desde la consola del navegador (no es razonable pedírselo a un jugador)
+- Prioridad: ALTA (protege datos del usuario)
+- Costo: S
+- Nota: la pantalla del Gist vive en `index.html` (69 KB, LES-028), así que el botón tiene que montarse desde un `.js`. Entra a READY cuando haya lugar.
+
+## DISC-010 — Modo legendario del raid Nexus of Eternity
+
+- Estado: ANALIZADO
+- Área: actividades y metas
+- Fecha: 2026-10-22
+- Última revisión: 2026-10-22
+- Fuente: legado de QwenPaw (PRE_BACKLOG idea 3); logros verificados en MIG-1 (`docs/GW2-API-HECHOS.md`): 9472 modo desafío y 9478 "Legendary Conqueror of Vloxx"
+- Problema: el Raid Tracker no muestra el avance en los modos desafío y legendario del raid más nuevo. En el legado el dato se descargaba y no se dibujaba (LES-029): no se copia, se hace con su pantalla
+- Beneficiario: jugadores de raids
+- Valor: contenido nuevo (Visions of Eternity), sin alternativa en español
+- Alternativa: gw2efficiency y la wiki (en inglés)
+- Prioridad: MEDIA
+- Costo: S
+- Nota: `raid-tracker.js` pesa 100 KB: o micro-ciclo de archivo grande (DEC-021) o un módulo aparte que se enganche a la pantalla de raids.
+
+## DISC-011 — Panel de Homestead
+
+- Estado: ANALIZADO
+- Área: app
+- Fecha: 2026-10-22
+- Última revisión: 2026-10-22
+- Fuente: legado de QwenPaw: `js/homestead-tracker.js` (20 KB) y su panel, nunca validados por Pablo ni llegados a La Bóveda; endpoints `/v2/account/homestead/decorations`, `/v2/homestead/glyphs` y `/v2/homestead/decorations/categories` (los glyphs llegan como texto, no como número)
+- Problema: no hay forma de ver qué decoraciones y glyphs del homestead faltan
+- Beneficiario: jugadores de Janthir Wilds que decoran su homestead
+- Valor: probable; sin demanda medida todavía
+- Alternativa: la wiki y el juego
+- Prioridad: BAJA (provisoria)
+- Costo: M
+- Esperando criterio: es una sección nueva de La Bóveda (alcance funcional), la decide Pablo. Mi recomendación: después de DISC-009 y DISC-010. Si se hace, se parte del código del legado y vuelve con él su test `alert86-censo-clasificacion`.
