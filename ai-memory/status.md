@@ -1,19 +1,19 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-050 — promoción a producción de todo lo validado en DEV, por orden de Pablo (2026-10-22 04:01Z): PSNA (FEAT-003) y Armería (BL-045 a BL-049). Después sigue BL-043 MIG-2a.
+Tarea actual: BL-050 hecho: PSNA y Armería en producción (5 archivos, blobs idénticos a DEV). Sigue BL-043 MIG-2a.
 Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T04:25Z
-Próxima acción: PRD-9 `js/legendary-tree-ui.js` (blob `0195a1be`) y después PRD-10 `js/legendary-tracker.js` (blob `42313701`) en gw2-wallet-ligero. Vuelta atrás: `2bab20f`. `index.html` y `analytics.js` de producción no se tocan (DEC-006).
-Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035): verificado por blobs en producción `b57bc7b`: PRD-6 psna-schedule.json `aca6dd7` (09728754), PRD-7 activities.js `de1c34d` (489ee8ec), PRD-8 render-catologo.js `b57bc7b` (c337858f), idénticos a DEV. Pendientes por blob: legendary-tree-ui.js (prod e9f360e4) y legendary-tracker.js (prod 59d847f0). Estado intermedio compatible: el tracker viejo sigue registrando los renders del catálogo nuevo; index.html de producción carga los mismos scripts que DEV.
+Última actualización: 2026-10-22T04:35Z
+Próxima acción: MIG-2a — generadores de la Armería del legado a `tools/legendary/` (BL-043). Si Pablo manda lo que dice el aviso de íconos en producción, eso va primero.
+Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
 Micro-ciclo:
-PRD-6 a PRD-10 — copia de contenido DEV → producción, un archivo por micro-ciclo, blobs idénticos (BL-050)
+MIG-2a — generadores de datos de la Armería a tools/legendary/ (BL-043)
 Archivos:
-uno por micro-ciclo, en el orden de Próxima acción
+tools/legendary/README.md
 
 Plan (orden por valor para el jugador):
 
@@ -28,6 +28,7 @@ Plan (orden por valor para el jugador):
 - Pablo probó la ficha (03:34Z): los íconos siguen sin cargar y el tamaño todavía no lo convence; pidió que sea directamente una pantalla, como la propuesta, sin consultarle ("resolvé con tu criterio").
 - ARM-7 estilos de la pantalla en `legendary-tree-ui.js` 2.2.0 (BL-049). Hecho (`21800ad`).
 - ARM-8 la legendaria como pantalla dentro de la Armería, íconos del árbol primero, respaldo directo y aviso con Reintentar, en `legendary-tracker.js` 1.3.0 (BL-049). Hecho (`3b96bf8`).
+- PRD-6 a PRD-10 promoción a producción por orden de Pablo (BL-050): `aca6dd7` psna-schedule.json, `de1c34d` activities.js, `b57bc7b` render-catologo.js, `6277d33` legendary-tree-ui.js, `dd5c0c6` legendary-tracker.js. Hecho, blobs verificados.
 - Después: sigue BL-043 en MIG-2a.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -42,6 +43,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- En producción por orden de Pablo (BL-050): el PSNA renovado y la Armería nueva (la legendaria como pantalla, "Tengo" real, Abalorio y Espaldar, expansiones reales y respaldo de íconos). Vuelta atrás: `2bab20f`.
 - Armería: la legendaria ahora se abre como pantalla dentro de la Armería (BL-049), con "← Volver", la receta a página completa y Materiales totales fijo al costado. Los íconos se piden primero para el árbol abierto, con un respaldo directo a la API, y si fallan la pantalla lo dice con "Reintentar".
 - Pablo validó el PSNA renovado (23:18Z: "espectacular").
 - PSNA renovado (BL-048): volvió el ícono del waypoint (el de la wiki dejó de cargar; ahora se sirve desde La Bóveda), el día y la cuenta regresiva se ven en grande y corren solos, y cada lugar es un botón grande que dice "Copiar" y confirma "✓ Copiado".
@@ -60,8 +62,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 ## Esperando a Pablo
 
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
-- [BL-049] Validación: abrí DEV (https://pablosnchz.github.io/gw2-factory-dev/) → Armería (Ctrl+F5) y tocá una legendaria grande (Colmilloescarcha, Eternidad). Si los íconos no aparecen, mandame lo que dice el aviso amarillo ("N de M").
-- [FEAT-003] Decisión: PSNA validado en DEV (lugares 22:42Z, diseño 23:18Z). Si querés, se puede promover a producción cuando lo pidas.
+- [BL-050] Validación: abrí producción (https://pablosnchz.github.io/gw2-wallet-ligero/) con Ctrl+F5: Actividades (PSNA) y Armería (tocá una legendaria). Si los íconos no aparecen, mandame lo que dice el aviso amarillo ("N de M").
 
 ## Para tu información
 
