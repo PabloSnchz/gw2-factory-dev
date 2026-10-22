@@ -1,15 +1,12 @@
 # Tests del legado que se importan a tests/ (MIG-4, BL-043, DEC-029).
 # Un archivo por línea, tal como se llama en gw2-wallet-agents/tests @ eb91075.
+# Una entrada tools/<archivo> es una herramienta que un test necesita y va a tools/.
 # El workflow legacy-tests los copia y solo los deja si TODOS pasan contra DEV;
-# el resultado queda en tools/legacy/IMPORTACION.txt. Ver CENSO.md.
-#
-# Fuera a propósito: hb90-t9-mutex.test.js (ROJO en el legado y VERDE en DEV:
-# posible inestable; si entra, puede poner main en rojo sin que nadie lo vea).
-# Pendiente de MIG-4h: t19c-lectores-legacy.test.js lee tests/idea61-claves-congeladas.test.js,
-# que está en ROJO contra DEV; entran o salen juntos.
+# el resultado queda en tools/legacy/IMPORTACION.txt. Ver CENSO.md y README.md
+# (ahí está lo que NO se importa y por qué).
 #
 # Pares que van juntos: hb106-censo-latch exige que hb106-t13-invariante exista
-# en tests/ (sección 4: el censo y el test de comportamiento son archivos distintos).
+# en tests/; t19c-lectores-legacy lee idea61-claves-congeladas, que corre audit-61.
 
 # Tanda 1 (MIG-4c) — Armería
 alert84.leyenda-estado-honesto.test.js
@@ -91,3 +88,8 @@ hb150-cuenta-skins.test.js
 hb154-skins-catalogo.test.js
 idea55.wv-online-parallel.test.js
 inventory-dashboard.abort.test.js
+
+# Tanda 6 (MIG-4h) — la lista de cuentas no queda congelada entre las dos claves de storage.js
+tools/audit-61-congeladas.mjs
+idea61-claves-congeladas.test.js
+t19c-lectores-legacy.test.js
