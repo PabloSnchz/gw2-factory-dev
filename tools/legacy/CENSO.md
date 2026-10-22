@@ -2,11 +2,11 @@
 
 Generado por `tools/legacy/census.cjs` en CI (`.github/workflows/legacy-tests.yml`). No editar a mano.
 
-- Fecha: 2026-10-22T15:06:33.763Z
+- Fecha: 2026-10-22T15:08:00.461Z
 - Legado: gw2-wallet-agents @ `eb91075`
 - Archivos: 88
 - En el legado: VERDE 85 · ROJO 3 · MIENTE 0 · TIEMPO 0 · DEPENDENCIA 0
-- En DEV: VERDE 73 · ROJO 15 · MIENTE 0 · TIEMPO 0 · DEPENDENCIA 0
+- En DEV: VERDE 74 · ROJO 14 · MIENTE 0 · TIEMPO 0 · DEPENDENCIA 0
 
 Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0 pero imprime FAIL · TIEMPO no terminó · DEPENDENCIA le falta un paquete.
 
@@ -93,7 +93,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
 | `idea57t4-idioma-contrato.test.js` | 3.9 | VERDE | VERDE | 0/0 | js/api-gw2.js | — |
 | `idea57t5-cuenta-medida.test.js` | 11.1 | VERDE | VERDE | 13/0 | js/api-gw2.js | — |
 | `idea60b.forma-charcount.test.js` | 7.4 | VERDE | VERDE | 21/0 | js/api-gw2.js | — |
-| `idea61-claves-congeladas.test.js` | 26.1 | VERDE | ROJO | 29/9 | — | — |
+| `idea61-claves-congeladas.test.js` | 26.1 | VERDE | VERDE | 38/0 | — | — |
 | `idea63-filtros-cuentas.test.js` | 7.8 | VERDE | VERDE | 26/0 | — | — |
 | `idea64-dos-pestanas.test.js` | 29.2 | VERDE | VERDE | 30/0 | — | — |
 | `idea78-puntos-logros-nan.test.js` | 5.8 | VERDE | VERDE | 12/0 | — | — |
@@ -108,7 +108,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-v7v7D5/dev/js/homestead-tracker.js'
+    path: '/tmp/censo-UAaBIs/dev/js/homestead-tracker.js'
     }
     Node.js v22.23.3
 
@@ -162,7 +162,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '\\tmp\\censo-v7v7D5\\dev\\\\js\\raid-tracker.js'
+    path: '\\tmp\\censo-UAaBIs\\dev\\\\js\\raid-tracker.js'
     }
     Node.js v22.23.3
 
@@ -180,7 +180,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-v7v7D5/dev/js/_build_legendary_recipes.py'
+    path: '/tmp/censo-UAaBIs/dev/js/_build_legendary_recipes.py'
     }
     Node.js v22.23.3
 
@@ -189,7 +189,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-v7v7D5/dev/tools/hb116-union-po.mjs'
+    path: '/tmp/censo-UAaBIs/dev/tools/hb116-union-po.mjs'
     }
     Node.js v22.23.3
 
@@ -198,7 +198,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-v7v7D5/dev/tools/hb100-suite.mjs'
+    path: '/tmp/censo-UAaBIs/dev/tools/hb100-suite.mjs'
     }
     Node.js v22.23.3
 
@@ -207,7 +207,7 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     errno: -2,
     code: 'ENOENT',
     syscall: 'open',
-    path: '/tmp/censo-v7v7D5/dev/tools/hb100-suite.mjs'
+    path: '/tmp/censo-UAaBIs/dev/tools/hb100-suite.mjs'
     }
     Node.js v22.23.3
 
@@ -219,15 +219,6 @@ Estados: VERDE sale con 0 y sin FAIL · ROJO sale con error · MIENTE sale con 0
     PASS  y la colecta ocurre UNA sola vez en todo el cuerpo: por clave serian 2 arrays + 24 indexOf POR clave  (obtenido: 1)
     PASS  cacheClear colecta el registro ANTES del loop que recorre el store
     HAY FALLOS — 64 pass / 5 FAIL
-
-### idea61-claves-congeladas.test.js — ROJO (código 1)
-
-    TOTAL: 29 pass, 9 FAIL
-    Un FAIL aca no es "el fix esta mal" a secas. Antes de tocar el
-    codigo: las secciones 1-4 son la ESPECIFICACION de la Idea 61 y
-    deben estar en verde; la 5 afirma un INVARIANTE (gw2_keys no es una
-    huerfana) y su forma cambio con el fix. Si la 5 falla, la razon
-    puede ser que el invariante se haya roto de verdad.
 
 ### idea84-leyenda-pipeline.test.js — ROJO (código 1)
 
