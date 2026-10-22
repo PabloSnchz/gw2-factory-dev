@@ -167,3 +167,24 @@ test('ficha: todo completo se ve en verde; cargando y error no inventan una fich
   assert.doesNotMatch(p, /lt-stats/);
   assert.match(UI.renderSheetHTML(null, {}, { esc }), /No se pudo construir el árbol/);
 });
+
+// ---- La legendaria como pantalla (v2.2.0) ----------------------------------
+test('pantalla: estilos de la ficha — Volver, cabecera grande y receta sin scroll interno', () => {
+  assert.match(UI.CSS, /\.lt-back\{/);
+  assert.match(UI.CSS, /\.lt-back:focus-visible/);
+  assert.match(UI.CSS, /\.lt-ficha \.lt-hero__ic\{width:80px;height:80px\}/);
+  assert.match(UI.CSS, /\.lt-ficha \.lt-pane--arbol \.lt-pane__body\{max-height:none;min-height:0;overflow:visible\}/);
+  assert.match(UI.CSS, /\.lt-ficha \.lt-pane--totales\{position:sticky;top:16px\}/);
+  // En pantallas angostas los totales dejan de ser fijos (si no, tapan la receta).
+  assert.match(UI.CSS, /@media \(max-width:1000px\)\{[^\n]*\.lt-ficha \.lt-pane--totales\{position:static\}/);
+});
+
+test('pantalla: aviso de íconos — nada si están, "cargando" mientras llegan, "Reintentar" si fallan', () => {
+  assert.equal(UI.renderIconStatusHTML({ estado: 'ok', con: 10, total: 10 }), '');
+  assert.equal(UI.renderIconStatusHTML(null), '');
+  assert.match(UI.renderIconStatusHTML({ estado: 'cargando' }), /lt-icons--cargando" role="status">Cargando íconos/);
+  const f = UI.renderIconStatusHTML({ estado: 'fallo', con: 3, total: 1200 });
+  assert.match(f, /No pude traer los íconos de la API de Guild Wars 2 \(3 de 1\.200\)/);
+  assert.match(f, /<button type="button" data-lt-icons-retry="1">Reintentar<\/button>/);
+  assert.match(f, /role="status"/);
+});

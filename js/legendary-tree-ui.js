@@ -1,5 +1,11 @@
 /**
  * legendary-tree-ui.js — el árbol de fabricación y los totales, pintados.
+ * v2.2.0 (2026-10-22) - La legendaria como PANTALLA dentro de la Armería
+ *   (BL-049, pedido de Pablo: la ficha en diálogo todavía quedaba chica).
+ *   Estilos `.lt-ficha`: botón "Volver", cabecera grande con ícono de 80 px,
+ *   la receta sin scroll interno (scrollea la página) y Materiales totales
+ *   fijo al costado mientras bajás. renderIconStatusHTML: aviso visible
+ *   cuando los íconos no llegan, con "Reintentar".
  * v2.1.0 (2026-10-21) - Ficha de pantalla completa (BL-047, pedido de Pablo:
  *   "en el modal queda comprimido, no tiene aire"). renderHeroHTML pinta la
  *   cabecera grande (ícono, nombre, tipo, expansión, generación) y
@@ -190,7 +196,31 @@
     '.lt-pane__hint{font-size:.72rem;color:var(--tx-3,#8a91a8)}',
     '.lt-pane__body{max-height:calc(100vh - 330px);min-height:260px;overflow:auto}',
     '.lt-pane .lt-tot th{position:sticky;top:0;z-index:1;background:var(--bg-1,#171a23)}',
+    // ---- La legendaria como pantalla (v2.2.0) ----
+    '.lt-ficha{display:flex;flex-direction:column;gap:16px}',
+    '.lt-ficha[hidden]{display:none}',
+    '.lt-ficha__bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap}',
+    '.lt-back{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:999px;border:1px solid var(--bd-1,rgba(255,255,255,.14));background:var(--bg-2,rgba(255,255,255,.04));color:var(--tx-1,#eceef5);font:inherit;font-size:.85rem;cursor:pointer}',
+    '.lt-back:hover{border-color:var(--accent,#9b7bff)}',
+    '.lt-back:focus-visible,.lt-icons button:focus-visible{outline:2px solid var(--accent,#9b7bff);outline-offset:2px}',
+    '.lt-ficha__crumb{font-size:.78rem;color:var(--tx-3,#8a91a8)}',
+    '.lt-ficha__head{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:20px 22px;border-radius:16px;background:linear-gradient(90deg,rgba(151,78,255,.18),transparent 70%);border:1px solid rgba(151,78,255,.35)}',
+    '.lt-ficha__title{flex:1;min-width:240px}',
+    '.lt-ficha__actions{display:flex;gap:8px;flex-wrap:wrap}',
+    '.lt-ficha .lt-hero__ic{width:80px;height:80px}',
+    '.lt-ficha .lt-hero__name{font-size:1.8rem;white-space:normal}',
+    '.lt-ficha .lt-sheet-wrap{padding:0}',
+    '.lt-ficha .lt-node{padding:9px 12px}',
+    '.lt-ficha .lt-nm{font-size:.88rem}',
+    '.lt-ficha .lt-pane--arbol .lt-pane__body{max-height:none;min-height:0;overflow:visible}',
+    '.lt-ficha .lt-pane--totales{position:sticky;top:16px}',
+    '.lt-ficha .lt-pane--totales .lt-pane__body{max-height:calc(100vh - 140px)}',
+    '.lt-icons{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.8rem;padding:8px 12px;border-radius:10px;border:1px solid rgba(226,180,90,.4);background:rgba(226,180,90,.08);color:var(--tx-2,#b9bfd3)}',
+    '.lt-icons--cargando{border-color:var(--bd-1,rgba(255,255,255,.14));background:transparent;color:var(--tx-3,#8a91a8)}',
+    '.lt-icons button{padding:4px 12px;border-radius:999px;border:1px solid var(--bd-1,rgba(255,255,255,.14));background:var(--bg-2,rgba(255,255,255,.04));color:var(--tx-1,#eceef5);font:inherit;font-size:.78rem;cursor:pointer}',
     '@media (max-width:1000px){.lt-sheet{grid-template-columns:minmax(0,1fr)}.lt-tabs{display:flex}' +
+      '.lt-ficha .lt-pane--totales{position:static}.lt-ficha .lt-pane--totales .lt-pane__body{max-height:none}' +
+      '.lt-ficha__head{padding:14px}.lt-ficha .lt-hero__ic{width:56px;height:56px}.lt-ficha .lt-hero__name{font-size:1.3rem}' +
       '.lt-sheet--arbol .lt-pane--totales,.lt-sheet--totales .lt-pane--arbol{display:none}' +
       '.lt-pane__body{max-height:none;min-height:0}.lt-hero__ic{width:48px;height:48px}.lt-hero__name{font-size:1.15rem;white-space:normal}' +
       '.lt-sheet-wrap{padding:12px}}',
@@ -488,6 +518,19 @@
     return h + '</div>';
   }
 
+  // Aviso de íconos (v2.2.0). `s` lo arma el tracker:
+  // { estado: 'cargando' | 'ok' | 'fallo', con, total }. Con 'ok' no se dice nada.
+  function renderIconStatusHTML(s) {
+    if (!s || s.estado === 'ok') return '';
+    if (s.estado === 'cargando') {
+      return '<div class="lt-icons lt-icons--cargando" role="status">Cargando íconos y nombres en español…</div>';
+    }
+    return '<div class="lt-icons" role="status"><span>No pude traer los íconos de la API de Guild Wars 2' +
+      (s.total ? ' (' + _num(s.con || 0) + ' de ' + _num(s.total) + ')' : '') +
+      '. La receta y las cantidades están completas.</span>' +
+      '<button type="button" data-lt-icons-retry="1">Reintentar</button></div>';
+  }
+
   // ==========================================================================
   // 8. API
   // ==========================================================================
@@ -498,6 +541,7 @@
     renderTotalsHTML: renderTotalsHTML,
     renderHeroHTML: renderHeroHTML,
     renderSheetHTML: renderSheetHTML,
+    renderIconStatusHTML: renderIconStatusHTML,
     NIVEL_ABIERTO_POR_DEFECTO: NIVEL_ABIERTO_POR_DEFECTO,
     _resetCache: _resetCache,
     _num: _num,
