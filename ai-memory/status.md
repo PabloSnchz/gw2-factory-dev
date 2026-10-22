@@ -1,16 +1,16 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: promoción de la Cartera a producción (FEAT-006), preparada en REQ-011; no se ejecuta sin el sí de Pablo.
-Motivo: Pablo aprobó BL-056 en DEV (2026-10-22 23:11Z) y autorizó preparar la promoción, sin ejecutarla.
+Tarea actual: la Cartera renovada en producción (FEAT-006, REQ-011); espera la validación funcional de Pablo.
+Motivo: Pablo aprobó REQ-011 (opción A) a las 23:17Z y autorizó PRD-0 y PRD-11 a PRD-14.
 Fase: F1 — Visibilidad
-Etapa actual: ARCHITECTURE
+Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22 23:20Z
-Próxima acción: con el sí de Pablo a REQ-011, PRD-0 (rama `rollback/pre-cartera` en `dd5c0c6`) y después PRD-11 a PRD-14, de a un archivo y verificando cada blob.
+Última actualización: 2026-10-22 23:32Z
+Próxima acción: esperar la validación de Pablo en producción. Con su visto bueno, BL-056 queda cerrada del todo y sigue BL-057 (restyle de Meta & Eventos, empieza por una propuesta visual).
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
-Micro-ciclo: ninguno en curso. Plan de promoción en REQ-011: PRD-11 `wallet-theme.js` 2.0.0 (669467a) → PRD-12 `converter-modal.js` 2.0.0 (e311da4) → PRD-13 `wallet-theme.js` 2.1.0 (3083c87) → PRD-14 `wallet-dashboard.js` 3.0.0 (dce7b5d).
+Micro-ciclo: ninguno en curso. Promoción PRD-0 a PRD-14 terminada y verificada.
 
 Plan (orden por valor para el jugador):
 
@@ -59,6 +59,7 @@ Plan (orden por valor para el jugador):
 - Pablo (22:54Z) validó CAR-3 (RSK-020 sigue BAJO) y pidió la validación funcional antes de abrir CAR-4. Hecha (23:03Z) con los dos archivos publicados en el mismo DOM: `wallet-dashboard.js` 3.0.0 (dce7b5d) y `wallet-theme.js` 2.1.0 (3083c87). 27 comprobaciones: la cabecera de la Cartera queda una sola vez y arriba (al entrar, al refrescar, al quitar una columna y al salir y volver), la pestaña activa es «Todas las cuentas», «Mi cartera» lleva a `#/cards`, y lo que el theme oculta es solo la cabecera vieja y «Volver a Cartera» (actualizar, columnas, KPIs, tabla y avisos siguen a la vista). Mutaciones: 2 de 3 detectadas; la tercera es equivalente (`ensurePanelContent` corre una sola vez, desde `initOnce`). CAR-3 cerrado.
 - CAR-4 hecho (checkpoint `a2c38b8`): `5c823f6` FEAT-006 (blob 56e1526), `3a46dc4` BL-056 a DONE (blob 5e38bd4), `7ea80e5` CHANGELOG-FACTORY con la Cartera en «Solo en DEV» (blob e732be1). Al escribir FEAT-006 corregí una afirmación mía antes de publicarla: CAR-1 sí agregó una clave de `localStorage`, `gn:wallet:hidezero`; quedó dicha en FEAT-006, el backlog y el CHANGELOG. Sin código ni cambios visuales. BL-056 cerrada.
 - Pablo (23:11Z) aprobó BL-056 y pidió preparar la promoción sin ejecutarla. Evidencia (23:15Z): en `js/` de producción (HEAD `dd5c0c6`) solo difieren de DEV los tres archivos de la Cartera (más `analytics.js`, a propósito: DEC-006); `app.js` y `shiruvana.js` idénticos; los 5 íconos que usan existen; producción no tiene tests. En DEV, en CAR-1 el conversor y el dashboard eran idénticos a los de producción de hoy: el orden propuesto repite estados ya validados. Propuesta en REQ-011.
+- Pablo (23:17Z) aprobó REQ-011 (opción A), aceptó RSK-020 como BAJO y el riesgo ALTO de la vuelta atrás del conversor. Checkpoint `8026658`. En gw2-wallet-ligero, en serie y con el blob verificado después de cada uno: PRD-0 rama `rollback/pre-cartera` en `dd5c0c6`; PRD-11 `d900b37` wallet-theme 2.0.0 (669467a); PRD-12 `e402e6b` converter-modal 2.0.0 (e311da4); PRD-13 `82da84c` wallet-theme 2.1.0 (3083c87); PRD-14 `a82c996` wallet-dashboard 3.0.0 (dce7b5d). Integridad final: `js/` de producción igual a DEV en 46 de 47 archivos (la diferencia es `analytics.js`, a propósito: DEC-006); la rama de vuelta atrás conserva d06748e, b42da9c y ff3d319. Documentación: FEAT-006 (`78d9b55`), CHANGELOG-FACTORY (`c711e02`) y backlog (`f5d7e67`, con BL-057 Meta & Eventos en READY, el próximo frente que fijó Pablo).
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -73,6 +74,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- La Cartera renovada está en producción (BL-056, REQ-011): 4 pasos en el mismo orden que DEV, cada archivo idéntico al validado. Vuelta atrás lista en la rama `rollback/pre-cartera`. Sigue la validación de Pablo y después el restyle de Meta & Eventos (BL-057).
 - La Cartera renovada quedó cerrada (BL-056, FEAT-006): Mi cartera, Cambio de divisas y Todas las cuentas en una sola pantalla con pestañas, validadas por Pablo paso a paso. Está en DEV. Una preferencia nueva en el navegador: `gn:wallet:hidezero` («ocultar en cero»).
 - Pablo archivó los dos repos del legado. Registré sus respuestas: el Gist queda deprecado (DEC-030) y el respaldo va a una nube que todos tengan (DISC-009); Homestead pasa a módulo propio (BL-055); BL-054 se cierra porque ya estaba resuelto en DEV (error mío al leer el legado). Propuesta de restyle de la Cartera presentada (BL-056). Sin cambios visuales en la webapp.
 - Migración del legado de QwenPaw terminada (BL-043): 73 de sus 88 tests protegen DEV, los generadores de la Armería reproducen el catálogo, la documentación describe La Bóveda de hoy y sus ideas que siguen valiendo quedaron en discovery (DISC-009 a 011) y en el backlog (BL-054). Sin cambios visuales en la webapp. Ya podés archivar los dos repos.
@@ -97,7 +99,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [REQ-011] Decisión: ¿llevo la Cartera renovada a producción con el plan de 4 pasos y la rama de vuelta atrás? La vuelta atrás del conversor viejo (68 KB) la tendrías que hacer vos con git.
+- [FEAT-006] Validación: probá la Cartera en producción con Ctrl+F5: Mi cartera, Cambio de divisas como pestaña y Todas las cuentas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
