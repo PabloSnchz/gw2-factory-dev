@@ -1,18 +1,18 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: la legendaria como pantalla propia quedó publicada (BL-049) y espera la validación de Pablo. Sigue la migración del legado (BL-043, MIG-2a).
+Tarea actual: BL-050 — promoción a producción de todo lo validado en DEV, por orden de Pablo (2026-10-22 04:01Z): PSNA (FEAT-003) y Armería (BL-045 a BL-049). Después sigue BL-043 MIG-2a.
 Motivo: Pablo validó en pantalla los arreglos de la Armería y aprobó la propuesta del árbol ("me encanta"). El producto va primero: lo que el jugador ve vale más que la migración.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22T04:40Z
-Próxima acción: MIG-2a — generadores de la Armería del legado a `tools/legendary/` (BL-043). Si Pablo valida la pantalla o manda lo que dice el aviso de íconos, eso va primero.
+Última actualización: 2026-10-22T04:10Z
+Próxima acción: PRD-6 a PRD-10 en gw2-wallet-ligero, un archivo por commit y en este orden compatible: psna-schedule.json, activities.js, render-catologo.js, legendary-tree-ui.js (sigue exportando lo que usa el tracker viejo), legendary-tracker.js. Vuelta atrás: `2bab20f`. `index.html` y `analytics.js` de producción no se tocan (DEC-006).
 
 Micro-ciclo:
-MIG-2a — generadores de datos de la Armería a tools/legendary/ (BL-043)
+PRD-6 a PRD-10 — copia de contenido DEV → producción, un archivo por micro-ciclo, blobs idénticos (BL-050)
 Archivos:
-tools/legendary/README.md
+uno por micro-ciclo, en el orden de Próxima acción
 
 Plan (orden por valor para el jugador):
 
