@@ -5,6 +5,8 @@
 #
 # Fuera a propósito: hb90-t9-mutex.test.js (ROJO en el legado y VERDE en DEV:
 # posible inestable; si entra, puede poner main en rojo sin que nadie lo vea).
+# Pendiente de MIG-4h: t19c-lectores-legacy.test.js lee tests/idea61-claves-congeladas.test.js,
+# que está en ROJO contra DEV; entran o salen juntos.
 #
 # Pares que van juntos: hb106-censo-latch exige que hb106-t13-invariante exista
 # en tests/ (sección 4: el censo y el test de comportamiento son archivos distintos).
@@ -81,4 +83,3 @@ hb94-raid-wing-card.test.js
 idea52.raid-encounter-ids.test.js
 idea56.f1-hint-permiso.test.js
 idea56.forma-raids.test.js
-t19c-lectores-legacy.test.js
