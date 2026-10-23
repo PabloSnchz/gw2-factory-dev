@@ -83,3 +83,5 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [FEAT-003](features/FEAT-003-psna-dia-correcto.md) — PSNA: el panel Actividades muestra el día correcto (rotación semanal, cambio a las 08:00 UTC, archivo propio).
 - [FEAT-004](features/FEAT-004-identidad-gato-negro-en-la-boveda.md) — La Bóveda con la identidad de Gato Negro: gato oficial, theme oficial por defecto, guías y mi voz donde le hablo al jugador.
 - [FEAT-005](features/FEAT-005-metas-janthir-y-visions.md) — Metas de Janthir Wilds y Visions of Eternity con horarios verificados, convergencias corregidas y filtro de expansión generado desde los datos.
+- [FEAT-006](features/FEAT-006-cartera-renovada.md) — La Cartera renovada: Mi cartera, Todas las cuentas y Cambio de divisas en una pantalla con pestañas (BL-056). En producción.
+- [FEAT-007](features/FEAT-007-metas-y-eventos-renovado.md) — Metas y Eventos renovado: cabecera de la propuesta con relojes, resets y «Hoy en tu cuenta», «Ahora», agenda de 3 h, Fijadas, vistas previas sin imágenes rotas y mis avisos de lo que está en curso (BL-057). En DEV.
