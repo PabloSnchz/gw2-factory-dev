@@ -1,6 +1,6 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.2.0 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
+ * Versión: 2.2.1 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
  * Arma su lista desde la de la Bienvenida (Welcome._pure.MODULES): mismo orden, nombre, ícono y color.
@@ -28,10 +28,14 @@
  *   tocar afuera la cierran y el foco vuelve a «Más». Punto ámbar en «Más» si adentro hay algo para
  *   revisar (la Key o un permiso). Controles de 44 px, zona segura del iPhone y lugar abajo para que nada
  *   quede tapado. El panel de Logros sigue donde estaba.
+ * 2.2.1 (SBR-4a): arranco cuando ya cargaron todos los scripts. index.html los carga con `defer` y la
+ *   Bienvenida viene después: arrancando antes, «Nuevo» no aparecía nunca y la guarda de contraste no se
+ *   aplicaba hasta cambiar de theme (la tarjeta se arreglaba sola con el gn:tokenchange de app.js).
+ *   Si la Bienvenida igual no está, las novedades se piden de nuevo en el próximo refresco.
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.2.0';
+  var VERSION = '2.2.1';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -580,7 +584,7 @@
     if (state.news !== null || state.newsLoading || typeof root.fetch !== 'function') return null;
     var W = root.Welcome;
     var pick = W && W._pure && typeof W._pure.pickNews === 'function' ? W._pure.pickNews : null;
-    if (!pick) { state.news = []; return null; }
+    if (!pick) return null; // sin la Bienvenida todavía: lo intento en el próximo refresco
     state.newsLoading = true;
     return root.fetch(NEWS_URL, { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : []; })
@@ -597,7 +601,9 @@
     if (!state.built) return;
     renderAccount();
     decorate();
+    applyContrast();
     updateAccountId();
+    loadNews();
   }
 
   function links() { return $$('#sbrNav a'); }
@@ -710,8 +716,9 @@
       LINK_ID: LINK_ID, VIEW: VIEW, ALIAS: ALIAS, CSS: CSS }
   };
 
-  // Welcome (welcome-panel.js) se carga después: armo en DOMContentLoaded, cuando ya están todos.
-  if (doc().readyState === 'loading') doc().addEventListener('DOMContentLoaded', init);
-  else init();
+  // Welcome (welcome-panel.js) se carga después, y con `defer` el estado ya es «interactive» cuando corro:
+  // armo en DOMContentLoaded, que llega cuando ya corrieron todos. Si la página ya terminó, armo ahora.
+  if (doc().readyState === 'complete') init();
+  else doc().addEventListener('DOMContentLoaded', init);
 
 })(typeof window !== 'undefined' ? window : this);
