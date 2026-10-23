@@ -1,26 +1,26 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-058 — WEL-1 (Bienvenida 2.0.0). Antes, SHV-0: registrar el frente estratégico de Shiruvana (niveles N1 a N5), sin implementar.
-Motivo: Pablo (05:00Z) aprobó la propuesta WEL-0b completa (sin API Key y con API Key), pidió implementarla tal cual y abrir un frente para la evolución de Shiruvana. BL-058 sigue siendo la prioridad.
+Tarea actual: BL-058 — WEL-1: Bienvenida 2.0.0 (estructura nueva, dos estados, 9 módulos, Novedades, Guías y ayuda, pie; test de frontera DEC-032).
+Motivo: Pablo (05:00Z) aprobó la propuesta WEL-0b y pidió implementarla tal cual. SHV-0 (frente de Shiruvana) ya quedó registrado.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 05:10Z
-Próxima acción: SHV-0 (DEC-033, memory-index, backlog BL-059) → WEL-1 (`js/welcome-panel.js` 2.0.0, `tests/welcome-view.test.cjs`, `assets/welcome-news.json`) → validación de Pablo.
+Última actualización: 2026-10-23 05:13Z
+Próxima acción: publicar los 3 archivos de WEL-1 en serie, verificar blobs y pedir la validación de Pablo en DEV.
 
 Micro-ciclo (en curso, checkpoint de este commit):
-SHV-0 — el frente de Shiruvana queda registrado: visión de los 5 niveles en DEC-033, su línea en el índice y BL-059 en el backlog (bloqueado por Pablo hasta que lo habilite).
+WEL-1 — `js/welcome-panel.js` 2.0.0 sin estilos en línea, con cabecera del gato, dos estados, los 9 módulos con su ruta real, novedades desde un archivo propio, guías y ayuda y pie compacto. Mismos ids de botones. 11 tests y 15/15 mutaciones en local. 39 KB.
 Archivos:
-- ai-memory/decisions/DEC-033-niveles-de-inteligencia-de-shiruvana.md
-- ai-memory/memory-index.md
-- ai-memory/backlog.md
+- js/welcome-panel.js
+- tests/welcome-view.test.cjs
+- assets/welcome-news.json
 
-Último hecho: WEL-0b aprobada por Pablo (05:00Z). `9b45215` propuesta v2, `e696be8` DEC-032.
+Último hecho: SHV-0 (05:12Z). `5fbf835` DEC-033, `f6c413d` memory-index, `4b65933` backlog (BL-058 en curso, BL-059 frente Shiruvana bloqueado por Pablo).
 
 Plan BL-058 (Pantalla de Bienvenida), aprobado:
 
-- WEL-1 `welcome-panel.js` 2.0.0: cabecera con el gato, dos estados, 9 módulos, Novedades, Guías y ayuda, pie; test de frontera (DEC-032).
+- WEL-1 `welcome-panel.js` 2.0.0 (este micro-ciclo).
 - WEL-2 «Tu Bóveda» y botones de estado (Keys y sus permisos, cuentas, copia, theme).
 - WEL-3 «Seguí donde quedaste» (clave nueva `gn:global:welcome`).
 - WEL-4 `shiruvana-places.js` 1.1.0: «Shiruvana te guía» y Preguntame; fuera el Gist (DEC-030).
@@ -31,8 +31,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el b
 ## Resumen de la sesión
 
 - BL-057 cerrada: Metas y Eventos renovado validado por Pablo en DEV (FEAT-007).
-- BL-058 aprobada (WEL-0b): la Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032). Empieza la implementación.
-- Frente nuevo: evolución de Shiruvana en 5 niveles (informativa, contextual, analítica, asistente estratégico, compañera de cuenta). Solo se registra.
+- BL-058 aprobada (WEL-0b) y en implementación: la Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032).
+- Frente nuevo registrado: evolución de Shiruvana en 5 niveles (DEC-033, BL-059). No se implementa todavía.
 
 ## Esperando a Pablo
 
@@ -42,6 +42,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el b
 ## Para tu información
 
 - [BL-057] Metas y Eventos queda solo en DEV: pasarlo a producción lo decidís vos.
+- [BL-059] El frente de Shiruvana queda registrado y sin implementar hasta que lo habilites.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
 
 ## Bloqueos
