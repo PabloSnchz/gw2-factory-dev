@@ -6,6 +6,11 @@
 // el catalogo, en orden de agregado, con las 3 primeras con mas peso visual.
 // SE CAE el switch "Desbloqueadas / Solo faltantes" y con el `setScope()`.
 //
+// ARM-3 (BL-064, 2026-10-23): COLA-13 se invirtio. La cola no se filtra
+// (HB#147, fijado en hb148), asi que la vista "Mi cola" ya no dibuja los
+// filtros del catalogo: eran controles que no cambiaban nada. Ver
+// `tests/hb119-2-2-filtros-progreso.test.js` (FILTRO-01/02).
+//
 // FASE ROJA: contra el archivo SIN la cola, COLA-01..08 dan FAIL (no existe
 // `toggleQueue`), y COLA-09..12 dan FAIL por el contrato viejo.
 const fs = require('fs'), vm = require('vm'), path = require('path');
@@ -249,15 +254,15 @@ const run = async () => {
       'setScope=' + typeof tr.setScope);
   }
 
-  // --- COLA-13: los filtros se MANTIENEN en la vista cola ---
+  // --- COLA-13: los filtros del catalogo NO van en la vista cola (ARM-3) ---
   {
     const t = boot();
     const C = colaDe(t);
     if (typeof t.ctx.LegendaryTracker.setMode === 'function') t.ctx.LegendaryTracker.setMode('progress');
     const html = t.d.el('legendaryModeContent').innerHTML;
-    ok('COLA-13 los filtros por categoria siguen en "Mi progreso"',
-      html.indexOf('data-ftype=') !== -1,
-      'el plan mantiene los 3 filtros: ahora eligen que entra a la cola');
+    ok('COLA-13 los filtros por categoria ya no estan en "Mi cola" (no la recortan)',
+      html.indexOf('data-ftype=') === -1,
+      'la cola no se filtra (HB#147): un filtro ahi es un control que no cambia nada');
   }
 
   // --- COLA-14: un id de la cola que no esta en el catalogo se SALTA ---
