@@ -1,0 +1,32 @@
+{
+  "id": "PATCH-011",
+  "summary": "BL-066 cerrada en el backlog y LES-032 en el índice; su RESULT confirma el estado de la suite completa.",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "cc54407c48a09f6f0ab72ea1aa43a3cb74c2792c",
+      "ops": [
+        {
+          "op": "delete",
+          "anchor": "- [BL-066] [MEDIO] La suite de DEV está en rojo: falla `tests/idea61-claves-congeladas.test.js` — lo descubrió el canal de parches (RESULT-008, 2026-10-23 19:28Z), que corre la suite de `app-checks` antes y después de cada parche; hasta ahora era invisible (RSK-016). Es un test heredado de QwenPaw (DEC-029: se importó cuando pasaba) que vigila la lista de cuentas en dos claves (`gn:account:keys` / `gw2_keys`) y nombra qué módulos leen claves espejo a pelo. Ninguno de los módulos del restyle (Bienvenida, Sidebar, Cartera, Metas) lee esas claves crudas: hay que correr `tools/audit-61-congeladas.mjs` sobre `js/` para ver qué aserción cae y si es un cambio real del invariante o una lista desactualizada. Mientras tanto el canal no culpa a los parches por esa falla, pero rechaza cualquiera que rompa algo nuevo. · LES-031, DEC-029, RSK-016, BL-031\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "· FEAT-009, BL-061, DEC-006, DEC-034 — 2026-10-23\n",
+          "text": "- [BL-066] [MEDIO] La suite de DEV en verde de nuevo — la descubrió el canal de parches (RESULT-008); Pablo la priorizó antes de FP-4 (2026-10-23 19:58Z). Las 3 fallas eran mías, no del legado (LES-032): `js/wallet-theme.js` (Cartera, CAR-1) leía `gn:account:keys` directo del navegador en un respaldo, saltándose el espejo de Storage, y `tests/idea61-claves-congeladas.test.js` lo detectó (37 de 38); corregido en 2.1.1 por el canal (PATCH-010, `wallet-view.test.cjs` con la regla). Las otras 2 eran de formato de mi `status.md` (DEC-019, DEC-021; `dc08f0c`). Para verlo sumé `factory-diagnose` (`bfa5ac8`): pido tests con `factory/diagnose/RUN-NNN.json` y la salida completa queda en `OUT-NNN.md` (RUN-001). Sin cambios visibles. · LES-031, LES-032, DEC-029, DEC-035, RSK-016 — 2026-10-23\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "c287b9580c12efd473b8ed079e734a1a20a139d7",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "nunca en el que por defecto tiene la mía.\n",
+          "text": "- [LES-032](lessons/LES-032-la-suite-roja-era-mia.md) — «No es mío» también se verifica: la suite roja que atribuí al legado eran 3 errores míos (un respaldo de la Cartera que se saltaba Storage y dos reglas de formato de status). Antes de atribuir, leer la aserción exacta.\n"
+        }
+      ]
+    }
+  ]
+}
