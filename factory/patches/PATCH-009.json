@@ -1,0 +1,33 @@
+{
+  "id": "PATCH-009",
+  "summary": "FP-3 cierre: BL-065 al día, BL-066 (suite de DEV en rojo) y LES-031 en el índice. Primer parche de dos archivos sobre la memoria oficial.",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "5c4b2cbac070c4c68af320ce36e1d185be6fa5b5",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "## READY\n\n",
+          "text": "- [BL-066] [MEDIO] La suite de DEV está en rojo: falla `tests/idea61-claves-congeladas.test.js` — lo descubrió el canal de parches (RESULT-008, 2026-10-23 19:28Z), que corre la suite de `app-checks` antes y después de cada parche; hasta ahora era invisible (RSK-016). Es un test heredado de QwenPaw (DEC-029: se importó cuando pasaba) que vigila la lista de cuentas en dos claves (`gn:account:keys` / `gw2_keys`) y nombra qué módulos leen claves espejo a pelo. Ninguno de los módulos del restyle (Bienvenida, Sidebar, Cartera, Metas) lee esas claves crudas: hay que correr `tools/audit-61-congeladas.mjs` sobre `js/` para ver qué aserción cae y si es un cambio real del invariante o una lista desactualizada. Mientras tanto el canal no culpa a los parches por esa falla, pero rechaza cualquiera que rompa algo nuevo. · LES-031, DEC-029, RSK-016, BL-031\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "FP-1 HECHO: `.github/scripts/apply-patch.cjs` + `apply-patch.test.cjs` (`ed86e8d`; 14 tests, mutaciones 22/24, 2 equivalentes); todavía sin workflow. Sigue FP-2 (workflow `factory-patch.yml`, probado primero por el camino de error, LES-016), FP-3, FP-4",
+          "text": "FP-1 HECHO y validado: `.github/scripts/apply-patch.cjs` + tests (`ed86e8d`; 14 tests, mutaciones 22/24). FP-2 HECHO: `factory-patch.yml` + `factory-patch.cjs` + tests (`34d1bab`, 31 tests, 21/21) y `dev-pages` sin `factory/` (`794ed03`); 5 rechazos reales correctos (RESULT-001..005, `78effca`). FP-3 HECHO: 3 parches aplicados (RESULT-006..008; blob de 007 igual al calculado antes en local), la suite se lee en TAP y nombra sus fallas (`f0e88fe`, 34 tests, 30/30), guía `factory/README.md`, LES-031 y este mismo texto llegaron por el canal (PATCH-009). Sigue FP-4"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "88a76e8545ba4cbab88467c5473ba7ef2829693f",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "ahora la lista de archivos se arma solo con contenido completo.\n",
+          "text": "- [LES-031](lessons/LES-031-un-canal-que-escribe-tambien-deja-ver.md) — Un mecanismo que escribe su resultado en el repo también me deja ver: el canal de parches reveló la suite de DEV en rojo (BL-066). Lo que leo de otra máquina, en formato explícito (TAP), nunca en el que por defecto tiene la mía.\n"
+        }
+      ]
+    }
+  ]
+}
