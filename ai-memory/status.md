@@ -1,16 +1,20 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-057 restyle de Meta & Eventos — MET-0 presentada; espera aprobación. Sin cambios en la app.
-Motivo: Pablo validó la Cartera en producción (23:37Z: BL-056 cerrada formalmente) y pidió la propuesta de Meta & Eventos: problemas, objetivos, propuesta visual, orden de la información, GDS y mi lugar en la pantalla.
+Estado: EN CURSO
+Tarea actual: BL-057 restyle de Meta & Eventos — MET-1 `meta.js` 4.0.0 (propuesta aprobada).
+Motivo: Pablo aprobó MET-0 (00:39Z): organización, Ahora, agenda de 3 h, grupos por expansión, GDS, BL-041 y mis mensajes. Pidió conservar la vista previa de infusiones y drops (se puede reorganizar, no quitar) y aprobó eliminar «Vista compacta».
 Fase: F1 — Visibilidad
-Etapa actual: PRODUCT
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-22 23:58Z
-Próxima acción: con el sí de Pablo, MET-1 (`meta.js` 4.0.0, archivo grande dedicado) y MET-2 (`meta-theme.js` 2.0.0); MET-3 cierre.
+Última actualización: 2026-10-23 00:45Z
+Próxima acción: MET-1 — `meta.js` 4.0.0 con tests y prueba de humo; publicar el archivo grande solo y después su test.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
-Micro-ciclo: ninguno en curso. MET-0 entregada (`propuesta-meta-bl057.html`, maqueta con los datos reales a las 23:37 UTC).
+Micro-ciclo (en curso, checkpoint de este commit):
+MET-1 — `meta.js` 4.0.0: secciones Ahora, Próximas 3 horas, Fijadas y Todas las metas; tarjeta nueva con la vista previa de drops; filtros desde los datos; redibujo cada 30 s; BL-041; «Hecho hoy» solo donde la API lo sabe; sin «Vista compacta». Archivo grande dedicado.
+Archivos:
+- js/meta.js
+- tests/meta-view.test.cjs
 
 Plan (orden por valor para el jugador):
 
@@ -62,6 +66,7 @@ Plan (orden por valor para el jugador):
 - Pablo (23:17Z) aprobó REQ-011 (opción A), aceptó RSK-020 como BAJO y el riesgo ALTO de la vuelta atrás del conversor. Checkpoint `8026658`. En gw2-wallet-ligero, en serie y con el blob verificado después de cada uno: PRD-0 rama `rollback/pre-cartera` en `dd5c0c6`; PRD-11 `d900b37` wallet-theme 2.0.0 (669467a); PRD-12 `e402e6b` converter-modal 2.0.0 (e311da4); PRD-13 `82da84c` wallet-theme 2.1.0 (3083c87); PRD-14 `a82c996` wallet-dashboard 3.0.0 (dce7b5d). Integridad final: `js/` de producción igual a DEV en 46 de 47 archivos (la diferencia es `analytics.js`, a propósito: DEC-006); la rama de vuelta atrás conserva d06748e, b42da9c y ff3d319. Documentación: FEAT-006 (`78d9b55`), CHANGELOG-FACTORY (`c711e02`) y backlog (`f5d7e67`, con BL-057 Meta & Eventos en READY, el próximo frente que fijó Pablo).
 - Pablo (23:37Z) validó la Cartera en producción: BL-056 cerrada formalmente. Pidió para BL-057 una propuesta visual de Meta & Eventos antes de implementar nada.
 - MET-0 hecha (23:58Z): maqueta con las 49 metas reales de `meta-events.json` vistas a las 23:37 UTC. Diagnóstico sobre el código de hoy (`meta.js` 3.5.0 blob 188c80e, `meta-theme.js` 1.4.2 blob b116f50): 30 de 49 metas muestran «✕ Pendiente» en rojo porque la API solo sigue 19 (13 jefes, 6 cofres); las tarjetas no se redibujan solas (solo el reloj corre); el filtro de tipo deja afuera 14 metas (event 7, temple 5, global 1, instance 1) y ofrece «Fractal Incursion» sin ninguna; cruce de medianoche (BL-041); 12 horarios y el estado repetido 3 veces por tarjeta; `meta-theme.js` reemplaza la cabecera y borra «Actualizado»; íconos de expansión de 92 a 420 KB mostrados a 42 px; estilos en línea. Propuesta: cabecera con relojes, resets y «Hoy 6 de 19»; mi voz condicional (reset > fijada > permiso > día completo); Ahora; agenda de 3 h por hora local; Fijadas; catálogo por expansión con filtros desde los datos en español; tarjeta con un estado, 3 horarios y acciones con nombre. Plan: MET-1 `meta.js` 4.0.0 (incluye BL-041), MET-2 `meta-theme.js` 2.0.0, MET-3 cierre.
+- Pablo (00:39Z) aprobó MET-0 con un pedido: la vista previa de infusiones y drops se queda (es un diferencial de La Bóveda); se puede reorganizar, no quitar. «Vista compacta» se elimina. Sigue MET-1. Reparto decidido: MET-1 deja en `meta.js` la lógica y las secciones y expone `Meta.snapshot()`; MET-2 (`meta-theme.js` 2.0.0) arma la cabecera (relojes, resets, «Hoy N de 19») y mis mensajes con ese estado.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -101,7 +106,6 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Esperando a Pablo
 
-- [BL-057] Decisión: ¿aprobás la propuesta de Meta & Eventos (`propuesta-meta-bl057.html`)? Con tu sí empiezo por MET-1.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
