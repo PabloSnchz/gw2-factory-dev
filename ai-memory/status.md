@@ -1,35 +1,36 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-058 — WEL-4b: cuando tocás «Siguiente» o un botón de «Preguntame», el mensaje nuevo se anuncia a quien usa lector de pantalla.
+Tarea actual: BL-058 — WEL-4c: cierre formal de la Pantalla de Bienvenida (FEAT-008, backlog, CHANGELOG-FACTORY e índice).
 Motivo: Pablo (05:54Z) validó WEL-3 y pidió WEL-4: 19 themes, responsive, teclado y accesibilidad, revisión final y cierre de BL-058.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 06:08Z
-Próxima acción: publicar `shiruvana-places.js` 1.2.0 junto con su test; después WEL-4c (FEAT-008, backlog, CHANGELOG-FACTORY).
+Última actualización: 2026-10-23 06:12Z
+Próxima acción: publicar FEAT-008, el índice, el CHANGELOG-FACTORY y el backlog (BL-058 a DONE); después status final y aviso a Pablo.
 
 Micro-ciclo (en curso):
-WEL-4b — `shiruvana-places.js` 1.2.0: región «polite» fija (#shvGuideLive, role=status) en #welcomePanel, fuera de .panel__body. Al cambiar de mensaje dice «2 de 3.» o «Preguntame.» y el texto nuevo; el foco no se mueve. Al cargar no anuncia nada: el mensaje ya está en pantalla.
+WEL-4c — documentación de cierre. FEAT-008 con lo que cambió, cómo evaluarlo y lo verificado; BL-058 a DONE; entrada del CHANGELOG-FACTORY «Solo en DEV»; FEAT-008 en el índice; BL-060 nuevo para el contraste de los themes en el resto de la Bóveda.
 Archivos:
-- js/shiruvana-places.js
-- tests/shiruvana-places.test.cjs
+- ai-memory/features/FEAT-008-bienvenida-puerta-de-la-boveda.md
+- ai-memory/backlog.md
+- docs/CHANGELOG-FACTORY.md
 
-Último hecho: WEL-4a publicado. `welcome-panel.js` 2.2.0 (`2c7184e`, blob cd8587a) y `tests/welcome-contrast.test.cjs` (`767e0fd`, blob cebaa51), iguales a los locales. 45 pares bajo AA en 15 themes → 0; Gato Negro, Bóveda, Dracula, Glassmorphism, Material Dark y PS5 no necesitan corrección.
+Último hecho: WEL-4b publicado en un commit (`3b668ff`): `shiruvana-places.js` 1.2.0 (blob 23a718e) y su test (blob ef63d99), iguales a los locales. 50/50 tests, 7/7 mutaciones nuevas, humo de integración 16/16.
 
 Plan BL-058 (Pantalla de Bienvenida), aprobado:
 
 - WEL-1, WEL-2 y WEL-3 hechos y validados.
 - WEL-4a guarda de contraste. Hecho.
-- WEL-4b anuncio para lector de pantalla. En curso.
-- WEL-4c cierre: FEAT-008, backlog, CHANGELOG-FACTORY.
+- WEL-4b anuncio para lector de pantalla. Hecho.
+- WEL-4c cierre. En curso.
 
 Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `611f7c9`).
 
 ## Resumen de la sesión
 
 - BL-057 cerrada: Metas y Eventos renovado validado por Pablo en DEV (FEAT-007).
-- BL-058: WEL-1, WEL-2 y WEL-3 validados; WEL-4 en curso. La Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032).
+- BL-058: WEL-1, WEL-2 y WEL-3 validados; WEL-4 en cierre. La Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032).
 - Frente registrado: evolución de Shiruvana en 5 niveles (DEC-033, BL-059), sin implementar.
 
 ## Esperando a Pablo
