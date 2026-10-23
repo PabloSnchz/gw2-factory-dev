@@ -1,0 +1,5 @@
+{
+  "id": "RUN-003",
+  "summary": "FP-5: el test de versiones y el inventario contra el repo real, después de PATCH-014",
+  "tests": ["tests/index-versions.test.cjs", "tests/index-versions.smoke.cjs", "tests/boot.test.cjs", "tests/index-identity.test.cjs", "tests/idea50-boton-cache.test.js"]
+}
