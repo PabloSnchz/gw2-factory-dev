@@ -1,6 +1,6 @@
 /*!
  * js/welcome-panel.js — Pantalla de Bienvenida: la puerta de entrada a La Bóveda
- * Versión: 2.1.0 (2026-10-23) · BL-058, propuesta WEL-0b aprobada por Pablo
+ * Versión: 2.2.0 (2026-10-23) · BL-058, propuesta WEL-0b aprobada por Pablo
  *
  * Contesta: qué puedo hacer en la Bóveda, qué módulos tengo, qué configuré, qué me falta
  * y dónde me conviene seguir. Dos estados: sin API Key (tres pasos) y con API Key.
@@ -22,10 +22,15 @@
  *   con la acción que resuelve cada pendiente, botón de Copia en la cabecera, aviso de permiso en los
  *   módulos que la Key activa no alcanza y Welcome.orientation(): la lista ordenada de lo que hay que
  *   mirar, que va a usar mi voz (WEL-3).
+ * 2.2.0 (WEL-4): guarda de contraste. Los 19 themes no garantizan 4.5:1 en los colores que uso como
+ *   texto (en macOS y Notion el verde de «listo» queda en 1.1:1 sobre blanco). Cada vez que cambia el
+ *   theme leo sus tokens y, solo dentro de #welcomePanel, corrijo los que no llegan: los acerco al
+ *   color de texto principal del mismo theme lo justo para pasar AA. Los themes no se tocan.
+ *   Accesibilidad: grupos con role, nombre de la barra de progreso y foco visible en «Ver cuáles».
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.1.0';
+  var VERSION = '2.2.0';
   var LOG = '[Welcome]';
 
   var LINKS = {
@@ -166,7 +171,7 @@
     '#welcomePanel .wl-priv{margin-left:auto;color:var(--tx-3)}',
     '#welcomePanel .wl-mod:hover,#welcomePanel .wl-guide:hover,#welcomePanel .wl-btn:hover,#welcomePanel .wl-pill:hover,#welcomePanel .wl-sup a:hover,#welcomePanel .wl-soc a:hover{border-color:var(--acc-1)}',
     '#welcomePanel .wl-mod:hover{transform:translateY(-1px)}',
-    '#welcomePanel a:focus-visible,#welcomePanel button:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '#welcomePanel a:focus-visible,#welcomePanel button:focus-visible,#welcomePanel summary:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '@media (max-width:980px){#welcomePanel .wl-pills{margin-left:0;justify-content:flex-start;width:100%}}',
     '@media (max-width:720px){#welcomePanel .wl-head{padding:16px 14px}' +
       '#welcomePanel .wl-pills{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}' +
@@ -346,7 +351,7 @@
           '<img src="assets/icons/Welcome/2604909.png" alt="">API Key <b>sin cargar</b></button>';
     return '<div class="wl-cat"><img src="assets/brand/gato-negro.svg" alt="" width="44" height="44"></div>' +
       '<div class="wl-htx" data-wl-slot="title"></div>' +
-      '<div class="wl-pills" aria-label="Estado de tu Bóveda">' + pills + '</div>' +
+      '<div class="wl-pills" role="group" aria-label="Estado de tu Bóveda">' + pills + '</div>' +
       '<div class="wl-sub" data-wl-sub>' + sub + '</div>';
   }
 
@@ -414,7 +419,7 @@
     return '<footer class="wl-foot">' +
       '<a class="wl-bio" href="' + LINKS.bio + '" target="_blank" rel="noopener"><span>Link in Bio</span><span>Pablin Schez</span></a>' +
       '<span>La Bóveda la hace Pablin Schez para la comunidad.</span>' +
-      '<div class="wl-soc" aria-label="Comunidad">' + soc('discord', 'Discord') + soc('youtube', 'YouTube') + soc('twitch', 'Twitch') + soc('instagram', 'Instagram') + soc('github', 'GitHub') + '</div>' +
+      '<div class="wl-soc" role="group" aria-label="Comunidad">' + soc('discord', 'Discord') + soc('youtube', 'YouTube') + soc('twitch', 'Twitch') + soc('instagram', 'Instagram') + soc('github', 'GitHub') + '</div>' +
       '<div class="wl-sup"><span>Apoyar:</span>' +
         '<a href="' + LINKS.paypal + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/payp.png" alt="" width="16" height="16">PayPal</a>' +
         '<a href="' + LINKS.kofi + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/kofi.png" alt="" width="16" height="16">Ko-fi</a>' +
@@ -478,7 +483,7 @@
     return '<section class="wl-card" aria-label="Tu Bóveda">' +
       '<div class="wl-h"><h3>Tu Bóveda</h3><span>Lo que configuraste y lo que falta</span></div>' +
       '<div class="wl-prog"><span><b>' + done + ' de ' + items.length + '</b> listo</span>' +
-        '<div class="wl-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + items.length + '" aria-valuenow="' + done + '"><i style="--p:' + Math.round(done / items.length * 100) + '%"></i></div></div>' +
+        '<div class="wl-bar" role="progressbar" aria-label="Configuración de tu Bóveda" aria-valuemin="0" aria-valuemax="' + items.length + '" aria-valuenow="' + done + '"><i style="--p:' + Math.round(done / items.length * 100) + '%"></i></div></div>' +
       '<ul class="wl-chk">' + items.join('') + '</ul></section>';
   }
 
@@ -499,6 +504,113 @@
     st.id = 'wl-css';
     st.textContent = CSS;
     (d.head || d.documentElement).appendChild(st);
+  }
+
+  // ---------------------------------------------------------------- contraste (WEL-4)
+  // Corrijo, solo dentro de #welcomePanel, los tokens que no llegan a 4.5:1 en el theme activo.
+  var AA = 4.5;
+  var GUARD_TEXT = ['--tx-3', '--muted', '--color-green', '--gn-gold', '--color-amber', '--acc-1'];
+  var GUARD_TINT = { '--color-green-bg': '--color-green', '--color-amber-bg': '--color-amber' };
+  var TINT_OF = { '--color-green': '--color-green-bg', '--color-amber': '--color-amber-bg', '--gn-gold': '--color-amber-bg' };
+  var guard = { applied: [], watching: false };
+
+  function parseColor(v) {
+    var s = String(v == null ? '' : v).trim().toLowerCase(), m;
+    if ((m = s.match(/^#([0-9a-f]{3,8})$/))) {
+      var h = m[1];
+      if (h.length === 3 || h.length === 4) h = h.split('').map(function (c) { return c + c; }).join('');
+      if (h.length !== 6 && h.length !== 8) return null;
+      return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16),
+        h.length === 8 ? parseInt(h.slice(6, 8), 16) / 255 : 1];
+    }
+    if ((m = s.match(/^rgba?\(([^)]*)\)$/))) {
+      var p = m[1].split(/[\s,\/]+/).filter(Boolean).map(parseFloat);
+      if (p.length < 3 || isNaN(p[0]) || isNaN(p[1]) || isNaN(p[2])) return null;
+      return [p[0], p[1], p[2], p.length > 3 && !isNaN(p[3]) ? p[3] : 1];
+    }
+    return null;
+  }
+  function over(c, base) { var a = c[3]; return [c[0] * a + base[0] * (1 - a), c[1] * a + base[1] * (1 - a), c[2] * a + base[2] * (1 - a), 1]; }
+  function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t, 1]; }
+  function lum(c) {
+    function ch(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+    return 0.2126 * ch(c[0]) + 0.7152 * ch(c[1]) + 0.0722 * ch(c[2]);
+  }
+  function contrast(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function hex(c) {
+    return '#' + c.slice(0, 3).map(function (v) {
+      var h = Math.round(Math.max(0, Math.min(255, v))).toString(16);
+      return h.length < 2 ? '0' + h : h;
+    }).join('');
+  }
+
+  // tokens: { '--bg-0': '#...', ... } tal como los define el theme. Devuelve solo lo que hay que corregir.
+  function contrastFixes(tokens) {
+    tokens = tokens || {};
+    var bg0 = parseColor(tokens['--bg-0']), tx1raw = parseColor(tokens['--tx-1']);
+    if (!bg0 || !tx1raw) return {};
+    bg0 = over(bg0, [255, 255, 255, 1]);
+    var bg1raw = parseColor(tokens['--bg-1']);
+    var bg1 = bg1raw ? over(bg1raw, bg0) : bg0;
+    var tx1 = over(tx1raw, bg1);
+    var out = {};
+    // Tintes pensados para fondo oscuro sobre un theme claro (o al revés): los rehago sobre la superficie.
+    Object.keys(GUARD_TINT).forEach(function (k) {
+      var t = parseColor(tokens[k]), c = parseColor(tokens[GUARD_TINT[k]]);
+      if (!t || !c) return;
+      if (contrast(over(t, bg1), bg1) > 2.5) out[k] = hex(mix(bg1, over(c, bg1), 0.16));
+    });
+    function worst(c, bgs) { return Math.min.apply(null, bgs.map(function (b) { return contrast(c, b); })); }
+    GUARD_TEXT.forEach(function (k) {
+      var raw = parseColor(tokens[k]);
+      if (!raw) return;
+      var bgs = [bg0, bg1];
+      var tk = TINT_OF[k], tb = tk ? parseColor(out[tk] || tokens[tk]) : null;
+      if (tb) bgs.push(over(tb, bg1));
+      var c = over(raw, bg1);
+      if (worst(c, bgs) >= AA) return;
+      for (var i = 1; i <= 20; i++) {
+        var m2 = mix(c, tx1, i / 20);
+        if (worst(m2, bgs) >= AA) { out[k] = hex(m2); return; }
+      }
+      out[k] = hex(tx1);
+    });
+    return out;
+  }
+
+  function readTokens() {
+    var d = doc(), t = {};
+    if (typeof root.getComputedStyle !== 'function' || !d.documentElement) return t;
+    var cs = root.getComputedStyle(d.documentElement);
+    ['--bg-0', '--bg-1', '--tx-1'].concat(GUARD_TEXT, Object.keys(GUARD_TINT)).forEach(function (k) {
+      t[k] = cs && cs.getPropertyValue ? cs.getPropertyValue(k) : '';
+    });
+    return t;
+  }
+
+  function applyContrast() {
+    var host = doc().getElementById('welcomePanel');
+    if (!host || !host.style || typeof host.style.setProperty !== 'function') return {};
+    var fixes = contrastFixes(readTokens());
+    guard.applied.forEach(function (k) { if (!(k in fixes)) host.style.removeProperty(k); });
+    Object.keys(fixes).forEach(function (k) { host.style.setProperty(k, fixes[k]); });
+    guard.applied = Object.keys(fixes);
+    return fixes;
+  }
+
+  // El theme cambia el <link id="themeStylesheet"> (carga asíncrona) y data-theme en <html>.
+  function watchTheme() {
+    if (guard.watching) return;
+    guard.watching = true;
+    var d = doc();
+    if (typeof root.MutationObserver === 'function' && d.documentElement) {
+      new root.MutationObserver(function () { applyContrast(); })
+        .observe(d.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    }
+    d.addEventListener('load', function (e) {
+      var t = e && e.target;
+      if (t && t.id === 'themeStylesheet') applyContrast();
+    }, true);
   }
 
   function ensurePanel() {
@@ -610,6 +722,7 @@
     var m = buildModel(readEnv());
     renderHead(host, m);
     body.innerHTML = bodyHTML(m, state.news);
+    applyContrast();
     if (!state.wired) {
       state.wired = true;
       host.addEventListener('click', onClick);
@@ -653,6 +766,7 @@
       if (state.inited) return;
       state.inited = true;
       ensurePanel();
+      watchTheme();
       doc().addEventListener('gn:tokenchange', onAccountChange);
       doc().addEventListener('click', onDocClick, true);
       if (typeof root.addEventListener === 'function') {
@@ -668,9 +782,11 @@
     Route: { path: 'welcome', mount: activate, unmount: deactivate },
     _debug: function () { return { version: VERSION, active: state.active, news: state.news ? state.news.length : null }; },
     orientation: function () { return orientation(buildModel(readEnv())); },
+    applyContrast: applyContrast,
     _pure: { buildModel: buildModel, pickNews: pickNews, headHTML: headHTML, bodyHTML: bodyHTML, orientation: orientation,
       keyStatus: keyStatus, relTime: relTime, moduleForHash: moduleForHash, trackVisit: trackVisit, markBackup: markBackup,
-      MODULES: MODULES, SCOPES: SCOPES, CSS: CSS, LINKS: LINKS }
+      MODULES: MODULES, SCOPES: SCOPES, CSS: CSS, LINKS: LINKS,
+      contrastFixes: contrastFixes, parseColor: parseColor, contrast: contrast }
   };
 
   root.Welcome = Welcome;
