@@ -1,35 +1,35 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-065 — FP-1 hecho: script del canal de parches y sus tests en DEV. Todavía sin workflow.
-Motivo: Pablo aprobó BL-065 y DEC-035 (2026-10-23 18:55Z): parches primero, manifiesto después, reducción progresiva al final; presupuesto de 40 KB por archivo.
+Tarea actual: BL-065 — FP-2 hecho: el canal de parches funciona en DEV y rechaza lo que tiene que rechazar. Empieza FP-3 (prueba feliz).
+Motivo: Pablo validó FP-1 y aprobó FP-2 y FP-3 (2026-10-23 19:09Z): workflow de aplicación, pruebas de rechazo, sin cambios funcionales en la Bóveda, solo DEV; mantener aplicación atómica, validación por versión, resultado persistente, rechazo ante ambigüedad y protección de workflows y canal. Pablo pasó el problema de caso de `index.html` a limitación estructural de la Factory.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 19:04Z
-Próxima acción: FP-2 — workflow `factory-patch.yml` que corre `apply-patch.cjs` cuando llega un `factory/patches/PATCH-NNN.json`, probado primero por el camino de error (LES-016): un parche con sha base equivocado tiene que dejar RESULT «RECHAZADO» y el archivo igual.
+Última actualización: 2026-10-23 19:20Z
+Próxima acción: FP-3 — un parche que se tiene que aplicar sobre un documento de `docs/` (sin republicar DEV) y otro sobre un archivo que sí se publica, inofensivo, para ver el disparo de `dev-pages`. Leer los RESULT y verificar los blobs nuevos.
 
 Micro-ciclo:
-FP-1 — script del canal de parches. HECHO.
+FP-2 — workflow del canal de parches. HECHO.
 Archivos:
-- .github/scripts/apply-patch.cjs (commit ed86e8d, blob 71969f7, 8.185 B)
-- .github/scripts/apply-patch.test.cjs (commit ed86e8d, blob 2d30562, 11.964 B)
-- ai-memory/decisions/DEC-035-crecimiento-modular-y-canal-de-parches.md (0c9723f), memory-index (8d81ae7), backlog (218b95d)
+- .github/workflows/factory-patch.yml (blob c1e2b69), .github/scripts/factory-patch.cjs (blob f3d7fb1), .github/scripts/factory-patch.test.cjs (blob 378c273) — commit 34d1bab
+- .github/workflows/dev-pages.yml (blob 25df1d9) + tests/dev-pages.test.cjs (blob cdc6c5f) — commit 794ed03: hallazgo BAJO, `factory/` no se publica ni dispara DEV
+- prueba real: factory/patches/PATCH-001..005 (4708ae8) → RESULT-001..005 por github-actions[bot] (78effca)
 
-Último hecho: FP-1 publicado y verificado (blobs publicados = locales). 14 tests; mutaciones 22/24 (sobreviven 2 equivalentes: el chequeo de «..» ya lo cubre la normalización de la ruta, y un parche rechazado nunca trae archivos para escribir). Dos mutantes vivos de la primera ronda eran huecos reales y se cerraron con tests (insert_after/insert_before del lado correcto; sha en bytes con tildes). `blobSha` da el mismo sha que GitHub sobre `render-catologo.js` (fe6ed4f). El script lo corre en CI el workflow `factory-scripts` que ya existía.
-Qué hace el script:
-- operaciones: replace, insert_before, insert_after, delete; en orden, cada una sobre el resultado anterior;
-- ancla exactamente una vez (también cuenta las que se solapan); texto literal (sin `$&` ni regex);
-- sha base por archivo: rechaza un parche sobre otra versión o ya aplicado;
-- todo o nada; un parche que no cambia nada se rechaza; máximo 50 operaciones;
-- rutas: solo app y documentación (index.html, js/, css/, assets/, docs/, tests/, tools/, ai-memory/, CHANGELOG.md, README.md); nunca .github/, .git/, el propio canal, absolutas ni con «..»;
-- escribe RESULT-NNN.md junto al parche, también si el JSON está roto; código de salida 0/1/2.
+Último hecho: 5 parches de rechazo, 5 RESULT «RECHAZADO» con el motivo correcto: 001 sha base equivocado, 002 ancla que aparece 2 veces, 003 ancla que aparece 0 veces, 004 intento de tocar `.github/workflows/factory-patch.yml`, 005 intento de tocar el propio canal. El commit del bot solo agregó los 5 RESULT (+45 líneas); el documento siguió en fadd74b y los workflows sin cambios. El workflow tardó menos de 10 s y su paso de tests (45 tests del canal en Node 22 de GitHub) pasó: primera señal de CI que la Factory puede leer, aunque indirecta.
+Diseño del workflow:
+- se dispara con `factory/patches/PATCH-*.json` en main (y a mano); solo en este repo y solo con pushes del dueño;
+- procesa todos los PATCH sin RESULT del main actual, en orden numérico: si la cola de GitHub cancela una corrida, la siguiente los encuentra (idempotente);
+- por parche: plan (ancla única, sha base, todo o nada) → escribe → `node --check` y la suite de app-checks antes y después → si algo falla, restaura byte a byte y rechaza; si la suite ya estaba en rojo, no culpa al parche y lo anota;
+- antes del commit verifica que lo preparado sea exactamente RESULT + archivos parcheados; nunca `.github/` ni `factory/` salvo RESULT;
+- republica DEV con `workflow_dispatch` solo si el parche cambió algo que se publica;
+- 31 tests del ejecutor y del workflow; mutaciones 21/21.
 
-Plan BL-065 (aprobado por Pablo, 18:55Z; DEC-035):
+Plan BL-065 (aprobado por Pablo; DEC-035):
 
-1. FP-1 script apply-patch.cjs + tests locales. HECHO.
-2. FP-2 workflow factory-patch.yml, probado primero por el camino de error.
-3. FP-3 prueba feliz sobre un archivo inofensivo.
+1. FP-1 script apply-patch.cjs + tests. HECHO (validado por Pablo).
+2. FP-2 workflow factory-patch.yml + rechazos reales. HECHO.
+3. FP-3 prueba feliz sobre archivos inofensivos. EN CURSO.
 4. FP-4 primer uso real: index.html carga js/boot.js + viewport-fit + BL-005.
 5. FP-5 manifiesto js/modules.js con versión ?v=.
 6. FP-6 test trinquete de tamaño + LES.
@@ -53,7 +53,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008), en producción.
 - BL-061 cerrada: la Sidebar (FEAT-009). Completa en producción (BL-062 y BL-063).
 - BL-064: la Armería terminada y validada en DEV (FEAT-010). Restyle en pausa por BL-065.
-- BL-065: aprobada con DEC-035; FP-1 hecho.
+- BL-065: aprobada con DEC-035; FP-1 validado, FP-2 hecho, FP-3 en curso.
 
 ## Esperando a Pablo
 
@@ -64,12 +64,12 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Para tu información
 
-- [BL-065] FP-1 no cambia nada en la Bóveda: es una herramienta interna de la Factory, todavía sin workflow que la use. No hay nada para mirar en pantalla hasta FP-4.
+- [BL-065] FP-1 a FP-3 no cambian nada en la Bóveda: son herramientas internas de la Factory. No hay nada para mirar en pantalla hasta FP-4.
 - [LES-028] El límite de ~64 KB es de cómo publico yo (cada archivo entero en una sola operación), no de GitHub. BL-065 lo resuelve con DEC-035.
 - [BL-064] Deuda conocida de la Armería (DEBT-ARM-3): el panel viejo de la cola y la barra «Modo:» del tracker se siguen pintando y se ocultan por CSS. Se limpian con el canal de parches.
 - [BL-061] La zona segura del iPhone queda en 0 hasta que `index.html` pida `viewport-fit=cover` (lo resuelve FP-4).
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
-- [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar; el canal de parches escribe su resultado en el repo por eso mismo.
+- [RSK-016] La Factory no puede leer el resultado de CI. El canal de parches escribe su resultado en el repo, y con la suite que corre antes y después empieza a dar una lectura indirecta.
 
 ## Bloqueos
 
