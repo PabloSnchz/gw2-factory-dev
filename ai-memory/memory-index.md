@@ -44,6 +44,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-031](decisions/DEC-031-vistas-previas-deuda-visual.md) — Decidida por Pablo (definitiva): las vistas previas de Metas que faltan (Chak y Dragon's End) quedan como deuda visual; no se investiga Internet Archive, Wayback ni fuentes alternativas y se retiró la recuperación automática. Lo que falta o no carga se ve como «sin vista previa», limpio.
 - [DEC-032](decisions/DEC-032-bienvenida-frontera-con-metas.md) — Decidida por Pablo: la Bienvenida es la portada de la Bóveda (qué puedo hacer, qué módulos tengo, qué configuré, qué me falta, dónde sigo) y nunca muestra timers, metas, agendas ni world bosses; ahí Shiruvana es guía general de la Bóveda. Un test lo vigila.
 - [DEC-033](decisions/DEC-033-niveles-de-inteligencia-de-shiruvana.md) — Frente abierto por Pablo (solo visión, BL-059): mis niveles de inteligencia en la Bóveda, N1 Informativa, N2 Contextual, N3 Analítica, N4 Asistente estratégico y N5 Compañera de cuenta; N1 cumplido, N2 en curso. Explico, no decido; todo con fundamento y en el navegador del jugador.
+- [DEC-034](decisions/DEC-034-rincon-global-de-shiruvana.md) — Decidida por Pablo (BL-061): mi rincón global al pie de la Sidebar (y de la hoja «Más» en el celular), excepción acotada a DEC-024: un lugar, avatar de 48 px, una línea, solo el estado de la Bóveda (N1–N2); nunca en enlaces ni íconos.
 
 ## LESSONS
 
