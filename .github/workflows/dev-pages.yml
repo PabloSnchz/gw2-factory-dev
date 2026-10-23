@@ -2,7 +2,9 @@
 # Publica la app en https://pablosnchz.github.io/gw2-factory-dev/ con un workflow propio:
 # así no aplica el límite blando de 10 publicaciones por hora de Pages.
 # Solo publica cuando cambia la app: la memoria (ai-memory), los tests, las
-# herramientas de datos (tools) y los .md no disparan publicación ni se publican.
+# herramientas de datos (tools), el canal de parches (factory, DEC-035) y los .md
+# no disparan publicación ni se publican. Cuando un parche cambia la app, el
+# workflow factory-patch dispara este a mano (workflow_dispatch).
 # Requisito único: Settings → Pages → Source: "GitHub Actions".
 # tests/dev-pages.test.cjs vigila qué se excluye.
 name: dev-pages
@@ -14,6 +16,7 @@ on:
       - 'ai-memory/**'
       - 'tests/**'
       - 'tools/**'
+      - 'factory/**'
       - '**.md'
   workflow_dispatch:
 
@@ -35,10 +38,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Armar el sitio (sin memoria, tests, herramientas ni workflows)
+      - name: Armar el sitio (sin memoria, tests, herramientas, parches ni workflows)
         run: |
           mkdir _site
-          rsync -a --exclude '.git' --exclude '.github' --exclude '.gitignore' --exclude 'ai-memory' --exclude 'tests' --exclude 'tools' --exclude '_site' ./ _site/
+          rsync -a --exclude '.git' --exclude '.github' --exclude '.gitignore' --exclude 'ai-memory' --exclude 'tests' --exclude 'tools' --exclude 'factory' --exclude '_site' ./ _site/
           touch _site/.nojekyll
           test -f _site/index.html
 
