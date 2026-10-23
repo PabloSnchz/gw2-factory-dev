@@ -7,13 +7,15 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## READY
 
-- [BL-058] [ALTO] Pantalla de Bienvenida renovada — próximo frente que fijó Pablo (2026-10-23 04:14Z): la puerta de entrada de La Bóveda, coherente con la Cartera y Metas y Eventos. Mismo camino: propuesta visual primero (WEL-0, `docs/propuestas/propuesta-bienvenida-bl058.html`, `4ec91ff`), micro-ciclos WEL-1 a WEL-5 solo después de su aprobación. No implementar todavía. · FEAT-006, FEAT-007
 - [BL-055] [MEDIO] Módulo Homestead propio — decisión de Pablo (2026-10-22 15:48Z). Primero mudar los Home Nodes desde la pestaña de Actividades (sin perder lo marcado: `gn:activities:home:nodes`) y después sumar decoraciones y glyphs (`/v2/account/homestead/decorations`, `/v2/homestead/glyphs`, `/v2/homestead/decorations/categories`) con lo que la comunidad valore. El código del legado (`homestead-tracker.js`, MIT, en el repo archivado) es punto de partida, no se copia tal cual (LES-029). Pide propuesta visual antes de implementar, como BL-056. · DISC-011, BL-043
 
 ## IN_PROGRESS
 
+- [BL-058] [ALTO] Pantalla de Bienvenida renovada — Pablo aprobó la propuesta WEL-0b completa (2026-10-23 05:00Z): la Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032). Se implementa tal cual en WEL-1 a WEL-5: cabecera con el gato, «Shiruvana te guía», «Seguí donde quedaste», «Tu Bóveda», módulos disponibles, novedades, guías y ayuda. Propuesta en `docs/propuestas/propuesta-bienvenida-bl058.html` (`9b45215`). · DEC-032, FEAT-006, FEAT-007
+
 ## BLOCKED
 
+- [BL-059] [ALTO] Frente estratégico: evolución de Shiruvana en la Bóveda — niveles N1 Informativa, N2 Contextual, N3 Analítica, N4 Asistente estratégico y N5 Compañera de cuenta; visión, principios y camino orientativo (SHV-1 a SHV-4) en DEC-033. N1 cumplido; N2 entrando con Metas y Eventos y la Bienvenida. · DEC-033, DEC-024, DEC-032 — Bloqueado por Pablo: abrió el frente para registrarlo (2026-10-23 05:00Z) y pidió no implementar todavía; BL-058 va primero.
 - [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). El archivo tiene guardas contra doble aplicación, así que el efecto es menor: duplica observadores y listeners. · FEAT-000 — Bloqueado por entorno: `index.html` (69 KB) no entra en una publicación de la Factory (LES-028).
 - [BL-031] [MEDIO] `node --check` de `js/*.js` en `app-checks` — resto de BL-006. La Factory no tiene los 46 archivos en local ni puede leer CI; un archivo con sintaxis de módulo dejaría `main` en rojo sin que nadie lo note (RSK-016, LES-019). · BL-006, RSK-016 — Bloqueado por entorno: la Factory no puede leer CI ni abrir PR.
 - [BL-053] [BAJO] Unir `docs/CHANGELOG-FACTORY.md` a `CHANGELOG.md` — mientras tanto el BRIEFING enlaza los dos. · BL-004 — Bloqueado por entorno: `CHANGELOG.md` pesa 79 KB y los archivos de más de ~64 KB no se publican desde la Factory (LES-028).
