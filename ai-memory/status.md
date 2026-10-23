@@ -1,16 +1,23 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-057 restyle de Meta & Eventos — MET-1 hecho y publicado; espera la validación de Pablo en DEV antes de MET-2.
-Motivo: Pablo aprobó MET-0 (00:39Z): organización, Ahora, agenda de 3 h, grupos por expansión, GDS, BL-041 y mis mensajes. Pidió conservar la vista previa de infusiones y drops (se puede reorganizar, no quitar) y aprobó eliminar «Vista compacta».
+Tarea actual: BL-057 — MET-1b: las vistas previas de infusiones y drops se sirven desde La Bóveda (y más livianas); después MET-2.
+Motivo: Pablo (01:23Z) aprobó MET-1 y el diagnóstico: 8 de 10 vistas previas apuntan a imágenes de la wiki que no cargan; las 2 locales andan. Aprobó MET-1b (servirlas desde assets) y optimizar `confeti.gif` (31 MB) en el mismo trabajo sin cambiar la funcionalidad. MET-2 sigue después, sin esperar más validación.
 Fase: F1 — Visibilidad
-Etapa actual: VALIDACIÓN FUNCIONAL (MET-1)
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 01:00Z
-Próxima acción: con la validación de Pablo, MET-2 — `meta-theme.js` 2.0.0: cabecera (relojes, resets, «Hoy N de 19») y mis mensajes desde `Meta.snapshot()`.
+Última actualización: 2026-10-23 01:30Z
+Próxima acción: MET-1b — workflow que baja las 8 de la wiki y convierte las 10 a WebP animado en `assets/previews/` (CI tiene red; la Factory no). Después MET-1c: `meta-drops.json` local, `meta.js` 4.0.1 con aviso si una imagen no carga, test. Después MET-2.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
-Micro-ciclo: ninguno en curso. Último hecho: MET-1 — `meta.js` 4.0.0: secciones Ahora, Próximas 3 horas, Fijadas y Todas las metas; tarjeta nueva con la vista previa de drops; filtros desde los datos; redibujo cada 30 s; BL-041; «Hecho hoy» solo donde la API lo sabe; sin «Vista compacta». Publicado: `e98a25a` js/meta.js (blob af42ca2, 62 790 bytes, archivo grande dedicado) y `8838217` tests/meta-view.test.cjs (blob 4efde78).
+Micro-ciclo (en curso, checkpoint de este commit):
+MET-1b — vistas previas servidas desde La Bóveda: CI baja las 8 imágenes de la wiki y convierte las 10 vistas previas (incluidas `confeti.gif` y `burbuja.gif`) a WebP de hasta 720×520 (el doble de lo que muestra la ventanita, 360×260), con todos los cuadros y tiempos; valida y guarda el informe en `tools/meta-previews/REPORTE.md` (RSK-016).
+Archivos:
+- .github/workflows/meta-previews.yml
+- tools/meta-previews/build_previews.py
+- tests/meta-previews.test.cjs
+
+Último hecho: MET-1 — `meta.js` 4.0.0: secciones Ahora, Próximas 3 horas, Fijadas y Todas las metas; tarjeta nueva con la vista previa de drops; filtros desde los datos; redibujo cada 30 s; BL-041; «Hecho hoy» solo donde la API lo sabe; sin «Vista compacta». Publicado: `e98a25a` js/meta.js (blob af42ca2, 62 790 bytes, archivo grande dedicado) y `8838217` tests/meta-view.test.cjs (blob 4efde78).
 
 Plan (orden por valor para el jugador):
 
@@ -64,6 +71,8 @@ Plan (orden por valor para el jugador):
 - MET-0 hecha (23:58Z): maqueta con las 49 metas reales de `meta-events.json` vistas a las 23:37 UTC. Diagnóstico sobre el código de hoy (`meta.js` 3.5.0 blob 188c80e, `meta-theme.js` 1.4.2 blob b116f50): 30 de 49 metas muestran «✕ Pendiente» en rojo porque la API solo sigue 19 (13 jefes, 6 cofres); las tarjetas no se redibujan solas (solo el reloj corre); el filtro de tipo deja afuera 14 metas (event 7, temple 5, global 1, instance 1) y ofrece «Fractal Incursion» sin ninguna; cruce de medianoche (BL-041); 12 horarios y el estado repetido 3 veces por tarjeta; `meta-theme.js` reemplaza la cabecera y borra «Actualizado»; íconos de expansión de 92 a 420 KB mostrados a 42 px; estilos en línea. Propuesta: cabecera con relojes, resets y «Hoy 6 de 19»; mi voz condicional (reset > fijada > permiso > día completo); Ahora; agenda de 3 h por hora local; Fijadas; catálogo por expansión con filtros desde los datos en español; tarjeta con un estado, 3 horarios y acciones con nombre. Plan: MET-1 `meta.js` 4.0.0 (incluye BL-041), MET-2 `meta-theme.js` 2.0.0, MET-3 cierre.
 - Pablo (00:39Z) aprobó MET-0 con un pedido: la vista previa de infusiones y drops se queda (es un diferencial de La Bóveda); se puede reorganizar, no quitar. «Vista compacta» se elimina. Sigue MET-1. Reparto decidido: MET-1 deja en `meta.js` la lógica y las secciones y expone `Meta.snapshot()`; MET-2 (`meta-theme.js` 2.0.0) arma la cabecera (relojes, resets, «Hoy N de 19») y mis mensajes con ese estado.
 - MET-1 hecho (01:00Z): `meta.js` 4.0.0 publicado solo (`e98a25a`, blob af42ca2 verificado) y su test aparte (`8838217`, blob 4efde78). Pruebas: `meta-view.test.cjs` 9 tests + `meta-events.test.cjs` 15 = 24/24 en UTC, Buenos Aires y Kolkata; humo con el HTML real del panel, los datos reales y la API simulada: 56 comprobaciones en las 3 zonas (Ahora, agenda de 57 inicios en 3 h, Fijadas y tope de 6, catálogo de 49 por expansión con templos al final, filtros, «Hecho hoy» solo en las 19 que sigue la API, sin permiso/sin cuenta/error de red, vista previa con mouse, Enter, toque y Escape, tick de 30 s que no redibuja con el panel oculto, foco conservado, snapshot). Mutaciones: 20/20 atrapadas. Dos arreglos propios durante la revisión: las «Próximas» de metas con 2 horarios por día mostraban 2 en vez de 3 (ahora se calcula hasta pasado mañana) y una vista previa abierta durante el redibujo de 30 s quedaba colgada de la tarjeta vieja (ahora sigue a la nueva o se cierra). Estado intermedio a la vista: la barra de relojes de `meta-theme.js` 1.4.2 sigue arriba hasta MET-2. RSK-020: `index.html` sigue pidiendo `meta.js?v=3.4.1`; hace falta Ctrl+F5.
+- Pablo (01:20Z) aprobó MET-1 salvo las vistas previas: Furienredadera muestra solo «Vista previa: Infusión de abeja reina». Diagnóstico (01:22Z): de 10 metas con vista previa en `meta-drops.json`, 2 andan (Piñata y Secretos del Bosque: archivos de `assets/gifanim/`) y 8 apuntan a `wiki.guildwars2.com/images/...` y no cargan; lo que se ve es el texto alternativo de la imagen rota. Ya fallaba en 3.5.0 (mismas direcciones); lo de MET-1 es no avisar cuando la imagen no carga. Mismo patrón que BL-048.
+- Pablo (01:23Z) aprobó MET-1, MET-1b (servir todas las vistas previas desde La Bóveda) y optimizar `confeti.gif` en el mismo trabajo; no seguir investigando la wiki; seguir con MET-2 al resolverlo.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -109,7 +118,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Para tu información
 
-- [BL-057] Validación funcional: Metas y Eventos en DEV (Ctrl+F5). La barra de relojes de arriba es la vieja hasta MET-2.
+- [BL-057] MET-1 aprobado. Las vistas previas que no cargan se arreglan en MET-1b/1c; MET-2 sigue después.
 - [FEAT-002] Usaste DEV y lo que encontraste es de la Armería, no de Analytics: doy FEAT-002 por validada.
 - [BL-042] Metas en producción: si no ves Visions of Eternity en el filtro, recargá con Ctrl+F5.
 - [BL-040] La Guarida: si no ves el cambio, recargá con Ctrl+F5. Tus favoritos, categorías y widgets no se tocaron.
