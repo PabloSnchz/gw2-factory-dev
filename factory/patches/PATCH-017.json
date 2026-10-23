@@ -1,0 +1,52 @@
+{
+  "id": "PATCH-017",
+  "summary": "FP-6 / cierre de BL-065: BL-065 a DONE, BL-064 retomada (Cámara del Brujo), BL-053 al día (PATCH-016 rechazado por DEC-019), LES-034 y DEC-035 con zonas en el índice.",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "994d2616b47b14e7bb2f5fcae2e50fbe0a086201",
+      "ops": [
+        {
+          "op": "delete",
+          "anchor": "- [BL-065] [ALTO] Archivos grandes: canal de parches, manifiesto de módulos y archivos chicos — pedido de Pablo (2026-10-23 18:46Z), que pausó BL-064 para resolverlo: el límite de ~64 KB por publicación (LES-028) frena el crecimiento de la webapp. Propuesta (`docs/propuestas/propuesta-archivos-grandes-bl065.md`, `c066e56`) aprobada por Pablo (18:55Z) junto con DEC-035 y el presupuesto de 40 KB por archivo, en orden: parches primero, manifiesto después, reducción progresiva al final. FP-1 HECHO y validado: `.github/scripts/apply-patch.cjs` + tests (`ed86e8d`; 14 tests, mutaciones 22/24). FP-2 HECHO: `factory-patch.yml` + `factory-patch.cjs` + tests (`34d1bab`, 31 tests, 21/21) y `dev-pages` sin `factory/` (`794ed03`); 5 rechazos reales correctos (RESULT-001..005, `78effca`). FP-3 HECHO: 3 parches aplicados (RESULT-006..008; blob de 007 igual al calculado antes en local), la suite se lee en TAP y nombra sus fallas (`f0e88fe`, 34 tests, 30/30), guía `factory/README.md`, LES-031 y este mismo texto llegaron por el canal (PATCH-009). FP-4 HECHO y validado: primer parche sobre `index.html` (PATCH-012: `viewport-fit=cover`, BL-005 y el cargador `js/boot.js` 1.0.0 con `js/modules.json`). FP-5 HECHO: inventario `tools/index-versions.cjs` (OUT-002: 14 `?v` desfasados); PATCH-014 los pone al día, corrige la cabecera de `settings-manager.js` y carga el primer módulo desde `js/modules.json` (`wv-tabs-skin.js`); PATCH-013 lo frenó el canal por un error mío (LES-033); `tests/index-versions.test.cjs` no deja que se vuelvan a separar (RSK-020 MITIGADO). Sigue FP-6 (trinquete de tamaño + LES). · DEC-035, LES-028, DEC-021, RSK-016, RSK-020, BL-005, BL-053\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Restyle completo de la Bóveda — EN PAUSA desde 2026-10-23 18:46Z por BL-065. Pedido",
+          "text": "Restyle completo de la Bóveda — RETOMADO el 2026-10-23 al cerrar BL-065 (en pausa desde las 18:46Z). Pedido"
+        },
+        {
+          "op": "replace",
+          "anchor": "Al volver: la Cámara del Brujo, ya con la regla de achicar al renovar (DEC-035).",
+          "text": "Sigue la Cámara del Brujo: propuesta visual primero; lo nuevo en archivos de hasta 40 KB cargados por `js/modules.json`, y `wv-purchase-detail.js` (congelado, 89 KB) solo se achica (DEC-035)."
+        },
+        {
+          "op": "replace",
+          "anchor": "ya se puede cambiar por el canal de parches (DEC-035); lo retomo al cerrar BL-065.",
+          "text": "ya se puede cambiar por el canal de parches (DEC-035); lo retomo después de BL-064."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Validado por Pablo (2026-10-23). · FEAT-000, DEC-035, BL-065 — 2026-10-23\n",
+          "text": "- [BL-065] [ALTO] Archivos grandes: canal de parches, manifiesto de módulos y archivos chicos — pedido de Pablo (2026-10-23 18:46Z), que pausó BL-064 para resolverlo; DEC-035 aprobada (18:55Z) con el presupuesto de 40 KB. Cerrada en 6 pasos, cada uno validado por Pablo: FP-1 script de parches (`ed86e8d`); FP-2 workflow con rechazos reales (`34d1bab`, RESULT-001..005); FP-3 prueba feliz y suite en TAP (`f0e88fe`, LES-031); FP-4 primer parche sobre `index.html` (PATCH-012: `viewport-fit=cover`, BL-005, cargador `js/boot.js`); FP-5 `?v` al día y primer módulo por `js/modules.json` (PATCH-014, `wv-tabs-skin.js`; RSK-020 MITIGADO; LES-033); FP-6 zonas de tamaño con trinquete en CI (`tools/size-budget.cjs` + `.json`, `tests/size-budget.test.cjs`, `e18170e`; 14/14 mutaciones; RUN-004: saludable 46, advertencia 3, congelado 19, excepción 3; LES-034). En el camino apareció y se cerró BL-066. Solo DEV. · DEC-035, LES-028, LES-031, LES-032, LES-033, LES-034, RSK-016, RSK-020, BL-005, BL-053, BL-066 — 2026-10-23\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "4b627cbeb9216b13a8f6514a7f12a35a55a97bf1",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "los de más de 48 KB no crecen, se achican al renovarse.\n",
+          "text": "los de más de 48 KB no crecen, se achican al renovarse. Zonas (FP-6, `tests/size-budget.test.cjs`): saludable ≤ 40 KB, advertencia ≤ 48 KB registrada, congelado que no crece y cuyo techo solo baja, excepción solo para datos generados. BL-065 cerrada.\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "los `?v` los vigila `tests/index-versions.test.cjs`.\n",
+          "text": "- [LES-034](lessons/LES-034-un-limite-que-no-se-mide-se-rompe.md) — Un límite que no se mide se rompe en silencio: los archivos pasaron los 64 KB porque nada lo frenaba y agregar un archivo nuevo era caro. Un límite se mide en CI, se acompaña de un camino barato para cumplirlo y se aplica con trinquete, sin migraciones masivas.\n"
+        }
+      ]
+    }
+  ]
+}
