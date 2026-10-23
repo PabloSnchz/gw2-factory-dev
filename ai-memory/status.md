@@ -1,41 +1,39 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-057 — MET-1c: las vistas previas salen de `assets/previews/` y las que faltan o no cargan muestran «Sin vista previa», limpio; después MET-2.
-Motivo: Pablo (03:29Z) autorizó seguir en orden: cierre de MET-1b (hecho), MET-1c y MET-2. La vista previa es un diferencial de La Bóveda y hoy 8 de 10 muestran el texto alternativo de una imagen rota.
+Tarea actual: BL-057 — MET-2: cabecera nueva de Metas y Eventos (relojes, resets, «Hoy en tu cuenta») y mis mensajes, con el diseño de la Cartera.
+Motivo: Pablo (03:29Z) autorizó seguir en orden: cierre de MET-1b y MET-1c ya están; la cabecera es lo que falta de la propuesta MET-0 aprobada.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 03:45Z
-Próxima acción: MET-1c en 3 commits en serie (datos → test → `meta.js`), cada uno con CI en verde. Después MET-2 `meta-theme.js` 2.0.0.
+Última actualización: 2026-10-23 03:50Z
+Próxima acción: MET-2 en 2 commits en serie (`meta-theme.js` 2.0.0 → su test). Después MET-3: FEAT-007, backlog, CHANGELOG-FACTORY y validación de Pablo en DEV.
 
 Micro-ciclo (en curso, checkpoint de este commit):
-MET-1c — `meta-drops.json` apunta las 8 vistas previas a `assets/previews/` y marca las 2 que faltan (`previewMissing`); `meta.js` 4.0.1 (63,6 KB, archivo grande dedicado) muestra «Sin vista previa» con el nombre del objeto cuando falta o no carga, y «Cargando vista previa…» mientras baja, sin texto alternativo a la vista. Tests en `meta-view.test.cjs` (8 nuevos o cambiados; 7 de 8 mutaciones atrapadas, la otra es equivalente).
+MET-2 — `meta-theme.js` 2.0.0 (14,1 KB): cabecera como la de la Cartera (ícono, título, estado y «↻ Actualizar»), fila con hora del servidor, tu hora, reset diario (00:00 UTC), reset semanal (lunes 07:30 UTC) y «Hoy en tu cuenta: N de 19» con barra; mi voz con un solo mensaje y solo cuando sirve (reset cerca con pendientes > fijada que empieza o está en curso > Key sin «progression» > día completo). Lee `Meta.snapshot()`, no pide nada a la API ni guarda nada. Se va lo de la 1.x (estilos en línea, migraciones de tarjetas viejas, emojis). Pruebas: 7 tests en UTC, Buenos Aires y Kolkata, 10/10 mutaciones, humo de integración con DOM simulado (19 comprobaciones).
 Archivos:
-- assets/meta-drops.json
-- tests/meta-view.test.cjs
-- js/meta.js
+- js/meta-theme.js
+- tests/meta-header.test.cjs
 
-Último hecho: cierre de MET-1b (03:32Z–03:34Z). Retirados el test (`3375bfd`), el workflow `meta-previews` (`2361b96`) y la herramienta de recuperación con Internet Archive (`d0540c7`): ya no puede correr. Decisión registrada en DEC-031 con su línea en el índice (`2f298db`). `tools/meta-previews/REPORTE.md` queda solo como registro del origen y la licencia de las imágenes.
+Último hecho: MET-1c (03:39Z–03:44Z). `28df57a` `meta-drops.json` (blob 4eaa46f): las 8 vistas previas desde `assets/previews/`, Chak y Dragon's End con `previewMissing`. `7f17458` `tests/meta-view.test.cjs` (blob b9ae731, 8 tests nuevos o cambiados). `30b0f18` `js/meta.js` 4.0.1 (blob d70026a, 63,6 KB, archivo grande dedicado): «Sin vista previa» con el nombre del objeto si falta o no carga, «Cargando vista previa…» mientras baja, nunca la imagen rota ni el texto alternativo suelto. 7 de 8 mutaciones atrapadas (la otra es equivalente). Para que el archivo entre en una publicación, resumí comentarios del encabezado y saqué la sangría de las líneas de CSS (sin cambios de comportamiento).
 
 Plan BL-057 (Meta & Eventos):
 
-- MET-0 propuesta visual. Aprobada por Pablo (00:39Z): la vista previa de infusiones se queda; «Vista compacta» se va.
+- MET-0 propuesta visual. Aprobada por Pablo (00:39Z).
 - MET-1 `meta.js` 4.0.0 (`e98a25a`, test `8838217`). Aprobado por Pablo (01:20Z) salvo las vistas previas.
-- MET-1b vistas previas servidas desde La Bóveda. CERRADO por decisión de Pablo (DEC-031): 8 de 10 en `assets/previews/`; Chak y Dragon's End son deuda visual. No se investiga más.
-- MET-1b cierre: workflow, herramienta y test retirados; DEC-031. Hecho.
-- MET-1c `meta.js` 4.0.1 + `meta-drops.json` (este micro-ciclo).
-- MET-2 `meta-theme.js` 2.0.0: cabecera nueva (relojes UTC y local, reset diario y semanal, «Hoy en tu cuenta») y mis mensajes según el momento, con el diseño de la Cartera.
-- MET-3 cierre: FEAT, backlog, CHANGELOG-FACTORY.
+- MET-1b CERRADO por decisión de Pablo (DEC-031): Chak y Dragon's End son deuda visual. Workflow, herramienta y test retirados (`3375bfd`, `2361b96`, `d0540c7`); DEC-031 (`2f298db`).
+- MET-1c `meta.js` 4.0.1 + `meta-drops.json`. Hecho (`28df57a`, `7f17458`, `30b0f18`).
+- MET-2 `meta-theme.js` 2.0.0 (este micro-ciclo).
+- MET-3 cierre: FEAT-007, backlog, CHANGELOG-FACTORY.
 
 Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `e775d97`).
 
 ## Resumen de la sesión
 
+- Vistas previas de Metas y Eventos arregladas (MET-1c): 8 de 10 se ven desde La Bóveda; Chak y Dragon's End muestran «Sin vista previa» con el nombre de la infusión, sin imágenes rotas.
 - MET-1b cerrado como decidió Pablo (DEC-031): las vistas previas que faltan son deuda visual y la recuperación automática de imágenes se retiró del repo.
-- Metas y Eventos renovado en DEV (BL-057, MET-1): arriba «Ahora» con lo que está en curso o empieza en 20 min, después la agenda de las próximas 3 horas, tus Fijadas (hasta 6) y todas las metas agrupadas por expansión. La vista previa de infusiones se quedó. «Hecho hoy» aparece solo donde la API lo sabe y todo se actualiza solo cada 30 s. Falta MET-2: la cabecera nueva y mis mensajes.
-- La Cartera renovada está en producción (BL-056, REQ-011): 4 pasos en el mismo orden que DEV, cada archivo idéntico al validado. Vuelta atrás lista en la rama `rollback/pre-cartera`.
-- La Cartera renovada quedó cerrada (BL-056, FEAT-006): Mi cartera, Cambio de divisas y Todas las cuentas en una sola pantalla con pestañas. Una preferencia nueva en el navegador: `gn:wallet:hidezero` («ocultar en cero»).
+- Metas y Eventos renovado en DEV (BL-057, MET-1): «Ahora», agenda de 3 horas, Fijadas (hasta 6) y todas las metas por expansión; «Hecho hoy» solo donde la API lo sabe y todo se actualiza cada 30 s.
+- La Cartera renovada está en producción (BL-056, REQ-011). Vuelta atrás lista en la rama `rollback/pre-cartera`.
 - Pablo archivó los dos repos del legado. El Gist queda deprecado (DEC-030) y el respaldo va a una nube que todos tengan (DISC-009); Homestead pasa a módulo propio (BL-055).
 
 ## Esperando a Pablo
@@ -45,7 +43,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM): en el backlo
 
 ## Para tu información
 
-- [BL-057] MET-1b cerrado como pediste (DEC-031): 8 de 10 vistas previas ya están guardadas en La Bóveda; las 2 que faltan quedan como deuda visual con un aviso limpio. No se investiga más.
+- [BL-057] MET-1b cerrado como pediste (DEC-031) y MET-1c publicado: para ver las vistas previas nuevas en DEV recargá con Ctrl+F5 (RSK-020).
 - [FEAT-002] Usaste DEV y lo que encontraste es de la Armería, no de Analytics: doy FEAT-002 por validada.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
 
