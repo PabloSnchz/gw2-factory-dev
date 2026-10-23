@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta BL-061 — Sidebar renovada · La Bóveda del Gato Negro</title>
+<!-- SBR-0: maqueta para aprobación. No es código de la Bóveda. Tokens del theme Gato Negro (GDS, DEC-010/025). -->
+<style>
+:root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#232A3A;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
+--acc-1:#A896FF;--gold:#F2B94B;--green:#3CC48A;--green-bg:#1D3436;--amber-bg:#38352F;--red:#F47C7C;--glow:rgba(123,92,255,.14)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-2);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{color:var(--tx-1);font-size:1.7rem;margin:0 0 4px}
+h2{color:var(--tx-1);font-size:1.15rem;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--bd-1)}
+h3{color:var(--tx-1);font-size:.95rem;margin:16px 0 6px}
+.lead{color:var(--tx-3);margin:0 0 18px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-3)}
+.tag--gold{border-color:var(--gold);color:var(--gold)}.tag--green{border-color:var(--green);color:var(--green)}.tag--red{border-color:var(--red);color:var(--red)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--bd-1)}
+th{color:var(--tx-3);font-weight:600;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+td b{color:var(--tx-1)}
+code{background:var(--bg-2);border-radius:4px;padding:0 4px;font-size:.85em;color:var(--tx-1)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:12px;padding:14px 16px}
+.voice{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg,var(--glow),transparent);border:1px solid var(--bd-2);border-radius:12px;padding:12px 14px;margin:14px 0}
+.av{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#C9BDFF,#7B5CFF 55%,#3B2A8A);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 0 2px var(--bd-2)}
+.voice p{margin:2px 0}.voice .lbl{color:var(--acc-1);font-weight:700;font-size:.82rem}
+
+/* ---------- maqueta desktop ---------- */
+.frame{border:1px solid var(--bd-2);border-radius:14px;overflow:hidden;background:var(--bg-0);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg-1);border-bottom:1px solid var(--bd-1);font-size:.8rem;color:var(--tx-3)}
+.fbar img{width:22px;height:22px}.fbar .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:3px 10px;color:var(--tx-2)}
+.app{display:grid;grid-template-columns:252px 1fr;min-height:640px}
+.sb{border-right:1px solid var(--bd-1);background:var(--bg-0);padding:14px 12px;display:flex;flex-direction:column;gap:12px}
+.acct{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px;display:grid;grid-template-columns:36px 1fr auto;gap:2px 10px;align-items:center}
+.acct img{width:36px;height:36px;grid-row:span 2;border-radius:9px;background:var(--bg-2);padding:4px}
+.acct small{color:var(--tx-3);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+.acct b{color:var(--tx-1);font-size:.92rem;grid-column:2}
+.acct .chg{grid-row:1 / span 2;grid-column:3;font-size:.75rem;border:1px solid var(--bd-1);border-radius:999px;padding:2px 9px;color:var(--tx-2);text-decoration:none}
+.acct .st{grid-column:1 / -1;margin-top:8px;display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--tx-3)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0}
+.dot--warn{background:var(--gold)}
+.nav{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.nav a{position:relative;display:flex;align-items:center;gap:11px;padding:7px 10px 7px 12px;border-radius:9px;text-decoration:none;color:var(--tx-2);font-size:.9rem;border:1px solid transparent}
+.nav a img{width:24px;height:24px;border-radius:6px;flex-shrink:0}
+.nav a:hover{background:var(--bg-1);border-color:var(--bd-1)}
+.nav a.on{background:var(--bg-1);border-color:var(--bd-2);color:var(--tx-1);font-weight:600}
+.nav a.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:3px;background:var(--x,var(--acc-1))}
+.nav .t{margin-left:auto;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:0 6px}
+.nav .w{margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.sep{height:1px;background:var(--bd-1);margin:6px 4px}
+.cap{font-size:.68rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.07em;padding:0 10px;margin:2px 0}
+.slot{border:1px dashed var(--bd-2);border-radius:10px;padding:10px;font-size:.78rem;color:var(--tx-3)}
+.shv{margin-top:auto;border:1px solid var(--bd-2);border-radius:12px;background:linear-gradient(180deg,var(--glow),transparent);padding:10px;display:grid;grid-template-columns:48px 1fr;gap:4px 10px;align-items:center}
+.shv .av{grid-row:span 2}
+.shv b{color:var(--acc-1);font-size:.78rem}
+.shv span{font-size:.8rem;color:var(--tx-2)}
+.shv a{grid-column:1 / -1;justify-self:start;margin-top:6px;font-size:.78rem;border:1px solid var(--acc-1);border-radius:999px;padding:3px 10px;text-decoration:none;color:var(--tx-1)}
+.main{padding:18px 22px}
+.ph{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);height:86px;margin-bottom:12px;display:flex;align-items:center;padding:0 18px;color:var(--tx-3);font-size:.85rem}
+.ph.h{height:120px;background:linear-gradient(180deg,var(--glow),var(--bg-1))}
+.ph.s{height:150px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ---------- maqueta celular ---------- */
+.phones{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;margin-top:12px}
+.phone{width:300px;height:620px;border:10px solid #05060A;border-radius:34px;background:var(--bg-0);position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+.phone .ftop{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;border-bottom:1px solid var(--bd-1);font-size:.75rem;color:var(--tx-3)}
+.phone .ftop img{width:22px;height:22px}.phone .ftop .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:2px 8px}
+.phone .body{padding:12px}
+.phone .body .ph{height:70px}.phone .body .ph.h{height:96px}
+.tabs{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);background:var(--bg-1);border-top:1px solid var(--bd-2);padding:6px 4px 10px}
+.tabs a{display:grid;justify-items:center;gap:3px;font-size:.62rem;color:var(--tx-3);text-decoration:none;min-height:48px;padding-top:4px;position:relative}
+.tabs a img{width:24px;height:24px}
+.tabs a.on{color:var(--tx-1);font-weight:700}
+.tabs a.on::before{content:"";position:absolute;top:-7px;left:28%;right:28%;height:3px;border-radius:3px;background:var(--acc-1)}
+.tabs .more{font-size:1.1rem;line-height:24px;color:var(--tx-2)}
+.tabs .badge{position:absolute;top:2px;right:24%;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 2px var(--bg-1)}
+.scrim{position:absolute;inset:0;background:rgba(5,6,10,.6)}
+.sheet{position:absolute;left:0;right:0;bottom:0;background:var(--bg-1);border-top:1px solid var(--bd-2);border-radius:18px 18px 0 0;padding:8px 12px 14px;max-height:84%;overflow:hidden}
+.grab{width:40px;height:4px;border-radius:4px;background:var(--bd-2);margin:2px auto 10px}
+.sheet .acct{margin-bottom:10px}
+.sheet .nav a{min-height:44px}
+.sheet .shv{margin-top:10px}
+.cap2{text-align:center;color:var(--tx-3);font-size:.8rem;margin-top:8px}
+
+/* ---------- antes ---------- */
+.old{width:300px;border:1px solid var(--bd-1);border-radius:12px;padding:10px;background:#141418}
+.old .p{border:1px solid #242428;border-radius:10px;padding:8px;margin-bottom:8px;background:#1A1F2B}
+.old .p h4{margin:0 0 6px;font-size:.85rem;color:var(--tx-1);display:flex;gap:8px;align-items:center}
+.old .p h4 img{width:26px;height:26px}
+.old .l{display:flex;align-items:center;gap:12px;padding:8px 10px;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);margin-bottom:6px;font-size:.85rem}
+.old .l img{width:26px;height:26px}
+.old .chip{display:inline-block;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px;font-size:.75rem;color:var(--green)}
+.old ul{margin:0;padding-left:18px;font-size:.8rem;color:var(--tx-3)}
+.num{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--red);color:#0F1117;font-size:.7rem;font-weight:800;margin-left:auto;flex-shrink:0}
+ol.plan{padding-left:20px}ol.plan li{margin:6px 0}
+.dec{border-left:3px solid var(--gold);background:var(--amber-bg);border-radius:8px;padding:10px 14px;margin:10px 0}
+.dec b{color:var(--gold)}
+@media (max-width:760px){.app{grid-template-columns:1fr}.sb{border-right:0;border-bottom:1px solid var(--bd-1)}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<span class="tag tag--gold">Propuesta · BL-061 · SBR-0</span>
+<h1>Sidebar renovada: la navegación de la Bóveda</h1>
+<p class="lead">Maqueta para aprobación. No toca código. Theme Gato Negro (GDS); los colores salen de los tokens, así que se adapta a los 19 themes.</p>
+
+<div class="voice"><div class="av" aria-hidden="true">S</div><div><p class="lbl">Shiruvana te explica</p>
+<p>La Bienvenida ya es la puerta de entrada; la Sidebar es el pasillo. Hoy es una columna a la derecha con tres estilos encimados, en otro orden que la Bienvenida y, en el celular, termina al fondo de la página. Te propongo que sea solo navegación, siempre a mano, y que yo tenga un rincón chiquito ahí para avisarte cuando algo de tu Bóveda necesita atención.</p></div></div>
+
+<!-- =============================== 1-2 =============================== -->
+<h2>1. Diagnóstico de la Sidebar actual</h2>
+<div class="cols">
+  <div>
+    <div class="old" aria-label="Sidebar actual, esquemática">
+      <div class="p"><h4><img src="../../assets/icons/3601748.png" alt="">Gato identificado</h4><span class="chip">Pablin.1234</span></div>
+      <div class="p"><h4><img src="../../assets/icons/784370.png" alt="">Navegación</h4>
+        <div class="l"><img src="../../assets/icons/733322.png" alt="">Cartera</div>
+        <div class="l"><img src="../../assets/icons/102420.png" alt="">Meta &amp; Eventos</div>
+        <div class="l"><img src="../../assets/icons/155059.png" alt="">Logros</div>
+        <div class="l"><img src="../../assets/icons/3172791.png" alt="">Cámara del Brujo</div>
+        <div class="l" style="opacity:.55">… 5 más (Armería casi al final)</div>
+      </div>
+      <div class="p"><h4>Próximas funciones</h4><ul><li>Panel de Actividades</li><li>Historial y variación</li><li>Deep-links</li></ul></div>
+    </div>
+    <p class="cap2">Hoy: columna derecha de 320 px (<code>1fr 320px</code>)</p>
+  </div>
+  <div class="card">
+    <h3>Cómo está armada</h3>
+    <table>
+      <tr><th>Pieza</th><th>Dónde vive</th></tr>
+      <tr><td><b>Marcado</b></td><td><code>index.html</code> (69 KB, no se puede republicar: LES-028)</td></tr>
+      <tr><td><b>Estilos</b></td><td>Tres capas que se pisan: <code>&lt;style&gt;</code> en <code>index.html</code> (íconos 32 px), <code>main.css</code> (18 px) y <code>theme-polish.css</code></td></tr>
+      <tr><td><b>Lógica</b></td><td><code>sidebar-nav.js</code> 1.2: marca el activo (si el router no lo hizo) y pide <code>/v2/account</code> para el nombre</td></tr>
+      <tr><td><b>Paneles por módulo</b></td><td><code>router.js</code> <code>updateSidebarFor()</code>: «Próximas funciones» en Cartera, «Próximos (Top 3)» en Metas, panel de Logros</td></tr>
+      <tr><td><b>Celular</b></td><td>Debajo de 900 px la grilla pasa a una columna y la Sidebar queda <b>después</b> del contenido</td></tr>
+    </table>
+  </div>
+</div>
+
+<h2>2. Problemas detectados</h2>
+<table>
+  <tr><th>#</th><th>Problema</th><th>Impacto</th><th>Nivel</th></tr>
+  <tr><td>1</td><td><b>En el celular la navegación queda al fondo de la página.</b> Para cambiar de módulo hay que bajar todo el contenido (en Metas, 49 tarjetas).</td><td>La Bóveda casi no se puede navegar en el teléfono.</td><td><span class="tag tag--red">Alto</span></td></tr>
+  <tr><td>2</td><td><b>No hay «Inicio».</b> A la Bienvenida solo se llega con un ícono de 16 px en la barra de arriba.</td><td>La puerta de entrada no está en la navegación.</td><td><span class="tag tag--red">Alto</span></td></tr>
+  <tr><td>3</td><td><b>Otro orden y otros nombres que la Bienvenida.</b> La Bienvenida dice «en el orden de la barra lateral», pero la Armería está segunda allá y octava acá; «Meta &amp; Eventos» contra «Metas y Eventos».</td><td>Dos mapas distintos de la misma Bóveda.</td><td><span class="tag tag--gold">Medio</span></td></tr>
+  <tr><td>4</td><td><b>Contenido viejo o duplicado.</b> «Próximas funciones» anuncia el Panel de Actividades, que existe hace meses. «Próximos (Top 3)» repite lo que ya muestra «Ahora» en Metas.</td><td>Ruido; información que contradice al producto.</td><td><span class="tag tag--gold">Medio</span></td></tr>
+  <tr><td>5</td><td><b>Tres capas de estilos que se contradicen</b> (íconos de 18 o 32 px, separación de 6 u 8 px, hover que desplaza) con <code>!important</code> y estilos en línea.</td><td>Cada theme se ve distinto; cualquier ajuste es frágil.</td><td><span class="tag tag--gold">Medio</span></td></tr>
+  <tr><td>6</td><td><b>No dice nada del estado de tu cuenta.</b> «Gato identificado» muestra solo el nombre, con un pedido extra a la API; los módulos que tu Key no alcanza no avisan.</td><td>La Bienvenida sabe qué falta, la navegación no.</td><td><span class="tag tag--gold">Medio</span></td></tr>
+  <tr><td>7</td><td><b>Accesibilidad.</b> Cada ícono repite el nombre en <code>alt</code> (el lector lo lee dos veces); los títulos «Navegación» y «Gato identificado» son <code>h3</code> sueltos; no hay región de navegación con nombre.</td><td>Lector de pantalla confuso.</td><td><span class="tag">Bajo</span></td></tr>
+  <tr><td>8</td><td><b>Fallo en <code>sidebar-nav.js</code>:</b> cada vez que cambiás de módulo agrega un oyente nuevo dentro de otro (el bloque final está anidado por error); y su respaldo vuelve a <code>#/cards</code>, no a la Bienvenida.</td><td>Oyentes que se acumulan durante la sesión.</td><td><span class="tag">Bajo</span></td></tr>
+</table>
+
+<!-- =============================== 3 =============================== -->
+<h2>3. Objetivos del rediseño</h2>
+<div class="cols">
+  <div class="card"><h3>Solo navegación</h3><p>La Sidebar lleva a los módulos y muestra en qué estado está tu cuenta. No muestra contenido de ningún módulo (la misma regla que DEC-032 para la Bienvenida).</p></div>
+  <div class="card"><h3>Un solo mapa</h3><p>Inicio primero, después los 9 módulos con el mismo orden, nombres, íconos y colores que la Bienvenida, de una sola fuente.</p></div>
+  <div class="card"><h3>A mano en el celular</h3><p>Barra fija abajo con los 4 destinos principales y «Más». Nunca más al fondo de la página.</p></div>
+  <div class="card"><h3>Una sola piel, con el GDS</h3><p>Una capa de estilos con tokens; se lee en los 19 themes (con la guarda de contraste de la Bienvenida).</p></div>
+</div>
+
+<!-- =============================== 4 =============================== -->
+<h2>4. Maqueta desktop</h2>
+<p class="lead">Sidebar a la izquierda, 252 px. La cuenta arriba, Inicio, los módulos, Cuentas separada y mi rincón al pie.</p>
+<div class="frame">
+  <div class="fbar"><img src="../../assets/brand/gato-negro.svg" alt="">La Bóveda del Gato Negro · Guías · Wiki · Foros<span class="sel">API Key: Pablin ▾</span></div>
+  <div class="app">
+    <nav class="sb" aria-label="Navegación de la Bóveda">
+      <div class="acct">
+        <img src="../../assets/icons/3601748.png" alt="">
+        <small>Cuenta activa</small>
+        <b>Pablin.1234</b>
+        <a class="chg" href="#">Cambiar</a>
+        <div class="st"><span class="dot dot--warn"></span>API Key · le falta «bazar»</div>
+      </div>
+      <ul class="nav">
+        <li><a class="on" href="#" style="--x:#A896FF"><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</a></li>
+      </ul>
+      <p class="cap">Módulos</p>
+      <ul class="nav">
+        <li><a href="#"><img src="../../assets/icons/733322.png" alt="">Cartera<span class="w" title="Falta permiso"></span></a></li>
+        <li><a href="#"><img src="../../assets/icons/102420.png" alt="">Metas y Eventos<span class="t">Nuevo</span></a></li>
+        <li><a href="#"><img src="../../assets/icons/Cuentas/157085.png" alt="">Armería Legendaria</a></li>
+        <li><a href="#"><img src="../../assets/icons/155059.png" alt="">Logros</a></li>
+        <li><a href="#"><img src="../../assets/icons/3172791.png" alt="">Cámara del Brujo</a></li>
+        <li><a href="#"><img src="../../assets/icons/1302773.png" alt="">Actividades</a></li>
+        <li><a href="#"><img src="../../assets/icons/raids/raid-icon.png" alt="">Raids y Strikes</a></li>
+        <li><a href="#"><img src="../../assets/icons/Welcome/358409.png" alt="">Inventario y Personajes</a></li>
+      </ul>
+      <div class="sep"></div>
+      <ul class="nav">
+        <li><a href="#"><img src="../../assets/icons/3601748.png" alt="">Cuentas</a></li>
+      </ul>
+      <div class="shv">
+        <div class="av" aria-hidden="true">S</div>
+        <b>Shiruvana</b>
+        <span>2 cosas para revisar en tu Bóveda</span>
+        <a href="#">Ver en Inicio →</a>
+      </div>
+    </nav>
+    <div class="main">
+      <div class="ph h">Bienvenida (cabecera con el gato y pastillas de estado)</div>
+      <div class="ph">«Shiruvana te guía» — el detalle de esas 2 cosas, una por vez</div>
+      <div class="grid2"><div class="ph s">Seguí donde quedaste</div><div class="ph s">Tu Bóveda</div></div>
+    </div>
+  </div>
+</div>
+<div class="cols" style="margin-top:12px">
+  <div class="card"><h3>Estados de cada enlace</h3><p><b>Activo:</b> fondo, borde y una barra de 3 px con el color del módulo (el mismo de su tarjeta en la Bienvenida). <b>Falta permiso:</b> punto ámbar con texto para el lector. <b>Nuevo:</b> etiqueta mientras la novedad tenga 14 días o menos (de <code>welcome-news.json</code>). Sin desplazamiento al pasar el mouse.</p></div>
+  <div class="card"><h3>Cuenta activa</h3><p>Nombre de la cuenta y el estado de su Key (completa, le falta un permiso, sin verificar). «Cambiar» lleva al selector de arriba. Reemplaza «Gato identificado».</p></div>
+  <div class="card"><h3>Lo que sale</h3><p>«Próximas funciones» (vieja) y «Próximos (Top 3)» de Metas (repite «Ahora»). El panel de Logros queda como único espacio de módulo, debajo de los enlaces, hasta que se renueve Logros.</p></div>
+</div>
+
+<!-- =============================== 5 =============================== -->
+<h2>5. Maqueta celular</h2>
+<p class="lead">Debajo de 900 px la Sidebar se esconde y aparece una barra fija abajo. «Más» abre una hoja con todo lo demás.</p>
+<div class="phones">
+  <div>
+    <div class="phone" aria-label="Celular: barra de abajo">
+      <div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">La Bóveda<span class="sel">Pablin ▾</span></div>
+      <div class="body"><div class="ph h">Metas y Eventos · cabecera</div><div class="ph">Ahora</div><div class="ph">Agenda</div><div class="ph">…</div></div>
+      <div class="tabs">
+        <a href="#"><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</a>
+        <a href="#"><img src="../../assets/icons/733322.png" alt="">Cartera</a>
+        <a class="on" href="#"><img src="../../assets/icons/102420.png" alt="">Metas</a>
+        <a href="#"><img src="../../assets/icons/Cuentas/157085.png" alt="">Armería</a>
+        <a href="#"><span class="more">☰</span>Más<span class="badge"></span></a>
+      </div>
+    </div>
+    <p class="cap2">Barra fija: 4 destinos + «Más» (punto ámbar si hay algo para revisar)</p>
+  </div>
+  <div>
+    <div class="phone" aria-label="Celular: hoja Más abierta">
+      <div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">La Bóveda<span class="sel">Pablin ▾</span></div>
+      <div class="body"><div class="ph h"></div><div class="ph"></div></div>
+      <div class="scrim"></div>
+      <div class="sheet" role="dialog" aria-label="Más">
+        <div class="grab"></div>
+        <div class="acct"><img src="../../assets/icons/3601748.png" alt=""><small>Cuenta activa</small><b>Pablin.1234</b><a class="chg" href="#">Cambiar</a></div>
+        <ul class="nav">
+          <li><a href="#"><img src="../../assets/icons/155059.png" alt="">Logros</a></li>
+          <li><a href="#"><img src="../../assets/icons/3172791.png" alt="">Cámara del Brujo</a></li>
+          <li><a href="#"><img src="../../assets/icons/1302773.png" alt="">Actividades</a></li>
+          <li><a href="#"><img src="../../assets/icons/raids/raid-icon.png" alt="">Raids y Strikes</a></li>
+          <li><a href="#"><img src="../../assets/icons/Welcome/358409.png" alt="">Inventario y Personajes</a></li>
+          <li><a href="#"><img src="../../assets/icons/3601748.png" alt="">Cuentas</a></li>
+        </ul>
+        <div class="shv"><div class="av" aria-hidden="true">S</div><b>Shiruvana</b><span>2 cosas para revisar</span></div>
+      </div>
+    </div>
+    <p class="cap2">«Más»: cuenta, los otros 6 destinos y mi rincón. Escape o tocar afuera la cierra.</p>
+  </div>
+</div>
+<div class="cols" style="margin-top:12px">
+  <div class="card"><h3>Detalles</h3><p>Controles de 44 px como mínimo; la barra respeta la zona segura del iPhone (<code>env(safe-area-inset-bottom)</code>) y el contenido deja lugar abajo para que nada quede tapado. La hoja «Más» guarda el foco adentro mientras está abierta y lo devuelve al cerrarla.</p></div>
+  <div class="card"><h3>Por qué esos 4</h3><p>Inicio, más los tres módulos renovados y más usados (Cartera, Metas, Armería). Si cuando tengamos datos de uso otros pesan más, se cambian en una línea.</p></div>
+</div>
+
+<!-- =============================== 6 =============================== -->
+<h2>6. Integración con el GDS</h2>
+<table>
+  <tr><th>Elemento</th><th>Tokens y componentes</th></tr>
+  <tr><td><b>Superficies</b></td><td>Sidebar <code>--bg-0</code>, tarjeta de cuenta y enlace activo <code>--bg-1</code>, bordes <code>--bd-1</code>/<code>--bd-2</code>, radios 8–12 px.</td></tr>
+  <tr><td><b>Texto</b></td><td><code>--tx-2</code> enlaces, <code>--tx-1</code> activo, <code>--tx-3</code> rótulos. Mismo cálculo de contraste AA que la Bienvenida (BL-060 lo lleva a toda la Bóveda).</td></tr>
+  <tr><td><b>Acento</b></td><td>Barra del activo con el color de cada módulo; foco visible <code>2px var(--acc-1)</code>; avisos con <code>--gn-gold</code>.</td></tr>
+  <tr><td><b>Componentes</b></td><td>Los mismos de la Bienvenida: chip, etiqueta, punto de estado y la voz de Shiruvana (<code>Shiruvana.voice</code>).</td></tr>
+  <tr><td><b>Una sola capa</b></td><td>Los estilos nuevos se aplican dentro de <code>#appSidebar</code> y le ganan a las tres capas viejas sin tocar <code>index.html</code>; las reglas viejas se limpian de <code>main.css</code> cuando se pueda.</td></tr>
+  <tr><td><b>Movimiento</b></td><td>Sin desplazamientos; la hoja «Más» sube en 160 ms y respeta <code>prefers-reduced-motion</code>.</td></tr>
+</table>
+
+<!-- =============================== 7 =============================== -->
+<h2>7. Integración con la Bienvenida</h2>
+<div class="cols">
+  <div class="card"><h3>Una sola lista de módulos</h3><p>La Sidebar lee la lista de la Bienvenida (<code>Welcome._pure.MODULES</code>): orden, nombre, ícono y color. Cambiar un módulo en un lugar lo cambia en los dos; un test lo vigila.</p></div>
+  <div class="card"><h3>Mismo estado</h3><p>El punto «Falta permiso» y el estado de la cuenta salen de los mismos datos que «Tu Bóveda» (las Keys y sus permisos en el navegador). Sin pedidos nuevos a la API.</p></div>
+  <div class="card"><h3>Inicio es la Bienvenida</h3><p>Primer enlace. Mi rincón lleva ahí: la Sidebar avisa, la Bienvenida explica. La Bienvenida sigue sin mostrar nada de otro módulo, y la Sidebar tampoco.</p></div>
+</div>
+
+<!-- =============================== 8 =============================== -->
+<h2>8. Presencia global de Shiruvana</h2>
+<div class="cols">
+  <div class="card">
+    <h3>Mi rincón, al pie de la Sidebar</h3>
+    <p>Una tarjeta chica, separada de los enlaces, que está en todas las pantallas:</p>
+    <ul>
+      <li><b>Con pendientes:</b> «2 cosas para revisar en tu Bóveda» + «Ver en Inicio →».</li>
+      <li><b>Todo en orden:</b> «Todo en orden en tu Bóveda», sin botón y en tono apagado.</li>
+      <li><b>Sin API Key:</b> «Empezá por tu API Key» → Inicio.</li>
+    </ul>
+    <p>Lo que digo sale de <code>Welcome.orientation()</code> (las mismas prioridades de «Shiruvana te guía»). Nunca hablo de horarios, metas ni del contenido de un módulo, y no interrumpo: no hay ventanas que se abren solas.</p>
+  </div>
+  <div class="card">
+    <h3>Choca con una regla vigente</h3>
+    <p>DEC-024 dice que mi avatar no va en la navegación. El rincón está <b>dentro</b> de la Sidebar, aunque separado de los enlaces. Para hacerlo hace falta una decisión tuya (DEC-034) que deje una excepción acotada:</p>
+    <ul>
+      <li>un solo lugar fijo, al pie;</li>
+      <li>avatar de 48 px y una sola línea;</li>
+      <li>solo estado de la Bóveda (N1–N2);</li>
+      <li>nunca dentro de un enlace ni de un ícono.</li>
+    </ul>
+    <p>Si preferís no tocar DEC-024, la Sidebar funciona igual sin el rincón y mi voz sigue solo en la Bienvenida.</p>
+  </div>
+</div>
+
+<!-- =============================== 9 =============================== -->
+<h2>9. Relación con BL-059 (niveles de Shiruvana)</h2>
+<table>
+  <tr><th>Nivel</th><th>Qué haría el rincón</th><th>Cuándo</th></tr>
+  <tr><td><b>N1 Informativa</b></td><td>Estado de la cuenta y de la Key en la tarjeta de arriba.</td><td>BL-061</td></tr>
+  <tr><td><b>N2 Contextual</b></td><td>«N cosas para revisar», con la prioridad de la Bienvenida.</td><td>BL-061, si aprobás DEC-034</td></tr>
+  <tr><td><b>N3 Analítica</b></td><td>Un aviso de un cambio fuerte de precio o tendencia, con su fundamento.</td><td>Solo cuando habilites BL-059</td></tr>
+  <tr><td><b>N4 Estratégica</b></td><td>Un próximo paso que cruza módulos («te faltan 3 materiales de tu legendaria»).</td><td>Solo cuando habilites BL-059</td></tr>
+  <tr><td><b>N5 Compañera</b></td><td>Lo mismo, aprendido de cómo usás la Bóveda.</td><td>Visión</td></tr>
+</table>
+<p>El rincón es el lugar natural donde van a aparecer los niveles siguientes: una voz, un lugar, en todas las pantallas. En BL-061 dejo el espacio y el contrato (qué puede decir y con qué prioridad), pero <b>no</b> implemento nada de N3 en adelante: BL-059 sigue bloqueado hasta que lo habilites.</p>
+
+<!-- =============================== 10 =============================== -->
+<h2>10. Plan por micro-ciclos</h2>
+<p class="lead">Sin tocar <code>index.html</code> (LES-028): <code>sidebar-nav.js</code> rearma la Sidebar al cargar, con los mismos ids de enlace que usa el router. Como <code>index.html</code> pide <code>sidebar-nav.js?v=1.2</code>, hace falta Ctrl+F5 (RSK-020).</p>
+<table>
+  <tr><th>Paso</th><th>Qué</th><th>Archivos</th><th>Validás</th></tr>
+  <tr><td><b>SBR-1</b></td><td>Sidebar desktop a la izquierda: Inicio, los 9 módulos desde la lista de la Bienvenida, Cuentas aparte, activo con la barra de color, una sola capa de estilos GDS, región de navegación con nombre. Corrige el oyente acumulado y el respaldo a <code>#/cards</code>.</td><td><code>js/sidebar-nav.js</code> 2.0.0 + test</td><td>Desktop</td></tr>
+  <tr><td><b>SBR-2</b></td><td>Tarjeta de cuenta activa con el estado de la Key, «Falta permiso» y «Nuevo» en los enlaces; salen «Próximas funciones» y «Próximos (Top 3)»; el panel de Logros queda como espacio de módulo.</td><td><code>js/sidebar-nav.js</code> 2.1.0 + test</td><td>Desktop</td></tr>
+  <tr><td><b>SBR-3</b></td><td>Celular: barra fija abajo con 4 destinos + «Más», hoja «Más» con foco atrapado, Escape y zona segura.</td><td><code>js/sidebar-nav.js</code> 2.2.0 + test</td><td>Celular</td></tr>
+  <tr><td><b>SBR-4</b></td><td>Mi rincón (solo si aprobás DEC-034): estado de la Bóveda desde <code>Welcome.orientation()</code>, enlace a Inicio, punto en «Más».</td><td><code>js/shiruvana-places.js</code> 1.3.0 + test · DEC-034</td><td>Desktop y celular</td></tr>
+  <tr><td><b>SBR-5</b></td><td>Revisión en los 19 themes, teclado y lector de pantalla; FEAT-009, backlog y CHANGELOG-FACTORY.</td><td>Documentación</td><td>Cierre</td></tr>
+</table>
+
+<div class="dec"><p><b>Decisiones que necesito de vos</b></p>
+<ol>
+  <li><b>Ubicación:</b> Sidebar a la izquierda (recomendado: es donde se busca la navegación y deja el contenido como protagonista) o la mantenemos a la derecha. El resto de la propuesta vale igual en los dos casos.</li>
+  <li><b>Mi rincón global (DEC-034):</b> sí, con la excepción acotada a DEC-024 (recomendado), o no, y mi voz queda solo en la Bienvenida.</li>
+</ol>
+<p>Lo demás lo decido yo: retirar «Próximas funciones» y «Próximos (Top 3)», los 4 destinos de la barra del celular y no hacer todavía la Sidebar colapsable (queda como idea en discovery).</p></div>
+
+</div>
+</body>
+</html>
