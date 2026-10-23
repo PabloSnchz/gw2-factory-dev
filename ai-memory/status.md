@@ -1,20 +1,16 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-057 restyle de Meta & Eventos — MET-1 `meta.js` 4.0.0 (propuesta aprobada).
+Tarea actual: BL-057 restyle de Meta & Eventos — MET-1 hecho y publicado; espera la validación de Pablo en DEV antes de MET-2.
 Motivo: Pablo aprobó MET-0 (00:39Z): organización, Ahora, agenda de 3 h, grupos por expansión, GDS, BL-041 y mis mensajes. Pidió conservar la vista previa de infusiones y drops (se puede reorganizar, no quitar) y aprobó eliminar «Vista compacta».
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: VALIDACIÓN FUNCIONAL (MET-1)
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 00:45Z
-Próxima acción: MET-1 — `meta.js` 4.0.0 con tests y prueba de humo; publicar el archivo grande solo y después su test.
+Última actualización: 2026-10-23 01:00Z
+Próxima acción: con la validación de Pablo, MET-2 — `meta-theme.js` 2.0.0: cabecera (relojes, resets, «Hoy N de 19») y mis mensajes desde `Meta.snapshot()`.
 Recuperación (SHIRUVANA-RECOVERY-001, 04:22Z, interrupción MCS-4035 durante PRD-9): reconstruida desde commits y blobs; no se repitió nada. PRD-6 a PRD-8 ya estaban; PRD-9 y PRD-10 se hicieron después del checkpoint `8355803`.
 
-Micro-ciclo (en curso, checkpoint de este commit):
-MET-1 — `meta.js` 4.0.0: secciones Ahora, Próximas 3 horas, Fijadas y Todas las metas; tarjeta nueva con la vista previa de drops; filtros desde los datos; redibujo cada 30 s; BL-041; «Hecho hoy» solo donde la API lo sabe; sin «Vista compacta». Archivo grande dedicado.
-Archivos:
-- js/meta.js
-- tests/meta-view.test.cjs
+Micro-ciclo: ninguno en curso. Último hecho: MET-1 — `meta.js` 4.0.0: secciones Ahora, Próximas 3 horas, Fijadas y Todas las metas; tarjeta nueva con la vista previa de drops; filtros desde los datos; redibujo cada 30 s; BL-041; «Hecho hoy» solo donde la API lo sabe; sin «Vista compacta». Publicado: `e98a25a` js/meta.js (blob af42ca2, 62 790 bytes, archivo grande dedicado) y `8838217` tests/meta-view.test.cjs (blob 4efde78).
 
 Plan (orden por valor para el jugador):
 
@@ -67,6 +63,7 @@ Plan (orden por valor para el jugador):
 - Pablo (23:37Z) validó la Cartera en producción: BL-056 cerrada formalmente. Pidió para BL-057 una propuesta visual de Meta & Eventos antes de implementar nada.
 - MET-0 hecha (23:58Z): maqueta con las 49 metas reales de `meta-events.json` vistas a las 23:37 UTC. Diagnóstico sobre el código de hoy (`meta.js` 3.5.0 blob 188c80e, `meta-theme.js` 1.4.2 blob b116f50): 30 de 49 metas muestran «✕ Pendiente» en rojo porque la API solo sigue 19 (13 jefes, 6 cofres); las tarjetas no se redibujan solas (solo el reloj corre); el filtro de tipo deja afuera 14 metas (event 7, temple 5, global 1, instance 1) y ofrece «Fractal Incursion» sin ninguna; cruce de medianoche (BL-041); 12 horarios y el estado repetido 3 veces por tarjeta; `meta-theme.js` reemplaza la cabecera y borra «Actualizado»; íconos de expansión de 92 a 420 KB mostrados a 42 px; estilos en línea. Propuesta: cabecera con relojes, resets y «Hoy 6 de 19»; mi voz condicional (reset > fijada > permiso > día completo); Ahora; agenda de 3 h por hora local; Fijadas; catálogo por expansión con filtros desde los datos en español; tarjeta con un estado, 3 horarios y acciones con nombre. Plan: MET-1 `meta.js` 4.0.0 (incluye BL-041), MET-2 `meta-theme.js` 2.0.0, MET-3 cierre.
 - Pablo (00:39Z) aprobó MET-0 con un pedido: la vista previa de infusiones y drops se queda (es un diferencial de La Bóveda); se puede reorganizar, no quitar. «Vista compacta» se elimina. Sigue MET-1. Reparto decidido: MET-1 deja en `meta.js` la lógica y las secciones y expone `Meta.snapshot()`; MET-2 (`meta-theme.js` 2.0.0) arma la cabecera (relojes, resets, «Hoy N de 19») y mis mensajes con ese estado.
+- MET-1 hecho (01:00Z): `meta.js` 4.0.0 publicado solo (`e98a25a`, blob af42ca2 verificado) y su test aparte (`8838217`, blob 4efde78). Pruebas: `meta-view.test.cjs` 9 tests + `meta-events.test.cjs` 15 = 24/24 en UTC, Buenos Aires y Kolkata; humo con el HTML real del panel, los datos reales y la API simulada: 56 comprobaciones en las 3 zonas (Ahora, agenda de 57 inicios en 3 h, Fijadas y tope de 6, catálogo de 49 por expansión con templos al final, filtros, «Hecho hoy» solo en las 19 que sigue la API, sin permiso/sin cuenta/error de red, vista previa con mouse, Enter, toque y Escape, tick de 30 s que no redibuja con el panel oculto, foco conservado, snapshot). Mutaciones: 20/20 atrapadas. Dos arreglos propios durante la revisión: las «Próximas» de metas con 2 horarios por día mostraban 2 en vez de 3 (ahora se calcula hasta pasado mañana) y una vista previa abierta durante el redibujo de 30 s quedaba colgada de la tarjeta vieja (ahora sigue a la nueva o se cierra). Estado intermedio a la vista: la barra de relojes de `meta-theme.js` 1.4.2 sigue arriba hasta MET-2. RSK-020: `index.html` sigue pidiendo `meta.js?v=3.4.1`; hace falta Ctrl+F5.
 - Plan de esta sesión: MEM-1 respuestas de Pablo en discovery y backlog → MEM-2 DEC-030 (Gist deprecado; respaldo por archivo y nube popular) y repetición de LES-029 (BL-054) → CAR-0 propuesta de la Cartera (tarjetas, tabla, cambio de divisas y todas las cuentas) para aprobación; CAR-1 en adelante, recién con el sí de Pablo.
 
 Plan FACTORY-ASSET-001, en pausa (los dos repos siguen en solo lectura; migrar es copiar a DEV):
@@ -81,6 +78,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Resumen de la sesión
 
+- Metas y Eventos renovado en DEV (BL-057, MET-1): arriba «Ahora» con lo que está en curso o empieza en 20 min, después la agenda de las próximas 3 horas, tus Fijadas (hasta 6) y todas las metas agrupadas por expansión. La vista previa de infusiones se quedó. «Hecho hoy» aparece solo donde la API lo sabe y todo se actualiza solo cada 30 s. Falta MET-2: la cabecera nueva y mis mensajes.
 - La Cartera renovada está en producción (BL-056, REQ-011): 4 pasos en el mismo orden que DEV, cada archivo idéntico al validado. Vuelta atrás lista en la rama `rollback/pre-cartera`. Sigue la validación de Pablo y después el restyle de Meta & Eventos (BL-057).
 - La Cartera renovada quedó cerrada (BL-056, FEAT-006): Mi cartera, Cambio de divisas y Todas las cuentas en una sola pantalla con pestañas, validadas por Pablo paso a paso. Está en DEV. Una preferencia nueva en el navegador: `gn:wallet:hidezero` («ocultar en cero»).
 - Pablo archivó los dos repos del legado. Registré sus respuestas: el Gist queda deprecado (DEC-030) y el respaldo va a una nube que todos tengan (DISC-009); Homestead pasa a módulo propio (BL-055); BL-054 se cierra porque ya estaba resuelto en DEV (error mío al leer el legado). Propuesta de restyle de la Cartera presentada (BL-056). Sin cambios visuales en la webapp.
@@ -111,6 +109,7 @@ Hecho antes, BL-042: FEAT-005 en producción (gw2-wallet-ligero `36010ab`, `2bab
 
 ## Para tu información
 
+- [BL-057] Validación funcional: Metas y Eventos en DEV (Ctrl+F5). La barra de relojes de arriba es la vieja hasta MET-2.
 - [FEAT-002] Usaste DEV y lo que encontraste es de la Armería, no de Analytics: doy FEAT-002 por validada.
 - [BL-042] Metas en producción: si no ves Visions of Eternity en el filtro, recargá con Ctrl+F5.
 - [BL-040] La Guarida: si no ves el cambio, recargá con Ctrl+F5. Tus favoritos, categorías y widgets no se tocaron.
