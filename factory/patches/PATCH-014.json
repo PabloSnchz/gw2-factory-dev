@@ -1,0 +1,115 @@
+{
+  "id": "PATCH-014",
+  "summary": "FP-5 (DEC-035, RSK-020): los 13 ?v atrasados de index.html al día (inventario OUT-002), la cabecera de settings-manager.js al día (ya era 1.0.4; PATCH-013 rechazado por idea50) y primer módulo cargado desde js/modules.json: wv-tabs-skin.js sale de index.html y lo carga boot.js.",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "d17e6e39cee328c82c4f1757a73a762a5ac497b3",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "src=\"js/meta.js?v=3.4.1\"",
+          "text": "src=\"js/meta.js?v=4.0.1\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/sidebar-nav.js?v=1.2\"",
+          "text": "src=\"js/sidebar-nav.js?v=2.2.2\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/activities.js?v=3.20.4\"",
+          "text": "src=\"js/activities.js?v=3.23.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/converter-modal.js?v=1.2.0\"",
+          "text": "src=\"js/converter-modal.js?v=2.0.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/welcome-panel.js?v=1.4.0\"",
+          "text": "src=\"js/welcome-panel.js?v=2.2.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/raid-tracker.js?v=1.9.0\"",
+          "text": "src=\"js/raid-tracker.js?v=1.10.1\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/legendary-tracker.js?v=1.1.0\"",
+          "text": "src=\"js/legendary-tracker.js?v=1.3.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/legendary-tree-ui.js?v=1.0.0\"",
+          "text": "src=\"js/legendary-tree-ui.js?v=2.2.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/render-catologo.js?v=1.0.0\"",
+          "text": "src=\"js/render-catologo.js?v=1.6.1\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/wallet-dashboard.js?v=2.9.0\"",
+          "text": "src=\"js/wallet-dashboard.js?v=3.0.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/shiruvana-places.js?v=1.0.0\"",
+          "text": "src=\"js/shiruvana-places.js?v=1.3.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/wallet-theme.js?v=1.3.1\"",
+          "text": "src=\"js/wallet-theme.js?v=2.1.1\""
+        },
+        {
+          "op": "replace",
+          "anchor": "src=\"js/meta-theme.js?v=1.4.2\"",
+          "text": "src=\"js/meta-theme.js?v=2.1.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "  <script defer src=\"js/wv-tabs-skin.js?v=1.0.0\"></script>\n",
+          "text": "  <!-- wv-tabs-skin.js se carga desde js/modules.json (boot.js, DEC-035 FP-5). -->\n"
+        }
+      ]
+    },
+    {
+      "path": "js/settings-manager.js",
+      "base_sha": "d35a7c31d8da2b65afae04fec5926e8f82d35b9f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * v1.0.2 (2026-03-28)\n",
+          "text": " * v1.0.4 (cabecera al día 2026-10-23, RSK-020: el archivo ya era 1.0.4, ver el historial)\n"
+        }
+      ]
+    },
+    {
+      "path": "js/modules.json",
+      "base_sha": "f5e671e9df835877e81e0fea323fac67fb63f36c",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "\"modules\": []",
+          "text": "\"modules\": [\n    { \"src\": \"js/wv-tabs-skin.js\", \"v\": \"1.0.0\" }\n  ]"
+        }
+      ]
+    },
+    {
+      "path": "tests/boot.test.cjs",
+      "base_sha": "2cd44d1961deba133dc7e565e96d44bf27141c34",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "test('el manifiesto del repo es válido y por ahora está vacío', () => {",
+          "text": "test('el manifiesto del repo es válido y cada módulo existe', () => {"
+        }
+      ]
+    }
+  ]
+}
