@@ -47,13 +47,49 @@ function jsCheck(root, files) {
   return errs;
 }
 
-// La misma suite que app-checks.yml.
+// Lee la salida TAP de node --test: cuántas fallas y cuáles, como «archivo: prueba».
+// Las pruebas de primer nivel van sin sangría; el archivo sale de su `location:`
+// (un archivo que revienta al cargar aparece con su ruta como nombre).
+function parseTap(out) {
+  const m = /^# fail (\d+)$/m.exec(out);
+  const lines = out.split('\n');
+  const failing = [];
+  lines.forEach((l, i) => {
+    const f = /^not ok \d+ - (.+?)(?: # .*)?$/.exec(l);
+    if (!f) return;
+    let file = '';
+    for (let j = i + 1; j < lines.length && /^\s/.test(lines[j]); j++) {
+      const loc = /^ {2}location: '.*?(tests\/[^:']+)/.exec(lines[j]);
+      if (loc) { file = loc[1]; break; }
+    }
+    const id = file && file !== f[1] ? file + ': ' + f[1] : f[1];
+    if (failing.indexOf(id) === -1) failing.push(id);
+  });
+  return { fails: m ? Number(m[1]) : null, failing };
+}
+
+// La misma suite que app-checks.yml, con salida TAP explícita (en Node 22 sin TTY ya es TAP;
+// en Node 23+ no: así se lee igual en todos lados).
 function suite(root) {
-  const r = spawnSync('bash', ['-c', 'shopt -s nullglob; node --test tests/*.test.cjs tests/*.test.js tests/*.smoke.js'],
-    { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
-  const out = String(r.stdout || '') + String(r.stderr || '');
-  const m = /ℹ fail (\d+)/.exec(out);
-  return { ok: r.status === 0, fails: m ? Number(m[1]) : null };
+  // Sin NODE_TEST_CONTEXT: si este proceso corre dentro de node --test, el hijo heredaría
+  // el modo «subproceso» y no imprimiría TAP.
+  const env = Object.assign({}, process.env);
+  delete env.NODE_TEST_CONTEXT;
+  const r = spawnSync('bash', ['-c', 'shopt -s nullglob; node --test --test-reporter=tap tests/*.test.cjs tests/*.test.js tests/*.smoke.js'],
+    { cwd: root, env, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  const t = parseTap(String(r.stdout || '') + String(r.stderr || ''));
+  return { ok: r.status === 0, fails: t.fails, failing: t.failing };
+}
+
+function describe(s) {
+  const n = s.fails === null ? '?' : s.fails;
+  const list = (s.failing || []).slice(0, 10);
+  return n + ' fallas' + (list.length ? ': ' + list.join(', ') + ((s.failing.length > 10) ? '…' : '') : '');
+}
+
+// Archivos que fallan después y no fallaban antes.
+function newFailures(base, after) {
+  return (after.failing || []).filter((f) => (base.failing || []).indexOf(f) === -1);
 }
 
 function processAll(root, deps) {
@@ -84,15 +120,17 @@ function processAll(root, deps) {
       let after = null;
       if (!errs.length) {
         after = deps.suite(root);
-        if (base.ok && !after.ok) errs = ['la suite de tests pasaba y con el parche falla (' + (after.fails === null ? '?' : after.fails) + ' fallas)'];
+        const fresh = newFailures(base, after);
+        if (base.ok && !after.ok) errs = ['la suite de tests pasaba y con el parche falla (' + describe(after) + ')'];
+        else if (!after.ok && fresh.length) errs = ['con el parche fallan archivos de tests que antes pasaban: ' + fresh.join(', ')];
       }
       if (errs.length) {
         backup.forEach((b) => fs.writeFileSync(path.join(root, b.path), b.data));
         outcome = { ok: false, errors: errs };
       } else {
         notes.push(base.ok ? 'Suite de tests: verde antes y después.' :
-          'Suite de tests: ya estaba en rojo antes del parche (' + (base.fails === null ? '?' : base.fails) +
-          ' fallas); se validó con node --check.');
+          'Suite de tests: ya estaba en rojo antes del parche (' + describe(base) +
+          '); el parche no rompió ningún archivo nuevo y pasó node --check.');
         base = after;
         touched.forEach((p) => { if (files.indexOf(p) === -1) files.push(p); });
       }
@@ -119,7 +157,7 @@ function message(run) {
   return head + '\n\nCanal de parches (DEC-035). Detalle en ' + run.results.map((r) => r.result).join(', ') + '.\n';
 }
 
-module.exports = { pending, needsPages, jsCheck, suite, processAll, verifyStaged, message };
+module.exports = { pending, needsPages, jsCheck, parseTap, suite, describe, newFailures, processAll, verifyStaged, message };
 
 if (require.main === module) {
   const root = process.cwd();

@@ -143,7 +143,53 @@ test('la suite ya estaba en rojo: no culpa al parche y lo anota', () => {
     [{ op: 'replace', anchor: '1', text: '2' }]) });
   const run = F.processAll(root, fakes({ suite: [{ ok: false, fails: 2 }, { ok: false, fails: 2 }] }).deps);
   assert.equal(run.results[0].ok, true);
-  assert.match(read(root, 'factory/patches/RESULT-001.md'), /ya estaba en rojo antes del parche \(2 fallas\); se validó con node --check\./);
+  assert.match(read(root, 'factory/patches/RESULT-001.md'),
+    /ya estaba en rojo antes del parche \(2 fallas\); el parche no rompió ningún archivo nuevo y pasó node --check\./);
+});
+
+test('suite en rojo: si el parche rompe una prueba que antes pasaba, se rechaza igual', () => {
+  const root = repo({ 'js/a.js': JS, 'factory/patches/PATCH-001.json': patch('001', 'js/a.js', JS,
+    [{ op: 'replace', anchor: '1', text: '2' }]) });
+  const base = { ok: false, fails: 1, failing: ['tests/a.test.cjs: vieja'] };
+  const after = { ok: false, fails: 2, failing: ['tests/a.test.cjs: vieja', 'tests/b.test.cjs: nueva'] };
+  const run = F.processAll(root, fakes({ suite: [base, after] }).deps);
+  assert.equal(run.results[0].ok, false);
+  assert.equal(read(root, 'js/a.js'), JS);
+  assert.match(read(root, 'factory/patches/RESULT-001.md'),
+    /con el parche fallan archivos de tests que antes pasaban: tests\/b\.test\.cjs: nueva\n/);
+  // Las mismas fallas de antes: se aplica y el RESULT las nombra.
+  const root2 = repo({ 'js/a.js': JS, 'factory/patches/PATCH-001.json': patch('001', 'js/a.js', JS,
+    [{ op: 'replace', anchor: '1', text: '2' }]) });
+  assert.equal(F.processAll(root2, fakes({ suite: [base, base] }).deps).results[0].ok, true);
+  assert.match(read(root2, 'factory/patches/RESULT-001.md'), /en rojo antes del parche \(1 fallas: tests\/a\.test\.cjs: vieja\)/);
+  assert.deepEqual(F.newFailures(base, after), ['tests/b.test.cjs: nueva']);
+  assert.deepEqual(F.newFailures({ ok: false, fails: null }, { ok: false, fails: null }), []);
+});
+
+test('TAP: cuenta las fallas y las nombra por archivo, sin subpruebas ni repetidos', () => {
+  const tap = ['TAP version 13', '# Subtest: pasa', 'ok 1 - pasa', '# Subtest: falla A', 'not ok 2 - falla A', '  ---',
+    "  location: '/home/runner/work/x/x/tests/bad.test.cjs:1:47'", '  ...', '# Subtest: grupo', 'not ok 3 - grupo',
+    '    not ok 1 - hija', "      location: '/r/tests/hija.test.cjs:2:1'", "  location: '/r/tests/grupo.test.cjs:1:1'",
+    '# Subtest: tests/crash.smoke.js', 'not ok 4 - tests/crash.smoke.js', '  ---',
+    "  location: '/r/tests/crash.smoke.js:1:1'", 'not ok 5 - suelta # SKIP',
+    'not ok 6 - tests/crash.smoke.js', "  location: '/r/tests/crash.smoke.js:1:1'", '1..6', '# pass 1', '# fail 4'].join('\n');
+  assert.deepEqual(F.parseTap(tap), { fails: 4, failing: ['tests/bad.test.cjs: falla A', 'tests/grupo.test.cjs: grupo',
+    'tests/crash.smoke.js', 'suelta'] });
+  assert.deepEqual(F.parseTap('sin resumen'), { fails: null, failing: [] });
+  assert.equal(F.describe({ fails: null, failing: [] }), '? fallas');
+  const many = Array.from({ length: 12 }, (_, i) => 'f' + i);
+  assert.equal(F.describe({ fails: 12, failing: many }), '12 fallas: ' + many.slice(0, 10).join(', ') + '…');
+});
+
+test('suite de verdad con node --test: verde, roja y archivo que revienta', () => {
+  const ok = repo({ 'tests/a.test.cjs': "require('node:test')('ok', () => {});\n" });
+  assert.deepEqual(F.suite(ok), { ok: true, fails: 0, failing: [] });
+  const bad = repo({ 'tests/a.test.cjs': "const t = require('node:test'); t('ok', () => {}); t('rota', () => { throw new Error('x'); });\n",
+    'tests/b.smoke.js': "throw new Error('boom');\n" });
+  const s = F.suite(bad);
+  assert.equal(s.ok, false);
+  assert.equal(s.fails, 2);
+  assert.deepEqual(s.failing.sort(), ['tests/a.test.cjs: rota', 'tests/b.smoke.js']);
 });
 
 test('dos parches encadenados: el segundo parte del resultado del primero', () => {
