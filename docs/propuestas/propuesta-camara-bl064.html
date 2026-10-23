@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta CAM-0 — Cámara del Brujo renovada (BL-064) · La Bóveda del Gato Negro</title>
+<!-- CAM-0: maqueta para aprobación. No es código de la Bóveda. Tokens del theme Gato Negro (GDS, DEC-010/025). Datos de ejemplo. -->
+<style>
+:root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#232A3A;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
+--acc-1:#A896FF;--gold:#F2B94B;--green:#3CC48A;--green-bg:#1D3436;--amber-bg:#38352F;--red:#F47C7C;--blue:#7BC2FF;--glow:rgba(123,92,255,.14);--wv:#4FC3D9;
+--pve:#3CC48A;--pvp:#F47C7C;--wvw:#F2B94B;--r-exo:#FFA405;--r-asc:#FB3E8D;--r-leg:#974EFF;--r-rare:#FCD00B}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-2);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{color:var(--tx-1);font-size:1.7rem;margin:0 0 4px}
+h2{color:var(--tx-1);font-size:1.15rem;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--bd-1)}
+h3{color:var(--tx-1);font-size:.95rem;margin:16px 0 6px}
+.lead{color:var(--tx-3);margin:0 0 18px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-3)}
+.tag--gold{border-color:var(--gold);color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--bd-1)}
+th{color:var(--tx-3);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em}
+td b{color:var(--tx-1)}
+code{background:var(--bg-2);border-radius:4px;padding:0 4px;font-size:.85em;color:var(--tx-1)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:12px;padding:14px 16px}
+.voice{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg,var(--glow),transparent);border:1px solid var(--bd-2);border-radius:12px;padding:12px 14px;margin:14px 0}
+.av{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#C9BDFF,#7B5CFF 55%,#3B2A8A);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 0 2px var(--bd-2)}
+.voice p{margin:2px 0}.voice .lbl{color:var(--acc-1);font-weight:700;font-size:.82rem}
+.dec{border-left:3px solid var(--gold);background:var(--amber-bg);border-radius:8px;padding:10px 14px;margin:10px 0}
+.dec b{color:var(--gold)}
+.sev{font-size:.68rem;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:1px 7px;border:1px solid;white-space:nowrap}
+.sev--a{color:var(--gold);border-color:var(--gold)}.sev--m{color:var(--acc-1);border-color:var(--acc-1)}.sev--b{color:var(--tx-3);border-color:var(--bd-2)}
+ol.plan{padding-left:20px}ol.plan li{margin:6px 0}
+/* marco */
+.frame{border:1px solid var(--bd-2);border-radius:14px;overflow:hidden;background:var(--bg-0);box-shadow:0 10px 30px rgba(0,0,0,.35);margin-top:10px}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg-1);border-bottom:1px solid var(--bd-1);font-size:.8rem;color:var(--tx-3)}
+.fbar img{width:22px;height:22px}.fbar .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:3px 10px;color:var(--tx-2)}
+.app{display:grid;grid-template-columns:190px 1fr}
+.sb{border-right:1px solid var(--bd-1);padding:14px 10px;display:flex;flex-direction:column;gap:2px;font-size:.84rem}
+.sb a{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:9px;text-decoration:none;color:var(--tx-2);border:1px solid transparent;position:relative}
+.sb a img{width:22px;height:22px}
+.sb a.on{background:var(--bg-1);border-color:var(--bd-2);color:var(--tx-1);font-weight:600}
+.sb a.on::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--wv)}
+.main{padding:18px 20px;min-width:0}
+/* cabecera de la Cámara */
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(79,195,217,.10),var(--bg-1) 70%);padding:16px 18px}
+.hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hrow>img{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px}
+.hrow h3{margin:0;font-size:1.3rem}
+.hrow p{margin:2px 0 0;color:var(--tx-3);font-size:.84rem}
+.pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.76rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-3);background:var(--bg-0);white-space:nowrap}
+.pill b{color:var(--tx-1);font-weight:600}.pill.hot{border-color:var(--gold)}.pill.hot b{color:var(--gold)}
+.ib{font-size:.76rem;border:1px solid var(--bd-2);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:transparent}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem;color:var(--tx-1)}.st b span{font-size:.8rem;color:var(--tx-3);font-weight:500}
+.st em{display:block;font-style:normal;font-size:.72rem;color:var(--tx-3);margin-top:2px}
+.aa{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:4px;background:linear-gradient(135deg,#7BE3F2,#3A8FD9);color:#06222b;font-size:.55rem;font-weight:900;vertical-align:-2px;margin-right:3px}
+.bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:var(--wv);border-radius:6px}
+.bar.g i{background:var(--green)}.bar.y i{background:var(--gold)}
+.hv{display:flex;gap:10px;align-items:center;margin-top:12px;padding:9px 12px;border:1px solid var(--bd-2);border-radius:12px;background:linear-gradient(180deg,var(--glow),transparent);font-size:.85rem}
+.hv .av{width:40px;height:40px;font-size:.85rem}.hv b{color:var(--acc-1)}.hv a{margin-left:auto;font-size:.78rem;color:var(--acc-1)}
+.tabsx{display:flex;gap:4px;margin:16px 0 12px;border-bottom:1px solid var(--bd-1)}
+.tabsx a{padding:8px 14px;text-decoration:none;color:var(--tx-3);font-size:.9rem;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabsx a.on{color:var(--tx-1);font-weight:700;border-color:var(--wv)}
+.tabsx a span{font-size:.72rem;color:var(--tx-3);margin-left:5px;font-weight:600;border:1px solid var(--bd-1);border-radius:999px;padding:0 6px}
+.tabsx a span.g{color:var(--gold);border-color:var(--gold)}
+.tool{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--bd-2);border-radius:10px;overflow:hidden}
+.seg a{padding:7px 12px;font-size:.82rem;text-decoration:none;color:var(--tx-2);white-space:nowrap}
+.seg a.on{background:var(--bg-2);color:var(--tx-1);font-weight:600}
+.seg a em{font-style:normal;color:var(--tx-3);font-size:.74rem;margin-left:4px}
+.search{flex:1 1 220px;display:flex;align-items:center;gap:8px;border:1px solid var(--bd-2);border-radius:10px;background:var(--bg-1);padding:8px 12px;color:var(--tx-3);font-size:.86rem}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-1);white-space:nowrap}
+.chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.chip.on{border-color:var(--acc-1);color:var(--tx-1);background:rgba(168,150,255,.12)}
+.more{margin-left:auto}
+/* objetivos */
+.meta{display:flex;align-items:center;gap:12px;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 14px;margin:12px 0}
+.meta b{color:var(--tx-1)}.meta .bar{flex:1;margin:0}.meta small{color:var(--tx-3)}
+.grp{font-size:.72rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.07em;margin:14px 0 6px;display:flex;gap:8px;align-items:center}
+.grp b{color:var(--gold)}.grp b.g{color:var(--green)}
+.ob{display:grid;grid-template-columns:34px 1fr 150px 70px 132px;gap:10px;align-items:center;border:1px solid var(--bd-1);border-radius:10px;background:var(--bg-1);padding:8px 12px;margin-bottom:6px;font-size:.86rem}
+.ob .md{font-size:.62rem;font-weight:800;border-radius:6px;padding:2px 0;text-align:center;border:1px solid}
+.md.pve{color:var(--pve);border-color:var(--pve)}.md.pvp{color:var(--pvp);border-color:var(--pvp)}.md.wvw{color:var(--wvw);border-color:var(--wvw)}
+.ob .t{color:var(--tx-1)}.ob .t small{display:block;color:var(--tx-3);font-size:.74rem}
+.ob .bar{margin:0}.ob .n{font-size:.74rem;color:var(--tx-3);text-align:right}
+.ob .rw{color:var(--tx-1);font-weight:600;font-size:.82rem}
+.stt{font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 9px;border:1px solid;text-align:center}
+.stt.rdy{color:var(--gold);border-color:var(--gold);background:var(--amber-bg)}
+.stt.ok{color:var(--green);border-color:var(--green);background:var(--green-bg)}
+.stt.run{color:var(--tx-3);border-color:var(--bd-2)}
+.ob.done{opacity:.72}
+/* tienda */
+.aaline{display:flex;gap:14px;flex-wrap:wrap;align-items:center;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 14px;margin:12px 0;font-size:.84rem;color:var(--tx-3)}
+.aaline b{color:var(--tx-1)}.aaline .bar{flex:1 1 180px;margin:0;display:flex}.aaline .bar i{border-radius:0}
+.aaline .bar i.rs{background:var(--acc-1)}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.sh{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px;display:grid;grid-template-columns:44px 1fr auto;gap:4px 10px;align-items:center;position:relative}
+.sh>img{width:44px;height:44px;border-radius:8px;grid-row:span 2;background:var(--bg-0)}
+.sh .n{font-weight:600;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sh .s{font-size:.75rem;color:var(--tx-3)}
+.pin{grid-row:span 2;font-size:.74rem;border:1px solid var(--bd-2);border-radius:999px;padding:4px 9px;color:var(--tx-3);background:transparent}
+.pin.on{border-color:var(--gold);color:var(--gold)}
+.sh .f{grid-column:1 / -1;display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:8px;border-top:1px solid var(--bd-1);font-size:.78rem}
+.segs{display:flex;gap:3px;flex:1}.segs span{flex:1;height:7px;border-radius:3px;background:var(--bg-2)}.segs span.y{background:var(--green)}.segs span.m{background:var(--acc-1)}
+.step{display:inline-flex;align-items:center;border:1px solid var(--bd-2);border-radius:9px;overflow:hidden}
+.step button{background:transparent;border:0;color:var(--tx-1);width:30px;height:30px;font-size:1rem}
+.step span{min-width:26px;text-align:center;color:var(--tx-1);font-weight:700}
+.mx{font-size:.72rem;border:1px solid var(--bd-2);border-radius:8px;padding:5px 8px;color:var(--tx-2);background:transparent}
+.sh.pinned{border-color:rgba(242,185,75,.5)}.sh.full{opacity:.7}
+.menu{position:relative;display:inline-block}
+.dd{position:absolute;right:0;top:36px;width:270px;background:var(--bg-1);border:1px solid var(--bd-2);border-radius:12px;padding:6px;box-shadow:0 12px 30px rgba(0,0,0,.5);z-index:3;font-size:.82rem}
+.dd div{padding:8px 10px;border-radius:8px}.dd div small{display:block;color:var(--tx-3);font-size:.72rem}
+.dd div.on{background:var(--bg-2)}.dd .rd{color:var(--red)}.dd hr{border:0;border-top:1px solid var(--bd-1);margin:4px 0}
+/* todas las cuentas */
+.mx-wrap{overflow:auto;border:1px solid var(--bd-1);border-radius:12px}
+.mxt{border-collapse:separate;border-spacing:0;font-size:.8rem;min-width:720px}
+.mxt th,.mxt td{padding:7px 8px;border-bottom:1px solid var(--bd-1);text-align:center}
+.mxt th:first-child,.mxt td:first-child{text-align:left;position:sticky;left:0;background:var(--bg-0);min-width:170px}
+.mxt th{font-size:.66rem;text-transform:none;letter-spacing:0;color:var(--tx-3);font-weight:600;max-width:96px}
+.mxt th .md{display:inline-block;width:34px;margin-bottom:3px}
+.acc{display:flex;align-items:center;gap:8px;color:var(--tx-1);font-weight:600}
+.acc img{width:24px;height:24px;border-radius:6px}.acc small{color:var(--tx-3);font-weight:500}
+.dot{display:inline-block;width:14px;height:14px;border-radius:50%;vertical-align:middle}
+.dot.ok{background:var(--green)}.dot.rdy{background:var(--gold)}.dot.no{border:2px solid var(--bd-2)}
+.mini{display:inline-block;width:38px;height:5px;border-radius:4px;background:var(--bg-2);overflow:hidden;vertical-align:middle}.mini i{display:block;height:100%;background:var(--wv)}
+.lgd{display:flex;gap:14px;font-size:.75rem;color:var(--tx-3);margin:8px 0;flex-wrap:wrap}
+.need{color:var(--red);font-weight:700}.okk{color:var(--green);font-weight:700}
+/* celular */
+.phones{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;margin-top:12px}
+.phone{width:300px;height:640px;border:10px solid #05060A;border-radius:34px;background:var(--bg-0);position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45);font-size:.85rem}
+.phone .ftop{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;border-bottom:1px solid var(--bd-1);font-size:.75rem;color:var(--tx-3)}
+.phone .ftop img{width:22px;height:22px}.phone .ftop .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:2px 8px}
+.phone .body{padding:10px 12px}
+.phone .hero{padding:12px;border-radius:14px}
+.phone .hrow>img{width:40px;height:40px;padding:4px}.phone .hrow h3{font-size:1.02rem}
+.phone .pills{margin-left:0;flex-wrap:nowrap;overflow:hidden}
+.phone .stats{grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}.phone .st{padding:7px 9px}.phone .st b{font-size:1.02rem}
+.phone .tabsx{margin:10px 0 8px}.phone .tabsx a{padding:7px 9px;font-size:.8rem}
+.phone .seg a{padding:8px 9px;font-size:.76rem}
+.phone .ob{grid-template-columns:30px 1fr auto;gap:4px 8px;padding:8px 10px}
+.phone .ob .bar{grid-column:2 / 4}.phone .ob .n,.phone .ob .rw.x{display:none}
+.phone .sh{padding:9px 10px}
+.phone .step button{width:40px;height:40px}
+.phone .hv{font-size:.78rem;padding:8px 10px}.phone .hv .av{width:32px;height:32px}
+.tbar{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;border-top:1px solid var(--bd-1);background:var(--bg-1);padding:6px 0 10px;font-size:.62rem;color:var(--tx-3)}
+.tbar span{display:flex;flex-direction:column;align-items:center;gap:2px}.tbar img{width:22px;height:22px}.tbar .on{color:var(--tx-1)}
+.ac{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:9px 11px;margin-bottom:7px}
+.ac .r{display:flex;align-items:center;gap:8px}.ac .r b{margin-left:auto;color:var(--tx-1);font-size:.8rem}
+.ac .dots{display:flex;gap:4px;margin-top:7px;flex-wrap:wrap}.ac .dots .dot{width:12px;height:12px}
+.cap{font-size:.75rem;color:var(--tx-3);text-align:center;margin-top:6px}
+@media (max-width:860px){.app{grid-template-columns:1fr}.sb{display:none}.stats{grid-template-columns:1fr 1fr}.ob{grid-template-columns:34px 1fr 90px}.ob .n,.ob .rw{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p><span class="tag tag--gold">CAM-0 · Propuesta para aprobar</span> <span class="tag">BL-064 paso 2</span> <span class="tag">Sin código</span></p>
+<h1>La Cámara del Brujo renovada</h1>
+<p class="lead">Diagnóstico de la pantalla actual, problemas, objetivos, maquetas de computadora y celular, Gato Design System, mi voz y el plan por micro-ciclos dentro de las reglas de DEC-035. Mismo proceso que la Cartera, Metas y Eventos, la Bienvenida y la Armería. Los números de las maquetas son de ejemplo.</p>
+
+<div class="voice"><div class="av">S</div><div><p class="lbl">Shiruvana recomienda</p>
+<p>La Cámara tiene todo lo que hace falta. Lo que falla es el orden: cuatro pestañas, cinco botones que aparecen y desaparecen, dos «dashboards» que tapan las pestañas y una tienda con ocho controles en una fila. Propongo <b>tres pestañas</b> (Objetivos, Tienda, Todas las cuentas), una <b>cabecera que responde «qué me falta y cuándo resetea»</b> y que la tienda sea para <b>planificar compras</b>, no una planilla.</p></div></div>
+
+<h2>1. Diagnóstico de la Cámara actual</h2>
+<p>Medido sobre el código de DEV (2026-10-23). La Cámara está repartida en 10 archivos y dos de ellos están congelados por DEC-035:</p>
+<table>
+<tr><th>Archivo</th><th>Tamaño</th><th>Qué hace hoy</th><th>Zona</th></tr>
+<tr><td><code>js/wv-purchase-detail.js</code> 1.14.0</td><td>89,1 KB</td><td>Vista «Compras» (todas las cuentas × ítems fijados), KPIs de AA, top de cuentas y de ítems, estado online. Lleva ~20 KB de CSS dentro del JS y además modifica las tarjetas de la tienda.</td><td>congelado</td></tr>
+<tr><td><code>js/router.js</code> 2.17.0</td><td>88,4 KB</td><td>Controlador de la Cámara (<code>window.WV</code>): pestañas, carga, rutas <code>#/account/wizards-vault</code> y <code>…/objectives-dashboard</code>. Conserva una copia vieja del dibujo de la tienda.</td><td>congelado</td></tr>
+<tr><td><code>js/wv-shop-ui.js</code> 1.0.2</td><td>34,2 KB</td><td>Tienda: barra, tarjetas, tabla, fijados, compras manuales.</td><td>saludable</td></tr>
+<tr><td><code>js/wizards-vault.js</code> 1.3.1</td><td>29,5 KB</td><td>Datos: temporada, objetivos, AA, listados (con caché). No se toca.</td><td>saludable</td></tr>
+<tr><td><code>js/wv-objectives-dashboard.js</code> 1.0.0</td><td>23,9 KB</td><td>«Dashboard»: objetivos semanales de todas las cuentas en una tabla.</td><td>saludable</td></tr>
+<tr><td><code>js/wv-season-storage.js</code> 1.1.1</td><td>23,2 KB</td><td>Fijados y marcas por temporada y cuenta. No se toca.</td><td>saludable</td></tr>
+<tr><td><code>js/wv-objectives-ui.js</code> 1.0.0</td><td>8,6 KB</td><td>Tarjetas de Diarias, Semanales y Especiales.</td><td>saludable</td></tr>
+<tr><td><code>wv-theme.js</code>, <code>wv-tabs-skin.js</code></td><td>7,0 + 5,5 KB</td><td>Parches visuales (borde de color, botones). El segundo ya se carga por <code>js/modules.json</code> (FP-5).</td><td>saludable</td></tr>
+</table>
+
+<div class="cols">
+<div class="card"><h3>Lo que el jugador ve hoy</h3>
+<ul>
+<li>Título, ícono «i» (solo con <i>tooltip</i>) y un ícono de recarga inyectado por un temporizador.</li>
+<li>Nombre de la temporada y fechas en el formato del navegador.</li>
+<li>Pestañas Diarias · Semanales · Especiales · Tienda y, a la derecha, <b>Dashboard</b>, <b>Compras</b>, <b>Refrescar</b>, <b>Volver</b> y <b>Sincronizar</b>, que se muestran u ocultan según la pestaña.</li>
+<li>Objetivos: tarjetas grandes con ✅ ✔️ … y una barra; la meta de la temporada como una tarjeta más.</li>
+<li>Tienda: buscador, «Vista», «Refrescar», «Recompensas Legado», «Limpiar sincronizados», «Limpiar fijados» (en rojo), «Replicar fijados»; una línea de AA; tarjetas con 📌, «Compras manuales», «MAX» e «ID».</li>
+</ul></div>
+<div class="card"><h3>Lo que hace bien (y se conserva)</h3>
+<ul>
+<li>Fijar ítems por cuenta y temporada, y marcar compras que la API todavía no ve.</li>
+<li>Cuánta AA necesito para lo fijado y el Δ por cuenta.</li>
+<li>Comparar objetivos semanales entre todas las cuentas.</li>
+<li>Estado online por cuenta, ocultar Legado, replicar fijados a todas las cuentas.</li>
+<li>Caché, reintentos y carga en paralelo con tope: la parte de datos funciona y no se toca.</li>
+</ul></div>
+</div>
+
+<h2>2. Problemas detectados</h2>
+<table>
+<tr><th>Sev.</th><th>Problema</th><th>Por qué importa</th></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td>Navegación en dos capas: 4 pestañas + 5 botones fantasma; «Dashboard» y «Compras» esconden las pestañas y se sale con «Volver».</td><td>No se entiende dónde estás ni cómo volver. En el celular los botones caen en otra fila.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td>Barra de la tienda con 8 controles en una fila; dos acciones masivas (una destructiva) al lado del buscador.</td><td>Un clic equivocado borra los fijados de todas las cuentas. La herramienta más usada (buscar) compite con la más peligrosa.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td>Dos módulos escriben la misma tarjeta de la tienda (<code>wv-shop-ui</code> y <code>wv-purchase-detail</code>), con dos campos de compras manuales.</td><td>Dos fuentes de verdad para las marcas: un campo puede pisar al otro.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td>Objetivos sin resumen: no dice cuánta AA llevo, cuántos están listos para reclamar en el juego ni cuándo resetea la pestaña que miro.</td><td>Es la pregunta que el jugador trae al abrir la Cámara.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td>La recompensa extra del día y de la semana (la «meta» que da la API: completar N objetivos) se muestra como «Meta de la temporada».</td><td>Es un dato equivocado: no es de la temporada, se reinicia con cada reset.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td>Estados con emoji (✅ ✔️ ⚠️ 📌) y colores fijos (blanco translúcido, hex de rareza, <code>#b19cd9</code>, <i>hover</i> en línea).</td><td>En themes claros se pierde el contraste (mismo frente que BL-060); un lector de pantalla lee «marca de verificación».</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td>Información clave solo en <i>tooltip</i> (por qué los objetivos tardan en actualizarse).</td><td>En el celular no existe el <i>hover</i>.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td>Tablas de todas las cuentas de 700 px o más con columnas de 90 px.</td><td>En el celular son ilegibles.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td>«Sincronizado hace 12 s» que no avanza; «ID 1234» en cada tarjeta; ícono de cuenta elegido al azar en cada carga; un ícono traído de un servidor externo.</td><td>Ruido y datos que cambian sin motivo.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td>3 módulos leen la lista de cuentas directo del navegador (<code>gw2_keys</code>).</td><td>Está permitido (es la clave heredada), pero el código nuevo usa Storage (LES-032).</td></tr>
+</table>
+
+<h2>3. Objetivos del rediseño</h2>
+<ol class="plan">
+<li><b>Una sola capa de navegación:</b> Objetivos · Tienda · Todas las cuentas. Sin botones fantasma ni «Volver». Las rutas actuales siguen funcionando.</li>
+<li><b>Cabecera que responde lo importante:</b> temporada y días que quedan, reset diario y semanal con cuenta regresiva, AA disponible, avance de hoy y de la semana. Mismo lenguaje que Metas y la Cartera.</li>
+<li><b>Objetivos accionables:</b> primero los «listos para reclamar», después los en curso, al final los reclamados; filtro por modo (PvE, PvP, WvW).</li>
+<li><b>Tienda para planificar:</b> AA disponible, reservada para lo fijado y lo que sobra o falta; tarjetas con progreso por unidades y un selector −/+ para marcar compras; acciones masivas dentro de «Gestionar», con confirmación.</li>
+<li><b>Todas las cuentas en un solo lugar:</b> objetivos semanales y compras fijadas, cada uno una vista; en el celular, una tarjeta por cuenta.</li>
+<li><b>GDS completo, AA en los 19 themes</b> (misma guarda de contraste que la Bienvenida, la Sidebar y la Armería), teclado y lector de pantalla.</li>
+<li><b>Crecer chico (DEC-035):</b> todo lo nuevo en archivos de hasta 40 KB cargados por <code>js/modules.json</code>; <code>wv-purchase-detail.js</code> y <code>router.js</code> solo se achican.</li>
+</ol>
+
+<h2>4. Maquetas — computadora</h2>
+
+<h3>4.1 Objetivos (pestaña por defecto)</h3>
+<div class="frame">
+<div class="fbar"><img src="../../assets/brand/gato-negro.svg" alt=""> La Bóveda del Gato Negro <span class="sel">Cuenta: Gato.1234 ▾</span></div>
+<div class="app">
+<nav class="sb"><a href="#"><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</a><a href="#"><img src="../../assets/icons/102420.png" alt="">Cartera</a><a href="#"><img src="../../assets/icons/733322.png" alt="">Metas y Eventos</a><a href="#"><img src="../../assets/icons/155059.png" alt="">Armería</a><a class="on" href="#"><img src="../../assets/icons/3172791.png" alt="">Cámara del Brujo</a></nav>
+<div class="main">
+<div class="hero">
+<div class="hrow"><img src="../../assets/icons/3172791.png" alt=""><div><h3>Cámara del Brujo</h3><p>Temporada «Ecos de Tyria» · termina el 14/12 (en 52 d)</p></div>
+<div class="pills"><span class="pill hot">Reset diario <b>en 3 h 12 min</b></span><span class="pill">Semanal <b>lun 07:30 UTC · en 4 d 8 h</b></span><button class="ib">↻ Actualizar</button></div></div>
+<div class="stats">
+<div class="st"><small>AA disponible</small><b><span class="aa">AA</span>2.340</b><em>reservada para fijados: 1.600</em></div>
+<div class="st"><small>Hoy</small><b>5 <span>de 8</span></b><div class="bar g"><i style="width:62%"></i></div></div>
+<div class="st"><small>Esta semana</small><b>9 <span>de 14</span></b><div class="bar g"><i style="width:64%"></i></div></div>
+<div class="st"><small>Gastada en la temporada</small><b><span class="aa">AA</span>4.150</b><em>según lo que la API ya vio</em></div>
+</div>
+<div class="hv"><div class="av">S</div><div><b>Shiruvana advierte:</b> tenés <b>2 objetivos listos</b> para reclamar en el juego (+130 AA) y el reset diario es en 3 h.</div></div>
+</div>
+<div class="tabsx" role="tablist"><a class="on" href="#">Objetivos <span class="g">2 listos</span></a><a href="#">Tienda <span>6 fijados</span></a><a href="#">Todas las cuentas <span>5</span></a></div>
+<div class="tool"><div class="seg"><a class="on" href="#">Diarias<em>5/8</em></a><a href="#">Semanales<em>9/14</em></a><a href="#">Especiales<em>2/6</em></a></div>
+<span class="chip on">Todos</span><span class="chip"><i style="background:var(--pve)"></i>PvE</span><span class="chip"><i style="background:var(--pvp)"></i>PvP</span><span class="chip"><i style="background:var(--wvw)"></i>WvW</span>
+<span class="chip more">ⓘ ¿Por qué tarda?</span></div>
+<div class="meta"><b>Recompensa del día</b><div class="bar y"><i style="width:62%"></i></div><small>3 de 4 · al completarla, <span class="aa">AA</span>+150 extra</small></div>
+<div class="grp"><b>Listos para reclamar · 2</b> se cobran dentro del juego</div>
+<div class="ob"><span class="md pve">PvE</span><div class="t">Completá 3 eventos en Tyria Central<small>3 / 3</small></div><div class="bar y"><i style="width:100%"></i></div><span class="rw"><span class="aa">AA</span>+80</span><span class="stt rdy">Listo para reclamar</span></div>
+<div class="ob"><span class="md wvw">WvW</span><div class="t">Capturá un campamento<small>1 / 1</small></div><div class="bar y"><i style="width:100%"></i></div><span class="rw"><span class="aa">AA</span>+50</span><span class="stt rdy">Listo para reclamar</span></div>
+<div class="grp">En curso · 3</div>
+<div class="ob"><span class="md pve">PvE</span><div class="t">Recolectá 50 materiales<small>32 / 50</small></div><div class="bar"><i style="width:64%"></i></div><span class="rw"><span class="aa">AA</span>+50</span><span class="stt run">En curso · 64 %</span></div>
+<div class="ob"><span class="md pvp">PvP</span><div class="t">Ganá una partida<small>0 / 1</small></div><div class="bar"><i style="width:0%"></i></div><span class="rw"><span class="aa">AA</span>+60</span><span class="stt run">En curso · 0 %</span></div>
+<div class="grp"><b class="g">Reclamados · 3</b> plegado ▸</div>
+</div></div></div>
+
+<h3>4.2 Tienda</h3>
+<div class="frame">
+<div class="fbar"><img src="../../assets/brand/gato-negro.svg" alt=""> La Bóveda del Gato Negro <span class="sel">Cuenta: Gato.1234 ▾</span></div>
+<div class="main">
+<div class="tabsx"><a href="#">Objetivos <span class="g">2 listos</span></a><a class="on" href="#">Tienda <span>6 fijados</span></a><a href="#">Todas las cuentas <span>5</span></a></div>
+<div class="aaline"><span><span class="aa">AA</span><b>2.340</b> disponible</span><span><b>1.600</b> reservada (fijados)</span><span>Sobran <b style="color:var(--green)">740</b></span>
+<div class="bar"><i class="rs" style="width:68%"></i><i style="width:32%;background:var(--green)"></i></div><small>Gastada esta temporada: 4.150</small></div>
+<div class="tool"><div class="search">🔍 Buscar ítem…</div>
+<div class="seg"><a class="on" href="#">Fijados primero</a><a href="#">Todos</a><a href="#">Me falta</a></div>
+<span class="chip on">Destacados</span><span class="chip">Normales</span><span class="chip">Legado</span>
+<div class="seg"><a class="on" href="#">▦</a><a href="#">☰</a></div>
+<span class="menu"><button class="ib">Gestionar ▾</button>
+<div class="dd"><div class="on">Ajustar marcas a la API<small>Quita lo que el juego ya registró</small></div><div>Copiar mis fijados a las otras cuentas<small>Agrega, no borra · pide confirmación</small></div><hr><div class="rd">Quitar fijados de todas las cuentas…<small>Se puede deshacer durante 10 s</small></div></div></span>
+</div>
+<div class="sgrid" style="margin-top:12px">
+<div class="sh pinned"><img src="https://render.guildwars2.com/file/2E5391DBF100D5A4413A07C3A13FC3513F29C394/1729332.png" alt=""><span class="n" style="color:var(--r-leg)">Cofre de Mística</span><button class="pin on">★ Fijado</button><span class="s"><span class="aa">AA</span>600 · Destacado</span>
+<div class="f"><div class="segs"><span class="y"></span><span class="m"></span><span></span></div><span>1 + 1 / 3</span><span class="step"><button>−</button><span>1</span><button>+</button></span><button class="mx">Máx</button></div></div>
+<div class="sh pinned"><img src="https://render.guildwars2.com/file/0F9C08DE12ADD1082A103DC6EF7401281B23985E/456009.png" alt=""><span class="n" style="color:var(--r-asc)">Trébol místico ×5</span><button class="pin on">★ Fijado</button><span class="s"><span class="aa">AA</span>200 · Normal</span>
+<div class="f"><div class="segs"><span class="y"></span><span class="y"></span><span></span><span></span><span></span></div><span>2 / 5</span><span class="step"><button>−</button><span>0</span><button>+</button></span><button class="mx">Máx</button></div></div>
+<div class="sh full"><img src="https://render.guildwars2.com/file/2695A8E44B7F07EF15A20857790EFCA91513F5F0/1634565.png" alt=""><span class="n" style="color:var(--r-exo)">Caja de infusiones</span><button class="pin">☆ Fijar</button><span class="s"><span class="aa">AA</span>350 · Normal</span>
+<div class="f"><div class="segs"><span class="y"></span><span class="y"></span></div><span class="stt ok">Completo 2 / 2</span></div></div>
+</div>
+<p class="cap">Progreso por unidades: verde = la API ya lo vio, violeta = marcado por vos. El selector −/+ reemplaza el campo numérico. La vista ☰ es la tabla de hoy, con las mismas columnas y estilo GDS.</p>
+</div></div>
+
+<h3>4.3 Todas las cuentas</h3>
+<div class="frame">
+<div class="fbar"><img src="../../assets/brand/gato-negro.svg" alt=""> La Bóveda del Gato Negro <span class="sel">Cuenta: Gato.1234 ▾</span></div>
+<div class="main">
+<div class="tabsx"><a href="#">Objetivos <span class="g">2 listos</span></a><a href="#">Tienda <span>6 fijados</span></a><a class="on" href="#">Todas las cuentas <span>5</span></a></div>
+<div class="tool"><div class="seg"><a class="on" href="#">Objetivos semanales</a><a href="#">Compras fijadas</a></div>
+<span class="chip">Solo con pendientes</span><span class="chip">Orden: más atrasada ▾</span><button class="ib more">↻ Actualizar todas · ● Online</button></div>
+<div class="stats" style="margin:12px 0">
+<div class="st"><small>Reclamados</small><b>41 <span>de 70</span></b><div class="bar g"><i style="width:58%"></i></div></div>
+<div class="st"><small>Listos sin reclamar</small><b style="color:var(--gold)">6</b><em>en 3 cuentas</em></div>
+<div class="st"><small>Cuenta más atrasada</small><b style="font-size:1rem">Alter.5678</b><em>4 de 14</em></div>
+<div class="st"><small>Reset semanal</small><b style="font-size:1rem">en 4 d 8 h</b><em>lunes 07:30 UTC</em></div>
+</div>
+<div class="lgd"><span><span class="dot ok"></span> Reclamado</span><span><span class="dot rdy"></span> Listo para reclamar</span><span><span class="mini"><i style="width:60%"></i></span> En curso</span><span><span class="dot no"></span> Sin empezar</span></div>
+<div class="mx-wrap"><table class="mxt">
+<tr><th>Cuenta</th><th><span class="md pve">PvE</span><br>Eventos en Janthir</th><th><span class="md pve">PvE</span><br>Materiales</th><th><span class="md pvp">PvP</span><br>Ganar partidas</th><th><span class="md wvw">WvW</span><br>Capturar torre</th><th><span class="md pve">PvE</span><br>Fractal diario</th><th>Total</th></tr>
+<tr><td><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Gato.1234 <small>main</small></span></td><td><span class="dot ok"></span></td><td><span class="dot ok"></span></td><td><span class="dot rdy"></span></td><td><span class="mini"><i style="width:40%"></i></span></td><td><span class="dot ok"></span></td><td>9 / 14</td></tr>
+<tr><td><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Alter.5678 <small>alter</small></span></td><td><span class="dot rdy"></span></td><td><span class="mini"><i style="width:20%"></i></span></td><td><span class="dot no"></span></td><td><span class="dot no"></span></td><td><span class="dot ok"></span></td><td>4 / 14</td></tr>
+<tr><td><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Farm.9012 <small>f2p</small></span></td><td><span class="dot ok"></span></td><td><span class="dot ok"></span></td><td><span class="dot ok"></span></td><td><span class="dot rdy"></span></td><td><span class="mini"><i style="width:70%"></i></span></td><td>11 / 14</td></tr>
+</table></div>
+<h3>Vista «Compras fijadas» (reemplaza «Compras»)</h3>
+<div class="mx-wrap"><table class="mxt">
+<tr><th>Cuenta</th><th>AA disponible</th><th>Necesaria</th><th>Δ</th><th>Cofre de Mística</th><th>Trébol ×5</th><th>Online</th></tr>
+<tr><td><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Gato.1234</span></td><td>2.340</td><td>1.600</td><td class="okk">+740</td><td>2 / 3</td><td>2 / 5</td><td><span class="dot ok"></span> hace 5 min</td></tr>
+<tr><td><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Alter.5678</span></td><td>420</td><td>1.800</td><td class="need">−1.380</td><td>0 / 3</td><td>1 / 5</td><td><span class="dot no"></span> hace 3 d</td></tr>
+</table></div>
+<p class="cap">Los KPIs, la cuenta regresiva y los «top» de la vista Compras de hoy pasan a la misma fila de tarjetas de arriba. El estado online sigue: un solo botón «Actualizar todas · Online».</p>
+</div></div>
+
+<h2>5. Maquetas — celular</h2>
+<div class="phones">
+<div class="phone"><div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">Bóveda<span class="sel">Gato.1234 ▾</span></div>
+<div class="body"><div class="hero"><div class="hrow"><img src="../../assets/icons/3172791.png" alt=""><div><h3>Cámara del Brujo</h3><p>Ecos de Tyria · 52 d</p></div></div>
+<div class="pills" style="margin-top:8px"><span class="pill hot">Diario <b>3 h 12</b></span><span class="pill">Semanal <b>4 d 8 h</b></span></div>
+<div class="stats"><div class="st"><small>AA</small><b>2.340</b></div><div class="st"><small>Hoy</small><b>5/8</b></div><div class="st"><small>Semana</small><b>9/14</b></div><div class="st"><small>Reservada</small><b>1.600</b></div></div>
+<div class="hv"><div class="av">S</div><div>2 listos para reclamar (+130 AA).</div></div></div>
+<div class="tabsx"><a class="on" href="#">Objetivos</a><a href="#">Tienda</a><a href="#">Cuentas</a></div>
+<div class="seg"><a class="on" href="#">Diarias<em>5/8</em></a><a href="#">Semanales</a><a href="#">Especiales</a></div>
+<div class="grp"><b>Listos · 2</b></div>
+<div class="ob"><span class="md pve">PvE</span><div class="t">3 eventos en Tyria Central</div><span class="stt rdy">+80</span><div class="bar y"><i style="width:100%"></i></div></div>
+<div class="ob"><span class="md wvw">WvW</span><div class="t">Capturá un campamento</div><span class="stt rdy">+50</span><div class="bar y"><i style="width:100%"></i></div></div>
+<div class="grp">En curso · 3</div>
+<div class="ob"><span class="md pve">PvE</span><div class="t">50 materiales · 32/50</div><span class="stt run">+50</span><div class="bar"><i style="width:64%"></i></div></div>
+</div>
+<div class="tbar"><span><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</span><span><img src="../../assets/icons/102420.png" alt="">Cartera</span><span><img src="../../assets/icons/733322.png" alt="">Metas</span><span><img src="../../assets/icons/155059.png" alt="">Armería</span><span class="on">☰<br>Más</span></div></div>
+
+<div class="phone"><div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">Bóveda<span class="sel">Gato.1234 ▾</span></div>
+<div class="body">
+<div class="tabsx"><a href="#">Objetivos</a><a class="on" href="#">Tienda</a><a href="#">Cuentas</a></div>
+<div class="aaline" style="font-size:.78rem;padding:8px 10px"><span><span class="aa">AA</span><b>2.340</b></span><span>Reservada <b>1.600</b></span><span>Sobran <b style="color:var(--green)">740</b></span></div>
+<div class="tool"><div class="search">🔍 Buscar…</div><button class="ib">⋯</button></div>
+<div class="seg" style="margin-top:8px"><a class="on" href="#">Fijados primero</a><a href="#">Todos</a><a href="#">Me falta</a></div>
+<div class="sh pinned" style="margin-top:8px"><img src="https://render.guildwars2.com/file/2E5391DBF100D5A4413A07C3A13FC3513F29C394/1729332.png" alt=""><span class="n" style="color:var(--r-leg)">Cofre de Mística</span><button class="pin on">★</button><span class="s">600 AA · Destacado</span>
+<div class="f"><div class="segs"><span class="y"></span><span class="m"></span><span></span></div><span class="step"><button>−</button><span>1</span><button>+</button></span></div></div>
+<div class="sh pinned" style="margin-top:8px"><img src="https://render.guildwars2.com/file/0F9C08DE12ADD1082A103DC6EF7401281B23985E/456009.png" alt=""><span class="n" style="color:var(--r-asc)">Trébol místico ×5</span><button class="pin on">★</button><span class="s">200 AA · 2 / 5</span>
+<div class="f"><div class="segs"><span class="y"></span><span class="y"></span><span></span><span></span><span></span></div><span class="step"><button>−</button><span>0</span><button>+</button></span></div></div>
+<p class="cap">Botones de 40 px para el dedo. «⋯» abre «Gestionar» como hoja inferior.</p>
+</div>
+<div class="tbar"><span><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</span><span><img src="../../assets/icons/102420.png" alt="">Cartera</span><span><img src="../../assets/icons/733322.png" alt="">Metas</span><span><img src="../../assets/icons/155059.png" alt="">Armería</span><span class="on">☰<br>Más</span></div></div>
+
+<div class="phone"><div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">Bóveda<span class="sel">Gato.1234 ▾</span></div>
+<div class="body">
+<div class="tabsx"><a href="#">Objetivos</a><a href="#">Tienda</a><a class="on" href="#">Cuentas</a></div>
+<div class="seg"><a class="on" href="#">Semanales</a><a href="#">Compras fijadas</a></div>
+<div class="stats"><div class="st"><small>Reclamados</small><b>41/70</b></div><div class="st"><small>Listos</small><b style="color:var(--gold)">6</b></div></div>
+<div class="ac" style="margin-top:10px"><div class="r"><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Alter.5678</span><b>4 / 14</b></div><div class="bar g"><i style="width:28%"></i></div><div class="dots"><span class="dot rdy"></span><span class="dot ok"></span><span class="dot no"></span><span class="dot no"></span><span class="dot no"></span><span class="dot ok"></span><span class="dot no"></span></div></div>
+<div class="ac"><div class="r"><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Gato.1234</span><b>9 / 14</b></div><div class="bar g"><i style="width:64%"></i></div><div class="dots"><span class="dot ok"></span><span class="dot ok"></span><span class="dot rdy"></span><span class="dot ok"></span><span class="dot ok"></span><span class="dot no"></span></div></div>
+<div class="ac"><div class="r"><span class="acc"><img src="../../assets/icons/Cuentas/157085.png" alt="">Farm.9012</span><b>11 / 14</b></div><div class="bar g"><i style="width:78%"></i></div></div>
+<p class="cap">Una tarjeta por cuenta, la más atrasada primero. Al tocarla se despliegan sus objetivos.</p>
+</div>
+<div class="tbar"><span><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</span><span><img src="../../assets/icons/102420.png" alt="">Cartera</span><span><img src="../../assets/icons/733322.png" alt="">Metas</span><span><img src="../../assets/icons/155059.png" alt="">Armería</span><span class="on">☰<br>Más</span></div></div>
+</div>
+
+<h2>6. Integración con el Gato Design System</h2>
+<table>
+<tr><th>Elemento</th><th>Hoy</th><th>Propuesta</th></tr>
+<tr><td>Cabecera</td><td>Título + «i» + fechas sueltas</td><td>Misma familia que Cartera, Metas y Armería: ícono 56 px, pastillas de reset, 4 tarjetas de resumen, mi línea abajo.</td></tr>
+<tr><td>Pestañas</td><td>Botones re-pintados por <code>wv-tabs-skin.js</code> + 5 botones con estilos en línea</td><td>Pestañas GDS (<code>role="tablist"</code>, flechas del teclado) con contador; segmentos para subvistas.</td></tr>
+<tr><td>Estados</td><td>Emoji y colores fijos</td><td>Pastillas con texto: «Listo para reclamar» (dorado), «Reclamado» (verde), «En curso» (neutro). El color nunca es la única señal.</td></tr>
+<tr><td>Colores</td><td>Hex de rareza y blanco translúcido en el código</td><td>Variables del theme más tokens de rareza; guarda de contraste AA en <code>#wvPanel</code>, igual que la Armería.</td></tr>
+<tr><td>Formularios</td><td>Campo numérico + «MAX»</td><td>Selector −/+ de 40 px en el celular, «Máx», guardado inmediato con aviso «Guardado».</td></tr>
+<tr><td>Acciones peligrosas</td><td>Botón rojo en la barra + <code>confirm()</code></td><td>Menú «Gestionar» con descripción de cada acción, confirmación y «Deshacer» durante 10 s.</td></tr>
+<tr><td>Ayuda</td><td>Solo <i>tooltip</i></td><td>«¿Por qué tarda?» abre un texto corto: la API actualiza los objetivos recién cuando entrás al juego.</td></tr>
+</table>
+
+<h2>7. Mi voz en la Cámara (cuando aporta)</h2>
+<p>Una sola línea en la cabecera, con el rótulo «Shiruvana advierte», y solo si hay algo útil. Respeta DEC-024, DEC-033 y DEC-034: avatar, una línea, nunca dentro de tarjetas ni tablas. Prioridades (gana la primera que aplique):</p>
+<ol class="plan">
+<li><b>Hay objetivos listos para reclamar:</b> «Tenés 2 objetivos listos para reclamar en el juego (+130 AA).»</li>
+<li><b>Reset cercano con pendientes</b> (60 min o menos): «El reset diario es en 40 min y te faltan 3 objetivos.»</li>
+<li><b>Fijados sin AA suficiente:</b> «Para lo fijado te faltan 380 AA. Si completás lo diario y lo semanal, llegás en unas 2 semanas.»</li>
+<li><b>Temporada terminando</b> (7 días o menos) con fijados incompletos: «La temporada termina en 5 días y te quedan 2 fijados sin comprar.»</li>
+<li><b>Todo al día:</b> sin mensaje. Solo hablo cuando hay algo para hacer.</li>
+</ol>
+<p>Todo se calcula con datos que la Cámara ya trae; no hay pedidos nuevos a la API. «Todas las cuentas» dice qué cuenta va más atrasada en su propia tarjeta de resumen, sin mi voz.</p>
+
+<h2>8. Plan de implementación por micro-ciclos (DEC-035)</h2>
+<div class="dec"><b>Regla de archivos:</b> lo nuevo va en archivos de hasta 40 KB cargados por <code>js/modules.json</code>. <code>router.js</code> (controlador) y <code>wv-purchase-detail.js</code> no crecen: el segundo se achica en CAM-5, y la copia vieja de la tienda en <code>router.js</code> sale por el canal en CAM-6. Los archivos saludables que se reescriben (<code>wv-objectives-ui.js</code>, <code>wv-shop-ui.js</code>, <code>wv-objectives-dashboard.js</code>) suben de versión y su <code>?v</code> sube en el mismo parche (LES-033). Lo de datos (<code>wizards-vault.js</code>, <code>wv-season-storage.js</code>) no se toca.</div>
+<table>
+<tr><th>Paso</th><th>Qué entrega</th><th>Archivos</th><th>Validás</th></tr>
+<tr><td><b>CAM-1</b></td><td>Cabecera nueva (temporada, resets, 4 tarjetas, «¿Por qué tarda?») y 3 pestañas. Los botones viejos se ocultan; las rutas actuales funcionan.</td><td><code>js/wv-view.js</code> 1.0.0 nuevo (≈18 KB, por manifiesto) + test</td><td>Que la cabecera y las pestañas se vean y naveguen bien.</td></tr>
+<tr><td><b>CAM-2</b></td><td>Objetivos: segmento Diarias/Semanales/Especiales con contador, filas agrupadas (listos, en curso, reclamados), filtro por modo, meta diaria.</td><td><code>wv-objectives-ui.js</code> 2.0.0 (≈20 KB) + <code>?v</code> por el canal + test</td><td>Que los objetivos se lean de un vistazo.</td></tr>
+<tr><td><b>CAM-3</b></td><td>Tienda: línea de AA (disponible, reservada, sobra/falta), tarjetas con progreso por unidades y selector −/+, segmentos, menú «Gestionar» con deshacer. Una sola fuente de marcas.</td><td><code>wv-shop-ui.js</code> 2.0.0 (≤38 KB) + <code>js/wv-shop-manage.js</code> nuevo (≈10 KB) + test</td><td>Fijar, marcar y gestionar.</td></tr>
+<tr><td><b>CAM-4</b></td><td>Todas las cuentas › Objetivos semanales: tarjetas de resumen, matriz con puntos, en el celular una tarjeta por cuenta.</td><td><code>wv-objectives-dashboard.js</code> 2.0.0 (≤30 KB) + test</td><td>La comparación entre cuentas.</td></tr>
+<tr><td><b>CAM-5</b></td><td>Todas las cuentas › Compras fijadas: misma estructura; el CSS de 20 KB sale del archivo congelado a <code>js/wv-accounts-style.js</code> nuevo, y deja de tocar las tarjetas de la tienda.</td><td>Parche a <code>wv-purchase-detail.js</code> (de 89 a ≈68 KB, baja su techo) + archivo nuevo + test</td><td>Las compras de todas las cuentas.</td></tr>
+<tr><td><b>CAM-6</b></td><td>Mi voz en la cabecera; revisión de los 19 themes, teclado, lector y celular; limpieza de <code>index.html</code> (botones viejos) y de la copia vieja de la tienda en <code>router.js</code> por el canal; FEAT-011.</td><td><code>wv-view.js</code> 1.1.0 + parches + tests de contraste</td><td>La Cámara completa.</td></tr>
+</table>
+<p>Cada paso pasa la suite completa antes y después, deja la Cámara funcionando y espera tu validación en DEV. Producción, solo con tu orden.</p>
+
+<h2>9. Decisiones que necesito</h2>
+<div class="dec"><b>1. Tres pestañas:</b> Diarias, Semanales y Especiales pasan a un segmento dentro de «Objetivos», y «Dashboard» y «Compras» pasan a «Todas las cuentas». <b>Recomiendo sí.</b></div>
+<div class="dec"><b>2. Marcar compras con −/+:</b> el selector reemplaza el campo numérico, y las tres acciones masivas van al menú «Gestionar» con confirmación y deshacer. <b>Recomiendo sí.</b></div>
+<div class="dec"><b>3. Mi voz:</b> una línea en la cabecera con las 4 prioridades de arriba. <b>Recomiendo sí.</b></div>
+<p>Con esas respuestas arranco CAM-1. Si querés cambiar algo de las maquetas, lo ajusto antes.</p>
+
+</div>
+</body>
+</html>
