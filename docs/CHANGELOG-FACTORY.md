@@ -6,6 +6,17 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ---
 
+## 2026-10-23 — En DEV: la Armería renovada (BL-064, FEAT-010)
+
+- **Cabecera** con cuánto tenés («N de 206»), buscador que no distingue acentos ni mayúsculas y pestañas Catálogo / Mi cola.
+- **Filtros en una fila**: «Todas / Las tengo / Me faltan», tipo, expansión y generación.
+- **Tarjetas que se usan con teclado**: el nombre abre la receta y «+ A la cola» es un botón aparte. «✓ La tengo» reemplaza a «PENDING». El precio dice «≈» con su fecha, o «No se vende».
+- **Secciones por expansión** con su progreso; en el celular, una columna y botones de 44 px.
+- **«Mi cola» es una vista propia**: numerada, las 3 primeras destacadas, «Ver receta y materiales» y «Quitar».
+- **Armaduras por set**: 132 piezas sueltas pasan a 23 tarjetas (7 sets × 3 pesos, más Eikasia y Selachimorpha) con «tenés N de 6 piezas»; buscar una pieza abre su set.
+- **Se lee en los 19 themes** (verificado por un test) y el foco ya no salta al principio al tocar un filtro o la lista.
+- Sin claves nuevas en el navegador ni pedidos nuevos a la API. Si no ves los cambios, recargá con Ctrl+F5 (RSK-020).
+
 ## 2026-10-23 — En producción: la Sidebar en el celular y mi rincón (BL-061, BL-063, FEAT-009)
 
 - **En el celular** (hasta 900 px) la navegación ya no queda al fondo de la página: barra fija abajo con Inicio, Cartera, Metas, Armería y «Más». «Más» abre una hoja con la cuenta activa y los otros 6 destinos; se cierra con «Cerrar», Escape, tocando afuera o eligiendo un destino. Un punto ámbar en «Más» avisa si adentro hay algo para revisar.
