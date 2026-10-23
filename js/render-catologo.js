@@ -1,6 +1,11 @@
 /*!
  * js/render-catologo.js — Render del catálogo y filtros
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * v1.2.0 (2026-10-23) — BL-064, ARM-1: el marco nuevo de la Armería. Cabecera con
+ *   ícono y resumen (desbloqueadas, por tipo y la cola), pestañas «Catálogo / Mi cola»
+ *   (reemplazan a «Modo:») y buscador por nombre en español o en inglés, sin tildes.
+ *   Todo vive acá: legendary-tracker.js no cambia (está al límite de publicación).
+ *   Las tarjetas y los filtros se renuevan en ARM-2.
  * v1.1.0 (2026-10-21) — BL-046: chips con la jerga de la comunidad (Abalorio,
  *   Espaldar) y la expansión real de cada legendaria (Secrets of the Obscure,
  *   Janthir Wilds y Visions of Eternity incluidas), con filtros en orden de salida.
@@ -219,6 +224,189 @@
   }
 
   // =======================================================================
+  // ARM-1 (BL-064): CABECERA, PESTAÑAS Y BUSCADOR
+  // =======================================================================
+  // El marco se pinta junto con la barra de filtros (renderFilterBar), así que
+  // la firma del contrato de renderers no cambia. Solo colores del theme para el
+  // texto; el color del módulo (el mismo de la Sidebar) va en bordes y barras.
+  var ARM_COLOR = '#E545CA';
+  var ARM_CSS = [
+    '#legendaryArmoryPanel>.panel__title,#legendaryArmoryBody>.legendary-view-toggle{display:none}',
+    '.arm-hero{border:1px solid var(--bd-1);border-radius:16px;padding:16px 18px;margin:0 0 14px;' +
+      'background:linear-gradient(180deg,rgba(229,69,202,.10),var(--bg-1) 70%)}',
+    '.arm-hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',
+    '.arm-hrow>img{width:56px;height:56px;border-radius:12px;background:var(--bg-2,var(--bg-0));padding:6px;flex-shrink:0}',
+    '.arm-hrow h2{margin:0;font-size:1.3rem;line-height:1.2;color:var(--tx-1)}',
+    '.arm-sub{margin:2px 0 0;font-size:.85rem;color:var(--tx-3)}',
+    '.arm-hbtns{margin-left:auto;display:flex;gap:6px}',
+    '.arm-btn{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border:1px solid var(--bd-1);' +
+      'border-radius:999px;background:transparent;color:var(--tx-2);font:inherit;font-size:.8rem;cursor:pointer}',
+    '.arm-btn:hover{border-color:' + ARM_COLOR + ';color:var(--tx-1)}',
+    '.arm-stats{display:grid;grid-template-columns:1.4fr repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}',
+    '.arm-st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px;min-width:0}',
+    '.arm-st small{display:block;font-size:.75rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.05em}',
+    '.arm-st b{font-size:1.25rem;color:var(--tx-1)}',
+    '.arm-st b span{font-size:.8rem;color:var(--tx-3);font-weight:500}',
+    '.arm-bar{height:6px;border-radius:6px;background:var(--bg-2,var(--bg-1));overflow:hidden;margin-top:7px}',
+    '.arm-bar i{display:block;height:100%;border-radius:6px;background:' + ARM_COLOR + '}',
+    '.arm-tabs{display:flex;gap:4px;margin:0 0 12px;border-bottom:1px solid var(--bd-1)}',
+    '.arm-tab{padding:8px 14px;margin-bottom:-1px;border:0;border-bottom:2px solid transparent;background:transparent;' +
+      'color:var(--tx-3);font:inherit;font-size:.92rem;cursor:pointer}',
+    '.arm-tab span{margin-left:4px;font-size:.78rem;color:var(--tx-3);font-weight:500}',
+    '.arm-tab[aria-current="page"]{color:var(--tx-1);font-weight:700;border-bottom-color:' + ARM_COLOR + '}',
+    '.arm-tool{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px}',
+    '.arm-search{flex:1 1 280px;min-height:40px;padding:8px 12px;border:1px solid var(--bd-2,var(--bd-1));border-radius:10px;' +
+      'background:var(--bg-1);color:var(--tx-1);font:inherit;font-size:.9rem}',
+    '.arm-search::placeholder{color:var(--tx-3)}',
+    '.arm-count{margin:0 0 10px;font-size:.8rem;color:var(--tx-3)}',
+    '.arm-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}',
+    '.arm-btn:focus-visible,.arm-tab:focus-visible,.arm-search:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '@media (max-width:1199px){.arm-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.arm-stats .arm-st:first-child{grid-column:1 / -1}}',
+    '@media (max-width:900px){.arm-hero{padding:12px}.arm-hrow>img{width:40px;height:40px;padding:4px}.arm-hrow h2{font-size:1.05rem}' +
+      '.arm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.arm-tab,.arm-btn,.arm-search{min-height:44px}}'
+  ].join('\n');
+
+  var ui = { q: '', raw: '', lastItems: null, lastOwned: null };
+
+  function ensureArmCss() {
+    var d = root.document;
+    if (!d || typeof d.getElementById !== 'function' || typeof d.createElement !== 'function' || !d.head) return;
+    if (d.getElementById('arm-css')) return;
+    var st = d.createElement('style');
+    st.id = 'arm-css';
+    st.textContent = ARM_CSS;
+    d.head.appendChild(st);
+  }
+
+  // Sin tildes y en minúscula: «crepusculo» encuentra «Crepúsculo».
+  function norm(s) {
+    var t = String(s || '').toLowerCase();
+    return typeof t.normalize === 'function' ? t.normalize('NFD').replace(/[\u0300-\u036f]/g, '') : t;
+  }
+  function matchesSearch(item, q) {
+    return !q || norm(item.nameEs).indexOf(q) !== -1 || norm(item.name).indexOf(q) !== -1;
+  }
+
+  function trackerState() {
+    var T = root.LegendaryTracker;
+    try { return T && typeof T.getState === 'function' ? (T.getState() || null) : null; } catch (_) { return null; }
+  }
+
+  // Resumen de la cabecera: lo que tenés de cada tipo sobre el catálogo completo.
+  function armorySummary(catalog, owned, queue) {
+    var sum = { total: 0, owned: 0, weapon: { n: 0, of: 0 }, armor: { n: 0, of: 0 }, other: { n: 0, of: 0 },
+      queue: (queue || []).length, max: (root.LegendaryTracker && root.LegendaryTracker.QUEUE_MAX) || 5 };
+    (catalog || []).forEach(function (it) {
+      if (!it) return;
+      var has = !!(owned && owned[it.id] > 0);
+      var k = it.type === 'weapon' ? 'weapon' : it.type === 'armor' ? 'armor' : 'other';
+      sum.total++; sum[k].of++;
+      if (has) { sum.owned++; sum[k].n++; }
+    });
+    return sum;
+  }
+
+  function subLine(st, sum) {
+    if (st && st.loading) return 'Leyendo la armería de tu cuenta…';
+    if (st && st.error) return 'No pude leer la armería de tu cuenta: ves el catálogo completo, sin marcar las tuyas.';
+    if (st && !st.token) return 'Sin API Key ves el catálogo completo; para marcar las tuyas, cargá una en Inicio.';
+    return fmtInt(sum.total) + ' legendarias · lo que tenés en la armería de tu cuenta';
+  }
+
+  function headerHTML(sum, st) {
+    var pct = sum.total ? Math.round(sum.owned * 1000 / sum.total) / 10 : 0;
+    var stat = function (label, n, of, bar) {
+      return '<div class="arm-st"><small>' + label + '</small><b>' + fmtInt(n) + ' <span>de ' + fmtInt(of) + '</span></b>' +
+        (bar ? '<div class="arm-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' : '') + '</div>';
+    };
+    return '<section class="arm-hero" aria-labelledby="armTitle">' +
+      '<div class="arm-hrow"><img src="assets/icons/Cuentas/157085.png" alt="" width="56" height="56">' +
+        '<div><h2 id="armTitle">Armería Legendaria</h2><p class="arm-sub">' + esc(subLine(st, sum)) + '</p></div>' +
+        '<div class="arm-hbtns"><button type="button" class="arm-btn" data-arm-act="refresh">↻ Actualizar</button></div>' +
+      '</div>' +
+      '<div class="arm-stats">' +
+        stat('Desbloqueadas', sum.owned, sum.total, true) +
+        stat('Armas', sum.weapon.n, sum.weapon.of) +
+        stat('Armaduras', sum.armor.n, sum.armor.of) +
+        stat('Abalorios y más', sum.other.n, sum.other.of) +
+        stat('En tu cola', sum.queue, sum.max) +
+      '</div>' +
+    '</section>';
+  }
+
+  function tabsHTML(mode, sum) {
+    var tab = function (id, label, extra) {
+      return '<button type="button" class="arm-tab" data-arm-tab="' + id + '"' +
+        (mode === id ? ' aria-current="page"' : '') + '>' + label + '<span>' + extra + '</span></button>';
+    };
+    return '<nav class="arm-tabs" aria-label="Vistas de la Armería">' +
+      tab('catalog', 'Catálogo', fmtInt(sum.total)) + tab('progress', 'Mi cola', sum.queue + ' de ' + sum.max) + '</nav>';
+  }
+
+  function toolbarHTML() {
+    return '<div class="arm-tool"><label class="arm-sr" for="armSearch">Buscar legendaria</label>' +
+      '<input type="search" id="armSearch" class="arm-search" autocomplete="off" ' +
+      'placeholder="Buscar por nombre, en español o en inglés…" value="' + esc(ui.raw) + '">' +
+      '<span id="armSearchLive" class="arm-sr" role="status" aria-live="polite"></span></div>';
+  }
+
+  function shellHTML(catalog) {
+    ensureArmCss();
+    wireArm();
+    var st = trackerState();
+    var mode = st && st.mode === 'progress' ? 'progress' : 'catalog';
+    var sum = armorySummary(catalog, (st && st.owned) || {}, colaActual());
+    return headerHTML(sum, st) + tabsHTML(mode, sum) + (mode === 'catalog' ? toolbarHTML() : '');
+  }
+
+  function countLine(n, q) {
+    if (!q) return '';
+    return '<p class="arm-count">' + (n === 1 ? '1 legendaria' : fmtInt(n) + ' legendarias') + ' para «' + esc(ui.raw) + '»</p>';
+  }
+
+  // Un solo oyente por contenedor (el tracker rearma su contenido en cada filtro).
+  function wireArm() {
+    var d = root.document;
+    var c = d && typeof d.getElementById === 'function' ? d.getElementById('legendaryModeContent') : null;
+    if (!c || c._armWired || typeof c.addEventListener !== 'function') return;
+    c._armWired = true;
+    c.addEventListener('input', function (e) {
+      var t = e && e.target;
+      if (!t || t.id !== 'armSearch') return;
+      searchFor(t.value);
+    });
+    c.addEventListener('click', function (e) {
+      var t = e && e.target;
+      while (t && t !== c) {
+        if (t.getAttribute) {
+          var tab = t.getAttribute('data-arm-tab');
+          var act = t.getAttribute('data-arm-act');
+          var T = root.LegendaryTracker;
+          if (tab) { if (T && typeof T.setMode === 'function') T.setMode(tab); return; }
+          if (act === 'refresh') { if (T && typeof T.refresh === 'function') T.refresh(); return; }
+        }
+        t = t.parentNode;
+      }
+    });
+  }
+
+  // Filtra la grilla sin rearmar la página: el buscador no pierde el foco.
+  function searchFor(value) {
+    ui.raw = String(value || '');
+    ui.q = norm(ui.raw).trim();
+    var d = root.document;
+    var host = d && d.getElementById ? d.getElementById('armGridHost') : null;
+    var html = gridInner(ui.lastItems || [], ui.lastOwned || {});
+    if (host) host.innerHTML = html;
+    var live = d && d.getElementById ? d.getElementById('armSearchLive') : null;
+    if (live) {
+      var n = (ui.lastItems || []).filter(function (it) { return matchesSearch(it, ui.q); }).length;
+      live.textContent = ui.q ? (n === 1 ? '1 legendaria' : n + ' legendarias') : '';
+    }
+    return html;
+  }
+
+  // =======================================================================
   // RENDER: BARRA DE FILTROS
   // =======================================================================
   function renderFilterBar(filters, catalog) {
@@ -318,7 +506,8 @@
       'border:1px solid var(--bd-1);background:var(--bg-1);color:var(--tx-2);margin-left:auto;">✕ Limpiar</button>' :
       '';
 
-    return '<div class="lt-filter-bar" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">' +
+    return shellHTML(catalog) +
+      '<div class="lt-filter-bar" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">' +
       '<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
         '<span style="font-size:0.65rem;color:var(--tx-3);padding:4px 8px;">Tipo:</span>' +
         typeBtns.join('') +
@@ -355,6 +544,20 @@
   // `queue` es la cola de crafteo, y viaja hasta la card para que el boton de
   // encolar pueda decir EN QUE ESTADO esta sin que el usuario abra el modal.
   function renderCatalogGrid(items, owned) {
+    ui.lastItems = items || [];
+    ui.lastOwned = owned || {};
+    return '<div id="armGridHost">' + gridInner(ui.lastItems, ui.lastOwned) + '</div>';
+  }
+
+  // La grilla, después del buscador (ARM-1).
+  function gridInner(all, owned) {
+    var items = (all || []).filter(function (it) { return matchesSearch(it, ui.q); });
+    if (ui.q && items.length === 0 && all.length) {
+      return '<div class="lt-empty-state" style="text-align:center;padding:32px;color:var(--tx-3);">' +
+        '<div style="font-size:0.85rem;">No encontré ninguna legendaria que se llame «' + esc(ui.raw) + '».</div>' +
+        '<div style="font-size:0.8rem;margin-top:4px;">Probá con otra parte del nombre, en español o en inglés.</div>' +
+        '</div>';
+    }
     if (!items || items.length === 0) {
       return '<div class="lt-empty-state" style="text-align:center;padding:32px;color:var(--tx-3);">' +
         '<div style="font-size:0.8rem;">No se encontraron legendarias con los filtros aplicados.</div>' +
@@ -374,7 +577,8 @@
       return renderItemCard(x.it, owned, idx, cola);
     });
 
-    return '<div class="lt-catalog-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;">' +
+    return countLine(items.length, ui.q) +
+      '<div class="lt-catalog-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;">' +
       cards.join('') +
     '</div>';
   }
@@ -691,7 +895,9 @@
     expansionReal: expansionReal,
     corregirExpansiones: corregirExpansiones,
     EXPANSION_ORDER: EXPANSION_ORDER.slice(),
-    TYPE_LABELS: TYPE_LABELS
+    TYPE_LABELS: TYPE_LABELS,
+    // ARM-1: lo que prueban los tests.
+    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui }
   };
 
   // =======================================================================
