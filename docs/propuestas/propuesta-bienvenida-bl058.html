@@ -3,15 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Propuesta BL-058 — Pantalla de Bienvenida (WEL-0)</title>
+<title>Propuesta BL-058 — Pantalla de Bienvenida (WEL-0b)</title>
 <!--
-  Propuesta WEL-0 de la Factory (Shiruvana) para Pablo. Maqueta estática: no toca La Bóveda.
-  Íconos, gato oficial y avatar se leen de DEV (pablosnchz.github.io/gw2-factory-dev) para que se vea con los archivos reales.
-  Los colores son los tokens del theme oficial «Gato Negro» (css/themes/gato.css, GDS).
+  Propuesta WEL-0b de la Factory (Shiruvana) para Pablo. Maqueta estática: no toca La Bóveda.
+  v2: el estado «con API Key» se reorienta a la Bóveda (navegación, configuración, guías, novedades).
+  La Bienvenida no muestra nada de Metas y Eventos (regla de frontera, DEC-032).
+  Íconos, gato y avatar se leen de DEV (pablosnchz.github.io/gw2-factory-dev). Colores: theme «Gato Negro» (css/themes/gato.css).
 -->
 <style>
 :root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#232A3A;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
---acc-1:#A896FF;--gn-gold:#F2B94B;--color-green:#3CC48A;--color-green-bg:#1D3436;--color-amber:#F2B94B;--color-amber-bg:#38352F;--color-blue-bg:#212E49;
+--acc-1:#A896FF;--gn-gold:#F2B94B;--color-green:#3CC48A;--color-green-bg:#1D3436;--color-amber:#F2B94B;--color-amber-bg:#38352F;--color-red:#F47C7C;--color-blue-bg:#212E49;
 --glow-base:rgba(123,92,255,.12);--font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 var(--font)}
@@ -33,33 +34,60 @@ a{color:var(--acc-1)}
 .wl-htx{min-width:0}.wl-htx h2{margin:0;font-size:1.55rem;font-weight:800;line-height:1.15}
 .wl-sub{color:var(--tx-3);font-size:.92rem;margin-top:3px}.wl-sub b{color:var(--tx-2);font-weight:600}
 .wl-pills{margin-left:auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
-.wl-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--bd-1);border-radius:10px;background:rgba(255,255,255,.02);color:var(--tx-3);font-size:.9rem;white-space:nowrap}
+.wl-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--bd-1);border-radius:10px;background:rgba(255,255,255,.02);color:var(--tx-3);font-size:.9rem;white-space:nowrap;text-decoration:none}
 .wl-pill img{width:22px;height:22px}.wl-pill b{color:var(--tx-1);font-variant-numeric:tabular-nums}
-.wl-pill.soon{border-color:var(--gn-gold);background:rgba(242,185,75,.06)}.wl-pill.soon b{color:var(--gn-gold)}
+.wl-pill.ok b{color:var(--color-green)}
+.wl-pill.warn{border-color:var(--gn-gold);background:rgba(242,185,75,.06)}.wl-pill.warn b{color:var(--gn-gold)}
 .wl-body{padding:18px 24px 22px;display:grid;gap:18px}
-.wl-voice{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:14px 18px;border:1px solid var(--bd-2);border-radius:14px;background:var(--bg-1)}
-.wl-voice.rec{border-color:rgba(60,196,138,.45);background:linear-gradient(90deg,rgba(60,196,138,.06),var(--bg-1) 40%)}
+
+/* Shiruvana: guía */
+.wl-voice{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:16px 18px;border:1px solid var(--bd-2);border-radius:14px;background:linear-gradient(90deg,rgba(168,150,255,.07),var(--bg-1) 45%)}
 .wl-av{width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--acc-1);background:var(--bg-2)}
-.wl-voice.rec .wl-av{box-shadow:0 0 0 2px var(--color-green)}
-.wl-vl{margin:0;font-weight:700;font-size:.85rem;color:var(--acc-1)}.wl-voice.rec .wl-vl{color:var(--color-green)}
-.wl-vt{margin:2px 0 0;font-size:.98rem}
-.wl-vacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.wl-vl{margin:0;font-weight:700;font-size:.85rem;color:var(--acc-1);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.wl-vl small{font-weight:500;color:var(--tx-3)}
+.wl-vt{margin:3px 0 0;font-size:.98rem;min-height:3em}
+.wl-vacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.wl-ask{margin-top:12px;padding-top:10px;border-top:1px dashed var(--bd-1);display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.wl-ask>span{font-size:.78rem;color:var(--tx-3);margin-right:4px}
+.wl-q{font:inherit;font-size:.8rem;border:1px solid var(--bd-1);background:var(--bg-0);color:var(--tx-2);border-radius:999px;padding:4px 11px;cursor:pointer}
+.wl-q:hover,.wl-q:focus-visible{border-color:var(--acc-1);color:var(--tx-1);outline:none}
+.wl-q.on{border-color:var(--acc-1);background:var(--color-blue-bg);color:var(--tx-1)}
+
 .wl-btn{display:inline-flex;align-items:center;gap:8px;background:var(--bg-0);border:1px solid var(--bd-1);color:var(--tx-1);border-radius:10px;padding:8px 14px;font:inherit;font-size:.88rem;cursor:pointer;text-decoration:none}
-.wl-btn img{width:18px;height:18px}.wl-btn:hover{border-color:var(--acc-1)}
+.wl-btn img{width:18px;height:18px}.wl-btn:hover,.wl-btn:focus-visible{border-color:var(--acc-1);outline:none}
 .wl-btn.pri{background:var(--acc-1);border-color:var(--acc-1);color:#14121F;font-weight:700}
 .wl-btn.sm{padding:4px 12px;border-radius:999px;font-size:.8rem;color:var(--tx-2)}
 .wl-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin:0 0 10px}
 .wl-h h3{margin:0;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tx-3)}
 .wl-h span{font-size:.8rem;color:var(--tx-3)}.wl-h a{margin-left:auto;font-size:.85rem}
-.wl-now{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.wl-ev{position:relative;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:12px;padding:10px 12px 10px 15px;display:flex;gap:10px;align-items:center;min-width:0}
-.wl-ev::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--x)}
-.wl-ev img{width:34px;height:34px;border-radius:8px;flex-shrink:0}
-.wl-ev b{display:block;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.wl-ev small{color:var(--tx-3);font-size:.78rem}
-.wl-st{margin-left:auto;font-size:.75rem;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2);white-space:nowrap}
-.wl-st.on{border-color:var(--color-green);color:var(--color-green);background:var(--color-green-bg)}
-.wl-st.soon{border-color:var(--color-amber);color:var(--color-amber);background:var(--color-amber-bg)}
+
+/* Seguí / Tu Bóveda */
+.wl-row{display:grid;grid-template-columns:1.15fr 1fr;gap:12px}
+.wl-card{background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:14px 16px;min-width:0}
+.wl-card p{margin:0 0 10px;font-size:.85rem;color:var(--tx-3)}
+.wl-cont{position:relative;display:flex;gap:14px;align-items:center;padding:14px 16px 14px 19px;border:1px solid var(--bd-2);border-radius:12px;background:var(--bg-1);text-decoration:none;color:inherit;margin-bottom:10px}
+.wl-cont::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--x)}
+.wl-cont img{width:46px;height:46px;border-radius:10px}
+.wl-cont b{display:block;font-size:1.02rem}.wl-cont small{color:var(--tx-3);font-size:.8rem}
+.wl-cont em{margin-left:auto;font-style:normal;color:var(--acc-1);font-weight:600;font-size:.9rem;white-space:nowrap}
+.wl-cont:hover,.wl-cont:focus-visible{border-color:var(--acc-1);outline:none}
+.wl-freq{display:flex;flex-wrap:wrap;gap:8px}
+.wl-fq{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd-1);border-radius:10px;padding:6px 12px 6px 8px;font-size:.85rem;color:var(--tx-2);text-decoration:none;background:var(--bg-1)}
+.wl-fq img{width:24px;height:24px;border-radius:6px}.wl-fq:hover,.wl-fq:focus-visible{border-color:var(--acc-1);outline:none}
+.wl-prog{display:flex;align-items:center;gap:10px;margin:0 0 10px;font-size:.85rem;color:var(--tx-3)}
+.wl-prog b{color:var(--tx-1)}
+.wl-bar{flex:1;height:4px;border-radius:4px;background:var(--bd-1);overflow:hidden}
+.wl-bar i{display:block;height:100%;width:80%;border-radius:4px;background:linear-gradient(90deg,var(--acc-1),var(--color-green))}
+.wl-chk{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.wl-chk li{display:flex;align-items:center;gap:10px;font-size:.88rem;padding:6px 0;border-bottom:1px solid rgba(46,54,73,.6)}
+.wl-chk li:last-child{border-bottom:0}
+.wl-chk .ic{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:800;flex-shrink:0}
+.wl-chk .ok .ic{background:var(--color-green-bg);color:var(--color-green)}
+.wl-chk .wa .ic{background:var(--color-amber-bg);color:var(--color-amber)}
+.wl-chk span{color:var(--tx-2);min-width:0}.wl-chk small{color:var(--tx-3)}
+.wl-chk .wl-btn{margin-left:auto;flex-shrink:0}
+
+/* Módulos */
 .wl-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
 .wl-mod{position:relative;display:flex;gap:12px;align-items:center;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:12px 14px 12px 17px;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
 .wl-mod::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--x)}
@@ -68,42 +96,54 @@ a{color:var(--acc-1)}
 .wl-mod b{display:block;font-size:.95rem}.wl-mod span{display:block;font-size:.8rem;color:var(--tx-3)}
 .wl-tag{position:absolute;top:8px;right:10px;font-style:normal;font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:1px 7px;border:1px solid var(--gn-gold);color:var(--gn-gold)}
 .wl-tag.key{border-color:var(--bd-2);color:var(--tx-3)}.wl-tag.free{border-color:var(--color-green);color:var(--color-green)}
-.wl-row{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
-.wl-card{background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:14px 16px}
-.wl-card h4{margin:0 0 8px;font-size:.95rem;display:flex;align-items:center;gap:8px}.wl-card h4 img{width:22px;height:22px}
-.wl-card p{margin:0 0 10px;font-size:.85rem;color:var(--tx-3)}
-.wl-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.wl-chip{font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:3px 10px;color:var(--tx-2)}
-.wl-chip i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--color-green);margin-right:6px}
-.wl-acts{display:flex;flex-wrap:wrap;gap:8px}
+.wl-tag.perm{border-color:var(--color-amber);color:var(--color-amber);text-transform:none;letter-spacing:0}
+
+/* Novedades / Guías */
+.wl-news{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.wl-news li{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;align-items:start;font-size:.86rem}
+.wl-news img{width:28px;height:28px;border-radius:7px;grid-row:span 2}
+.wl-news b{color:var(--tx-1)}.wl-news small{color:var(--tx-3);font-size:.78rem}
+.wl-new{font-size:.62rem;font-weight:800;letter-spacing:.05em;color:#14121F;background:var(--acc-1);border-radius:999px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.wl-guides{display:grid;gap:8px}
+.wl-guide{display:flex;gap:12px;align-items:center;border:1px solid var(--bd-1);border-radius:12px;padding:10px 12px;text-decoration:none;color:inherit;background:var(--bg-1)}
+.wl-guide img{width:30px;height:30px}
+.wl-guide b{display:block;font-size:.9rem}.wl-guide small{color:var(--tx-3);font-size:.78rem}
+.wl-guide:hover,.wl-guide:focus-visible{border-color:var(--acc-1);outline:none}
+.wl-guide em{margin-left:auto;font-style:normal;color:var(--tx-3)}
+
+/* Nuevo: pasos */
 .wl-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:s}
 .wl-step{background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:14px 16px;display:grid;gap:8px;align-content:start}
 .wl-step.on{border-color:var(--acc-1);box-shadow:0 0 0 1px var(--acc-1) inset}
 .wl-step b::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--bg-2);border:1px solid var(--bd-2);margin-right:8px;font-size:.8rem}
 .wl-step.on b::before{background:var(--acc-1);color:#14121F;border-color:var(--acc-1)}
 .wl-step span{font-size:.85rem;color:var(--tx-3)}
+
 .wl-foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 24px;border-top:1px solid var(--bd-1);font-size:.82rem;color:var(--tx-3)}
 .wl-bio{display:inline-flex;height:26px;border-radius:4px;overflow:hidden;text-decoration:none;font-size:10px;font-weight:700}
 .wl-bio span:first-child{background:#232A3A;color:#F4F6FA;padding:0 10px;display:flex;align-items:center;gap:6px}
 .wl-bio span:last-child{background:#5A3DDB;color:#fff;padding:0 12px;display:flex;align-items:center}
 .wl-soc{display:flex;gap:6px}.wl-soc a{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--bd-1);border-radius:8px;background:var(--bg-0)}
 .wl-soc img{width:18px;height:18px}
-.wl-sup{display:flex;gap:6px;align-items:center}.wl-sup a{display:inline-flex;gap:6px;align-items:center;font-size:.8rem;color:var(--tx-2);text-decoration:none;border:1px solid var(--bd-1);border-radius:999px;padding:3px 10px}
+.wl-sup{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.wl-sup a{display:inline-flex;gap:6px;align-items:center;font-size:.8rem;color:var(--tx-2);text-decoration:none;border:1px solid var(--bd-1);border-radius:999px;padding:3px 10px}
 .wl-sup img{width:16px;height:16px}
 .wl-foot .wl-priv{margin-left:auto;color:var(--tx-3)}
 [hidden]{display:none!important}
 
-/* Responsive (botón «Celular» de la maqueta = lo que aplica la pantalla real bajo 720 px) */
+/* Responsive (botón «Celular» = lo que aplica la pantalla real bajo 720 px) */
 .stage.mobile .wl-top,.stage.mobile .wl-body,.stage.mobile .wl-foot{padding-left:14px;padding-right:14px}
 .stage.mobile .wl-pills{margin-left:0;width:100%;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:2px}
-.stage.mobile .wl-now,.stage.mobile .wl-row,.stage.mobile .wl-steps{grid-template-columns:1fr}
+.stage.mobile .wl-row,.stage.mobile .wl-steps{grid-template-columns:1fr}
 .stage.mobile .wl-mods{grid-template-columns:repeat(2,minmax(0,1fr))}
 .stage.mobile .wl-mod{flex-direction:column;align-items:flex-start;padding:12px}
 .stage.mobile .wl-mod span{display:none}
+.stage.mobile .wl-tag{position:static;margin-top:-4px}
 .stage.mobile .wl-voice{grid-template-columns:1fr}.stage.mobile .wl-av{width:44px;height:44px}
 .stage.mobile .wl-btn{min-height:44px}.stage.mobile .wl-foot .wl-priv{margin-left:0}
+.stage.mobile .wl-cont em{display:none}
 @media (max-width:980px){.wl-pills{margin-left:0;justify-content:flex-start;width:100%}.wl-row{grid-template-columns:1fr}}
-@media (max-width:720px){.wl-now,.wl-steps{grid-template-columns:1fr}.wl-mods{grid-template-columns:repeat(2,minmax(0,1fr))}.wl-mod span{display:none}}
+@media (max-width:720px){.wl-steps{grid-template-columns:1fr}.wl-mods{grid-template-columns:repeat(2,minmax(0,1fr))}.wl-mod span{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* ===== Documento ===== */
 .sec{margin:28px 0;padding-top:8px;border-top:1px solid var(--bd-1)}
@@ -113,17 +153,21 @@ table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{border-bottom:1
 th{color:var(--tx-3);font-weight:600}
 .sev{font-size:.72rem;font-weight:700;border-radius:999px;padding:1px 8px;border:1px solid}
 .sev.a{color:#F47C7C;border-color:#F47C7C}.sev.m{color:var(--gn-gold);border-color:var(--gn-gold)}.sev.b{color:var(--tx-3);border-color:var(--bd-2)}
+.chg{border:1px solid var(--acc-1);border-radius:12px;padding:12px 16px;background:var(--color-blue-bg);margin:0 0 16px}
+.chg b{color:var(--acc-1)}
 </style>
 </head>
 <body>
 <div class="doc">
 <h1>Propuesta BL-058 — Pantalla de Bienvenida</h1>
-<p class="lead">WEL-0 · 2026-10-23 · Shiruvana para Pablo · Misma metodología que la Cartera (CAR-0) y Metas y Eventos (MET-0). Nada de código todavía.</p>
+<p class="lead">WEL-0b · 2026-10-23 · Shiruvana para Pablo · Segunda versión: el estado «con API Key» pasa a ser la portada de toda la Bóveda.</p>
+
+<div class="chg"><b>Qué cambió desde WEL-0.</b> Se fueron los relojes de reset, «Ahora en Tyria», las metas y mis avisos de world bosses: eso es de Metas y Eventos y la Bienvenida no lo toca (lo dejo como regla, DEC-032, y un test lo vigila). En su lugar: <b>Seguí donde quedaste</b>, <b>Tu Bóveda</b> (qué configuraste y qué falta), <b>¿Qué puedo hacer aquí?</b> con el estado de cada módulo según tu Key, <b>Novedades</b>, <b>Guías y ayuda</b> y mi bloque de guía con <b>Preguntame</b>. El estado «sin API Key» queda como lo aprobaste.</div>
 
 <div class="ctl" role="group" aria-label="Ver la maqueta">
   <b>Ver como:</b>
-  <button type="button" data-st="back" class="on">Jugador que vuelve</button>
-  <button type="button" data-st="new">Jugador nuevo (sin API Key)</button>
+  <button type="button" data-st="back" class="on">Con API Key</button>
+  <button type="button" data-st="new">Sin API Key (aprobado)</button>
   <b style="margin-left:12px">Pantalla:</b>
   <button type="button" data-w="desk" class="on">Escritorio</button>
   <button type="button" data-w="mobile">Celular (390 px)</button>
@@ -136,79 +180,114 @@ th{color:var(--tx-3);font-weight:600}
       <div class="wl-cat"><img data-src="assets/brand/gato-negro.svg" alt=""></div>
       <div class="wl-htx">
         <h2>La Bóveda del Gato Negro</h2>
-        <div class="wl-sub" data-for="back">Hola de nuevo · cuenta activa <b>Pablin.1234</b> · 3 cuentas guardadas</div>
+        <div class="wl-sub" data-for="back">Hola de nuevo · cuenta activa <b>Pablin.1234</b></div>
         <div class="wl-sub" data-for="new" hidden>Tu cuenta de Guild Wars 2 en un solo lugar · todo queda en este navegador</div>
       </div>
-      <div class="wl-pills">
-        <div class="wl-pill"><img data-src="assets/icons/460028.png" alt=""><span>Servidor</span><b id="mkSrv">—</b></div>
-        <div class="wl-pill" id="mkDailyP"><img data-src="assets/icons/534745.png" alt=""><span>Reset diario</span><b id="mkDaily">—</b></div>
-        <div class="wl-pill" id="mkWeeklyP"><img data-src="assets/icons/155064.png" alt=""><span>Reset semanal</span><b id="mkWeekly">—</b></div>
+      <div class="wl-pills" data-for="back">
+        <a class="wl-pill ok" href="#"><img data-src="assets/icons/Welcome/2604909.png" alt=""><span>API Key</span><b>Activa</b></a>
+        <a class="wl-pill" href="#"><img data-src="assets/icons/3601748.png" alt=""><span>Cuentas</span><b>3</b></a>
+        <a class="wl-pill warn" href="#"><img data-src="assets/icons/155034.png" alt=""><span>Copia</span><b>hace 19 días</b></a>
+      </div>
+      <div class="wl-pills" data-for="new" hidden>
+        <a class="wl-pill warn" href="#"><img data-src="assets/icons/Welcome/2604909.png" alt=""><span>API Key</span><b>sin cargar</b></a>
       </div>
     </div>
   </div>
 
   <div class="wl-body">
-    <aside class="wl-voice rec" data-for="back" aria-label="Shiruvana recomienda">
+    <!-- Con Key: Shiruvana guía -->
+    <aside class="wl-voice" data-for="back" aria-label="Shiruvana te guía">
       <img class="wl-av" alt="">
       <div>
-        <p class="wl-vl">Shiruvana recomienda</p>
-        <p class="wl-vt">En 12 min empieza <b>Tequatl el Sombrío</b> (06:00) y es una de tus fijadas. <b>Octohiedra</b> está en curso y termina en 8 min.</p>
-        <div class="wl-vacts"><a class="wl-btn sm" href="#">Ir a Metas y Eventos →</a><button class="wl-btn sm" type="button">Copiar waypoint [&amp;BNABAAA=]</button></div>
+        <p class="wl-vl">Shiruvana te guía <small id="vCount">1 de 3 · lo más importante primero</small></p>
+        <p class="wl-vt" id="vText" aria-live="polite"></p>
+        <div class="wl-vacts" id="vActs"></div>
+        <div class="wl-ask" role="group" aria-label="Preguntame">
+          <span>Preguntame:</span>
+          <button class="wl-q" type="button" data-q="0">¿Qué hay que revisar?</button>
+          <button class="wl-q" type="button" data-q="3">¿Mis Keys están seguras?</button>
+          <button class="wl-q" type="button" data-q="4">¿Qué es un permiso?</button>
+          <button class="wl-q" type="button" data-q="5">¿Cómo cambio de cuenta?</button>
+          <button class="wl-q" type="button" data-q="6">Un truco de la Bóveda</button>
+        </div>
       </div>
     </aside>
+
+    <!-- Sin Key: aprobado -->
     <aside class="wl-voice" data-for="new" hidden aria-label="Shiruvana">
       <img class="wl-av" alt="">
       <div>
         <p class="wl-vl">Shiruvana</p>
-        <p class="wl-vt">Hola, soy Shiruvana y te acompaño en La Bóveda. Con una API Key de tu cuenta te muestro tu cartera, tu armería legendaria y lo que hiciste hoy. Sin Key ya podés ver los horarios de Metas y Eventos. Te llevo paso a paso: son tres.</p>
+        <p class="wl-vt">Hola, soy Shiruvana y te acompaño en La Bóveda. Con una API Key de tu cuenta te muestro tu cartera, tu armería legendaria y lo que vas logrando. Sin Key ya podés usar Metas y Eventos. Te llevo paso a paso: son tres.</p>
       </div>
     </aside>
-
     <section data-for="new" hidden aria-label="Empezá en tres pasos">
       <div class="wl-h"><h3>Empezá en tres pasos</h3><span>Tus datos se quedan en este navegador</span></div>
       <div class="wl-steps">
-        <div class="wl-step on"><b>Creá tu API Key</b><span>En account.arena.net, con los 7 permisos que te detallo.</span><a class="wl-btn" href="#">Abrir account.arena.net ↗</a></div>
+        <div class="wl-step on"><b>Creá tu API Key</b><span>En account.arena.net, con los permisos que te detallo.</span><a class="wl-btn" href="#">Abrir account.arena.net ↗</a></div>
         <div class="wl-step"><b>Pegala en La Bóveda</b><span>La reviso y te digo si le falta algún permiso.</span><button class="wl-btn pri" type="button">＋ Agregar API Key</button></div>
         <div class="wl-step"><b>Elegí por dónde empezar</b><span>La Cartera es lo más rápido para ver que todo anda.</span><a class="wl-btn" href="#">Ir a la Cartera</a></div>
       </div>
     </section>
 
-    <section data-for="back" aria-label="Ahora en Tyria">
-      <div class="wl-h"><h3>Ahora en Tyria</h3><span>De la agenda de Metas y Eventos · tu hora local</span><a href="#">Ver la agenda completa →</a></div>
-      <div class="wl-now">
-        <div class="wl-ev" style="--x:#1E8D39"><img data-src="assets/icons/expansions/HoT.png" alt=""><div style="min-width:0"><b>Octohiedra</b><small>Valle Áurico</small></div><span class="wl-st on">En curso · 8 min</span></div>
-        <div class="wl-ev" style="--x:#DC241F"><img data-src="assets/icons/expansions/core.png" alt=""><div style="min-width:0"><b>Tequatl el Sombrío ★</b><small>Pantano de las Centellas</small></div><span class="wl-st soon">06:00 · en 12 min</span></div>
-        <div class="wl-ev" style="--x:#C28E0E"><img data-src="assets/icons/expansions/VoE.webp" alt=""><div style="min-width:0"><b>Convergencia: Nexo</b><small>Leyspring Hollows</small></div><span class="wl-st">07:00 · en 1 h 12 min</span></div>
-      </div>
-    </section>
+    <!-- Con Key: Seguí donde quedaste + Tu Bóveda -->
+    <div class="wl-row" data-for="back">
+      <section class="wl-card" aria-label="Seguí donde quedaste">
+        <div class="wl-h"><h3>Seguí donde quedaste</h3><span>De tus últimas visitas, en este navegador</span></div>
+        <a class="wl-cont" href="#" style="--x:#E545CA"><img data-src="assets/icons/Cuentas/157085.png" alt=""><div><b>Armería Legendaria</b><small>Última visita: ayer · Aurora en tu lista</small></div><em>Continuar →</em></a>
+        <div class="wl-freq" aria-label="Lo que más usás">
+          <a class="wl-fq" href="#"><img data-src="assets/icons/733322.png" alt="">Cartera</a>
+          <a class="wl-fq" href="#"><img data-src="assets/icons/3172791.png" alt="">Cámara del Brujo</a>
+          <a class="wl-fq" href="#"><img data-src="assets/icons/Welcome/358409.png" alt="">Inventario</a>
+        </div>
+      </section>
+      <section class="wl-card" aria-label="Tu Bóveda">
+        <div class="wl-h"><h3>Tu Bóveda</h3><span>Lo que configuraste y lo que falta</span></div>
+        <div class="wl-prog"><span><b>4 de 5</b> listo</span><div class="wl-bar"><i></i></div></div>
+        <ul class="wl-chk">
+          <li class="ok"><i class="ic">✓</i><span>API Key de <b>Pablin.1234</b> activa · <small>todos los permisos</small></span></li>
+          <li class="wa"><i class="ic">!</i><span>Key de <b>Alt.5678</b> · <small>le falta «inventarios»</small></span><button class="wl-btn sm" type="button">Revisar</button></li>
+          <li class="ok"><i class="ic">✓</i><span>3 cuentas guardadas · <small>cifradas en tu PC</small></span></li>
+          <li class="wa"><i class="ic">!</i><span>Copia de seguridad · <small>la última fue hace 19 días</small></span><button class="wl-btn sm" type="button">Guardar copia</button></li>
+          <li class="ok"><i class="ic">✓</i><span>Theme <b>Gato Negro</b> · <small>19 disponibles</small></span><button class="wl-btn sm" type="button">Cambiar</button></li>
+        </ul>
+      </section>
+    </div>
 
-    <section aria-label="Tus módulos">
-      <div class="wl-h"><h3>Tus módulos</h3><span>Los mismos de la barra lateral, con lo que hace cada uno</span></div>
+    <!-- Módulos: ¿Qué puedo hacer aquí? -->
+    <section aria-label="¿Qué puedo hacer aquí?">
+      <div class="wl-h"><h3>¿Qué puedo hacer aquí?</h3><span data-for="back">Tus 9 módulos, listos para tu Key</span><span data-for="new" hidden>Los 9 módulos de la Bóveda</span></div>
       <div class="wl-mods">
         <a class="wl-mod" href="#" style="--x:#F2B94B"><img data-src="assets/icons/733322.png" alt=""><div><b>Cartera</b><span>Divisas, conversor y todas tus cuentas</span></div><i class="wl-tag" data-for="back">Renovada</i><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
-        <a class="wl-mod" href="#" style="--x:#A896FF"><img data-src="assets/icons/102420.png" alt=""><div><b>Metas y Eventos</b><span>Qué está en curso, agenda y fijadas</span></div><i class="wl-tag" data-for="back">Renovada</i><i class="wl-tag free" data-for="new" hidden>Sin Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#A896FF"><img data-src="assets/icons/102420.png" alt=""><div><b>Metas y Eventos</b><span>Horarios de metas y world bosses</span></div><i class="wl-tag" data-for="back">Renovada</i><i class="wl-tag free" data-for="new" hidden>Sin Key</i></a>
         <a class="wl-mod" href="#" style="--x:#E545CA"><img data-src="assets/icons/Cuentas/157085.png" alt=""><div><b>Armería Legendaria</b><span>Las 206 legendarias, recetas y lo que te falta</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
         <a class="wl-mod" href="#" style="--x:#6EA3FF"><img data-src="assets/icons/155059.png" alt=""><div><b>Logros</b><span>Los que tenés cerca de completar</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
         <a class="wl-mod" href="#" style="--x:#15C3B7"><img data-src="assets/icons/3172791.png" alt=""><div><b>Cámara del Brujo</b><span>Objetivos diarios, semanales y tienda</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
         <a class="wl-mod" href="#" style="--x:#3CC48A"><img data-src="assets/icons/1302773.png" alt=""><div><b>Actividades</b><span>PSNA del día, Home Nodes y semanales</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
         <a class="wl-mod" href="#" style="--x:#F47C7C"><img data-src="assets/icons/raids/raid-icon.png" alt=""><div><b>Raids y Strikes</b><span>Alas y encuentros de la semana</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
-        <a class="wl-mod" href="#" style="--x:#7EC3FF"><img data-src="assets/icons/Welcome/358409.png" alt=""><div><b>Inventario y Personajes</b><span>Buscá un objeto en toda la cuenta</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#7EC3FF"><img data-src="assets/icons/Welcome/358409.png" alt=""><div><b>Inventario y Personajes</b><span>Buscá un objeto en toda la cuenta</span></div><i class="wl-tag perm" data-for="back">Alt.5678: falta permiso</i><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
         <a class="wl-mod" href="#" style="--x:#8E96A3"><img data-src="assets/icons/3601748.png" alt=""><div><b>Cuentas</b><span>Tus cuentas y Keys, cifradas en tu PC</span></div></a>
       </div>
     </section>
 
+    <!-- Novedades + Guías -->
     <div class="wl-row">
-      <div class="wl-card">
-        <h4><img data-src="assets/icons/Welcome/2604909.png" alt="">Tus API Keys</h4>
-        <div class="wl-chips" data-for="back"><span class="wl-chip"><i></i>Pablin.1234 · activa</span><span class="wl-chip">Alt.5678</span><span class="wl-chip">Mula.9012</span></div>
-        <p data-for="new" hidden>Todavía no agregaste ninguna. Empezá por el paso 1 de arriba.</p>
-        <div class="wl-acts"><button class="wl-btn pri" type="button">＋ Agregar API Key</button><button class="wl-btn" type="button" data-for="back">Gestionar Keys</button><button class="wl-btn" type="button">Asistente de cuentas</button></div>
-      </div>
-      <div class="wl-card">
-        <h4><img data-src="assets/icons/155034.png" alt="">Tus datos</h4>
-        <p>Todo queda en este navegador. Guardá una copia para no perder tus Keys, fijadas y ajustes.</p>
-        <div class="wl-acts"><button class="wl-btn" type="button"><img data-src="assets/icons/155034.png" alt="">Guardar copia</button><button class="wl-btn" type="button"><img data-src="assets/icons/155033.png" alt="">Restaurar</button><button class="wl-btn" type="button"><img data-src="assets/icons/Welcome/102353.png" alt="">Guía de usuario</button></div>
-      </div>
+      <section class="wl-card" aria-label="Novedades de la Bóveda">
+        <div class="wl-h"><h3>Novedades de la Bóveda</h3><a href="#">Ver todas</a></div>
+        <ul class="wl-news">
+          <li><img data-src="assets/icons/102420.png" alt=""><b>Metas y Eventos renovado<span class="wl-new">NUEVO</span></b><small>23/10 · «Ahora», agenda, fijadas y vistas previas de las infusiones</small></li>
+          <li><img data-src="assets/icons/733322.png" alt=""><b>La Cartera, renovada</b><small>22/10 · tres pestañas: tu cartera, cambio de divisas y todas las cuentas</small></li>
+          <li><img data-src="assets/icons/Cuentas/157085.png" alt=""><b>Cada legendaria con pantalla propia</b><small>22/10 · receta completa y materiales totales lado a lado</small></li>
+        </ul>
+      </section>
+      <section class="wl-card" aria-label="Guías y ayuda">
+        <div class="wl-h"><h3>Guías y ayuda</h3></div>
+        <div class="wl-guides">
+          <a class="wl-guide" href="#"><img data-src="assets/icons/Welcome/102353.png" alt=""><div><b>Guía de usuario</b><small>Lo básico, módulo por módulo</small></div><em>→</em></a>
+          <a class="wl-guide" href="#"><img data-src="assets/icons/Welcome/1302775.png" alt=""><div><b>Guía avanzada</b><small>Varias cuentas, copias, trucos y atajos</small></div><em>→</em></a>
+          <a class="wl-guide" href="#"><img data-src="assets/icons/Welcome/discord.png" alt=""><div><b>¿Algo no anda?</b><small>Contalo en el Discord de la comunidad</small></div><em>↗</em></a>
+        </div>
+      </section>
     </div>
   </div>
 
@@ -222,7 +301,7 @@ th{color:var(--tx-3);font-weight:600}
       <a href="#" title="Instagram"><img data-src="assets/icons/Welcome/instagram.png" alt="Instagram"></a>
       <a href="#" title="GitHub"><img data-src="assets/icons/Welcome/github.png" alt="GitHub"></a>
     </div>
-    <div class="wl-sup"><span>Apoyar:</span><a href="#"><img data-src="assets/icons/Welcome/payp.png" alt="">PayPal</a><a href="#"><img data-src="assets/icons/Welcome/kofi.png" alt="">Ko-fi</a></div>
+    <div class="wl-sup"><span>Apoyar:</span><a href="#"><img data-src="assets/icons/Welcome/payp.png" alt="">PayPal</a><a href="#"><img data-src="assets/icons/Welcome/kofi.png" alt="">Ko-fi</a><a href="#">Métricas</a></div>
     <a class="wl-priv" href="#">Privacidad</a>
   </footer>
 </section>
@@ -230,72 +309,96 @@ th{color:var(--tx-3);font-weight:600}
 
 <section class="sec"><h2>1. Diagnóstico de la pantalla actual</h2>
 <ul>
-<li><b>Dónde vive:</b> casi nada es HTML. <code>index.html</code> tiene solo el título y un <code>panel__body</code> vacío; todo lo dibuja <code>js/welcome-panel.js</code> 1.4.0 (mayo 2026, 25 KB) con una plantilla de texto. Es buena noticia: se puede rediseñar entera sin tocar <code>index.html</code> (69 KB, LES-028), igual que la Cartera y Metas.</li>
-<li><b>Mi voz:</b> <code>js/shiruvana-places.js</code> 1.0.0 pone un saludo fijo arriba («Hola de nuevo… tenés todos los módulos en la barra lateral»).</li>
-<li><b>Orden de hoy:</b> título «Bienvenido a la Bóveda» → «¿Qué puedo hacer aquí?» (9 viñetas) → «¿Ya tenés una API Key?» + «Asistente de Cuentas» → «Acceso rápido» (8 tarjetas) → «Comunidad» (5 tarjetas + email) → «Apoyar el proyecto» (PayPal, Ko-fi y 2 insignias) → Privacidad.</li>
-<li><b>Lo que el jugador ve:</b> la misma pantalla larga, tenga o no API Key, a cualquier hora. No dice nada de su cuenta ni de lo que pasa en Tyria.</li>
+<li><b>Dónde vive:</b> <code>index.html</code> solo tiene el título y un contenedor vacío; todo lo dibuja <code>js/welcome-panel.js</code> 1.4.0 (25 KB). Se rehace sin tocar <code>index.html</code> (69 KB, LES-028), como la Cartera y Metas.</li>
+<li><b>Mi voz:</b> <code>js/shiruvana-places.js</code> 1.0.0 pone un saludo fijo, igual para todos.</li>
+<li><b>Orden de hoy:</b> «¿Qué puedo hacer aquí?» (9 viñetas) → API Key + Asistente de Cuentas → «Acceso rápido» (8 tarjetas) → Comunidad (5 tarjetas + email) → Apoyo (PayPal, Ko-fi, 2 insignias) → Privacidad.</li>
+<li><b>Lo que no responde:</b> qué configuré, qué me falta, si mi Key anda, cuándo hice la última copia, qué hay de nuevo y por dónde sigo.</li>
 </ul></section>
 
 <section class="sec"><h2>2. Problemas detectados</h2>
 <table><tr><th>Sev.</th><th>Problema</th><th>Dónde</th></tr>
-<tr><td><span class="sev a">ALTO</span></td><td>No es una puerta de entrada: no cambia entre jugador nuevo y jugador que vuelve, y no muestra nada vivo (cuenta, resets, qué está en curso).</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev a">ALTO</span></td><td>Sin identidad: el gato oficial no aparece; título genérico con un ícono de casa. No se parece a la Cartera ni a Metas.</td><td>index.html / welcome-panel.js</td></tr>
-<tr><td><span class="sev a">ALTO</span></td><td>El texto del modal de Keys todavía promete «tu Gist privado»: el Gist está deprecado (DEC-030).</td><td>shiruvana-places.js</td></tr>
-<tr><td><span class="sev m">MEDIO</span></td><td>Lo mismo dos veces: «¿Qué puedo hacer aquí?» (9 viñetas) repite «Acceso rápido» (8 tarjetas). Y falta la Armería Legendaria, el módulo más trabajado.</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev m">MEDIO</span></td><td>«Agregar API Key» y «Gestionar Keys» abren el mismo modal; las dos tarjetas usan el mismo ícono.</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev m">MEDIO</span></td><td>Grillas fijas (4, 5 y 2 columnas): en el celular se aprietan o se salen.</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev m">MEDIO</span></td><td>Comunidad y Apoyo pesan lo mismo que los módulos y ocupan media pantalla.</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev b">BAJO</span></td><td>CSS roto: <code>color: var(--tx-1)fff</code> en las insignias (el texto no toma color). Rosa de Instagram en vez de los colores oficiales de la bio que ya usa la cabecera.</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev b">BAJO</span></td><td>Todo con estilos en línea y efectos con <code>onmouseover</code>: sin foco visible con teclado, no sigue al theme en el hover.</td><td>welcome-panel.js</td></tr>
-<tr><td><span class="sev b">BAJO</span></td><td>Mi saludo habla de «la barra lateral», que en el celular no está a la vista.</td><td>shiruvana-places.js</td></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>No orienta: la misma pantalla para quien recién llega y para quien usa la Bóveda todos los días. No dice qué está configurado ni qué falta.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>Una Key sin un permiso hace que un módulo muestre menos de lo que debería, y nadie lo avisa hasta que entrás y no ves tus datos.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>El texto del modal de Keys todavía promete «tu Gist privado»: el Gist está deprecado (DEC-030). Y nada recuerda hacer una copia, que hoy es el único respaldo.</td><td>shiruvana-places.js</td></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>Sin identidad: no aparece el gato oficial; título genérico con un ícono de casa.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>Los módulos están dos veces (9 viñetas y 8 tarjetas) y falta la Armería. La guía está escondida como la última viñeta; la guía avanzada no aparece.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>Las mejoras nuevas (Cartera, Metas, Armería) no se anuncian en ningún lado.</td><td>—</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>«Agregar» y «Gestionar Keys» abren el mismo modal. Grillas fijas (4, 5 y 2 columnas) que se aprietan en el celular. Comunidad y Apoyo ocupan media pantalla.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev b">BAJO</span></td><td>CSS roto (<code>color: var(--tx-1)fff</code>); rosa de Instagram en vez de los colores oficiales de la bio; estilos en línea con <code>onmouseover</code> sin foco de teclado; mi saludo nombra «la barra lateral», que en el celular no se ve.</td><td>welcome-panel.js, shiruvana-places.js</td></tr>
 </table></section>
 
 <section class="sec"><h2>3. Objetivos del rediseño</h2>
-<ol>
-<li><b>Puerta de entrada:</b> en 5 segundos saber qué es La Bóveda, qué pasa ahora y a dónde ir.</li>
-<li><b>Dos estados:</b> el jugador nuevo ve tres pasos para empezar; el que vuelve ve su cuenta y lo que está pasando en Tyria.</li>
-<li><b>Identidad:</b> el gato oficial y el theme Gato Negro al frente; misma cabecera que Cartera y Metas.</li>
-<li><b>Una sola lista de módulos</b> (los 9 de la barra lateral, con la Armería), cada uno con una línea de lo que hace.</li>
-<li><b>Rápida y honesta:</b> la Bienvenida no hace pedidos nuevos a la API. Usa lo que ya está en el navegador (Keys guardadas, cuenta activa, fijadas) y la agenda local de metas. Lo que no sabe, no lo inventa.</li>
-<li><b>La comunidad en su lugar:</b> un pie compacto con la bio, redes y apoyo, con los colores oficiales.</li>
-</ol></section>
+<p>La Bienvenida contesta cinco preguntas, cada una en su lugar:</p>
+<table><tr><th>Pregunta</th><th>Dónde se contesta</th></tr>
+<tr><td>¿Qué puedo hacer en la Bóveda?</td><td><b>¿Qué puedo hacer aquí?</b>: los 9 módulos con una línea de lo que hace cada uno.</td></tr>
+<tr><td>¿Qué módulos tengo disponibles?</td><td>Las mismas tarjetas, con su estado según tus Keys: <i>Renovada</i>, o <i>falta permiso</i> si tu Key no alcanza.</td></tr>
+<tr><td>¿Qué configuré?</td><td><b>Tu Bóveda</b> y los botones de arriba: API Key, cuentas, copia, theme.</td></tr>
+<tr><td>¿Qué me falta configurar?</td><td><b>Tu Bóveda</b>, con «4 de 5 listo» y el botón que lo arregla en la misma línea.</td></tr>
+<tr><td>¿Dónde me conviene continuar?</td><td><b>Seguí donde quedaste</b> (tu último módulo y los que más usás) y mi recomendación.</td></tr>
+</table>
+<p><b>Frontera con Metas y Eventos (DEC-032):</b> la Bienvenida no muestra horarios, relojes de reset, metas, agendas ni sugerencias de qué meta hacer. Metas y Eventos aparece como un módulo más, con su tarjeta y su novedad. Un test revisa que <code>welcome-panel.js</code> no lea la agenda de metas ni las claves <code>gn:meta:*</code>.</p>
+</section>
 
 <section class="sec"><h2>4. Maqueta</h2>
-<p>Arriba, con los dos estados y las dos pantallas. Los íconos, el gato y mi avatar son los archivos reales de DEV. Los datos (cuentas, metas, horas) son de ejemplo, salvo los relojes, que corren de verdad.</p></section>
+<p>Arriba, con los dos estados y las dos pantallas. En «Con API Key», probá los botones de <b>Preguntame</b>: mi mensaje cambia sin salir de la pantalla. Íconos, gato y avatar son los reales de DEV; cuentas, fechas y permisos son de ejemplo.</p>
+<ul>
+<li><b>Cabecera:</b> el gato, el título, tu cuenta activa y tres botones de estado (API Key, Cuentas, Copia). Se ven como los de la Cartera y Metas; el que pide atención va en dorado y lleva directo a arreglarlo.</li>
+<li><b>Mi guía</b>, debajo: un mensaje por vez, el más importante primero, con su acción. Debajo, <b>Preguntame</b> con respuestas cortas sobre la Bóveda.</li>
+<li><b>Seguí donde quedaste</b> y <b>Tu Bóveda</b>, lado a lado.</li>
+<li><b>¿Qué puedo hacer aquí?</b>: los 9 módulos.</li>
+<li><b>Novedades</b> y <b>Guías y ayuda</b> (guía de usuario, guía avanzada, Discord).</li>
+<li><b>Pie</b> compacto: bio, redes, PayPal, Ko-fi, métricas y privacidad.</li>
+</ul></section>
 
 <section class="sec"><h2>5. Integración con el GDS</h2>
 <ul>
-<li><b>Tokens del theme</b> (<code>--bg-0/1/2</code>, <code>--bd-1/2</code>, <code>--tx-1/2/3</code>, <code>--acc-1</code>, <code>--gn-gold</code>, <code>--color-*</code>): nada de colores fijos salvo la insignia de la bio (oficial, DEC-025). Funciona en los 19 themes.</li>
-<li><b>Los mismos componentes</b> que Cartera y Metas: cabecera con resplandor arcano e ícono en cuadro obsidiana; botones sutiles de hora y resets (iguales a Metas, el reset cercano en dorado); tarjetas con barra de color a la izquierda; títulos de sección en mayúsculas pequeñas; chips; botón primario arcano.</li>
-<li><b>Colores de módulo</b> tomados de donde ya aparecen (oro de la Cartera, arcano de Metas, magenta de la Armería…), solo en la barra izquierda.</li>
-<li><b>Accesibilidad:</b> enlaces y botones de verdad, foco visible en todo, contraste AA (los mismos pares ya calculados del GDS), animaciones apagadas con <code>prefers-reduced-motion</code>.</li>
+<li>Solo tokens del theme (<code>--bg-*</code>, <code>--bd-*</code>, <code>--tx-*</code>, <code>--acc-1</code>, <code>--gn-gold</code>, <code>--color-*</code>); la única excepción es la insignia de la bio con sus colores oficiales (DEC-025). Anda en los 19 themes.</li>
+<li>Mismos componentes que la Cartera y Metas: cabecera con resplandor arcano y gato en cuadro obsidiana; botones sutiles de estado; tarjetas con barra de color a la izquierda; títulos en mayúsculas pequeñas; la barra fina en degradé de «N de 19», acá como «4 de 5 listo»; chips y botón primario arcano.</li>
+<li>Verde = listo, dorado = falta algo. Nunca rojo en la Bienvenida: nada de lo que falta es un error tuyo.</li>
+<li>Enlaces y botones reales, foco visible, contraste AA y sin animaciones con <code>prefers-reduced-motion</code>.</li>
 </ul></section>
 
-<section class="sec"><h2>6. Integración con Shiruvana</h2>
+<section class="sec"><h2>6. Integración con Shiruvana: guía de la Bóveda</h2>
+<p>La Bienvenida es el lugar donde más hablo, y hablo de la Bóveda, no del juego. Uso el componente oficial (<code>Shiruvana.voice</code>, DEC-024): un avatar, un bloque, siempre con acción.</p>
+<table><tr><th>Prioridad</th><th>Cuándo</th><th>Qué digo (ejemplo)</th></tr>
+<tr><td>1</td><td>Una Key no responde o le falta un permiso</td><td>«La Key de Alt.5678 no tiene permiso de inventarios: en Inventario y en la Armería vas a ver menos de lo que tenés. ¿La reemplazamos?» → <i>Revisar Keys</i></td></tr>
+<tr><td>2</td><td>Nunca hiciste copia o pasaron más de 14 días</td><td>«Tu última copia es de hace 19 días. Tus Keys, fijadas y ajustes viven solo en este navegador: guardá una copia, son 2 segundos.» → <i>Guardar copia</i></td></tr>
+<tr><td>3</td><td>Hay una novedad que no viste</td><td>«Metas y Eventos está renovado: ahora tiene vistas previas de las infusiones.» → <i>Ir a Metas y Eventos</i> (presento el módulo; no hablo de metas)</td></tr>
+<tr><td>4</td><td>Todo en orden</td><td>«Todo listo. Ayer estabas en la Armería con la Aurora: ¿seguimos?» → <i>Continuar</i></td></tr>
+<tr><td>5</td><td>Nada de lo anterior</td><td>Un truco de la Bóveda, uno por día («En la Cartera podés ocultar las divisas en cero»).</td></tr>
+</table>
 <ul>
-<li><b>Un solo mensaje</b>, debajo de la cabecera, con el componente oficial (<code>Shiruvana.voice</code>, DEC-024: avatar de 56 px, uno por pantalla).</li>
-<li><b>Qué digo, por prioridad:</b> sin Key → me presento y te llevo a los tres pasos · una fijada tuya en curso o por empezar · algo en curso o que empieza en 20 min · reset diario a menos de 1 h · nada de eso → no hablo (la pantalla ya muestra lo que hay).</li>
-<li><b>Siempre con acción:</b> «Ir a Metas y Eventos →» y «Copiar waypoint», como en Metas.</li>
-<li><b>Corrijo de paso</b> el texto del modal de Keys (sin Gist, DEC-030) y el saludo que mencionaba la barra lateral.</li>
-<li>No hablo sobre saldos, módulos ni navegación: eso son datos, no mi voz.</li>
+<li><b>Preguntame</b> (respuestas fijas, sin red): ¿Qué hay que revisar? · ¿Mis Keys están seguras? · ¿Qué es un permiso? · ¿Cómo cambio de cuenta? · Un truco de la Bóveda.</li>
+<li><b>Nunca:</b> relojes de metas, agenda, world bosses ni qué meta hacer. Eso lo digo dentro de Metas y Eventos.</li>
+<li>Corrijo el texto de las Keys (sin Gist, DEC-030) y el saludo que nombraba la barra lateral.</li>
 </ul></section>
 
-<section class="sec"><h2>7. Diseño responsive</h2>
+<section class="sec"><h2>7. Datos: de dónde sale cada cosa</h2>
+<table><tr><th>Dato</th><th>Fuente</th><th>Costo</th></tr>
+<tr><td>Cuentas y Key activa</td><td><code>KeyManager.list</code> / <code>selected</code> (ya en el navegador)</td><td>Ninguno</td></tr>
+<tr><td>Permisos de cada Key</td><td><code>/v2/tokeninfo</code>, guardado 24 h</td><td>1 pedido liviano por Key al día; es el único pedido de la Bienvenida</td></tr>
+<tr><td>Fecha de la última copia, último módulo, los que más usás, novedades vistas</td><td><b>Clave nueva</b> <code>gn:global:welcome</code> (una sola, en este navegador)</td><td>Ninguno</td></tr>
+<tr><td>Novedades</td><td>Archivo nuevo <code>assets/welcome-news.json</code> (fecha, módulo, texto)</td><td>Un archivo local</td></tr>
+<tr><td>Theme</td><td><code>gn:theme</code></td><td>Ninguno</td></tr>
+</table>
+<p><b>Aviso de <code>localStorage</code>:</b> la clave nueva es <code>gn:global:welcome</code>. La fecha de la copia empieza a contarse desde la primera copia que hagas con la versión nueva; hasta entonces digo «todavía no registré ninguna copia», sin inventar.</p></section>
+
+<section class="sec"><h2>8. Diseño responsive</h2>
 <table><tr><th>Ancho</th><th>Cómo se ve</th></tr>
-<tr><td>≥ 980 px</td><td>Cabecera en una fila (gato, título, botones a la derecha); «Ahora en Tyria» en 3 columnas; módulos en 3; Keys y Datos lado a lado.</td></tr>
-<tr><td>720–980 px</td><td>Los botones de hora pasan debajo del título; módulos en 2–3 columnas; Keys y Datos uno debajo del otro.</td></tr>
-<tr><td>&lt; 720 px</td><td>Botones de hora en una tira que se desliza; «Ahora» y los tres pasos apilados; módulos en 2 columnas, solo ícono y nombre; botones de 44 px de alto; pie apilado. (Botón «Celular» de la maqueta.)</td></tr>
+<tr><td>≥ 980 px</td><td>Cabecera en una fila; «Seguí» y «Tu Bóveda» lado a lado; módulos en 3 columnas; Novedades y Guías lado a lado.</td></tr>
+<tr><td>720–980 px</td><td>Los botones de estado pasan debajo del título; las parejas de tarjetas se apilan.</td></tr>
+<tr><td>&lt; 720 px</td><td>Botones de estado en una tira que se desliza; módulos en 2 columnas con ícono, nombre y estado; «Preguntame» se acomoda en varias líneas; botones de 44 px.</td></tr>
 </table></section>
 
-<section class="sec"><h2>8. Plan de implementación por micro-ciclos</h2>
+<section class="sec"><h2>9. Plan de implementación por micro-ciclos</h2>
 <table><tr><th>Paso</th><th>Qué</th><th>Archivos</th></tr>
-<tr><td>WEL-1</td><td>Estructura nueva sin estilos en línea: cabecera con el gato, los dos estados, los 9 módulos, Keys y Datos, pie. Mismos ids de botones (<code>welcomeAddKeyBtn</code>, <code>welcomeManageKeysBtn</code>, <code>welcomeAccountsBtn</code>) para no romper nada.</td><td><code>js/welcome-panel.js</code> 2.0.0 + <code>tests/welcome-view.test.cjs</code></td></tr>
-<tr><td>WEL-2</td><td>Lo vivo: relojes y resets, y «Ahora en Tyria» desde <code>assets/meta-events.json</code> con las reglas de <code>Meta._pure</code> (sin API). Fijadas desde <code>gn:meta:favs</code>.</td><td><code>js/welcome-panel.js</code> 2.1.0 + test</td></tr>
-<tr><td>WEL-3</td><td>Mi voz en la Bienvenida según el momento; corregir el texto de Keys (Gist) y el saludo.</td><td><code>js/shiruvana-places.js</code> 1.1.0 + test</td></tr>
-<tr><td>WEL-4</td><td>Revisión en los 19 themes, en el celular y con teclado; prueba de integración con el HTML real.</td><td>ajustes en <code>welcome-panel.js</code></td></tr>
-<tr><td>WEL-5</td><td>Cierre: FEAT-008, backlog, CHANGELOG-FACTORY.</td><td><code>ai-memory/</code>, <code>docs/</code></td></tr>
+<tr><td>WEL-1</td><td>Estructura nueva sin estilos en línea: cabecera con el gato, dos estados, los 9 módulos, Novedades, Guías y pie. Mismos ids de botones (<code>welcomeAddKeyBtn</code>, <code>welcomeManageKeysBtn</code>, <code>welcomeAccountsBtn</code>). Test de frontera: no lee la agenda de metas ni <code>gn:meta:*</code>.</td><td><code>js/welcome-panel.js</code> 2.0.0 + <code>tests/welcome-view.test.cjs</code> + <code>assets/welcome-news.json</code></td></tr>
+<tr><td>WEL-2</td><td><b>Tu Bóveda</b> y botones de estado: Keys, permisos por <code>tokeninfo</code> con caché de 24 h, cuentas, copia y theme. Estado de cada módulo según los permisos.</td><td><code>welcome-panel.js</code> 2.1.0 + test</td></tr>
+<tr><td>WEL-3</td><td><b>Seguí donde quedaste</b>: anotar el último módulo y la fecha de la copia en <code>gn:global:welcome</code>, escuchando la navegación que ya existe (<code>gn:nav-active</code>).</td><td><code>welcome-panel.js</code> 2.2.0 + test</td></tr>
+<tr><td>WEL-4</td><td>Mi guía: prioridades, Preguntame y trucos; corregir los textos del Gist y de la barra lateral.</td><td><code>js/shiruvana-places.js</code> 1.1.0 + test</td></tr>
+<tr><td>WEL-5</td><td>Revisión en 19 themes, celular y teclado; cierre (FEAT-008, backlog, CHANGELOG-FACTORY).</td><td>ajustes + <code>ai-memory/</code>, <code>docs/</code></td></tr>
 </table>
-<p>Cada paso deja DEV funcionando y espera tu validación antes del siguiente, como en la Cartera. Sin claves nuevas en el navegador. Sin tocar <code>index.html</code>: el título viejo («Bienvenido a la Bóveda») se reemplaza desde el JS.</p></section>
+<p>Cada paso deja DEV andando y espera tu validación. Sin tocar <code>index.html</code>.</p></section>
 </div>
 
 <script>
@@ -309,15 +412,21 @@ th{color:var(--tx-3);font-weight:600}
   document.querySelectorAll('[data-st]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-st]').forEach(function(x){x.classList.toggle('on',x===b);});setState(b.getAttribute('data-st'));};});
   document.querySelectorAll('[data-w]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-w]').forEach(function(x){x.classList.toggle('on',x===b);});document.getElementById('stage').classList.toggle('mobile',b.getAttribute('data-w')==='mobile');};});
   setState('back');
-  function p2(n){return String(n).padStart(2,'0');}
-  function cd(ms){var s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return 'en '+(d?d+' d '+h+' h':h?h+' h'+(m?' '+m+' min':''):m+' min');}
-  function tick(){var n=new Date(),t=+n;
-    document.getElementById('mkSrv').textContent=p2(n.getUTCHours())+':'+p2(n.getUTCMinutes())+' UTC';
-    var dr=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1)-t;
-    var base=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),7,30),w=base+((1-n.getUTCDay()+7)%7)*864e5;if(w<=t)w+=7*864e5;
-    document.getElementById('mkDaily').textContent=cd(dr);document.getElementById('mkWeekly').textContent=cd(w-t);
-    document.getElementById('mkDailyP').classList.toggle('soon',dr<=36e5);document.getElementById('mkWeeklyP').classList.toggle('soon',w-t<=864e5);}
-  tick();setInterval(tick,1000);
+  var M=[
+    {c:'1 de 3 · lo más importante primero',t:'La Key de <b>Alt.5678</b> no tiene permiso de <b>inventarios</b>: en Inventario y en la Armería vas a ver menos de lo que tenés. ¿La reemplazamos?',a:['Revisar Keys','Cómo crear una Key completa ↗']},
+    {c:'2 de 3',t:'Tu última copia es de hace <b>19 días</b>. Tus Keys, fijadas y ajustes viven solo en este navegador: guardá una copia, son 2 segundos.',a:['Guardar copia']},
+    {c:'3 de 3',t:'<b>Metas y Eventos</b> está renovado: ahora tiene vistas previas de las infusiones y tus fijadas arriba de todo.',a:['Ir a Metas y Eventos','Ver novedades']},
+    {c:'Preguntame',t:'Tus Keys y cuentas se guardan <b>solo en este navegador</b>, y las cuentas van cifradas. La Bóveda no tiene servidor: nadie más las ve. Por eso es importante la copia.',a:['Guardar copia']},
+    {c:'Preguntame',t:'Un <b>permiso</b> es lo que tu Key deja leer de tu cuenta. Si falta uno, el módulo que lo necesita muestra menos. En account.arena.net podés crear una Key nueva con todos tildados.',a:['Revisar Keys']},
+    {c:'Preguntame',t:'Arriba a la derecha está el selector de cuenta. Al cambiarla, todos los módulos se actualizan solos con la cuenta nueva.',a:['Ir a Cuentas']},
+    {c:'Truco del día',t:'En la <b>Cartera</b> podés ocultar las divisas en cero y fijar las que más mirás: quedan arriba en todas tus cuentas.',a:['Ir a la Cartera']}
+  ];
+  var vt=document.getElementById('vText'),vc=document.getElementById('vCount'),va=document.getElementById('vActs');
+  function show(i){var m=M[i];vt.innerHTML=m.t;vc.textContent=m.c;va.innerHTML=m.a.map(function(x){return '<button class="wl-btn sm" type="button">'+x+'</button>';}).join('')+(i<2?'<button class="wl-btn sm" type="button" data-next="'+(i+1)+'">Siguiente →</button>':'');
+    var n=va.querySelector('[data-next]');if(n)n.onclick=function(){show(+n.getAttribute('data-next'));};
+    document.querySelectorAll('.wl-q').forEach(function(q){q.classList.toggle('on',+q.getAttribute('data-q')===i);});}
+  document.querySelectorAll('.wl-q').forEach(function(q){q.onclick=function(){show(+q.getAttribute('data-q'));};});
+  show(0);
 })();
 </script>
 </body>
