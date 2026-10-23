@@ -1,5 +1,6 @@
 // La Sidebar (BL-061): solo navegación, a la izquierda, con la misma lista que la Bienvenida (SBR-1);
-// cuenta activa con el estado de su Key, «Falta permiso» y «Nuevo» en los enlaces (SBR-2).
+// cuenta activa con el estado de su Key, «Falta permiso» y «Nuevo» en los enlaces (SBR-2);
+// en el celular, barra fija abajo y hoja «Más» con foco atrapado (SBR-3).
 // Se prueba con un DOM mínimo y, para la lista de módulos y el estado de las Keys, con la Bienvenida real.
 'use strict';
 const { test } = require('node:test');
@@ -26,8 +27,10 @@ function matches(n, sel) {
     return n.tag === s;
   });
 }
+let CUR = null; // el document del test en curso (para activeElement)
 function el(tag, extra) {
   const n = Object.assign({ tag, children: [], attrs: {}, className: '', parentNode: null, listeners: {}, _text: '' }, extra || {});
+  n.focus = () => { if (CUR) CUR.activeElement = n; };
   n.setAttribute = (k, v) => { n.attrs[k] = String(v); if (k === 'id') n.id = String(v); };
   n.getAttribute = (k) => (k in n.attrs ? n.attrs[k] : null);
   n.removeAttribute = (k) => { delete n.attrs[k]; };
@@ -75,13 +78,13 @@ function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '', ke
   const label = el('span', { attrs: { id: 'accountIdLabel' }, _text: '—' });
   acctPanel.appendChild(label);
   const sel = el('select', { attrs: { id: 'keySelectGlobal' }, value: token });
-  sel.focus = () => { sel.focused = true; };
+  sel.focus = () => { sel.focused = true; document.activeElement = sel; };
   side.children.unshift(acctPanel); acctPanel.parentNode = side;
   ['asideNextFeatures', 'metaAsideNext', 'achAsidePanel'].forEach((id) => side.appendChild(el('section', { attrs: { id }, className: 'panel' })));
   body.appendChild(sel); body.appendChild(side);
   const docListeners = {}, winListeners = {}, observers = [];
   const document = {
-    readyState: 'loading', head, body, documentElement: docRoot,
+    readyState: 'loading', head, body, documentElement: docRoot, activeElement: null,
     getElementById: (id) => docRoot.all().find((c) => c.attrs.id === id) || null,
     querySelector: (s) => docRoot.querySelector(s),
     querySelectorAll: (s) => docRoot.querySelectorAll(s),
@@ -118,16 +121,17 @@ function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '', ke
     window.Welcome = { _pure: { MODULES: null, contrastFixes: () => fixes || {} } };
   }
   const fire = (t, ev) => (docListeners[t] || []).forEach((f) => f(ev || {}));
+  CUR = document;
   return { window, document, docListeners, winListeners, observers, side, navPanel, acctPanel, sel, store, label, fetched, fire, S: () => window.SidebarNav };
 }
 const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.1.0', () => {
+test('versión 2.2.0', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.1\.0/);
-  assert.equal(x.S().version, '2.1.0');
+  assert.match(SRC, /Versión: 2\.2\.0/);
+  assert.equal(x.S().version, '2.2.0');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
@@ -250,10 +254,10 @@ test('CSS: a la izquierda desde 901 px, fija al hacer scroll; debajo de 900 px n
   assert.match(mq, /#appSidebar\{grid-column:1;grid-row:1;position:sticky;top:12px;align-self:start/);
   assert.match(mq, /\.container\.layout>:not\(#appSidebar\)\{grid-column:2\}/);
   assert.doesNotMatch(css.replace(mq, ''), /\.container\.layout|#appSidebar\{/, 'fuera del corte no cambio la grilla de la página');
-  assert.match(css, /#appSidebar \.sbr-list a:hover\{[^}]*transform:none/);
-  assert.match(css, /#appSidebar \.sbr-list a:focus-visible\{outline:2px solid var\(--acc-1\)/);
+  assert.match(css, /:is\(#appSidebar,#sbrSheet\) \.sbr-list a:hover\{[^}]*transform:none/);
+  assert.match(css, /:is\(#appSidebar,#sbrSheet\) \.sbr-list a:focus-visible\{outline:2px solid var\(--acc-1\)/);
   assert.match(css, /prefers-reduced-motion/);
-  assert.match(css, /#appSidebar \.sbr-list a span\{color:inherit/, 'theme-polish pinta los span: el activo tiene que heredar');
+  assert.match(css, /:is\(#appSidebar,#sbrSheet\) \.sbr-list a span\{color:inherit/, 'theme-polish pinta los span: el activo tiene que heredar');
 });
 
 test('Frontera: la Sidebar no lee datos de ningún módulo ni de metas', () => {
@@ -364,4 +368,177 @@ test('paneles viejos: «Próximas funciones» y «Próximos (Top 3)» ocultos; e
   const css = setup().S()._pure.CSS;
   assert.match(css, /#asideNextFeatures,#metaAsideNext\{display:none!important\}/);
   assert.doesNotMatch(css, /achAsidePanel/);
+});
+
+// ---------------------------------------------------------------- SBR-3: celular
+const byId = (x, id) => x.document.getElementById(id);
+const tabLinks = (x) => x.document.querySelectorAll('#sbrTabs a');
+const sheetLinks = (x) => x.document.querySelectorAll('#sbrSheet a').filter((a) => a.getAttribute('data-mod'));
+const click = (n) => (n.listeners.click || []).forEach((f) => f({ target: n, preventDefault() {} }));
+const key = (x, k, shift) => { let p = false; (byId(x, 'sbrSheet').listeners.keydown || []).forEach((f) => f({ key: k, shiftKey: !!shift, preventDefault() { p = true; } })); return p; };
+const isOpen = (x) => byId(x, 'sbrSheet').getAttribute('hidden') === null;
+
+test('celular: barra con Inicio, Cartera, Metas y Armería y el botón «Más»', () => {
+  const x = ready(setup());
+  same(tabLinks(x).map((a) => a.getAttribute('href')), ['#/welcome', '#/cards', '#/meta', '#/account/legendary-armory']);
+  same(tabLinks(x).map((a) => a.children[1].textContent), ['Inicio', 'Cartera', 'Metas', 'Armería']);
+  tabLinks(x).forEach((a) => {
+    assert.equal(a.getAttribute('id'), null, 'sin ids repetidos: los de la Sidebar los usa el router');
+    assert.doesNotMatch(a.className, /side-nav/);
+    assert.equal(a.children[0].getAttribute('alt'), '');
+  });
+  const nav = byId(x, 'sbrTabs');
+  assert.equal(nav.tag, 'nav');
+  assert.equal(nav.getAttribute('aria-label'), 'Navegación principal');
+  const more = byId(x, 'sbrMore');
+  assert.equal(more.tag, 'button');
+  assert.equal(more.getAttribute('type'), 'button');
+  assert.equal(more.getAttribute('aria-haspopup'), 'dialog');
+  assert.equal(more.getAttribute('aria-expanded'), 'false');
+  assert.equal(more.getAttribute('aria-controls'), 'sbrSheet');
+  assert.match(more.textContent, /Más/);
+  assert.equal(x.document.querySelectorAll('#sbrNav a').filter((a) => a.getAttribute('id') === 'navCards').length, 1);
+});
+
+test('celular: la hoja «Más» es un diálogo con la cuenta activa y los otros 6 destinos', async () => {
+  const x = ready(setup({ token: 'KEY-1', keys: [{ label: 'Main', value: 'KEY-1', perms: ALL }] }));
+  const sh = byId(x, 'sbrSheet');
+  assert.equal(sh.getAttribute('role'), 'dialog');
+  assert.equal(sh.getAttribute('aria-modal'), 'true');
+  assert.equal(sh.getAttribute('aria-labelledby'), 'sbrSheetT');
+  assert.ok(byId(x, 'sbrSheetT'));
+  assert.equal(isOpen(x), false, 'cerrada al cargar');
+  assert.equal(byId(x, 'sbrScrim').getAttribute('hidden'), '');
+  same(sheetLinks(x).map((a) => a.getAttribute('href')), ['#/account/achievements', '#/account/wizards-vault', '#/activities',
+    '#/account/raids', '#/account/characters', '#/account/accounts']);
+  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Logros', 'Cámara del Brujo', 'Actividades', 'Raids y Strikes', 'Inventario y Personajes', 'Cuentas']);
+  sheetLinks(x).forEach((a) => assert.equal(a.getAttribute('id'), null));
+  const P = x.S()._pure;
+  same(P.mobileGroups().tabs.map((m) => m.id), ['home', 'cards', 'meta', 'armory']);
+  same(P.TABS, ['cards', 'meta', 'armory']);
+  const acct = byId(x, 'sbrSheetAcct');
+  assert.equal(acct.querySelector('small').textContent, 'Cuenta activa');
+  assert.equal(acct.querySelector('.sbr-st').textContent, 'API Key completa');
+  assert.equal(acct.querySelectorAll('#accountIdLabel').length, 0, 'el id queda solo en la Sidebar');
+  await flush();
+  assert.equal(acct.querySelector('.sbr-accname').textContent, 'Pablin.1234', 'el nombre llega también a la hoja');
+  x.fire('gn:tokenchange');
+  assert.equal(acct.children.length, 1, 'una sola tarjeta en la hoja');
+});
+
+test('celular: «Más» abre la hoja, el foco entra y vuelve a «Más» al cerrar con Escape', () => {
+  const x = ready(setup());
+  const more = byId(x, 'sbrMore');
+  more.focus();
+  click(more);
+  assert.equal(isOpen(x), true);
+  assert.equal(byId(x, 'sbrScrim').getAttribute('hidden'), null);
+  assert.equal(more.getAttribute('aria-expanded'), 'true');
+  assert.ok(x.document.documentElement.classList.contains('sbr-lock'), 'la página de atrás no se desplaza');
+  assert.equal(x.document.activeElement, byId(x, 'sbrSheet').querySelector('.sbr-close'), 'el foco entra en la hoja');
+  assert.equal(key(x, 'Escape'), true);
+  assert.equal(isOpen(x), false);
+  assert.equal(byId(x, 'sbrScrim').getAttribute('hidden'), '');
+  assert.equal(more.getAttribute('aria-expanded'), 'false');
+  assert.equal(x.document.documentElement.classList.contains('sbr-lock'), false);
+  assert.equal(x.document.activeElement, more, 'el foco vuelve a «Más»');
+});
+
+test('celular: la hoja se cierra con «Cerrar», tocando afuera, eligiendo un destino o con «Más» otra vez', () => {
+  const x = ready(setup());
+  const more = byId(x, 'sbrMore');
+  click(more); click(byId(x, 'sbrSheet').querySelector('.sbr-close')); assert.equal(isOpen(x), false, 'Cerrar');
+  click(more); click(byId(x, 'sbrScrim')); assert.equal(isOpen(x), false, 'afuera');
+  click(more); click(sheetLinks(x)[2]); assert.equal(isOpen(x), false, 'un destino');
+  click(more); assert.equal(isOpen(x), true); click(more); assert.equal(isOpen(x), false, 'Más otra vez');
+  assert.equal(x.S().closeSheet(), false, 'cerrar dos veces no hace nada');
+});
+
+test('celular: el foco queda atrapado en la hoja (Tab y Shift+Tab dan la vuelta)', () => {
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL }] }));
+  click(byId(x, 'sbrMore'));
+  const f = byId(x, 'sbrSheet').querySelectorAll('a, button');
+  const first = f[0], last = f[f.length - 1];
+  assert.equal(first.className, 'sbr-close');
+  assert.equal(last.getAttribute('href'), '#/account/accounts');
+  last.focus();
+  assert.equal(key(x, 'Tab'), true);
+  assert.equal(x.document.activeElement, first);
+  assert.equal(key(x, 'Tab', true), true);
+  assert.equal(x.document.activeElement, last);
+  f[1].focus();
+  assert.equal(key(x, 'Tab'), false, 'en el medio, Tab sigue normal');
+  assert.equal(key(x, 'Enter'), false);
+  assert.equal(isOpen(x), true);
+});
+
+test('celular: «Cambiar» en la hoja la cierra y lleva al selector de cuenta', () => {
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL }] }));
+  click(byId(x, 'sbrMore'));
+  click(byId(x, 'sbrSheetAcct').querySelector('.sbr-chg'));
+  assert.equal(isOpen(x), false);
+  assert.equal(x.sel.focused, true);
+  assert.equal(x.document.activeElement, x.sel);
+});
+
+test('celular: el activo se marca en la barra; si está en la hoja, se marca «Más»', () => {
+  const x = ready(setup({ hash: '#/meta' }));
+  const tab = (h) => tabLinks(x).find((a) => a.getAttribute('href') === h);
+  assert.ok(tab('#/meta').classList.contains('is-active'));
+  assert.equal(tab('#/meta').getAttribute('aria-current'), 'page');
+  assert.equal(byId(x, 'sbrMore').classList.contains('is-active'), false);
+  x.fire('gn:nav-active', { detail: { hash: '#/account/strikes' } });
+  assert.equal(tab('#/meta').classList.contains('is-active'), false);
+  assert.ok(byId(x, 'sbrMore').classList.contains('is-active'));
+  const raids = sheetLinks(x).find((a) => a.getAttribute('href') === '#/account/raids');
+  assert.equal(raids.getAttribute('aria-current'), 'page');
+  assert.ok(x.document.getElementById('navRaids').classList.contains('is-active'), 'la Sidebar también');
+  x.fire('gn:nav-active', { detail: { hash: '#/account/legendary-armory/80055' } });
+  assert.ok(tab('#/account/legendary-armory').classList.contains('is-active'));
+  assert.equal(byId(x, 'sbrMore').classList.contains('is-active'), false);
+});
+
+test('celular: avisos en la barra y en la hoja; punto en «Más» si adentro hay algo para revisar', () => {
+  const ok = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL }] }));
+  assert.equal(byId(ok, 'sbrMore').querySelector('.sbr-dot'), null, 'todo en orden: sin punto');
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'progression') }] }));
+  const ach = sheetLinks(x).find((a) => a.getAttribute('data-mod') === 'achievements');
+  assert.ok(ach.querySelector('.sbr-w'), 'Logros, en la hoja, con «Falta permiso»');
+  const more = byId(x, 'sbrMore');
+  assert.ok(more.querySelector('.sbr-dot'));
+  assert.equal(more.querySelector('.sbr-sr').textContent, ' (hay algo para revisar)');
+  x.fire('gn:tokenchange');
+  assert.equal(more.querySelectorAll('.sbr-dot').length, 1, 'sin duplicar');
+  const y = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'tradingpost') }] }));
+  assert.ok(tabLinks(y).find((a) => a.getAttribute('data-mod') === 'cards').querySelector('.sbr-w'), 'Cartera, en la barra');
+  const none = ready(setup({ token: '' }));
+  assert.ok(byId(none, 'sbrMore').querySelector('.sbr-dot'), 'sin Key: la tarjeta de la hoja lo pide');
+  const P = ok.S()._pure;
+  assert.equal(P.moreNeedsAttention({ state: 'back', activeStatus: 'ok', activeMods: [] }, ['raids']), false);
+  assert.equal(P.moreNeedsAttention({ state: 'back', activeStatus: 'ok', activeMods: ['raids'] }, ['raids']), true);
+  assert.equal(P.moreNeedsAttention({ state: 'back', activeStatus: 'ok', activeMods: ['cards'] }, ['raids']), false);
+  assert.equal(P.moreNeedsAttention({ state: 'back', activeStatus: 'unknown', activeMods: [] }, ['raids']), false, 'sin verificar no es urgente');
+});
+
+test('celular: armar dos veces deja una sola barra y una sola hoja', () => {
+  const x = ready(setup());
+  x.S().build();
+  assert.equal(x.document.body.children.filter((c) => c.attrs.id === 'sbrTabs').length, 1);
+  assert.equal(x.document.body.children.filter((c) => c.attrs.id === 'sbrSheet').length, 1);
+  assert.equal(x.document.body.children.filter((c) => c.attrs.id === 'sbrScrim').length, 1);
+});
+
+test('CSS celular: barra fija hasta 900 px con zona segura y 44 px; el panel de Logros sigue', () => {
+  const css = setup().S()._pure.CSS;
+  assert.match(css, /#sbrTabs,#sbrSheet,#sbrScrim\{display:none\}/, 'en desktop no existen');
+  const mob = css.slice(css.indexOf('@media (max-width:900px){'));
+  assert.match(mob, /#sideNavPanel,#sideAccountPanel\{display:none!important\}/);
+  assert.doesNotMatch(css, /#appSidebar\{display:none/, 'no escondo la Sidebar entera: ahí vive el panel de Logros');
+  assert.match(mob, /#sbrTabs\{display:grid;grid-template-columns:repeat\(5,minmax\(0,1fr\)\);position:fixed;[^}]*bottom:0/);
+  assert.match(mob, /#sbrTabs\{[^}]*env\(safe-area-inset-bottom,0px\)/);
+  assert.match(mob, /body\{padding-bottom:calc\(68px \+ env\(safe-area-inset-bottom,0px\)\)\}/, 'nada queda tapado');
+  assert.match(mob, /#sbrTabs \.sbr-tab\{[^}]*min-height:52px;min-width:44px/);
+  assert.match(mob, /#sbrSheet \.sbr-close\{min-height:44px;min-width:44px/);
+  assert.match(mob, /#sbrSheet \.sbr-list a\{min-height:48px\}/);
+  assert.match(css, /prefers-reduced-motion:reduce\)\{#sbrSheet:not\(\[hidden\]\)\{animation:none\}\}/);
 });
