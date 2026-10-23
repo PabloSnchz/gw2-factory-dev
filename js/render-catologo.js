@@ -1,6 +1,8 @@
 /*!
  * js/render-catologo.js — Render del catálogo y filtros
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * v1.6.1 (2026-10-23) — BL-064: «Modo: Catálogo / Mi progreso» del tracker oculto de verdad
+ *   (su display:flex en línea le ganaba a la regla; ahora va con !important). Las pestañas lo reemplazan.
  * v1.6.0 (2026-10-23) — BL-064, ARM-5: guarda de contraste de la Bienvenida sobre el panel (19 themes)
  *   y el foco vuelve al mismo control cuando el tracker repinta (filtros, listas, cola, pestañas).
  * v1.2.0–1.5.0 (2026-10-23) — BL-064, ARM-1 a ARM-4 (FEAT-010): cabecera con resumen, pestañas
@@ -203,7 +205,7 @@
   // texto; el color del módulo (el mismo de la Sidebar) va en bordes y barras.
   var ARM_COLOR = '#E545CA';
   var ARM_CSS = [
-    '#legendaryArmoryPanel>.panel__title,#legendaryArmoryBody>.legendary-view-toggle{display:none}',
+    '#legendaryArmoryPanel>.panel__title,#legendaryArmoryBody>.legendary-view-toggle{display:none!important}',
     '.arm-hero{border:1px solid var(--bd-1);border-radius:16px;padding:16px 18px;margin:0 0 14px;' +
       'background:linear-gradient(180deg,rgba(229,69,202,.10),var(--bg-1) 70%)}',
     '.arm-hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',
