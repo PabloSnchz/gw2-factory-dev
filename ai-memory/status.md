@@ -1,31 +1,31 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-064 — ARM-3 publicado en DEV: «Mi cola» renovada y mi línea en la cabecera de la Armería.
-Motivo: Pablo validó ARM-2 y pidió seguir con ARM-3 (2026-10-23 16:18Z). Foco: restyle de la Armería.
+Tarea actual: BL-064 — ARM-4 publicado en DEV: armaduras por set en la Armería.
+Motivo: Pablo validó ARM-3 y pidió seguir con ARM-4 (2026-10-23 16:49Z). Foco: restyle de la Armería.
 Fase: F1 — Visibilidad
 Etapa actual: REVIEW (validación visual de Pablo)
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 16:32Z
-Próxima acción: con la validación de Pablo, ARM-4 (armaduras por set: ~22 tarjetas con «N de 6 piezas» en lugar de 132 sueltas).
+Última actualización: 2026-10-23 17:00Z
+Próxima acción: con la validación de Pablo, ARM-5 (revisión final: 19 themes, celular, teclado y lector; foco al cambiar Expansión/Gen.; FEAT-010 y cierre de la Armería).
 
 Micro-ciclo:
-ARM-3 — «Mi cola» y mi línea. HECHO.
+ARM-4 — armaduras por set. HECHO.
 Archivos:
-- js/render-catologo.js (1.4.0, commit eb365e4, blob 5d4ac65)
-- tests/armeria-cola-vista.test.cjs (commit 8890425, blob 6a44394)
-- tests/hb119-2-2 (3b062ec) y hb126 (cfb6649): contrato nuevo, la cola sin filtros
+- js/render-catologo.js (1.5.0, commit 67d2f58, blob e9fca2e, 59.720 B)
+- tests/armeria-sets.test.cjs (commit d97dfc1, blob d3ccee2)
 
-Último hecho: ARM-3 publicado y verificado (16:30Z). Blobs publicados = locales. Tests de la Armería 26/26, hb119-2-2 7/7, hb126 15/15 (fase roja verificada contra ARM-2: FILTRO-01/02/06 y COLA-13 caen), réplica local 22/22, mutaciones 24/25 (sobrevive solo `esc` sobre mi línea: textos fijos sin HTML, mutante equivalente), y siguen 24/24 (ARM-2) y 18/18 (ARM-1).
-Notas de ARM-3:
-- Contrato de tests heredados actualizado: «Mi cola» ya no dibuja los filtros del catálogo (la cola no se filtra, HB#147; diseño aprobado en ARM-0). Los filtros quedan guardados para cuando volvés al Catálogo.
-- DEBT-ARM-3 (BAJO): el panel viejo de la cola (`renderQueuePanel` del tracker) se sigue pintando y queda oculto con `.arm-qview~*`, porque `legendary-tracker.js` (63,9 KB) no se puede publicar (LES-028). Se borra cuando el tracker adelgace.
-- Mi línea: solo sobre la Armería (N1–N2), una vez, oculta en el celular (ahí está mi rincón). Sin Key o leyendo no digo nada: la cabecera ya lo cuenta.
-- Pendiente para ARM-5 (BAJO): el foco al cambiar Expansión o Gen. vuelve al inicio.
+Último hecho: ARM-4 publicado y verificado (16:59Z). Blobs publicados = locales. Tests de la Armería 32/32, hb119-2-2 7/7, hb126 15/15, réplica local 22/22, mutaciones 23/24 (sobrevive el caché de setOf: solo rendimiento, mutante equivalente); siguen 24/25 (ARM-3), 24/24 (ARM-2) y 18/18 (ARM-1).
+Notas de ARM-4:
+- 132 piezas → 23 tarjetas: 7 sets × 3 pesos (Enviado perfeccionado, Héroe triunfal, Héroe triunfal forjado en la Niebla, Héroe glorioso, Héroe glorioso forjado en la Niebla, Glorioso ardiente, Obsidiana) + Eikasia (guantes) y Selaquimorfo (casco acuático), una tarjeta con los 3 pesos cada una.
+- Cada set es un <details>: se abre con clic, Enter o Espacio; adentro, las piezas con la tarjeta de siempre (abren la ficha y encolan como antes). Abierto ocupa toda la fila. Con una búsqueda, los sets que encuentran algo se abren solos.
+- El avance («tenés N de 6 piezas», barra, «✓ Completo») cuenta las 6 piezas aunque haya filtros; sin Key o si la API falló no lo digo.
+- Una armadura que no reconozca (un set nuevo) aparece suelta: nunca se esconde.
+- Para que entrara (LES-028) resumí comentarios heredados de render-catologo.js; el detalle sigue en git. El archivo quedó en 59,7 KB: no le entra otro paso grande. ARM-5 va con cambios chicos.
 
 Plan del restyle (aprobado por Pablo, 15:33Z):
 
-1. Armería Legendaria: ARM-1 marco, cabecera, pestañas y buscador (VALIDADO) · ARM-2 filtros, tarjetas y grilla (VALIDADO) · ARM-3 «Mi cola» y mi línea (HECHO, espera validación) · ARM-4 armaduras por set (aprobado) · ARM-5 revisión y cierre (FEAT-010).
+1. Armería Legendaria: ARM-1 (VALIDADO) · ARM-2 (VALIDADO) · ARM-3 (VALIDADO) · ARM-4 armaduras por set (HECHO, espera validación) · ARM-5 revisión y cierre (FEAT-010).
 2. Cámara del Brujo.
 3. Logros.
 4. Actividades (después de decidir BL-055).
@@ -41,11 +41,11 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - BL-057 cerrada: Metas y Eventos renovado (FEAT-007), en producción.
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008), en producción.
 - BL-061 cerrada: la Sidebar (FEAT-009). Completa en producción (BL-062 y BL-063).
-- BL-064 en curso: restyle completo, primero la Armería. ARM-1 y ARM-2 validados; ARM-3 en DEV.
+- BL-064 en curso: restyle completo, primero la Armería. ARM-1 a ARM-3 validados; ARM-4 en DEV.
 
 ## Esperando a Pablo
 
-- [BL-064] Validación: abrí DEV con recarga completa (Ctrl+F5) → Armería → «Mi cola». Lista numerada en tu orden, las 3 primeras con el borde del módulo; cada una con qué es, su expansión, precio o «✓ La tengo», «Ver receta y materiales» y «Quitar». Abajo, cuántos lugares te quedan. Sin filtros en esta pestaña. Con la cola vacía: «Ir al catálogo». En la computadora, mi línea al pie de la cabecera (en las dos pestañas).
+- [BL-064] Validación: abrí DEV con recarga completa (Ctrl+F5) → Armería → Catálogo. En Clásico, Heart of Thorns, Secrets of the Obscure y Visions of Eternity, las armaduras ya no son 132 tarjetas sueltas: son tarjetas de set («Enviado perfeccionado · Pesada — Armadura · Gen 1 · tenés 4 de 6 piezas», con barra). Al tocar una se abre a lo ancho con sus piezas; cada pieza abre su ficha y tiene «+ A la cola» como siempre. Probá buscar «casco del enviado»: el set se abre solo.
 - [BL-064] Decisión (sin apuro): el flujo de parches de `index.html` por GitHub Actions. Pablo lo está revisando (16:02Z).
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
@@ -55,7 +55,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 ## Para tu información
 
 - [LES-028] Por qué no republico `index.html`: la Factory publica cada archivo mandando su contenido completo en una sola operación, y cada operación mía tiene un tope de ~64 KB. `index.html` pesa 69 KB: si lo mando, sale cortado y rompe la página. No es una regla de GitHub, es un límite de cómo publico yo. Alternativa: un workflow de GitHub Actions en DEV que aplique parches chicos a `index.html`. Destrabaría BL-005, BL-053 y RSK-020 (cache-busting `?v=`). En producción solo con tu orden.
-- [BL-064] Cuatro archivos del resto de la Bóveda no entran en una publicación de la Factory (`raid-tracker.js` 100 KB, `wv-purchase-detail.js` 91 KB, `inventory-hub.js` 70 KB, `accounts-panel.js` 68 KB). Esos módulos se renuevan desde sus archivos `*-theme.js`, que ya se cargan. `render-catologo.js` quedó en 57 KB: ARM-4 entra, pero es el último paso grande que le cabe.
+- [BL-064] Cuatro archivos del resto de la Bóveda no entran en una publicación de la Factory (`raid-tracker.js` 100 KB, `wv-purchase-detail.js` 91 KB, `inventory-hub.js` 70 KB, `accounts-panel.js` 68 KB). Esos módulos se renuevan desde sus archivos `*-theme.js`, que ya se cargan. `render-catologo.js` quedó en 59,7 KB: cerca del límite.
 - [BL-061] La zona segura del iPhone queda en 0 hasta que `index.html` pida `viewport-fit=cover` (no lo toco: LES-028); la barra igual deja su margen normal y no tapa nada.
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
