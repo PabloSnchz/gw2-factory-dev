@@ -6,6 +6,18 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ---
 
+## 2026-10-23 — Solo en DEV: Bienvenida renovada, la puerta de entrada de la Bóveda (BL-058, FEAT-008)
+
+- **Cabecera** con el gato, la cuenta activa y tres pastillas: API Key, Cuentas y Copia (con «Guardar copia» a un clic).
+- **«Shiruvana te guía»** reemplaza el saludo heredado: un mensaje por vez, lo más importante primero (lo que impide funcionar, permisos faltantes, copia pendiente, configuración incompleta, por dónde seguir y un truco de la Bóveda), cada uno con el botón que lo resuelve, «Siguiente» y «Preguntame».
+- **«Seguí donde quedaste»**: el último módulo que abriste y los que más usás.
+- **«Tu Bóveda»**: Keys y permisos (qué falta y cómo arreglarlo), cuenta activa, copia de seguridad y theme, con «N de 4 listo». Los módulos que tu Key no alcanza dicen «Falta permiso».
+- **Módulos, Novedades y Guías y ayuda**: los 9 módulos como tarjetas, lo nuevo de la Bóveda y las guías y el Discord.
+- **Sin API Key**: tres pasos para empezar.
+- **Solo la Bóveda**: sin horarios, metas, agendas ni world bosses; eso vive en Metas y Eventos (DEC-032).
+- **Se lee en los 19 themes**: en macOS y Notion el verde y el ámbar de los estados ya no se pierden sobre el blanco. Controles de 44 px en el celular, foco visible y anuncios para lector de pantalla.
+- Una clave nueva en el navegador: `gn:global:welcome` (último módulo, visitas y fecha de la última copia). Si no ves los cambios, Ctrl+F5 (RSK-020).
+
 ## 2026-10-23 — Solo en DEV: Metas y Eventos renovado (BL-057, FEAT-007)
 
 - **Cabecera nueva**: «Metas y Eventos · Horarios en tu hora local · 49 metas» con botones de Local, Servidor (UTC), Reset diario (00:00 UTC) y Reset semanal (lunes 07:30 UTC) con cuenta regresiva; el reset cercano se pone dorado.
