@@ -45,6 +45,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-032](decisions/DEC-032-bienvenida-frontera-con-metas.md) — Decidida por Pablo: la Bienvenida es la portada de la Bóveda (qué puedo hacer, qué módulos tengo, qué configuré, qué me falta, dónde sigo) y nunca muestra timers, metas, agendas ni world bosses; ahí Shiruvana es guía general de la Bóveda. Un test lo vigila.
 - [DEC-033](decisions/DEC-033-niveles-de-inteligencia-de-shiruvana.md) — Frente abierto por Pablo (solo visión, BL-059): mis niveles de inteligencia en la Bóveda, N1 Informativa, N2 Contextual, N3 Analítica, N4 Asistente estratégico y N5 Compañera de cuenta; N1 cumplido, N2 en curso. Explico, no decido; todo con fundamento y en el navegador del jugador.
 - [DEC-034](decisions/DEC-034-rincon-global-de-shiruvana.md) — Decidida por Pablo (BL-061): mi rincón global al pie de la Sidebar (y de la hoja «Más» en el celular), excepción acotada a DEC-024: un lugar, avatar de 48 px, una línea, solo el estado de la Bóveda (N1–N2); nunca en enlaces ni íconos.
+- [DEC-035](decisions/DEC-035-crecimiento-modular-y-canal-de-parches.md) — Aprobada por Pablo (BL-065): canal de parches por Actions para archivos de más de 40 KB (ancla única, sha base, todo o nada, RESULT en el repo; solo DEV), después manifiesto de módulos para no tocar más `index.html`, y al final archivos chicos: presupuesto de 40 KB, los de más de 48 KB no crecen, se achican al renovarse.
 
 ## LESSONS
 
