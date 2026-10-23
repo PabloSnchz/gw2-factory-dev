@@ -1,4 +1,5 @@
-// Pantalla de Bienvenida 2.0.0 (BL-058, propuesta WEL-0b aprobada; frontera DEC-032).
+// Pantalla de Bienvenida 2.x (BL-058, propuesta WEL-0b aprobada; frontera DEC-032).
+// Estructura y frontera; «Tu Bóveda» y «Seguí donde quedaste» en tests/welcome-vault.test.cjs.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -81,7 +82,7 @@ test('sin API Key: tres pasos, «Agregar API Key» con su id y los módulos marc
 test('con API Key: saludo con la cuenta activa, botones de Keys y Cuentas, sin los tres pasos', () => {
   const keys = [{ label: 'Pablin.1234', value: 'AAA' }, { label: 'Alt', value: 'BBB' }];
   const m = P.buildModel({ keys, selected: 'BBB' });
-  assert.deepEqual(JSON.parse(JSON.stringify(m)), { state: 'back', keyCount: 2, activeLabel: 'Alt' });
+  assert.deepEqual([m.state, m.keyCount, m.activeLabel], ['back', 2, 'Alt']);
   const html = P.headHTML(m) + P.bodyHTML(m, []);
   assert.match(html, /cuenta activa <b>Alt<\/b>/);
   assert.match(html, /id="welcomeManageKeysBtn"/);
@@ -147,7 +148,7 @@ test('GDS: sin estilos en línea ni onmouseover; solo tokens salvo la bio oficia
   assert.doesNotMatch(SRC, /var\(--tx-1\)fff|#E1306C|#555555|Gist/);
   const html = P.headHTML(P.buildModel({})) + P.bodyHTML(P.buildModel({}), []);
   const styles = [...html.matchAll(/style="([^"]*)"/g)].map((x) => x[1]);
-  assert.ok(styles.every((s) => /^--x:[^;]+$/.test(s)), 'el único estilo en línea es el color del módulo: ' + styles.find((s) => !/^--x:/.test(s)));
+  assert.ok(styles.every((s) => /^--[xp]:[^;]+$/.test(s)), 'los únicos estilos en línea son variables (color del módulo, avance): ' + styles.find((s) => !/^--[xp]:[^;]+$/.test(s)));
   const hex = new Set((P.CSS.match(/#[0-9A-Fa-f]{6}\b/g) || []).map((h) => h.toUpperCase()));
   assert.deepEqual([...hex].sort(), ['#232A3A', '#5A3DDB', '#F4F6FA', '#FFFFFF'], 'solo los colores oficiales de la bio');
   assert.match(P.CSS, /prefers-reduced-motion/);
@@ -193,6 +194,7 @@ test('API pública compatible con 1.4.0 y versión en el encabezado', () => {
   const { W } = load();
   for (const k of ['initOnce', 'activate', 'deactivate', 'Route', '_debug']) assert.ok(W[k], k);
   assert.equal(W.Route.path, 'welcome');
-  assert.match(SRC, /Versión: 2\.0\.0/);
-  assert.equal(W.version, '2.0.0');
+  const v = SRC.match(/Versión: (2\.\d+\.\d+)/);
+  assert.ok(v, 'versión 2.x en el encabezado');
+  assert.equal(W.version, v[1], 'la versión del encabezado coincide con Welcome.version');
 });
