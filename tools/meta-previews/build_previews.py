@@ -55,32 +55,50 @@ def is_url(src):
     return src.startswith('http://') or src.startswith('https://')
 
 
+BROWSER_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
+
+
 def candidates(url):
-    """La dirección de la imagen y, de respaldo, Special:FilePath con el mismo nombre de archivo."""
+    """(dirección, User-Agent, de dónde) en orden. La primera corrida en CI (2026-10-23) mostró que
+    la wiki responde HTML en vez de la imagen, también por Special:FilePath; de respaldo queda la
+    copia del Internet Archive (`id_` devuelve el archivo original, sin cambios)."""
     name = url.rstrip('/').split('/')[-1]
-    return [url, 'https://wiki.guildwars2.com/wiki/Special:FilePath/' + name]
+    return [
+        (url, UA, 'la wiki'),
+        (url, BROWSER_UA, 'la wiki'),
+        ('https://wiki.guildwars2.com/wiki/Special:FilePath/' + name, UA, 'la wiki (Special:FilePath)'),
+        ('https://web.archive.org/web/2025id_/' + url, UA, 'copia del Internet Archive'),
+    ]
+
+
+class NotImage(Exception):
+    pass
 
 
 def download(url, tries=2):
-    last = None
-    for cand in candidates(url):
+    """Devuelve (bytes, dirección usada, cómo). Un 403/404 o una respuesta que no es imagen pasa
+    enseguida al siguiente origen; solo los errores de red se reintentan."""
+    errors = []
+    for cand, ua, where in candidates(url):
         for i in range(tries):
             try:
-                req = urllib.request.Request(cand, headers={'User-Agent': UA, 'Accept': 'image/*'})
+                req = urllib.request.Request(cand, headers={'User-Agent': ua, 'Accept': 'image/*'})
                 with urllib.request.urlopen(req, timeout=25) as r:
                     data = r.read()
                     ctype = r.headers.get('Content-Type', '')
                 if not ctype.startswith('image/'):
-                    raise ValueError('no es una imagen: ' + ctype)
-                return data, cand, 'HTTP 200 ' + ctype
+                    raise NotImage('no es una imagen: ' + ctype)
+                return data, cand, 'HTTP 200 %s desde %s' % (ctype, where)
             except urllib.error.HTTPError as e:
-                last = '%s -> HTTP %s' % (cand, e.code)
-                if e.code in (403, 404):
-                    break
-            except Exception as e:  # red, tiempo, contenido
-                last = '%s -> %s' % (cand, e)
-            time.sleep(2 * (i + 1))
-    raise RuntimeError(last or 'sin respuesta')
+                errors.append('%s: HTTP %s' % (where, e.code))
+                break
+            except NotImage as e:
+                errors.append('%s: %s' % (where, e))
+                break
+            except Exception as e:  # red o tiempo: se reintenta
+                errors.append('%s: %s' % (where, e))
+                time.sleep(2 * (i + 1))
+    raise RuntimeError('; '.join(errors) or 'sin respuesta')
 
 
 def fit(w, h):
@@ -151,7 +169,7 @@ def build(root, out_dir, source_dir=None):
                 row['how'] = 'archivo de prueba'
             elif is_url(src):
                 data, used, how = download(src)
-                row['how'] = how + ('' if used == src else ' (por Special:FilePath)')
+                row['how'] = how
             else:
                 with open(os.path.join(root, src), 'rb') as fh:
                     data = fh.read()
