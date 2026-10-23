@@ -1,6 +1,6 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.0.0 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
+ * Versión: 2.1.0 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
  * Arma su lista desde la de la Bienvenida (Welcome._pure.MODULES): mismo orden, nombre, ícono y color.
@@ -17,11 +17,17 @@
  * 2.0.0 (SBR-1): todo lo anterior. Corrige el oyente de `gn:nav-active` que se agregaba de nuevo en
  *   cada cambio de módulo (estaba anidado por error) y el activo de rutas internas
  *   (#/account/legendary-armory/…, #/account/strikes, #/wallet/dashboard).
- * 1.2: resaltado de respaldo y nombre de la cuenta en «Gato identificado» (sigue igual hasta SBR-2).
+ * 2.1.0 (SBR-2): «Gato identificado» pasa a «Cuenta activa»: nombre, estado de su Key (completa, le falta
+ *   un permiso, sin verificar o sin Key) y «Cambiar», que lleva al selector de arriba. Punto «Falta permiso»
+ *   en los módulos que la Key activa no alcanza (Welcome._pure.buildModel: los mismos datos que «Tu Bóveda»)
+ *   y «Nuevo» en los que tienen una novedad de 14 días o menos (assets/welcome-news.json, pickNews de la
+ *   Bienvenida). Se ocultan «Próximas funciones» (vieja) y «Próximos (Top 3)» (repetía «Ahora» de Metas).
+ *   Sin pedidos nuevos a la API: el nombre sale del mismo /v2/account de siempre.
+ * 1.2: resaltado de respaldo y nombre de la cuenta en «Gato identificado».
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.0.0';
+  var VERSION = '2.1.0';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -66,10 +72,33 @@
     '#appSidebar .sbr-list a:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '#appSidebar .sbr-ic{width:24px;height:24px;border-radius:6px;object-fit:contain;flex-shrink:0;filter:none}',
     '#appSidebar .sbr-sep{height:1px;background:var(--bd-1);margin:8px 6px}',
-    '@media (prefers-reduced-motion:reduce){#appSidebar .sbr-list a{transition:none}}'
+    '@media (prefers-reduced-motion:reduce){#appSidebar .sbr-list a{transition:none}}',
+    // SBR-2: paneles viejos fuera; cuenta activa; avisos en los enlaces.
+    '#asideNextFeatures,#metaAsideNext{display:none!important}',
+    '#sideAccountPanel.sbr-host{background:transparent;border:0;box-shadow:none;padding:0;margin:0 0 4px}',
+    '#appSidebar .sbr-acct{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:2px 10px;align-items:center;' +
+      'padding:10px 12px;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1)}',
+    '#appSidebar .sbr-acct img{grid-row:span 2;width:36px;height:36px;border-radius:9px;background:var(--bg-2,var(--bg-0));padding:4px;object-fit:contain}',
+    '#appSidebar .sbr-acct small{font-size:.68rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--tx-3);line-height:1.2}',
+    '#appSidebar .sbr-acct b{grid-column:2;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--tx-1);font-size:.92rem}',
+    '#appSidebar .sbr-chg{grid-column:3;grid-row:1 / span 2;display:inline-flex;align-items:center;min-height:30px;padding:2px 10px;' +
+      'border:1px solid var(--bd-1);border-radius:999px;background:transparent;color:var(--tx-2);font:inherit;font-size:.75rem;cursor:pointer;text-decoration:none}',
+    '#appSidebar .sbr-chg:hover{border-color:var(--acc-1);color:var(--tx-1)}',
+    '#appSidebar .sbr-chg:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '#appSidebar .sbr-st{grid-column:1 / -1;display:flex;align-items:center;gap:7px;margin-top:8px;font-size:.78rem;color:var(--tx-3)}',
+    '#appSidebar .sbr-st span{color:inherit}',
+    '#appSidebar .sbr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--color-green)}',
+    '#appSidebar .sbr-dot.is-warn{background:var(--gn-gold,var(--color-amber))}',
+    '#appSidebar .sbr-dot.is-info{background:var(--tx-3)}',
+    '#appSidebar .sbr-w{margin-left:auto;width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--gn-gold,var(--color-amber))}',
+    '#appSidebar .sbr-new{margin-left:auto;flex-shrink:0;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;' +
+      'color:var(--gn-gold,var(--color-amber));border:1px solid var(--gn-gold,var(--color-amber));border-radius:999px;padding:0 6px;line-height:1.5}',
+    '#appSidebar .sbr-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}'
   ].join('\n');
 
-  var state = { built: false, watching: false, applied: [], lastToken: null, acctCtrl: null };
+  var state = { built: false, watching: false, applied: [], lastToken: null, acctCtrl: null, accName: '', news: null, newsLoading: false };
+  var NEWS_URL = 'assets/welcome-news.json';
+  var ACCOUNT_ICON = 'assets/icons/3601748.png';
 
   function doc() { return root.document; }
   function $(s, r) { return (r || doc()).querySelector(s); }
@@ -107,6 +136,44 @@
     return best;
   }
 
+  function storageGet(name, fallback) {
+    try {
+      var S = root.Storage;
+      if (!S || typeof S.get !== 'function') return null;
+      return S.get((S.STORAGE_KEYS && S.STORAGE_KEYS[name]) || fallback);
+    } catch (_) { return null; }
+  }
+
+  // Estado de la cuenta activa, con los mismos datos que «Tu Bóveda» (sin pedidos a la API).
+  function accountModel() {
+    var W = root.Welcome;
+    if (!W || !W._pure || typeof W._pure.buildModel !== 'function') return null;
+    var sel = $('#keySelectGlobal');
+    var selected = storageGet('ACCOUNT_SELECTED', 'gn:account:selected') || (sel ? String(sel.value || '') : '');
+    try { return W._pure.buildModel({ keys: storageGet('ACCOUNT_KEYS', 'gn:account:keys'), selected: selected }); }
+    catch (_) { return null; }
+  }
+
+  // Qué dice la línea de estado de la tarjeta de cuenta.
+  function keyLine(m) {
+    if (!m || m.state !== 'back') return { level: 'warn', text: 'Todavía no cargaste una API Key' };
+    if (m.activeStatus === 'missing') {
+      var act = (m.keys || []).filter(function (k) { return k.active; })[0];
+      var miss = act && act.missing && act.missing.length ? act.missing : [];
+      return { level: 'warn', text: miss.length === 1 ? 'API Key · le falta «' + miss[0] + '»'
+        : 'API Key · le faltan ' + miss.length + ' permisos' };
+    }
+    if (m.activeStatus === 'unknown') return { level: 'info', text: 'API Key sin verificar' };
+    return { level: 'ok', text: 'API Key completa' };
+  }
+
+  // Módulos con una novedad marcada como «NUEVO» en la Bienvenida.
+  function newModules(news) {
+    var out = {};
+    (Array.isArray(news) ? news : []).forEach(function (n) { if (n && n.isNew && n.module) out[n.module] = true; });
+    return out;
+  }
+
   // ---------------------------------------------------------------- DOM
   function ensureCSS() {
     var d = doc();
@@ -122,6 +189,7 @@
     a.setAttribute('href', m.href);
     a.setAttribute('id', LINK_ID[m.id] || ('nav-' + m.id));
     a.setAttribute('data-view', VIEW[m.id] || m.id);
+    a.setAttribute('data-mod', m.id);
     a.setAttribute('style', '--x:' + m.color);
     var img = d.createElement('img');
     img.className = 'sbr-ic';
@@ -177,8 +245,125 @@
     host.appendChild(nav);
     state.built = true;
     syncActive();
+    renderAccount();
+    decorate();
     applyContrast();
     return nav;
+  }
+
+  // «Cuenta activa»: reemplaza a «Gato identificado».
+  function renderAccount() {
+    var d = doc();
+    var host = d.getElementById('sideAccountPanel');
+    if (!host) return null;
+    var m = accountModel();
+    var line = keyLine(m);
+    var box = d.createElement('div');
+    box.className = 'sbr-acct';
+    var img = d.createElement('img');
+    img.setAttribute('src', ACCOUNT_ICON);
+    img.setAttribute('alt', '');
+    img.setAttribute('width', '36');
+    img.setAttribute('height', '36');
+    var cap = d.createElement('small');
+    cap.textContent = 'Cuenta activa';
+    var name = d.createElement('b');
+    name.setAttribute('id', 'accountIdLabel');
+    name.textContent = state.accName || (m && m.activeLabel) || '—';
+    var chg;
+    if (m && m.state === 'back') {
+      chg = d.createElement('button');
+      chg.setAttribute('type', 'button');
+      chg.setAttribute('aria-label', 'Cambiar de cuenta');
+      chg.textContent = 'Cambiar';
+      chg.addEventListener('click', focusSelector);
+    } else {
+      chg = d.createElement('a');
+      chg.setAttribute('href', '#/welcome');
+      chg.textContent = 'Empezar';
+    }
+    chg.className = 'sbr-chg';
+    var st = d.createElement('div');
+    st.className = 'sbr-st';
+    st.setAttribute('data-level', line.level);
+    var dot = d.createElement('i');
+    dot.className = 'sbr-dot' + (line.level === 'ok' ? '' : ' is-' + line.level);
+    dot.setAttribute('aria-hidden', 'true');
+    var txt = d.createElement('span');
+    txt.textContent = line.text;
+    st.appendChild(dot);
+    st.appendChild(txt);
+    [img, cap, name, chg, st].forEach(function (n) { box.appendChild(n); });
+    while (host.firstChild) host.removeChild(host.firstChild);
+    host.removeAttribute('aria-labelledby');
+    host.setAttribute('aria-label', 'Cuenta activa');
+    host.className = 'sbr-host';
+    host.appendChild(box);
+    return box;
+  }
+
+  // «Cambiar» lleva al selector de cuenta de arriba (el mismo de siempre).
+  function focusSelector() {
+    var sel = $('#keySelectGlobal');
+    if (!sel) return;
+    if (typeof sel.focus === 'function') sel.focus();
+    if (typeof sel.showPicker === 'function') { try { sel.showPicker(); } catch (_) {} }
+  }
+
+  // «Falta permiso» y «Nuevo» en los enlaces de módulo.
+  function decorate() {
+    var d = doc();
+    var m = accountModel();
+    var missing = {};
+    ((m && m.state === 'back' && m.activeMods) || []).forEach(function (id) { missing[id] = true; });
+    var fresh = newModules(state.news);
+    links().forEach(function (a) {
+      Array.prototype.slice.call(a.children || []).forEach(function (c) {
+        if (/\bsbr-(w|new|sr)\b/.test(c.className || '')) a.removeChild(c);
+      });
+      a.removeAttribute('title');
+      var id = a.getAttribute('data-mod');
+      if (missing[id]) {
+        var w = d.createElement('i');
+        w.className = 'sbr-w';
+        w.setAttribute('aria-hidden', 'true');
+        var sr = d.createElement('span');
+        sr.className = 'sbr-sr';
+        sr.textContent = ' (falta permiso)';
+        a.appendChild(w);
+        a.appendChild(sr);
+        a.setAttribute('title', 'A tu API Key le falta un permiso para este módulo');
+      } else if (fresh[id]) {
+        var n = d.createElement('i');
+        n.className = 'sbr-new';
+        n.textContent = 'Nuevo';
+        a.appendChild(n);
+      }
+    });
+  }
+
+  function loadNews() {
+    if (state.news !== null || state.newsLoading || typeof root.fetch !== 'function') return null;
+    var W = root.Welcome;
+    var pick = W && W._pure && typeof W._pure.pickNews === 'function' ? W._pure.pickNews : null;
+    if (!pick) { state.news = []; return null; }
+    state.newsLoading = true;
+    return root.fetch(NEWS_URL, { cache: 'no-cache' })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .catch(function () { return []; })
+      .then(function (data) {
+        state.newsLoading = false;
+        try { state.news = pick(data && data.items ? data.items : data); } catch (_) { state.news = []; }
+        decorate();
+      });
+  }
+
+  // Cambió la Key o sus permisos: rearmo la tarjeta y los avisos.
+  function refresh() {
+    if (!state.built) return;
+    renderAccount();
+    decorate();
+    updateAccountId();
   }
 
   function links() { return $$('#sbrNav a'); }
@@ -229,22 +414,27 @@
     }, true);
   }
 
-  // ---------------------------------------------------------------- cuenta (igual que 1.2 hasta SBR-2)
+  // ---------------------------------------------------------------- nombre de la cuenta (/v2/account, como en 1.2)
   function updateAccountId() {
     var out = $('#accountIdLabel');
     var sel = $('#keySelectGlobal');
     if (!out || !sel) return null;
     var token = String(sel.value || '').trim();
-    if (!token) { state.lastToken = null; out.textContent = '—'; return null; }
-    if (token === state.lastToken && out.textContent && out.textContent !== '—') return null;
+    if (!token) { state.lastToken = null; state.accName = ''; return null; }
+    if (token === state.lastToken && state.accName) { out.textContent = state.accName; return null; }
     if (typeof root.fetch !== 'function') return null;
     if (state.acctCtrl) { try { state.acctCtrl.abort(); } catch (_) {} }
     state.acctCtrl = typeof root.AbortController === 'function' ? new root.AbortController() : null;
     var url = 'https://api.guildwars2.com/v2/account?access_token=' + encodeURIComponent(token);
     return root.fetch(url, { headers: { Accept: 'application/json' }, signal: state.acctCtrl ? state.acctCtrl.signal : undefined })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (j) { out.textContent = (j && j.name) || '—'; state.lastToken = token; })
-      .catch(function () { out.textContent = '—'; });
+      .then(function (j) {
+        state.accName = (j && j.name) || '';
+        state.lastToken = token;
+        var now = $('#accountIdLabel');
+        if (now && state.accName) now.textContent = state.accName;
+      })
+      .catch(function () { state.accName = ''; });
   }
 
   // ---------------------------------------------------------------- arranque
@@ -252,6 +442,7 @@
     build();
     watchTheme();
     updateAccountId();
+    loadNews();
     if (root.console && root.console.info) root.console.info(LOG, 'ready v' + VERSION);
   }
 
@@ -259,12 +450,14 @@
   if (typeof root.addEventListener === 'function') root.addEventListener('hashchange', function () { syncActive(); });
   // El router marca su activo y avisa: yo dejo el mío (mismo criterio para rutas internas).
   doc().addEventListener('gn:nav-active', function (ev) { syncActive(ev && ev.detail && ev.detail.hash); });
-  doc().addEventListener('gn:tokenchange', function () { updateAccountId(); });
-  (function () { var sel = $('#keySelectGlobal'); if (sel) sel.addEventListener('change', updateAccountId); })();
+  doc().addEventListener('gn:tokenchange', function () { refresh(); });
+  if (typeof root.addEventListener === 'function') root.addEventListener('storage', function () { refresh(); });
+  (function () { var sel = $('#keySelectGlobal'); if (sel) sel.addEventListener('change', refresh); })();
 
   root.SidebarNav = {
-    version: VERSION, init: init, build: build, syncActive: syncActive, applyContrast: applyContrast,
-    _pure: { groups: groups, activeFor: activeFor, normHash: normHash, MODULES_FALLBACK: MODULES_FALLBACK, HOME: HOME,
+    version: VERSION, init: init, build: build, syncActive: syncActive, applyContrast: applyContrast, refresh: refresh,
+    _pure: { groups: groups, activeFor: activeFor, normHash: normHash, keyLine: keyLine, newModules: newModules,
+      MODULES_FALLBACK: MODULES_FALLBACK, HOME: HOME,
       LINK_ID: LINK_ID, VIEW: VIEW, ALIAS: ALIAS, CSS: CSS }
   };
 

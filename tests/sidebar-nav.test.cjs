@@ -1,5 +1,6 @@
-// La Sidebar (BL-061, SBR-1): solo navegación, a la izquierda, con la misma lista que la Bienvenida.
-// Se prueba con un DOM mínimo y, para la lista de módulos, con la Bienvenida real.
+// La Sidebar (BL-061): solo navegación, a la izquierda, con la misma lista que la Bienvenida (SBR-1);
+// cuenta activa con el estado de su Key, «Falta permiso» y «Nuevo» en los enlaces (SBR-2).
+// Se prueba con un DOM mínimo y, para la lista de módulos y el estado de las Keys, con la Bienvenida real.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -54,7 +55,10 @@ function styleObj() {
   return { props, setProperty: (k, v) => { props[k] = v; }, removeProperty: (k) => { delete props[k]; } };
 }
 
-function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '' } = {}) {
+const ALL = ['account', 'wallet', 'progression', 'unlocks', 'inventories', 'tradingpost', 'characters'];
+const today = () => new Date().toISOString().slice(0, 10);
+
+function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '', keys = null, news = null } = {}) {
   const docRoot = el('html');
   const head = el('head');
   const body = el('body');
@@ -66,9 +70,14 @@ function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '' } =
   oldUl.appendChild(el('a', { attrs: { id: 'navCards', href: '#/cards' } }));
   navPanel.appendChild(oldUl);
   side.appendChild(navPanel);
+  const acctPanel = el('section', { attrs: { id: 'sideAccountPanel', 'aria-labelledby': 'sideAccTitle' }, className: 'panel' });
+  acctPanel.appendChild(el('h3', { attrs: { id: 'sideAccTitle' }, _text: 'Gato identificado' }));
   const label = el('span', { attrs: { id: 'accountIdLabel' }, _text: '—' });
+  acctPanel.appendChild(label);
   const sel = el('select', { attrs: { id: 'keySelectGlobal' }, value: token });
-  side.appendChild(label);
+  sel.focus = () => { sel.focused = true; };
+  side.children.unshift(acctPanel); acctPanel.parentNode = side;
+  ['asideNextFeatures', 'metaAsideNext', 'achAsidePanel'].forEach((id) => side.appendChild(el('section', { attrs: { id }, className: 'panel' })));
   body.appendChild(sel); body.appendChild(side);
   const docListeners = {}, winListeners = {}, observers = [];
   const document = {
@@ -88,7 +97,16 @@ function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '' } =
     },
   };
   const fetched = [];
-  window.fetch = (url) => { fetched.push(url); return Promise.resolve({ ok: true, json: () => Promise.resolve({ name: 'Pablin.1234' }) }); };
+  window.fetch = (url) => {
+    fetched.push(url);
+    if (/welcome-news\.json$/.test(url)) return Promise.resolve({ ok: true, json: () => Promise.resolve({ items: news || [] }) });
+    return Promise.resolve({ ok: true, json: () => Promise.resolve({ name: 'Pablin.1234' }) });
+  };
+  const store = { 'gn:account:keys': keys, 'gn:account:selected': token || null };
+  window.Storage = {
+    STORAGE_KEYS: { ACCOUNT_KEYS: 'gn:account:keys', ACCOUNT_SELECTED: 'gn:account:selected' },
+    get: (k) => (k in store ? JSON.parse(JSON.stringify(store[k])) : null),
+  };
   const ctx = { window, Date, JSON, Promise, Math, encodeURIComponent };
   vm.runInNewContext(SRC, ctx);
   if (welcome === 'real') {
@@ -100,16 +118,16 @@ function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '' } =
     window.Welcome = { _pure: { MODULES: null, contrastFixes: () => fixes || {} } };
   }
   const fire = (t, ev) => (docListeners[t] || []).forEach((f) => f(ev || {}));
-  return { window, document, docListeners, winListeners, observers, side, navPanel, label, fetched, fire, S: () => window.SidebarNav };
+  return { window, document, docListeners, winListeners, observers, side, navPanel, acctPanel, sel, store, label, fetched, fire, S: () => window.SidebarNav };
 }
 const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.0.0', () => {
+test('versión 2.1.0', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.0\.0/);
-  assert.equal(x.S().version, '2.0.0');
+  assert.match(SRC, /Versión: 2\.1\.0/);
+  assert.equal(x.S().version, '2.1.0');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
@@ -231,7 +249,7 @@ test('CSS: a la izquierda desde 901 px, fija al hacer scroll; debajo de 900 px n
   assert.match(mq, /\.container\.layout\{grid-template-columns:252px minmax\(0,1fr\)\}/);
   assert.match(mq, /#appSidebar\{grid-column:1;grid-row:1;position:sticky;top:12px;align-self:start/);
   assert.match(mq, /\.container\.layout>:not\(#appSidebar\)\{grid-column:2\}/);
-  assert.doesNotMatch(css.replace(mq, ''), /grid-template-columns/, 'fuera del corte no cambio la grilla');
+  assert.doesNotMatch(css.replace(mq, ''), /\.container\.layout|#appSidebar\{/, 'fuera del corte no cambio la grilla de la página');
   assert.match(css, /#appSidebar \.sbr-list a:hover\{[^}]*transform:none/);
   assert.match(css, /#appSidebar \.sbr-list a:focus-visible\{outline:2px solid var\(--acc-1\)/);
   assert.match(css, /prefers-reduced-motion/);
@@ -242,13 +260,108 @@ test('Frontera: la Sidebar no lee datos de ningún módulo ni de metas', () => {
   assert.doesNotMatch(SRC, /meta-events|gn:meta|Meta\._pure|metaMiniNext|gn:wallet|tokeninfo|Shiruvana\.voice/);
 });
 
-test('cuenta: sin Key muestra «—» y no pide nada; con Key pide /v2/account una sola vez', async () => {
+const flush = () => new Promise((r) => setTimeout(r, 0));
+const accountFetches = (x) => x.fetched.filter((u) => /\/v2\/account\?/.test(u)).length;
+const nameEl = (x) => x.document.getElementById('accountIdLabel');
+const line = (x) => x.acctPanel.querySelector('.sbr-st');
+
+test('cuenta: sin Key muestra «—», no pide /v2/account y ofrece «Empezar» (lleva a Inicio)', async () => {
   const a = ready(setup({ token: '' }));
-  assert.equal(a.label.textContent, '—');
-  assert.equal(a.fetched.length, 0);
-  const b = ready(setup({ token: 'KEY-1' }));
-  await new Promise((r) => setTimeout(r, 0));
-  assert.equal(b.label.textContent, 'Pablin.1234');
-  b.fire('gn:tokenchange');
-  assert.equal(b.fetched.length, 1, 'misma Key y nombre ya mostrado: no vuelve a pedir');
+  await flush();
+  assert.equal(nameEl(a).textContent, '—');
+  assert.equal(accountFetches(a), 0);
+  assert.equal(line(a).textContent, 'Todavía no cargaste una API Key');
+  assert.equal(line(a).getAttribute('data-level'), 'warn');
+  const go = a.acctPanel.querySelector('.sbr-chg');
+  assert.equal(go.tag, 'a');
+  assert.equal(go.getAttribute('href'), '#/welcome');
+  assert.equal(go.textContent, 'Empezar');
+});
+
+test('cuenta: reemplaza a «Gato identificado» por «Cuenta activa», con el nombre de /v2/account (un solo pedido)', async () => {
+  const x = ready(setup({ token: 'KEY-1', keys: [{ label: 'Main', value: 'KEY-1', perms: ALL }] }));
+  assert.equal(nameEl(x).textContent, 'Main', 'mientras llega el nombre, el de la Key');
+  await flush();
+  assert.equal(nameEl(x).textContent, 'Pablin.1234');
+  assert.equal(x.acctPanel.getAttribute('aria-labelledby'), null);
+  assert.equal(x.acctPanel.getAttribute('aria-label'), 'Cuenta activa');
+  assert.equal(x.acctPanel.className, 'sbr-host');
+  assert.equal(x.acctPanel.children.length, 1, 'se fue el título «Gato identificado»');
+  assert.equal(x.acctPanel.querySelector('small').textContent, 'Cuenta activa');
+  assert.equal(x.acctPanel.querySelector('img').getAttribute('alt'), '');
+  x.fire('gn:tokenchange');
+  await flush();
+  assert.equal(accountFetches(x), 1, 'misma Key: no vuelve a pedir');
+  assert.equal(nameEl(x).textContent, 'Pablin.1234', 'al rearmar conserva el nombre');
+});
+
+test('cuenta: «Cambiar» lleva al selector de cuenta de arriba', () => {
+  const x = ready(setup({ token: 'KEY-1', keys: [{ label: 'Main', value: 'KEY-1', perms: ALL }] }));
+  const b = x.acctPanel.querySelector('.sbr-chg');
+  assert.equal(b.tag, 'button');
+  assert.equal(b.getAttribute('type'), 'button');
+  assert.equal(b.getAttribute('aria-label'), 'Cambiar de cuenta');
+  b.listeners.click[0]();
+  assert.equal(x.sel.focused, true);
+});
+
+test('estado de la Key: completa, le falta un permiso, le faltan varios o sin verificar', () => {
+  const kl = setup().S()._pure.keyLine;
+  const W = setup().window.Welcome._pure;
+  const m = (keys) => W.buildModel({ keys, selected: 'A' });
+  same(kl(m([{ label: 'Main', value: 'A', perms: ALL }])), { level: 'ok', text: 'API Key completa' });
+  same(kl(m([{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'tradingpost') }])), { level: 'warn', text: 'API Key · le falta «bazar»' });
+  same(kl(m([{ label: 'Main', value: 'A', perms: ['account', 'wallet'] }])), { level: 'warn', text: 'API Key · le faltan 5 permisos' });
+  same(kl(m([{ label: 'Main', value: 'A' }])), { level: 'info', text: 'API Key sin verificar' });
+  same(kl(null), { level: 'warn', text: 'Todavía no cargaste una API Key' });
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'tradingpost') }] }));
+  assert.equal(line(x).textContent, 'API Key · le falta «bazar»');
+  assert.match(line(x).querySelector('.sbr-dot').className, /is-warn/);
+});
+
+test('«Falta permiso»: punto en los módulos que la Key activa no alcanza, con texto para el lector', () => {
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'wallet') }] }));
+  const cards = x.document.getElementById('navCards');
+  assert.ok(cards.querySelector('.sbr-w'));
+  assert.equal(cards.querySelector('.sbr-w').getAttribute('aria-hidden'), 'true');
+  assert.equal(cards.querySelector('.sbr-sr').textContent, ' (falta permiso)');
+  assert.match(cards.getAttribute('title'), /falta un permiso/);
+  ['navMeta', 'navLegendaryArmory', 'navHome', 'navAccounts'].forEach((id) =>
+    assert.equal(x.document.getElementById(id).querySelector('.sbr-w'), null, id + ' sin aviso'));
+});
+
+test('«Nuevo»: en los módulos con una novedad de 14 días o menos; el aviso de permiso tiene prioridad', async () => {
+  const news = [
+    { date: today(), module: 'meta', title: 'Metas' },
+    { date: today(), module: 'cards', title: 'Cartera' },
+    { date: '2020-01-01', module: 'armory', title: 'Vieja' },
+  ];
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'wallet') }], news }));
+  await flush();
+  assert.equal(x.document.getElementById('navMeta').querySelector('.sbr-new').textContent, 'Nuevo');
+  assert.equal(x.document.getElementById('navCards').querySelector('.sbr-new'), null, 'Cartera muestra el aviso de permiso');
+  assert.equal(x.document.getElementById('navLegendaryArmory').querySelector('.sbr-new'), null, 'una novedad vieja no');
+  assert.equal(x.fetched.filter((u) => /welcome-news/.test(u)).length, 1);
+  same(x.S()._pure.newModules([{ module: 'wv', isNew: true }, { module: 'raids', isNew: false }, null]), { wv: true });
+});
+
+test('al cambiar la Key (gn:tokenchange) rearmo tarjeta y avisos sin duplicar', () => {
+  const x = ready(setup({ token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL.filter((p) => p !== 'wallet') }] }));
+  assert.ok(x.document.getElementById('navCards').querySelector('.sbr-w'));
+  x.store['gn:account:keys'] = [{ label: 'Main', value: 'A', perms: ALL }];
+  x.fire('gn:tokenchange');
+  assert.equal(x.document.getElementById('navCards').querySelector('.sbr-w'), null);
+  assert.equal(x.document.getElementById('navCards').getAttribute('title'), null);
+  assert.equal(line(x).textContent, 'API Key completa');
+  x.store['gn:account:keys'] = [{ label: 'Main', value: 'A', perms: ['account'] }];
+  (x.winListeners.storage || []).forEach((f) => f());
+  x.fire('gn:tokenchange');
+  assert.equal(x.document.getElementById('navCards').querySelectorAll('.sbr-w').length, 1, 'un solo punto');
+  assert.equal(x.acctPanel.children.length, 1, 'una sola tarjeta');
+});
+
+test('paneles viejos: «Próximas funciones» y «Próximos (Top 3)» ocultos; el de Logros sigue', () => {
+  const css = setup().S()._pure.CSS;
+  assert.match(css, /#asideNextFeatures,#metaAsideNext\{display:none!important\}/);
+  assert.doesNotMatch(css, /achAsidePanel/);
 });
