@@ -6,6 +6,14 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ---
 
+## 2026-10-23 — Solo en DEV: la Sidebar en el celular y mi rincón (BL-061, SBR-3 a SBR-5, FEAT-009)
+
+- **En el celular** (hasta 900 px) la navegación ya no queda al fondo de la página: barra fija abajo con Inicio, Cartera, Metas, Armería y «Más». «Más» abre una hoja con la cuenta activa y los otros 6 destinos; se cierra con «Cerrar», Escape, tocando afuera o eligiendo un destino. Un punto ámbar en «Más» avisa si adentro hay algo para revisar.
+- **Mi rincón** (DEC-034) al pie de la Sidebar en la computadora y al pie de la hoja «Más» en el celular: una sola línea sobre el estado de tu Bóveda («Empezá por tu API Key», «Todo en orden en tu Bóveda» o «Tengo N cosas para revisar; la primera: …») y, si hace falta, un enlace a Inicio. Nunca habla de horarios, eventos ni metas.
+- **«Nuevo» aparece desde la primera carga.** Antes la Sidebar arrancaba antes que la Bienvenida y nunca lo mostraba. En producción (2.1.0) sigue pasando.
+- **Revisión final:** se lee en los 19 themes (verificado por un test), controles de 44 px en el celular, foco visible en todo lo que se toca y avisos que el lector de pantalla lee como texto: «(falta permiso)», «(nuevo)» y «(hay algo para revisar)».
+- Sin claves nuevas en el navegador ni pedidos nuevos a la API. Si no ves los cambios, recargá con Ctrl+F5 (RSK-020).
+
 ## 2026-10-23 — En producción: Sidebar a la izquierda (BL-061, SBR-1 y SBR-2)
 
 - **A la izquierda** desde 901 px de ancho y fija al hacer scroll. En el celular queda como estaba hasta SBR-3 (barra fija abajo).
