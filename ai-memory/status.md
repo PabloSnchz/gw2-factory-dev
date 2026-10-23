@@ -1,42 +1,43 @@
 # STATUS
 
-Estado: EN CURSO
-Tarea actual: BL-057 — MET-3: cierre formal de Meta & Eventos (FEAT-007, índice, CHANGELOG-FACTORY y backlog). Después, WEL-0: propuesta visual de la Pantalla de Bienvenida, sin código.
-Motivo: Pablo (04:14Z) validó MET-2b en pantalla («coincide con la propuesta aprobada. Aprobado.») y pidió cerrar BL-057 y preparar la propuesta de la Bienvenida con la misma metodología que Cartera y Metas.
+Estado: ESPERANDO A PABLO
+Tarea actual: BL-058 — WEL-0: propuesta visual de la Pantalla de Bienvenida publicada, esperando aprobación. BL-057 cerrada.
+Motivo: Pablo (04:14Z) aprobó MET-2b y pidió cerrar BL-057 y preparar la propuesta de la Bienvenida sin tocar código, para aprobarla primero.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 04:20Z
-Próxima acción: MET-3a (FEAT-007 + memory-index + CHANGELOG-FACTORY) → MET-3b (backlog: BL-057 y BL-041 a DONE, BL-058 Bienvenida en READY) → WEL-0 propuesta para aprobación.
+Última actualización: 2026-10-23 04:28Z
+Próxima acción: con la aprobación de Pablo (o sus cambios a la propuesta), WEL-1: `js/welcome-panel.js` 2.0.0 con la estructura nueva y `tests/welcome-view.test.cjs`.
 
-Micro-ciclo (en curso, checkpoint de este commit):
-MET-3a — documentación de BL-057: FEAT-007 con lo que cambió, cómo evaluarlo y sus riesgos; su línea en el índice; la entrada en el CHANGELOG-FACTORY (solo DEV).
+Micro-ciclo (cerrado):
+MET-3 — cierre de BL-057 y propuesta WEL-0.
 Archivos:
-- ai-memory/features/FEAT-007-metas-y-eventos-renovado.md
-- ai-memory/memory-index.md
-- docs/CHANGELOG-FACTORY.md
+- ai-memory/backlog.md
+- ai-memory/status.md
+- docs/propuestas/propuesta-bienvenida-bl058.html
 
-Último hecho: MET-2b (04:09Z), aprobado por Pablo a las 04:14Z. `31fb0d4` `js/meta-theme.js` 2.1.0 y `14377ef` `tests/meta-header.test.cjs`.
+Último hecho: MET-3 (04:28Z). `5ae10e3` FEAT-007, `d24ae69` memory-index, `8b2dcdd` CHANGELOG-FACTORY, `4ec91ff` propuesta WEL-0, `965d6a7` backlog (BL-057 y BL-041 a DONE, BL-058 en READY).
 
-Plan BL-057 (Meta & Eventos):
+Plan BL-058 (Pantalla de Bienvenida), sujeto a aprobación:
 
-- MET-0 propuesta visual. Aprobada por Pablo (00:39Z).
-- MET-1 `meta.js` 4.0.0 (`e98a25a`, test `8838217`). Aprobado (01:20Z) salvo las vistas previas.
-- MET-1b CERRADO por decisión de Pablo (DEC-031) (`3375bfd`, `2361b96`, `d0540c7`, `2f298db`).
-- MET-1c `meta.js` 4.0.1 + `meta-drops.json` (`28df57a`, `7f17458`, `30b0f18`).
-- MET-2 `meta-theme.js` 2.0.0 (`c381ed9`, `3630a56`) y MET-2b 2.1.0 (`31fb0d4`, `14377ef`). Aprobado por Pablo (04:14Z).
-- MET-3 cierre (este micro-ciclo y el siguiente).
+- WEL-0 propuesta visual (`docs/propuestas/propuesta-bienvenida-bl058.html`). Esperando a Pablo.
+- WEL-1 `welcome-panel.js` 2.0.0: estructura nueva, dos estados (nuevo / vuelve), 9 módulos, Keys y Datos, pie compacto; mismos ids de botones.
+- WEL-2 `welcome-panel.js` 2.1.0: relojes, resets y «Ahora en Tyria» desde la agenda local (sin pedidos nuevos a la API).
+- WEL-3 `shiruvana-places.js` 1.1.0: mi voz según el momento; fuera la mención al Gist (DEC-030).
+- WEL-4 revisión en 19 themes, celular y teclado.
+- WEL-5 cierre (FEAT-008, backlog, CHANGELOG-FACTORY).
 
-Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `e775d97`).
+Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `611f7c9`).
 
 ## Resumen de la sesión
 
-- Pablo aprobó Metas y Eventos renovado en DEV (BL-057): cabecera de la propuesta, «Ahora», agenda de 3 horas, Fijadas, catálogo por expansión, vistas previas sin imágenes rotas y mis avisos de lo que está en curso. Lo cierro y documento.
-- MET-1b cerrado como decidió Pablo (DEC-031): las vistas previas que faltan son deuda visual y la recuperación automática de imágenes se retiró del repo.
+- BL-057 cerrada: Metas y Eventos renovado validado por Pablo en DEV (FEAT-007). Documentada en FEAT-007, índice, CHANGELOG-FACTORY y backlog.
+- Propuesta de la Bienvenida lista (WEL-0): diagnóstico, problemas, objetivos, maqueta con dos estados y vista de celular, GDS, mi voz, responsive y plan WEL-1 a WEL-5.
 - La Cartera renovada está en producción (BL-056, REQ-011). Vuelta atrás lista en la rama `rollback/pre-cartera`.
 
 ## Esperando a Pablo
 
+- [BL-058] Decisión: aprobá la propuesta de la Bienvenida (`docs/propuestas/propuesta-bienvenida-bl058.html`) o decime qué cambiar. Con tu OK arranco WEL-1.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
