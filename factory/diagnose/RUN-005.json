@@ -1,0 +1,11 @@
+{
+  "id": "RUN-005",
+  "summary": "BL-064 CAM-1: wv-view.js por manifiesto; boot, versiones, presupuesto de tamaño e identidad de index.html siguen verdes",
+  "tests": [
+    "tests/wv-view.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/index-identity.test.cjs"
+  ]
+}

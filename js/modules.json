@@ -1,6 +1,7 @@
 {
   "version": 1,
   "modules": [
-    { "src": "js/wv-tabs-skin.js", "v": "1.0.0" }
+    { "src": "js/wv-tabs-skin.js", "v": "1.0.0" },
+    { "src": "js/wv-view.js", "v": "1.0.0" }
   ]
 }
