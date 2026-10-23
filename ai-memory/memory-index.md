@@ -80,6 +80,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [LES-029](lessons/LES-029-lo-heredado-se-verifica.md) — Lo heredado no está terminado ni verificado hasta que lo compruebo: los hechos vencen (el 9478 sí existe) y un dato que no se muestra en pantalla no es una funcionalidad. Repetida en BL-054: una alerta heredada se contrasta con la función de hoy, no solo con que el archivo sea idéntico.
 - [LES-030](lessons/LES-030-nunca-publicar-contenido-provisorio.md) — Una publicación no tiene borradores: cada archivo va con su contenido final verificado en local o no va. Pasó dos veces en SBR-5 (`dbf621c`, `b009770`), corregidas en minutos; ahora la lista de archivos se arma solo con contenido completo.
 - [LES-031](lessons/LES-031-un-canal-que-escribe-tambien-deja-ver.md) — Un mecanismo que escribe su resultado en el repo también me deja ver: el canal de parches reveló la suite de DEV en rojo (BL-066). Lo que leo de otra máquina, en formato explícito (TAP), nunca en el que por defecto tiene la mía.
+- [LES-032](lessons/LES-032-la-suite-roja-era-mia.md) — «No es mío» también se verifica: la suite roja que atribuí al legado eran 3 errores míos (un respaldo de la Cartera que se saltaba Storage y dos reglas de formato de status). Antes de atribuir, leer la aserción exacta.
 
 ## FEATURES
 
