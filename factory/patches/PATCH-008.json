@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-008",
+  "summary": "FP-3: estado de la propuesta BL-065 al día y lectura de la suite con el informe TAP",
+  "files": [
+    {
+      "path": "docs/propuestas/propuesta-archivos-grandes-bl065.md",
+      "base_sha": "5c6c4b530cb17833848faad1d18ea8ba4ad3f124",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "FP-1 y FP-2 hechos; esta línea la escribió el canal de parches (FP-3, PATCH-006).",
+          "text": "FP-1 a FP-3 hechos; esta línea la mantiene el canal de parches (PATCH-006 y PATCH-008)."
+        }
+      ]
+    }
+  ]
+}
