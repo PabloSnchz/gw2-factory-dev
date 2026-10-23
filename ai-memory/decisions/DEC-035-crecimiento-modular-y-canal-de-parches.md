@@ -1,10 +1,10 @@
 # DEC-035 — Crecimiento modular y canal de parches
 
-- Estado: ACEPTADA (conceptualmente) — Pablo (2026-10-23 18:55Z: «BL-065 Aprobado. DEC-035 aprobada conceptualmente»)
+- Estado: ACEPTADA (conceptualmente) — Pablo (2026-10-23 18:55Z: «BL-065 Aprobado. DEC-035 aprobada conceptualmente»). Implementada y validada paso a paso (FP-1 a FP-5); FP-6 cierra BL-065 (2026-10-23).
 - Fecha: 2026-10-23
 - Ámbito: gw2-factory-dev (app, `.github/`, `factory/patches/`). Producción no cambia.
 - Propuesta: `docs/propuestas/propuesta-archivos-grandes-bl065.md` (`c066e56`)
-- Relacionadas: BL-065, BL-064, LES-028, DEC-021, DEC-004, LES-016, LES-018, LES-019, RSK-016, RSK-020, BL-005, BL-053
+- Relacionadas: BL-065, BL-064, LES-028, LES-031, LES-032, LES-033, LES-034, DEC-021, DEC-004, LES-016, LES-018, LES-019, RSK-016, RSK-020, BL-005, BL-053
 
 ## Contexto
 
@@ -26,13 +26,28 @@ Se combinan tres mecanismos, **en este orden** (aprobado por Pablo):
    - lleva una guarda de repositorio y va en serie (`concurrency`, LES-018).
 
    Los archivos de menos de 40 KB se siguen publicando enteros, como hasta ahora.
-2. **Después, el manifiesto de módulos.** Un cargador chico (`js/boot.js`) lee `js/modules.js` (archivo y versión `?v=`) e inserta los scripts en orden. `index.html` se toca una vez para cargar el cargador. Solo para módulos nuevos, que arrancan aunque el documento ya esté cargado; los módulos actuales siguen como están.
+2. **Después, el manifiesto de módulos.** Un cargador chico (`js/boot.js`) lee `js/modules.json` (archivo y versión `?v=`) e inserta los scripts en orden. `index.html` se toca una vez para cargar el cargador. Solo para módulos nuevos (o renovados), que arrancan aunque el documento ya esté cargado; los módulos actuales siguen como están.
 3. **Al final, archivos chicos como regla de crecimiento, nunca como migración masiva.**
    - **Presupuesto: 40 KB por archivo** (aprobado por Pablo).
    - Un archivo que ya pasa los 48 KB no puede crecer: un test en CI lo compara con una línea base que solo baja.
    - Cada módulo que se renueva extrae su vista a archivos nuevos y deja el original más chico. Primer candidato: la Cámara del Brujo (`wv-purchase-detail.js`, 91 KB).
 
 Los datos generados (`legendary-*.js`) no se parchean a mano: los regenera un workflow con `tools/legendary/` (trabajo aparte).
+
+## Zonas de tamaño (FP-6)
+
+Aplica a `index.html`, `js/*.js` y `css/**/*.css`. 1 KB = 1024 bytes. Lo controla `tests/size-budget.test.cjs` en cada push y en cada parche del canal; la configuración vive en `tools/size-budget.json` y las reglas en `tools/size-budget.cjs`.
+
+| Zona | Tamaño | Regla |
+|---|---|---|
+| Saludable | ≤ 40 KB | El presupuesto. Se publica entero. Es la zona de todo archivo nuevo. |
+| Advertencia | > 40 KB y ≤ 48 KB | Registrado con motivo. Puede cambiar, pero no pasar 48 KB. Se achica cuando se renueva su módulo. |
+| Congelado | > 48 KB | Registrado con base (medida al congelar) y techo. No crece: tamaño ≤ techo ≤ base. Si se achica más de 1 KB por debajo del techo, el techo baja en el mismo cambio (trinquete). Lo nuevo va a un archivo aparte. |
+| Excepción | sin límite | Solo datos generados por herramientas (`js/legendary-data.js`, `js/legendary-recipes.js`, `js/legendary-precursors.js`), con motivo. No se editan a mano. |
+
+Las listas son exactas: un archivo que entra en advertencia o congelado sin registrarse, o que sale de su zona sin salir de la lista, hace fallar el test. Ningún archivo puede pasar a congelado: la lista de congelados solo se achica. Subir una base o agregar una excepción es una decisión de arquitectura nueva (DEC).
+
+Línea base (2026-10-23, RUN-004): 71 archivos; saludable 46, advertencia 3, congelado 19, excepción 3.
 
 ## Consecuencias
 
@@ -44,4 +59,4 @@ Los datos generados (`legendary-*.js`) no se parchean a mano: los regenera un wo
 
 ## Implementación (BL-065)
 
-FP-1 script + tests locales · FP-2 workflow probado primero por el camino de error · FP-3 prueba feliz sobre un archivo inofensivo · FP-4 `index.html` (cargador, `viewport-fit`, BL-005) · FP-5 manifiesto · FP-6 trinquete de tamaño + LES.
+FP-1 script + tests locales · FP-2 workflow probado primero por el camino de error · FP-3 prueba feliz sobre un archivo inofensivo · FP-4 `index.html` (cargador, `viewport-fit`, BL-005) · FP-5 manifiesto y `?v` al día (RSK-020) · FP-6 zonas de tamaño con trinquete en CI + LES-034. Todo hecho el 2026-10-23.
