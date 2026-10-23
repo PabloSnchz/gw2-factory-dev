@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-012",
+  "summary": "FP-4 (DEC-035): primer parche sobre index.html — viewport-fit=cover (zona segura del iPhone), characters-theme.js una sola vez (BL-005) y el cargador js/boot.js como último defer. Con su test en index-identity.",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "3a9b2f1050ad9e22fa484471da1a41959df09047",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"/>",
+          "text": "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"/>"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "  <script defer src=\"js/app.js?v=2.8.0\"></script>\n",
+          "text": "  <!-- Cargador de módulos nuevos (DEC-035): los módulos nuevos van en js/modules.json, no acá. Último defer. -->\n  <script defer src=\"js/boot.js?v=1.0.0\"></script>\n"
+        },
+        {
+          "op": "delete",
+          "anchor": "  <script src=\"js/characters-theme.js?v=1.0.1\"></script>\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/index-identity.test.cjs",
+      "base_sha": "529d853c28df9ae3977a50b7cc94dad2a8c6ef7a",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "  assert.equal(m[1], src.match(/Versión: ([\\d.]+)/)[1], 'la versión del script coincide con la del archivo (caché)');\n});\n",
+          "text": "\ntest('FP-4 (DEC-035): zona segura, characters-theme una sola vez y el cargador de módulos al final', () => {\n  assert.match(HTML, /<meta name=\"viewport\" content=\"width=device-width, initial-scale=1, viewport-fit=cover\"\\/>/);\n  assert.equal((HTML.match(/js\\/characters-theme\\.js/g) || []).length, 1, 'characters-theme.js se carga una sola vez (BL-005)');\n  assert.match(HTML, /<script defer src=\"js\\/characters\\.js\\?v=[\\d.]+\"><\\/script>\\s*<script defer src=\"js\\/characters-theme\\.js\\?v=[\\d.]+\"><\\/script>/,\n    'la que queda va con defer, después de characters.js');\n  const boot = HTML.match(/<script defer src=\"js\\/boot\\.js\\?v=([\\d.]+)\"><\\/script>/);\n  assert.ok(boot, 'index.html carga el cargador');\n  const defers = [...HTML.matchAll(/<script defer src=\"([^\"]+)\"/g)];\n  assert.equal(defers[defers.length - 1][1], 'js/boot.js?v=' + boot[1], 'el cargador es el último defer: corre cuando todo lo demás ya está');\n  const src = fs.readFileSync(path.join(ROOT, 'js', 'boot.js'), 'utf8');\n  assert.equal(boot[1], src.match(/Versión: ([\\d.]+)/)[1], 'el ?v del cargador coincide con su versión (caché)');\n});\n"
+        }
+      ]
+    }
+  ]
+}
