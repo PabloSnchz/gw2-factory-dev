@@ -1,27 +1,33 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-061 — SBR-2 publicado: tarjeta «Cuenta activa» con el estado de la Key, «Falta permiso» y «Nuevo» en los enlaces; se ocultan «Próximas funciones» y «Próximos (Top 3)».
-Motivo: falta la validación visual de Pablo antes de SBR-3.
+Estado: EN CURSO
+Tarea actual: PRD — promoción a producción de Metas y Eventos (BL-057), Bienvenida (BL-058) y Sidebar (BL-061, SBR-1 y SBR-2).
+Motivo: Pablo (07:00Z) validó SBR-2 y ordenó: «Meta + Welcome + sidebar, todo a productivo autorizado».
 Fase: F1 — Visibilidad
-Etapa actual: REVIEW
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 07:20Z
-Próxima acción: con la validación de Pablo, SBR-3 (celular: barra fija abajo con Inicio, Cartera, Metas, Armería y «Más»; hoja con foco atrapado, Escape y safe-area).
+Última actualización: 2026-10-23 07:05Z
+Próxima acción: PRD-0 rama de vuelta atrás en gw2-wallet-ligero; después PRD-15 a PRD-19 en serie.
 
-Micro-ciclo (cerrado):
-SBR-2 — `sidebar-nav.js` 2.1.0, commit `d92f477` (blobs 8934573 y ed9b778, iguales a los locales). «Gato identificado» pasa a «Cuenta activa»: nombre de la cuenta, estado de su Key (completa, le falta un permiso, le faltan N, sin verificar o sin Key) y «Cambiar», que lleva al selector de arriba («Empezar» si no hay Key). Punto ámbar «Falta permiso» (con texto para el lector de pantalla) en los módulos que la Key activa no alcanza, con los mismos datos que «Tu Bóveda». «Nuevo» en los módulos con una novedad de 14 días o menos. «Próximas funciones» y «Próximos (Top 3)» ocultos; el panel de Logros sigue. Sin pedidos nuevos a la API. Tests: 22/22. Mutaciones: 21/21 en lo nuevo y 19/19 en lo de SBR-1.
+Micro-ciclo (en curso):
+PRD (BL-062) — copiar a gw2-wallet-ligero los blobs de DEV. Diferencias medidas DEV↔PROD (07:02Z): solo 5 archivos de js/ (meta.js, meta-theme.js, welcome-panel.js, shiruvana-places.js, sidebar-nav.js), assets/meta-drops.json, assets/welcome-news.json (nuevo) y assets/previews/ (8 .webp, binarios). index.html difiere solo en el bloque de GA (DEC-006): no se toca. css/ e íconos iguales.
+Plan:
+- PRD-0 rama `rollback/pre-meta-welcome-sidebar` = PROD a82c996.
+- PRD-15 js/meta.js 4.0.1 (d70026a, 63,6 KB, solo).
+- PRD-16 js/meta-theme.js 2.1.0 (37a2981) + assets/meta-drops.json versión PROD (e30b617: piñata y burbujas siguen en assets/gifanim; las otras 6 apuntan a assets/previews y muestran «Sin vista previa» hasta que estén los .webp, que la Factory no puede subir: son binarios).
+- PRD-17 js/welcome-panel.js 2.2.0 (cd8587a) + assets/welcome-news.json (b1bf170).
+- PRD-18 js/shiruvana-places.js 1.2.0 (23a718e).
+- PRD-19 js/sidebar-nav.js 2.1.0 (8934573).
 Archivos:
-- js/sidebar-nav.js
-- tests/sidebar-nav.test.cjs
+- js/meta.js
 - ai-memory/status.md
 
-Último hecho: SBR-2 publicado (`d92f477`).
+Último hecho: Pablo validó SBR-2 (07:00Z).
 
 Plan BL-061 (Sidebar), aprobado:
 
 - SBR-1 Sidebar desktop. Hecho y validado.
-- SBR-2 Cuenta activa, «Falta permiso», «Nuevo»; salen los paneles viejos. Publicado, espera validación.
+- SBR-2 Cuenta activa, «Falta permiso», «Nuevo». Hecho y validado.
 - SBR-3 Celular: barra fija abajo + «Más».
 - SBR-4 Rincón de Shiruvana (DEC-034).
 - SBR-5 Revisión y cierre (FEAT-009).
@@ -32,18 +38,16 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL): en
 
 - BL-057 cerrada: Metas y Eventos renovado (FEAT-007).
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008).
-- BL-061 aprobada (Sidebar a la izquierda, DEC-034): SBR-1 validado, SBR-2 publicado.
+- BL-061: SBR-1 y SBR-2 validados.
+- Promoción a PRD de Metas, Bienvenida y Sidebar en curso.
 
 ## Esperando a Pablo
 
-- [BL-061] Validación: abrí DEV con Ctrl+F5 (index.html sigue pidiendo sidebar-nav.js?v=1.2). Arriba de la Sidebar está «Cuenta activa» con el nombre de tu cuenta, el estado de tu Key y «Cambiar»; los módulos que tu Key no alcanza tienen un punto ámbar y los que tienen novedad reciente dicen «Nuevo»; ya no aparecen «Próximas funciones» ni «Próximos (Top 3)».
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
 ## Para tu información
 
-- [BL-058] La Bienvenida queda en DEV; pasarla a producción lo decidís vos.
-- [BL-057] Metas y Eventos queda solo en DEV: pasarlo a producción lo decidís vos.
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
 
