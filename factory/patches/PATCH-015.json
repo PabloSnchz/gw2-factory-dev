@@ -1,0 +1,58 @@
+{
+  "id": "PATCH-015",
+  "summary": "FP-5 documentación: RSK-020 MITIGADO, BL-005 a DONE, BL-053 destrabado por el canal, BL-065 con FP-4 y FP-5 hechos, LES-033 en el índice.",
+  "files": [
+    {
+      "path": "ai-memory/risks.md",
+      "base_sha": "54b60cea1134e2118fc15501c63d23b6b125d66c",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "| RSK-020 | BAJO | ABIERTO |",
+          "text": "| RSK-020 | BAJO | MITIGADO |"
+        },
+        {
+          "op": "replace",
+          "anchor": "la igualdad vuelve cuando `index.html` se pueda publicar (mismo límite que BL-053). |",
+          "text": "la igualdad vuelve cuando `index.html` se pueda publicar (mismo límite que BL-053). MITIGADO el 2026-10-23 (FP-5, DEC-035): por el canal de parches (PATCH-014) los 13 `?v` desfasados quedaron al día y `tests/index-versions.test.cjs` exige en CI que cada `?v` de `index.html` y de `js/modules.json` sea igual a la versión del archivo; inventario con `tools/index-versions.cjs` (LES-033). |"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "290c8f9f996ed3e0ee5380bf639c929a799ceeb6",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Sigue FP-4 (`index.html`: cargador, `viewport-fit`, BL-005), FP-5 (manifiesto) y FP-6 (trinquete de tamaño + LES).",
+          "text": "FP-4 HECHO y validado: primer parche sobre `index.html` (PATCH-012: `viewport-fit=cover`, BL-005 y el cargador `js/boot.js` 1.0.0 con `js/modules.json`). FP-5 HECHO: inventario `tools/index-versions.cjs` (OUT-002: 14 `?v` desfasados); PATCH-014 los pone al día, corrige la cabecera de `settings-manager.js` y carga el primer módulo desde `js/modules.json` (`wv-tabs-skin.js`); PATCH-013 lo frenó el canal por un error mío (LES-033); `tests/index-versions.test.cjs` no deja que se vuelvan a separar (RSK-020 MITIGADO). Sigue FP-6 (trinquete de tamaño + LES)."
+        },
+        {
+          "op": "delete",
+          "anchor": "- [BL-005] [BAJO] `js/characters-theme.js?v=1.0.1` se incluye dos veces en `index.html` (una con `defer`, otra sin). El archivo tiene guardas contra doble aplicación, así que el efecto es menor: duplica observadores y listeners. · FEAT-000 — Bloqueado por entorno: `index.html` (69 KB) no entra en una publicación de la Factory (LES-028).\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "— Bloqueado por entorno: `CHANGELOG.md` pesa 79 KB y los archivos de más de ~64 KB no se publican desde la Factory (LES-028).",
+          "text": "— Bloqueado por Factory: `CHANGELOG.md` pesa 79 KB y ya se puede cambiar por el canal de parches (DEC-035); lo retomo al cerrar BL-065."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "· LES-031, LES-032, DEC-029, DEC-035, RSK-016 — 2026-10-23\n",
+          "text": "- [BL-005] [BAJO] `characters-theme.js` se cargaba dos veces en `index.html` — resuelto con el primer parche sobre `index.html` (PATCH-012, FP-4): queda solo la carga con `defer`, después de `characters.js`; `tests/index-identity.test.cjs` lo vigila. Validado por Pablo (2026-10-23). · FEAT-000, DEC-035, BL-065 — 2026-10-23\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "ba696a7cd9774e1eb449c278a386612823aed601",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "Antes de atribuir, leer la aserción exacta.\n",
+          "text": "- [LES-033](lessons/LES-033-la-version-que-vale-es-la-que-corre.md) — La versión que vale es la que corre, no la del comentario: la cabecera de `settings-manager.js` decía 1.0.2 y el archivo era 1.0.4; el canal frenó mi parche (PATCH-013). Ante una diferencia, corregir el lado que miente; los `?v` los vigila `tests/index-versions.test.cjs`.\n"
+        }
+      ]
+    }
+  ]
+}
