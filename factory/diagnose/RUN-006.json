@@ -1,0 +1,16 @@
+{
+  "id": "RUN-006",
+  "summary": "BL-064 CAM-2: después de PATCH-018, wv-objectives-ui 2.0.0 y su ?v coinciden; la Cámara, versiones, tamaño e identidad siguen verdes",
+  "tests": [
+    "tests/wv-objectives-ui.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/wv-view.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/index-identity.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/hb98-wv-shop-view.test.js",
+    "tests/idea55.wv-online-parallel.test.js",
+    "tests/idea64-dos-pestanas.test.js",
+    "tests/ai-memory.test.cjs"
+  ]
+}
