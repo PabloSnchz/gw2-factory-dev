@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "nota": "Presupuesto de tamaño (DEC-035, FP-6). Bytes; 1 KB = 1024. Reglas en tools/size-budget.cjs. Las listas son exactas: el test falla si un archivo entra o sale de una zona sin registrarlo.",
+  "saludable": 40960,
+  "limite": 49152,
+  "holgura": 1024,
+  "congelados": {
+    "index.html": { "base": 69606, "techo": 69606, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
+    "js/api-gw2.js": { "base": 132261, "techo": 132261 },
+    "js/raid-tracker.js": { "base": 100052, "techo": 100052 },
+    "js/wv-purchase-detail.js": { "base": 91227, "techo": 91227, "nota": "Primero en achicarse: Cámara del Brujo (BL-064)." },
+    "js/router.js": { "base": 90495, "techo": 90495 },
+    "js/inventory-hub.js": { "base": 70258, "techo": 70258 },
+    "js/accounts-panel.js": { "base": 67648, "techo": 67648 },
+    "js/app.js": { "base": 66869, "techo": 66869 },
+    "js/activities.js": { "base": 64918, "techo": 64918 },
+    "css/main.css": { "base": 64637, "techo": 64637 },
+    "js/legendary-tracker.js": { "base": 63971, "techo": 63971 },
+    "js/meta.js": { "base": 63600, "techo": 63600 },
+    "js/characters.js": { "base": 62006, "techo": 62006 },
+    "js/render-catologo.js": { "base": 61534, "techo": 61534 },
+    "js/strike-tracker.js": { "base": 57762, "techo": 57762 },
+    "js/inventory-dashboard.js": { "base": 53460, "techo": 53460 },
+    "js/wallet-dashboard.js": { "base": 52505, "techo": 52505 },
+    "js/achievements.js": { "base": 52352, "techo": 52352 },
+    "js/welcome-panel.js": { "base": 49153, "techo": 49153, "nota": "1 byte sobre 48 KB: el próximo recorte lo saca de esta lista." }
+  },
+  "advertencia": {
+    "js/converter-modal.js": { "nota": "Cartera (BL-056); se achicó de 68 KB a 48 KB en CAR-2A." },
+    "js/activities-theme.js": { "nota": "Actividades; se achica al renovarla (BL-064, paso 4)." },
+    "css/theme-polish.css": { "nota": "Capa visual común; se achica en el marco común (BL-064, paso 8)." }
+  },
+  "excepciones": {
+    "js/legendary-data.js": { "motivo": "Datos generados por tools/legendary (DEC-035): se regeneran, no se editan a mano." },
+    "js/legendary-recipes.js": { "motivo": "Datos generados por tools/legendary (DEC-035): se regeneran, no se editan a mano." },
+    "js/legendary-precursors.js": { "motivo": "Datos generados por tools/legendary (DEC-035): se regeneran, no se editan a mano." }
+  }
+}
