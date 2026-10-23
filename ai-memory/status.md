@@ -1,27 +1,27 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-058 — WEL-4a: guarda de contraste de la Bienvenida. La revisión en los 19 themes encontró textos por debajo de 4.5:1 (en macOS y Notion el verde de «listo» queda en 1.1:1 sobre blanco).
+Tarea actual: BL-058 — WEL-4b: cuando tocás «Siguiente» o un botón de «Preguntame», el mensaje nuevo se anuncia a quien usa lector de pantalla.
 Motivo: Pablo (05:54Z) validó WEL-3 y pidió WEL-4: 19 themes, responsive, teclado y accesibilidad, revisión final y cierre de BL-058.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 06:20Z
-Próxima acción: publicar `welcome-panel.js` 2.2.0 (archivo grande dedicado, 49 KB) y después su test; seguir con WEL-4b (anuncio para lector de pantalla) y WEL-4c (cierre).
+Última actualización: 2026-10-23 06:08Z
+Próxima acción: publicar `shiruvana-places.js` 1.2.0 junto con su test; después WEL-4c (FEAT-008, backlog, CHANGELOG-FACTORY).
 
 Micro-ciclo (en curso):
-WEL-4a — `welcome-panel.js` 2.2.0: con cada cambio de theme leo sus tokens y, solo dentro de #welcomePanel, acerco al texto principal del mismo theme los colores que no llegan a 4.5:1. Los themes no se tocan; Gato Negro no necesita ninguna corrección. Además: grupos con role, nombre de la barra de progreso y foco visible en «Ver cuáles». Test nuevo que lee los 19 themes reales.
+WEL-4b — `shiruvana-places.js` 1.2.0: región «polite» fija (#shvGuideLive, role=status) en #welcomePanel, fuera de .panel__body. Al cambiar de mensaje dice «2 de 3.» o «Preguntame.» y el texto nuevo; el foco no se mueve. Al cargar no anuncia nada: el mensaje ya está en pantalla.
 Archivos:
-- js/welcome-panel.js
-- tests/welcome-contrast.test.cjs
+- js/shiruvana-places.js
+- tests/shiruvana-places.test.cjs
 
-Último hecho: revisión WEL-4 en local. 19 themes: 45 pares bajo AA en 15 themes, 0 después de la guarda. Celular (980/720 px, controles de 44 px): correcto. Teclado: todo es control nativo; faltaban nombres ARIA y el anuncio de «Siguiente». 50/50 tests, 14/15 mutaciones (la que vive es equivalente), humo de integración 16/16.
+Último hecho: WEL-4a publicado. `welcome-panel.js` 2.2.0 (`2c7184e`, blob cd8587a) y `tests/welcome-contrast.test.cjs` (`767e0fd`, blob cebaa51), iguales a los locales. 45 pares bajo AA en 15 themes → 0; Gato Negro, Bóveda, Dracula, Glassmorphism, Material Dark y PS5 no necesitan corrección.
 
 Plan BL-058 (Pantalla de Bienvenida), aprobado:
 
 - WEL-1, WEL-2 y WEL-3 hechos y validados.
-- WEL-4a guarda de contraste. En curso.
-- WEL-4b anuncio de «Siguiente» y «Preguntame» para lector de pantalla (`shiruvana-places.js` 1.2.0).
+- WEL-4a guarda de contraste. Hecho.
+- WEL-4b anuncio para lector de pantalla. En curso.
 - WEL-4c cierre: FEAT-008, backlog, CHANGELOG-FACTORY.
 
 Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `611f7c9`).
