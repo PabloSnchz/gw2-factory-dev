@@ -1,0 +1,72 @@
+# Canal de parches de la Factory (DEC-035, BL-065).
+# La Factory publica un parche chico (factory/patches/PATCH-NNN.json) y este workflow
+# lo aplica sobre el archivo real: ancla única, sha base, todo o nada, node --check y
+# la suite de tests; si algo falla, no cambia nada. El resultado queda en el repo
+# (RESULT-NNN.md) porque la Factory no lee CI (RSK-016).
+#
+# Seguridad:
+# - Solo en gw2-factory-dev y solo con pushes del dueño (producción nunca lo usa).
+# - El contenido del parche nunca se interpola en comandos: lo leen los scripts.
+# - Nunca toca .github/, .git/ ni factory/ (apply-patch.cjs) y antes del commit se
+#   verifica que lo preparado sea exactamente lo esperado.
+# - Permisos mínimos: escribir contenido (el commit) y actions (republicar DEV:
+#   lo que commitea un workflow no dispara otros, salvo workflow_dispatch).
+# - En serie: procesa todos los pendientes del main actual, así que una corrida
+#   cancelada por la cola no pierde nada.
+
+name: factory-patch
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'factory/patches/PATCH-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: factory-patch
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    if: >-
+      github.repository == 'PabloSnchz/gw2-factory-dev' &&
+      github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tests del canal
+        run: node --test .github/scripts/apply-patch.test.cjs .github/scripts/factory-patch.test.cjs
+
+      - name: Aplicar los parches pendientes
+        id: apply
+        run: node .github/scripts/factory-patch.cjs
+
+      - name: Commit del resultado
+        if: steps.apply.outputs.count != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          xargs -r -d '\n' git add -- < "$RUNNER_TEMP/factory-patch-files.txt"
+          git diff --cached --name-only | node .github/scripts/factory-patch.cjs --verify-staged
+          git commit -F "$RUNNER_TEMP/factory-patch-msg.txt"
+          git push origin HEAD:main || { git pull --rebase origin main && git push origin HEAD:main; }
+
+      - name: Republicar DEV
+        if: steps.apply.outputs.pages == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run dev-pages.yml --ref main
