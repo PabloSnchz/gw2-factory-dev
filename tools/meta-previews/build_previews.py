@@ -20,12 +20,15 @@ Las imágenes son de la Guild Wars 2 Wiki (© ArenaNet), usadas sin fines comerc
 Content Terms of Use de ArenaNet; el informe guarda el origen de cada una.
 """
 import argparse
+import hashlib
 import io
 import json
 import os
+import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 MAX_W, MAX_H = 720, 520
@@ -47,6 +50,19 @@ SOURCES = {
 }
 
 
+# Otras imágenes de la misma infusión en la wiki, por si la principal no está archivada (orden de preferencia).
+ALTERNATES = {
+    'chak_gerent': ['Chak_Animation_%d.gif' % i for i in range(1, 13) if i != 8] + ['Chak_Infusion.jpg', 'Chak_Infusion.png'],
+    'vinewrath': ['QB_Animation_%d.gif' % i for i in range(1, 13) if i != 7] + ['Queen_Bee_Infusion.jpg', 'Queen_Bee_Infusion.png'],
+}
+
+
+def wiki_image_url(name):
+    """Dirección de un archivo de la wiki: MediaWiki lo guarda en images/<md5[0]>/<md5[0:2]>/<nombre>."""
+    h = hashlib.md5(name.encode('utf-8')).hexdigest()
+    return 'https://wiki.guildwars2.com/images/%s/%s/%s' % (h[0], h[:2], urllib.parse.quote(name))
+
+
 def out_name(meta_id):
     return meta_id + '.webp'
 
@@ -58,29 +74,38 @@ def is_url(src):
 BROWSER_UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 
 
-def candidates(url):
-    """(dirección, User-Agent, de dónde) en orden. La primera corrida en CI (2026-10-23) mostró que
-    la wiki responde HTML en vez de la imagen, también por Special:FilePath; de respaldo queda la
-    copia del Internet Archive (`id_` devuelve el archivo original, sin cambios)."""
+ARCHIVE = 'https://web.archive.org/web/2025id_/'
+ARCHIVE_PAUSE = 4  # segundos entre pedidos al Internet Archive (rechaza conexiones si se le pide rápido)
+
+
+def candidates(url, alternates=()):
+    """(dirección, User-Agent, de dónde) en orden. En CI (2026-10-23) la wiki respondió HTML y después
+    403, también por Special:FilePath; de respaldo queda la copia del Internet Archive (`id_` devuelve
+    el archivo original, sin cambios) y, si esa no está archivada, otras imágenes de la misma infusión."""
     name = url.rstrip('/').split('/')[-1]
-    return [
+    out = [
         (url, UA, 'la wiki'),
         (url, BROWSER_UA, 'la wiki'),
         ('https://wiki.guildwars2.com/wiki/Special:FilePath/' + name, UA, 'la wiki (Special:FilePath)'),
-        ('https://web.archive.org/web/2025id_/' + url, UA, 'copia del Internet Archive'),
+        (ARCHIVE + url, UA, 'copia del Internet Archive'),
     ]
+    for alt in alternates:
+        out.append((ARCHIVE + wiki_image_url(alt), UA, 'copia del Internet Archive (%s)' % alt))
+    return out
 
 
 class NotImage(Exception):
     pass
 
 
-def download(url, tries=2):
+def download(url, alternates=(), tries=3):
     """Devuelve (bytes, dirección usada, cómo). Un 403/404 o una respuesta que no es imagen pasa
     enseguida al siguiente origen; solo los errores de red se reintentan."""
     errors = []
-    for cand, ua, where in candidates(url):
+    for cand, ua, where in candidates(url, alternates):
         for i in range(tries):
+            if cand.startswith(ARCHIVE):
+                time.sleep(ARCHIVE_PAUSE * (1 + 3 * i))
             try:
                 req = urllib.request.Request(cand, headers={'User-Agent': ua, 'Accept': 'image/*'})
                 with urllib.request.urlopen(req, timeout=25) as r:
@@ -98,7 +123,19 @@ def download(url, tries=2):
             except Exception as e:  # red o tiempo: se reintenta
                 errors.append('%s: %s' % (where, e))
                 time.sleep(2 * (i + 1))
-    raise RuntimeError('; '.join(errors) or 'sin respuesta')
+    raise RuntimeError(summarize(errors) or 'sin respuesta')
+
+
+def summarize(errors):
+    """Los errores iguales se cuentan una vez (las alternativas no archivadas suelen ser muchas)."""
+    counts, order = {}, []
+    for e in errors:
+        k = re.sub(r'\([^)]+\.(gif|jpg|png)\)', '(otra imagen)', e)
+        if k not in counts:
+            counts[k] = 0
+            order.append(k)
+        counts[k] += 1
+    return '; '.join(k + (' x%d' % counts[k] if counts[k] > 1 else '') for k in order)
 
 
 def fit(w, h):
@@ -154,11 +191,21 @@ def kb(n):
     return '%.1f MB' % (n / 1048576.0) if n >= 1048576 else '%.0f KB' % (n / 1024.0)
 
 
-def build(root, out_dir, source_dir=None):
+def build(root, out_dir, source_dir=None, force=False):
     os.makedirs(out_dir, exist_ok=True)
     rows = []
     for meta_id, src in SOURCES.items():
         row = {'id': meta_id, 'src': src, 'ok': False}
+        target = os.path.join(out_dir, out_name(meta_id))
+        if not force and not source_dir and os.path.exists(target):
+            # Ya convertida en una corrida anterior: no se vuelve a pedir ni a convertir.
+            from PIL import Image
+            im = Image.open(target)
+            n = getattr(im, 'n_frames', 1)
+            row.update(ok=True, kept=True, how='ya estaba (no se volvió a bajar)', after=os.path.getsize(target),
+                       size=list(im.size), frames=n)
+            rows.append(row)
+            continue
         try:
             if source_dir:
                 found = [f for f in os.listdir(source_dir) if f.rsplit('.', 1)[0] == meta_id]
@@ -168,7 +215,7 @@ def build(root, out_dir, source_dir=None):
                     data = fh.read()
                 row['how'] = 'archivo de prueba'
             elif is_url(src):
-                data, used, how = download(src)
+                data, used, how = download(src, ALTERNATES.get(meta_id, ()))
                 row['how'] = how
             else:
                 with open(os.path.join(root, src), 'rb') as fh:
@@ -187,15 +234,19 @@ def build(root, out_dir, source_dir=None):
 
 def report(rows):
     ok = [r for r in rows if r['ok']]
-    before = sum(r['before'] for r in ok)
-    after = sum(r['after'] for r in ok)
+    new = [r for r in ok if not r.get('kept')]
     L = ['# Vistas previas de Metas y Eventos (MET-1b)', '',
          'Generado por `.github/workflows/meta-previews.yml` con `build_previews.py`. No editar a mano.', '',
-         'RESULTADO: %d de %d listas en `assets/previews/`; %s -> %s.' % (len(ok), len(rows), kb(before), kb(after)), '',
+         'RESULTADO: %d de %d listas en `assets/previews/` (%s en total); en esta corrida %d nuevas, %s -> %s.' % (
+             len(ok), len(rows), kb(sum(r['after'] for r in ok)), len(new),
+             kb(sum(r['before'] for r in new)), kb(sum(r['after'] for r in new))), '',
          '| meta | origen | cómo | antes | después | tamaño | cuadros | duración |',
          '|---|---|---|---|---|---|---|---|']
     for r in rows:
-        if r['ok']:
+        if r.get('kept'):
+            L.append('| %s | %s | %s | — | %s | %dx%d | %d | — |' % (
+                r['id'], r['src'], r['how'], kb(r['after']), r['size'][0], r['size'][1], r['frames']))
+        elif r['ok']:
             L.append('| %s | %s | %s | %s | %s | %dx%d -> %dx%d | %d | %s |' % (
                 r['id'], r['src'], r['how'], kb(r['before']), kb(r['after']),
                 r['src_size'][0], r['src_size'][1], r['size'][0], r['size'][1], r['frames'],
@@ -214,12 +265,13 @@ def main(argv=None):
     ap.add_argument('--out', default='assets/previews')
     ap.add_argument('--report', default='tools/meta-previews/REPORTE.md')
     ap.add_argument('--source-dir')
+    ap.add_argument('--force', action='store_true', help='volver a bajar y convertir aunque ya existan')
     a = ap.parse_args(argv)
     if a.list:
         print(json.dumps({k: {'src': v, 'out': 'assets/previews/' + out_name(k)} for k, v in SOURCES.items()},
                          ensure_ascii=False, indent=2))
         return 0
-    rows = build(a.root, a.out, a.source_dir)
+    rows = build(a.root, a.out, a.source_dir, a.force)
     text = report(rows)
     os.makedirs(os.path.dirname(a.report) or '.', exist_ok=True)
     with open(a.report, 'w', encoding='utf-8') as f:
