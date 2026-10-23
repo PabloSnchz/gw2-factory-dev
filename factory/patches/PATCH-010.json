@@ -1,0 +1,43 @@
+{
+  "id": "PATCH-010",
+  "summary": "BL-066: wallet-theme 2.1.1 lee la cantidad de Keys solo por Storage (el respaldo leía la clave espejo gn:account:keys directo del navegador y rompía idea61). Test de la Cartera al día y con la regla.",
+  "files": [
+    {
+      "path": "js/wallet-theme.js",
+      "base_sha": "3083c8734f649990a1e4d66e41e06b2e8fc9196b",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * v2.1.0 (2026-10-22)\n *\n * v2.1.0 (CAR-2B):",
+          "text": " * v2.1.1 (2026-10-23)\n *\n * v2.1.1 (BL-066): la cantidad de Keys de la pestaña «Todas las cuentas» se lee solo por Storage.\n *   El respaldo leía la clave espejo del navegador sin pasar por Storage y se salteaba el espejo\n *   (lo detectó tests/idea61-claves-congeladas.test.js). Sin Storage, la pestaña no muestra número.\n * v2.1.0 (CAR-2B):"
+        },
+        {
+          "op": "replace",
+          "anchor": "var VERSION = '2.1.0';",
+          "text": "var VERSION = '2.1.1';"
+        },
+        {
+          "op": "replace",
+          "anchor": "      var St = root.Storage, list = St && St.STORAGE_KEYS ? St.get(St.STORAGE_KEYS.ACCOUNT_KEYS) : JSON.parse(root.localStorage.getItem('gn:account:keys') || '[]');\n",
+          "text": "      // Solo por Storage: lee la legacy primero y respeta el espejo (idea61). Sin Storage, 0.\n      var St = root.Storage;\n      if (!St || !St.STORAGE_KEYS || typeof St.get !== 'function') return 0;\n      var list = St.get(St.STORAGE_KEYS.ACCOUNT_KEYS);\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/wallet-view.test.cjs",
+      "base_sha": "a1f6ddc6be91fdec8765bad7e8d3cda1fbc16f03",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "assert.equal(WT.version, '2.1.0');",
+          "text": "assert.equal(WT.version, '2.1.1');"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "  assert.deepEqual([...SRC.matchAll(/localStorage\\.setItem\\(([^,]+),/g)].map((m) => m[1]), ['LS_HIDEZERO']);\n",
+          "text": "  // Las claves espejo (gn:account:*, gn:activities:*) solo por Storage: leerlas directo se saltea el espejo (idea61, BL-066).\n  const code = SRC.replace(/\\/\\*[\\s\\S]*?\\*\\//g, ' ').replace(/\\/\\/[^\\n]*/g, ' ');\n  assert.doesNotMatch(code, /getItem\\(\\s*'gn:(account|activities):/);\n  assert.match(SRC, /if \\(!St \\|\\| !St\\.STORAGE_KEYS \\|\\| typeof St\\.get !== 'function'\\) return 0;/);\n"
+        }
+      ]
+    }
+  ]
+}
