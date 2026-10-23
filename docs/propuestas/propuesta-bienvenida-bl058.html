@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta BL-058 — Pantalla de Bienvenida (WEL-0)</title>
+<!--
+  Propuesta WEL-0 de la Factory (Shiruvana) para Pablo. Maqueta estática: no toca La Bóveda.
+  Íconos, gato oficial y avatar se leen de DEV (pablosnchz.github.io/gw2-factory-dev) para que se vea con los archivos reales.
+  Los colores son los tokens del theme oficial «Gato Negro» (css/themes/gato.css, GDS).
+-->
+<style>
+:root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#232A3A;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
+--acc-1:#A896FF;--gn-gold:#F2B94B;--color-green:#3CC48A;--color-green-bg:#1D3436;--color-amber:#F2B94B;--color-amber-bg:#38352F;--color-blue-bg:#212E49;
+--glow-base:rgba(123,92,255,.12);--font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 var(--font)}
+a{color:var(--acc-1)}
+.doc{max-width:1240px;margin:0 auto;padding:24px 20px 60px}
+.doc h1{font-size:1.5rem;margin:0 0 4px}.doc>p.lead{color:var(--tx-3);margin:0 0 18px}
+.ctl{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 0;background:var(--bg-0)}
+.ctl b{color:var(--tx-3);font-weight:600;font-size:.85rem;margin-right:4px}
+.ctl button{background:var(--bg-1);border:1px solid var(--bd-1);color:var(--tx-2);border-radius:999px;padding:6px 14px;font:inherit;font-size:.85rem;cursor:pointer}
+.ctl button.on{border-color:var(--acc-1);color:var(--tx-1);background:var(--color-blue-bg)}
+.stage{margin:8px auto 40px;transition:max-width .25s}.stage.mobile{max-width:390px}
+.frame{border:1px solid var(--bd-1);border-radius:16px;background:var(--bg-1);overflow:hidden}
+
+/* ===== Maqueta: Bienvenida (wl-) ===== */
+.wl-head{border-bottom:1px solid var(--bd-1);background:linear-gradient(180deg,var(--glow-base),transparent)}
+.wl-top{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;padding:22px 24px}
+.wl-cat{width:64px;height:64px;border-radius:16px;background:var(--bg-0);display:grid;place-items:center;box-shadow:0 0 0 1px var(--bd-1),0 0 26px rgba(123,92,255,.22);flex-shrink:0}
+.wl-cat img{width:44px;height:44px}
+.wl-htx{min-width:0}.wl-htx h2{margin:0;font-size:1.55rem;font-weight:800;line-height:1.15}
+.wl-sub{color:var(--tx-3);font-size:.92rem;margin-top:3px}.wl-sub b{color:var(--tx-2);font-weight:600}
+.wl-pills{margin-left:auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}
+.wl-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid var(--bd-1);border-radius:10px;background:rgba(255,255,255,.02);color:var(--tx-3);font-size:.9rem;white-space:nowrap}
+.wl-pill img{width:22px;height:22px}.wl-pill b{color:var(--tx-1);font-variant-numeric:tabular-nums}
+.wl-pill.soon{border-color:var(--gn-gold);background:rgba(242,185,75,.06)}.wl-pill.soon b{color:var(--gn-gold)}
+.wl-body{padding:18px 24px 22px;display:grid;gap:18px}
+.wl-voice{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;padding:14px 18px;border:1px solid var(--bd-2);border-radius:14px;background:var(--bg-1)}
+.wl-voice.rec{border-color:rgba(60,196,138,.45);background:linear-gradient(90deg,rgba(60,196,138,.06),var(--bg-1) 40%)}
+.wl-av{width:56px;height:56px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 2px var(--acc-1);background:var(--bg-2)}
+.wl-voice.rec .wl-av{box-shadow:0 0 0 2px var(--color-green)}
+.wl-vl{margin:0;font-weight:700;font-size:.85rem;color:var(--acc-1)}.wl-voice.rec .wl-vl{color:var(--color-green)}
+.wl-vt{margin:2px 0 0;font-size:.98rem}
+.wl-vacts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.wl-btn{display:inline-flex;align-items:center;gap:8px;background:var(--bg-0);border:1px solid var(--bd-1);color:var(--tx-1);border-radius:10px;padding:8px 14px;font:inherit;font-size:.88rem;cursor:pointer;text-decoration:none}
+.wl-btn img{width:18px;height:18px}.wl-btn:hover{border-color:var(--acc-1)}
+.wl-btn.pri{background:var(--acc-1);border-color:var(--acc-1);color:#14121F;font-weight:700}
+.wl-btn.sm{padding:4px 12px;border-radius:999px;font-size:.8rem;color:var(--tx-2)}
+.wl-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin:0 0 10px}
+.wl-h h3{margin:0;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tx-3)}
+.wl-h span{font-size:.8rem;color:var(--tx-3)}.wl-h a{margin-left:auto;font-size:.85rem}
+.wl-now{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.wl-ev{position:relative;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:12px;padding:10px 12px 10px 15px;display:flex;gap:10px;align-items:center;min-width:0}
+.wl-ev::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--x)}
+.wl-ev img{width:34px;height:34px;border-radius:8px;flex-shrink:0}
+.wl-ev b{display:block;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wl-ev small{color:var(--tx-3);font-size:.78rem}
+.wl-st{margin-left:auto;font-size:.75rem;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2);white-space:nowrap}
+.wl-st.on{border-color:var(--color-green);color:var(--color-green);background:var(--color-green-bg)}
+.wl-st.soon{border-color:var(--color-amber);color:var(--color-amber);background:var(--color-amber-bg)}
+.wl-mods{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.wl-mod{position:relative;display:flex;gap:12px;align-items:center;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:12px 14px 12px 17px;text-decoration:none;color:inherit;transition:border-color .15s,transform .15s}
+.wl-mod::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--x)}
+.wl-mod:hover,.wl-mod:focus-visible{border-color:var(--bd-2);transform:translateY(-1px);outline:none;box-shadow:0 0 0 2px var(--acc-1)}
+.wl-mod img{width:40px;height:40px;border-radius:10px;flex-shrink:0}
+.wl-mod b{display:block;font-size:.95rem}.wl-mod span{display:block;font-size:.8rem;color:var(--tx-3)}
+.wl-tag{position:absolute;top:8px;right:10px;font-style:normal;font-size:.66rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:999px;padding:1px 7px;border:1px solid var(--gn-gold);color:var(--gn-gold)}
+.wl-tag.key{border-color:var(--bd-2);color:var(--tx-3)}.wl-tag.free{border-color:var(--color-green);color:var(--color-green)}
+.wl-row{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+.wl-card{background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:14px 16px}
+.wl-card h4{margin:0 0 8px;font-size:.95rem;display:flex;align-items:center;gap:8px}.wl-card h4 img{width:22px;height:22px}
+.wl-card p{margin:0 0 10px;font-size:.85rem;color:var(--tx-3)}
+.wl-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.wl-chip{font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:3px 10px;color:var(--tx-2)}
+.wl-chip i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--color-green);margin-right:6px}
+.wl-acts{display:flex;flex-wrap:wrap;gap:8px}
+.wl-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:s}
+.wl-step{background:var(--bg-0);border:1px solid var(--bd-1);border-radius:14px;padding:14px 16px;display:grid;gap:8px;align-content:start}
+.wl-step.on{border-color:var(--acc-1);box-shadow:0 0 0 1px var(--acc-1) inset}
+.wl-step b::before{counter-increment:s;content:counter(s);display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--bg-2);border:1px solid var(--bd-2);margin-right:8px;font-size:.8rem}
+.wl-step.on b::before{background:var(--acc-1);color:#14121F;border-color:var(--acc-1)}
+.wl-step span{font-size:.85rem;color:var(--tx-3)}
+.wl-foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:14px 24px;border-top:1px solid var(--bd-1);font-size:.82rem;color:var(--tx-3)}
+.wl-bio{display:inline-flex;height:26px;border-radius:4px;overflow:hidden;text-decoration:none;font-size:10px;font-weight:700}
+.wl-bio span:first-child{background:#232A3A;color:#F4F6FA;padding:0 10px;display:flex;align-items:center;gap:6px}
+.wl-bio span:last-child{background:#5A3DDB;color:#fff;padding:0 12px;display:flex;align-items:center}
+.wl-soc{display:flex;gap:6px}.wl-soc a{width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--bd-1);border-radius:8px;background:var(--bg-0)}
+.wl-soc img{width:18px;height:18px}
+.wl-sup{display:flex;gap:6px;align-items:center}.wl-sup a{display:inline-flex;gap:6px;align-items:center;font-size:.8rem;color:var(--tx-2);text-decoration:none;border:1px solid var(--bd-1);border-radius:999px;padding:3px 10px}
+.wl-sup img{width:16px;height:16px}
+.wl-foot .wl-priv{margin-left:auto;color:var(--tx-3)}
+[hidden]{display:none!important}
+
+/* Responsive (botón «Celular» de la maqueta = lo que aplica la pantalla real bajo 720 px) */
+.stage.mobile .wl-top,.stage.mobile .wl-body,.stage.mobile .wl-foot{padding-left:14px;padding-right:14px}
+.stage.mobile .wl-pills{margin-left:0;width:100%;flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;padding-bottom:2px}
+.stage.mobile .wl-now,.stage.mobile .wl-row,.stage.mobile .wl-steps{grid-template-columns:1fr}
+.stage.mobile .wl-mods{grid-template-columns:repeat(2,minmax(0,1fr))}
+.stage.mobile .wl-mod{flex-direction:column;align-items:flex-start;padding:12px}
+.stage.mobile .wl-mod span{display:none}
+.stage.mobile .wl-voice{grid-template-columns:1fr}.stage.mobile .wl-av{width:44px;height:44px}
+.stage.mobile .wl-btn{min-height:44px}.stage.mobile .wl-foot .wl-priv{margin-left:0}
+@media (max-width:980px){.wl-pills{margin-left:0;justify-content:flex-start;width:100%}.wl-row{grid-template-columns:1fr}}
+@media (max-width:720px){.wl-now,.wl-steps{grid-template-columns:1fr}.wl-mods{grid-template-columns:repeat(2,minmax(0,1fr))}.wl-mod span{display:none}}
+
+/* ===== Documento ===== */
+.sec{margin:28px 0;padding-top:8px;border-top:1px solid var(--bd-1)}
+.sec h2{font-size:1.15rem;margin:10px 0}
+.sec li{margin:4px 0}.sec code{background:var(--bg-2);padding:1px 6px;border-radius:4px;font-size:.85em}
+table{width:100%;border-collapse:collapse;font-size:.88rem}th,td{border-bottom:1px solid var(--bd-1);padding:7px 8px;text-align:left;vertical-align:top}
+th{color:var(--tx-3);font-weight:600}
+.sev{font-size:.72rem;font-weight:700;border-radius:999px;padding:1px 8px;border:1px solid}
+.sev.a{color:#F47C7C;border-color:#F47C7C}.sev.m{color:var(--gn-gold);border-color:var(--gn-gold)}.sev.b{color:var(--tx-3);border-color:var(--bd-2)}
+</style>
+</head>
+<body>
+<div class="doc">
+<h1>Propuesta BL-058 — Pantalla de Bienvenida</h1>
+<p class="lead">WEL-0 · 2026-10-23 · Shiruvana para Pablo · Misma metodología que la Cartera (CAR-0) y Metas y Eventos (MET-0). Nada de código todavía.</p>
+
+<div class="ctl" role="group" aria-label="Ver la maqueta">
+  <b>Ver como:</b>
+  <button type="button" data-st="back" class="on">Jugador que vuelve</button>
+  <button type="button" data-st="new">Jugador nuevo (sin API Key)</button>
+  <b style="margin-left:12px">Pantalla:</b>
+  <button type="button" data-w="desk" class="on">Escritorio</button>
+  <button type="button" data-w="mobile">Celular (390 px)</button>
+</div>
+
+<div class="stage" id="stage">
+<section class="frame" aria-label="Maqueta de la Bienvenida">
+  <div class="wl-head">
+    <div class="wl-top">
+      <div class="wl-cat"><img data-src="assets/brand/gato-negro.svg" alt=""></div>
+      <div class="wl-htx">
+        <h2>La Bóveda del Gato Negro</h2>
+        <div class="wl-sub" data-for="back">Hola de nuevo · cuenta activa <b>Pablin.1234</b> · 3 cuentas guardadas</div>
+        <div class="wl-sub" data-for="new" hidden>Tu cuenta de Guild Wars 2 en un solo lugar · todo queda en este navegador</div>
+      </div>
+      <div class="wl-pills">
+        <div class="wl-pill"><img data-src="assets/icons/460028.png" alt=""><span>Servidor</span><b id="mkSrv">—</b></div>
+        <div class="wl-pill" id="mkDailyP"><img data-src="assets/icons/534745.png" alt=""><span>Reset diario</span><b id="mkDaily">—</b></div>
+        <div class="wl-pill" id="mkWeeklyP"><img data-src="assets/icons/155064.png" alt=""><span>Reset semanal</span><b id="mkWeekly">—</b></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wl-body">
+    <aside class="wl-voice rec" data-for="back" aria-label="Shiruvana recomienda">
+      <img class="wl-av" alt="">
+      <div>
+        <p class="wl-vl">Shiruvana recomienda</p>
+        <p class="wl-vt">En 12 min empieza <b>Tequatl el Sombrío</b> (06:00) y es una de tus fijadas. <b>Octohiedra</b> está en curso y termina en 8 min.</p>
+        <div class="wl-vacts"><a class="wl-btn sm" href="#">Ir a Metas y Eventos →</a><button class="wl-btn sm" type="button">Copiar waypoint [&amp;BNABAAA=]</button></div>
+      </div>
+    </aside>
+    <aside class="wl-voice" data-for="new" hidden aria-label="Shiruvana">
+      <img class="wl-av" alt="">
+      <div>
+        <p class="wl-vl">Shiruvana</p>
+        <p class="wl-vt">Hola, soy Shiruvana y te acompaño en La Bóveda. Con una API Key de tu cuenta te muestro tu cartera, tu armería legendaria y lo que hiciste hoy. Sin Key ya podés ver los horarios de Metas y Eventos. Te llevo paso a paso: son tres.</p>
+      </div>
+    </aside>
+
+    <section data-for="new" hidden aria-label="Empezá en tres pasos">
+      <div class="wl-h"><h3>Empezá en tres pasos</h3><span>Tus datos se quedan en este navegador</span></div>
+      <div class="wl-steps">
+        <div class="wl-step on"><b>Creá tu API Key</b><span>En account.arena.net, con los 7 permisos que te detallo.</span><a class="wl-btn" href="#">Abrir account.arena.net ↗</a></div>
+        <div class="wl-step"><b>Pegala en La Bóveda</b><span>La reviso y te digo si le falta algún permiso.</span><button class="wl-btn pri" type="button">＋ Agregar API Key</button></div>
+        <div class="wl-step"><b>Elegí por dónde empezar</b><span>La Cartera es lo más rápido para ver que todo anda.</span><a class="wl-btn" href="#">Ir a la Cartera</a></div>
+      </div>
+    </section>
+
+    <section data-for="back" aria-label="Ahora en Tyria">
+      <div class="wl-h"><h3>Ahora en Tyria</h3><span>De la agenda de Metas y Eventos · tu hora local</span><a href="#">Ver la agenda completa →</a></div>
+      <div class="wl-now">
+        <div class="wl-ev" style="--x:#1E8D39"><img data-src="assets/icons/expansions/HoT.png" alt=""><div style="min-width:0"><b>Octohiedra</b><small>Valle Áurico</small></div><span class="wl-st on">En curso · 8 min</span></div>
+        <div class="wl-ev" style="--x:#DC241F"><img data-src="assets/icons/expansions/core.png" alt=""><div style="min-width:0"><b>Tequatl el Sombrío ★</b><small>Pantano de las Centellas</small></div><span class="wl-st soon">06:00 · en 12 min</span></div>
+        <div class="wl-ev" style="--x:#C28E0E"><img data-src="assets/icons/expansions/VoE.webp" alt=""><div style="min-width:0"><b>Convergencia: Nexo</b><small>Leyspring Hollows</small></div><span class="wl-st">07:00 · en 1 h 12 min</span></div>
+      </div>
+    </section>
+
+    <section aria-label="Tus módulos">
+      <div class="wl-h"><h3>Tus módulos</h3><span>Los mismos de la barra lateral, con lo que hace cada uno</span></div>
+      <div class="wl-mods">
+        <a class="wl-mod" href="#" style="--x:#F2B94B"><img data-src="assets/icons/733322.png" alt=""><div><b>Cartera</b><span>Divisas, conversor y todas tus cuentas</span></div><i class="wl-tag" data-for="back">Renovada</i><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#A896FF"><img data-src="assets/icons/102420.png" alt=""><div><b>Metas y Eventos</b><span>Qué está en curso, agenda y fijadas</span></div><i class="wl-tag" data-for="back">Renovada</i><i class="wl-tag free" data-for="new" hidden>Sin Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#E545CA"><img data-src="assets/icons/Cuentas/157085.png" alt=""><div><b>Armería Legendaria</b><span>Las 206 legendarias, recetas y lo que te falta</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#6EA3FF"><img data-src="assets/icons/155059.png" alt=""><div><b>Logros</b><span>Los que tenés cerca de completar</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#15C3B7"><img data-src="assets/icons/3172791.png" alt=""><div><b>Cámara del Brujo</b><span>Objetivos diarios, semanales y tienda</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#3CC48A"><img data-src="assets/icons/1302773.png" alt=""><div><b>Actividades</b><span>PSNA del día, Home Nodes y semanales</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#F47C7C"><img data-src="assets/icons/raids/raid-icon.png" alt=""><div><b>Raids y Strikes</b><span>Alas y encuentros de la semana</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#7EC3FF"><img data-src="assets/icons/Welcome/358409.png" alt=""><div><b>Inventario y Personajes</b><span>Buscá un objeto en toda la cuenta</span></div><i class="wl-tag key" data-for="new" hidden>Con Key</i></a>
+        <a class="wl-mod" href="#" style="--x:#8E96A3"><img data-src="assets/icons/3601748.png" alt=""><div><b>Cuentas</b><span>Tus cuentas y Keys, cifradas en tu PC</span></div></a>
+      </div>
+    </section>
+
+    <div class="wl-row">
+      <div class="wl-card">
+        <h4><img data-src="assets/icons/Welcome/2604909.png" alt="">Tus API Keys</h4>
+        <div class="wl-chips" data-for="back"><span class="wl-chip"><i></i>Pablin.1234 · activa</span><span class="wl-chip">Alt.5678</span><span class="wl-chip">Mula.9012</span></div>
+        <p data-for="new" hidden>Todavía no agregaste ninguna. Empezá por el paso 1 de arriba.</p>
+        <div class="wl-acts"><button class="wl-btn pri" type="button">＋ Agregar API Key</button><button class="wl-btn" type="button" data-for="back">Gestionar Keys</button><button class="wl-btn" type="button">Asistente de cuentas</button></div>
+      </div>
+      <div class="wl-card">
+        <h4><img data-src="assets/icons/155034.png" alt="">Tus datos</h4>
+        <p>Todo queda en este navegador. Guardá una copia para no perder tus Keys, fijadas y ajustes.</p>
+        <div class="wl-acts"><button class="wl-btn" type="button"><img data-src="assets/icons/155034.png" alt="">Guardar copia</button><button class="wl-btn" type="button"><img data-src="assets/icons/155033.png" alt="">Restaurar</button><button class="wl-btn" type="button"><img data-src="assets/icons/Welcome/102353.png" alt="">Guía de usuario</button></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="wl-foot">
+    <a class="wl-bio" href="#"><span>Link in Bio</span><span>Pablin Schez</span></a>
+    <span>La Bóveda la hace Pablin Schez para la comunidad.</span>
+    <div class="wl-soc" aria-label="Comunidad">
+      <a href="#" title="Discord"><img data-src="assets/icons/Welcome/discord.png" alt="Discord"></a>
+      <a href="#" title="YouTube"><img data-src="assets/icons/Welcome/youtube.png" alt="YouTube"></a>
+      <a href="#" title="Twitch"><img data-src="assets/icons/Welcome/twitchlogo.png" alt="Twitch"></a>
+      <a href="#" title="Instagram"><img data-src="assets/icons/Welcome/instagram.png" alt="Instagram"></a>
+      <a href="#" title="GitHub"><img data-src="assets/icons/Welcome/github.png" alt="GitHub"></a>
+    </div>
+    <div class="wl-sup"><span>Apoyar:</span><a href="#"><img data-src="assets/icons/Welcome/payp.png" alt="">PayPal</a><a href="#"><img data-src="assets/icons/Welcome/kofi.png" alt="">Ko-fi</a></div>
+    <a class="wl-priv" href="#">Privacidad</a>
+  </footer>
+</section>
+</div>
+
+<section class="sec"><h2>1. Diagnóstico de la pantalla actual</h2>
+<ul>
+<li><b>Dónde vive:</b> casi nada es HTML. <code>index.html</code> tiene solo el título y un <code>panel__body</code> vacío; todo lo dibuja <code>js/welcome-panel.js</code> 1.4.0 (mayo 2026, 25 KB) con una plantilla de texto. Es buena noticia: se puede rediseñar entera sin tocar <code>index.html</code> (69 KB, LES-028), igual que la Cartera y Metas.</li>
+<li><b>Mi voz:</b> <code>js/shiruvana-places.js</code> 1.0.0 pone un saludo fijo arriba («Hola de nuevo… tenés todos los módulos en la barra lateral»).</li>
+<li><b>Orden de hoy:</b> título «Bienvenido a la Bóveda» → «¿Qué puedo hacer aquí?» (9 viñetas) → «¿Ya tenés una API Key?» + «Asistente de Cuentas» → «Acceso rápido» (8 tarjetas) → «Comunidad» (5 tarjetas + email) → «Apoyar el proyecto» (PayPal, Ko-fi y 2 insignias) → Privacidad.</li>
+<li><b>Lo que el jugador ve:</b> la misma pantalla larga, tenga o no API Key, a cualquier hora. No dice nada de su cuenta ni de lo que pasa en Tyria.</li>
+</ul></section>
+
+<section class="sec"><h2>2. Problemas detectados</h2>
+<table><tr><th>Sev.</th><th>Problema</th><th>Dónde</th></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>No es una puerta de entrada: no cambia entre jugador nuevo y jugador que vuelve, y no muestra nada vivo (cuenta, resets, qué está en curso).</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>Sin identidad: el gato oficial no aparece; título genérico con un ícono de casa. No se parece a la Cartera ni a Metas.</td><td>index.html / welcome-panel.js</td></tr>
+<tr><td><span class="sev a">ALTO</span></td><td>El texto del modal de Keys todavía promete «tu Gist privado»: el Gist está deprecado (DEC-030).</td><td>shiruvana-places.js</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>Lo mismo dos veces: «¿Qué puedo hacer aquí?» (9 viñetas) repite «Acceso rápido» (8 tarjetas). Y falta la Armería Legendaria, el módulo más trabajado.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>«Agregar API Key» y «Gestionar Keys» abren el mismo modal; las dos tarjetas usan el mismo ícono.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>Grillas fijas (4, 5 y 2 columnas): en el celular se aprietan o se salen.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev m">MEDIO</span></td><td>Comunidad y Apoyo pesan lo mismo que los módulos y ocupan media pantalla.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev b">BAJO</span></td><td>CSS roto: <code>color: var(--tx-1)fff</code> en las insignias (el texto no toma color). Rosa de Instagram en vez de los colores oficiales de la bio que ya usa la cabecera.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev b">BAJO</span></td><td>Todo con estilos en línea y efectos con <code>onmouseover</code>: sin foco visible con teclado, no sigue al theme en el hover.</td><td>welcome-panel.js</td></tr>
+<tr><td><span class="sev b">BAJO</span></td><td>Mi saludo habla de «la barra lateral», que en el celular no está a la vista.</td><td>shiruvana-places.js</td></tr>
+</table></section>
+
+<section class="sec"><h2>3. Objetivos del rediseño</h2>
+<ol>
+<li><b>Puerta de entrada:</b> en 5 segundos saber qué es La Bóveda, qué pasa ahora y a dónde ir.</li>
+<li><b>Dos estados:</b> el jugador nuevo ve tres pasos para empezar; el que vuelve ve su cuenta y lo que está pasando en Tyria.</li>
+<li><b>Identidad:</b> el gato oficial y el theme Gato Negro al frente; misma cabecera que Cartera y Metas.</li>
+<li><b>Una sola lista de módulos</b> (los 9 de la barra lateral, con la Armería), cada uno con una línea de lo que hace.</li>
+<li><b>Rápida y honesta:</b> la Bienvenida no hace pedidos nuevos a la API. Usa lo que ya está en el navegador (Keys guardadas, cuenta activa, fijadas) y la agenda local de metas. Lo que no sabe, no lo inventa.</li>
+<li><b>La comunidad en su lugar:</b> un pie compacto con la bio, redes y apoyo, con los colores oficiales.</li>
+</ol></section>
+
+<section class="sec"><h2>4. Maqueta</h2>
+<p>Arriba, con los dos estados y las dos pantallas. Los íconos, el gato y mi avatar son los archivos reales de DEV. Los datos (cuentas, metas, horas) son de ejemplo, salvo los relojes, que corren de verdad.</p></section>
+
+<section class="sec"><h2>5. Integración con el GDS</h2>
+<ul>
+<li><b>Tokens del theme</b> (<code>--bg-0/1/2</code>, <code>--bd-1/2</code>, <code>--tx-1/2/3</code>, <code>--acc-1</code>, <code>--gn-gold</code>, <code>--color-*</code>): nada de colores fijos salvo la insignia de la bio (oficial, DEC-025). Funciona en los 19 themes.</li>
+<li><b>Los mismos componentes</b> que Cartera y Metas: cabecera con resplandor arcano e ícono en cuadro obsidiana; botones sutiles de hora y resets (iguales a Metas, el reset cercano en dorado); tarjetas con barra de color a la izquierda; títulos de sección en mayúsculas pequeñas; chips; botón primario arcano.</li>
+<li><b>Colores de módulo</b> tomados de donde ya aparecen (oro de la Cartera, arcano de Metas, magenta de la Armería…), solo en la barra izquierda.</li>
+<li><b>Accesibilidad:</b> enlaces y botones de verdad, foco visible en todo, contraste AA (los mismos pares ya calculados del GDS), animaciones apagadas con <code>prefers-reduced-motion</code>.</li>
+</ul></section>
+
+<section class="sec"><h2>6. Integración con Shiruvana</h2>
+<ul>
+<li><b>Un solo mensaje</b>, debajo de la cabecera, con el componente oficial (<code>Shiruvana.voice</code>, DEC-024: avatar de 56 px, uno por pantalla).</li>
+<li><b>Qué digo, por prioridad:</b> sin Key → me presento y te llevo a los tres pasos · una fijada tuya en curso o por empezar · algo en curso o que empieza en 20 min · reset diario a menos de 1 h · nada de eso → no hablo (la pantalla ya muestra lo que hay).</li>
+<li><b>Siempre con acción:</b> «Ir a Metas y Eventos →» y «Copiar waypoint», como en Metas.</li>
+<li><b>Corrijo de paso</b> el texto del modal de Keys (sin Gist, DEC-030) y el saludo que mencionaba la barra lateral.</li>
+<li>No hablo sobre saldos, módulos ni navegación: eso son datos, no mi voz.</li>
+</ul></section>
+
+<section class="sec"><h2>7. Diseño responsive</h2>
+<table><tr><th>Ancho</th><th>Cómo se ve</th></tr>
+<tr><td>≥ 980 px</td><td>Cabecera en una fila (gato, título, botones a la derecha); «Ahora en Tyria» en 3 columnas; módulos en 3; Keys y Datos lado a lado.</td></tr>
+<tr><td>720–980 px</td><td>Los botones de hora pasan debajo del título; módulos en 2–3 columnas; Keys y Datos uno debajo del otro.</td></tr>
+<tr><td>&lt; 720 px</td><td>Botones de hora en una tira que se desliza; «Ahora» y los tres pasos apilados; módulos en 2 columnas, solo ícono y nombre; botones de 44 px de alto; pie apilado. (Botón «Celular» de la maqueta.)</td></tr>
+</table></section>
+
+<section class="sec"><h2>8. Plan de implementación por micro-ciclos</h2>
+<table><tr><th>Paso</th><th>Qué</th><th>Archivos</th></tr>
+<tr><td>WEL-1</td><td>Estructura nueva sin estilos en línea: cabecera con el gato, los dos estados, los 9 módulos, Keys y Datos, pie. Mismos ids de botones (<code>welcomeAddKeyBtn</code>, <code>welcomeManageKeysBtn</code>, <code>welcomeAccountsBtn</code>) para no romper nada.</td><td><code>js/welcome-panel.js</code> 2.0.0 + <code>tests/welcome-view.test.cjs</code></td></tr>
+<tr><td>WEL-2</td><td>Lo vivo: relojes y resets, y «Ahora en Tyria» desde <code>assets/meta-events.json</code> con las reglas de <code>Meta._pure</code> (sin API). Fijadas desde <code>gn:meta:favs</code>.</td><td><code>js/welcome-panel.js</code> 2.1.0 + test</td></tr>
+<tr><td>WEL-3</td><td>Mi voz en la Bienvenida según el momento; corregir el texto de Keys (Gist) y el saludo.</td><td><code>js/shiruvana-places.js</code> 1.1.0 + test</td></tr>
+<tr><td>WEL-4</td><td>Revisión en los 19 themes, en el celular y con teclado; prueba de integración con el HTML real.</td><td>ajustes en <code>welcome-panel.js</code></td></tr>
+<tr><td>WEL-5</td><td>Cierre: FEAT-008, backlog, CHANGELOG-FACTORY.</td><td><code>ai-memory/</code>, <code>docs/</code></td></tr>
+</table>
+<p>Cada paso deja DEV funcionando y espera tu validación antes del siguiente, como en la Cartera. Sin claves nuevas en el navegador. Sin tocar <code>index.html</code>: el título viejo («Bienvenido a la Bóveda») se reemplaza desde el JS.</p></section>
+</div>
+
+<script>
+(function(){
+  var BASE='https://pablosnchz.github.io/gw2-factory-dev/';
+  document.querySelectorAll('img[data-src]').forEach(function(i){i.src=BASE+i.getAttribute('data-src');});
+  var s=document.createElement('script');s.src=BASE+'js/shiruvana.js';
+  s.onload=function(){if(window.Shiruvana)document.querySelectorAll('.wl-av').forEach(function(i){i.src=window.Shiruvana.AVATAR;});};
+  document.head.appendChild(s);
+  function setState(st){document.querySelectorAll('[data-for]').forEach(function(e){e.hidden=e.getAttribute('data-for')!==st;});}
+  document.querySelectorAll('[data-st]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-st]').forEach(function(x){x.classList.toggle('on',x===b);});setState(b.getAttribute('data-st'));};});
+  document.querySelectorAll('[data-w]').forEach(function(b){b.onclick=function(){document.querySelectorAll('[data-w]').forEach(function(x){x.classList.toggle('on',x===b);});document.getElementById('stage').classList.toggle('mobile',b.getAttribute('data-w')==='mobile');};});
+  setState('back');
+  function p2(n){return String(n).padStart(2,'0');}
+  function cd(ms){var s=Math.floor(ms/1000),d=Math.floor(s/86400),h=Math.floor(s%86400/3600),m=Math.floor(s%3600/60);return 'en '+(d?d+' d '+h+' h':h?h+' h'+(m?' '+m+' min':''):m+' min');}
+  function tick(){var n=new Date(),t=+n;
+    document.getElementById('mkSrv').textContent=p2(n.getUTCHours())+':'+p2(n.getUTCMinutes())+' UTC';
+    var dr=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate()+1)-t;
+    var base=Date.UTC(n.getUTCFullYear(),n.getUTCMonth(),n.getUTCDate(),7,30),w=base+((1-n.getUTCDay()+7)%7)*864e5;if(w<=t)w+=7*864e5;
+    document.getElementById('mkDaily').textContent=cd(dr);document.getElementById('mkWeekly').textContent=cd(w-t);
+    document.getElementById('mkDailyP').classList.toggle('soon',dr<=36e5);document.getElementById('mkWeeklyP').classList.toggle('soon',w-t<=864e5);}
+  tick();setInterval(tick,1000);
+})();
+</script>
+</body>
+</html>
