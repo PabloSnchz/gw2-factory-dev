@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-018",
+  "summary": "BL-064 CAM-2: index.html pide js/wv-objectives-ui.js con ?v=2.0.0 (objetivos agrupados: listos para reclamar, en curso, reclamados; filtro por modo; recompensa del día o de la semana). Regla de LES-033: la versión del archivo y su ?v suben juntas.",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "fd9c1343cb5f60d42a5111f1ba091c2c744761f7",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "src=\"js/wv-objectives-ui.js?v=1.0.0\"",
+          "text": "src=\"js/wv-objectives-ui.js?v=2.0.0\""
+        }
+      ]
+    }
+  ]
+}
