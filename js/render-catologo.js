@@ -1,6 +1,10 @@
 /*!
  * js/render-catologo.js — Render del catálogo y filtros
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * v1.4.0 (2026-10-23) — BL-064, ARM-3: «Mi cola» renovada (lista numerada con las 3 primeras
+ *   destacadas, «Ver receta y materiales» y «Quitar», lugares libres, sin los filtros del
+ *   catálogo, que no recortan la cola) y mi línea en la cabecera: una sola, sobre la
+ *   Armería (N1–N2), oculta en el celular, donde ya está mi rincón.
  * v1.3.0 (2026-10-23) — BL-064, ARM-2: filtros en una sola fila («Todas / Las tengo /
  *   Me faltan», tipo, y expansión y generación como listas), tarjetas nuevas (artículo
  *   con el nombre como botón y «+ A la cola» aparte, «✓ La tengo» en vez de «PENDING»,
@@ -309,13 +313,29 @@
     '.arm-empty{text-align:center;padding:32px 12px;font-size:.85rem;color:var(--tx-3)}',
     '.arm-empty p{margin:4px 0}',
     '.arm-chip:focus-visible,.arm-select:focus-visible,.arm-cname:focus-visible,.arm-qbtn:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '.arm-voice{display:flex;align-items:center;gap:10px;margin-top:12px;padding:8px 12px;border:1px solid var(--bd-1);' +
+      'border-radius:12px;background:var(--bg-0)}',
+    '.arm-voice img{width:32px;height:32px;border-radius:50%;flex-shrink:0}',
+    '.arm-voice p{margin:0;font-size:.85rem;line-height:1.4;color:var(--tx-2)}',
+    '.arm-voice b{color:var(--tx-1)}',
+    '.arm-btn--pri{border-color:' + ARM_COLOR + ';color:var(--tx-1);font-weight:600}',
+    '.arm-qview~*{display:none!important}',
+    '.arm-qlist{list-style:none;margin:0 0 10px;padding:0;display:flex;flex-direction:column;gap:8px}',
+    '.arm-qrow{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid var(--bd-1);' +
+      'border-left:3px solid var(--bd-1);border-radius:12px;background:var(--bg-1)}',
+    '.arm-qrow[data-top]{border-left-color:' + ARM_COLOR + '}',
+    '.arm-qpos{width:22px;text-align:center;font-size:.9rem;font-weight:700;color:var(--tx-3);flex-shrink:0}',
+    '.arm-qbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;align-items:flex-start}',
+    '.arm-qname{font-size:.95rem;color:var(--tx-1)}',
+    '.arm-qacts{display:flex;gap:6px;flex-shrink:0}',
     '@media (prefers-reduced-motion:reduce){.lt-skeleton-card,.lt-skeleton-card *{animation:none!important}}',
     '@media (max-width:1199px){.arm-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.arm-stats .arm-st:first-child{grid-column:1 / -1}}',
     '@media (max-width:900px){.arm-hero{padding:12px}.arm-hrow>img{width:40px;height:40px;padding:4px}.arm-hrow h2{font-size:1.05rem}' +
       '.arm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.arm-tab,.arm-btn,.arm-search{min-height:44px}}',
     '@media (max-width:900px){.arm-filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.arm-seg,.arm-fgroup{flex-wrap:nowrap}' +
-      '.arm-chip,.arm-select,.arm-qbtn{min-height:44px}.arm-cname{line-height:44px}}',
-    '@media (max-width:560px){.arm-grid{grid-template-columns:1fr}}'
+      '.arm-chip,.arm-select,.arm-qbtn{min-height:44px}.arm-cname{line-height:44px}.arm-voice{display:none}}',
+    '@media (max-width:560px){.arm-grid{grid-template-columns:1fr}}',
+    '@media (max-width:560px){.arm-qrow{flex-wrap:wrap}.arm-qacts{width:100%}.arm-qacts .arm-btn{flex:1;justify-content:center}}'
   ].join('\n');
 
   var ui = { q: '', raw: '', lastItems: null, lastOwned: null };
@@ -382,7 +402,7 @@
         stat('Armaduras', sum.armor.n, sum.armor.of) +
         stat('Abalorios y más', sum.other.n, sum.other.of) +
         stat('En tu cola', sum.queue, sum.max) +
-      '</div>' +
+      '</div>' + voiceHTML(st, sum) +
     '</section>';
   }
 
@@ -447,6 +467,10 @@
           var T = root.LegendaryTracker;
           if (tab) { if (T && typeof T.setMode === 'function') T.setMode(tab); return; }
           if (act === 'refresh') { if (T && typeof T.refresh === 'function') T.refresh(); return; }
+          var qo = t.getAttribute('data-arm-qopen');
+          if (qo) { if (T && typeof T.openItemModal === 'function') T.openItemModal(qo); return; }
+          var qr = t.getAttribute('data-arm-qrm');
+          if (qr) { removeFromQueue(qr, c); return; }
         }
         t = t.parentNode;
       }
@@ -467,6 +491,128 @@
       live.textContent = ui.q ? (n === 1 ? '1 legendaria' : n + ' legendarias') : '';
     }
     return html;
+  }
+
+  // =======================================================================
+  // ARM-3 (BL-064): «MI COLA» Y MI LÍNEA EN LA CABECERA
+  // =======================================================================
+  // La cola la sigue guardando el tracker (gn:legendary:queue, hasta 5). Su panel
+  // viejo (`renderQueuePanel`) se sigue pintando detrás de esta vista y queda
+  // oculto con `.arm-qview~*`: legendary-tracker.js está a 1 KB del límite de
+  // publicación (LES-028) y no lo toco. Cuando el tracker adelgace, el panel viejo
+  // se borra allá y esta regla se va (DEBT anotada en ARM-3).
+  //
+  // En «Mi cola» no van los filtros del catálogo: la cola no se filtra (decisión
+  // de producto de HB#147) y un filtro que no cambia nada es un control que miente.
+
+  // Una línea, una vez por pantalla (DEC-024), solo sobre la Armería (N1–N2,
+  // DEC-033). Sin Key o leyendo no digo nada: la cabecera ya lo cuenta.
+  function voiceText(st, sum) {
+    if (!st || st.loading || !st.token) return '';
+    if (st.error) {
+      return /permis|unlock|desbloque|scope|403/i.test(String(st.error))
+        ? 'Tu Key no me deja ver tu armería: le falta el permiso «desbloqueos». Te explico cómo arreglarlo en Inicio.'
+        : 'No pude leer tu armería. Probá «↻ Actualizar» en un rato; si sigue, revisá tu Key en Inicio.';
+    }
+    var have = sum.owned === sum.total ? 'Tenés las ' + fmtInt(sum.total) + '. ' :
+      'Tenés ' + fmtInt(sum.owned) + ' de ' + fmtInt(sum.total) + '. ';
+    if (!sum.queue) return have + 'Abrí cualquier legendaria y sumala a tu cola: te muestro la receta y lo que te falta.';
+    return have + 'En tu cola ' + (sum.queue === 1 ? 'hay 1' : 'hay ' + sum.queue) +
+      ': abrí una para ver qué materiales te faltan.';
+  }
+
+  function voiceHTML(st, sum) {
+    var text = voiceText(st, sum);
+    if (!text) return '';
+    var S = root.Shiruvana;
+    var img = S && typeof S.AVATAR === 'string' && S.AVATAR.indexOf('data:image/') === 0 ?
+      '<img src="' + S.AVATAR + '" alt="" width="32" height="32">' : '';
+    return '<aside class="arm-voice" aria-label="Shiruvana">' + img +
+      '<p><b>Shiruvana</b> · ' + esc(text) + '</p></aside>';
+  }
+
+  function queueItemsOf(ids) {
+    var cat = (root.LegendaryCatalog && root.LegendaryCatalog.items) || [];
+    var byId = {};
+    cat.forEach(function (it) { if (it) byId[it.id] = it; });
+    return (ids || []).map(function (id) { return byId[id]; }).filter(Boolean);
+  }
+
+  function queueRow(item, pos, owned) {
+    var name = item.nameEs || item.name;
+    var state = '';
+    if (owned[item.id] > 0) state = '<span class="arm-own">✓ La tengo</span>';
+    else if (item.tpTradeable && item.tpSell > 0) state = '<span class="arm-price">≈ ' + tpCoinHTML(item.tpSell) + '</span>';
+    else state = '<span class="arm-nosell">No se vende</span>';
+    return '<li class="arm-qrow" data-qid="' + item.id + '"' + (pos < 3 ? ' data-top="1"' : '') + '>' +
+      '<span class="arm-qpos" aria-hidden="true">' + (pos + 1) + '</span>' +
+      '<img class="arm-cicon" src="' + esc(item.icon || '') + '" width="44" height="44" alt="" loading="lazy" referrerpolicy="no-referrer">' +
+      '<div class="arm-qbody"><b class="arm-qname">' + esc(name) + '</b>' +
+        '<p class="arm-cmeta"><i class="arm-dot" style="background:' + typeColor(item) + '" aria-hidden="true"></i>' +
+          esc(kindLabel(item) + ' · ' + expansionLabel(item)) + '</p>' + state + '</div>' +
+      '<div class="arm-qacts">' +
+        '<button type="button" class="arm-btn arm-btn--pri" data-arm-qopen="' + item.id + '">Ver receta y materiales</button>' +
+        '<button type="button" class="arm-btn" data-arm-qrm="' + item.id + '" aria-label="' + esc('Quitar ' + name + ' de tu cola') + '">Quitar</button>' +
+      '</div></li>';
+  }
+
+  function queueViewHTML(st, sum) {
+    var items = queueItemsOf(colaActual());
+    var owned = (st && st.owned) || {};
+    var max = sum.max;
+    var head = '<h3 class="arm-sec" id="armQTitle">Tu cola <span>· ' + items.length + ' de ' + max + '</span></h3>';
+    if (!items.length) {
+      return '<section class="arm-qview" aria-labelledby="armQTitle">' + head +
+        '<div class="arm-empty"><p>Tu cola está vacía.</p>' +
+        '<p>Sumá hasta ' + max + ' legendarias desde el catálogo con «+ A la cola»: acá las tenés a mano, con su receta.</p>' +
+        '<button type="button" class="arm-btn arm-btn--pri" data-arm-tab="catalog">Ir al catálogo</button></div></section>';
+    }
+    var left = max - items.length;
+    var foot = left > 0 ?
+      'Te ' + (left === 1 ? 'queda 1 lugar' : 'quedan ' + left + ' lugares') + '. Sumá legendarias desde el catálogo con «+ A la cola».' :
+      'Tu cola está completa: para sumar otra, quitá una.';
+    var priced = items.some(function (it) { return !(owned[it.id] > 0) && it.tpTradeable && it.tpSell > 0; });
+    var d = priceDate();
+    return '<section class="arm-qview" aria-labelledby="armQTitle">' + head +
+      '<ol class="arm-qlist">' + items.map(function (it, i) { return queueRow(it, i, owned); }).join('') + '</ol>' +
+      '<p class="arm-note">' + foot + (priced && d ? ' ≈ Precio de referencia del bazar del ' + d + ', no en vivo.' : '') + '</p>' +
+    '</section>';
+  }
+
+  // Una región «polite» fija, fuera de lo que el tracker repinta.
+  function announce(text) {
+    var d = root.document;
+    if (!d || !d.body || typeof d.createElement !== 'function') return;
+    var live = d.getElementById('armLive');
+    if (!live) {
+      live = d.createElement('div');
+      live.id = 'armLive';
+      live.className = 'arm-sr';
+      live.setAttribute('role', 'status');
+      live.setAttribute('aria-live', 'polite');
+      d.body.appendChild(live);
+    }
+    live.textContent = text;
+  }
+
+  function removeFromQueue(id, c) {
+    var T = root.LegendaryTracker;
+    if (!T || typeof T.toggleQueue !== 'function') return;
+    var before = colaActual();
+    var pos = before.indexOf(Number(id));
+    var it = queueItemsOf([Number(id)])[0];
+    var res = T.toggleQueue(id);
+    if (!res || !res.ok) return;
+    if (typeof T.setMode === 'function') T.setMode('progress');
+    var n = before.length - 1;
+    announce('Quitaste ' + (it ? (it.nameEs || it.name) : 'la legendaria') + ' de tu cola. ' +
+      (n === 1 ? 'Queda 1.' : 'Quedan ' + n + '.'));
+    // El foco va al «Quitar» que quedó en ese lugar, o al anterior, o a «Ir al catálogo».
+    if (c && typeof c.querySelectorAll === 'function') {
+      var rm = c.querySelectorAll('[data-arm-qrm]');
+      var next = rm[Math.min(pos, rm.length - 1)] || c.querySelector('[data-arm-tab="catalog"].arm-btn');
+      if (next && typeof next.focus === 'function') next.focus();
+    }
   }
 
   // =======================================================================
@@ -503,6 +649,10 @@
   function renderFilterBar(filters, catalog) {
     corregirExpansiones(catalog);
     filters = filters || {};
+    var st0 = trackerState();
+    if (st0 && st0.mode === 'progress') {
+      return shellHTML(catalog) + queueViewHTML(st0, armorySummary(catalog, st0.owned || {}, colaActual()));
+    }
     var opts = getFilterOptions(catalog || []);
     var own = { tengo: 0, faltan: 0 };
     var T = root.LegendaryTracker;
@@ -888,7 +1038,7 @@
     EXPANSION_ORDER: EXPANSION_ORDER.slice(),
     TYPE_LABELS: TYPE_LABELS,
     // ARM-1: lo que prueban los tests.
-    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard }
+    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard, voice: voiceText, queue: queueViewHTML }
   };
 
   // =======================================================================
