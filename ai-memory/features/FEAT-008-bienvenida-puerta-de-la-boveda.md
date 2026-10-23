@@ -21,13 +21,13 @@ La Bienvenida era un saludo heredado con enlaces sueltos. Pablo pidió que fuera
 
 - **Solo datos de este navegador:** Keys y permisos (`gn:account:keys`), cuenta activa y una clave nueva, `gn:global:welcome` (último módulo, visitas por módulo y fecha de la última copia; solo ids y fechas). No hace pedidos a la API.
 - **Sin tocar `index.html`** (69 KB, LES-028): sigue pidiendo `welcome-panel.js?v=1.4.0` y `shiruvana-places.js?v=1.0.0`; hace falta Ctrl+F5 (RSK-020).
-- **Los themes no se tocan.** La guarda corrige solo dentro de `#welcomePanel`. Gato Negro, Bóveda, Dracula, Glassmorphism, Material Dark y PS5 no necesitan corrección. En macOS y Notion, el verde de «listo» pasaba de 1.1:1 a 4.5:1 o más, y los tintes oscuros se rehacen sobre la superficie clara.
+- **Los themes no se tocan.** La guarda corrige solo dentro de `#welcomePanel`, y en 13 de los 19 themes. Gato Negro, Bóveda, Dracula, Glassmorphism, Material Dark y PS5 no necesitan corrección. En macOS y Notion, el verde de «listo» pasaba de 1.1:1 a 4.5:1 o más, y los tintes oscuros se rehacen sobre la superficie clara.
 
 ## Revisión final (WEL-4)
 
 | Revisión | Cómo | Resultado |
 |---|---|---|
-| 19 themes | Contraste WCAG calculado para cada par texto/fondo que usa la Bienvenida (21 pares por theme), sobre los tokens reales de `css/themes/` | 45 pares bajo 4.5:1 en 15 themes → 0 con la guarda. Lo vigila `tests/welcome-contrast.test.cjs`. |
+| 19 themes | Contraste WCAG calculado para cada par texto/fondo que usa la Bienvenida (19 pares por theme), sobre los tokens reales de `css/themes/` | La auditoría inicial encontró 45 pares bajo 4.5:1 en 12 themes; con la guarda, 0 en los 19. Lo vigila `tests/welcome-contrast.test.cjs`. |
 | Celular | Cortes de 980 y 720 px del CSS | Pastillas en una fila con scroll, módulos en 2 columnas, controles de 44 px (también los botones de mi guía). |
 | Teclado | Recorrido del marcado | Todo lo que se toca es `button`, `a` o `summary`; foco visible en los tres; nada de clics en `div`. |
 | Lector de pantalla | Nombres y anuncios | Secciones con nombre, grupos con `role`, barra de progreso con nombre y región «polite» para mi guía. |
@@ -55,6 +55,6 @@ Los 50 tests de la Bienvenida pasan juntos. Todos los blobs publicados son idén
 ## Riesgos y notas
 
 - **RSK-020 (BAJO, aceptado):** `index.html` pide versiones viejas; hace falta Ctrl+F5 hasta que se pueda publicar `index.html`.
-- **Contraste de los themes en el resto de la Bóveda (BL-060):** el texto tenue (`--tx-3`) no llega a 4.5:1 en 10 themes y los colores de estado son de tema oscuro en macOS y Notion. La Bienvenida ya lo corrige; los demás módulos no.
+- **Contraste de los themes en el resto de la Bóveda (BL-060):** el texto tenue (`--tx-3`) no llega a 4.5:1 en 9 themes, el acento falla como texto en Discord, Fluent, Solarized Dark, macOS y Notion, y los colores de estado son de tema oscuro en macOS y Notion. La Bienvenida ya lo corrige; los demás módulos no.
 - **Lo que quedó fuera a propósito (DEC-032):** horarios, agenda, metas y world bosses. Viven en Metas y Eventos.
 - **Para producción:** van juntos `js/welcome-panel.js` 2.2.0, `js/shiruvana-places.js` 1.2.0 y `assets/welcome-news.json`.
