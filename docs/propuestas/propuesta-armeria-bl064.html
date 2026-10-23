@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta BL-064 — Restyle completo y Armería Legendaria · La Bóveda del Gato Negro</title>
+<!-- ARM-0: maqueta para aprobación. No es código de la Bóveda. Tokens del theme Gato Negro (GDS, DEC-010/025). -->
+<style>
+:root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#232A3A;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
+--acc-1:#A896FF;--gold:#F2B94B;--green:#3CC48A;--green-bg:#1D3436;--amber-bg:#38352F;--red:#F47C7C;--glow:rgba(123,92,255,.14);--arm:#E545CA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-2);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{color:var(--tx-1);font-size:1.7rem;margin:0 0 4px}
+h2{color:var(--tx-1);font-size:1.15rem;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--bd-1)}
+h3{color:var(--tx-1);font-size:.95rem;margin:16px 0 6px}
+.lead{color:var(--tx-3);margin:0 0 18px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-3)}
+.tag--gold{border-color:var(--gold);color:var(--gold)}.tag--green{border-color:var(--green);color:var(--green)}.tag--red{border-color:var(--red);color:var(--red)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--bd-1)}
+th{color:var(--tx-3);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em}
+td b{color:var(--tx-1)}
+code{background:var(--bg-2);border-radius:4px;padding:0 4px;font-size:.85em;color:var(--tx-1)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:12px;padding:14px 16px}
+.voice{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg,var(--glow),transparent);border:1px solid var(--bd-2);border-radius:12px;padding:12px 14px;margin:14px 0}
+.av{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#C9BDFF,#7B5CFF 55%,#3B2A8A);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 0 2px var(--bd-2)}
+.voice p{margin:2px 0}.voice .lbl{color:var(--acc-1);font-weight:700;font-size:.82rem}
+.dec{border-left:3px solid var(--gold);background:var(--amber-bg);border-radius:8px;padding:10px 14px;margin:10px 0}
+.dec b{color:var(--gold)}
+.sev{font-size:.68rem;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:1px 7px;border:1px solid}
+.sev--c{color:var(--red);border-color:var(--red)}.sev--a{color:var(--gold);border-color:var(--gold)}.sev--m{color:var(--acc-1);border-color:var(--acc-1)}.sev--b{color:var(--tx-3);border-color:var(--bd-2)}
+.done td:first-child{color:var(--green)}
+ol.plan{padding-left:20px}ol.plan li{margin:6px 0}
+
+/* ---------- marco ---------- */
+.frame{border:1px solid var(--bd-2);border-radius:14px;overflow:hidden;background:var(--bg-0);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg-1);border-bottom:1px solid var(--bd-1);font-size:.8rem;color:var(--tx-3)}
+.fbar img{width:22px;height:22px}.fbar .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:3px 10px;color:var(--tx-2)}
+.app{display:grid;grid-template-columns:200px 1fr}
+.sb{border-right:1px solid var(--bd-1);padding:14px 10px;display:flex;flex-direction:column;gap:2px;font-size:.84rem}
+.sb a{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:9px;text-decoration:none;color:var(--tx-2);border:1px solid transparent;position:relative}
+.sb a img{width:22px;height:22px}
+.sb a.on{background:var(--bg-1);border-color:var(--bd-2);color:var(--tx-1);font-weight:600}
+.sb a.on::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--arm)}
+.sb .cap{font-size:.66rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.07em;padding:8px 9px 2px}
+.main{padding:18px 20px;min-width:0}
+
+/* ---------- Armería nueva ---------- */
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(229,69,202,.10),var(--bg-1) 70%);padding:16px 18px}
+.hrow{display:flex;align-items:center;gap:14px}
+.hrow>img{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px}
+.hrow h3{margin:0;font-size:1.3rem}
+.hrow p{margin:2px 0 0;color:var(--tx-3);font-size:.84rem}
+.hbtns{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.hb{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 11px;color:var(--tx-2);background:transparent;text-decoration:none}
+.stats{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem;color:var(--tx-1)}.st b span{font-size:.8rem;color:var(--tx-3);font-weight:500}
+.bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:var(--arm);border-radius:6px}
+.hv{display:flex;gap:10px;align-items:center;margin-top:12px;padding:9px 12px;border:1px solid var(--bd-2);border-radius:12px;background:linear-gradient(180deg,var(--glow),transparent);font-size:.85rem}
+.hv .av{width:40px;height:40px;font-size:.85rem}.hv b{color:var(--acc-1)}
+.tabsx{display:flex;gap:4px;margin:16px 0 12px;border-bottom:1px solid var(--bd-1)}
+.tabsx a{padding:8px 14px;text-decoration:none;color:var(--tx-3);font-size:.9rem;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabsx a.on{color:var(--tx-1);font-weight:700;border-color:var(--arm)}
+.tabsx a span{font-size:.75rem;color:var(--tx-3);margin-left:4px;font-weight:500}
+.tool{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.search{flex:1 1 260px;display:flex;align-items:center;gap:8px;border:1px solid var(--bd-2);border-radius:10px;background:var(--bg-1);padding:8px 12px;color:var(--tx-3);font-size:.88rem}
+.seg{display:inline-flex;border:1px solid var(--bd-2);border-radius:10px;overflow:hidden}
+.seg a{padding:7px 12px;font-size:.82rem;text-decoration:none;color:var(--tx-2)}
+.seg a.on{background:var(--bg-2);color:var(--tx-1);font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.chips .lb{font-size:.72rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.06em;margin-right:2px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 11px;color:var(--tx-2);background:var(--bg-1)}
+.chip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.chip em{font-style:normal;color:var(--tx-3);font-size:.72rem}
+.chip.on{border-color:var(--acc-1);color:var(--tx-1);background:rgba(168,150,255,.12)}
+.chip.clr{margin-left:auto;border-style:dashed}
+.sect{display:flex;align-items:center;gap:10px;margin:18px 0 8px;font-size:.82rem;color:var(--tx-3)}
+.sect b{color:var(--tx-1);font-size:.92rem}.sect .bar{flex:0 0 90px;margin:0}.sect .bar i{background:var(--tx-3)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.it{position:relative;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px;display:grid;grid-template-columns:48px 1fr;gap:4px 10px;align-items:center}
+.it:hover{border-color:var(--bd-2)}
+.it>img{width:48px;height:48px;border-radius:8px;grid-row:span 2;background:var(--bg-0)}
+.it .n{color:var(--tx-1);font-weight:600;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .s{font-size:.76rem;color:var(--tx-3);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.it .s i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.it .f{grid-column:1 / -1;display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:8px;border-top:1px solid var(--bd-1)}
+.own{font-size:.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:999px;padding:1px 8px}
+.price{font-size:.76rem;color:var(--tx-3)}.price b{color:var(--gold);font-weight:600}
+.qb{margin-left:auto;font-size:.76rem;border:1px solid var(--bd-2);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:transparent;min-height:30px}
+.qb.in{border-color:var(--acc-1);color:var(--tx-1)}
+.it.has{border-color:rgba(60,196,138,.45)}
+.it.set .slots{grid-column:1 / -1;display:flex;gap:4px;margin-top:6px}
+.slots span{flex:1;height:6px;border-radius:4px;background:var(--bg-2)}.slots span.y{background:var(--green)}
+.q{display:grid;gap:8px}
+.qr{display:grid;grid-template-columns:28px 44px 1fr auto auto;gap:12px;align-items:center;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px}
+.qr .pos{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.78rem;font-weight:800;background:var(--bg-2);color:var(--tx-1)}
+.qr .pos.top{background:var(--arm);color:#16081A}
+.qr img{width:44px;height:44px;border-radius:8px}
+.qr .n{color:var(--tx-1);font-weight:600}.qr .s{font-size:.76rem;color:var(--tx-3)}
+.btn{font-size:.8rem;border:1px solid var(--bd-2);border-radius:999px;padding:6px 12px;color:var(--tx-2);background:transparent;text-decoration:none;white-space:nowrap}
+.btn.pri{border-color:var(--acc-1);color:var(--tx-1);font-weight:600}
+.qe{border:1px dashed var(--bd-2);border-radius:12px;padding:12px;color:var(--tx-3);font-size:.84rem;text-align:center}
+
+/* ---------- antes ---------- */
+.old{border:1px solid var(--bd-1);border-radius:12px;padding:12px;background:#141418;font-size:.78rem}
+.old .mode{display:flex;gap:6px;align-items:center;margin-bottom:10px;color:var(--tx-3)}
+.old .mode span{border:1px solid var(--bd-1);border-radius:8px;padding:2px 8px;color:var(--tx-2)}
+.old .fl{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px}
+.old .fl span{font-size:.62rem;border:1px solid var(--bd-1);border-radius:20px;padding:2px 7px;color:var(--tx-2);background:var(--bg-1)}
+.old .fl em{font-style:normal;font-size:.6rem;color:var(--tx-3);padding:2px 4px}
+.old .g{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:8px}
+.old .c{border:1px solid var(--bd-1);border-left:3px solid #974EFF;border-radius:8px;padding:5px;background:var(--bg-1);position:relative;min-width:0}
+.old .c img{width:22px;height:22px;border-radius:3px}
+.old .c .t{font-size:.55rem;color:var(--tx-1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.old .c .p{position:absolute;top:3px;right:3px;font-size:.45rem;border:1px solid var(--bd-1);border-radius:9px;padding:0 3px;color:var(--tx-3)}
+.old .c .b{font-size:.45rem;color:#974EFF;border:1px solid #974EFF55;border-radius:3px;padding:0 2px;display:inline-block}
+.old .c .k{font-size:.45rem;border:1px solid var(--bd-1);border-radius:9px;padding:0 3px;float:right;color:var(--tx-3)}
+.num{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--red);color:#0F1117;font-size:.7rem;font-weight:800}
+
+/* ---------- celular ---------- */
+.phones{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;margin-top:12px}
+.phone{width:300px;height:640px;border:10px solid #05060A;border-radius:34px;background:var(--bg-0);position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.45);font-size:.85rem}
+.phone .ftop{display:flex;align-items:center;gap:8px;padding:12px 12px 8px;border-bottom:1px solid var(--bd-1);font-size:.75rem;color:var(--tx-3)}
+.phone .ftop img{width:22px;height:22px}.phone .ftop .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:2px 8px}
+.phone .body{padding:10px 12px}
+.phone .hero{padding:12px;border-radius:14px}
+.phone .hrow>img{width:40px;height:40px;padding:4px}.phone .hrow h3{font-size:1.02rem}
+.phone .chips{flex-wrap:nowrap;overflow:hidden}
+.phone .chip{white-space:nowrap;min-height:36px}
+.phone .seg a{padding:8px 10px;font-size:.78rem}
+.phone .it{grid-template-columns:44px 1fr auto;padding:9px 10px}
+.phone .it>img{width:44px;height:44px;grid-row:span 2}
+.phone .it .qb{grid-row:span 2;align-self:center;min-height:40px}
+.mtabs{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);background:var(--bg-1);border-top:1px solid var(--bd-2);padding:6px 4px 10px}
+.mtabs a{display:grid;justify-items:center;gap:3px;font-size:.62rem;color:var(--tx-3);text-decoration:none;min-height:48px;padding-top:4px;position:relative}
+.mtabs a img{width:24px;height:24px}
+.mtabs a.on{color:var(--tx-1);font-weight:700}
+.mtabs a.on::before{content:"";position:absolute;top:-7px;left:28%;right:28%;height:3px;border-radius:3px;background:var(--arm)}
+.mtabs .more{font-size:1.1rem;line-height:24px;color:var(--tx-2)}
+.cap2{text-align:center;color:var(--tx-3);font-size:.8rem;margin-top:8px}
+@media (max-width:900px){.app{grid-template-columns:1fr}.sb{display:none}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<span class="tag tag--gold">Propuesta · BL-064 · ARM-0</span>
+<h1>Restyle completo de la Bóveda y Armería Legendaria</h1>
+<p class="lead">Plan pantalla por pantalla y la primera propuesta para validar. Maqueta: no toca código; los números de la maqueta son de ejemplo. Theme Gato Negro (GDS); en la Bóveda los colores salen de los tokens, así que se adapta a los 19 themes.</p>
+
+<div class="voice"><div class="av" aria-hidden="true">S</div><div><p class="lbl">Shiruvana te explica</p>
+<p>Coincido con vos: la Armería va primero. La ficha de la legendaria ya habla el idioma nuevo, pero para llegar a ella pasás por un catálogo que todavía habla el viejo. Además es uno de los cuatro accesos fijos de la barra del celular, y hoy en el celular no se puede usar: son 5 columnas fijas en 300 px. Abajo te dejo el orden que propongo para el resto, con el porqué de cada lugar.</p></div></div>
+
+<!-- =============================== PLAN =============================== -->
+<h2>1. Plan del restyle completo, pantalla por pantalla</h2>
+<p>Medido sobre el código de DEV de hoy. «Publicable» quiere decir que el archivo entra en una publicación de la Factory (hasta ~64 KB, LES-028). Los que no entran se renuevan desde un archivo más chico que ya se carga (su <code>*-theme.js</code>), sin tocar el grande.</p>
+<table>
+<tr><th>Orden</th><th>Módulo y pantallas</th><th>Hoy</th><th>Archivos (tamaño)</th><th>Por qué en este lugar</th><th>Pasos</th></tr>
+<tr class="done"><td>✓</td><td><b>Bienvenida</b> · <b>Sidebar</b> · <b>Cartera</b> (3 pestañas) · <b>Metas y Eventos</b> · <b>ficha de la legendaria</b> · <b>PSNA</b> de Actividades</td><td>En producción</td><td>—</td><td>Son el lenguaje de referencia: cabecera con ícono y datos, tarjetas de resumen, chips, pestañas y mi voz.</td><td>—</td></tr>
+<tr><td><b>1</b></td><td><b>Armería Legendaria</b>: catálogo (filtros, grilla, tarjetas) y «Mi progreso», que en realidad es la cola de fabricación</td><td>Estilo viejo, todo con estilos sueltos en el código</td><td><code>render-catologo.js</code> 36 KB ✓ · <code>legendary-tracker.js</code> 64 KB, al límite</td><td>Ya renovamos la ficha y el catálogo desentona. Está en la barra del celular y ahí hoy no se puede usar. Es el que más se nota.</td><td>5</td></tr>
+<tr><td><b>2</b></td><td><b>Cámara del Brujo</b>: objetivos diarios, semanales y especiales, tienda, detalle de compra y temporadas</td><td>Estilo viejo con un tema parcial (<code>wv-theme.js</code>)</td><td><code>wizards-vault.js</code> 30 KB ✓ · <code>wv-shop-ui.js</code> 35 KB ✓ · <code>wv-objectives-dashboard.js</code> 24 KB ✓ · <code>wv-purchase-detail.js</code> 91 KB ✗</td><td>Se usa todos los días (objetivos diarios). Mucho valor por visita.</td><td>5</td></tr>
+<tr><td><b>3</b></td><td><b>Logros</b>: categorías, progreso y panel lateral</td><td>Estilo viejo con un tema chico</td><td><code>achievements.js</code> 52 KB ✓ · <code>achievements-theme.js</code> 6 KB ✓</td><td>Es el módulo de progreso de cuenta más amplio. Archivos publicables: riesgo bajo.</td><td>4</td></tr>
+<tr><td><b>4</b></td><td><b>Actividades</b>: pestañas restantes (fractales, entregas del bazar y las demás; PSNA ya está)</td><td>Mezcla: PSNA nuevo, el resto viejo</td><td><code>activities.js</code> 65 KB, al límite · <code>activities-theme.js</code> 47 KB ✓</td><td>Conviene después de decidir BL-055: los Home Nodes se mudan a Homestead y no vale renovar algo que se va.</td><td>4</td></tr>
+<tr><td><b>5</b></td><td><b>Raids y Strikes</b>: alas, encuentros y strikes</td><td>Estilo viejo</td><td><code>raid-tracker.js</code> 100 KB ✗ · <code>strike-tracker.js</code> 58 KB ✓</td><td>El archivo de raids no se puede publicar: se renueva desde afuera, con más cuidado.</td><td>4</td></tr>
+<tr><td><b>6</b></td><td><b>Inventario y Personajes</b>: personajes, inventario, banco y panel de inventario</td><td>Estilo viejo con un tema</td><td><code>characters.js</code> 62 KB ✓ · <code>inventory-hub.js</code> 70 KB ✗ · <code>inventory-dashboard.js</code> 53 KB ✓ · <code>characters-theme.js</code> 13 KB ✓</td><td>El más grande y el de más pantallas. Va cuando el lenguaje ya está probado en cinco módulos.</td><td>6</td></tr>
+<tr><td><b>7</b></td><td><b>Cuentas</b>: lista de cuentas y comparación</td><td>Estilo viejo</td><td><code>accounts-panel.js</code> 68 KB ✗</td><td>Se usa menos; el archivo no se puede publicar, se renueva desde afuera.</td><td>3</td></tr>
+<tr><td><b>8</b></td><td><b>Marco común</b>: barra de arriba (selector de cuenta, Keys, Backup, theme), modales de API Keys, guías y copia, avisos y pie</td><td>Estilo viejo</td><td>Marcado en <code>index.html</code> 69 KB ✗; lógica en <code>app.js</code> 67 KB ✗ y <code>settings-manager.js</code> 35 KB ✓</td><td>Lo toca todo y su marcado vive en <code>index.html</code>. Hacerlo al final evita rehacerlo cada vez que cambia un módulo.</td><td>4</td></tr>
+</table>
+<div class="card">
+<h3>Lo que se repite en cada módulo</h3>
+<ol class="plan">
+<li><b>Propuesta</b> como esta, con diagnóstico medido y maqueta. No implemento sin tu aprobación.</li>
+<li><b>Pasos chicos</b>, cada uno publicado en DEV y validado por vos.</li>
+<li><b>Revisión final</b>: los 19 themes con la guarda de contraste de la Bienvenida (la misma que usa la Sidebar), celular, teclado y lector de pantalla. Después, el registro de la funcionalidad (FEAT) y el cierre.</li>
+<li><b>Producción</b> solo cuando vos lo ordenás, con una rama de vuelta atrás.</li>
+</ol>
+<p style="margin:6px 0 0">Reglas comunes: solo tokens del theme (nada de colores fijos en el texto), texto de 12 px o más, controles de 44 px en el celular, foco visible, nada clickeable que no sea botón o enlace, y mi voz una sola vez por pantalla. Sin archivos nuevos: <code>index.html</code> no se puede republicar, así que todo vive en archivos que ya se cargan.</p>
+</div>
+
+<!-- =============================== DIAGNÓSTICO =============================== -->
+<h2>2. Armería: diagnóstico de la pantalla actual</h2>
+<div class="cols">
+  <div>
+    <div class="old" aria-label="Catálogo actual, esquemático">
+      <div class="mode">Modo: <span>Catálogo</span><span>Mi progreso</span></div>
+      <div class="fl"><em>Tipo:</em><span>Arma (57)</span><span>Armadura (132)</span><span>Abalorio (10)</span><span>Espaldar (4)</span><span>Componente (2)</span><span>Reliquia (1)</span></div>
+      <div class="fl"><em>Gen:</em><span>Gen 3</span><span>Gen 2</span><span>Gen 1</span><em>Exp:</em><span>Clásico</span><span>Heart of Thorns</span><span>Path of Fire</span><span>…4 más</span></div>
+      <div class="fl"><em>Yo:</em><span>Tengo (34)</span><span>Me faltan (172)</span></div>
+      <div class="g">
+        <div class="c"><span class="p">PENDING</span><img src="https://render.guildwars2.com/file/0F9C08DE12ADD1082A103DC6EF7401281B23985E/456009.png" alt=""><div class="t">Colmilloescarcha</div><span class="b">Arma</span> <span class="k">+ Cola</span></div>
+        <div class="c"><span class="p">✓</span><img src="https://render.guildwars2.com/file/FD221A90427ADBD29B7E2DF8BDAF98BB16391162/456025.png" alt=""><div class="t">El Bifrost</div><span class="b">Arma</span> <span class="k">+ Cola</span></div>
+        <div class="c"><span class="p">PENDING</span><img src="https://render.guildwars2.com/file/EFF16C4F19792627355DC294E6D7093F544921E7/456030.png" alt=""><div class="t">Amanecer</div><span class="b">Arma</span> <span class="k">+ Cola</span></div>
+        <div class="c"><span class="p">PENDING</span><img src="https://render.guildwars2.com/file/CE3AF0B7B9BB6244726779F5B6A930541BA6C15F/456031.png" alt=""><div class="t">Crepúsculo</div><span class="b">Arma</span> <span class="k">+ Cola</span></div>
+        <div class="c"><span class="p">PENDING</span><img src="https://render.guildwars2.com/file/A30DA1A1EF05BD080C95AE2EF0067BADCDD0D89D/456014.png" alt=""><div class="t">Eternidad</div><span class="b">Arma</span> <span class="k">+ Cola</span></div>
+      </div>
+    </div>
+    <p class="cap2">Hoy: 4 filas de filtros y 5 columnas fijas, en cualquier ancho</p>
+  </div>
+  <div class="card">
+    <h3>Cómo está armada</h3>
+    <table>
+      <tr><th>Pieza</th><th>Dónde vive</th></tr>
+      <tr><td><b>Marco y «Modo:»</b></td><td><code>legendary-tracker.js</code> 1.3.0 (63.971 bytes, a 1 KB del límite de publicación)</td></tr>
+      <tr><td><b>Filtros, grilla y tarjetas</b></td><td><code>render-catologo.js</code> 1.1.0: todo con estilos escritos en el código, sin clases</td></tr>
+      <tr><td><b>Cola</b></td><td>Las filas las arma <code>legendary-tracker.js</code> (<code>queueRowHTML</code>), también con estilos sueltos</td></tr>
+      <tr><td><b>Datos</b></td><td>206 legendarias de <code>legendary-data.js</code> (generado el 2026-10-02), las tuyas de <code>/v2/account/legendaryarmory</code></td></tr>
+      <tr><td><b>Ficha</b></td><td><code>legendary-tree-ui.js</code> 2.2.0: ya renovada (BL-049)</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3>Problemas detectados</h3>
+<table>
+<tr><th>#</th><th>Problema</th><th>Severidad</th></tr>
+<tr><td><span class="num">1</span></td><td><b>En el celular no se puede usar.</b> La grilla tiene 5 columnas fijas (<code>repeat(5,…)</code>) en cualquier ancho: en un teléfono cada tarjeta mide unos 55 px y los nombres no se leen.</td><td><span class="sev sev--c">CRÍTICO</span></td></tr>
+<tr><td><span class="num">2</span></td><td><b>Con el teclado no se abre ninguna legendaria.</b> La tarjeta es un <code>div</code> con clic, sin foco ni rol: con Tab no se llega y el lector de pantalla no la anuncia como botón.</td><td><span class="sev sev--a">ALTO</span></td></tr>
+<tr><td><span class="num">3</span></td><td><b>Texto ilegible.</b> «+ Cola», el estado y los chips miden entre 0,58 y 0,62 rem, es decir de 9 a 10 px.</td><td><span class="sev sev--a">ALTO</span></td></tr>
+<tr><td><span class="num">4</span></td><td><b>Colores fijos.</b> Violeta <code>#974EFF</code>, verde <code>#68ff9f</code> y los de tipo y expansión usados como color de texto. En los themes claros (macOS, Notion) el verde de «la tengo» queda en 1,2:1 y no se ve.</td><td><span class="sev sev--a">ALTO</span></td></tr>
+<tr><td><span class="num">5</span></td><td><b>No hay buscador</b> entre 206 legendarias. Para encontrar Crepúsculo hay que filtrar y recorrer con la vista.</td><td><span class="sev sev--a">ALTO</span></td></tr>
+<tr><td><span class="num">6</span></td><td><b>«PENDING» en inglés</b> en 172 tarjetas, y el borde violeta es igual en todas: no distingue nada.</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td><span class="num">7</span></td><td><b>«Mi progreso» es en realidad la cola de fabricación</b> (hasta 5), y encima muestra los filtros del catálogo, que en la cola no hacen nada.</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td><span class="num">8</span></td><td><b>Sin cabecera ni resumen.</b> No dice cuántas tenés (la cuenta solo aparece entre paréntesis en «Tengo (34)»), ni cuántas por tipo. La ficha sí tiene cabecera y resumen: el salto se nota.</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td><span class="num">9</span></td><td><b>Filtros pesados.</b> 18 chips en 4 grupos con rótulos crípticos («Gen:», «Exp:», «Yo:»), que en pantalla ocupan 2 o 3 renglones antes de la primera legendaria.</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td><span class="num">10</span></td><td><b>La grilla está agrupada por expansión, pero no lo dice:</b> no hay títulos de sección, así que el orden parece al azar.</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td><span class="num">11</span></td><td><b>132 de las 206 tarjetas son piezas de armadura sueltas</b> (6 piezas × 3 pesos × 7 sets): el catálogo se ve como una lista de cascos y botas.</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td><span class="num">12</span></td><td><b>El precio es del 2026-10-02 y no lo aclara.</b> Sale del catálogo generado, no del bazar en vivo, y envejece sin dar error (LES-021).</td><td><span class="sev sev--b">BAJO</span></td></tr>
+<tr><td><span class="num">13</span></td><td><b>El esqueleto de carga se anima siempre</b>, aunque el dispositivo pida reducir el movimiento.</td><td><span class="sev sev--b">BAJO</span></td></tr>
+</table>
+
+<!-- =============================== OBJETIVOS =============================== -->
+<h2>3. Objetivos del rediseño</h2>
+<div class="cols">
+<div class="card"><h3>Mismo idioma que la ficha, la Cartera y Metas</h3><p>Cabecera con ícono y resumen, pestañas, chips con tokens y tarjetas con aire. Pasar del catálogo a la ficha tiene que sentirse como entrar a una habitación de la misma casa.</p></div>
+<div class="card"><h3>Encontrar cualquier legendaria en segundos</h3><p>Buscador por nombre en español o en inglés, «Todas / Las tengo / Me faltan» siempre visible y los demás filtros en una sola fila.</p></div>
+<div class="card"><h3>Ver mi avance de un vistazo</h3><p>«34 de 206» con barra, el avance por tipo y por expansión en el título de cada sección.</p></div>
+<div class="card"><h3>La cola como lo que es</h3><p>«Mi cola (2 de 5)», con el orden a la vista, «Ver receta» y «Quitar». Sin filtros que no hacen nada.</p></div>
+<div class="card"><h3>Para todos</h3><p>Celular de 1 o 2 columnas, teclado completo, lector de pantalla y los 19 themes.</p></div>
+<div class="card"><h3>Sin cambiar lo que funciona</h3><p>Mismos datos y la misma ficha. La cola sigue en <code>gn:legendary:</code>, sin claves nuevas ni pedidos nuevos a la API.</p></div>
+</div>
+
+<!-- =============================== MAQUETA DESKTOP =============================== -->
+<h2>4. Maqueta desktop</h2>
+<div class="frame">
+  <div class="fbar"><img src="../../assets/brand/gato-negro.svg" alt="">La Bóveda del Gato Negro<span class="sel">Pablin.1234 ▾</span></div>
+  <div class="app">
+    <nav class="sb" aria-label="Sidebar (ya renovada)">
+      <a href="#"><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</a>
+      <span class="cap">Módulos</span>
+      <a href="#"><img src="../../assets/icons/733322.png" alt="">Cartera</a>
+      <a href="#"><img src="../../assets/icons/102420.png" alt="">Metas y Eventos</a>
+      <a href="#" class="on"><img src="../../assets/icons/Cuentas/157085.png" alt="">Armería Legendaria</a>
+      <a href="#"><img src="../../assets/icons/155059.png" alt="">Logros</a>
+      <a href="#"><img src="../../assets/icons/3172791.png" alt="">Cámara del Brujo</a>
+      <a href="#" style="opacity:.6">… y 4 más</a>
+    </nav>
+    <div class="main">
+      <section class="hero" aria-label="Cabecera de la Armería">
+        <div class="hrow"><img src="../../assets/icons/Cuentas/157085.png" alt="">
+          <div><h3>Armería Legendaria</h3><p>206 legendarias · lo que tenés en la armería de tu cuenta</p></div>
+          <div class="hbtns"><a class="hb" href="#">↻ Actualizar</a><a class="hb" href="#">¿Qué cuenta?</a></div></div>
+        <div class="stats">
+          <div class="st"><small>Desbloqueadas</small><b>34 <span>de 206</span></b><div class="bar"><i style="width:16.5%"></i></div></div>
+          <div class="st"><small>Armas</small><b>18 <span>de 57</span></b></div>
+          <div class="st"><small>Armaduras</small><b>12 <span>de 132</span></b></div>
+          <div class="st"><small>Abalorios y más</small><b>4 <span>de 17</span></b></div>
+          <div class="st"><small>En tu cola</small><b>2 <span>de 5</span></b></div>
+        </div>
+        <div class="hv"><div class="av" aria-hidden="true">S</div><div><b>Shiruvana</b> · Tenés 34 de 206. En tu cola hay 2: abrí una para ver qué materiales te faltan.</div></div>
+      </section>
+
+      <nav class="tabsx" aria-label="Vistas de la Armería"><a href="#" class="on">Catálogo<span>206</span></a><a href="#">Mi cola<span>2 de 5</span></a></nav>
+
+      <div class="tool">
+        <div class="search">🔍 Buscar por nombre, en español o en inglés…</div>
+        <div class="seg" role="group" aria-label="Mostrar"><a href="#" class="on">Todas</a><a href="#">Las tengo · 34</a><a href="#">Me faltan · 172</a></div>
+      </div>
+      <div class="chips">
+        <span class="lb">Tipo</span>
+        <span class="chip on"><i style="background:#974EFF"></i>Armas <em>57</em></span>
+        <span class="chip"><i style="background:#4DA6FF"></i>Armaduras <em>132</em></span>
+        <span class="chip"><i style="background:#FFD700"></i>Abalorios <em>10</em></span>
+        <span class="chip"><i style="background:#9370DB"></i>Espaldares <em>4</em></span>
+        <span class="chip">Otros <em>3</em></span>
+        <span class="lb" style="margin-left:8px">Expansión</span><span class="chip">Todas ▾</span>
+        <span class="lb" style="margin-left:8px">Gen.</span><span class="chip">Todas ▾</span>
+        <span class="chip clr">✕ Limpiar</span>
+      </div>
+
+      <div class="sect"><b>Clásico</b> · 9 de 24 armas <div class="bar"><i style="width:37%"></i></div></div>
+      <div class="grid">
+        <div class="it"><img src="https://render.guildwars2.com/file/0F9C08DE12ADD1082A103DC6EF7401281B23985E/456009.png" alt=""><div class="n">Colmilloescarcha</div><div class="s"><i style="background:#974EFF"></i>Hacha · Gen 1</div>
+          <div class="f"><span class="price" title="Precio de referencia del 2026-10-02, no en vivo">≈ <b>1.889 g</b></span><button class="qb">+ A la cola</button></div></div>
+        <div class="it has"><img src="https://render.guildwars2.com/file/FD221A90427ADBD29B7E2DF8BDAF98BB16391162/456025.png" alt=""><div class="n">El Bifrost</div><div class="s"><i style="background:#974EFF"></i>Báculo · Gen 1</div>
+          <div class="f"><span class="own">✓ La tengo</span></div></div>
+        <div class="it"><img src="https://render.guildwars2.com/file/EFF16C4F19792627355DC294E6D7093F544921E7/456030.png" alt=""><div class="n">Amanecer</div><div class="s"><i style="background:#974EFF"></i>Mandoble · Gen 1</div>
+          <div class="f"><span class="price">≈ <b>1.599 g</b></span><button class="qb in">✓ En tu cola</button></div></div>
+        <div class="it"><img src="https://render.guildwars2.com/file/CE3AF0B7B9BB6244726779F5B6A930541BA6C15F/456031.png" alt=""><div class="n">Crepúsculo</div><div class="s"><i style="background:#974EFF"></i>Mandoble · Gen 1</div>
+          <div class="f"><span class="price">≈ <b>1.795 g</b></span><button class="qb">+ A la cola</button></div></div>
+      </div>
+
+      <div class="sect"><b>Path of Fire</b> · 2 de 31 <div class="bar"><i style="width:6%"></i></div></div>
+      <div class="grid">
+        <div class="it"><img src="https://render.guildwars2.com/file/2E5391DBF100D5A4413A07C3A13FC3513F29C394/1729332.png" alt=""><div class="n">Aurora</div><div class="s"><i style="background:#FFD700"></i>Accesorio · Gen 2</div>
+          <div class="f"><span class="price">No se vende</span><button class="qb">+ A la cola</button></div></div>
+        <div class="it has"><img src="https://render.guildwars2.com/file/A5587E6C220ECF0601523947DE33A0B34048800D/2149863.png" alt=""><div class="n">Visión</div><div class="s"><i style="background:#FFD700"></i>Accesorio · Gen 2</div>
+          <div class="f"><span class="own">✓ La tengo</span></div></div>
+        <div class="it set"><img src="https://render.guildwars2.com/file/2695A8E44B7F07EF15A20857790EFCA91513F5F0/1634565.png" alt=""><div class="n">Enviado perfeccionado · Pesada</div><div class="s"><i style="background:#4DA6FF"></i>Armadura · 4 de 6 piezas</div>
+          <div class="slots" aria-label="4 de 6 piezas"><span class="y"></span><span class="y"></span><span class="y"></span><span class="y"></span><span></span><span></span></div></div>
+      </div>
+      <p class="cap2" style="text-align:left">La tarjeta de armadura por set es el paso ARM-4 (sección 9); hasta entonces, las piezas siguen sueltas con el mismo diseño.</p>
+    </div>
+  </div>
+</div>
+
+<h3>«Mi cola»</h3>
+<div class="frame"><div class="main">
+  <nav class="tabsx" aria-label="Vistas de la Armería" style="margin-top:0"><a href="#">Catálogo<span>206</span></a><a href="#" class="on">Mi cola<span>2 de 5</span></a></nav>
+  <div class="q">
+    <div class="qr"><span class="pos top">1</span><img src="https://render.guildwars2.com/file/EFF16C4F19792627355DC294E6D7093F544921E7/456030.png" alt=""><div><div class="n">Amanecer</div><div class="s">Mandoble · Gen 1 · Clásico</div></div><a class="btn pri" href="#">Ver receta y materiales</a><a class="btn" href="#">Quitar</a></div>
+    <div class="qr"><span class="pos top">2</span><img src="https://render.guildwars2.com/file/2E5391DBF100D5A4413A07C3A13FC3513F29C394/1729332.png" alt=""><div><div class="n">Aurora</div><div class="s">Accesorio · Gen 2 · Path of Fire</div></div><a class="btn pri" href="#">Ver receta y materiales</a><a class="btn" href="#">Quitar</a></div>
+    <div class="qe">Te quedan 3 lugares. Sumá legendarias desde el catálogo con «+ A la cola».</div>
+  </div>
+</div></div>
+
+<!-- =============================== CELULAR =============================== -->
+<h2>5. Maqueta celular</h2>
+<div class="phones">
+  <div class="phone" aria-label="Catálogo en el celular">
+    <div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">La Bóveda<span class="sel">Pablin ▾</span></div>
+    <div class="body">
+      <div class="hero"><div class="hrow"><img src="../../assets/icons/Cuentas/157085.png" alt=""><div><h3>Armería Legendaria</h3><p>34 de 206 · 2 en tu cola</p></div></div><div class="bar"><i style="width:16.5%"></i></div></div>
+      <nav class="tabsx" style="margin:10px 0 8px"><a href="#" class="on">Catálogo</a><a href="#">Mi cola<span>2</span></a></nav>
+      <div class="search" style="padding:9px 10px">🔍 Buscar legendaria…</div>
+      <div class="chips" style="margin-top:8px"><span class="seg"><a href="#" class="on">Todas</a><a href="#">Tengo</a><a href="#">Faltan</a></span><span class="chip">Tipo ▾</span><span class="chip">Exp ▾</span></div>
+      <div class="sect" style="margin:12px 0 6px"><b>Clásico</b> · 9 de 24</div>
+      <div class="grid" style="grid-template-columns:1fr;gap:8px">
+        <div class="it"><img src="https://render.guildwars2.com/file/0F9C08DE12ADD1082A103DC6EF7401281B23985E/456009.png" alt=""><div class="n">Colmilloescarcha</div><button class="qb">+ Cola</button><div class="s">Hacha · Gen 1 · ≈ 1.889 g</div></div>
+        <div class="it has"><img src="https://render.guildwars2.com/file/FD221A90427ADBD29B7E2DF8BDAF98BB16391162/456025.png" alt=""><div class="n">El Bifrost</div><span class="own" style="grid-row:span 2;align-self:center">✓</span><div class="s">Báculo · Gen 1</div></div>
+      </div>
+    </div>
+    <nav class="mtabs"><a href="#"><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</a><a href="#"><img src="../../assets/icons/733322.png" alt="">Cartera</a><a href="#"><img src="../../assets/icons/102420.png" alt="">Metas</a><a href="#" class="on"><img src="../../assets/icons/Cuentas/157085.png" alt="">Armería</a><a href="#"><span class="more">☰</span>Más</a></nav>
+  </div>
+  <div class="phone" aria-label="Mi cola en el celular">
+    <div class="ftop"><img src="../../assets/brand/gato-negro.svg" alt="">La Bóveda<span class="sel">Pablin ▾</span></div>
+    <div class="body">
+      <nav class="tabsx" style="margin:0 0 10px"><a href="#">Catálogo</a><a href="#" class="on">Mi cola<span>2 de 5</span></a></nav>
+      <div class="q">
+        <div class="qr" style="grid-template-columns:26px 40px 1fr;row-gap:8px"><span class="pos top">1</span><img src="https://render.guildwars2.com/file/EFF16C4F19792627355DC294E6D7093F544921E7/456030.png" alt="" style="width:40px;height:40px"><div><div class="n">Amanecer</div><div class="s">Mandoble · Gen 1</div></div><a class="btn pri" href="#" style="grid-column:1 / 3;text-align:center;min-height:40px">Ver receta</a><a class="btn" href="#" style="text-align:center;min-height:40px">Quitar</a></div>
+        <div class="qr" style="grid-template-columns:26px 40px 1fr;row-gap:8px"><span class="pos top">2</span><img src="https://render.guildwars2.com/file/2E5391DBF100D5A4413A07C3A13FC3513F29C394/1729332.png" alt="" style="width:40px;height:40px"><div><div class="n">Aurora</div><div class="s">Accesorio · Gen 2</div></div><a class="btn pri" href="#" style="grid-column:1 / 3;text-align:center;min-height:40px">Ver receta</a><a class="btn" href="#" style="text-align:center;min-height:40px">Quitar</a></div>
+      </div>
+    </div>
+    <nav class="mtabs"><a href="#"><img src="../../assets/icons/Welcome/3380755.png" alt="">Inicio</a><a href="#"><img src="../../assets/icons/733322.png" alt="">Cartera</a><a href="#"><img src="../../assets/icons/102420.png" alt="">Metas</a><a href="#" class="on"><img src="../../assets/icons/Cuentas/157085.png" alt="">Armería</a><a href="#"><span class="more">☰</span>Más</a></nav>
+  </div>
+</div>
+<p class="cap2">Hasta 900 px: cabecera compacta, filtros en una fila con scroll horizontal, una tarjeta por renglón (dos desde 560 px) y botones de 44 px.</p>
+
+<!-- =============================== GDS =============================== -->
+<h2>6. Integración con el GDS</h2>
+<table>
+<tr><th>Hoy</th><th>Propuesta</th></tr>
+<tr><td>Violeta <code>#974EFF</code> fijo en bordes, barra y cola</td><td>Color propio del módulo, el mismo de la Sidebar y la Bienvenida (<code>#E545CA</code>), solo en bordes, barras y la marca del activo. El texto va siempre con <code>--tx-1/2/3</code></td></tr>
+<tr><td>Verde <code>#68ff9f</code> fijo en «✓»</td><td><code>--color-green</code>, con la guarda de contraste de la Bienvenida: en macOS y Notion pasa a verde oscuro</td></tr>
+<tr><td>Colores de tipo y de expansión como color de texto</td><td>Solo como punto de 7–8 px al lado del texto. El texto queda en tokens: se lee en los 19 themes</td></tr>
+<tr><td>Texto de 9 a 10 px</td><td>12 px como mínimo; nombres de 14 px</td></tr>
+<tr><td>Estilos escritos en cada etiqueta</td><td>Clases <code>.arm-*</code> en una sola hoja inyectada (como la Cartera y Metas): se pueden revisar y probar</td></tr>
+<tr><td>«Modo: Catálogo / Mi progreso»</td><td>Pestañas como las de la Cartera: «Catálogo 206 · Mi cola 2 de 5»</td></tr>
+<tr><td>Precio sin fecha</td><td>«≈ 1.889 g» con la aclaración «precio de referencia del 2026-10-02, no en vivo». Las monedas, con el mismo componente que la Cartera (<code>.coin</code>)</td></tr>
+</table>
+
+<!-- =============================== SHIRUVANA =============================== -->
+<h2>7. Integración con Shiruvana</h2>
+<div class="cols">
+<div class="card"><h3>Dónde y cuánto</h3><p>Una sola línea, en la cabecera (DEC-024: una vez por pantalla, nunca en los datos). En el celular no aparece: ahí ya está mi rincón, en «Más».</p></div>
+<div class="card"><h3>Qué digo (N1–N2, DEC-033)</h3><p>Solo lo que la Armería sabe de tu cuenta:</p><ul><li>«Tenés 34 de 206. En tu cola hay 2: abrí una para ver qué materiales te faltan.»</li><li>Con la cola vacía: «Abrí cualquier legendaria y sumala a tu cola: te muestro la receta y lo que te falta.»</li><li>Sin API Key: «El catálogo se puede mirar sin Key; para ver las tuyas, cargá una en Inicio.»</li><li>Sin permiso «desbloqueos»: «Tu Key no me deja ver tu armería; te explico cómo arreglarlo en Inicio.»</li></ul></div>
+<div class="card"><h3>Qué no digo (BL-059, sin habilitar)</h3><p>Nada de «te conviene fabricar X», precios en vivo, cuánto oro te falta ni cruces con la Cartera. Eso es N3–N4 y queda para cuando habilites el frente de Shiruvana.</p></div>
+</div>
+
+<!-- =============================== RESPONSIVE + A11Y =============================== -->
+<h2>8. Diseño responsive y accesibilidad</h2>
+<table>
+<tr><th>Ancho</th><th>Cómo se ve</th></tr>
+<tr><td><b>Desde 1200 px</b></td><td>Cabecera con 5 tarjetas de resumen; grilla de 4 a 5 columnas que se ajusta sola (<code>auto-fill, minmax(210px,1fr)</code>)</td></tr>
+<tr><td><b>901 a 1199 px</b></td><td>Resumen en 3 columnas; grilla de 3</td></tr>
+<tr><td><b>561 a 900 px</b></td><td>Cabecera compacta con barra; filtros en una fila con scroll; grilla de 2; barra fija abajo (Sidebar)</td></tr>
+<tr><td><b>Hasta 560 px</b></td><td>Una tarjeta por renglón, con «+ Cola» a la derecha; botones de 44 px; la cola apila sus botones</td></tr>
+</table>
+<p><b>Teclado y lector:</b> cada tarjeta es un artículo con dos controles reales, el nombre (botón que abre la ficha) y «+ A la cola» (botón aparte, nunca uno dentro del otro). Los filtros son botones con <code>aria-pressed</code>, el buscador tiene rótulo y anuncia «N legendarias», y las pestañas usan <code>aria-current</code>. El foco es visible en todo, el esqueleto de carga no se anima si el dispositivo pide reducir el movimiento, y «✓ La tengo» se lee como texto, no solo como color.</p>
+
+<!-- =============================== MICRO-CICLOS =============================== -->
+<h2>9. Plan de implementación (micro-ciclos)</h2>
+<table>
+<tr><th>Paso</th><th>Qué ves</th><th>Archivos</th></tr>
+<tr><td><b>ARM-1</b></td><td>Cabecera con resumen, pestañas «Catálogo / Mi cola» y buscador. Antes, una dieta de <code>legendary-tracker.js</code>: la cola y el marco pasan a <code>render-catologo.js</code>, que ya se carga, para que el tracker baje de su límite de 64 KB.</td><td><code>legendary-tracker.js</code>, <code>render-catologo.js</code>, test</td></tr>
+<tr><td><b>ARM-2</b></td><td>Filtros en una fila, tarjetas nuevas, grilla adaptable, secciones por expansión con su avance, «La tengo» en vez de «PENDING» y precio con fecha</td><td><code>render-catologo.js</code>, test</td></tr>
+<tr><td><b>ARM-3</b></td><td>«Mi cola» renovada y mi línea en la cabecera</td><td><code>render-catologo.js</code>, test</td></tr>
+<tr><td><b>ARM-4</b></td><td>Armaduras por set: unas 22 tarjetas con «4 de 6 piezas» en lugar de 132 sueltas. Al abrir una, sus 6 piezas. <i>Lo decidís vos (abajo).</i></td><td><code>render-catologo.js</code>, test</td></tr>
+<tr><td><b>ARM-5</b></td><td>Revisión en los 19 themes, celular, teclado y lector; FEAT-010, backlog, changelog y cierre</td><td>test de contraste, documentación</td></tr>
+</table>
+<p>La ficha de la legendaria no cambia. La cola sigue guardada en el mismo lugar (<code>gn:legendary:</code>): nadie pierde lo que tiene encolado. Sin pedidos nuevos a la API.</p>
+
+<h2>10. Lo que necesito de vos</h2>
+<div class="dec"><b>Plan y orden.</b> ¿Aprobás el orden de la sección 1 (Armería, Cámara del Brujo, Logros, Actividades, Raids y Strikes, Inventario y Personajes, Cuentas y el marco común al final)? Mi recomendación: sí. Va de lo más usado y más fácil de publicar a lo más grande y delicado.</div>
+<div class="dec"><b>Propuesta de la Armería.</b> ¿Aprobás el diseño de las secciones 4 a 8? Si la aprobás, arranco por ARM-1.</div>
+<div class="dec"><b>Armaduras por set (ARM-4).</b> ¿Las agrupo? Mi recomendación: sí, es la mejora más grande de lectura del catálogo, porque pasa de 206 tarjetas a unas 96. Va como paso aparte, al final, para que el resto quede listo antes.</div>
+<p class="lead" style="margin-top:18px">Riesgos: <code>legendary-tracker.js</code> está a 1 KB del límite de publicación (lo cubre la dieta de ARM-1); hace falta Ctrl+F5 para ver cada paso (RSK-020); los precios siguen siendo de referencia hasta que exista un precio en vivo (idea N3 de BL-059).</p>
+
+</div>
+</body>
+</html>
