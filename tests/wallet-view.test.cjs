@@ -24,7 +24,7 @@ const P = WT._pure;
 const M = (id, amount, cats, extra) => Object.assign({ id, name: 'D' + id, amount, cats, pinned: false, isMain: false }, extra || {});
 
 test('versión y nombres públicos de la 1.x siguen existiendo', () => {
-  assert.equal(WT.version, '2.1.0');
+  assert.equal(WT.version, '2.1.1');
   assert.equal(typeof WT.showTab, 'function');
   for (const k of ['process', 'themeWalletNow', 'applyCurrencyTheme', 'migrateCategoriesToBadges', 'migrateWalletToCardClass']) {
     assert.equal(typeof WT[k], 'function', k);
@@ -121,6 +121,10 @@ test('Cambio de divisas (CAR-2B): se monta en la Cartera con la API pública del
 test('la capa no pide datos ni escribe datos del jugador; solo su preferencia', () => {
   assert.doesNotMatch(SRC, /fetch\(|GW2Api|XMLHttpRequest/);
   assert.deepEqual([...SRC.matchAll(/localStorage\.setItem\(([^,]+),/g)].map((m) => m[1]), ['LS_HIDEZERO']);
+  // Las claves espejo (gn:account:*, gn:activities:*) solo por Storage: leerlas directo se saltea el espejo (idea61, BL-066).
+  const code = SRC.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/\/\/[^\n]*/g, ' ');
+  assert.doesNotMatch(code, /getItem\(\s*'gn:(account|activities):/);
+  assert.match(SRC, /if \(!St \|\| !St\.STORAGE_KEYS \|\| typeof St\.get !== 'function'\) return 0;/);
   // Los controles de app.js se mudan (mismos nodos, mismos listeners), no se clonan.
   assert.doesNotMatch(SRC, /cloneNode/);
   assert.match(SRC, /\$\('\.wn-search', tools\)\.appendChild\(search\)/);
