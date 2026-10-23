@@ -1,6 +1,7 @@
 // Dónde le hablo al jugador (DEC-025): Bienvenida, modal de API Keys y modal de guías.
 // En la Bienvenida con API Key soy «Shiruvana te guía» (BL-058, WEL-3): un mensaje por vez,
-// por prioridad, y solo sobre la Bóveda (DEC-032). Se prueba con el componente de voz real.
+// por prioridad, y solo sobre la Bóveda (DEC-032). Mi rincón al pie de la Sidebar y de la hoja «Más»
+// (DEC-034, SBR-4). Se prueba con el componente de voz real.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -49,7 +50,7 @@ function el(tag, extra) {
 }
 const focused = { el: null };
 
-function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWelcome = false } = {}) {
+function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWelcome = false, hosts = [] } = {}) {
   const head = el('head');
   const welcomeBody = el('div', { className: 'panel__body' });
   if (welcomeDrawn) welcomeBody.appendChild(el('div', { _text: 'contenido' }));
@@ -59,6 +60,8 @@ function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWe
   guideBody.appendChild(el('p', { className: 'muted', _text: 'Elegí la guía que mejor se adapte a lo que necesitás:' }));
   const map = { '#welcomePanel .panel__body': welcomeBody, '#keysModal .modal__body': keysBody, '#guideModal .modal__body': guideBody };
   const welcomePanel = el('section', { id: 'welcomePanel' });
+  const H = {};
+  hosts.forEach((id) => { H[id] = el(id === 'sbrSheet' ? 'div' : 'aside', { id }); H[id].appendChild(el('ul', { _text: 'enlaces' })); });
   const window = {
     Storage: { get: (k) => (k === 'gn:account:keys' ? keys : k === 'gn:account:selected' ? selected : null) },
   };
@@ -66,7 +69,7 @@ function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWe
   window.document = {
     readyState: 'complete', head,
     querySelector: (s) => map[s] || null,
-    getElementById: (id) => (id === 'welcomePanel' ? welcomePanel
+    getElementById: (id) => (id === 'welcomePanel' ? welcomePanel : H[id] ? H[id]
       : head.children.concat(welcomePanel.children).find((c) => c.id === id) || null),
     createElement: (t) => el(t),
     addEventListener() {},
@@ -74,7 +77,7 @@ function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWe
   const ctx = { window, globalThis: {}, Date, Math, JSON };
   vm.runInNewContext(VOICE, ctx);
   vm.runInNewContext(SRC, ctx);
-  return { P: window.ShiruvanaPlaces, welcomeBody, welcomePanel, keysBody, guideBody, head };
+  return { P: window.ShiruvanaPlaces, welcomeBody, welcomePanel, keysBody, guideBody, head, H, window };
 }
 
 const voiceOf = (body) => body.children[0];
@@ -269,9 +272,109 @@ test('lector de pantalla: «Siguiente» y «Preguntame» anuncian el mensaje nue
   assert.equal(focused.el && focused.el.getAttribute('data-ask'), 'safe', 'el foco no se mueve');
 });
 
-test('versión 1.2.0 en el encabezado y en la API', () => {
+test('versión 1.3.0 en el encabezado y en la API', () => {
   const { P } = setup();
-  assert.match(SRC, /Versión: 1\.2\.0/);
-  assert.equal(P.version, '1.2.0');
+  assert.match(SRC, /Versión: 1\.3\.0/);
+  assert.equal(P.version, '1.3.0');
   assert.match(P.CSS || SRC, /\.shv-sr\{position:absolute;width:1px;height:1px/);
+});
+
+// ---------------------------------------------------------------- mi rincón (SBR-4, DEC-034)
+const BOTH = ['appSidebar', 'sbrSheet'];
+const cornersIn = (host) => host.children.filter((c) => c.attrs['data-shv-place'] === 'corner');
+const lineOf = (c) => textOf(c).join(' ');
+const linksIn = (c) => c.querySelectorAll('a');
+
+test('rincón: al pie de la Sidebar y de la hoja «Más», con avatar de 48 px, «Shiruvana» y una sola línea', () => {
+  const x = setup({ keys: [k('Main', 'A', ALL)], selected: 'A', orient: [O.cont], hosts: BOTH });
+  BOTH.forEach((id) => {
+    const cs = cornersIn(x.H[id]);
+    assert.equal(cs.length, 1, 'uno solo por lugar: ' + id);
+    const c = cs[0];
+    assert.equal(x.H[id].children[x.H[id].children.length - 1], c, 'al pie, después de los enlaces');
+    assert.match(c.className, /\bshv-corner\b/);
+    assert.equal(c.getAttribute('aria-label'), 'Shiruvana');
+    assert.equal(c.querySelector('.shv-voice__label').textContent, 'Shiruvana');
+    const img = c.querySelector('img');
+    assert.ok(img, 'con mi avatar');
+    assert.equal(img.width, 48);
+    assert.equal(textOf(c).length, 1, 'una sola línea');
+  });
+  assert.equal(lineOf(cornersIn(x.H.appSidebar)[0]), 'Todo en orden en tu Bóveda.');
+  assert.equal(linksIn(cornersIn(x.H.appSidebar)[0]).length, 0, 'si está todo en orden no te mando a ningún lado');
+});
+
+test('rincón: sin API Key te llevo a Inicio para empezar (un solo enlace)', () => {
+  const x = setup({ hosts: BOTH });
+  const c = cornersIn(x.H.appSidebar)[0];
+  assert.equal(lineOf(c), 'Empezá por tu API Key: te llevo paso a paso en Inicio.');
+  const a = linksIn(c);
+  assert.equal(a.length, 1);
+  assert.equal(a[0].getAttribute('href'), '#/welcome');
+  assert.equal(a[0].textContent, 'Ir a Inicio');
+  assert.equal(c.getAttribute('data-level'), 'warn');
+  assert.equal(c.querySelector('.shv-voice__label').textContent, 'Shiruvana', 'el rótulo es siempre «Shiruvana», también cuando aviso');
+  assert.equal(c.getAttribute('aria-label'), 'Shiruvana');
+});
+
+test('rincón: cuento lo que hay para revisar con las prioridades de «Shiruvana te guía»', () => {
+  const one = setup({ keys: [k('Main', 'A', ALL)], selected: 'A', orient: [O.backupNever, O.cont], hosts: BOTH });
+  assert.equal(lineOf(cornersIn(one.H.sbrSheet)[0]), 'Tengo 1 cosa para revisar: tu copia de seguridad.');
+  const many = setup({ keys: [k('Main', 'A', ALL), k('Alt', 'B', ['account'])], selected: 'A', orient: [O.keys, O.backupOld, O.verify, O.cont], hosts: BOTH });
+  const c = cornersIn(many.H.appSidebar)[0];
+  assert.equal(lineOf(c), 'Tengo 3 cosas para revisar; la primera: faltan permisos en tus Keys.');
+  assert.equal(linksIn(c).length, 1);
+  assert.equal(linksIn(c)[0].textContent, 'Ver en Inicio');
+  const blocked = setup({ keys: [k('Main', 'A', ['wallet'])], selected: 'A', orient: [{ id: 'keys', level: 'warn', title: 'A la Key de Main le faltan permisos' }], hosts: BOTH });
+  assert.equal(lineOf(cornersIn(blocked.H.appSidebar)[0]), 'Tengo 1 cosa para revisar: tu Key activa no tiene el permiso «cuenta».', 'lo que impide funcionar va primero y no se repite');
+  const P = one.P;
+  same(P.cornerMessage(true, [O.verify], { label: 'M', value: 'A', perms: ALL }),
+    { level: 'warn', text: 'Tengo 1 cosa para revisar: Keys sin sus permisos anotados.', link: { label: 'Ver en Inicio', href: '#/welcome' } });
+});
+
+test('rincón: se actualiza en el mismo lugar cuando cambia lo que hay que revisar, sin duplicarse', () => {
+  let orient = [O.backupNever, O.cont];
+  const x = setup({ keys: [k('Main', 'A', ALL)], selected: 'A', orient: () => orient, hosts: BOTH });
+  const before = cornersIn(x.H.appSidebar)[0];
+  x.P.corner();
+  assert.equal(cornersIn(x.H.appSidebar)[0], before, 'si no cambió nada, no lo rearmo');
+  orient = [O.cont];
+  x.P.corner();
+  assert.equal(cornersIn(x.H.appSidebar).length, 1);
+  assert.equal(lineOf(cornersIn(x.H.appSidebar)[0]), 'Todo en orden en tu Bóveda.');
+  assert.equal(cornersIn(x.H.sbrSheet).length, 1);
+});
+
+test('rincón: el enlace de la hoja «Más» la cierra', () => {
+  const x = setup({ hosts: BOTH });
+  let closed = 0;
+  x.window.SidebarNav = { closeSheet: () => { closed++; } };
+  const a = linksIn(cornersIn(x.H.sbrSheet)[0])[0];
+  a.listeners.click.forEach((f) => f({}));
+  assert.equal(closed, 1);
+});
+
+test('rincón: sin la Sidebar, sin la Bienvenida o sin mi voz no pongo nada ni rompo', () => {
+  const none = setup({ keys: [k('Main', 'A', ALL)] });
+  same(none.P.corner(), []);
+  const noW = setup({ keys: [k('Main', 'A', ALL)], noWelcome: true, hosts: BOTH });
+  assert.equal(cornersIn(noW.H.appSidebar).length, 0, 'con Keys pero sin saber qué falta, no invento');
+  const bad = setup({ keys: [k('Main', 'A', ALL)], orient: () => { throw new Error('x'); }, hosts: BOTH });
+  assert.equal(cornersIn(bad.H.appSidebar).length, 0);
+});
+
+test('rincón: uno solo a la vista (Sidebar en desktop, hoja en el celular) y nada se abre solo', () => {
+  const x = setup({ hosts: BOTH });
+  const css = x.P.CORNER_CSS;
+  assert.match(css, /@media \(max-width:900px\)\{#appSidebar>\.shv-corner\{display:none\}/);
+  assert.match(css, /@media \(min-width:901px\)\{#sbrSheet>\.shv-corner\{display:none\}\}/);
+  assert.equal(x.head.children.filter((c) => c.id === 'shv-corner-css').length, 1);
+  assert.doesNotMatch(SRC, /openSheet/, 'no abro la hoja por mi cuenta');
+});
+
+test('rincón — Frontera (DEC-032, DEC-034): solo estado de la Bóveda, nada de horarios, eventos, metas ni módulos', () => {
+  const P = setup().P;
+  const all = Object.values(P.CORNER_SHORT).join(' ') + ' ' +
+    [P.cornerMessage(false), P.cornerMessage(true, []), P.cornerMessage(true, [O.keys, O.backupOld, O.verify])].map((m) => m.text).join(' ');
+  assert.doesNotMatch(all, /meta|evento|horario|reset|world ?boss|jefe|precio|oro|legendaria|logro|infusi|agenda|termina|empieza/i);
 });
