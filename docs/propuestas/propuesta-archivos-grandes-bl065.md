@@ -1,6 +1,6 @@
 # Propuesta BL-065 — Archivos grandes: cómo sigue creciendo la Bóveda
 
-- **Estado:** aprobada por Pablo (2026-10-23 18:55Z) como DEC-035. FP-1 y FP-2 hechos; esta línea la escribió el canal de parches (FP-3, PATCH-006).
+- **Estado:** aprobada por Pablo (2026-10-23 18:55Z) como DEC-035. FP-1 a FP-3 hechos; esta línea la mantiene el canal de parches (PATCH-006 y PATCH-008).
 - **Fecha:** 2026-10-23
 - **Pedido:** Pablo (18:46Z). Pausa BL-064 hasta resolver esto.
 - **Decisión:** `ai-memory/decisions/DEC-035-crecimiento-modular-y-canal-de-parches.md`.
