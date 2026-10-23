@@ -6,6 +6,17 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ---
 
+## 2026-10-23 — Solo en DEV: Metas y Eventos renovado (BL-057, FEAT-007)
+
+- **Cabecera nueva**: «Metas y Eventos · Horarios en tu hora local · 49 metas» con botones de Local, Servidor (UTC), Reset diario (00:00 UTC) y Reset semanal (lunes 07:30 UTC) con cuenta regresiva; el reset cercano se pone dorado.
+- **«Hoy en tu cuenta»**: N de 19 que la API puede seguir (jefes del mundo y cofres de mapa), con barra fina, «↻ Actualizar» y «¿Por qué 19?». Las otras metas ya no dicen «Pendiente» en rojo: la API no las informa.
+- **Secciones**: «Ahora» (en curso y lo que empieza en 20 min), agenda de las próximas 3 horas por tu hora local, Fijadas (hasta 6) y todas las metas por expansión, en orden de salida. Todo se redibuja solo cada 30 s.
+- **Filtros desde los datos**, en español y con su cantidad; antes 14 metas no tenían tipo para filtrar y «Fractal Incursion» no tenía ninguna.
+- **Metas que cruzan la medianoche UTC** siguen «En curso» después de las 00:00 (BL-041).
+- **Vistas previas de infusiones**: salen de La Bóveda (8 de 10). Chak y Dragon's End dicen «Sin vista previa» con el nombre de la infusión; ya no se ven imágenes rotas (DEC-031).
+- **Mi voz** avisa lo que está en curso y cuándo termina, con el nombre en negrita y el waypoint a un clic; cerca del reset, lo que te queda para hoy.
+- Sin «Vista compacta» (aprobado por Pablo). Sin claves nuevas en el navegador. Si no ves los cambios, Ctrl+F5 (RSK-020).
+
 ## 2026-10-22 — En producción: la Cartera renovada (BL-056, FEAT-006)
 
 - **Una pantalla con tres pestañas**: Mi cartera, Todas las cuentas y Cambio de divisas. El conversor ya no es un modal.
