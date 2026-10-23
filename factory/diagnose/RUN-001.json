@@ -1,0 +1,5 @@
+{
+  "id": "RUN-001",
+  "summary": "BL-066: qué aserción de idea61 falla en CI (Node 22)",
+  "tests": ["tests/idea61-claves-congeladas.test.js"]
+}
