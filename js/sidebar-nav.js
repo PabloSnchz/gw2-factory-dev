@@ -1,6 +1,6 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.2.1 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
+ * Versión: 2.2.2 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
  * Arma su lista desde la de la Bienvenida (Welcome._pure.MODULES): mismo orden, nombre, ícono y color.
@@ -32,10 +32,13 @@
  *   Bienvenida viene después: arrancando antes, «Nuevo» no aparecía nunca y la guarda de contraste no se
  *   aplicaba hasta cambiar de theme (la tarjeta se arreglaba sola con el gn:tokenchange de app.js).
  *   Si la Bienvenida igual no está, las novedades se piden de nuevo en el próximo refresco.
+ * 2.2.2 (SBR-5, revisión): «Nuevo» se lee igual en todos lados. En la barra del celular es un punto con
+ *   el texto a tamaño 0, y algunos lectores de pantalla (VoiceOver) saltean ese texto. Ahora la marca
+ *   visible queda oculta para el lector y se lee «(nuevo)» aparte, como «(falta permiso)».
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.2.1';
+  var VERSION = '2.2.2';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -558,8 +561,13 @@
       } else if (fresh[id]) {
         var n = d.createElement('i');
         n.className = 'sbr-new';
+        n.setAttribute('aria-hidden', 'true');
         n.textContent = 'Nuevo';
+        var srn = d.createElement('span');
+        srn.className = 'sbr-sr';
+        srn.textContent = ' (nuevo)';
         a.appendChild(n);
+        a.appendChild(srn);
       }
     });
     var more = d.getElementById('sbrMore');
