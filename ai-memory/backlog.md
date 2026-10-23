@@ -12,6 +12,8 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
+- [BL-064] [ALTO] Restyle completo de la Bóveda, primero la Armería Legendaria — pedido de Pablo (2026-10-23 15:14Z): terminar el restyle de toda la webapp antes de BL-060 y BL-055, empezando por la Armería (su catálogo desentona con la ficha de BL-049). ARM-0: plan pantalla por pantalla (1 Armería, 2 Cámara del Brujo, 3 Logros, 4 Actividades, 5 Raids y Strikes, 6 Inventario y Personajes, 7 Cuentas, 8 marco común) y propuesta de la Armería con diagnóstico medido (grilla fija de 5 columnas en el celular, tarjetas sin teclado, texto de 9–10 px, colores fijos, sin buscador, «PENDING», «Mi progreso» que es la cola) y plan ARM-1 a ARM-5 en `docs/propuestas/propuesta-armeria-bl064.html` (`7ac2f3f`). Espera la aprobación de Pablo: plan y orden, diseño, y armaduras por set (ARM-4). Sin código todavía. · BL-049, FEAT-006, FEAT-007, FEAT-008, FEAT-009, DEC-024, DEC-033, LES-028
+
 ## BLOCKED
 
 - [BL-059] [ALTO] Frente estratégico: evolución de Shiruvana en la Bóveda — niveles N1 Informativa, N2 Contextual, N3 Analítica, N4 Asistente estratégico y N5 Compañera de cuenta; visión, principios y camino orientativo (SHV-1 a SHV-4) en DEC-033. N1 cumplido; N2 entrando con Metas y Eventos y la Bienvenida. · DEC-033, DEC-024, DEC-032 — Bloqueado por Pablo: abrió el frente para registrarlo (2026-10-23 05:00Z) y pidió no implementar todavía; lo mantiene aprobado conceptualmente (2026-10-23 05:54Z).
