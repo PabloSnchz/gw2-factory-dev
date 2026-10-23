@@ -1,5 +1,6 @@
-// BL-057 / MET-1 — Meta & Eventos 4.0.0: lógica de la pantalla nueva (Ahora, agenda, catálogo).
+// BL-057 / MET-1 — Meta & Eventos 4.0.x: lógica de la pantalla nueva (Ahora, agenda, catálogo).
 // Carga js/meta.js en un contexto mínimo y prueba las funciones puras de Meta._pure con los datos reales.
+// MET-1c (4.0.1, DEC-031): vistas previas desde assets/previews/ y estado «Sin vista previa» limpio.
 const test = require('node:test');
 const assert = require('node:assert');
 const fs = require('node:fs');
@@ -23,8 +24,8 @@ const P = Meta._pure;
 const at = (iso) => new Date(iso);
 const flagsOk = (wb, mc) => ({ state: 'ok', worldbosses: new Set(wb || []), mapchests: new Set(mc || []) });
 
-test('versión 4.0.0 y API pública', () => {
-  assert.equal(Meta.version, '4.0.0');
+test('versión 4.0.x y API pública', () => {
+  assert.equal(Meta.version, Meta._view ? '4.0.1' : '4.0.0');
   for (const k of ['refresh', 'snapshot', '_expansionOptions']) assert.equal(typeof Meta[k], 'function', k);
   for (const k of ['instanceAt', 'startsWithin', 'agendaOf', 'matches', 'typeCounts', 'expCounts', 'groupByExp', 'doneOf', 'hasDrop', 'fold', 'nextResetUTC']) {
     assert.equal(typeof P[k], 'function', k);
@@ -152,4 +153,146 @@ test('pantalla: se mantiene la vista previa de drops; se va la vista compacta', 
   assert.ok(!/Vista compacta/.test(SRC.replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '')), 'sin «Vista compacta»');
   assert.ok(!/\bconfirm\(/.test(SRC), 'sin confirm()');
   assert.match(SRC, /gn:meta-rendered/);
+});
+
+// ---------------------------------------------------------------------------------------------
+// MET-1c (DEC-031): vistas previas desde La Bóveda y estado «Sin vista previa» limpio.
+// ---------------------------------------------------------------------------------------------
+const drops = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/meta-drops.json'), 'utf8').replace(/^\uFEFF/, ''));
+const skip1c = !Meta._view && 'meta.js todavía 4.0.0';
+
+test('meta-drops.json: 8 vistas previas locales en assets/previews/ y 2 marcadas como faltantes', () => {
+  const ok = [], missing = [];
+  for (const d of drops) {
+    const it = (d.items || [])[0] || {};
+    assert.ok(!/^https?:/i.test(it.preview || ''), d.metaId + ': la vista previa no sale de internet');
+    if (it.previewMissing) { missing.push(d.metaId); assert.equal(it.preview, '', d.metaId); continue; }
+    if (!it.preview) continue;
+    ok.push(d.metaId);
+    assert.equal(it.preview, 'assets/previews/' + d.metaId + '.webp', d.metaId);
+    assert.ok(fs.existsSync(path.join(ROOT, it.preview)), 'existe ' + it.preview);
+  }
+  assert.deepEqual(ok.sort(), ['death_branded_shatterer', 'dragonstorm', 'drakkar', 'drizzlewood_north', 'octovine', 'pinata', 'secrets_of_the_weald', 'vinewrath']);
+  assert.deepEqual(missing.sort(), ['chak_gerent', 'dragons_end']);
+});
+
+test('meta.js pide meta-drops.json nuevo (?v=2.6.0) para no servir las direcciones viejas', { skip: skip1c }, () => {
+  assert.match(SRC, /assets\/meta-drops\.json\?v=2\.6\.0/);
+});
+
+test('previewOf: ok, falta (DEC-031), no aplica y la que no cargó', { skip: skip1c }, () => {
+  const V = Meta._view;
+  assert.deepEqual(V.previewOf({ preview: 'assets/previews/a.webp' }), { state: 'ok', url: 'assets/previews/a.webp' });
+  assert.deepEqual(V.previewOf({ preview: '', previewMissing: true }), { state: 'missing', url: '' });
+  assert.deepEqual(V.previewOf({ preview: '' }), { state: 'none', url: '' });
+  assert.deepEqual(V.previewOf(null), { state: 'none', url: '' });
+  V.badPreviews.add('assets/previews/rota.webp');
+  assert.deepEqual(V.previewOf({ preview: 'assets/previews/rota.webp' }), { state: 'missing', url: '' });
+  V.badPreviews.delete('assets/previews/rota.webp');
+});
+
+test('tarjeta: «Vista previa» si hay archivo, «Sin vista previa» si falta, nada si no aplica', { skip: skip1c }, () => {
+  const V = Meta._view;
+  const ok = V.dropHTML({ highlightItemId: null, _extItems: [{ itemName: 'Queen Bee Infusion', preview: 'assets/previews/vinewrath.webp' }] });
+  assert.match(ok, /data-preview="assets\/previews\/vinewrath\.webp"/);
+  assert.match(ok, /data-pv="ok"/);
+  assert.match(ok, /mt-drop--prev/);
+  assert.match(ok, />Vista previa</);
+  const miss = V.dropHTML({ highlightItemId: null, _extItems: [{ itemName: 'Chak Infusion', preview: '', previewMissing: true }] });
+  assert.match(miss, /data-preview=""/);
+  assert.match(miss, /data-pv="missing"/);
+  assert.match(miss, /mt-drop--nopv/);
+  assert.match(miss, /Sin vista previa/);
+  assert.match(miss, /aria-label="Sin vista previa de Chak Infusion"/);
+  assert.doesNotMatch(miss, /mt-drop--prev/);
+  const none = V.dropHTML({ highlightItemId: null, _extItems: [{ itemName: 'Algo', preview: '' }] });
+  assert.doesNotMatch(none, /data-preview|vista previa/i);
+});
+
+// DOM mínimo para la ventanita: lo justo que usan showPreview, place y markMissing.
+function fakeDom() {
+  const all = [];
+  class El {
+    constructor(tag) { this.tagName = tag.toUpperCase(); this.attrs = {}; this.children = []; this.style = {}; this.html = ''; this.parentNode = null;
+      const cls = new Set(); this.classList = { add: (...c) => c.forEach((x) => cls.add(x)), remove: (...c) => c.forEach((x) => cls.delete(x)), contains: (c) => cls.has(c) };
+      Object.defineProperty(this, 'className', { get: () => [...cls].join(' '), set: (v) => { cls.clear(); String(v).split(/\s+/).filter(Boolean).forEach((x) => cls.add(x)); } }); }
+    setAttribute(k, v) { this.attrs[k] = String(v); }
+    getAttribute(k) { return k in this.attrs ? this.attrs[k] : null; }
+    hasAttribute(k) { return k in this.attrs; }
+    appendChild(c) { c.parentNode = this; this.children.push(c); return c; }
+    removeChild(c) { this.children = this.children.filter((x) => x !== c); c.parentNode = null; }
+    set innerHTML(v) { this.html = v; this.children = []; }
+    get innerHTML() { return this.html + this.children.map((c) => '<' + c.tagName.toLowerCase() + '>').join(''); }
+    querySelector(sel) { const k = sel.replace('.', ''); return (this.sub || {})[k] || null; }
+    getBoundingClientRect() { return { left: 10, top: 300 }; }
+    get offsetHeight() { return 100; }
+  }
+  const body = new El('body');
+  const document = { body, createElement: (t) => { const e = new El(t); all.push(e); return e; }, querySelector: () => null, querySelectorAll: () => targets, addEventListener: () => {} };
+  const targets = [];
+  return { El, document, body, all, targets };
+}
+function loadWithDom(dom) {
+  const window = { addEventListener: () => {}, scrollX: 0, scrollY: 0 };
+  const warns = [];
+  vm.runInNewContext(SRC, { window, document: dom.document, Storage: { STORAGE_KEYS: {} }, console: { info() {}, warn: (...a) => warns.push(a.join(' ')), error() {}, log() {} }, setTimeout, clearTimeout, setInterval, clearInterval });
+  return { Meta: window.Meta, warns };
+}
+function target(dom, url, pv, name) {
+  const t = new dom.El('div');
+  t.setAttribute('data-preview', url); t.setAttribute('data-pv', pv);
+  const n = new dom.El('span'); n.textContent = name; const h = new dom.El('span'); h.textContent = 'Vista previa';
+  t.sub = { 'mt-dname': n, 'mt-dhint': h };
+  t.classList.add('mt-drop', pv === 'ok' ? 'mt-drop--prev' : 'mt-drop--nopv');
+  dom.targets.push(t);
+  return t;
+}
+
+test('ventanita sin archivo: «Sin vista previa» con el nombre, sin <img> ni texto alternativo', { skip: skip1c }, () => {
+  const dom = fakeDom();
+  const { Meta: M } = loadWithDom(dom);
+  const t = target(dom, '', 'missing', 'Chak Infusion');
+  M._view.showPreview(t, null);
+  const pop = dom.body.children[0];
+  assert.ok(pop, 'se abre');
+  assert.match(pop.innerHTML, /Sin vista previa/);
+  assert.match(pop.innerHTML, /Chak Infusion/);
+  assert.doesNotMatch(pop.innerHTML, /<img/);
+  M._view.hidePreview(true);
+  assert.equal(dom.body.children.length, 0, 'se cierra');
+});
+
+test('ventanita con archivo: «Cargando…» sin texto alternativo, después la imagen; si falla, «Sin vista previa» y la tarjeta cambia', { skip: skip1c }, () => {
+  const dom = fakeDom();
+  const { Meta: M, warns } = loadWithDom(dom);
+  const url = 'assets/previews/vinewrath.webp';
+  const t = target(dom, url, 'ok', 'Queen Bee Infusion');
+  M._view.showPreview(t, null);
+  let pop = dom.body.children[0];
+  const img = pop.children.find((c) => c.tagName === 'IMG');
+  assert.ok(img, 'pide la imagen');
+  assert.equal(img.src, url);
+  assert.equal(img.alt, '', 'mientras carga no hay texto alternativo a la vista');
+  assert.ok(pop.classList.contains('is-loading'));
+  assert.match(pop.html, /Cargando vista previa/);
+  img.onload();
+  assert.ok(!pop.classList.contains('is-loading'));
+  assert.equal(img.alt, 'Vista previa: Queen Bee Infusion');
+  M._view.hidePreview(true);
+
+  M._view.showPreview(t, null);
+  pop = dom.body.children[0];
+  const img2 = pop.children.find((c) => c.tagName === 'IMG');
+  img2.onerror();
+  assert.match(pop.innerHTML, /Sin vista previa/);
+  assert.match(pop.innerHTML, /Queen Bee Infusion/);
+  assert.doesNotMatch(pop.innerHTML, /<img/, 'la imagen rota se va');
+  assert.ok(M._view.badPreviews.has(url));
+  assert.equal(t.getAttribute('data-pv'), 'missing');
+  assert.ok(t.classList.contains('mt-drop--nopv') && !t.classList.contains('mt-drop--prev'));
+  assert.equal(t.sub['mt-dhint'].textContent, 'Sin vista previa');
+  assert.ok(warns.some((w) => w.includes(url)), 'deja el diagnóstico en la consola');
+  M._view.hidePreview(true);
+  M._view.showPreview(t, null);
+  assert.doesNotMatch(dom.body.children[0].innerHTML, /<img/, 'la próxima vez ya no la pide');
 });
