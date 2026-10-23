@@ -1,6 +1,6 @@
 /*!
  * js/shiruvana-places.js — Dónde le hablo al jugador (DEC-025)
- * Versión: 1.1.0
+ * Versión: 1.2.0
  *
  * Pongo mi voz (js/shiruvana.js) en tres lugares, sin tocar el código de cada módulo:
  *  - la Bienvenida: sin API Key me presento y te llevo a los tres pasos; con API Key soy
@@ -18,10 +18,12 @@
  *
  * 1.1.0 (WEL-3): «Shiruvana te guía», con «Siguiente» y «Preguntame»; el texto del modal de Keys
  *   deja de prometer la sincronización deprecada (DEC-030) y el saludo deja de nombrar la barra lateral.
+ * 1.2.0 (WEL-4): con «Siguiente» o «Preguntame» el mensaje nuevo se anuncia en una región «polite»
+ *   (#shvGuideLive, fuera de .panel__body) para quien usa lector de pantalla; el foco no se mueve.
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
 
   var TEXTS = {
     welcomeNew: [
@@ -74,7 +76,7 @@
 
   var PRIORITY = { blocked: 1, keys: 2, backup: 3, verify: 4, 'continue': 5, general: 6 };
 
-  var guide = { idx: 0, sig: '', ask: null };
+  var guide = { idx: 0, sig: '', ask: null, say: '' };
 
   function doc() { return root.document; }
   function dayIndex(now) { return Math.floor((typeof now === 'number' ? now : Date.now()) / 864e5); }
@@ -173,7 +175,8 @@
     '.shv-guide__btn--pri{border-color:var(--acc-1);color:var(--tx-1,var(--text));font-weight:600}',
     '.shv-guide__btn:hover,.shv-guide__btn[aria-pressed="true"]{border-color:var(--acc-1);color:var(--tx-1,var(--text))}',
     '.shv-guide__btn:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
-    '@media (max-width:720px){.shv-guide__btn{min-height:44px}}'
+    '@media (max-width:720px){.shv-guide__btn{min-height:44px}}',
+    '.shv-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}'
   ].join('\n');
 
   function ensureGuideCSS(d) {
@@ -214,6 +217,8 @@
       count.textContent = ask ? 'Preguntame' : (items.length > 1 ? (idx + 1) + ' de ' + items.length + (idx === 0 ? ' · lo más importante primero' : '') : '');
       if (count.textContent) label.appendChild(count);
     }
+    guide.say = (ask ? 'Preguntame. ' : (items.length > 1 ? (idx + 1) + ' de ' + items.length + '. ' : '')) +
+      [].concat(msg.text).join(' ');
     if (!main) return el;
 
     var acts = d.createElement('div');
@@ -264,11 +269,29 @@
     if (!el) return null;
     el.setAttribute('data-shv-place', 'welcome');
     body.replaceChild(el, prev);
+    announce(guide.say);
     var target = focus === 'next'
       ? (el.querySelector('[data-guide="next"]') || el.querySelector('[data-ask="review"]'))
       : el.querySelector('[data-ask="' + focus + '"]');
     if (target && target.focus) target.focus();
     return el;
+  }
+
+  // Región «polite» fija en #welcomePanel (fuera de .panel__body, que la Bienvenida redibuja).
+  function announce(text) {
+    var d = doc(), host = d.getElementById('welcomePanel');
+    if (!host || !text) return;
+    ensureGuideCSS(d);
+    var live = d.getElementById('shvGuideLive');
+    if (!live) {
+      live = d.createElement('div');
+      live.id = 'shvGuideLive';
+      live.className = 'shv-sr';
+      live.setAttribute('role', 'status');
+      live.setAttribute('aria-live', 'polite');
+      host.appendChild(live);
+    }
+    live.textContent = text;
   }
 
   function buildWelcome() {

@@ -58,6 +58,7 @@ function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWe
   const guideBody = el('div');
   guideBody.appendChild(el('p', { className: 'muted', _text: 'Elegí la guía que mejor se adapte a lo que necesitás:' }));
   const map = { '#welcomePanel .panel__body': welcomeBody, '#keysModal .modal__body': keysBody, '#guideModal .modal__body': guideBody };
+  const welcomePanel = el('section', { id: 'welcomePanel' });
   const window = {
     Storage: { get: (k) => (k === 'gn:account:keys' ? keys : k === 'gn:account:selected' ? selected : null) },
   };
@@ -65,14 +66,15 @@ function setup({ keys = null, selected = null, orient, welcomeDrawn = true, noWe
   window.document = {
     readyState: 'complete', head,
     querySelector: (s) => map[s] || null,
-    getElementById: (id) => head.children.find((c) => c.id === id) || null,
+    getElementById: (id) => (id === 'welcomePanel' ? welcomePanel
+      : head.children.concat(welcomePanel.children).find((c) => c.id === id) || null),
     createElement: (t) => el(t),
     addEventListener() {},
   };
   const ctx = { window, globalThis: {}, Date, Math, JSON };
   vm.runInNewContext(VOICE, ctx);
   vm.runInNewContext(SRC, ctx);
-  return { P: window.ShiruvanaPlaces, welcomeBody, keysBody, guideBody, head };
+  return { P: window.ShiruvanaPlaces, welcomeBody, welcomePanel, keysBody, guideBody, head };
 }
 
 const voiceOf = (body) => body.children[0];
@@ -250,8 +252,26 @@ test('sin el componente de voz no rompo nada', () => {
   assert.doesNotThrow(() => vm.runInNewContext(SRC, { window, globalThis: {} }));
 });
 
-test('versión 1.1.0 en el encabezado y en la API', () => {
+test('lector de pantalla: «Siguiente» y «Preguntame» anuncian el mensaje nuevo en una región polite fija', () => {
+  const { welcomeBody, welcomePanel } = setup({ keys: [k('Main', 'A', ALL)], selected: 'A', orient: [O.backupNever, O.cont] });
+  const click = (sel) => { const v = voiceOf(welcomeBody); v.listeners.click[0]({ target: v.querySelector(sel), preventDefault() {} }); };
+  assert.equal(welcomePanel.children.length, 0, 'al cargar no anuncio nada: el mensaje ya está en pantalla');
+  click('[data-guide="next"]');
+  const live = welcomePanel.children.find((c) => c.id === 'shvGuideLive');
+  assert.ok(live, 'la región vive en #welcomePanel, fuera de .panel__body');
+  assert.equal(live.getAttribute('aria-live'), 'polite');
+  assert.equal(live.getAttribute('role'), 'status');
+  assert.equal(live.className, 'shv-sr');
+  assert.match(live.textContent, /^2 de 3\. .*La última vez estuviste en Armería Legendaria/);
+  click('[data-ask="safe"]');
+  assert.match(live.textContent, /^Preguntame\. .*solo en este navegador/);
+  assert.equal(welcomePanel.children.filter((c) => c.id === 'shvGuideLive').length, 1, 'una sola región');
+  assert.equal(focused.el && focused.el.getAttribute('data-ask'), 'safe', 'el foco no se mueve');
+});
+
+test('versión 1.2.0 en el encabezado y en la API', () => {
   const { P } = setup();
-  assert.match(SRC, /Versión: 1\.1\.0/);
-  assert.equal(P.version, '1.1.0');
+  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.equal(P.version, '1.2.0');
+  assert.match(P.CSS || SRC, /\.shv-sr\{position:absolute;width:1px;height:1px/);
 });
