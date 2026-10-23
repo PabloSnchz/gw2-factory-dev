@@ -12,6 +12,8 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
+- [BL-061] [ALTO] Restyle de la Sidebar — pedido de Pablo (2026-10-23 06:25Z): propuesta visual antes de implementar. SBR-0 publicada en `docs/propuestas/propuesta-sidebar-bl061.html` (`cc347f7`): diagnóstico (en el celular la navegación queda al fondo de la página, no hay Inicio, otro orden y nombres que la Bienvenida, «Próximas funciones» vieja y «Próximos (Top 3)» duplicado, tres capas de estilos, un oyente que se acumula en `sidebar-nav.js`), maquetas desktop y celular (barra fija abajo + «Más»), GDS, integración con la Bienvenida (una sola lista de módulos), rincón global de Shiruvana (pide DEC-034, excepción acotada a DEC-024) y relación con BL-059. Plan SBR-1 a SBR-5 sin tocar `index.html`. Espera la aprobación de Pablo y dos decisiones: ubicación (izquierda recomendada) y DEC-034. · DEC-032, DEC-024, DEC-033, FEAT-008, LES-028
+
 ## BLOCKED
 
 - [BL-059] [ALTO] Frente estratégico: evolución de Shiruvana en la Bóveda — niveles N1 Informativa, N2 Contextual, N3 Analítica, N4 Asistente estratégico y N5 Compañera de cuenta; visión, principios y camino orientativo (SHV-1 a SHV-4) en DEC-033. N1 cumplido; N2 entrando con Metas y Eventos y la Bienvenida. · DEC-033, DEC-024, DEC-032 — Bloqueado por Pablo: abrió el frente para registrarlo (2026-10-23 05:00Z) y pidió no implementar todavía; lo mantiene aprobado conceptualmente (2026-10-23 05:54Z).
