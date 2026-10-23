@@ -1,6 +1,10 @@
 /*!
  * js/render-catologo.js — Render del catálogo y filtros
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * v1.5.0 (2026-10-23) — BL-064, ARM-4: armaduras por set. Las 132 piezas sueltas pasan a
+ *   23 tarjetas (7 sets × 3 pesos, más Eikasia y Selachimorpha) con «tenés N de 6 piezas»;
+ *   al abrir una, sus piezas con la tarjeta de siempre. Comentarios heredados resumidos
+ *   para dejar lugar (LES-028): el detalle sigue en git.
  * v1.4.0 (2026-10-23) — BL-064, ARM-3: «Mi cola» renovada (lista numerada con las 3 primeras
  *   destacadas, «Ver receta y materiales» y «Quitar», lugares libres, sin los filtros del
  *   catálogo, que no recortan la cola) y mi línea en la cabecera: una sola, sobre la
@@ -184,27 +188,8 @@
     if (!item.generation) return '—';
     return GEN_LABELS[item.generation] || ('Gen ' + item.generation);
   }
-  // Badge de precio TP.
-  //
-  // QUE CAMBIA (punto 1.1, 2026-10-02): antes era `formatCoinShort()`, que
-  // devolvia texto plano ("1.889g") envuelto en un div con borde. Ahora usa
-  // el MISMO componente que la Cartera (`app.js:162` `badgesHTMLFromCopper`):
-  // las clases `.coin` / `.coin--g` de `main.css:224-232`.
-  //
-  // POR QUE NO SE INVENTA CSS NUEVO: `.coin` ya existe y ya se ve bien en la
-  // Cartera. Lo que faltaba no era el estilo, era que la Armeria no lo
-  // usara. Agregar un `.lt-coin` propio seria el camino corto y el que
-  // diverge: dos clases para el mismo componente, y un cambio de tema futuro
-  // toca una y no la otra.
-  //
-  // POR QUE SE DESCARTA `formatCoinShort` Y NO SE REAPROVECHA: las dos
-  // funciones hacen lo mismo con salidas distintas. `badgesHTMLFromCopper`
-  // emite una pastilla por unidad (oro, plata, cobre) y omite las que valen
-  // cero; `formatCoinShort` colapsa a la unidad mayor. Para un badge chico
-  // en una grilla de 206 cards, la version de una sola pastilla ocupa menos
-  // y no muestra "0 s" al lado de "1 g". Se conservan las dos porque la
-  // columna de stock del modal de materiales (2.3) si va a querer el
-  // desglose completo, y no tiene por que reinventarlo.
+  // Precio TP con el componente de oro de la Cartera (.coin de main.css): una
+  // pastilla por unidad, sin las que valen cero (hb119-1-1). Historia: git.
   function tpCoinHTML(copper) {
     var g = Math.floor((copper || 0) / 10000);
     var s = Math.floor(((copper || 0) % 10000) / 100);
@@ -328,12 +313,26 @@
     '.arm-qbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;align-items:flex-start}',
     '.arm-qname{font-size:.95rem;color:var(--tx-1)}',
     '.arm-qacts{display:flex;gap:6px;flex-shrink:0}',
+    '.arm-set{min-width:0;border:1px solid var(--bd-1);border-left:3px solid var(--bd-1);border-radius:12px;background:var(--bg-1)}',
+    '.arm-set[data-full]{border-left-color:var(--color-green,#3fb950)}',
+    '.arm-set[data-q]{border-left-color:' + ARM_COLOR + '}',
+    '.arm-set[open]{grid-column:1 / -1}',
+    '.arm-set>summary{display:flex;gap:10px;align-items:center;padding:10px 12px;cursor:pointer;list-style:none;border-radius:12px}',
+    '.arm-set>summary::-webkit-details-marker{display:none}',
+    '.arm-set>summary:hover .arm-sname{text-decoration:underline}',
+    '.arm-set>summary:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '.arm-sname{font-size:.9rem;color:var(--tx-1)}',
+    '.arm-chev{font-size:1.2rem;color:var(--tx-3);transition:transform .15s}',
+    '.arm-set[open] .arm-chev{transform:rotate(90deg)}',
+    '.arm-set>.arm-grid{padding:0 12px 12px}',
     '@media (prefers-reduced-motion:reduce){.lt-skeleton-card,.lt-skeleton-card *{animation:none!important}}',
+    '@media (prefers-reduced-motion:reduce){.arm-chev{transition:none}}',
     '@media (max-width:1199px){.arm-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.arm-stats .arm-st:first-child{grid-column:1 / -1}}',
     '@media (max-width:900px){.arm-hero{padding:12px}.arm-hrow>img{width:40px;height:40px;padding:4px}.arm-hrow h2{font-size:1.05rem}' +
       '.arm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.arm-tab,.arm-btn,.arm-search{min-height:44px}}',
     '@media (max-width:900px){.arm-filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.arm-seg,.arm-fgroup{flex-wrap:nowrap}' +
       '.arm-chip,.arm-select,.arm-qbtn{min-height:44px}.arm-cname{line-height:44px}.arm-voice{display:none}}',
+    '@media (max-width:900px){.arm-set>summary{min-height:44px}}',
     '@media (max-width:560px){.arm-grid{grid-template-columns:1fr}}',
     '@media (max-width:560px){.arm-qrow{flex-wrap:wrap}.arm-qacts{width:100%}.arm-qacts .arm-btn{flex:1;justify-content:center}}'
   ].join('\n');
@@ -742,7 +741,6 @@
 
     var cola = colaActual();
     var key = hasKey();
-    var idx = 0;
     var body = secs.map(function (s) {
       var n = s.items.filter(function (it) { return owned[it.id] > 0; }).length;
       var id = 'armSec-' + esc(s.e);
@@ -751,7 +749,7 @@
       return '<section class="arm-section" aria-labelledby="' + id + '">' +
         '<h3 class="arm-sec" id="' + id + '">' + esc(EXPANSION_LABELS[s.e] || s.e) + ' <span>· ' + meta + '</span></h3>' +
         '<div class="lt-catalog-grid arm-grid">' +
-          s.items.map(function (it) { return renderItemCard(it, owned, idx++, cola); }).join('') +
+          sectionHTML(s.items, owned, cola, key) +
         '</div></section>';
     }).join('');
 
@@ -829,22 +827,87 @@
   }
 
   // =======================================================================
+  // ARM-4 (BL-064): ARMADURAS POR SET
+  // =======================================================================
+  // 132 de las 206 son piezas sueltas. Las agrupo por set y peso: una tarjeta
+  // por set con «tenés N de 6 piezas»; al abrirla (<details>, teclado nativo)
+  // aparecen sus piezas con la tarjeta de siempre (`card lt-item-card`, que
+  // abre la ficha y encola como antes; los tests heredados las siguen
+  // contando). Una armadura que no reconozco va suelta: nunca la escondo.
+  // Eikasia (guantes) y Selachimorpha (casco acuático) son una pieza por peso:
+  // van en una sola tarjeta con los 3 pesos.
+  var ARMOR_SETS = [
+    [/^(Sublime )?Mistforged Triumphant/, 'mtri', 'Héroe triunfal forjado en la Niebla'],
+    [/^Mistforged Glorious/, 'mglo', 'Héroe glorioso forjado en la Niebla'],
+    [/^Triumphant Hero/, 'tri', 'Héroe triunfal'],
+    [/^Glorious Hero/, 'glo', 'Héroe glorioso'],
+    [/^Ardent Glorious/, 'ard', 'Glorioso ardiente'],
+    [/^Perfected Envoy/, 'env', 'Enviado perfeccionado'],
+    [/^Obsidian /, 'obs', 'Obsidiana'],
+    [/^Eikasia/, 'eik', 'Eikasia, aferranieblas', 1],
+    [/^Selachimorpha/, 'sel', 'Selaquimorfo', 1]
+  ];
+  var setCache = {};
+
+  function setOf(it) {
+    if (!it || it.type !== 'armor') return null;
+    if (setCache[it.id] !== undefined) return setCache[it.id];
+    var r = null;
+    for (var i = 0; i < ARMOR_SETS.length && !r; i++) {
+      var s = ARMOR_SETS[i];
+      if (!s[0].test(it.name || '')) continue;
+      var m = /^(heavy|medium|light) (\w+)$/.exec(it.subtype || '') || [];
+      r = { key: s[1] + (s[3] ? '' : '-' + (m[1] || '')), single: !!s[3],
+        name: s[2] + (s[3] || !m[1] ? '' : ' · ' + WEIGHT_ES[m[1]]), piece: PIECE_ES[m[2]] || '' };
+    }
+    return (setCache[it.id] = r);
+  }
+
+  function sectionHTML(items, owned, cola, key) {
+    var all = (root.LegendaryCatalog && root.LegendaryCatalog.items) || items;
+    var done = {};
+    return items.map(function (it) {
+      var s = setOf(it);
+      if (!s) return renderItemCard(it, owned, 0, cola);
+      if (done[s.key]) return '';
+      done[s.key] = 1;
+      var inSet = function (x) { var o = setOf(x); return !!o && o.key === s.key; };
+      return setCardHTML(s, items.filter(inSet), all.filter(inSet), owned, cola, key);
+    }).join('');
+  }
+
+  function setCardHTML(s, shown, pieces, owned, cola, key) {
+    var t = pieces.length;
+    var n = pieces.filter(function (x) { return owned[x.id] > 0; }).length;
+    var q = shown.filter(function (x) { return cola.indexOf(Number(x.id)) !== -1; }).length;
+    var full = key && n === t;
+    var g = genLabel(pieces[0] || shown[0]);
+    var meta = [s.single ? s.piece + ' · los 3 pesos' : 'Armadura'];
+    if (g !== '—') meta.push(g);
+    meta.push(key ? (full ? '✓ Completo · ' : 'tenés ') + n + ' de ' + t + (t === 1 ? ' pieza' : ' piezas') :
+      t + (t === 1 ? ' pieza' : ' piezas'));
+    if (q) meta.push(q + ' en tu cola');
+    var pct = t ? Math.round(n * 1000 / t) / 10 : 0;
+    return '<details class="arm-set" data-set="' + s.key + '"' + (full ? ' data-full="1"' : '') +
+      (q ? ' data-q="1"' : '') + (ui.q ? ' open' : '') + '>' +
+      '<summary><img class="arm-cicon" src="' + esc((shown[0] || {}).icon || '') + '" width="44" height="44" alt="" loading="lazy" referrerpolicy="no-referrer">' +
+        '<div class="arm-cbody"><b class="arm-sname">' + esc(s.name) + '</b>' +
+          '<p class="arm-cmeta"><i class="arm-dot" style="background:' + typeColor({ type: 'armor' }) + '" aria-hidden="true"></i>' +
+            esc(meta.join(' · ')) + '</p>' +
+          (key ? '<div class="arm-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' : '') +
+        '</div><span class="arm-chev" aria-hidden="true">›</span></summary>' +
+      '<div class="arm-grid">' + shown.map(function (x) { return renderItemCard(x, owned, 0, cola); }).join('') + '</div>' +
+    '</details>';
+  }
+
+  // =======================================================================
   // RENDER: PROGRESS VIEW
   // =======================================================================
   function renderProgress(state, stats) {
     var catalog = (root.LegendaryCatalog && root.LegendaryCatalog.items) || [];
 
-    // QUE CAMBIA (punto 2.2, 2026-10-02): antes el render elegia sus propios
-    // items con `catalog.filter(owned)`. Ahora RECIBE la lista ya recortada en
-    // `state.items`, porque el recorte depende de dos cosas que el render no
-    // tiene: los filtros que viven en el tracker y el alcance del switch.
-    // Que el tracker decida el conjunto y el render solo lo pinte es lo que
-    // hace que "Armas" muestre lo mismo en Catalogo y en Mi progreso.
-    //
-    // Se conserva el fallback a `owned` para cuando `state.items` no venga
-    // (un consumidor viejo que llame a `progress()` con la firma anterior).
-    // Sin ese fallback, ese consumidor veria una grilla vacia en vez de un
-    // error: el modo de fallo silencioso.
+    // Recibe la lista ya recortada por el tracker en `state.items`; sin ella,
+    // cae a las que tenés (consumidores viejos). Historia: git (punto 2.2).
     var items;
     if (Array.isArray(state.items)) {
       items = state.items.slice();
@@ -854,17 +917,12 @@
       });
     }
 
-    // Ordenar por rareza de progreso (no owned primero en catálogo, owned primero en progreso)
     items.sort(function (a, b) {
       return (a.nameEs || a.name).localeCompare(b.nameEs || b.name, 'es');
     });
 
     if (items.length === 0) {
-      // El mensaje viejo decía SIEMPRE "Aún no poseés ninguna legendaria".
-      // Con el switch y los filtros queda mentira en dos casos reales: si el
-      // alcance es "Solo faltantes" y no falta ninguna, o si un filtro dejó la
-      // lista vacia. Un empty state que afirma algo falso es peor que no
-      // tener ninguno: el usuario cree que la API fallo.
+      // Un vacío que afirma algo falso es peor que ninguno: el mensaje depende del motivo.
       var hayFiltro = !!(state.filters && (state.filters.type || state.filters.generation || state.filters.expansion));
       var soloFaltantes = state.scope === 'missing';
       var msg, sub;
@@ -907,28 +965,16 @@
   }
 
   // =======================================================================
-  // RENDER: SKELETON (LOADING)
-  // =======================================================================
-  // =======================================================================
   // RENDER: MODAL DE MATERIALES (ARME 1.2)
   // =======================================================================
-  //
-  // Recibe lo que calcula `computeMaterials` y lo pinta. El corte es el mismo
-  // que los otros cuatro renders: aqui no se consulta la API ni se decide
-  // nada de negocio, solo se dibuja.
-  //
-  // Los cuatro status se dibujan DISTINTOS a proposito. Un modal que para
-  // 'no_recipe', 'placeholder' y 'unknown' dijera lo mismo seria un filtro
-  // invisible: el dia que GW2 renombre el item 95093, el filtro dejaria de
-  // matchear y nadie lo veria.
+  // Pinta lo que calcula `computeMaterials`; no consulta la API. Los cuatro
+  // status se dibujan distintos a propósito (un filtro invisible no avisa).
   function renderItemModal(datos, item) {
     if (!datos) {
       return '<div style="padding:18px;color:var(--tx-3);font-size:0.78rem;">Sin datos.</div>';
     }
 
-    // Los tres status "sin fila" muestran el motivo, y el motivo es lo que
-    // dice el contrato (o el tracker si el contrato no esta). No se inventa
-    // texto aca: duplicar el motivo es la forma de que los dos se desincronicen.
+    // El motivo lo da el contrato: no se inventa texto acá.
     if (datos.status !== 'recipe') {
       var icon = datos.status === 'unknown' ? '?' : '!';
       return '<div style="padding:16px 4px;">' +
@@ -1038,7 +1084,7 @@
     EXPANSION_ORDER: EXPANSION_ORDER.slice(),
     TYPE_LABELS: TYPE_LABELS,
     // ARM-1: lo que prueban los tests.
-    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard, voice: voiceText, queue: queueViewHTML }
+    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard, voice: voiceText, queue: queueViewHTML, setOf: setOf }
   };
 
   // =======================================================================
