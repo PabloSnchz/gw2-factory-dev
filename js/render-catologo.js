@@ -1,6 +1,11 @@
 /*!
  * js/render-catologo.js — Render del catálogo y filtros
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
+ * v1.3.0 (2026-10-23) — BL-064, ARM-2: filtros en una sola fila («Todas / Las tengo /
+ *   Me faltan», tipo, y expansión y generación como listas), tarjetas nuevas (artículo
+ *   con el nombre como botón y «+ A la cola» aparte, «✓ La tengo» en vez de «PENDING»,
+ *   precio con su fecha), grilla adaptable (de 1 a 5 columnas) y secciones por
+ *   expansión con su avance. Estilos en clases .arm-*, sin colores fijos en el texto.
  * v1.2.0 (2026-10-23) — BL-064, ARM-1: el marco nuevo de la Armería. Cabecera con
  *   ícono y resumen (desbloqueadas, por tipo y la cola), pestañas «Catálogo / Mi cola»
  *   (reemplazan a «Modo:») y buscador por nombre en español o en inglés, sin tildes.
@@ -261,9 +266,56 @@
     '.arm-count{margin:0 0 10px;font-size:.8rem;color:var(--tx-3)}',
     '.arm-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}',
     '.arm-btn:focus-visible,.arm-tab:focus-visible,.arm-search:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '.arm-filters{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:0 0 12px}',
+    '.arm-seg,.arm-fgroup{display:flex;gap:4px;align-items:center;flex-wrap:wrap}',
+    '.arm-seg{padding:3px;border:1px solid var(--bd-1);border-radius:999px;background:var(--bg-1)}',
+    '.arm-flabel,.arm-fsel label{font-size:.75rem;color:var(--tx-3);margin:0 2px 0 6px}',
+    '.arm-chip{min-height:32px;padding:4px 12px;border:1px solid var(--bd-1);border-radius:999px;background:var(--bg-1);' +
+      'color:var(--tx-2);font:inherit;font-size:.8rem;font-weight:600;cursor:pointer;white-space:nowrap}',
+    '.arm-seg .arm-chip{border-color:transparent;background:transparent}',
+    '.arm-chip:hover{color:var(--tx-1);border-color:' + ARM_COLOR + '}',
+    '.arm-chip[aria-pressed="true"]{color:var(--tx-1);border-color:' + ARM_COLOR + ';background:rgba(229,69,202,.14)}',
+    '.arm-fsel{display:inline-flex;align-items:center;gap:4px}',
+    '.arm-select{min-height:32px;padding:4px 8px;border:1px solid var(--bd-1);border-radius:10px;background:var(--bg-1);' +
+      'color:var(--tx-1);font:inherit;font-size:.8rem}',
+    '.arm-clear{margin-left:auto}',
+    '.arm-note{margin:0 0 10px;font-size:.75rem;color:var(--tx-3)}',
+    '.arm-section{margin:0 0 18px}',
+    '.arm-sec{margin:0 0 8px;font-size:.95rem;font-weight:700;color:var(--tx-1)}',
+    '.arm-sec span{font-size:.8rem;font-weight:500;color:var(--tx-3)}',
+    '.arm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}',
+    '#legendaryModeContent .lt-item-card{display:flex;gap:10px;align-items:flex-start;margin:0;padding:10px 12px;' +
+      'border:1px solid var(--bd-1);border-left:3px solid var(--bd-1);border-radius:12px;background:var(--bg-1);' +
+      'cursor:pointer;min-width:0;animation:none;transform:none}',
+    '#legendaryModeContent .lt-item-card:hover{border-color:' + ARM_COLOR + '}',
+    '#legendaryModeContent .lt-item-card[data-own]{border-left-color:var(--color-green,#3fb950)}',
+    '#legendaryModeContent .lt-item-card[data-q]{border-left-color:' + ARM_COLOR + '}',
+    '.arm-cicon{width:44px;height:44px;border-radius:8px;background:var(--bg-0);object-fit:contain;flex-shrink:0}',
+    '.arm-cbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}',
+    '.arm-cname{all:unset;display:block;cursor:pointer;font-size:.9rem;font-weight:700;color:var(--tx-1);' +
+      'overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border-radius:4px}',
+    '.arm-cname:hover{text-decoration:underline}',
+    '.arm-cmeta{margin:0;display:flex;align-items:center;gap:6px;min-width:0;font-size:.75rem;color:var(--tx-3)}',
+    '.arm-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}',
+    '.arm-cfoot{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap}',
+    '.arm-price{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:var(--tx-2)}',
+    '.arm-nosell{font-size:.75rem;color:var(--tx-3)}',
+    '.arm-own{padding:2px 8px;border:1px solid var(--color-green,#3fb950);border-radius:999px;' +
+      'background:rgba(63,185,80,.14);font-size:.75rem;font-weight:700;color:var(--tx-1)}',
+    '.arm-qbtn{margin-left:auto;min-height:30px;padding:3px 10px;border:1px solid var(--bd-1);border-radius:999px;' +
+      'background:transparent;color:var(--tx-2);font:inherit;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap}',
+    '.arm-qbtn:hover{color:var(--tx-1);border-color:' + ARM_COLOR + '}',
+    '[data-q] .arm-qbtn{color:var(--tx-1);border-color:' + ARM_COLOR + ';background:rgba(229,69,202,.14)}',
+    '.arm-empty{text-align:center;padding:32px 12px;font-size:.85rem;color:var(--tx-3)}',
+    '.arm-empty p{margin:4px 0}',
+    '.arm-chip:focus-visible,.arm-select:focus-visible,.arm-cname:focus-visible,.arm-qbtn:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '@media (prefers-reduced-motion:reduce){.lt-skeleton-card,.lt-skeleton-card *{animation:none!important}}',
     '@media (max-width:1199px){.arm-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.arm-stats .arm-st:first-child{grid-column:1 / -1}}',
     '@media (max-width:900px){.arm-hero{padding:12px}.arm-hrow>img{width:40px;height:40px;padding:4px}.arm-hrow h2{font-size:1.05rem}' +
-      '.arm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.arm-tab,.arm-btn,.arm-search{min-height:44px}}'
+      '.arm-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.arm-tab,.arm-btn,.arm-search{min-height:44px}}',
+    '@media (max-width:900px){.arm-filters{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px}.arm-seg,.arm-fgroup{flex-wrap:nowrap}' +
+      '.arm-chip,.arm-select,.arm-qbtn{min-height:44px}.arm-cname{line-height:44px}}',
+    '@media (max-width:560px){.arm-grid{grid-template-columns:1fr}}'
   ].join('\n');
 
   var ui = { q: '', raw: '', lastItems: null, lastOwned: null };
@@ -375,8 +427,19 @@
       if (!t || t.id !== 'armSearch') return;
       searchFor(t.value);
     });
+    // Los <select> de expansión y generación van por `setFilter`.
+    c.addEventListener('change', function (e) {
+      var t = e && e.target;
+      var k = t && t.getAttribute ? t.getAttribute('data-arm-filter') : null;
+      var T = root.LegendaryTracker;
+      if (k && T && typeof T.setFilter === 'function') T.setFilter(k, t.value);
+    });
+    // En captura: un clic sobre un <option> (Firefox lo dispara) no puede llegar
+    // a `wireFilterBar`, que leería su `data-ftype` y alternaría el filtro.
     c.addEventListener('click', function (e) {
       var t = e && e.target;
+      var tag = t && t.tagName ? String(t.tagName).toUpperCase() : '';
+      if (tag === 'OPTION' || tag === 'SELECT') { if (e.stopPropagation) e.stopPropagation(); return; }
       while (t && t !== c) {
         if (t.getAttribute) {
           var tab = t.getAttribute('data-arm-tab');
@@ -387,7 +450,7 @@
         }
         t = t.parentNode;
       }
-    });
+    }, true);
   }
 
   // Filtra la grilla sin rearmar la página: el buscador no pierde el foco.
@@ -407,133 +470,71 @@
   }
 
   // =======================================================================
-  // RENDER: BARRA DE FILTROS
+  // RENDER: BARRA DE FILTROS (ARM-2: una sola fila)
   // =======================================================================
+  // Los botones son hojas, sin elementos adentro: `wireFilterBar` del tracker
+  // lee el atributo de `e.target` sin subir, así que un <span> interno se
+  // comería el clic. Expansión y generación son <select>: los cambia `wireArm`
+  // con `setFilter`, y sus <option> conservan `data-ftype` (contrato de tests).
+  // «Todas» manda `data-fvalue=""`: el tracker guarda '' (falso) y muestra todo.
+  //
+  // Tengo / Me faltan los cuenta el tracker (`getOwnershipCounts`), no el render:
+  // contarlos acá obligaría a duplicar `passesFilters`. La firma
+  // `renderFilterBar(filters, catalog)` es el contrato de renderers y no cambia.
+  var TYPE_ORDER = ['weapon', 'armor', 'trinket', 'back', 'upgradecomponent', 'relic'];
+
+  function chip(ft, value, label, active) {
+    return '<button type="button" class="lt-filter-btn arm-chip' + (active ? ' active' : '') + '" ' +
+      'data-ftype="' + ft + '" data-fvalue="' + value + '" aria-pressed="' + (active ? 'true' : 'false') + '">' +
+      esc(label) + '</button>';
+  }
+
+  function selectHTML(key, label, values, labels, counts, current) {
+    var id = 'armF-' + key;
+    var cur = current === null || current === undefined ? '' : String(current);
+    var opts = '<option value=""' + (cur ? '' : ' selected') + '>Todas</option>' + values.map(function (v) {
+      return '<option value="' + v + '" data-ftype="' + key + '" data-fvalue="' + v + '"' +
+        (cur === String(v) ? ' selected' : '') + '>' + esc(labels[v] || v) + ' (' + (counts[v] || 0) + ')</option>';
+    }).join('');
+    return '<span class="arm-fsel"><label for="' + id + '">' + label + '</label>' +
+      '<select id="' + id + '" class="arm-select" data-arm-filter="' + key + '">' + opts + '</select></span>';
+  }
+
   function renderFilterBar(filters, catalog) {
     corregirExpansiones(catalog);
+    filters = filters || {};
     var opts = getFilterOptions(catalog || []);
+    var own = { tengo: 0, faltan: 0 };
+    var T = root.LegendaryTracker;
+    if (T && typeof T.getOwnershipCounts === 'function') own = T.getOwnershipCounts() || own;
+    var o = filters.ownership || '';
 
-    // Type buttons (orden: weapon, armor, trinket, back, upgradecomponent, relic)
-    var typeOrder = ['weapon', 'armor', 'trinket', 'back', 'upgradecomponent', 'relic'];
-    var typeBtns = typeOrder.map(function (t) {
-      var label = TYPE_LABELS[t] || t;
-      var count = opts.types[t] || 0;
-      var active = filters.type === t;
-      return '<button class="lt-filter-btn ' + (active ? 'active' : '') + '" ' +
-        'data-ftype="type" data-fvalue="' + t + '" ' +
-        'style="padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;' +
-        'border:' + (active ? '1px solid ' + typeColor({type:t}) : '1px solid var(--bd-1)') + ';' +
-        'background:' + (active ? typeColor({type:t}) + '20' : 'var(--bg-1)') + ';' +
-        'color:' + (active ? typeColor({type:t}) : 'var(--tx-2)') + ';' +
-        'transition:all 0.15s ease;">' +
-        esc(label) + ' (' + count + ')</button>';
-    });
+    var seg = '<div class="arm-seg" role="group" aria-label="Qué legendarias ver">' +
+      chip('ownership', '', 'Todas', !o) +
+      chip('ownership', 'tengo', 'Las tengo · ' + fmtInt(own.tengo), o === 'tengo') +
+      chip('ownership', 'faltan', 'Me faltan · ' + fmtInt(own.faltan), o === 'faltan') + '</div>';
 
-    // Generation buttons (order: 3, 2, 1)
-    var genOrder = [3, 2, 1];
-    var genBtns = genOrder.map(function (g) {
-      var label = GEN_LABELS[g] || ('Gen ' + g);
-      var count = opts.gens[g] || 0;
-      var active = String(filters.generation) === String(g);
-      return '<button class="lt-filter-btn ' + (active ? 'active' : '') + '" ' +
-        'data-ftype="generation" data-fvalue="' + g + '" ' +
-        'style="padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;' +
-        'border:' + (active ? '1px solid #974EFF' : '1px solid var(--bd-1)') + ';' +
-        'background:' + (active ? 'rgba(151,78,255,0.2)' : 'var(--bg-1)') + ';' +
-        'color:' + (active ? '#974EFF' : 'var(--tx-2)') + ';' +
-        'transition:all 0.15s ease;">' +
-        esc(label) + ' (' + count + ')</button>';
-    });
+    var types = '<div class="arm-fgroup" role="group" aria-label="Tipo"><span class="arm-flabel" aria-hidden="true">Tipo</span>' +
+      TYPE_ORDER.map(function (t) {
+        return chip('type', t, (TYPE_LABELS[t] || t) + ' (' + (opts.types[t] || 0) + ')', filters.type === t);
+      }).join('') + '</div>';
 
-    // Expansion buttons: en orden de salida (BL-046)
-    var expOrder = EXPANSION_ORDER;
-    var expBtns = expOrder.map(function (e) {
-      var label = EXPANSION_LABELS[e] || e;
-      var count = opts.exps[e] || 0;
-      var active = filters.expansion === e;
-      var color = EXPANSION_COLORS[e] || '#974EFF';
-      return '<button class="lt-filter-btn ' + (active ? 'active' : '') + '" ' +
-        'data-ftype="expansion" data-fvalue="' + e + '" ' +
-        'style="padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;' +
-        'border:' + (active ? '1px solid ' + color : '1px solid var(--bd-1)') + ';' +
-        'background:' + (active ? color + '20' : 'var(--bg-1)') + ';' +
-        'color:' + (active ? color : 'var(--tx-2)') + ';' +
-        'transition:all 0.15s ease;">' +
-        esc(label) + ' (' + count + ')</button>';
-    });
-
-    // Botones de posesion: "Tengo" / "Me faltan" (2026-10-02).
-  //
-  // Los dos comparten `data-ftype="ownership"`, y ESO es lo que los hace
-  // excluyentes: el toggle generico de `wireFilterBar` escribe `filters[ft]`,
-  // asi que apretar uno sobrescribe al otro. Con dos `data-ftype` distintos los
-  // dos podrian quedar apretados a la vez, y el catalogo mostraria la
-  // interseccion de dos filtros que el usuario nunca pidio.
-  //
-  // Los numeros de "Tengo / Me faltan" los PREGUNTA al tracker, y no llegan por
-  // parametro. `renderFilterBar(filters, catalog)` tiene la firma del contrato
-  // de renderers y esa firma es un contrato con `alert84.t3t4-registro`: leaky
-  // un parametro obliga a cambiar el arnés para agregar un dato. Y contarlos
-  // aca exige reimplementar el predicado de filtros —duplicarlo es como los
-  // dos filtros se desincronicen, que es justo lo que `passesFilters` evita—.
-  // El tracker ya es dependencia de este render: se registra ahi y se leen
-  // filtros y `owned` por `getState()`.
-  var own = { tengo: 0, faltan: 0 };
-  if (root.LegendaryTracker && typeof root.LegendaryTracker.getOwnershipCounts === 'function') {
-    own = root.LegendaryTracker.getOwnershipCounts() || own;
-  }
-  var ownBtn = function (value, label, count, color) {
-    var active = filters.ownership === value;
-    return '<button class="lt-filter-btn ' + (active ? 'active' : '') + '" ' +
-      'data-ftype="ownership" data-fvalue="' + value + '" ' +
-      'style="padding:4px 10px;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;' +
-      'border:' + (active ? '1px solid ' + color : '1px solid var(--bd-1)') + ';' +
-      'background:' + (active ? color + '26' : 'var(--bg-1)') + ';' +
-      'color:' + (active ? color : 'var(--tx-2)') + ';' +
-      'transition:all 0.15s ease;">' +
-      esc(label) + ' (' + count + ')</button>';
-  };
-  // Verde = el tilde de la card; violeta = lo que queda por hacer. Los mismos
-  // dos estados que ya distinguen "la tengo" de "no la tengo" en la grilla.
-  var ownBtns = ownBtn('tengo', 'Tengo', own.tengo, '#68ff9f') +
-    ownBtn('faltan', 'Me faltan', own.faltan, '#974EFF');
-
-  // Clear button (solo si hay filtros activos)
     var hasActive = filters.type || filters.generation || filters.expansion || filters.ownership;
-    var clearBtn = hasActive ?
-      '<button class="lt-filter-clear" data-action="clear-filters" ' +
-      'style="padding:4px 12px;border-radius:20px;font-size:0.7rem;font-weight:600;cursor:pointer;' +
-      'border:1px solid var(--bd-1);background:var(--bg-1);color:var(--tx-2);margin-left:auto;">✕ Limpiar</button>' :
-      '';
+    var clear = hasActive ?
+      '<button type="button" class="lt-filter-clear arm-chip arm-clear" data-action="clear-filters">✕ Limpiar</button>' : '';
 
     return shellHTML(catalog) +
-      '<div class="lt-filter-bar" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">' +
-      '<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
-        '<span style="font-size:0.65rem;color:var(--tx-3);padding:4px 8px;">Tipo:</span>' +
-        typeBtns.join('') +
-      '</div>' +
-      '<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
-        '<span style="font-size:0.65rem;color:var(--tx-3);padding:4px 8px;">Gen:</span>' +
-        genBtns.join('') +
-      '</div>' +
-      '<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
-        '<span style="font-size:0.65rem;color:var(--tx-3);padding:4px 8px;">Exp:</span>' +
-        expBtns.join('') +
-      '</div>' +
-      '<div style="display:flex;gap:4px;flex-wrap:wrap;">' +
-        '<span style="font-size:0.65rem;color:var(--tx-3);padding:4px 8px;">Yo:</span>' +
-        ownBtns +
-      '</div>' +
-      clearBtn +
-    '</div>';
+      '<div class="lt-filter-bar arm-filters">' + seg + types +
+        selectHTML('expansion', 'Expansión', EXPANSION_ORDER, EXPANSION_LABELS, opts.exps, filters.expansion) +
+        selectHTML('generation', 'Gen.', [3, 2, 1], GEN_LABELS, opts.gens, filters.generation) +
+        clear +
+      '</div>';
   }
 
   // =======================================================================
-  // RENDER: GRID DEL CATÁLOGO (5 COLUMNAS)
+  // RENDER: GRILLA DEL CATÁLOGO (ARM-2: secciones por expansión, grilla adaptable)
   // =======================================================================
-  // La cola se lee UNA vez por grilla y se pasa a cada card. `getQueue()` ya era
-  // parte de la API publica del tracker; la firma de `renderCatalogGrid` queda
-  // como la del contrato.
+  // La cola se lee UNA vez por grilla y se pasa a cada tarjeta.
   function colaActual() {
     if (root.LegendaryTracker && typeof root.LegendaryTracker.getQueue === 'function') {
       return root.LegendaryTracker.getQueue() || [];
@@ -541,151 +542,140 @@
     return [];
   }
 
-  // `queue` es la cola de crafteo, y viaja hasta la card para que el boton de
-  // encolar pueda decir EN QUE ESTADO esta sin que el usuario abra el modal.
   function renderCatalogGrid(items, owned) {
     ui.lastItems = items || [];
     ui.lastOwned = owned || {};
     return '<div id="armGridHost">' + gridInner(ui.lastItems, ui.lastOwned) + '</div>';
   }
 
-  // La grilla, después del buscador (ARM-1).
+  // Fecha del precio: la del catálogo generado, no la del bazar en vivo (LES-021).
+  function priceDate() {
+    var g = root.LegendaryCatalog && root.LegendaryCatalog.generated;
+    var m = /^\d{4}-\d{2}-\d{2}/.exec(String(g || ''));
+    return m ? m[0] : '';
+  }
+
+  // Sin Key (o si la API falló) no sé cuáles tenés: no digo «tenés 0».
+  function hasKey() {
+    var st = trackerState();
+    return !!(st && st.token && !st.error);
+  }
+
+  function emptyHTML(a, b) {
+    return '<div class="lt-empty-state arm-empty"><p>' + a + '</p><p>' + b + '</p></div>';
+  }
+
   function gridInner(all, owned) {
+    owned = owned || {};
     var items = (all || []).filter(function (it) { return matchesSearch(it, ui.q); });
     if (ui.q && items.length === 0 && all.length) {
-      return '<div class="lt-empty-state" style="text-align:center;padding:32px;color:var(--tx-3);">' +
-        '<div style="font-size:0.85rem;">No encontré ninguna legendaria que se llame «' + esc(ui.raw) + '».</div>' +
-        '<div style="font-size:0.8rem;margin-top:4px;">Probá con otra parte del nombre, en español o en inglés.</div>' +
-        '</div>';
+      return emptyHTML('No encontré ninguna legendaria que se llame «' + esc(ui.raw) + '».',
+        'Probá con otra parte del nombre, en español o en inglés.');
     }
-    if (!items || items.length === 0) {
-      return '<div class="lt-empty-state" style="text-align:center;padding:32px;color:var(--tx-3);">' +
-        '<div style="font-size:0.8rem;">No se encontraron legendarias con los filtros aplicados.</div>' +
-        '<div style="font-size:0.7rem;margin-top:4px;">Intentá limpiar los filtros.</div>' +
-        '</div>';
+    if (!items.length) {
+      return emptyHTML('No hay legendarias con estos filtros.', 'Probá con «✕ Limpiar».');
     }
 
-    // Agrupada por expansion, en orden de salida; dentro de cada una se
-    // conserva el orden del catalogo (BL-046).
+    // Agrupada por expansión, en orden de salida; dentro de cada una, el orden
+    // del catálogo (BL-046). Ahora cada grupo tiene su título y su avance.
     var ordenados = items.map(function (it, i) { return { it: it, i: i }; });
     ordenados.sort(function (a, b) {
       return (ordenExpansion(expansionReal(a.it)) - ordenExpansion(expansionReal(b.it))) || (a.i - b.i);
     });
-
-    var cola = colaActual();
-    var cards = ordenados.map(function (x, idx) {
-      return renderItemCard(x.it, owned, idx, cola);
+    var secs = [];
+    ordenados.forEach(function (x) {
+      var e = expansionReal(x.it) || 'otras';
+      var s = secs[secs.length - 1];
+      if (!s || s.e !== e) { s = { e: e, items: [] }; secs.push(s); }
+      s.items.push(x.it);
     });
 
-    return countLine(items.length, ui.q) +
-      '<div class="lt-catalog-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;">' +
-      cards.join('') +
-    '</div>';
+    var cola = colaActual();
+    var key = hasKey();
+    var idx = 0;
+    var body = secs.map(function (s) {
+      var n = s.items.filter(function (it) { return owned[it.id] > 0; }).length;
+      var id = 'armSec-' + esc(s.e);
+      var meta = key ? 'tenés ' + fmtInt(n) + ' de ' + fmtInt(s.items.length) :
+        fmtInt(s.items.length) + (s.items.length === 1 ? ' legendaria' : ' legendarias');
+      return '<section class="arm-section" aria-labelledby="' + id + '">' +
+        '<h3 class="arm-sec" id="' + id + '">' + esc(EXPANSION_LABELS[s.e] || s.e) + ' <span>· ' + meta + '</span></h3>' +
+        '<div class="lt-catalog-grid arm-grid">' +
+          s.items.map(function (it) { return renderItemCard(it, owned, idx++, cola); }).join('') +
+        '</div></section>';
+    }).join('');
+
+    var d = priceDate();
+    var note = d ? '<p class="arm-note">≈ Precio de referencia del bazar del ' + d + ', no en vivo.</p>' : '';
+    return countLine(items.length, ui.q) + note + body;
   }
 
-  // `queue` es la cola de crafteo. La vista de progreso (`renderProgress`)
-  // llama a esta funcion con 3 argumentos, asi que el default no es cosmetico:
-  // sin el, un item de la vista de progreso lee `queue.indexOf` de `undefined`
-  // y la vista de progreso deja de pintar entera.
+  // =======================================================================
+  // TARJETA (ARM-2)
+  // =======================================================================
+  var WEAPON_ES = {
+    axe: 'Hacha', dagger: 'Daga', focus: 'Foco', greatsword: 'Mandoble', hammer: 'Martillo',
+    harpoon: 'Lanza', longbow: 'Arco largo', mace: 'Maza', pistol: 'Pistola', rifle: 'Rifle',
+    scepter: 'Cetro', shield: 'Escudo', shortbow: 'Arco corto', speargun: 'Arpón', staff: 'Báculo',
+    sword: 'Espada', torch: 'Antorcha', trident: 'Tridente', warhorn: 'Cuerno de guerra',
+    accessory: 'Accesorio', amulet: 'Amuleto', ring: 'Anillo', back: 'Espaldar'
+  };
+  var PIECE_ES = {
+    helm: 'Casco', helmaquatic: 'Casco acuático', shoulders: 'Hombreras', coat: 'Pechera',
+    gloves: 'Guantes', leggings: 'Perneras', boots: 'Botas'
+  };
+  var WEIGHT_ES = { heavy: 'Pesada', medium: 'Media', light: 'Ligera' };
+
+  // «Hacha · Gen 1», «Casco · Pesada · Gen 3», «Componente».
+  function kindLabel(item) {
+    var s = String(item.subtype || '');
+    var m = /^(heavy|medium|light) (\w+)$/.exec(s);
+    var parts = m ? [PIECE_ES[m[2]] || m[2], WEIGHT_ES[m[1]]] : [WEAPON_ES[s] || typeLabel(item)];
+    var g = genLabel(item);
+    if (g !== '—') parts.push(g);
+    return parts.join(' · ');
+  }
+
+  // Un artículo con dos controles reales y separados: el nombre (botón que abre
+  // la ficha; el clic en cualquier lado de la tarjeta también, vía
+  // `wireItemCards`) y «+ A la cola» (`data-card-queue`, que el tracker atiende
+  // antes que la tarjeta). Nunca un botón dentro de otro.
+  // `class="card lt-item-card"` y `data-id` son contrato de los tests heredados:
+  // el estado va en `data-own` / `data-q`, no en la clase.
   function renderItemCard(item, owned, idx, queue) {
     var cola = queue || [];
+    owned = owned || {};
     var enCola = cola.indexOf(Number(item.id)) !== -1;
     var isOwned = !!(owned[item.id] && owned[item.id] > 0);
-    var tColor = typeColor(item);
-    var eColor = expansionColor(item);
-    var gLabel = genLabel(item);
-    var owns = isOwned ? (owned[item.id] || 1) : 0;
+    var name = item.nameEs || item.name;
+    var d = priceDate();
 
-    // Overlay de estado
-    var statusOverlay;
+    var state;
     if (isOwned) {
-      statusOverlay = '<div class="lt-status-badge" style="position:absolute;top:6px;right:6px;' +
-        'background:rgba(104,255,163,0.12);border:1px solid rgba(104,255,163,0.4);' +
-        'border-radius:999px;padding:2px 8px;font-size:0.58rem;color:#68ff9f;font-weight:700;">✓</div>';
+      state = '<span class="arm-own">✓ La tengo</span>';
+    } else if (item.tpTradeable && item.tpSell > 0) {
+      state = '<span class="lt-tp-badge arm-price" title="Precio de referencia del bazar' + (d ? ' del ' + d : '') +
+        ', no en vivo">≈ ' + tpCoinHTML(item.tpSell) + '</span>';
     } else {
-      statusOverlay = '<div class="lt-status-badge" style="position:absolute;top:6px;right:6px;' +
-        'background:rgba(255,255,255,0.06);border:1px solid var(--bd-1);' +
-        'border-radius:999px;padding:2px 8px;font-size:0.58rem;color:var(--tx-3);">PENDING</div>';
+      state = '<span class="arm-nosell">No se vende</span>';
     }
 
-    // Badge TP (solo si tradeable)
-    //
-    // El wrapper `lt-tp-badge` conservaba su fondo/borde/padding INLINE, y
-    // al meter adentro una pastilla `.coin` (que ya trae fondo, borde y
-    // padding de main.css) quedaban dos cajas anidadas: un borde dentro de
-    // otro borde, con el doble de padding. Por eso el wrapper solo aporta
-    // `gap` entre unidades y el `font-size` chico de la grilla; el resto lo
-    // pone `.coin`. Es el mismo criterio que usa la Cartera.
-    var tpBadge = '';
-    if (item.tpTradeable && item.tpSell > 0) {
-      tpBadge = '<div class="lt-tp-badge" title="Precio TP (venta directa)" ' +
-        'style="display:inline-flex;align-items:center;gap:4px;font-size:0.62rem;">' +
-        tpCoinHTML(item.tpSell) + '</div>';
+    var qBtn = '';
+    if (!isOwned || enCola) {
+      var qLabel = enCola ? 'Quitar ' + name + ' de tu cola' : 'Agregar ' + name + ' a tu cola';
+      qBtn = '<button type="button" class="lt-card-queue-btn arm-qbtn" data-card-queue="' + item.id + '" ' +
+        'aria-label="' + esc(qLabel) + '" title="' + esc(qLabel) + '">' + (enCola ? '✓ En tu cola' : '+ A la cola') + '</button>';
     }
 
-    // Badges de tipo, gen, exp
-    var badges = '<div style="display:flex;align-items:center;gap:4px;margin-top:2px;flex-wrap:wrap;">' +
-      '<span style="font-size:0.62rem;font-weight:600;background:' + tColor + '20;border:1px solid ' + tColor + '40;' +
-      'border-radius:4px;padding:1px 6px;color:' + tColor + ';">' + esc(typeLabel(item)) + '</span>';
-
-    if (gLabel !== '—') {
-      badges += '<span style="font-size:0.6rem;color:var(--tx-3);font-weight:500;">' + esc(gLabel) + '</span>';
-    }
-
-    badges += '<span style="font-size:0.62rem;font-weight:600;background:' + eColor + '20;border:1px solid ' + eColor + '40;' +
-      'border-radius:4px;padding:1px 6px;color:' + eColor + ';">' + esc(expansionLabel(item)) + '</span>';
-
-    if (item.tpTradeable) {
-      badges += '<span title="Tradeable en TP" style="font-size:0.6rem;opacity:0.6;">💎</span>';
-    }
-
-    badges += '</div>';
-
-    // Nombre display (español si existe)
-    var displayName = item.nameEs || item.name;
-
-    // Boton de encolar, DENTRO de la card (2026-10-02).
-    //
-    // Va dentro a proposito: la card abre el arbol y el boton encola, asi que
-    // el click del boton tiene que GOLPEAR la card para que no abra el modal al
-    // mismo tiempo. `wireItemCards` lo intercepta antes de llegar a la card.
-    //
-    // El texto corto y el `title` largo no son dos mensajes distintos: el texto
-    // es lo que entra en 5 columnas, y el `title` + `aria-label` son el texto
-    // EXACTO del modal ("Quitar de la cola" / "Agregar a la cola"), que es lo
-    // que el usuario necesita para saber el estado sin abrir nada. Un boton
-    // que solo dice "+ Cola" cuando el item ya esta encolado es un boton que
-    // obliga a abrir el modal para averiguarlo.
-    var textoCola = enCola ? 'Quitar de la cola' : 'Agregar a la cola';
-    var queueBtn = '<div style="margin-top:6px;display:flex;justify-content:flex-end;">' +
-      '<button type="button" class="lt-card-queue-btn" data-card-queue="' + item.id + '" ' +
-      'title="' + textoCola + '" aria-label="' + textoCola + '" ' +
-      'style="padding:2px 8px;border-radius:999px;font-size:0.58rem;font-weight:600;cursor:pointer;' +
-      'white-space:nowrap;border:1px solid ' + (enCola ? '#974EFF' : 'var(--bd-1)') + ';' +
-      'background:' + (enCola ? 'rgba(151,78,255,0.18)' : 'rgba(255,255,255,0.06)') + ';' +
-      'color:' + (enCola ? '#974EFF' : 'var(--tx-3)') + ';">' +
-      (enCola ? '✓ En la cola' : '+ Cola') + '</button></div>';
-
-    return '<div class="card lt-item-card" data-id="' + item.id + '" data-type="' + esc(item.type) + '" ' +
-      'style="position:relative;cursor:pointer;padding:10px;border-radius:12px;' +
-      'border-left:3px solid #974EFF;' +
-      'animation-delay:' + (idx * 0.02) + 's">' +
-      statusOverlay +
-      '<div style="display:flex;align-items:center;gap:8px;">' +
-        '<div style="width:40px;height:40px;border-radius:6px;background:var(--bg-1);display:flex;' +
-        'align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;">' +
-          '<img src="' + esc(item.icon || '') + '" width="36" height="36" alt="' + esc(displayName) + '" ' +
-          'style="border-radius:4px;object-fit:contain;" loading="lazy" referrerpolicy="no-referrer">' +
-        '</div>' +
-        '<div style="flex:1;min-width:0;">' +
-          '<div style="font-weight:600;font-size:0.8rem;color:var(--tx-1);overflow:hidden;' +
-          'text-overflow:ellipsis;white-space:nowrap;" title="' + esc(displayName) + '">' + esc(displayName) + '</div>' +
-          badges +
-        '</div>' +
-      '</div>' +
-      (tpBadge ? '<div style="margin-top:6px;">' + tpBadge + '</div>' : '') +
-      queueBtn +
-      '</div>';
+    return '<article class="card lt-item-card" data-id="' + item.id + '" data-type="' + esc(item.type) + '"' +
+      (isOwned ? ' data-own="1"' : '') + (enCola ? ' data-q="1"' : '') + '>' +
+      '<img class="arm-cicon" src="' + esc(item.icon || '') + '" width="44" height="44" alt="" loading="lazy" referrerpolicy="no-referrer">' +
+      '<div class="arm-cbody">' +
+        '<button type="button" class="arm-cname" title="Ver receta y materiales">' + esc(name) + '</button>' +
+        '<p class="arm-cmeta"><i class="arm-dot" style="background:' + typeColor(item) + '" aria-hidden="true"></i>' +
+          esc(kindLabel(item)) + '</p>' +
+        '<div class="arm-cfoot">' + state + qBtn + '</div>' +
+      '</div></article>';
   }
 
   // =======================================================================
@@ -761,7 +751,7 @@
         '<span style="font-size:0.7rem;color:var(--tx-3);">' + stats.pct + '%</span>' +
       '</div>' +
       '</div>' +
-      '<div class="lt-progress-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;">' +
+      '<div class="lt-progress-grid arm-grid">' +
         cards.join('') +
       '</div>';
   }
@@ -854,6 +844,7 @@
   }
 
   function renderSkeleton() {
+    ensureArmCss();
     var skelCard = function () {
       return '<div class="lt-skeleton-card card" style="padding:10px;border-radius:12px;">' +
         '<div style="display:flex;align-items:center;gap:8px;">' +
@@ -874,7 +865,7 @@
     return '<div class="lt-filter-bar" style="display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;">' +
       '<div style="display:flex;gap:4px;flex-wrap:wrap;"><span style="font-size:0.65rem;color:var(--tx-3);padding:4px 8px;">Tipo:</span>' + buttons.substring(0, buttons.length / 2) + '</div>' +
     '</div>' +
-    '<div class="lt-catalog-grid" style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;">' +
+    '<div class="lt-catalog-grid arm-grid">' +
       Array(15).fill(0).map(skelCard).join('') +
     '</div>';
   }
@@ -897,7 +888,7 @@
     EXPANSION_ORDER: EXPANSION_ORDER.slice(),
     TYPE_LABELS: TYPE_LABELS,
     // ARM-1: lo que prueban los tests.
-    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui }
+    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard }
   };
 
   // =======================================================================
