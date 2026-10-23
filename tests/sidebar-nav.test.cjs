@@ -1,6 +1,6 @@
 // La Sidebar (BL-061): solo navegación, a la izquierda, con la misma lista que la Bienvenida (SBR-1);
 // cuenta activa con el estado de su Key, «Falta permiso» y «Nuevo» en los enlaces (SBR-2);
-// en el celular, barra fija abajo y hoja «Más» con foco atrapado (SBR-3).
+// en el celular, barra fija abajo y hoja «Más» con foco atrapado (SBR-3); arranque con `defer` (SBR-4a).
 // Se prueba con un DOM mínimo y, para la lista de módulos y el estado de las Keys, con la Bienvenida real.
 'use strict';
 const { test } = require('node:test');
@@ -61,7 +61,7 @@ function styleObj() {
 const ALL = ['account', 'wallet', 'progression', 'unlocks', 'inventories', 'tradingpost', 'characters'];
 const today = () => new Date().toISOString().slice(0, 10);
 
-function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '', keys = null, news = null } = {}) {
+function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '', keys = null, news = null, readyState = 'loading' } = {}) {
   const docRoot = el('html');
   const head = el('head');
   const body = el('body');
@@ -84,7 +84,7 @@ function setup({ hash = '#/meta', welcome = 'real', fixes = null, token = '', ke
   body.appendChild(sel); body.appendChild(side);
   const docListeners = {}, winListeners = {}, observers = [];
   const document = {
-    readyState: 'loading', head, body, documentElement: docRoot, activeElement: null,
+    readyState, head, body, documentElement: docRoot, activeElement: null,
     getElementById: (id) => docRoot.all().find((c) => c.attrs.id === id) || null,
     querySelector: (s) => docRoot.querySelector(s),
     querySelectorAll: (s) => docRoot.querySelectorAll(s),
@@ -128,10 +128,10 @@ const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.2.0', () => {
+test('versión 2.2.1', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.2\.0/);
-  assert.equal(x.S().version, '2.2.0');
+  assert.match(SRC, /Versión: 2\.2\.1/);
+  assert.equal(x.S().version, '2.2.1');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
@@ -541,4 +541,41 @@ test('CSS celular: barra fija hasta 900 px con zona segura y 44 px; el panel de 
   assert.match(mob, /#sbrSheet \.sbr-close\{min-height:44px;min-width:44px/);
   assert.match(mob, /#sbrSheet \.sbr-list a\{min-height:48px\}/);
   assert.match(css, /prefers-reduced-motion:reduce\)\{#sbrSheet:not\(\[hidden\]\)\{animation:none\}\}/);
+});
+
+// ---------------------------------------------------------------- SBR-4a: arranque con `defer`
+test('con defer (estado «interactive») espero a DOMContentLoaded: ahí ya está la Bienvenida', async () => {
+  const news = [{ date: today(), module: 'meta', title: 'Metas' }];
+  const x = setup({ readyState: 'interactive', news, token: 'A', keys: [{ label: 'Main', value: 'A', perms: ALL }] });
+  assert.equal(x.document.getElementById('sbrNav'), null, 'todavía no armé nada');
+  assert.equal(x.fetched.length, 0);
+  ready(x);
+  await flush();
+  assert.ok(x.document.getElementById('sbrNav'));
+  assert.equal(x.document.getElementById('navMeta').querySelector('.sbr-new').textContent, 'Nuevo', '«Nuevo» aparece en la primera carga');
+  assert.equal(line(x).textContent, 'API Key completa', 'la tarjeta ya sabe de la Key');
+});
+
+test('si la página ya terminó de cargar, armo en el momento', () => {
+  const x = setup({ readyState: 'complete' });
+  assert.ok(x.document.getElementById('sbrNav'));
+  assert.equal((x.docListeners.DOMContentLoaded || []).length, 0);
+});
+
+test('si la Bienvenida llega tarde, las novedades y el contraste se recuperan en el próximo refresco', async () => {
+  const news = [{ date: today(), module: 'meta', title: 'Metas' }];
+  const x = ready(setup({ welcome: 'none', news }));
+  await flush();
+  assert.equal(x.fetched.filter((u) => /welcome-news/.test(u)).length, 0, 'sin la Bienvenida no pido nada');
+  const W = setup().window.Welcome;
+  W._pure.contrastFixes = () => ({ '--tx-3': '#868fba' });
+  x.window.Welcome = W;
+  x.fire('gn:tokenchange');
+  await flush();
+  assert.equal(x.fetched.filter((u) => /welcome-news/.test(u)).length, 1);
+  assert.equal(x.document.getElementById('navMeta').querySelector('.sbr-new').textContent, 'Nuevo');
+  same(x.side.style.props, { '--tx-3': '#868fba' });
+  x.fire('gn:tokenchange');
+  await flush();
+  assert.equal(x.fetched.filter((u) => /welcome-news/.test(u)).length, 1, 'una sola vez');
 });
