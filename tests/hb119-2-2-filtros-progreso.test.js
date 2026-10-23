@@ -10,6 +10,16 @@
 // compartidos entre Catalogo y la cola) no se toco. Ver
 // `tests/hb126-cola-crafteo.test.js` para el contrato nuevo completo.
 //
+// CONTRATO ACTUALIZADO EN ARM-3 (BL-064, 2026-10-23, diseño aprobado por Pablo
+// en ARM-0): la vista "Mi cola" YA NO dibuja la barra de filtros. La cola no se
+// filtra (veredicto del PO en el HB#147, fijado en hb148), asi que en esa vista
+// los filtros eran controles visibles que no cambiaban nada: el mismo defecto
+// que este archivo nacio para cazar ("un control visible que no hace nada es
+// peor que un control ausente"). FILTRO-01 y 02 se invirtieron para la cola y
+// FILTRO-02 ahora afirma tambien que el Catalogo SI los tiene; FILTRO-06 mira
+// la vista nueva (`arm-qview`). Los filtros siguen siendo estado compartido del
+// tracker: al volver al Catalogo estan donde los dejaste.
+//
 // POR QUE EL FILTRO COMPARTIDO ERA UN BUG Y NO UNA FALTANTE DE DISENO:
 // `filters` es estado COMPARTIDO en el tracker (`legendary-tracker.js:99`), y
 // `catalogItems()` lo aplica. `renderProgress()` lo IGNORA por completo y
@@ -112,25 +122,27 @@ const ARMAS2 = CAT.filter(c => c.type === 'armor').slice(5, 10).map(c => c.id);
 const run = async () => {
   console.log('FILTRO: Mi progreso usa los filtros del Catalogo + switch de alcance');
 
-  // --- FILTRO-01: en progreso se dibuja la barra de filtros ---
+  // --- FILTRO-01: en la cola NO se dibuja la barra de filtros (ARM-3) ---
   {
     const out = await render([ARMAS[0]], 'progress');
-    ok('FILTRO-01 Mi progreso dibuja la barra de filtros',
-      out.disponible && out.html.indexOf('lt-filter-bar') !== -1,
-      'html=' + out.html.length);
+    ok('FILTRO-01 Mi cola no dibuja la barra de filtros, que no la recorta (ARM-3)',
+      out.disponible && out.html.indexOf('lt-filter-bar') === -1 && out.html.indexOf('arm-qview') !== -1,
+      'filter-bar=' + out.html.indexOf('lt-filter-bar') + ' qview=' + out.html.indexOf('arm-qview'));
   }
 
-  // --- FILTRO-02: los TRES filtros estan, con los mismos data-ftype ---
+  // --- FILTRO-02: los TRES filtros estan en el Catalogo y ninguno en la cola ---
   {
-    const out = await render([ARMAS[0]], 'progress');
-    const h = out.html;
-    ok('FILTRO-02 los tres filtros (Tipo/Gen/Exp) estan con los MISMOS data-ftype',
-      h.indexOf('data-ftype="type"') !== -1 &&
-      h.indexOf('data-ftype="generation"') !== -1 &&
-      h.indexOf('data-ftype="expansion"') !== -1,
-      'type=' + h.indexOf('data-ftype="type"') +
-      ' gen=' + h.indexOf('data-ftype="generation"') +
-      ' exp=' + h.indexOf('data-ftype="expansion"'));
+    const cat = (await render([ARMAS[0]], 'catalog')).html;
+    const h = (await render([ARMAS[0]], 'progress')).html;
+    ok('FILTRO-02 los tres filtros (Tipo/Gen/Exp) estan en el Catalogo y no en la cola (ARM-3)',
+      cat.indexOf('data-ftype="type"') !== -1 &&
+      cat.indexOf('data-ftype="generation"') !== -1 &&
+      cat.indexOf('data-ftype="expansion"') !== -1 &&
+      h.indexOf('data-ftype=') === -1,
+      'type=' + cat.indexOf('data-ftype="type"') +
+      ' gen=' + cat.indexOf('data-ftype="generation"') +
+      ' exp=' + cat.indexOf('data-ftype="expansion"') +
+      ' en la cola=' + h.indexOf('data-ftype='));
   }
 
   // --- FILTRO-03: el switch Desbloqueadas / Solo faltantes SE CAYO ---
@@ -183,6 +195,7 @@ const run = async () => {
   // junto con la grilla. Lo que queda por affirmar es que la vista progreso
   // NO depende de esa API y que sigue renderizando (un modulo que se rompio al
   // retirar el switch es el modo de fallo real que este assert cubre hoy).
+  // ARM-3: lo que se pinta es la vista nueva de la cola (`arm-qview`).
   {
     const t = boot();
     t.d.el('keySelectGlobal').value = 'KEY-A';
@@ -191,13 +204,13 @@ const run = async () => {
     T.activate(); await tick(); T.setMode('progress'); await tick();
     const h = t.d.el('legendaryModeContent').innerHTML;
     ok('FILTRO-06 la vista progreso renderiza SIN setScope (contrato nuevo)',
-      typeof T.setScope !== 'function' && h.length > 0 && h.indexOf('lt-filter-bar') !== -1,
+      typeof T.setScope !== 'function' && h.length > 0 && h.indexOf('arm-qview') !== -1,
       'setScope=' + typeof T.setScope + ' html=' + h.slice(0, 160));
   }
 
   // --- FILTRO-07: la API publica expone setFilter y NO expone setScope ---
   // `setFilter` sigue siendo el contrato: los 3 filtros por categoria se
-  // MANTIENEN (el plan los conserva) y se aplican a lo que entra a la cola.
+  // MANTIENEN en el Catalogo (las listas de Expansion y Gen. de ARM-2 lo usan).
   // `setScope` se va con el switch, y el test lo verifica para que no quede
   // colgando una API que nadie llama y que un consumidor externo usaria.
   {
