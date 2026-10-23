@@ -52,3 +52,16 @@ test('index.html pide la versión del selector que trae el theme oficial', () =>
   const src = fs.readFileSync(path.join(ROOT, 'js', 'theme-selector.js'), 'utf8');
   assert.equal(m[1], src.match(/Versión: ([\d.]+)/)[1], 'la versión del script coincide con la del archivo (caché)');
 });
+
+test('FP-4 (DEC-035): zona segura, characters-theme una sola vez y el cargador de módulos al final', () => {
+  assert.match(HTML, /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"\/>/);
+  assert.equal((HTML.match(/js\/characters-theme\.js/g) || []).length, 1, 'characters-theme.js se carga una sola vez (BL-005)');
+  assert.match(HTML, /<script defer src="js\/characters\.js\?v=[\d.]+"><\/script>\s*<script defer src="js\/characters-theme\.js\?v=[\d.]+"><\/script>/,
+    'la que queda va con defer, después de characters.js');
+  const boot = HTML.match(/<script defer src="js\/boot\.js\?v=([\d.]+)"><\/script>/);
+  assert.ok(boot, 'index.html carga el cargador');
+  const defers = [...HTML.matchAll(/<script defer src="([^"]+)"/g)];
+  assert.equal(defers[defers.length - 1][1], 'js/boot.js?v=' + boot[1], 'el cargador es el último defer: corre cuando todo lo demás ya está');
+  const src = fs.readFileSync(path.join(ROOT, 'js', 'boot.js'), 'utf8');
+  assert.equal(boot[1], src.match(/Versión: ([\d.]+)/)[1], 'el ?v del cargador coincide con su versión (caché)');
+});
