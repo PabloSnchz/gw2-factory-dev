@@ -1,26 +1,26 @@
 # STATUS
 
-Estado: EN CURSO
-Tarea actual: BL-058 — WEL-1: Bienvenida 2.0.0 (estructura nueva, dos estados, 9 módulos, Novedades, Guías y ayuda, pie; test de frontera DEC-032).
-Motivo: Pablo (05:00Z) aprobó la propuesta WEL-0b y pidió implementarla tal cual. SHV-0 (frente de Shiruvana) ya quedó registrado.
+Estado: ESPERANDO A PABLO
+Tarea actual: BL-058 — WEL-1 publicado en DEV (Bienvenida 2.0.0). Esperando la validación de Pablo en pantalla antes de WEL-2.
+Motivo: Pablo (05:00Z) aprobó la propuesta WEL-0b y pidió implementarla tal cual, por micro-ciclos.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: REVIEW
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 05:13Z
-Próxima acción: publicar los 3 archivos de WEL-1 en serie, verificar blobs y pedir la validación de Pablo en DEV.
+Última actualización: 2026-10-23 05:20Z
+Próxima acción: con la validación de Pablo, WEL-2: «Tu Bóveda» y estado de cada Key con sus permisos (ya guardados en el navegador: sin pedidos a la API).
 
-Micro-ciclo (en curso, checkpoint de este commit):
-WEL-1 — `js/welcome-panel.js` 2.0.0 sin estilos en línea, con cabecera del gato, dos estados, los 9 módulos con su ruta real, novedades desde un archivo propio, guías y ayuda y pie compacto. Mismos ids de botones. 11 tests y 15/15 mutaciones en local. 39 KB.
+Micro-ciclo (cerrado):
+WEL-1 — Bienvenida 2.0.0: cabecera con el gato y botones de API Key y Cuentas, dos estados (tres pasos sin Key), los 9 módulos con su ruta real, Novedades desde `assets/welcome-news.json`, Guías y ayuda, pie compacto con los colores oficiales de la bio. Sin estilos en línea; test de frontera DEC-032. 11 tests, 15/15 mutaciones.
 Archivos:
 - js/welcome-panel.js
 - tests/welcome-view.test.cjs
 - assets/welcome-news.json
 
-Último hecho: SHV-0 (05:12Z). `5fbf835` DEC-033, `f6c413d` memory-index, `4b65933` backlog (BL-058 en curso, BL-059 frente Shiruvana bloqueado por Pablo).
+Último hecho: WEL-1 (05:16Z) en un solo commit `5ee02d8` (blobs 001d3c5, e612468, b1bf170, iguales a los locales). Antes, SHV-0: `5fbf835` DEC-033, `f6c413d` memory-index, `4b65933` backlog.
 
 Plan BL-058 (Pantalla de Bienvenida), aprobado:
 
-- WEL-1 `welcome-panel.js` 2.0.0 (este micro-ciclo).
+- WEL-1 hecho; espera validación.
 - WEL-2 «Tu Bóveda» y botones de estado (Keys y sus permisos, cuentas, copia, theme).
 - WEL-3 «Seguí donde quedaste» (clave nueva `gn:global:welcome`).
 - WEL-4 `shiruvana-places.js` 1.1.0: «Shiruvana te guía» y Preguntame; fuera el Gist (DEC-030).
@@ -31,11 +31,12 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el b
 ## Resumen de la sesión
 
 - BL-057 cerrada: Metas y Eventos renovado validado por Pablo en DEV (FEAT-007).
-- BL-058 aprobada (WEL-0b) y en implementación: la Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032).
+- BL-058 en implementación: WEL-1 publicado. La Bienvenida es la puerta de entrada de la Bóveda y no asume funciones de ningún módulo (DEC-032).
 - Frente nuevo registrado: evolución de Shiruvana en 5 niveles (DEC-033, BL-059). No se implementa todavía.
 
 ## Esperando a Pablo
 
+- [BL-058] Validación: mirá la Bienvenida en DEV (Inicio, con Ctrl+F5 por RSK-020), con y sin API Key y en el celular. Mi mensaje de arriba todavía es el saludo viejo: el nuevo «Shiruvana te guía» llega en WEL-4.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 
