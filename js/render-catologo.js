@@ -1,24 +1,11 @@
 /*!
  * js/render-catologo.js — Render del catálogo y filtros
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
- * v1.5.0 (2026-10-23) — BL-064, ARM-4: armaduras por set. Las 132 piezas sueltas pasan a
- *   23 tarjetas (7 sets × 3 pesos, más Eikasia y Selachimorpha) con «tenés N de 6 piezas»;
- *   al abrir una, sus piezas con la tarjeta de siempre. Comentarios heredados resumidos
- *   para dejar lugar (LES-028): el detalle sigue en git.
- * v1.4.0 (2026-10-23) — BL-064, ARM-3: «Mi cola» renovada (lista numerada con las 3 primeras
- *   destacadas, «Ver receta y materiales» y «Quitar», lugares libres, sin los filtros del
- *   catálogo, que no recortan la cola) y mi línea en la cabecera: una sola, sobre la
- *   Armería (N1–N2), oculta en el celular, donde ya está mi rincón.
- * v1.3.0 (2026-10-23) — BL-064, ARM-2: filtros en una sola fila («Todas / Las tengo /
- *   Me faltan», tipo, y expansión y generación como listas), tarjetas nuevas (artículo
- *   con el nombre como botón y «+ A la cola» aparte, «✓ La tengo» en vez de «PENDING»,
- *   precio con su fecha), grilla adaptable (de 1 a 5 columnas) y secciones por
- *   expansión con su avance. Estilos en clases .arm-*, sin colores fijos en el texto.
- * v1.2.0 (2026-10-23) — BL-064, ARM-1: el marco nuevo de la Armería. Cabecera con
- *   ícono y resumen (desbloqueadas, por tipo y la cola), pestañas «Catálogo / Mi cola»
- *   (reemplazan a «Modo:») y buscador por nombre en español o en inglés, sin tildes.
- *   Todo vive acá: legendary-tracker.js no cambia (está al límite de publicación).
- *   Las tarjetas y los filtros se renuevan en ARM-2.
+ * v1.6.0 (2026-10-23) — BL-064, ARM-5: guarda de contraste de la Bienvenida sobre el panel (19 themes)
+ *   y el foco vuelve al mismo control cuando el tracker repinta (filtros, listas, cola, pestañas).
+ * v1.2.0–1.5.0 (2026-10-23) — BL-064, ARM-1 a ARM-4 (FEAT-010): cabecera con resumen, pestañas
+ *   «Catálogo / Mi cola» y buscador; filtros en una fila, tarjetas nuevas y grilla adaptable por
+ *   expansión; «Mi cola» renovada y mi línea; armaduras por set. legendary-tracker.js no cambia.
  * v1.1.0 (2026-10-21) — BL-046: chips con la jerga de la comunidad (Abalorio,
  *   Espaldar) y la expansión real de cada legendaria (Secrets of the Obscure,
  *   Janthir Wilds y Visions of Eternity incluidas), con filtros en orden de salida.
@@ -93,18 +80,9 @@
   // =======================================================================
   // EXPANSION REAL DE CADA LEGENDARIA (BL-046)
   // =======================================================================
-  // `legendary-data.js` se genero cuando solo existian 4 expansiones y adivino
-  // la de cada pieza por generacion: Klobjarne Geirr (Janthir Wilds) y Verano
-  // Infinito (Visions of Eternity) salian como Path of Fire. Ese archivo pesa
-  // 83 KB y no entra en una publicacion de la Factory (LES-028), asi que la
-  // correccion vive aca y se aplica al catalogo al cargar: filtros, chips y
-  // orden leen el mismo dato.
-  //
-  // Regla: la expansion es la que hace falta para conseguir la pieza. Si no hace
-  // falta ninguna (PvP, WvW, fractales, mejoras gratuitas), es Clasico. Las de
-  // segunda generacion que aceptan maestria de HoT o de PoF van con PoF, el ciclo
-  // en que salieron. Fuentes (2026-10-21): wiki oficial (Legendary weapon,
-  // Legendary trinket, Legendary back item, Legendary armor), GuildJen y Snow Crows.
+  // legendary-data.js adivinó la expansión por generación; la real vive acá (83 KB, LES-028).
+  // Regla: la expansión que hace falta para conseguir la pieza; si ninguna, Clásico. Fuentes: wiki
+  // oficial, GuildJen y Snow Crows (2026-10-21).
   var EXPANSION_FIX = {
     // Heart of Thorns: Chuka y Champawat (una de las 4 de segunda generacion con
     // coleccion) y Aurora (Mundo Viviente 3). Ad Infinitum ya venia bien.
@@ -231,7 +209,7 @@
     '.arm-hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',
     '.arm-hrow>img{width:56px;height:56px;border-radius:12px;background:var(--bg-2,var(--bg-0));padding:6px;flex-shrink:0}',
     '.arm-hrow h2{margin:0;font-size:1.3rem;line-height:1.2;color:var(--tx-1)}',
-    '.arm-sub{margin:2px 0 0;font-size:.85rem;color:var(--tx-3)}',
+    '.arm-sub{margin:2px 0 0;font-size:.85rem;color:var(--tx-2)}',
     '.arm-hbtns{margin-left:auto;display:flex;gap:6px}',
     '.arm-btn{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:4px 12px;border:1px solid var(--bd-1);' +
       'border-radius:999px;background:transparent;color:var(--tx-2);font:inherit;font-size:.8rem;cursor:pointer}',
@@ -290,7 +268,7 @@
     '.arm-price{display:inline-flex;align-items:center;gap:4px;font-size:.75rem;color:var(--tx-2)}',
     '.arm-nosell{font-size:.75rem;color:var(--tx-3)}',
     '.arm-own{padding:2px 8px;border:1px solid var(--color-green,#3fb950);border-radius:999px;' +
-      'background:rgba(63,185,80,.14);font-size:.75rem;font-weight:700;color:var(--tx-1)}',
+      'background:rgba(63,185,80,.10);font-size:.75rem;font-weight:700;color:var(--tx-1)}',
     '.arm-qbtn{margin-left:auto;min-height:30px;padding:3px 10px;border:1px solid var(--bd-1);border-radius:999px;' +
       'background:transparent;color:var(--tx-2);font:inherit;font-size:.75rem;font-weight:600;cursor:pointer;white-space:nowrap}',
     '.arm-qbtn:hover{color:var(--tx-1);border-color:' + ARM_COLOR + '}',
@@ -347,6 +325,61 @@
     st.id = 'arm-css';
     st.textContent = ARM_CSS;
     d.head.appendChild(st);
+  }
+
+  // ARM-5: la guarda de contraste de la Bienvenida (como la Sidebar), solo dentro del panel.
+  var GUARD = ['--bg-0', '--bg-1', '--tx-1', '--tx-3', '--muted', '--color-green', '--gn-gold', '--color-amber', '--acc-1',
+    '--color-green-bg', '--color-amber-bg'];
+  var guard = { applied: [], watching: false };
+  function armContrast(tokens) {
+    var d = root.document, W = root.Welcome;
+    var host = d && d.getElementById ? d.getElementById('legendaryArmoryPanel') : null;
+    if (!host || !host.style || !W || !W._pure || typeof W._pure.contrastFixes !== 'function') return {};
+    if (!tokens) {
+      tokens = {};
+      var cs = typeof root.getComputedStyle === 'function' && d.documentElement ? root.getComputedStyle(d.documentElement) : null;
+      GUARD.forEach(function (k) { tokens[k] = cs && cs.getPropertyValue ? cs.getPropertyValue(k) : ''; });
+    }
+    var fixes = W._pure.contrastFixes(tokens) || {};
+    guard.applied.forEach(function (k) { if (!(k in fixes)) host.style.removeProperty(k); });
+    Object.keys(fixes).forEach(function (k) { host.style.setProperty(k, fixes[k]); });
+    guard.applied = Object.keys(fixes);
+    if (!guard.watching && typeof root.MutationObserver === 'function' && d.documentElement) {
+      guard.watching = true;
+      new root.MutationObserver(function () { armContrast(); })
+        .observe(d.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      if (d.addEventListener) d.addEventListener('load', function (e) { if (e && e.target && e.target.id === 'themeStylesheet') armContrast(); }, true);
+    }
+    return fixes;
+  }
+
+  // ARM-5: el tracker rearma todo con cada filtro; el foco vuelve al control equivalente.
+  function focusKey(el) {
+    var g = el && el.getAttribute ? function (k) { return el.getAttribute(k); } : null;
+    if (!g) return '';
+    if (g('data-action') === 'clear-filters') return '[data-ftype="ownership"][data-fvalue=""]';
+    if (g('data-ftype')) return '[data-ftype="' + g('data-ftype') + '"][data-fvalue="' + (g('data-fvalue') || '') + '"]';
+    var ks = ['data-card-queue', 'data-arm-tab', 'data-arm-act', 'data-arm-qopen'];
+    for (var i = 0; i < ks.length; i++) if (g(ks[i])) return '[' + ks[i] + '="' + g(ks[i]) + '"]';
+    if (el.id) return '#' + el.id;
+    var p = typeof el.closest === 'function' ? el.closest('[data-id],[data-set]') : null;
+    if (!p) return '';
+    return p.getAttribute('data-set') ? '[data-set="' + p.getAttribute('data-set') + '"]>summary' :
+      '[data-id="' + p.getAttribute('data-id') + '"] .arm-cname';
+  }
+  function keepFocus() {
+    var d = root.document;
+    var c = d && d.getElementById ? d.getElementById('legendaryModeContent') : null;
+    var a = d && d.activeElement;
+    if (!c || !a || typeof c.contains !== 'function' || !c.contains(a)) return;
+    var key = focusKey(a);
+    if (!key || typeof root.setTimeout !== 'function') return;
+    root.setTimeout(function () {
+      var now = d.activeElement;
+      if (now && now !== d.body && c.contains(now)) return;
+      var el = c.querySelector ? c.querySelector(key) : null;
+      if (el && el.focus) el.focus();
+    }, 0);
   }
 
   // Sin tildes y en minúscula: «crepusculo» encuentra «Crepúsculo».
@@ -424,6 +457,8 @@
   function shellHTML(catalog) {
     ensureArmCss();
     wireArm();
+    armContrast();
+    keepFocus();
     var st = trackerState();
     var mode = st && st.mode === 'progress' ? 'progress' : 'catalog';
     var sum = armorySummary(catalog, (st && st.owned) || {}, colaActual());
@@ -1084,7 +1119,8 @@
     EXPANSION_ORDER: EXPANSION_ORDER.slice(),
     TYPE_LABELS: TYPE_LABELS,
     // ARM-1: lo que prueban los tests.
-    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard, voice: voiceText, queue: queueViewHTML, setOf: setOf }
+    _arm: { CSS: ARM_CSS, norm: norm, summary: armorySummary, search: searchFor, state: ui, kind: kindLabel, card: renderItemCard, voice: voiceText, queue: queueViewHTML, setOf: setOf,
+      contrast: armContrast, focusKey: focusKey }
   };
 
   // =======================================================================
