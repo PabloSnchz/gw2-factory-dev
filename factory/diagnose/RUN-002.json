@@ -1,0 +1,5 @@
+{
+  "id": "RUN-002",
+  "summary": "FP-5 (RSK-020): inventario real de ?v de index.html contra la versión de cada archivo",
+  "tests": ["tests/index-versions.smoke.cjs", "tests/index-versions-tool.test.cjs"]
+}
