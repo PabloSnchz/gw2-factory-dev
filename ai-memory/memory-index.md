@@ -42,6 +42,7 @@ Panel: https://pablosnchz.github.io/gw2-factory-dashboard/
 - [DEC-029](decisions/DEC-029-tests-del-legado-por-ci.md) — Los tests del legado se migran por CI: un workflow corre el censo contra DEV (`tools/legacy/CENSO.md`) e importa solo los archivos de una lista que pasan en DEV. La Factory decide con evidencia sin copiar 1,1 MB a mano.
 - [DEC-030](decisions/DEC-030-gist-deprecado-respaldo-en-nube.md) — Decidida por Pablo: el Gist queda deprecado (nunca levantó el respaldo y casi nadie tiene GitHub). El respaldo es el archivo, llevado a la nube del jugador: primero «Guardar copia en…» con el menú Compartir, después Google Drive (necesita un proyecto de Pablo); iCloud directo no es viable.
 - [DEC-031](decisions/DEC-031-vistas-previas-deuda-visual.md) — Decidida por Pablo (definitiva): las vistas previas de Metas que faltan (Chak y Dragon's End) quedan como deuda visual; no se investiga Internet Archive, Wayback ni fuentes alternativas y se retiró la recuperación automática. Lo que falta o no carga se ve como «sin vista previa», limpio.
+- [DEC-032](decisions/DEC-032-bienvenida-frontera-con-metas.md) — Decidida por Pablo: la Bienvenida es la portada de la Bóveda (qué puedo hacer, qué módulos tengo, qué configuré, qué me falta, dónde sigo) y nunca muestra timers, metas, agendas ni world bosses; ahí Shiruvana es guía general de la Bóveda. Un test lo vigila.
 
 ## LESSONS
 
