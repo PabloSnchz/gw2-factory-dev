@@ -1,6 +1,6 @@
 /*!
  * js/settings-manager.js — Gestión de Exportación/Importación de configuración
- * v1.0.2 (2026-03-28)
+ * v1.0.4 (cabecera al día 2026-10-23, RSK-020: el archivo ya era 1.0.4, ver el historial)
  * 
  * Permite exportar e importar toda la configuración de la app:
  * - API Keys (nombres + keys, key seleccionada)

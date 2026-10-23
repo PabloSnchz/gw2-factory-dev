@@ -37,7 +37,7 @@ test('versión y manifiesto', () => {
   assert.equal(B.manifest, 'js/modules.json');
 });
 
-test('el manifiesto del repo es válido y por ahora está vacío', () => {
+test('el manifiesto del repo es válido y cada módulo existe', () => {
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8'));
   assert.equal(m.version, 1);
   const p = B.plan(m);
