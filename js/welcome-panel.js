@@ -1,6 +1,6 @@
 /*!
  * js/welcome-panel.js — Pantalla de Bienvenida: la puerta de entrada a La Bóveda
- * Versión: 2.0.0 (2026-10-23) · BL-058, propuesta WEL-0b aprobada por Pablo
+ * Versión: 2.1.0 (2026-10-23) · BL-058, propuesta WEL-0b aprobada por Pablo
  *
  * Contesta: qué puedo hacer en la Bóveda, qué módulos tengo, qué configuré, qué me falta
  * y dónde me conviene seguir. Dos estados: sin API Key (tres pasos) y con API Key.
@@ -9,18 +9,23 @@
  * metas, agendas, saldos ni logros: cada módulo aparece como una tarjeta que lleva a él.
  * Un test lo vigila (tests/welcome-view.test.cjs).
  *
- * Datos: solo lo que ya está en este navegador (Keys guardadas y cuenta activa por Storage)
- * y assets/welcome-news.json. No hace pedidos a la API.
+ * Datos: solo lo que ya está en este navegador y assets/welcome-news.json. No hace pedidos a la API.
+ *  - Keys, sus permisos (`perms`, que app.js guarda de /v2/tokeninfo al agregarlas) y la cuenta activa.
+ *  - gn:global:welcome (clave nueva, solo de este navegador): último módulo, visitas por módulo y
+ *    fecha de la última copia hecha desde «Backup» o desde «Guardar copia». Solo ids de módulo y fechas.
  * Mi voz la pone js/shiruvana-places.js al principio de .panel__body (DEC-024, DEC-025).
  *
  * 2.0.0 (WEL-1): estructura nueva sin estilos ni efectos en línea; cabecera con el gato;
  *   los 9 módulos de la barra lateral; Novedades; Guías y ayuda; pie compacto con los colores
- *   oficiales de la bio. Mismos ids de botones que 1.4.0. Siguen WEL-2 (Tu Bóveda) y WEL-3
- *   (Seguí donde quedaste).
+ *   oficiales de la bio. Mismos ids de botones que 1.4.0.
+ * 2.1.0 (WEL-2): «Seguí donde quedaste», «Tu Bóveda» (Keys y permisos, cuenta activa, copia, theme)
+ *   con la acción que resuelve cada pendiente, botón de Copia en la cabecera, aviso de permiso en los
+ *   módulos que la Key activa no alcanza y Welcome.orientation(): la lista ordenada de lo que hay que
+ *   mirar, que va a usar mi voz (WEL-3).
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.0.0';
+  var VERSION = '2.1.0';
   var LOG = '[Welcome]';
 
   var LINKS = {
@@ -52,6 +57,20 @@
     { id: 'characters', name: 'Inventario y Personajes', desc: 'Buscá un objeto en toda la cuenta', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },
     { id: 'accounts', name: 'Cuentas', desc: 'Tus cuentas y Keys, cifradas en tu PC', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3', local: true }
   ];
+  // Los 7 permisos que pide la puerta de app.js (KeyManager.REQUIRED_PERMISSIONS, que no está en
+  // window) y qué módulos dejan sin datos si faltan. Lo vigila tests/welcome-vault.test.cjs.
+  var SCOPES = [
+    { scope: 'account', label: 'cuenta', mods: ['cards', 'armory', 'achievements', 'wv', 'activities', 'raids', 'characters'] },
+    { scope: 'wallet', label: 'cartera', mods: ['cards'] },
+    { scope: 'progression', label: 'progreso', mods: ['achievements', 'activities', 'raids'] },
+    { scope: 'unlocks', label: 'desbloqueos', mods: ['armory', 'activities'] },
+    { scope: 'inventories', label: 'inventarios', mods: ['armory', 'characters'] },
+    { scope: 'tradingpost', label: 'bazar', mods: ['cards'] },
+    { scope: 'characters', label: 'personajes', mods: ['characters'] }
+  ];
+  var STATE_KEY = 'gn:global:welcome';
+  var BACKUP_DAYS = 14;  // una copia de más de 14 días ya pide atención
+  var DAY = 864e5;
   var NEWS_URL = 'assets/welcome-news.json';
   var NEWS_DAYS = 14;  // una novedad lleva «NUEVO» durante 14 días
   var NEWS_MAX = 3;
@@ -70,6 +89,34 @@
     '#welcomePanel .wl-pill b{color:var(--tx-1);font-variant-numeric:tabular-nums}',
     '#welcomePanel .wl-pill.is-warn{border-color:var(--gn-gold,var(--color-amber))}',
     '#welcomePanel .wl-pill.is-warn b{color:var(--gn-gold,var(--color-amber))}',
+    '#welcomePanel .wl-pill.is-ok b{color:var(--color-green)}',
+    '#welcomePanel .wl-cont{position:relative;display:flex;gap:14px;align-items:center;padding:14px 16px 14px 19px;border:1px solid var(--bd-2,var(--bd-1));border-radius:12px;background:var(--bg-1);text-decoration:none;color:inherit;margin-bottom:10px}',
+    '#welcomePanel .wl-cont::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:3px;background:var(--x)}',
+    '#welcomePanel .wl-cont img{width:46px;height:46px;border-radius:10px}',
+    '#welcomePanel .wl-cont b{display:block;font-size:1.02rem;color:var(--tx-1)}',
+    '#welcomePanel .wl-cont small,#welcomePanel .wl-note{color:var(--tx-3);font-size:.8rem}',
+    '#welcomePanel .wl-cont em{margin-left:auto;font-style:normal;color:var(--acc-1);font-weight:600;font-size:.9rem;white-space:nowrap}',
+    '#welcomePanel .wl-note{margin:0 0 10px}',
+    '#welcomePanel .wl-freq{display:flex;flex-wrap:wrap;gap:8px}',
+    '#welcomePanel .wl-fq{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--bd-1);border-radius:10px;padding:6px 12px 6px 8px;font-size:.85rem;color:var(--tx-2);text-decoration:none;background:var(--bg-1)}',
+    '#welcomePanel .wl-fq img{width:24px;height:24px;border-radius:6px}',
+    '#welcomePanel .wl-prog{display:flex;align-items:center;gap:10px;margin:0 0 8px;font-size:.85rem;color:var(--tx-3)}',
+    '#welcomePanel .wl-prog b{color:var(--tx-1)}',
+    '#welcomePanel .wl-bar{flex:1;height:4px;border-radius:4px;background:var(--bd-1);overflow:hidden}',
+    '#welcomePanel .wl-bar i{display:block;height:100%;width:var(--p,0);border-radius:4px;background:linear-gradient(90deg,var(--acc-1),var(--color-green))}',
+    '#welcomePanel .wl-chk{list-style:none;margin:0;padding:0}',
+    '#welcomePanel .wl-chk>li{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:.88rem;padding:8px 0;border-bottom:1px solid var(--bd-1)}',
+    '#welcomePanel .wl-chk>li:last-child{border-bottom:0}',
+    '#welcomePanel .wl-ic{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:.72rem;font-weight:800;flex-shrink:0;background:var(--color-green-bg,var(--bg-2));color:var(--color-green)}',
+    '#welcomePanel .is-warn>.wl-ic{background:var(--color-amber-bg,var(--bg-2));color:var(--gn-gold,var(--color-amber))}',
+    '#welcomePanel .wl-chk span{color:var(--tx-2);min-width:0;flex:1}',
+    '#welcomePanel .wl-chk small{color:var(--tx-3)}',
+    '#welcomePanel .wl-btn--sm{padding:4px 12px;border-radius:999px;font-size:.8rem;color:var(--tx-2)}',
+    '#welcomePanel .wl-keys{flex-basis:100%;margin:2px 0 0 30px;font-size:.82rem;color:var(--tx-3)}',
+    '#welcomePanel .wl-keys summary{cursor:pointer;color:var(--tx-2)}',
+    '#welcomePanel .wl-keys ul{margin:6px 0;padding-left:18px}',
+    '#welcomePanel .wl-keys b{color:var(--tx-1)}',
+    '#welcomePanel .wl-tag--perm{border-color:var(--gn-gold,var(--color-amber));color:var(--gn-gold,var(--color-amber));text-transform:none;letter-spacing:0}',
     '#welcomePanel .wl-body{display:grid;gap:18px;padding-top:16px}',
     '#welcomePanel .wl-h{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin:0 0 10px}',
     '#welcomePanel .wl-h h3{margin:0;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tx-3)}',
@@ -128,7 +175,9 @@
       '#welcomePanel .wl-mod span{display:none}' +
       '#welcomePanel .wl-tag{position:static}' +
       '#welcomePanel .wl-btn,#welcomePanel .wl-pill{min-height:44px}' +
-      '#welcomePanel .wl-priv{margin-left:0}}',
+      '#welcomePanel .wl-priv{margin-left:0}' +
+      '#welcomePanel .wl-cont em{display:none}' +
+      '#welcomePanel .wl-keys{margin-left:0}}',
     '@media (prefers-reduced-motion:reduce){#welcomePanel .wl-mod{transition:none}#welcomePanel .wl-mod:hover{transform:none}}'
   ].join('\n');
 
@@ -153,22 +202,107 @@
   // ---------------------------------------------------------------- modelo (puro)
   // Lo que la Bienvenida sabe de vos, tomado solo de este navegador.
   function readEnv() {
+    var themeId = storageGet('THEME', 'gn:theme') || 'gato', themeName = '', themeCount = 0;
+    try {
+      var list = root.ThemeSelector && root.ThemeSelector.getThemes ? root.ThemeSelector.getThemes() : [];
+      themeCount = list.length;
+      for (var i = 0; i < list.length; i++) if (list[i].id === themeId) themeName = list[i].name;
+    } catch (_) {}
     return {
       keys: storageGet('ACCOUNT_KEYS', 'gn:account:keys'),
-      selected: storageGet('ACCOUNT_SELECTED', 'gn:account:selected')
+      selected: storageGet('ACCOUNT_SELECTED', 'gn:account:selected'),
+      vault: readVault(),
+      theme: { id: themeId, name: themeName || themeId, count: themeCount },
+      now: Date.now()
     };
   }
 
+  // Estado propio de la Bienvenida (gn:global:welcome). Solo ids de módulo y fechas.
+  function readVault() {
+    var v = storageGet('GLOBAL_WELCOME', STATE_KEY);
+    if (!v || typeof v !== 'object') v = {};
+    return {
+      last: v.last && v.last.id ? { id: String(v.last.id), at: +v.last.at || 0 } : null,
+      visits: v.visits && typeof v.visits === 'object' ? v.visits : {},
+      backupAt: +v.backupAt || 0
+    };
+  }
+  function writeVault(v) {
+    try { if (root.Storage && root.Storage.set) root.Storage.set(STATE_KEY, v); } catch (_) {}
+  }
+
+  // Qué permisos le faltan a una Key. Sin `perms` guardados no se sabe: «sin verificar», nunca «mala».
+  function keyStatus(k) {
+    if (!Array.isArray(k.perms)) return { status: 'unknown', missing: [], mods: [] };
+    var has = {}, missing = [], mods = {};
+    for (var i = 0; i < k.perms.length; i++) has[k.perms[i]] = true;
+    SCOPES.forEach(function (s) {
+      if (has[s.scope]) return;
+      missing.push(s.label);
+      s.mods.forEach(function (id) { mods[id] = true; });
+    });
+    return { status: missing.length ? 'missing' : 'ok', missing: missing, mods: Object.keys(mods) };
+  }
+
+  function relTime(ms) {
+    if (!(ms >= 0)) return '';
+    var min = Math.floor(ms / 6e4);
+    if (min < 1) return 'recién';
+    if (min < 60) return 'hace ' + min + ' min';
+    if (ms < DAY) return 'hace ' + Math.floor(min / 60) + ' h';
+    if (ms < 2 * DAY) return 'ayer';
+    return 'hace ' + Math.floor(ms / DAY) + ' días';
+  }
+
   function buildModel(env) {
-    var keys = Array.isArray(env && env.keys) ? env.keys.filter(function (k) { return k && k.value; }) : [];
+    env = env || {};
+    var now = typeof env.now === 'number' ? env.now : Date.now();
+    var keys = Array.isArray(env.keys) ? env.keys.filter(function (k) { return k && k.value; }) : [];
     var active = null;
-    for (var i = 0; i < keys.length; i++) if (keys[i].value === (env && env.selected)) active = keys[i];
+    for (var i = 0; i < keys.length; i++) if (keys[i].value === env.selected) active = keys[i];
     if (!active && keys.length) active = keys[0];
+    var name = function (k) { return String(k.label || '').trim() || 'sin nombre'; };
+    var list = keys.map(function (k) {
+      var s = keyStatus(k);
+      return { label: name(k), status: s.status, missing: s.missing, mods: s.mods, active: k === active };
+    });
+    var vault = env.vault || { last: null, visits: {}, backupAt: 0 };
+    var age = vault.backupAt ? now - vault.backupAt : -1;
+    var last = vault.last && moduleById(vault.last.id) ? vault.last : null;
+    var freq = Object.keys(vault.visits || {}).filter(function (id) {
+      return moduleById(id) && (!last || id !== last.id) && vault.visits[id] > 0;
+    }).sort(function (a, b) { return vault.visits[b] - vault.visits[a] || (a < b ? -1 : 1); }).slice(0, 3);
+    var act = active ? list[keys.indexOf(active)] : null;
     return {
       state: keys.length ? 'back' : 'new',
       keyCount: keys.length,
-      activeLabel: active ? (String(active.label || '').trim() || 'sin nombre') : ''
+      activeLabel: active ? name(active) : '',
+      activeStatus: act ? act.status : '',
+      activeMods: act ? act.mods : [],
+      keys: list,
+      backup: { status: age < 0 ? 'never' : age > BACKUP_DAYS * DAY ? 'old' : 'ok', when: age < 0 ? '' : relTime(age) },
+      last: last ? { id: last.id, when: relTime(now - last.at) } : null,
+      freq: freq,
+      theme: env.theme || { id: 'gato', name: 'Gato Negro', count: 0 }
     };
+  }
+
+  // El flujo de orientación: lo que hay que mirar primero va primero. Cada pendiente trae la
+  // acción que lo resuelve. Lo usan «Tu Bóveda» y, en WEL-3, mi voz. Solo habla de la Bóveda.
+  function orientation(m) {
+    if (!m || m.state !== 'back') return [{ id: 'start', level: 'warn', title: 'Agregá tu primera API Key', act: 'add-key', action: 'Agregar API Key' }];
+    var items = [];
+    var bad = m.keys.filter(function (k) { return k.status === 'missing'; });
+    var unk = m.keys.filter(function (k) { return k.status === 'unknown'; });
+    if (bad.length) items.push({ id: 'keys', level: 'warn', act: 'manage-keys', action: 'Revisar Keys',
+      title: bad.length === 1 ? 'A la Key de ' + bad[0].label + ' le faltan permisos' : bad.length + ' Keys con permisos incompletos' });
+    if (m.backup.status !== 'ok') items.push({ id: 'backup', level: 'warn', act: 'backup', action: 'Guardar copia',
+      title: m.backup.status === 'never' ? 'Todavía no registré ninguna copia en este navegador' : 'Tu última copia es de ' + m.backup.when });
+    if (unk.length) items.push({ id: 'verify', level: 'info', act: 'manage-keys', action: 'Gestionar Keys',
+      title: unk.length === 1 ? 'La Key de ' + unk[0].label + ' no tiene sus permisos anotados' : unk.length + ' Keys sin sus permisos anotados' });
+    if (m.last) items.push({ id: 'continue', level: 'ok', href: (moduleById(m.last.id) || {}).href, action: 'Continuar',
+      title: 'Seguir en ' + moduleById(m.last.id).name });
+    return items;
   }
 
   // Novedades: más nuevas primero, como mucho 3; «NUEVO» si tienen 14 días o menos.
@@ -199,11 +333,15 @@
     var sub = m.state === 'back'
       ? 'Hola de nuevo · cuenta activa <b>' + esc(m.activeLabel) + '</b>'
       : 'Tu cuenta de Guild Wars 2 en un solo lugar · todo queda en este navegador';
+    var keyPill = m.activeStatus === 'missing' ? ['is-warn', 'Revisar'] : m.activeStatus === 'unknown' ? ['', 'Sin verificar'] : ['is-ok', 'Activa'];
+    var bk = m.backup || { status: 'never' };
     var pills = m.state === 'back'
-      ? '<button type="button" class="wl-pill" id="welcomeManageKeysBtn" data-act="manage-keys">' +
-          '<img src="assets/icons/Welcome/2604909.png" alt="">API Key <b>Activa</b></button>' +
+      ? '<button type="button" class="wl-pill ' + keyPill[0] + '" id="welcomeManageKeysBtn" data-act="manage-keys">' +
+          '<img src="assets/icons/Welcome/2604909.png" alt="">API Key <b>' + keyPill[1] + '</b></button>' +
         '<a class="wl-pill" id="welcomeAccountsBtn" href="#/account/accounts" data-act="accounts">' +
-          '<img src="assets/icons/3601748.png" alt="">Cuentas <b>' + m.keyCount + '</b></a>'
+          '<img src="assets/icons/3601748.png" alt="">Cuentas <b>' + m.keyCount + '</b></a>' +
+        '<button type="button" class="wl-pill' + (bk.status === 'ok' ? '' : ' is-warn') + '" data-act="backup" title="Guardar una copia ahora">' +
+          '<img src="assets/icons/155034.png" alt="">Copia <b>' + (bk.status === 'never' ? 'sin registrar' : esc(bk.when)) + '</b></button>'
       : '<button type="button" class="wl-pill is-warn" data-act="add-key">' +
           '<img src="assets/icons/Welcome/2604909.png" alt="">API Key <b>sin cargar</b></button>';
     return '<div class="wl-cat"><img src="assets/brand/gato-negro.svg" alt="" width="44" height="44"></div>' +
@@ -228,7 +366,10 @@
   function modulesHTML(m) {
     var items = MODULES.map(function (mod) {
       var tag = '';
-      if (m.state === 'back') { if (mod.tag) tag = '<i class="wl-tag">' + esc(mod.tag) + '</i>'; }
+      if (m.state === 'back') {
+        if ((m.activeMods || []).indexOf(mod.id) >= 0) tag = '<i class="wl-tag wl-tag--perm">Falta permiso</i>';
+        else if (mod.tag) tag = '<i class="wl-tag">' + esc(mod.tag) + '</i>';
+      }
       else if (mod.free) tag = '<i class="wl-tag wl-tag--free">Sin Key</i>';
       else if (!mod.local) tag = '<i class="wl-tag wl-tag--key">Con Key</i>';
       return '<li><a class="wl-mod" href="' + mod.href + '" data-mod="' + mod.id + '" style="--x:' + mod.color + '">' +
@@ -283,9 +424,67 @@
       '</footer>';
   }
 
+  function continueHTML(m) {
+    var body;
+    if (m.last) {
+      var mod = moduleById(m.last.id);
+      body = '<a class="wl-cont" href="' + mod.href + '" data-mod="' + mod.id + '" style="--x:' + mod.color + '">' +
+        '<img src="' + mod.icon + '" alt="" width="46" height="46"><div><b>' + esc(mod.name) + '</b>' +
+        '<small>Última visita: ' + esc(m.last.when) + '</small></div><em aria-hidden="true">Continuar →</em></a>';
+    } else {
+      body = '<p class="wl-note">Todavía no anoté tus visitas en este navegador. Desde ahora, acá vas a encontrar el último módulo que abriste.</p>';
+    }
+    var freq = (m.freq.length ? m.freq : (m.last ? [] : ['cards', 'armory', 'characters'])).map(function (id) {
+      var x = moduleById(id);
+      return '<a class="wl-fq" href="' + x.href + '"><img src="' + x.icon + '" alt="" width="24" height="24">' + esc(x.name) + '</a>';
+    }).join('');
+    return '<section class="wl-card" aria-label="Seguí donde quedaste">' +
+      '<div class="wl-h"><h3>Seguí donde quedaste</h3><span>' + (m.freq.length ? 'Y lo que más usás' : m.last ? 'En este navegador' : 'Para empezar') + '</span></div>' +
+      body + (freq ? '<div class="wl-freq">' + freq + '</div>' : '') + '</section>';
+  }
+
+  function vaultHTML(m) {
+    function row(ok, text, act, label) {
+      return '<li class="' + (ok ? 'is-ok' : 'is-warn') + '"><i class="wl-ic" aria-hidden="true">' + (ok ? '✓' : '!') + '</i>' +
+        '<span>' + text + '</span>' + (act ? '<button type="button" class="wl-btn wl-btn--sm" data-act="' + act + '">' + label + '</button>' : '');
+    }
+    var bad = m.keys.filter(function (k) { return k.status === 'missing'; });
+    var unk = m.keys.filter(function (k) { return k.status === 'unknown'; });
+    var okKeys = m.keys.length - bad.length - unk.length;
+    var keysText = m.keyCount + (m.keyCount === 1 ? ' API Key' : ' API Keys') + ' · <small>' +
+      (bad.length || unk.length
+        ? okKeys + (okKeys === 1 ? ' completa' : ' completas') + (bad.length ? ', ' + bad.length + ' con permisos faltantes' : '') + (unk.length ? ', ' + unk.length + ' sin verificar' : '')
+        : (m.keyCount === 1 ? 'con' : 'todas con') + ' los 7 permisos') + '</small>';
+    var detail = '';
+    if (bad.length || unk.length) {
+      detail = '<details class="wl-keys"><summary>Ver cuáles y cómo arreglarlo</summary><ul>' +
+        bad.map(function (k) {
+          return '<li><b>' + esc(k.label) + '</b>: le falta ' + esc(k.missing.join(', ')) + '. Sin eso quedan sin datos: ' +
+            esc(k.mods.map(function (id) { return moduleById(id).name; }).join(', ')) + '.</li>';
+        }).join('') +
+        unk.map(function (k) { return '<li><b>' + esc(k.label) + '</b>: no tengo sus permisos anotados.</li>'; }).join('') +
+        '</ul>' + (bad.length ? 'Creá una Key nueva con los 7 permisos en <a href="' + LINKS.anet + '" target="_blank" rel="noopener">account.arena.net ↗</a> y reemplazala en «Revisar Keys». ' : '') +
+        (unk.length ? 'Para anotar los permisos, volvé a guardar la Key en «Revisar Keys»: la reviso al guardarla.' : '') + '</details>';
+    }
+    var items = [
+      row(!bad.length && !unk.length, keysText, 'manage-keys', 'Revisar Keys') + detail + '</li>',
+      row(true, 'Cuenta activa: <b>' + esc(m.activeLabel) + '</b> · <small>la elegís arriba, en el selector de cuenta</small>', '', '') + '</li>',
+      row(m.backup.status === 'ok', 'Copia de seguridad · <small>' + (m.backup.status === 'never'
+        ? 'todavía no registré ninguna en este navegador'
+        : 'la última fue ' + esc(m.backup.when)) + '</small>', 'backup', 'Guardar copia') + '</li>',
+      row(true, 'Theme <b>' + esc(m.theme.name) + '</b>' + (m.theme.count ? ' · <small>' + m.theme.count + ' disponibles</small>' : ''), 'theme', 'Cambiar') + '</li>'
+    ];
+    var done = (bad.length || unk.length ? 0 : 1) + 1 + (m.backup.status === 'ok' ? 1 : 0) + 1;
+    return '<section class="wl-card" aria-label="Tu Bóveda">' +
+      '<div class="wl-h"><h3>Tu Bóveda</h3><span>Lo que configuraste y lo que falta</span></div>' +
+      '<div class="wl-prog"><span><b>' + done + ' de ' + items.length + '</b> listo</span>' +
+        '<div class="wl-bar" role="progressbar" aria-valuemin="0" aria-valuemax="' + items.length + '" aria-valuenow="' + done + '"><i style="--p:' + Math.round(done / items.length * 100) + '%"></i></div></div>' +
+      '<ul class="wl-chk">' + items.join('') + '</ul></section>';
+  }
+
   function bodyHTML(m, news) {
     return '<div class="wl-body">' +
-      (m.state === 'new' ? stepsHTML() : '') +
+      (m.state === 'new' ? stepsHTML() : '<div class="wl-row">' + continueHTML(m) + vaultHTML(m) + '</div>') +
       modulesHTML(m) +
       '<div class="wl-row">' + newsHTML(news) + guidesHTML() + '</div>' +
       footHTML() +
@@ -357,7 +556,51 @@
     if (!t) return;
     var act = t.getAttribute('data-act');
     if (act === 'add-key' || act === 'manage-keys') { if (e.preventDefault) e.preventDefault(); openKeysModal(); }
+    else if (act === 'backup') {
+      var SM = root.SettingsManager;
+      if (!SM || typeof SM.exportAll !== 'function') return;
+      try { SM.exportAll(); markBackup(); } catch (err) { if (root.console) root.console.warn(LOG, 'no se pudo guardar la copia', err); }
+    } else if (act === 'theme') {
+      if (root.ThemeSelector && root.ThemeSelector.openModal) root.ThemeSelector.openModal();
+    }
   }
+
+  // ---------------------------------------------------------------- memoria de la Bienvenida
+  function moduleForHash(hash) {
+    var h = String(hash || '');
+    var best = null;
+    MODULES.forEach(function (m) {
+      if ((h === m.href || h.indexOf(m.href + '/') === 0) && (!best || m.href.length > best.href.length)) best = m;
+    });
+    return best;
+  }
+
+  function trackVisit(hash, now) {
+    var mod = moduleForHash(hash);
+    if (!mod) return null;
+    var v = readVault();
+    var t = typeof now === 'number' ? now : Date.now();
+    var visits = {};
+    Object.keys(v.visits).forEach(function (id) { if (moduleById(id)) visits[id] = +v.visits[id] || 0; });
+    // Una visita por módulo cada 30 min: volver y volver al mismo no lo infla.
+    if (!(v.last && v.last.id === mod.id && t - v.last.at < 18e5)) visits[mod.id] = (visits[mod.id] || 0) + 1;
+    writeVault({ v: 1, last: { id: mod.id, at: t }, visits: visits, backupAt: v.backupAt || 0 });
+    return mod.id;
+  }
+
+  function markBackup(now) {
+    var v = readVault();
+    writeVault({ v: 1, last: v.last, visits: v.visits, backupAt: typeof now === 'number' ? now : Date.now() });
+    if (state.active) render();
+  }
+
+  // El botón «Backup» de la cabecera lo maneja settings-manager.js; acá solo anoto la fecha.
+  function onDocClick(e) {
+    var t = e && e.target && e.target.closest ? e.target.closest('#exportSettingsBtn') : null;
+    if (t) markBackup();
+  }
+
+  function onRoute() { trackVisit(root.location ? root.location.hash : ''); }
 
   function render() {
     var host = ensurePanel();
@@ -411,7 +654,12 @@
       state.inited = true;
       ensurePanel();
       doc().addEventListener('gn:tokenchange', onAccountChange);
-      if (typeof root.addEventListener === 'function') root.addEventListener('storage', onAccountChange);
+      doc().addEventListener('click', onDocClick, true);
+      if (typeof root.addEventListener === 'function') {
+        root.addEventListener('storage', onAccountChange);
+        root.addEventListener('hashchange', onRoute);
+      }
+      onRoute();
       if (root.console && root.console.info) root.console.info(LOG, 'ready v' + VERSION);
     },
     activate: activate,
@@ -419,7 +667,10 @@
     refresh: function () { if (state.active) render(); },
     Route: { path: 'welcome', mount: activate, unmount: deactivate },
     _debug: function () { return { version: VERSION, active: state.active, news: state.news ? state.news.length : null }; },
-    _pure: { buildModel: buildModel, pickNews: pickNews, headHTML: headHTML, bodyHTML: bodyHTML, MODULES: MODULES, CSS: CSS, LINKS: LINKS }
+    orientation: function () { return orientation(buildModel(readEnv())); },
+    _pure: { buildModel: buildModel, pickNews: pickNews, headHTML: headHTML, bodyHTML: bodyHTML, orientation: orientation,
+      keyStatus: keyStatus, relTime: relTime, moduleForHash: moduleForHash, trackVisit: trackVisit, markBackup: markBackup,
+      MODULES: MODULES, SCOPES: SCOPES, CSS: CSS, LINKS: LINKS }
   };
 
   root.Welcome = Welcome;
