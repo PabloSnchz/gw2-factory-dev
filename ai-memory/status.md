@@ -1,26 +1,26 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-064 — ARM-0 publicado: plan del restyle de toda la Bóveda y propuesta de la Armería Legendaria (catálogo y cola).
-Motivo: falta la aprobación de Pablo: plan y orden, diseño de la Armería y armaduras por set (ARM-4).
+Estado: EN CURSO
+Tarea actual: BL-064 — ARM-1: dieta de `legendary-tracker.js` (la cola y el marco pasan a `render-catologo.js`), cabecera con resumen, pestañas «Catálogo / Mi cola» y buscador.
+Motivo: Pablo aprobó el plan y el orden, el diseño completo de la Armería y las armaduras por set (2026-10-23 15:33Z).
 Fase: F1 — Visibilidad
-Etapa actual: PRODUCT
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 15:26Z
-Próxima acción: con la aprobación, ARM-1 (dieta de `legendary-tracker.js`, cabecera con resumen, pestañas «Catálogo / Mi cola» y buscador).
+Última actualización: 2026-10-23 15:35Z
+Próxima acción: implementar ARM-1 en local con los tests de la Armería, mutaciones y publicar en serie; después, esperar la validación de Pablo antes de ARM-2.
 
-Micro-ciclo (cerrado):
-ARM-0 — propuesta, sin código. `docs/propuestas/propuesta-armeria-bl064.html` (`7ac2f3f`, blob ce2eb4c, igual al local) y BL-064 en el backlog (`36354d4`).
+Micro-ciclo:
+ARM-1 — marco nuevo de la Armería, sin cambiar las tarjetas (eso es ARM-2).
 Archivos:
-- docs/propuestas/propuesta-armeria-bl064.html
-- ai-memory/backlog.md
-- ai-memory/status.md
+- js/legendary-tracker.js
+- js/render-catologo.js
+- tests/armeria-shell.test.cjs
 
-Último hecho: ARM-0 publicado (15:23Z).
+Último hecho: ARM-0 aprobado por Pablo (15:33Z).
 
-Plan del restyle (propuesto, espera aprobación):
+Plan del restyle (aprobado por Pablo, 15:33Z):
 
-1. Armería Legendaria (ARM-1 a ARM-5).
+1. Armería Legendaria: ARM-1 marco, cabecera, pestañas y buscador · ARM-2 filtros, tarjetas y grilla · ARM-3 «Mi cola» y mi línea · ARM-4 armaduras por set (aprobado) · ARM-5 revisión y cierre (FEAT-010).
 2. Cámara del Brujo.
 3. Logros.
 4. Actividades (después de decidir BL-055).
@@ -36,11 +36,10 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - BL-057 cerrada: Metas y Eventos renovado (FEAT-007), en producción.
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008), en producción.
 - BL-061 cerrada: la Sidebar (FEAT-009). Completa en producción (BL-062 y BL-063).
-- BL-064 abierta: restyle completo, primero la Armería. Propuesta publicada.
+- BL-064 en curso: restyle completo, primero la Armería. Propuesta aprobada.
 
 ## Esperando a Pablo
 
-- [BL-064] Validación: mirá la propuesta en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-armeria-bl064.html y decime tres cosas: si aprobás el plan y el orden de los módulos, si aprobás el diseño de la Armería, y si agrupo las armaduras por set (ARM-4; recomiendo que sí).
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
@@ -49,7 +48,6 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 ## Para tu información
 
 - [BL-064] Cuatro archivos del resto de la Bóveda no entran en una publicación de la Factory (`raid-tracker.js` 100 KB, `wv-purchase-detail.js` 91 KB, `inventory-hub.js` 70 KB, `accounts-panel.js` 68 KB). Esos módulos se renuevan desde sus archivos `*-theme.js`, que ya se cargan. `legendary-tracker.js` está a 1 KB del límite: ARM-1 lo achica primero.
-- [BL-062] Pablo informó (2026-10-23 15:14Z) que la aceptación de los usuarios de Cartera, Metas, Bienvenida y Sidebar fue muy positiva.
 - [BL-061] La zona segura del iPhone queda en 0 hasta que `index.html` pida `viewport-fit=cover` (no lo toco: LES-028); la barra igual deja su margen normal y no tapa nada.
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
