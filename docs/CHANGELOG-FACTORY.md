@@ -6,7 +6,16 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ---
 
-## 2026-10-23 — Solo en DEV: Bienvenida renovada, la puerta de entrada de la Bóveda (BL-058, FEAT-008)
+## 2026-10-23 — En producción: Sidebar a la izquierda (BL-061, SBR-1 y SBR-2)
+
+- **A la izquierda** desde 901 px de ancho y fija al hacer scroll. En el celular queda como estaba hasta SBR-3 (barra fija abajo).
+- **Inicio** primero, después los 8 módulos en el mismo orden, nombre, ícono y color que la Bienvenida, y Cuentas aparte. El módulo en el que estás se marca con su color, también en las pantallas internas (por ejemplo, una legendaria abierta marca la Armería).
+- **«Cuenta activa»** reemplaza a «Gato identificado»: nombre de la cuenta, estado de su API Key (completa, le falta un permiso, sin verificar o sin Key) y «Cambiar», que lleva al selector de arriba.
+- **Avisos en los módulos**: un punto ámbar si a tu Key le falta el permiso que ese módulo necesita y «Nuevo» si tiene una novedad de 14 días o menos.
+- Ya no aparecen «Próximas funciones» ni «Próximos (Top 3)», que repetía lo de Metas y Eventos.
+- Se lee en los 19 themes. Sin pedidos nuevos a la API ni claves nuevas en el navegador.
+
+## 2026-10-23 — En producción: Bienvenida renovada, la puerta de entrada de la Bóveda (BL-058, FEAT-008)
 
 - **Cabecera** con el gato, la cuenta activa y tres pastillas: API Key, Cuentas y Copia (con «Guardar copia» a un clic).
 - **«Shiruvana te guía»** reemplaza el saludo heredado: un mensaje por vez, lo más importante primero (lo que impide funcionar, permisos faltantes, copia pendiente, configuración incompleta, por dónde seguir y un truco de la Bóveda), cada uno con el botón que lo resuelve, «Siguiente» y «Preguntame».
@@ -16,18 +25,19 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 - **Sin API Key**: tres pasos para empezar.
 - **Solo la Bóveda**: sin horarios, metas, agendas ni world bosses; eso vive en Metas y Eventos (DEC-032).
 - **Se lee en los 19 themes**: en macOS y Notion el verde y el ámbar de los estados ya no se pierden sobre el blanco. Controles de 44 px en el celular, foco visible y anuncios para lector de pantalla.
-- Una clave nueva en el navegador: `gn:global:welcome` (último módulo, visitas y fecha de la última copia). Si no ves los cambios, Ctrl+F5 (RSK-020).
+- Una clave nueva en el navegador: `gn:global:welcome` (último módulo, visitas y fecha de la última copia).
 
-## 2026-10-23 — Solo en DEV: Metas y Eventos renovado (BL-057, FEAT-007)
+## 2026-10-23 — En producción: Metas y Eventos renovado (BL-057, FEAT-007)
 
 - **Cabecera nueva**: «Metas y Eventos · Horarios en tu hora local · 49 metas» con botones de Local, Servidor (UTC), Reset diario (00:00 UTC) y Reset semanal (lunes 07:30 UTC) con cuenta regresiva; el reset cercano se pone dorado.
 - **«Hoy en tu cuenta»**: N de 19 que la API puede seguir (jefes del mundo y cofres de mapa), con barra fina, «↻ Actualizar» y «¿Por qué 19?». Las otras metas ya no dicen «Pendiente» en rojo: la API no las informa.
 - **Secciones**: «Ahora» (en curso y lo que empieza en 20 min), agenda de las próximas 3 horas por tu hora local, Fijadas (hasta 6) y todas las metas por expansión, en orden de salida. Todo se redibuja solo cada 30 s.
 - **Filtros desde los datos**, en español y con su cantidad; antes 14 metas no tenían tipo para filtrar y «Fractal Incursion» no tenía ninguna.
 - **Metas que cruzan la medianoche UTC** siguen «En curso» después de las 00:00 (BL-041).
-- **Vistas previas de infusiones**: salen de La Bóveda (8 de 10). Chak y Dragon's End dicen «Sin vista previa» con el nombre de la infusión; ya no se ven imágenes rotas (DEC-031).
+- **Vistas previas de infusiones**: en DEV salen de La Bóveda (8 de 10). En producción hoy se ven las 2 que ya estaban (piñata y burbujas); las otras 6 dicen «Sin vista previa» hasta que sus archivos `.webp` estén en `assets/previews/` de producción (son imágenes: la Factory no las puede subir). Chak y Dragon's End dicen «Sin vista previa» con el nombre de la infusión; ya no se ven imágenes rotas (DEC-031).
 - **Mi voz** avisa lo que está en curso y cuándo termina, con el nombre en negrita y el waypoint a un clic; cerca del reset, lo que te queda para hoy.
-- Sin «Vista compacta» (aprobado por Pablo). Sin claves nuevas en el navegador. Si no ves los cambios, Ctrl+F5 (RSK-020).
+- Sin «Vista compacta» (aprobado por Pablo). Sin claves nuevas en el navegador.
+- Vuelta atrás de las tres entregas del 2026-10-23: rama `rollback/pre-meta-welcome-sidebar` (BL-062). Si no ves los cambios, recargá con Ctrl+F5 (RSK-020).
 
 ## 2026-10-22 — En producción: la Cartera renovada (BL-056, FEAT-006)
 
