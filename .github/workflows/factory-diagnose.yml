@@ -1,0 +1,54 @@
+# Diagnóstico de la Factory (BL-066, LES-031).
+# La Factory no lee CI (RSK-016). Pide correr tests concretos con
+# factory/diagnose/RUN-NNN.json y este workflow deja la salida completa en
+# factory/diagnose/OUT-NNN.md.
+#
+# Seguridad: solo en gw2-factory-dev y solo con pushes del dueño; solo corre
+# archivos de tests/ (lista validada por el script); el único archivo que
+# commitea es el OUT, verificado antes del commit; nada del evento entra a un comando.
+
+name: factory-diagnose
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'factory/diagnose/RUN-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: factory-diagnose
+  cancel-in-progress: false
+
+jobs:
+  run:
+    if: >-
+      github.repository == 'PabloSnchz/gw2-factory-dev' &&
+      github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Correr los tests pedidos
+        id: diag
+        run: node .github/scripts/factory-diagnose.cjs
+
+      - name: Commit del resultado
+        if: steps.diag.outputs.count != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          xargs -r -d '\n' git add -- < "$RUNNER_TEMP/factory-diagnose-files.txt"
+          if git diff --cached --name-only | grep -vE '^factory/diagnose/OUT-[0-9]{3,}\.md$'; then echo "Cambios no esperados"; exit 1; fi
+          git commit -m "factory-diagnose: resultados en factory/diagnose"
+          git push origin HEAD:main || { git pull --rebase origin main && git push origin HEAD:main; }
