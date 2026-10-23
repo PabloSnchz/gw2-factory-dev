@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-007",
+  "summary": "FP-3 prueba feliz: nota de estado en la propuesta de la Armería (archivo publicado, dispara dev-pages)",
+  "files": [
+    {
+      "path": "docs/propuestas/propuesta-armeria-bl064.html",
+      "base_sha": "ce2eb4c3bfe5910687cbd6e126f807babda7875a",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "<!-- ARM-0: maqueta para aprobación. No es código de la Bóveda. Tokens del theme Gato Negro (GDS, DEC-010/025). -->\n",
+          "text": "<!-- Estado: aprobada por Pablo (2026-10-23 15:33Z); la Armería quedó terminada en DEV (FEAT-010). Nota agregada por el canal de parches (DEC-035, FP-3, PATCH-007). -->\n"
+        }
+      ]
+    }
+  ]
+}

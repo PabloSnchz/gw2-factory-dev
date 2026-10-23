@@ -1,0 +1,22 @@
+{
+  "id": "PATCH-006",
+  "summary": "FP-3 prueba feliz: estado de la propuesta BL-065 (documento .md, dos operaciones)",
+  "files": [
+    {
+      "path": "docs/propuestas/propuesta-archivos-grandes-bl065.md",
+      "base_sha": "fadd74bc7e2d4027389976efa51adf284648eceb",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- **Estado:** propuesta. Espera la aprobación de Pablo. No hay código.",
+          "text": "- **Estado:** aprobada por Pablo (2026-10-23 18:55Z) como DEC-035. FP-1 y FP-2 hechos; esta línea la escribió el canal de parches (FP-3, PATCH-006)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "- **Pedido:** Pablo (18:46Z). Pausa BL-064 hasta resolver esto.\n",
+          "text": "- **Decisión:** `ai-memory/decisions/DEC-035-crecimiento-modular-y-canal-de-parches.md`.\n"
+        }
+      ]
+    }
+  ]
+}
