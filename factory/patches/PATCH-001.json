@@ -1,0 +1,11 @@
+{
+  "id": "PATCH-001",
+  "summary": "FP-2 prueba de rechazo: sha base equivocado",
+  "files": [
+    {
+      "path": "docs/propuestas/propuesta-archivos-grandes-bl065.md",
+      "base_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "ops": [{ "op": "replace", "anchor": "- **Estado:** propuesta.", "text": "- **Estado:** NO TIENE QUE APLICARSE." }]
+    }
+  ]
+}

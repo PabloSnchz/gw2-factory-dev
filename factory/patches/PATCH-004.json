@@ -1,0 +1,11 @@
+{
+  "id": "PATCH-004",
+  "summary": "FP-2 prueba de rechazo: intenta tocar un workflow",
+  "files": [
+    {
+      "path": ".github/workflows/factory-patch.yml",
+      "base_sha": "c1e2b69287d9ca8b2465df04c8b2a66dfc9b0bd0",
+      "ops": [{ "op": "replace", "anchor": "name: factory-patch", "text": "name: NO-TIENE-QUE-APLICARSE" }]
+    }
+  ]
+}

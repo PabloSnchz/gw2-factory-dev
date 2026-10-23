@@ -1,0 +1,11 @@
+{
+  "id": "PATCH-005",
+  "summary": "FP-2 prueba de rechazo: intenta tocar el propio canal",
+  "files": [
+    {
+      "path": "factory/patches/PATCH-001.json",
+      "base_sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "ops": [{ "op": "delete", "anchor": "PATCH-001" }]
+    }
+  ]
+}

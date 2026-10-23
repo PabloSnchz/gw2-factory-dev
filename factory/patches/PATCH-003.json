@@ -1,0 +1,11 @@
+{
+  "id": "PATCH-003",
+  "summary": "FP-2 prueba de rechazo: ancla inexistente",
+  "files": [
+    {
+      "path": "docs/propuestas/propuesta-archivos-grandes-bl065.md",
+      "base_sha": "fadd74bc7e2d4027389976efa51adf284648eceb",
+      "ops": [{ "op": "insert_after", "anchor": "este texto no existe en el archivo", "text": "NO TIENE QUE APLICARSE" }]
+    }
+  ]
+}

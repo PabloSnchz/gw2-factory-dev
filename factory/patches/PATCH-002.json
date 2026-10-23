@@ -1,0 +1,11 @@
+{
+  "id": "PATCH-002",
+  "summary": "FP-2 prueba de rechazo: ancla ambigua",
+  "files": [
+    {
+      "path": "docs/propuestas/propuesta-archivos-grandes-bl065.md",
+      "base_sha": "fadd74bc7e2d4027389976efa51adf284648eceb",
+      "ops": [{ "op": "replace", "anchor": "BL-065", "text": "NO TIENE QUE APLICARSE" }]
+    }
+  ]
+}
