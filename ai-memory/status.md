@@ -1,43 +1,42 @@
 # STATUS
 
 Estado: EN CURSO
-Tarea actual: BL-057 — cierre de MET-1b: se retira el workflow de recuperación de imágenes y se registra la decisión de Pablo; después MET-1c y MET-2.
-Motivo: Pablo (2026-10-23 02:47Z, confirmado 02:51Z y 03:29Z) cerró MET-1b con una decisión de producto definitiva: las vistas previas que faltan quedan como deuda visual, no se investiga más Internet Archive, Wayback ni fuentes alternativas y no se construye más infraestructura de recuperación. La prioridad vuelve a ser BL-057.
+Tarea actual: BL-057 — MET-1c: las vistas previas salen de `assets/previews/` y las que faltan o no cargan muestran «Sin vista previa», limpio; después MET-2.
+Motivo: Pablo (03:29Z) autorizó seguir en orden: cierre de MET-1b (hecho), MET-1c y MET-2. La vista previa es un diferencial de La Bóveda y hoy 8 de 10 muestran el texto alternativo de una imagen rota.
 Fase: F1 — Visibilidad
 Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 03:33Z
-Próxima acción: MET-1b cierre (este micro-ciclo) → memoria (DEC-031, backlog) → MET-1c `meta.js` 4.0.1: vistas previas desde `assets/previews/` y estado «sin vista previa» limpio → MET-2 `meta-theme.js` 2.0.0.
-Recuperación (2026-10-23 02:47Z–03:28Z): la sesión estuvo sin herramientas de contenido de GitHub; nada se publicó en ese lapso. Pablo agregó el GitHub MCP Server a las 03:28Z y retomo desde el repo (HEAD `e775d97`).
+Última actualización: 2026-10-23 03:45Z
+Próxima acción: MET-1c en 3 commits en serie (datos → test → `meta.js`), cada uno con CI en verde. Después MET-2 `meta-theme.js` 2.0.0.
 
 Micro-ciclo (en curso, checkpoint de este commit):
-MET-1b cierre — se retira la recuperación automática de imágenes para que no vuelva a correr: se borran el workflow, la herramienta y su test, en serie (primero el test, que lee a los otros dos). `tools/meta-previews/REPORTE.md` queda como registro del origen y la licencia de las imágenes ya guardadas.
+MET-1c — `meta-drops.json` apunta las 8 vistas previas a `assets/previews/` y marca las 2 que faltan (`previewMissing`); `meta.js` 4.0.1 (63,6 KB, archivo grande dedicado) muestra «Sin vista previa» con el nombre del objeto cuando falta o no carga, y «Cargando vista previa…» mientras baja, sin texto alternativo a la vista. Tests en `meta-view.test.cjs` (8 nuevos o cambiados; 7 de 8 mutaciones atrapadas, la otra es equivalente).
 Archivos:
-- tests/meta-previews.test.cjs
-- .github/workflows/meta-previews.yml
-- tools/meta-previews/build_previews.py
+- assets/meta-drops.json
+- tests/meta-view.test.cjs
+- js/meta.js
 
-Último hecho: MET-1b (01:33Z–01:59Z). El workflow dejó en `assets/previews/` 8 de las 10 vistas previas en WebP (las 2 de La Bóveda y 6 de la wiki); faltan Chak (`chak_gerent`) y Dragon's End (`dragons_end`). `meta-drops.json` todavía apunta a la wiki: lo corrige MET-1c.
+Último hecho: cierre de MET-1b (03:32Z–03:34Z). Retirados el test (`3375bfd`), el workflow `meta-previews` (`2361b96`) y la herramienta de recuperación con Internet Archive (`d0540c7`): ya no puede correr. Decisión registrada en DEC-031 con su línea en el índice (`2f298db`). `tools/meta-previews/REPORTE.md` queda solo como registro del origen y la licencia de las imágenes.
 
 Plan BL-057 (Meta & Eventos):
 
 - MET-0 propuesta visual. Aprobada por Pablo (00:39Z): la vista previa de infusiones se queda; «Vista compacta» se va.
 - MET-1 `meta.js` 4.0.0 (`e98a25a`, test `8838217`). Aprobado por Pablo (01:20Z) salvo las vistas previas.
-- MET-1b vistas previas servidas desde La Bóveda. CERRADO por decisión de Pablo (02:47Z): 8 de 10 quedaron en `assets/previews/`; las 2 que faltan son deuda visual. Prohibido seguir investigando o recuperando imágenes.
-- MET-1b cierre: retirar workflow, herramienta y test (este micro-ciclo).
-- MET-1c `meta.js` 4.0.1 + `meta-drops.json`: las 8 desde `assets/previews/`; las 2 que faltan y cualquier imagen que no cargue muestran un estado «sin vista previa» limpio, con el lenguaje del GDS, nunca la imagen rota ni el texto alternativo suelto.
-- MET-2 `meta-theme.js` 2.0.0: cabecera nueva (relojes, resets, «Hoy en tu cuenta») y mis mensajes según el momento, con el diseño de la Cartera.
+- MET-1b vistas previas servidas desde La Bóveda. CERRADO por decisión de Pablo (DEC-031): 8 de 10 en `assets/previews/`; Chak y Dragon's End son deuda visual. No se investiga más.
+- MET-1b cierre: workflow, herramienta y test retirados; DEC-031. Hecho.
+- MET-1c `meta.js` 4.0.1 + `meta-drops.json` (este micro-ciclo).
+- MET-2 `meta-theme.js` 2.0.0: cabecera nueva (relojes UTC y local, reset diario y semanal, «Hoy en tu cuenta») y mis mensajes según el momento, con el diseño de la Cartera.
 - MET-3 cierre: FEAT, backlog, CHANGELOG-FACTORY.
 
 Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `e775d97`).
 
 ## Resumen de la sesión
 
+- MET-1b cerrado como decidió Pablo (DEC-031): las vistas previas que faltan son deuda visual y la recuperación automática de imágenes se retiró del repo.
 - Metas y Eventos renovado en DEV (BL-057, MET-1): arriba «Ahora» con lo que está en curso o empieza en 20 min, después la agenda de las próximas 3 horas, tus Fijadas (hasta 6) y todas las metas agrupadas por expansión. La vista previa de infusiones se quedó. «Hecho hoy» aparece solo donde la API lo sabe y todo se actualiza solo cada 30 s. Falta MET-2: la cabecera nueva y mis mensajes.
 - La Cartera renovada está en producción (BL-056, REQ-011): 4 pasos en el mismo orden que DEV, cada archivo idéntico al validado. Vuelta atrás lista en la rama `rollback/pre-cartera`.
 - La Cartera renovada quedó cerrada (BL-056, FEAT-006): Mi cartera, Cambio de divisas y Todas las cuentas en una sola pantalla con pestañas. Una preferencia nueva en el navegador: `gn:wallet:hidezero` («ocultar en cero»).
 - Pablo archivó los dos repos del legado. El Gist queda deprecado (DEC-030) y el respaldo va a una nube que todos tengan (DISC-009); Homestead pasa a módulo propio (BL-055).
-- Migración del legado de QwenPaw terminada (BL-043): 73 de sus 88 tests protegen DEV y los generadores de la Armería reproducen el catálogo.
 
 ## Esperando a Pablo
 
@@ -46,7 +45,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM): en el backlo
 
 ## Para tu información
 
-- [BL-057] MET-1b cerrado como pediste: 8 de 10 vistas previas ya están guardadas en La Bóveda; las 2 que faltan quedan como deuda visual con un aviso limpio. No se investiga más.
+- [BL-057] MET-1b cerrado como pediste (DEC-031): 8 de 10 vistas previas ya están guardadas en La Bóveda; las 2 que faltan quedan como deuda visual con un aviso limpio. No se investiga más.
 - [FEAT-002] Usaste DEV y lo que encontraste es de la Armería, no de Analytics: doy FEAT-002 por validada.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
 
