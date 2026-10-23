@@ -82,7 +82,9 @@ test('pestañas: «Catálogo» y «Mi cola» reemplazan a «Modo:», con la actu
   html = cargar({ mode: 'progress' }).r.filterBar({}, x.items);
   assert.match(html, /data-arm-tab="progress" aria-current="page"/);
   assert.doesNotMatch(html, /armSearch/, 'en la cola no hay buscador');
-  assert.match(x.A.CSS, /#legendaryArmoryPanel>\.panel__title,#legendaryArmoryBody>\.legendary-view-toggle\{display:none\}/);
+  // El tracker pinta «Modo: Catálogo / Mi progreso» con style="display:flex" en línea:
+  // sin !important la regla pierde y los botones viejos se ven (captura de Pablo, ARM-5).
+  assert.match(x.A.CSS, /#legendaryArmoryPanel>\.panel__title,#legendaryArmoryBody>\.legendary-view-toggle\{display:none!important\}/);
 });
 
 test('las pestañas y «Actualizar» llaman al tracker; un solo oyente aunque se repinte', () => {
