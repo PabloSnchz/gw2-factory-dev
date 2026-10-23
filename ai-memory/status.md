@@ -1,37 +1,30 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-058 cerrada. La Pantalla de Bienvenida queda en DEV (FEAT-008); espero la próxima indicación de Pablo.
-Motivo: Pablo (05:54Z) validó WEL-3 y pidió WEL-4: 19 themes, responsive, teclado y accesibilidad, revisión final y cierre de BL-058; continuar solo con ese cierre.
+Estado: EN CURSO
+Tarea actual: BL-061 — SBR-0: propuesta visual del restyle de la Sidebar (diagnóstico, maquetas desktop y celular, GDS, Bienvenida, Shiruvana, BL-059 y plan). Sin tocar código.
+Motivo: Pablo (06:25Z) abrió BL-061 y pidió la propuesta para aprobar antes de implementar.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 06:16Z
-Próxima acción: esperar a Pablo. En READY quedan BL-055 (Homestead, pide propuesta visual) y BL-060 (contraste de los themes en el resto de la Bóveda); BL-059 sigue bloqueado por Pablo.
+Última actualización: 2026-10-23 06:30Z
+Próxima acción: publicar la maqueta en `docs/propuestas/propuesta-sidebar-bl061.html`, registrar BL-061 en el backlog y presentarla a Pablo.
 
-Micro-ciclo (cerrado):
-WEL-4c — cierre de BL-058: FEAT-008 (`14aee49`, cifras corregidas en `1addab6`), índice (`e8bd4cc`), CHANGELOG-FACTORY (`59802a3`) y backlog (`cc56bd2`: BL-058 a DONE, BL-060 nuevo en READY).
+Micro-ciclo (en curso):
+SBR-0 — relevamiento de `index.html` (sidebar, 2 capas de estilos en línea), `css/main.css`, `css/theme-polish.css`, `js/sidebar-nav.js` 1.2 y `js/router.js` (`updateSidebarFor`); maqueta de la propuesta y backlog.
 Archivos:
-- ai-memory/features/FEAT-008-bienvenida-puerta-de-la-boveda.md
+- docs/propuestas/propuesta-sidebar-bl061.html
 - ai-memory/backlog.md
-- docs/CHANGELOG-FACTORY.md
+- ai-memory/status.md
 
-Último hecho: WEL-4 completo. WEL-4a guarda de contraste (`2c7184e`, `767e0fd`), WEL-4b anuncio para lector de pantalla (`3b668ff`) y WEL-4c documentación. Todos los blobs publicados son iguales a los locales. 50/50 tests de la Bienvenida, mutaciones 14/15 (una equivalente) y 7/7, humo de integración 16/16.
+Último hecho: BL-058 cerrada (FEAT-008, `86afe37`).
 
-Plan BL-058 (Pantalla de Bienvenida), aprobado y terminado:
-
-- WEL-1, WEL-2 y WEL-3 hechos y validados.
-- WEL-4a guarda de contraste. Hecho.
-- WEL-4b anuncio para lector de pantalla. Hecho.
-- WEL-4c cierre. Hecho.
-
-Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `611f7c9`).
+Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `86afe37`).
 
 ## Resumen de la sesión
 
-- BL-057 cerrada: Metas y Eventos renovado validado por Pablo en DEV (FEAT-007).
-- BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda, validada por Pablo paso a paso y revisada en los 19 themes, celular y teclado (FEAT-008). No asume funciones de ningún módulo (DEC-032).
-- Frente registrado: evolución de Shiruvana en 5 niveles (DEC-033, BL-059), aprobado conceptualmente y sin implementar.
+- BL-057 cerrada: Metas y Eventos renovado (FEAT-007).
+- BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008).
+- BL-061 abierta: restyle de la Sidebar, en propuesta.
 
 ## Esperando a Pablo
 
@@ -40,8 +33,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET): en el b
 
 ## Para tu información
 
-- [BL-058] La Bienvenida queda en DEV. Si querés mirar lo de WEL-4: Ctrl+F5, «Cambiar» en «Tu Bóveda» y elegí macOS o Notion; los «✓» y los textos en verde y ámbar ahora se leen. Pasarla a producción lo decidís vos.
-- [BL-060] La revisión encontró que el texto tenue y algunos colores de estado de 12 themes no llegan a 4.5:1 en el resto de la Bóveda. La Bienvenida ya lo corrige; lo dejé en READY para los demás módulos.
+- [BL-058] La Bienvenida queda en DEV; pasarla a producción lo decidís vos.
 - [BL-057] Metas y Eventos queda solo en DEV: pasarlo a producción lo decidís vos.
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
