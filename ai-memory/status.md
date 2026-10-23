@@ -1,19 +1,19 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-062 — Metas y Eventos, Bienvenida y Sidebar (SBR-1 y SBR-2) publicados en producción.
-Motivo: falta la validación de Pablo en producción; después sigue SBR-3 en DEV.
+Estado: EN CURSO
+Tarea actual: BL-061 — SBR-3: en el celular, barra fija abajo (Inicio, Cartera, Metas, Armería y «Más») y hoja «Más» con la cuenta activa y los otros 6 destinos.
+Motivo: Pablo (07:21Z) pidió seguir con SBR-3.
 Fase: F1 — Visibilidad
-Etapa actual: REVIEW
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-23 07:17Z
-Próxima acción: con la validación de Pablo, SBR-3 en DEV (celular: barra fija abajo con Inicio, Cartera, Metas, Armería y «Más»; hoja con foco atrapado, Escape y safe-area).
+Última actualización: 2026-10-23 07:24Z
+Próxima acción: publicar `js/sidebar-nav.js` 2.2.0 con su test en un solo commit.
 
-Micro-ciclo (cerrado):
-PRD (BL-062) — gw2-wallet-ligero, en serie: rama de vuelta atrás `rollback/pre-meta-welcome-sidebar` = `a82c996`; `0cfe1be` meta.js 4.0.1; `c97521d` meta-theme.js 2.1.0 + meta-drops.json (versión de producción `e30b617`); `88a6da6` welcome-panel.js 2.2.0 + welcome-news.json; `a435bcc` shiruvana-places.js 1.2.0; `d5136bd` sidebar-nav.js 2.1.0. Verificado: `js/` de producción = DEV salvo analytics.js; welcome-news.json = DEV. index.html no se tocó (solo difería en GA). Docs: CHANGELOG-FACTORY `ee72511`, backlog `be0e56e`.
+Micro-ciclo (en curso):
+SBR-3 — `sidebar-nav.js` 2.2.0: debajo de 901 px se ocultan la tarjeta de cuenta y la navegación de la Sidebar y aparece una barra fija abajo con 4 destinos y «Más»; «Más» abre una hoja (diálogo) con la cuenta activa y los otros 6 destinos, con foco atrapado, Escape, tocar afuera o «Cerrar» para salir y el foco de vuelta en «Más». Controles de 44 px, zona segura del iPhone y lugar abajo para que nada quede tapado. Desktop sin cambios. El panel de Logros sigue donde estaba.
 Archivos:
-- docs/CHANGELOG-FACTORY.md
-- ai-memory/backlog.md
+- js/sidebar-nav.js
+- tests/sidebar-nav.test.cjs
 - ai-memory/status.md
 
 Último hecho: BL-062 publicado en producción (07:13Z).
@@ -22,7 +22,7 @@ Plan BL-061 (Sidebar), aprobado:
 
 - SBR-1 Sidebar desktop. Hecho, validado y en producción.
 - SBR-2 Cuenta activa, «Falta permiso», «Nuevo». Hecho, validado y en producción.
-- SBR-3 Celular: barra fija abajo + «Más».
+- SBR-3 Celular: barra fija abajo + «Más». En curso.
 - SBR-4 Rincón de Shiruvana (DEC-034).
 - SBR-5 Revisión y cierre (FEAT-009).
 
@@ -32,7 +32,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL): en
 
 - BL-057 cerrada: Metas y Eventos renovado (FEAT-007), en producción.
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008), en producción.
-- BL-061: SBR-1 y SBR-2 validados y en producción; siguen SBR-3 a SBR-5 en DEV.
+- BL-061: SBR-1 y SBR-2 validados y en producción; SBR-3 en curso en DEV.
 
 ## Esperando a Pablo
 
@@ -43,7 +43,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL): en
 
 ## Para tu información
 
-- [BL-062] En producción la Bienvenida suma una clave nueva en el navegador de cada usuario: `gn:global:welcome` (último módulo, visitas y fecha de la última copia). La Sidebar en el celular sigue como antes hasta SBR-3.
+- [BL-062] En producción la Bienvenida suma una clave nueva en el navegador de cada usuario: `gn:global:welcome` (último módulo, visitas y fecha de la última copia).
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 - [RSK-016] La Factory no puede leer el resultado de CI. Lo compensa verificando todo en local antes de publicar. No necesitás hacer nada.
 
