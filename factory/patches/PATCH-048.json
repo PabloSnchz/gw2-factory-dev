@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-048",
+ "summary": "BL-070 RAI-4 tanda 3 (Path of Fire): el índice publica pof.json y los tests cubren las 11 fichas de las alas 5 a 7",
+ "files": [
+  {
+   "path": "assets/data/raids/mechanics/index.json",
+   "base_sha": "d9cb5d214887aa3df0f0fd89b5d61e3f21dd27b8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  \"hot\": \"hot.json\"\n",
+     "text": "  \"hot\": \"hot.json\",\n  \"pof\": \"pof.json\"\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "6a01157775d8918f8868c4d369bb9a220a472f6a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));\n",
+     "text": "const HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));\nconst POF = JSON.parse(fs.readFileSync(path.join(MDIR, 'pof.json'), 'utf8'));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot'], 'tandas publicadas: Janthir y Heart of Thorns');\n",
+     "text": "  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof'], 'tandas publicadas: Janthir, Heart of Thorns y Path of Fire');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(tc, /Estatuas acechantes/);\n});\n",
+     "text": "  assert.match(tc, /Estatuas acechantes/);\n});\n\ntest('tanda Path of Fire: las 11 fichas de las alas 5 a 7, con modo desafío solo donde existe', () => {\n  const pm = (id) => ({ e: POF.encounters[id], roles: POF.roles, sources: POF.sources, verified: POF.verified });\n  const ids = Object.keys(POF.encounters);\n  const pof = CAT.encounters.filter((e) => groupOf(e).expansion === 'pof');\n  assert.equal(ids.length, 11);\n  assert.deepEqual(ids, pof.map((e) => e.id), 'en el orden del catálogo');\n  assert.deepEqual(ids.filter((id) => POF.encounters[id].cm), pof.filter((e) => e.cm).map((e) => e.id), 'modo desafío solo donde existe');\n  assert.equal(ids.filter((id) => POF.encounters[id].cm).length, 8);\n  // Cada ala cita su guía de MetaBattle y la página del ala en la wiki oficial.\n  for (const [id, w, page] of [['soulless_horror', 5, 'Hall_of_Chains'], ['qadim', 6, 'Mythwright_Gambit'], ['qadim_the_peerless', 7, 'The_Key_of_Ahdashim']]) {\n    const h = S.fightHTML(model(id), pm(id));\n    assert.match(h, new RegExp('Guide:Raid_Wing_' + w + '_'), id + ': guía del ala ' + w);\n    assert.match(h, new RegExp('href=\"https:\\\\/\\\\/wiki\\\\.guildwars2\\\\.com\\\\/wiki\\\\/' + page + '\"'), id + ': página del ala en la wiki');\n    assert.match(h, /consultadas el 2026-10-24/);\n  }\n  const dh = S.fightHTML(model('voice_in_the_void'), pm('voice_in_the_void'));\n  assert.equal((dh.match(/<ol class=\"rs-phases\">[\\s\\S]*?<\\/ol>/)[0].match(/<li>/g) || []).length, 6);\n  assert.match(dh, /En modo desafío cambia[\\s\\S]*40 millones/);\n  assert.match(dh, /wiki\\/Dhuum\"/);\n  const sh = S.fightHTML(model('soulless_horror'), pm('soulless_horror'));\n  assert.match(sh, /Antes del jefe: Runas del acantilado\\./);\n  assert.match(sh, /<span class=\"rs-role\">Empuje<\\/span>/);\n  assert.doesNotMatch(S.fightHTML(model('river_of_souls'), pm('river_of_souls')), /En modo desafío cambia/, 'el Río de Almas no tiene modo desafío');\n  const gt = S.fightHTML(model('gate'), pm('gate'));\n  assert.doesNotMatch(gt, /rs-phases/, 'las Puertas de Ahdashim son un evento sin fases');\n  assert.match(gt, /Defender a Glenna/);\n  const ad = S.fightHTML(model('adina'), pm('adina'));\n  assert.match(ad, /Levantamiento tectónico/);\n  assert.match(ad, /En modo desafío cambia[\\s\\S]*arena movediza/);\n  assert.match(S.fightHTML(model('qadim_the_peerless'), pm('qadim_the_peerless')), /Desatar/);\n  // Solo fuentes verificadas: la wiki oficial y MetaBattle.\n  assert.doesNotMatch(JSON.stringify(POF), /guildjen|hardstuck|mukluk/i);\n});\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "/mechanics\\/hot/.test(u) ? HOT : ",
+     "text": "/mechanics\\/hot/.test(u) ? HOT : /mechanics\\/pof/.test(u) ? POF : "
+    },
+    {
+     "op": "replace",
+     "anchor": "  await sb.RaidsSheet.open('adina');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 3, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n",
+     "text": "  await sb.RaidsSheet.open('adina');\n  assert.match(rs.innerHTML, /Levantamiento tectónico/);\n  assert.deepEqual(mf().slice(3), ['assets/data/raids/mechanics/pof.json'], 'Path of Fire se pide al abrir su primera ficha');\n  await sb.RaidsSheet.open('old_lions_court');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 4, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n"
+    }
+   ]
+  }
+ ]
+}
