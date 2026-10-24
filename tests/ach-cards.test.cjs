@@ -84,8 +84,8 @@ function load(opts = {}) {
 const tick = () => new Promise((r) => setTimeout(r, 5));
 const fire = (host, type, attrs, extra) => { const t = node('t', attrs); t.parentNode = host; Object.assign(t, extra || {}); (host.listeners[type] || []).forEach((f) => f({ target: t })); };
 
-test('versión 1.1.0, por js/modules.json y después de ach-view.js', () => {
-  assert.match(SRC, /\* Versión: 1\.1\.0 /);
+test('versión 1.2.0, por js/modules.json y después de ach-view.js', () => {
+  assert.match(SRC, /\* Versión: 1\.2\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).modules.map((x) => x.src);
   assert.ok(m.includes('js/ach-cards.js'));
   assert.ok(m.indexOf('js/ach-cards.js') > m.indexOf('js/ach-view.js'));
@@ -237,6 +237,38 @@ test('LOG-4: con ach-armory.js, «Ver en la Armería →» junto a la Wiki; en l
   x = load({ cat: '2', pct: 0 });
   assert.match(x.main.innerHTML, /<span class="achc-links"><a class="achc-wiki"/, 'sin ach-armory.js, como antes');
   assert.match(x.P.CSS, /\.achc-armory\{[^}]*border:1px solid var\(--color-amber/);
+});
+
+test('LOG-5: el lector oye cuántos logros quedan al filtrar, una vez y sin leer la grilla', () => {
+  const x = load();
+  const bar = x.bar();
+  assert.match(bar.innerHTML, /<p class="achc-sr" id="achcCount" role="status" aria-live="polite"><\/p>/);
+  const live = x.nodes.achcCount = node('achcCount');
+  let sets = 0;
+  Object.defineProperty(live, 'textContent', { get: () => live._t || '', set: (v) => { sets++; live._t = v; } });
+  x.win.AchCards.render();
+  assert.equal(live.textContent, 'Ves 3 logros.');
+  x.win.AchCards.render();
+  assert.equal(sets, 1, 'mismo resultado: no lo repite');
+  x.st.pct = 0.95;
+  x.win.AchCards.render();
+  assert.equal(live.textContent, 'Ves 2 logros.');
+  x.st.pct = 0.8;
+  const P = x.P, snap = x.win.Achievements.getSnapshot();
+  assert.equal(P.countText(snap, false), 'Ves 3 logros.');
+  assert.equal(P.countText(Object.assign({}, snap, { rows: snap.rows.slice(0, 1) }), false), 'Ves 1 logro.');
+  assert.equal(P.countText(Object.assign({}, snap, { rows: [] }), true), 'No tenés colecciones legendarias en curso.');
+  assert.equal(P.countText(Object.assign({}, snap, { rows: new Array(75).fill(snap.rows[0]) }), false), 'Ves los 60 más cercanos de 75 logros.');
+  assert.equal(P.countText(Object.assign({}, snap, { rows: snap.rows.slice(0, 1) }), true), 'Ves 1 colección legendaria.');
+  assert.equal(P.countText(Object.assign({}, snap, { loaded: false }), false), '', 'cargando: nada');
+  assert.equal(P.countText(Object.assign({}, snap, { hasToken: false }), false), '');
+  assert.match(SRC, /if \(live && st\.count !== txt\) \{ st\.count = txt; live\.textContent = txt; \}/, 'solo avisa si cambió');
+  assert.doesNotMatch(SRC, /aria-live="polite"[^>]*id="achievementsMain"|achievementsMain[^\n]*aria-live/, 'la grilla no es región viva');
+});
+
+test('LOG-5: en el celular los enlaces de la tarjeta miden 44 px de alto', () => {
+  const P = load().P;
+  assert.match(P.CSS, /@media \(max-width:900px\)\{[^\n]*\.achc-wiki,\.achc-armory\{min-height:44px/);
 });
 
 test('reglas de la Bóveda: sin claves crudas ni endpoints con API Key', () => {

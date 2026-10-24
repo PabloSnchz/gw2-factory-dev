@@ -1,7 +1,10 @@
 /*!
  * js/ach-cards.js — Logros: filtros y tarjetas «te falta» (BL-067, LOG-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-24)
+ * Versión: 1.2.0 (2026-10-24)
+ *  - 1.2.0 (LOG-5): el lector de pantalla oye cuántos logros quedan al filtrar (un aviso corto
+ *    en role=status, en lugar de leer toda la grilla) y en el celular «Ver en la Armería →» y
+ *    «Wiki ↗» tienen 44 px de alto para el dedo.
  *  - 1.1.0 (LOG-4): si js/ach-armory.js está cargado, la tarjeta suma «Ver en la Armería →» cuando
  *    lo que da el logro es una legendaria o una pieza de una sola; en «Colecciones legendarias»
  *    le pide los precursores para encontrar también las partes.
@@ -22,7 +25,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[AchCards]';
   var ICON = 'assets/icons/155059.png';
   var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
@@ -134,6 +137,15 @@
     return h.join('');
   }
 
+  // Lo que oye el lector de pantalla al filtrar: corto, sin leer la grilla.
+  function countText(snap, legendary) {
+    if (!snap || !snap.hasToken || !snap.loaded) return '';
+    var n = (snap.rows || []).length;
+    if (!n) return legendary ? 'No tenés colecciones legendarias en curso.' : 'No hay logros con estos filtros.';
+    var what = legendary ? (n === 1 ? 'colección legendaria' : 'colecciones legendarias') : (n === 1 ? 'logro' : 'logros');
+    return n > MAX ? 'Ves los ' + MAX + ' más cercanos de ' + fmtInt(n) + ' ' + what + '.' : 'Ves ' + fmtInt(n) + ' ' + what + '.';
+  }
+
   // Filtros distintos de los de entrada (≥ 80 %, sin recompensa, sin categoría, sin búsqueda).
   function activeCount(snap) {
     return (Number(snap.pct) !== NEAR ? 1 : 0) + (snap.reward ? 1 : 0) + (snap.cat ? 1 : 0) + (String(snap.q || '').trim() ? 1 : 0);
@@ -203,7 +215,7 @@
     '.achc-empty,.achc-note{grid-column:1/-1;margin:4px 0;color:var(--tx-2);font-size:.88rem}.achc-note{font-size:.8rem}',
     '.achc-link{font:inherit;background:none;border:0;padding:0;color:var(--acc-1);text-decoration:underline;cursor:pointer}',
     '.achc-bar button:focus-visible,.achc-bar input:focus-visible,.achc-bar select:focus-visible,.achc-wiki:focus-visible,.achc-armory:focus-visible,.achc-link:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
-    '@media (max-width:900px){.achc-more{display:inline-flex;align-items:center}.achc-search input,.achc-sel select{min-height:44px}',
+    '@media (max-width:900px){.achc-more{display:inline-flex;align-items:center}.achc-search input,.achc-sel select{min-height:44px}.achc-wiki,.achc-armory{min-height:44px;padding:4px 12px}',
     '.achc-ctrl{display:none;width:100%;flex-direction:column;align-items:stretch;padding:10px;border:1px solid var(--bd-2);border-radius:12px;background:var(--bg-1)}',
     '.achc-ctrl.achc-open{display:flex}.achc-seg{display:flex}.achc-seg button{flex:1;min-height:44px}.achc-sel{justify-content:space-between}.achc-sel select{max-width:none;flex:1}',
     '#achievementsMain{grid-template-columns:1fr}}'
@@ -211,7 +223,7 @@
 
   // ------------------------------------------------------------------ DOM
   var doc = root.document;
-  var st = { cache: { Item: {}, Title: {}, Mastery: {} }, asked: { Item: {}, Title: {}, Mastery: {} }, open: false, timer: null };
+  var st = { cache: { Item: {}, Title: {}, Mastery: {} }, asked: { Item: {}, Title: {}, Mastery: {} }, open: false, timer: null, count: null };
 
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
   function api() { var A = root.Achievements; return A && A.cardsByModule && typeof A.getSnapshot === 'function' && typeof A.setFilter === 'function' ? A : null; }
@@ -232,7 +244,7 @@
     bar.setAttribute('aria-label', 'Filtros de Logros');
     bar.innerHTML = '<label class="achc-search"><span class="achc-sr">Buscar logro</span><input type="search" id="achcSearch" placeholder="Buscar logro…" autocomplete="off"></label>' +
       '<button type="button" class="achc-more" id="achcMore" data-achc-act="more" aria-expanded="false" aria-controls="achcCtrl">Filtros</button>' +
-      '<div class="achc-ctrl" id="achcCtrl"></div>';
+      '<div class="achc-ctrl" id="achcCtrl"></div><p class="achc-sr" id="achcCount" role="status" aria-live="polite"></p>';
     var parent = main.parentNode || byId('achievementsPanel');
     if (parent && parent.insertBefore) parent.insertBefore(bar, main);
     wire(bar, main);
@@ -267,6 +279,8 @@
     if (legendary && AR && typeof AR.wantDeep === 'function') AR.wantDeep();
     main.innerHTML = gridHTML(snap, { catById: snap.catById, achIdToCat: snap.achIdToCat, cache: st.cache, calc: A._calc, legendary: legendary, armory: armory });
     askRewards((snap.rows || []).slice(0, MAX), main);
+    var live = byId('achcCount'), txt = countText(snap, legendary);
+    if (live && st.count !== txt) { st.count = txt; live.textContent = txt; }
     return snap;
   }
 
@@ -352,7 +366,7 @@
   root.AchCards = {
     version: VERSION, render: render,
     _pure: { fmtInt: fmtInt, missing: missing, shownPct: shownPct, coins: coins, rewardInfo: rewardInfo, missingIds: missingIds,
-      cardHTML: cardHTML, gridHTML: gridHTML, activeCount: activeCount, pendingCats: pendingCats, controlsHTML: controlsHTML, CSS: CSS, WIKI: WIKI },
+      cardHTML: cardHTML, gridHTML: gridHTML, activeCount: activeCount, pendingCats: pendingCats, controlsHTML: controlsHTML, countText: countText, CSS: CSS, WIKI: WIKI },
     _state: st
   };
 
