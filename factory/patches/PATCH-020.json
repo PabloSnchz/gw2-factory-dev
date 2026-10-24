@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-020",
+  "summary": "BL-064 CAM-4: index.html pide js/wv-objectives-dashboard.js con ?v=2.0.0 (Todas las cuentas → Objetivos semanales: números, leyenda, «Solo con pendientes», orden y matriz accesible). LES-033: la versión del archivo y su ?v suben juntas.",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "7e6857e14d3c40f3dfbace6ded10cbbaaa815407",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "src=\"js/wv-objectives-dashboard.js?v=1.0.0\"",
+          "text": "src=\"js/wv-objectives-dashboard.js?v=2.0.0\""
+        }
+      ]
+    }
+  ]
+}
