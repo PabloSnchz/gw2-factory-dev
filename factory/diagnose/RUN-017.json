@@ -1,0 +1,16 @@
+{
+  "id": "RUN-017",
+  "summary": "BL-067 CAM-POLISH-001: con js/gn-surface.js 1.0.0 y las guardas sobre superficies reales (PATCH-033), las superficies, el AA en los 19 themes, la Cámara, Logros, versiones, tamaño y boot siguen verdes",
+  "tests": [
+    "tests/gn-surface.test.cjs",
+    "tests/ach-view.test.cjs",
+    "tests/wv-view.test.cjs",
+    "tests/wv-camara-a11y.test.cjs",
+    "tests/ach-a11y.test.cjs",
+    "tests/ach-cards.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/welcome-contrast.test.cjs"
+  ]
+}
