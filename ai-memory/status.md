@@ -1,29 +1,32 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-064 paso 2 — CAM-5 hecho en DEV: «Todas las cuentas → Compras fijadas» con −/+ por cuenta, «Gestionar» y «Deshacer» (`js/wv-purchase-detail.js` 2.0.0 + `js/wv-purchases-view.js` 1.0.0). Espera la validación visual de Pablo.
-Motivo: Pablo validó CAM-4 (números, matriz, leyenda, orden, «Solo con pendientes», celular, columna fija y GDS; aprobó «Cuentas al día») y autorizó CAM-5 (2026-10-24 01:00Z): Compras fijadas con selector −/+, gestión de compras, deshacer, coherencia con la Cámara y reducción de archivos congelados.
+Tarea actual: BL-064 paso 2 — CAM-6 hecho en DEV: mi voz en la cabecera de la Cámara, contraste AA en los 19 themes, teclado y lector, y limpieza de lo viejo en `index.html` y `router.js`. La Cámara del Brujo queda completa (FEAT-011) y BL-064 cerrada como pidió Pablo; los módulos que faltan del restyle pasan a BL-067. Espera la validación de Pablo.
+Motivo: Pablo validó CAM-5 (AA, −/+, sincronización Tienda ↔ Compras fijadas, Gestionar, Deshacer, filtros, celular y reducción de congelados) y autorizó CAM-6 (2026-10-24 01:45Z): voz, accesibilidad, contraste, teclado, limpieza, cierre de FEAT-011 y de BL-064.
 Fase: F1 — Visibilidad
 Etapa actual: REVIEW
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 01:38Z
-Próxima acción: con la validación de Pablo, CAM-6: mi voz en la cabecera (una línea), revisión de contraste, teclado y lector, y limpieza por el canal de lo viejo en `index.html` y `router.js`.
+Última actualización: 2026-10-24 02:20Z
+Próxima acción: con la validación de Pablo, empezar BL-067 por Logros (propuesta visual primero, como en la Armería y la Cámara), salvo que Pablo elija otro orden.
 
 Micro-ciclo:
-CAM-5 — Todas las cuentas → Compras fijadas. HECHO, espera validación.
+CAM-6 — Voz, accesibilidad, contraste, teclado y limpieza. HECHO, espera validación.
 Archivos:
-- js/wv-purchase-detail.js (36abbb0)
-- js/wv-purchases-view.js (f8aad22)
-- index.html (PATCH-021, fe49d4e)
+- js/wv-view.js 1.1.0 (PATCH-022)
+- index.html y js/router.js 2.18.0 (PATCH-024)
+- tests/wv-camara-a11y.test.cjs (636d6dd)
 
-Último hecho: Compras fijadas con el mismo idioma que Objetivos semanales. Arriba, 4 números: AA disponible (ya descontada la que marcaste), Reservada para fijados (con las compras pendientes), Cuentas que no llegan (y cuánta AA les falta) y Fijados completos. Barra: buscar cuenta, «Solo con pendientes» (saca cuentas y columnas sin pendientes), orden (a la que más le falta, nombre, como en Cuentas, más AA), «Gestionar» y «Quién está online». Matriz: cuenta fija a la izquierda (con «seleccionada»), AA disponible, Reservada y Balance; una columna por ítem fijado con lo comprado (verde), lo marcado (violeta) y −/+ para marcar compras de cualquier cuenta sin cambiar de cuenta; columna Online; fila «Faltan» por ítem. «Gestionar» para todas las cuentas: ajustar marcas a la API, copiar los fijados de la cuenta seleccionada y quitar fijados, con confirmación y «Deshacer» de 10 s; usa las mismas reglas que la Tienda (`wv-shop-manage.js`). Archivo congelado: `wv-purchase-detail.js` bajó de 91 KB a 28 KB y salió de los congelados (`tools/size-budget.json`); la vista nueva (25 KB) entra por `js/modules.json`. Se fue el código que escribía sobre las tarjetas viejas de la Tienda y que recargaba todas las cuentas cada vez que se abría la Tienda. Pruebas: 21 tests nuevos; mutaciones 52/52; RUN-010 en CI: 10 suites en verde (incluye Idea 55, idea61, T19-c, versiones y tamaño).
+Último hecho: mi voz en la cabecera de la Cámara, una sola línea y solo cuando hay algo para hacer, en este orden: objetivos listos para reclamar (con la AA que suman), reset diario o semanal en menos de una hora con objetivos pendientes, fijados para los que no alcanza la AA (con cuántas semanas faltan si completás lo diario y lo semanal) y temporada que termina en 7 días o menos con fijados sin comprar. Si todo está al día, no digo nada. Sin pedidos nuevos a la API. Contraste: la guarda de la Bienvenida corre en toda la Cámara y corrige también los colores fijos de los módulos (rojo, «AA» y marcado): todos los textos llegan a 4.5:1 en los 19 themes, medido en un test. Teclado y lector: cada pestaña dice qué panel controla y el panel dice qué pestaña lo nombra; foco visible en pestañas y paneles; movimiento reducido respetado. Limpieza: se fueron los 5 botones viejos (Dashboard, Compras, Refrescar, Volver, Sincronizar), su script y el CSS viejo de `index.html` (69.6 → 64.8 KB), y la Tienda de respaldo de `router.js` (90.5 → 65.6 KB); los dos techos bajaron. PATCH-023 fue rechazado por el canal porque `hb98` medía el código que se iba; PATCH-024 lo corrige y mide lo nuevo (LES-035). Suite completa en verde antes y después.
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
-Plan del restyle (BL-064, RETOMADO 2026-10-23):
+Plan del restyle:
 
-1. Armería Legendaria: CERRADA en DEV y validada por Pablo al 100% (FEAT-010).
-2. Cámara del Brujo. CAM-0 a CAM-4 validados; CAM-5 hecho, espera validación; CAM-6 después.
+BL-064 (cerrada, pedido de Pablo 2026-10-24 01:45Z):
+1. Armería Legendaria: validada por Pablo al 100% (FEAT-010).
+2. Cámara del Brujo: CAM-0 a CAM-5 validados; CAM-6 hecho, espera validación (FEAT-011).
+
+BL-067 (READY, sigue el mismo plan aprobado):
 3. Logros.
 4. Actividades (después de decidir BL-055).
 5. Raids y Strikes.
@@ -31,21 +34,21 @@ Plan del restyle (BL-064, RETOMADO 2026-10-23):
 7. Cuentas.
 8. Marco común: barra de arriba, modales, avisos y pie.
 
-Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `86afe37`).
+Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR, CAM): en el backlog (DONE) y en git (`ai-memory/status.md` hasta `86afe37`).
 
 ## Resumen de la sesión
 
 - BL-057 cerrada: Metas y Eventos renovado (FEAT-007), en producción.
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008), en producción.
 - BL-061 cerrada: la Sidebar (FEAT-009). Completa en producción (BL-062 y BL-063).
-- BL-064: la Armería terminada y validada en DEV (FEAT-010). Cámara del Brujo: CAM-4 validado, CAM-5 hecho en DEV.
+- BL-064 cerrada en DEV: la Armería (FEAT-010) y la Cámara del Brujo (FEAT-011). El resto del restyle sigue en BL-067.
 - BL-065 cerrada y validada: canal de parches, manifiesto de módulos y presupuesto de tamaño (DEC-035; LES-031 a LES-034).
 - BL-066 cerrada: suite de DEV en verde; las 3 fallas eran mías (LES-032).
 - BL-005 cerrada con el primer parche sobre `index.html` (FP-4).
 
 ## Esperando a Pablo
 
-- [BL-064] Validación: abrí la Cámara del Brujo en DEV con recarga completa (Ctrl+F5) → Todas las cuentas → Compras fijadas. Revisá los 4 números; marcá con −/+ una compra de otra cuenta y fijate que la Tienda de esa cuenta muestre lo mismo; probá «Gestionar» (y su «Deshacer»), «Solo con pendientes», el orden y «Quién está online»; en el celular, que la columna de cuentas quede fija al deslizar la tabla.
+- [BL-064] Validación: abrí la Cámara del Brujo en DEV con recarga completa (Ctrl+F5). Arriba ya no están los botones viejos (Dashboard, Compras, Refrescar, Volver, Sincronizar): todo se navega con las 3 pestañas. Si tenés objetivos listos o fijados sin AA suficiente, vas a ver mi línea en la cabecera; si está todo al día, no aparece. Cambiá a un theme claro (macOS o Notion) y fijate que la AA, lo marcado y los números rojos se lean bien. Con el teclado: Tab hasta las pestañas, flechas para cambiar, Enter para entrar; el foco se ve siempre. La Tienda y Compras fijadas tienen que seguir igual que en CAM-5.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
@@ -54,7 +57,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 ## Para tu información
 
 - [BL-064] Deuda registrada (DEBT-CAM-1): la Tienda, Objetivos semanales y Compras fijadas siguen leyendo la lista de cuentas desde la clave vieja `gw2_keys` (lectura tolerada que vigila idea61). Pasarla a `Storage` toca ese guard y va en un ciclo propio.
-- [BL-065] Zonas de hoy: 18 archivos congelados (`wv-purchase-detail.js` salió en CAM-5: de 91 KB a 28 KB; el más grande, `api-gw2.js`, 129 KB; `welcome-panel.js` quedó congelado por 1 byte y sale con el próximo recorte); en advertencia `converter-modal.js`, `activities-theme.js` y `css/theme-polish.css`; excepciones, solo los datos generados de la Armería.
+- [BL-064] Quedan ocultos y sin borrar el título viejo de la Cámara, la línea de temporada y la nota de sincronización (`router.js` y `wizards-vault.js` todavía los usan). Se van cuando se renueven esos dos archivos.
+- [BL-065] Zonas de hoy: `index.html` (64.8 KB) y `router.js` (65.6 KB) siguen congelados pero con el techo más bajo; `welcome-panel.js` quedó congelado por 1 byte y sale con el próximo recorte; en advertencia `converter-modal.js`, `activities-theme.js` y `css/theme-polish.css`; excepciones, solo los datos generados de la Armería.
 - [BL-065] Regla de LES-033: cuando subo la versión de un módulo, en el mismo cambio sube su `?v`, o el módulo vive en `js/modules.json`. El test `index-versions` lo exige en CI.
 - [BL-065] El canal de parches solo corre en DEV, solo con pushes tuyos, y nunca puede tocar workflows ni a sí mismo. Guía: `factory/README.md`. El diagnóstico (`factory/diagnose/`) solo lee: corre tests y escribe la salida.
 - [BL-066] Producción tiene la misma Cartera (`wallet-theme.js` 2.1.0, BL-056). El respaldo nunca se usa en la app real (Storage siempre está cargado), así que no hay efecto visible; la corrección queda en DEV hasta que decidas promoverla.
