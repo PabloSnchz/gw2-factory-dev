@@ -169,7 +169,8 @@ test('la cabecera pinta mi línea con Shiruvana.voice, una sola vez, y lee fijad
   assert.equal(y.calls.filter((k) => k[0] === 'voice').length, 0, 'todo al día: no hablo');
   assert.equal(y.nodes.wvxVoice.children.length, 0);
   const z = load({ rows: [{ id: 7, cost: 500, purchased: 0, purchase_limit: 2 }], pinned: { 7: 1 }, aa: 100,
-    daily: { objectives: [{ progress_current: 0, progress_complete: 1, acclaim: 10 }] } });
+    // Diario hecho y cobrado: con el reloj real, entre las 23:00 y las 00:00 UTC ganaría la línea del reset diario.
+    daily: { objectives: [{ progress_current: 1, progress_complete: 1, acclaim: 10, claimed: true }] } });
   await flush();
   assert.match(z.calls.filter((k) => k[0] === 'voice').pop()[2], /^Para lo fijado te faltan 900 AA\. Si completás lo diario y lo semanal, llegás en unas 13 semanas\.$/);
 });
