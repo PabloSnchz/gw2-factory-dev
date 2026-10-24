@@ -87,13 +87,13 @@ const lnStrike = lineOf('strike-tracker.js');
 const lnApp = lineOf('app.js');
 
 ok(lnRaid !== null, 'index.html carga raid-tracker.js');
-ok(lnStrike !== null, 'index.html carga strike-tracker.js');
+// BL-070 RAI-5b: strike-tracker.js se retiró (los strikes son encuentros de Raids desde 2026-02-03).
+// El defecto de ALERT-197 se sigue midiendo con raid-tracker.js y app.js, que son los que escriben __GN__.
+ok(lnStrike === null, 'index.html ya no carga strike-tracker.js (BL-070 RAI-5b)');
 ok(lnApp !== null, 'index.html carga app.js');
 ok(lnRaid !== null && lnApp !== null && lnRaid < lnApp,
    'raid-tracker.js se declara ANTES que app.js (el escritor se escribe primero)',
    'si app.js se declarara antes, el orden de carga ya no explicaria el defecto y este test midio otra cosa');
-ok(lnApp !== null && lnStrike !== null && lnStrike < lnApp,
-   'strike-tracker.js se declara ANTES que app.js', null);
 
 // ── 2. Los hooks, VERBATIM, extraidos del producto ─────────────────────────
 // Nada de reescribir la asignacion a mano: si se copia, el test puede pasar

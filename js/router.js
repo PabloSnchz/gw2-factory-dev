@@ -1,6 +1,12 @@
 /*!
  * Router y Vistas (WV Objetivos + Tienda unificada)
- * v2.18.0 (2026-10-24) — Sin la copia vieja de la Tienda (BL-064 CAM-6)
+ * v2.18.1 (2026-10-24) — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)
+ *
+ * Cambios v2.18.1:
+ *  - La ruta vieja de Strikes muestra el panel de Raids y raids-view.js la lleva a Encuentros.
+ *  - Se fue el refresco de StrikeTracker: el módulo ya no se carga.
+ *
+ * Antes, v2.18.0 — Sin la copia vieja de la Tienda (BL-064 CAM-6)
  *
  * Cambios v2.18.0:
  *  - Se fue la Tienda de respaldo (barra, tarjetas, tabla, campo numérico y sus marcas):
@@ -30,7 +36,7 @@
 (function () {
   'use strict';
 
-  console.info('[WV] router-wv.js v2.18.0 — Fases 1-3 completas + Strike Tracker + fixes');
+  console.info('[WV] router-wv.js v2.18.1 — Fases 1-3 completas + fixes');
 
   var $  = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -1122,19 +1128,12 @@
           return;
         }
 
+        // BL-070 RAI-5b: desde el 2026-02-03 los strikes son encuentros de raid. La ruta vieja muestra
+        // Raids y raids-view.js la lleva a la pestaña Encuentros. strike-tracker.js ya no se carga.
         if (h === '#/account/strikes') {
-          try {
-            showPanel('strikeTrackerPanel');
-            if (typeof Analytics !== 'undefined') Analytics.viewModule('strikes');
-            if (window.StrikeTracker && typeof window.StrikeTracker.activate === 'function') {
-              window.StrikeTracker.activate();
-            }
-          } catch (e) {
-            console.warn('[router] show strikes error', e);
-          } finally {
-            updateSidebarFor('strikes');
-            setActiveNav(h);
-          }
+          showPanel('raidTrackerPanel');
+          updateSidebarFor('raids');
+          setActiveNav(h);
           return;
         }
 
@@ -1390,12 +1389,6 @@
           window.RaidTracker.refresh(true);
         } else if (window.RaidTracker && typeof window.RaidTracker.activate === 'function') {
           window.RaidTracker.activate();
-        }
-      } else if (h === '#/account/strikes') {
-        if (window.StrikeTracker && typeof window.StrikeTracker.refresh === 'function') {
-          window.StrikeTracker.refresh(true);
-        } else if (window.StrikeTracker && typeof window.StrikeTracker.activate === 'function') {
-          window.StrikeTracker.activate();
         }
       } else if (h === '#/account/legendary-armory') {
         if (window.LegendaryTracker && typeof window.LegendaryTracker.refresh === 'function') {
