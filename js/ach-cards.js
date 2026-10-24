@@ -1,7 +1,10 @@
 /*!
  * js/ach-cards.js — Logros: filtros y tarjetas «te falta» (BL-067, LOG-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-24)
+ * Versión: 1.1.0 (2026-10-24)
+ *  - 1.1.0 (LOG-4): si js/ach-armory.js está cargado, la tarjeta suma «Ver en la Armería →» cuando
+ *    lo que da el logro es una legendaria o una pieza de una sola; en «Colecciones legendarias»
+ *    le pide los precursores para encontrar también las partes.
  *
  * Pinta la barra de filtros y la grilla de Logros con el estado de achievements.js
  * (3.4.0 o más: Achievements.cardsByModule, getSnapshot, setFilter y el evento gn:achievements).
@@ -19,7 +22,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[AchCards]';
   var ICON = 'assets/icons/155059.png';
   var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
@@ -101,7 +104,8 @@
     var k = missing(pr), max = Math.max(0, Math.round(Number(pr.max) || 0)), pct = shownPct(pr), step = (Number(pr.pct) || 0) >= STEP;
     var cid = ctx.achIdToCat ? ctx.achIdToCat.get(String(id)) : '', cat = cid && ctx.catById ? ctx.catById.get(String(cid)) : null;
     var rw = (Array.isArray(meta.rewards) ? meta.rewards : []).map(function (r) { return r ? rewardInfo(r, ctx.cache) : null; }).filter(Boolean);
-    var ap = apLeft(x, ctx.calc);
+    var ap = apLeft(x, ctx.calc), arm = '';
+    if (typeof ctx.armory === 'function') { try { arm = ctx.armory(x) || ''; } catch (e) { arm = ''; } }
     var h = [];
     h.push('<article class="achc-card' + (step ? ' achc-card--step' : '') + '" data-id="' + esc(id) + '">');
     h.push('<div class="achc-top"><img class="achc-ico" src="' + esc(meta.icon || ICON) + '" alt="" width="48" height="48" loading="lazy" decoding="async" referrerpolicy="no-referrer">');
@@ -113,7 +117,7 @@
       '" aria-label="Progreso de «' + esc(name) + '»: ' + pct + ' %"><i style="width:' + pct + '%"></i></div>');
     if (rw.length) h.push('<ul class="achc-rw" aria-label="' + (ctx.legendary ? 'Te da' : 'Recompensas') + '">' + rw.map(rewardLi).join('') + '</ul>');
     h.push('<div class="achc-foot"><span class="achc-ap">' + (ap ? '<img src="' + ICON_AP + '" alt="" width="16" height="16">+' + fmtInt(ap) + ' AP al terminar' : '') + '</span>');
-    h.push('<a class="achc-wiki" href="' + WIKI + encodeURIComponent(name) + '" target="_blank" rel="noopener" aria-label="Buscar «' + esc(name) + '» en la wiki (se abre en otra pestaña)">Wiki ↗</a></div>');
+    h.push('<span class="achc-links">' + arm + '<a class="achc-wiki" href="' + WIKI + encodeURIComponent(name) + '" target="_blank" rel="noopener" aria-label="Buscar «' + esc(name) + '» en la wiki (se abre en otra pestaña)">Wiki ↗</a></span></div>');
     h.push('</article>');
     return h.join('');
   }
@@ -193,9 +197,12 @@
     '.achc-ap{display:inline-flex;align-items:center;gap:5px}.achc-ap img{border-radius:3px}',
     '.achc-wiki{display:inline-flex;align-items:center;min-height:28px;padding:2px 8px;border:1px solid var(--bd-2);border-radius:8px;color:var(--acc-1);text-decoration:none}',
     '.achc-wiki:hover{border-color:var(--acc-1)}',
+    '.achc-links{display:inline-flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}',
+    '.achc-armory{display:inline-flex;align-items:center;min-height:28px;padding:2px 8px;border:1px solid var(--color-amber,#F2B94B);border-radius:8px;color:var(--tx-1);text-decoration:none;font-weight:600}',
+    '.achc-armory:hover{background:var(--bg-2)}',
     '.achc-empty,.achc-note{grid-column:1/-1;margin:4px 0;color:var(--tx-2);font-size:.88rem}.achc-note{font-size:.8rem}',
     '.achc-link{font:inherit;background:none;border:0;padding:0;color:var(--acc-1);text-decoration:underline;cursor:pointer}',
-    '.achc-bar button:focus-visible,.achc-bar input:focus-visible,.achc-bar select:focus-visible,.achc-wiki:focus-visible,.achc-link:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '.achc-bar button:focus-visible,.achc-bar input:focus-visible,.achc-bar select:focus-visible,.achc-wiki:focus-visible,.achc-armory:focus-visible,.achc-link:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '@media (max-width:900px){.achc-more{display:inline-flex;align-items:center}.achc-search input,.achc-sel select{min-height:44px}',
     '.achc-ctrl{display:none;width:100%;flex-direction:column;align-items:stretch;padding:10px;border:1px solid var(--bd-2);border-radius:12px;background:var(--bg-1)}',
     '.achc-ctrl.achc-open{display:flex}.achc-seg{display:flex}.achc-seg button{flex:1;min-height:44px}.achc-sel{justify-content:space-between}.achc-sel select{max-width:none;flex:1}',
@@ -256,7 +263,9 @@
     if (more) { more.textContent = 'Filtros' + (n ? ' · ' + n : ''); more.setAttribute('aria-expanded', String(st.open)); }
     if (input && doc.activeElement !== input && input.value !== String(snap.q || '')) input.value = String(snap.q || '');
     if (snap.hasToken && !snap.loaded) return snap;
-    main.innerHTML = gridHTML(snap, { catById: snap.catById, achIdToCat: snap.achIdToCat, cache: st.cache, calc: A._calc, legendary: legendary });
+    var AR = root.AchArmory, armory = AR && typeof AR.linkHTML === 'function' ? AR.linkHTML : null;
+    if (legendary && AR && typeof AR.wantDeep === 'function') AR.wantDeep();
+    main.innerHTML = gridHTML(snap, { catById: snap.catById, achIdToCat: snap.achIdToCat, cache: st.cache, calc: A._calc, legendary: legendary, armory: armory });
     askRewards((snap.rows || []).slice(0, MAX), main);
     return snap;
   }

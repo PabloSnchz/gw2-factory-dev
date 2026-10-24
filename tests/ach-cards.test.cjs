@@ -64,6 +64,7 @@ function load(opts = {}) {
   const win = {
     console: { info() {}, log() {}, warn() {} }, setTimeout, clearTimeout, Promise, Map, JSON, Math,
     Achievements: A,
+    AchArmory: opts.armory,
     GW2Api: { getItemsMany: (ids, o) => { calls.push(['items', ids.join(','), JSON.stringify(o)]); return Promise.resolve(ids.map((id) => ({ id, name: 'Cofre ' + id, icon: 'https://render/i' + id + '.png' }))); } },
     fetch: (u) => { calls.push(['fetch', u]); const ids = /ids=([\d,]+)/.exec(u)[1].split(',').map(Number);
       return Promise.resolve({ ok: true, json: () => Promise.resolve(ids.map((id) => ({ id, name: /titles/.test(u) ? 'Fractalero' : 'Leyendas de Amnytas', icon: /titles/.test(u) ? undefined : 'https://render/m.png' }))) }); }
@@ -83,8 +84,8 @@ function load(opts = {}) {
 const tick = () => new Promise((r) => setTimeout(r, 5));
 const fire = (host, type, attrs, extra) => { const t = node('t', attrs); t.parentNode = host; Object.assign(t, extra || {}); (host.listeners[type] || []).forEach((f) => f({ target: t })); };
 
-test('versión 1.0.0, por js/modules.json y después de ach-view.js', () => {
-  assert.match(SRC, /\* Versión: 1\.0\.0 /);
+test('versión 1.1.0, por js/modules.json y después de ach-view.js', () => {
+  assert.match(SRC, /\* Versión: 1\.1\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).modules.map((x) => x.src);
   assert.ok(m.includes('js/ach-cards.js'));
   assert.ok(m.indexOf('js/ach-cards.js') > m.indexOf('js/ach-view.js'));
@@ -215,6 +216,27 @@ test('un aviso gn:achievements vuelve a pintar con los filtros nuevos', () => {
   x.st.pct = 0.95;
   x.docListeners['gn:achievements'].forEach((f) => f({}));
   assert.equal((x.main.innerHTML.match(/<article /g) || []).length, 2);
+});
+
+test('LOG-4: con ach-armory.js, «Ver en la Armería →» junto a la Wiki; en legendarias pide los precursores', () => {
+  const seen = [], deep = [];
+  const armory = {
+    linkHTML: (x) => { seen.push(x.r.id); return x.r.id === 4 ? '<a class="achc-armory" href="#/account/legendary-armory" data-ach-armory="99">Ver en la Armería →</a>' : ''; },
+    wantDeep: () => deep.push(1)
+  };
+  let x = load({ cat: '2', pct: 0, armory });
+  assert.match(x.main.innerHTML, /<span class="achc-links"><a class="achc-armory" href="#\/account\/legendary-armory" data-ach-armory="99">Ver en la Armería →<\/a><a class="achc-wiki"/);
+  assert.deepEqual(seen, [4]);
+  assert.equal(deep.length, 1, 'en «Colecciones legendarias» pide los precursores');
+  deep.length = 0;
+  x = load({ armory });
+  assert.equal(deep.length, 0, 'en «Casi listos» no los pide');
+  assert.doesNotMatch(x.main.innerHTML, /achc-armory/, 'sin legendaria, sin enlace');
+  x = load({ cat: '2', pct: 0, armory: { linkHTML: () => { throw new Error('x'); } } });
+  assert.match(x.main.innerHTML, /<span class="achc-links"><a class="achc-wiki"/, 'si falla, la tarjeta igual se pinta');
+  x = load({ cat: '2', pct: 0 });
+  assert.match(x.main.innerHTML, /<span class="achc-links"><a class="achc-wiki"/, 'sin ach-armory.js, como antes');
+  assert.match(x.P.CSS, /\.achc-armory\{[^}]*border:1px solid var\(--color-amber/);
 });
 
 test('reglas de la Bóveda: sin claves crudas ni endpoints con API Key', () => {
