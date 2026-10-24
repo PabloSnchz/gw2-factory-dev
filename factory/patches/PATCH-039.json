@@ -1,0 +1,89 @@
+{
+ "id": "PATCH-039",
+ "summary": "BL-070 RAI-1 hecho: status, backlog y hechos de la API de raids",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "51b2b42b90131d8385404f8b567f87b73861b9c5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN CURSO",
+     "text": "Estado: ESPERANDO A PABLO"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 EN CURSO.",
+     "text": "RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 HECHO (16:15Z), espera validación."
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: DEVELOPMENT",
+     "text": "Etapa actual: DOCUMENTATION"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 16:05Z",
+     "text": "Última actualización: 2026-10-24 16:15Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: RAI-1. Mido la API oficial desde CI (RUN-022: /v2/raids, minis, monedas y logros semanales), armo `assets/data/raids/catalog.json` con los 45 encuentros verificados y su test. Sin cambios visibles.",
+     "text": "Próxima acción: esperar a Pablo. Él valida RAI-1 (sin cambios visibles: catálogo, íconos y marcado). Con su visto sigo con RAI-2: Raids unificado con cabecera, pestañas Alas y Encuentros y tarjetas, en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-1 — catálogo verificado, miniaturas oficiales y prueba de los logros semanales. EN CURSO.\nArchivos:\n- tests/probe-rai1-*.smoke.cjs (sondas temporales de la API, se borran al terminar)\n- assets/data/raids/catalog.json\n- tests/raids-catalog.test.cjs\n",
+     "text": "BL-070 RAI-1 — catálogo verificado, miniaturas oficiales y prueba de los logros semanales. HECHO.\nArchivos:\n- tests/probe-rai1-*.smoke.cjs (4 sondas temporales; resultados en OUT-022 y OUT-023; ya borradas)\n- assets/data/raids/catalog.json (`17e273e`)\n- tests/raids-catalog.test.cjs (`21ef95b`)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: promoví a producción, por orden de Pablo,",
+     "text": "Último hecho: RAI-1 hecho (2026-10-24 16:15Z): `assets/data/raids/catalog.json` (`17e273e`, 22,8 KB) con 46 encuentros verificados (30 de las 8 alas, con el evento «camp» de Monte Balrior que la propuesta no contaba, y 16 encuentros) y `tests/raids-catalog.test.cjs` (`21ef95b`, 10 tests, 10/10 mutaciones; RUN-024 verde con los íconos reales). Medido en la API desde CI (RUN-022 y RUN-023, 4 sondas temporales ya borradas): la API sí trae los encuentros en el logro semanal «Weekly Raid Encounters» (9125), con un objetivo por encuentro, así que 14 de los 16 se pueden marcar solos (la lectura con una cuenta real la confirmo en RAI-2: CI no tiene clave); solo Forjando acero y Nexo de la Eternidad quedan para marcar a mano (D2). Íconos: 23 miniaturas locales, 16 oficiales nuevas de /v2/minis (McLeod, Berg, Xera ilusoria, Desmina, Llave de Ahdashim, Caballeras de asalto, Mai Trin, Kela, Vloxx…), 2 eventos con el jefe que sigue y 5 sin miniatura oficial (Voz y Garra, Fraenir, Chatarrería, Kaineng, Cosecha). Correcciones al módulo de hoy: Gaeting actual es la moneda 77 (no la 39 de Path of Fire), tope 150 por semana; conocimiento legendario 44 por semana; nombres oficiales «Sala de las Cadenas» y «Táctica del Forjador de Mitos». Sin cambios visibles todavía. Antes: promoví a producción, por orden de Pablo,"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "Historial de planes anteriores (",
+     "text": "BL-070 (en curso desde 2026-10-24 15:39Z; propuesta primero y cada paso validado por Pablo):\n9. Raids y Strikes: RAI-0 propuesta aprobada; RAI-1 catálogo verificado HECHO; siguen RAI-2 hub unificado, RAI-3 ficha a pantalla completa, RAI-4 mecánicas por tandas, RAI-5 retiro de `strike-tracker.js`, RAI-6 revisión y FEAT-014.\n10. Inventario y Personajes, 11. Actividades (con BL-055), 12. Cuentas, 13. barra de arriba, modales, avisos y pie.\n\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Resumen de la sesión\n\n",
+     "text": "- BL-070: Raids renovado. Propuesta RAI-0 aprobada por Pablo; RAI-1 catálogo verificado de 46 encuentros con la API oficial (la API trae un objetivo por encuentro en el logro semanal 9125).\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-069] Validación: abrí producción",
+     "text": "- [BL-070] Validación: RAI-1 no cambia nada en pantalla. Revisá el resumen del catálogo (46 encuentros, 14 de los 16 encuentros se podrán marcar solos, íconos oficiales nuevos y los 5 que siguen sin miniatura) y dame el visto para seguir con RAI-2.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "c1e4c311f9867e6bacaee2acbf66b19427797e1d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "plan RAI-1 a RAI-6; decisiones D1 a D4 pendientes.",
+     "text": "plan RAI-1 a RAI-6. Pablo aprobó RAI-0 y D1 a D4 (2026-10-24 15:57Z). RAI-1 hecho (2026-10-24 16:15Z): `assets/data/raids/catalog.json` (`17e273e`, 22,8 KB) con 46 encuentros verificados (30 de las 8 alas, con el evento «camp» de Monte Balrior que la propuesta no contaba, y 16 encuentros) y `tests/raids-catalog.test.cjs` (`21ef95b`, 10 tests, 10/10 mutaciones; RUN-024 verde con los íconos reales). Medido en la API desde CI (RUN-022 y RUN-023, 4 sondas temporales ya borradas): la API sí trae los encuentros en el logro semanal «Weekly Raid Encounters» (9125), con un objetivo por encuentro, así que 14 de los 16 se pueden marcar solos (la lectura con una cuenta real la confirmo en RAI-2: CI no tiene clave); solo Forjando acero y Nexo de la Eternidad quedan para marcar a mano (D2). Íconos: 23 miniaturas locales, 16 oficiales nuevas de /v2/minis (McLeod, Berg, Xera ilusoria, Desmina, Llave de Ahdashim, Caballeras de asalto, Mai Trin, Kela, Vloxx…), 2 eventos con el jefe que sigue y 5 sin miniatura oficial (Voz y Garra, Fraenir, Chatarrería, Kaineng, Cosecha). Correcciones al módulo de hoy: Gaeting actual es la moneda 77 (no la 39 de Path of Fire), tope 150 por semana; conocimiento legendario 44 por semana; nombres oficiales «Sala de las Cadenas» y «Táctica del Forjador de Mitos»."
+    }
+   ]
+  },
+  {
+   "path": "docs/GW2-API-HECHOS.md",
+   "base_sha": "a0d409bdbf907a57246c384503ff554985e6aed3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- Última revisión: 2026-10-21.",
+     "text": "- Última revisión: 2026-10-24."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "## Permisos de las API keys",
+     "text": "## Raids y encuentros (desde la unificación del 2026-02-03)\n\n| Hecho | Fuente | Verificado |\n|---|---|---|\n| `/v2/raids` y `/v2/account/raids` traen solo las 8 alas (30 eventos, incluido `camp` de Monte Balrior). Los ex-strikes, Claro del Guardián y Nexo de la Eternidad no están (gw2-api #148). | API (RUN-022) · gw2-api issue #148 | 2026-10-24 |\n| El logro semanal **9125** «Weekly Raid Encounters» tiene un objetivo por encuentro (bits 0 a 13): Paso de las Picosescalofriantes, Fraenir, Voz y Garra, Susurro, Pelahuesos, Guerra fría, Escondite Filoetéreo, Chatarrería de Xunlai Jade, Mirador de Kaineng, Templo de la Cosecha, Observatorio Cósmico, Templo de Febe, Vieja Corte del León y Claro del Guardián. Con los `bits` de `/v2/account/achievements` debería saberse cuáles hizo la cuenta esta semana; falta confirmarlo con una clave real (RAI-2). Forjando acero y Nexo de la Eternidad no están. | API (RUN-022) | 2026-10-24 |\n| Cada ala tiene su logro semanal: 9128, 9147, 9182, 9144, 9111, 9120, 9156 y 9181 (alas 1 a 8). | API (RUN-022) | 2026-10-24 |\n| Monedas: conocimiento legendario 70, magnetita 28 (tope 800 por semana). Hay **dos** «Gaeting Crystal»: la 39 es la vieja de Path of Fire y la **77** es la actual (tope 150 por semana, Visions of Eternity). | API (RUN-022, RUN-023) · wiki | 2026-10-24 |\n| Miniaturas oficiales de los jefes en `/v2/minis` (984 en total); ids y render en `assets/data/raids/catalog.json`. | API (RUN-022, RUN-023) | 2026-10-24 |\n\n"
+    }
+   ]
+  }
+ ]
+}
