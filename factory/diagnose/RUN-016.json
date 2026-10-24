@@ -1,0 +1,5 @@
+{
+  "id": "RUN-016",
+  "summary": "BL-067 pasos 4 a 8: inventario de Actividades, Raids y Strikes, Inventario y Personajes, Cuentas y marco (archivos, ids, clases, colores, aria, rutas) antes de diseñar",
+  "tests": ["tests/probe-b67.smoke.cjs"]
+}
