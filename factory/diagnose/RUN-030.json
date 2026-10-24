@@ -1,0 +1,15 @@
+{
+  "id": "RUN-030",
+  "summary": "BL-070 RAI-4 tanda 1 después de PATCH-044: raids-sheet 1.1.0 con mecánicas de Monte Balrior, vista, versiones, arranque y presupuesto de tamaño",
+  "tests": [
+    "tests/raids-sheet.test.cjs",
+    "tests/raids-view.test.cjs",
+    "tests/raids-catalog.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/ai-memory.test.cjs",
+    "tests/dev-pages.test.cjs",
+    "tests/index-identity.test.cjs"
+  ]
+}
