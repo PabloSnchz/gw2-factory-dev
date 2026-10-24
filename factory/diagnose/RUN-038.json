@@ -1,0 +1,4 @@
+{
+ "id": "RUN-038",
+ "tests": ["tests/hb106-censo-latch.test.js", "tests/size-budget.test.cjs", "tests/hb106-t13-invariante.test.js"]
+}
