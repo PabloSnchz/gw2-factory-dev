@@ -18,6 +18,8 @@ const MIDX = JSON.parse(fs.readFileSync(path.join(MDIR, 'index.json'), 'utf8'));
 const JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));
 const HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));
 const POF = JSON.parse(fs.readFileSync(path.join(MDIR, 'pof.json'), 'utf8'));
+const IBS = JSON.parse(fs.readFileSync(path.join(MDIR, 'ibs.json'), 'utf8'));
+const CORE = JSON.parse(fs.readFileSync(path.join(MDIR, 'core.json'), 'utf8'));
 const byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));
 const groupOf = (e) => CAT.groups.find((g) => g.id === e.group);
 
@@ -163,7 +165,7 @@ test('mi línea en la ficha: solo hechos del catálogo y de tu semana', () => {
 const mech = (id) => ({ e: JW.encounters[id], roles: JW.roles, sources: JW.sources, verified: JW.verified });
 
 test('mecánicas por tandas: cada archivo del índice existe y cada dato tiene su fuente', () => {
-  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof'], 'tandas publicadas: Janthir, Heart of Thorns y Path of Fire');
+  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof', 'ibs', 'core'], 'tandas publicadas: Janthir, Heart of Thorns, Path of Fire, The Icebrood Saga y juego base');
   for (const [exp, f] of Object.entries(MIDX.files)) {
     assert.match(f, /^[\w-]+\.json$/);
     const d = JSON.parse(fs.readFileSync(path.join(MDIR, f), 'utf8'));
@@ -293,6 +295,34 @@ test('tanda Path of Fire: las 11 fichas de las alas 5 a 7, con modo desafío sol
   assert.doesNotMatch(JSON.stringify(POF), /guildjen|hardstuck|mukluk/i);
 });
 
+test('tanda 4a: los 7 encuentros de The Icebrood Saga y Vieja Corte del León', () => {
+  const im = (d, id) => ({ e: d.encounters[id], roles: d.roles, sources: d.sources, verified: d.verified });
+  const ibs = CAT.encounters.filter((e) => groupOf(e).expansion === 'ibs').map((e) => e.id);
+  assert.deepEqual(Object.keys(IBS.encounters), ibs, 'en el orden del catálogo');
+  assert.equal(ibs.length, 7);
+  assert.ok(Object.values(IBS.encounters).every((e) => !e.cm), 'ningún encuentro de la saga tiene modo desafío');
+  for (const [id, page] of [['shiverpeaks_pass', 'Shiverpeaks_Pass'], ['boneskinner', 'Boneskinner'], ['cold_war', 'Cold_War']]) {
+    const h = S.fightHTML(model(id), im(IBS, id));
+    assert.match(h, new RegExp('href="https:\\/\\/wiki\\.guildwars2\\.com\\/wiki\\/' + page + '"'), id + ': página de la wiki');
+    assert.match(h, /consultadas el 2026-10-24/);
+    assert.doesNotMatch(h, /En modo desafío cambia/);
+  }
+  const sp = S.fightHTML(model('shiverpeaks_pass'), im(IBS, 'shiverpeaks_pass'));
+  assert.match(sp, /Antes del jefe: Paso helado\./);
+  assert.match(sp, /Onda de choque mortal/);
+  const vc = S.fightHTML(model('voice_claw'), im(IBS, 'voice_claw'));
+  assert.equal((vc.match(/<ol class="rs-phases">[\s\S]*?<\/ol>/)[0].match(/<li>/g) || []).length, 6);
+  const cw = S.fightHTML(model('cold_war'), im(IBS, 'cold_war'));
+  assert.ok(cw.indexOf('8:00') < cw.indexOf('5:28'), 'Guerra fría por reloj');
+  assert.match(S.fightHTML(model('forging_steel'), im(IBS, 'forging_steel')), /Forjador antiguo/);
+  const olc = S.fightHTML(model('old_lions_court'), im(CORE, 'old_lions_court'));
+  assert.deepEqual(Object.keys(CORE.encounters), ['old_lions_court']);
+  assert.match(olc, /Triple amenaza/);
+  assert.match(olc, /En modo desafío cambia[\s\S]*23\.594\.400/);
+  assert.match(olc, /wiki\/Old_Lion%27s_Court"/);
+  assert.doesNotMatch(JSON.stringify([IBS, CORE]), /guildjen|hardstuck|mukluk|snowcrows/i);
+});
+
 test('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {
   assert.match(S.CSS, /max-width:720px[\s\S]*\.rs-tabs\{display:flex\}/, 'las pestañas solo en el celular');
   assert.match(S.CSS, /#rsRoot\[data-pane=rew\] \[data-rs-pane=fight\],#rsRoot\[data-pane=fight\] \[data-rs-pane=rew\]\{display:none\}/);
@@ -351,7 +381,7 @@ function boot(o) {
     scrollY: 640, scrollTo: (x, y) => scrolls.push(y),
     fetch: (u) => {
       fetches.push(u);
-      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /mechanics\/pof/.test(u) ? POF : /catalog/.test(u) ? CAT : null;
+      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /mechanics\/pof/.test(u) ? POF : /mechanics\/ibs/.test(u) ? IBS : /mechanics\/core/.test(u) ? CORE : /catalog/.test(u) ? CAT : null;
       return Promise.resolve(body ? { ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(body))) } : { ok: false, status: 404 });
     },
     Storage: { STORAGE_KEYS: { ACCOUNT_SELECTED: 'gn:account:selected' }, get: (k) => (k === 'gn:account:selected' ? 'TOKEN' : null), getRaw: () => 'raids', set() {} },
@@ -434,8 +464,11 @@ test('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestaña
   assert.match(rs.innerHTML, /Levantamiento tectónico/);
   assert.deepEqual(mf().slice(3), ['assets/data/raids/mechanics/pof.json'], 'Path of Fire se pide al abrir su primera ficha');
   await sb.RaidsSheet.open('old_lions_court');
+  assert.match(rs.innerHTML, /Triple amenaza/);
+  assert.deepEqual(mf().slice(4), ['assets/data/raids/mechanics/core.json'], 'el juego base se pide al abrir su ficha');
+  await sb.RaidsSheet.open('aetherblade_hideout');
   assert.match(rs.innerHTML, /llegan en una próxima tanda/);
-  assert.equal(mf().length, 4, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
+  assert.equal(mf().length, 5, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
   sb.RaidsSheet.close();
   await sb.RaidsSheet.open('decima');
   assert.equal(rs.getAttribute('data-pane'), 'rew', 'abrir desde la lista vuelve a Recompensas');
