@@ -1,0 +1,63 @@
+{
+ "id": "PATCH-051",
+ "summary": "BL-070 RAI-4 tanda 4a hecha («Cómo se pelea» de The Icebrood Saga y Vieja Corte del León, 8 encuentros): status y backlog",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "a54267ab72352fba70b8ca6c16d188ac700c2540",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "RAI-4 tanda 1 (Monte Balrior) VALIDADA (19:27Z); tandas 2 (Heart of Thorns, 19:40Z) y 3 (Path of Fire, 20:40Z) HECHAS, esperan validación en DEV.",
+     "text": "RAI-4 tanda 1 (Monte Balrior) VALIDADA (19:27Z); tandas 2 (Heart of Thorns, 19:40Z), 3 (Path of Fire, 20:40Z) y 4a (Icebrood Saga y Vieja Corte del León, 21:02Z) HECHAS, esperan validación en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 20:40Z",
+     "text": "Última actualización: 2026-10-24 21:02Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tandas 2 y 3 publicadas; sigue la tanda 4, los 16 encuentros, en el próximo turno de investigación. Pablo puede validar las tandas 2 y 3 en DEV cuando quiera.",
+     "text": "Tandas 2, 3 y 4a publicadas; sigue la tanda 4b (End of Dragons, Secrets of the Obscure y Visions of Eternity, 8 encuentros) en el próximo turno de investigación. Pablo puede validar las tandas 2, 3 y 4a en DEV cuando quiera."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-4 tanda 3 — «Cómo se pelea» de Path of Fire: 11 encuentros de las alas 5 a 7. HECHO.\nArchivos:\n- assets/data/raids/mechanics/pof.json (`3189c67`)\n- assets/data/raids/mechanics/index.json (`e4f1c8a`)\n- tests/raids-sheet.test.cjs (`0e0d1cb`)\n\nAdemás: PATCH-048 (índice y tests); sin cambios de código.\n",
+     "text": "BL-070 RAI-4 tanda 4a — «Cómo se pelea» de The Icebrood Saga (7) y Vieja Corte del León. HECHO.\nArchivos:\n- assets/data/raids/mechanics/ibs.json (`ebfdf47`)\n- assets/data/raids/mechanics/core.json (`4a1caa7`)\n- tests/raids-sheet.test.cjs (`67d0653`)\n\nAdemás: PATCH-050 (índice `4e9c0a7` y tests); sin cambios de código.\n\nAntes: RAI-4 tanda 3 — Path of Fire (`pof.json` `3189c67`, PATCH-048).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-4 tanda 3 hecha (2026-10-24 20:40Z):",
+     "text": "Último hecho: RAI-4 tanda 4a hecha (2026-10-24 21:02Z): «Cómo se pelea» de 8 de los 16 encuentros: los 7 de The Icebrood Saga (Paso de las Picosescalofriantes, Voz y Garra de los Caídos, Fraenir de Jormag, Pelahuesos, Susurro de Jormag, Forjando acero y Guerra fría) y Vieja Corte del León. Datos en `assets/data/raids/mechanics/ibs.json` (`ebfdf47`, 21,4 KB) y `core.json` (`4a1caa7`, 4,0 KB); el índice suma las dos (`mechanics/index.json` `4e9c0a7`, PATCH-050); sin tocar código. Fuentes: la página de cada encuentro en la wiki oficial y su guía de MetaBattle, consultadas el 2026-10-24. Ningún encuentro de la saga tiene modo desafío; el de Vieja Corte del León sale de la wiki: 13 minutos, 23.594.400 de vida por caballero en lugar de 14.156.640, barras de 3600 y Triples amenazas al 100, 60 y 20 % con orden al azar. Forjando acero y Guerra fría van por etapas (preparación, escolta y jefe; 8 minutos de oleadas y la ministra). `tests/raids-sheet.test.cjs` (`67d0653`, 17 tests; el humo de «sin tanda» pasa a Escondite Filoetéreo); RUN-033 verde (8 archivos). Partí la tanda 4 en dos para no pasar de un turno: siguen End of Dragons (4), Secrets of the Obscure (2) y Visions of Eternity (2) en la tanda 4b. Antes, RAI-4 tanda 3 hecha (2026-10-24 20:40Z):"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior VALIDADA; tandas 2 Heart of Thorns y 3 Path of Fire HECHAS; siguen los encuentros)",
+     "text": "RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior VALIDADA; tandas 2 Heart of Thorns, 3 Path of Fire y 4a Icebrood Saga y Vieja Corte del León HECHAS; sigue la 4b)"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-4 «Cómo se pelea» con fases y mecánicas verificadas: Monte Balrior (validada), Heart of Thorns y Path of Fire.\n",
+     "text": "RAI-4 «Cómo se pelea» con fases y mecánicas verificadas: Monte Balrior (validada), Heart of Thorns, Path of Fire, The Icebrood Saga y Vieja Corte del León.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Un encuentro, como Vieja Corte del León, todavía tiene que decir que llega en una próxima tanda.\n",
+     "text": "En la pestaña Encuentros, mirá el Paso de las Picosescalofriantes («Antes del jefe»), Voz y Garra (6 fases), Guerra fría (por reloj) y Vieja Corte del León (con «En modo desafío cambia»). Escondite Filoetéreo todavía tiene que decir que llega en una próxima tanda.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "3186d0e25b52be14e6dad11e9da03eecc3759513",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue la tanda 4, los 16 encuentros. SHIRUVANA-ART-001 queda en pausa",
+     "text": "Sigue la tanda 4, los 16 encuentros. RAI-4 tanda 4a hecha (2026-10-24 21:02Z): «Cómo se pelea» de 8 de los 16 encuentros: los 7 de The Icebrood Saga (Paso de las Picosescalofriantes, Voz y Garra de los Caídos, Fraenir de Jormag, Pelahuesos, Susurro de Jormag, Forjando acero y Guerra fría) y Vieja Corte del León. Datos en `assets/data/raids/mechanics/ibs.json` (`ebfdf47`, 21,4 KB) y `core.json` (`4a1caa7`, 4,0 KB); el índice suma las dos (`mechanics/index.json` `4e9c0a7`, PATCH-050); sin tocar código. Fuentes: la página de cada encuentro en la wiki oficial y su guía de MetaBattle, consultadas el 2026-10-24. Ningún encuentro de la saga tiene modo desafío; el de Vieja Corte del León sale de la wiki: 13 minutos, 23.594.400 de vida por caballero en lugar de 14.156.640, barras de 3600 y Triples amenazas al 100, 60 y 20 % con orden al azar. Forjando acero y Guerra fría van por etapas (preparación, escolta y jefe; 8 minutos de oleadas y la ministra). `tests/raids-sheet.test.cjs` (`67d0653`, 17 tests; el humo de «sin tanda» pasa a Escondite Filoetéreo); RUN-033 verde (8 archivos). Partí la tanda 4 en dos para no pasar de un turno: siguen End of Dragons (4), Secrets of the Obscure (2) y Visions of Eternity (2) en la tanda 4b. SHIRUVANA-ART-001 queda en pausa"
+    }
+   ]
+  }
+ ]
+}
