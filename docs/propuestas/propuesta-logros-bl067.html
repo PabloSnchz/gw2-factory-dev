@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta LOG-0 — Logros renovado (BL-067) · La Bóveda del Gato Negro</title>
+<!-- LOG-0: maqueta para aprobación. No es código de la Bóveda. Tokens del theme Gato Negro (GDS, DEC-010/025). Datos de ejemplo. -->
+<style>
+:root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#232A3A;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
+--acc-1:#A896FF;--gold:#F2B94B;--green:#3CC48A;--green-bg:#1D3436;--amber-bg:#38352F;--red:#F47C7C;--blue:#7BC2FF;--glow:rgba(123,92,255,.14);--ach:#E8A33D}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-2);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+h1{color:var(--tx-1);font-size:1.7rem;margin:0 0 4px}
+h2{color:var(--tx-1);font-size:1.15rem;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--bd-1)}
+h3{color:var(--tx-1);font-size:.95rem;margin:16px 0 6px}
+.lead{color:var(--tx-3);margin:0 0 18px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-3)}
+.tag--gold{border-color:var(--gold);color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--bd-1)}
+th{color:var(--tx-3);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em}
+td b{color:var(--tx-1)}
+code{background:var(--bg-2);border-radius:4px;padding:0 4px;font-size:.85em;color:var(--tx-1)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:12px;padding:14px 16px}
+.voice{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg,var(--glow),transparent);border:1px solid var(--bd-2);border-radius:12px;padding:12px 14px;margin:14px 0}
+.av{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#C9BDFF,#7B5CFF 55%,#3B2A8A);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 0 2px var(--bd-2)}
+.voice p{margin:2px 0}.voice .lbl{color:var(--acc-1);font-weight:700;font-size:.82rem}
+.dec{border-left:3px solid var(--gold);background:var(--amber-bg);border-radius:8px;padding:10px 14px;margin:10px 0}
+.dec b{color:var(--gold)}
+.sev{font-size:.68rem;font-weight:800;letter-spacing:.04em;border-radius:999px;padding:1px 7px;border:1px solid;white-space:nowrap}
+.sev--a{color:var(--gold);border-color:var(--gold)}.sev--m{color:var(--acc-1);border-color:var(--acc-1)}.sev--b{color:var(--tx-3);border-color:var(--bd-2)}
+ol.plan{padding-left:20px}ol.plan li{margin:6px 0}
+/* marco */
+.frame{border:1px solid var(--bd-2);border-radius:14px;overflow:hidden;background:var(--bg-0);box-shadow:0 10px 30px rgba(0,0,0,.35);margin-top:10px}
+.fbar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg-1);border-bottom:1px solid var(--bd-1);font-size:.8rem;color:var(--tx-3)}
+.fbar .sel{margin-left:auto;border:1px solid var(--bd-1);border-radius:8px;padding:3px 10px;color:var(--tx-2)}
+.logo{width:22px;height:22px}
+.app{display:grid;grid-template-columns:190px 1fr}
+.sb{border-right:1px solid var(--bd-1);padding:14px 10px;display:flex;flex-direction:column;gap:2px;font-size:.84rem}
+.sb a{display:flex;align-items:center;gap:9px;padding:6px 9px;border-radius:9px;text-decoration:none;color:var(--tx-2);border:1px solid transparent;position:relative}
+.sb a i{width:18px;height:18px;border-radius:5px;background:var(--bg-2);display:inline-block}
+.sb a.on{background:var(--bg-1);border-color:var(--bd-2);color:var(--tx-1);font-weight:600}
+.sb a.on::before{content:"";position:absolute;left:0;top:7px;bottom:7px;width:3px;border-radius:3px;background:var(--ach)}
+.sb .old{margin-top:10px;border:1px dashed var(--red);border-radius:10px;padding:8px;font-size:.72rem;color:var(--red)}
+.main{padding:18px 20px;min-width:0}
+/* cabecera */
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(232,163,61,.10),var(--bg-1) 70%);padding:16px 18px}
+.hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);display:grid;place-items:center;color:var(--ach);font-size:1.7rem;font-weight:900}
+.hrow h3{margin:0;font-size:1.3rem}
+.hrow p{margin:2px 0 0;color:var(--tx-3);font-size:.84rem}
+.pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.76rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-3);background:var(--bg-0);white-space:nowrap}
+.pill b{color:var(--tx-1);font-weight:600}.pill.hot{border-color:var(--gold)}.pill.hot b{color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;color:var(--tx-3);text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem;color:var(--tx-1)}.st b span{font-size:.8rem;color:var(--tx-3);font-weight:500}
+.st em{display:block;font-style:normal;font-size:.72rem;color:var(--tx-3);margin-top:2px}
+.ap{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:4px;background:linear-gradient(135deg,#FFD27A,#C98A1E);color:#2a1a00;font-size:.5rem;font-weight:900;vertical-align:-2px;margin-right:3px}
+.hv{display:flex;gap:10px;align-items:center;margin-top:12px;padding:9px 12px;border-radius:12px;background:linear-gradient(90deg,var(--glow),transparent);border:1px solid var(--bd-2);font-size:.86rem;color:var(--tx-1)}
+.hv .av{width:32px;height:32px;font-size:.8rem}
+/* pestañas */
+.tabs{display:flex;gap:4px;margin:14px 0 10px;border-bottom:1px solid var(--bd-1)}
+.tab{padding:8px 14px;border-radius:10px 10px 0 0;font-size:.86rem;color:var(--tx-3);border:1px solid transparent;border-bottom:none}
+.tab.on{color:var(--tx-1);background:var(--bg-1);border-color:var(--bd-1);font-weight:600;box-shadow:inset 0 2px 0 var(--ach)}
+.tab small{margin-left:6px;color:var(--tx-3);font-weight:500}
+/* filtros */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.search{flex:1 1 220px;border:1px solid var(--bd-1);border-radius:10px;padding:7px 10px;background:var(--bg-0);color:var(--tx-3);font-size:.84rem}
+.seg{display:inline-flex;border:1px solid var(--bd-1);border-radius:10px;overflow:hidden}
+.seg span{padding:6px 10px;font-size:.78rem;color:var(--tx-3);border-right:1px solid var(--bd-1)}
+.seg span:last-child{border-right:none}.seg span.on{background:var(--bg-2);color:var(--tx-1);font-weight:600}
+.selx{border:1px solid var(--bd-1);border-radius:10px;padding:6px 10px;font-size:.78rem;color:var(--tx-2);background:var(--bg-0)}
+/* tarjetas */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.ac{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:12px;display:flex;flex-direction:column;gap:6px}
+.ac.top{border-color:rgba(242,185,75,.55)}
+.ach{display:flex;gap:10px;align-items:flex-start}
+.aico{width:36px;height:36px;border-radius:8px;background:var(--bg-2);flex-shrink:0;display:grid;place-items:center;color:var(--ach);font-weight:900}
+.ach b{color:var(--tx-1);font-size:.9rem;display:block}
+.ach small{color:var(--tx-3);font-size:.74rem}
+.miss{font-size:.84rem;color:var(--tx-1)}.miss em{font-style:normal;color:var(--gold);font-weight:700}
+.pb{height:7px;border-radius:7px;background:var(--bg-2);overflow:hidden}.pb i{display:block;height:100%;border-radius:7px;background:var(--green)}
+.pb.g i{background:var(--gold)}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:.76rem;color:var(--tx-3)}
+.rw{display:flex;gap:6px;flex-wrap:wrap}
+.rw span{font-size:.72rem;border:1px solid var(--bd-1);border-radius:999px;padding:2px 8px;color:var(--tx-2);background:var(--bg-0)}
+.rw span.t{border-color:var(--acc-1);color:var(--acc-1)}.rw span.m{border-color:var(--blue);color:var(--blue)}
+.lnk{font-size:.74rem;color:var(--acc-1);border:1px solid var(--bd-2);border-radius:8px;padding:2px 8px}
+/* categorías */
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.grp{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px}
+.grp h4{margin:0 0 8px;color:var(--tx-1);font-size:.86rem;display:flex;justify-content:space-between}
+.grp h4 span{color:var(--tx-3);font-weight:500;font-size:.76rem}
+.crow{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:.78rem;padding:5px 0;border-top:1px solid var(--bd-1)}
+.crow .pb{grid-column:1/-1;height:5px}
+.crow b{color:var(--tx-2);font-weight:500}
+/* celular */
+.phones{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+.phone{width:330px;border:1px solid var(--bd-2);border-radius:28px;overflow:hidden;background:var(--bg-0);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.ptop{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--bd-1);font-size:.78rem;color:var(--tx-3)}
+.pmain{padding:12px}
+.pmain .stats{grid-template-columns:repeat(2,1fr)}
+.pmain .grid{grid-template-columns:1fr}
+.pmain .tabs{overflow:auto}
+.pnav{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--bd-1);background:var(--bg-1);font-size:.66rem;text-align:center;color:var(--tx-3)}
+.pnav span{padding:8px 0}.pnav span.on{color:var(--tx-1);box-shadow:inset 0 2px 0 var(--ach)}
+.fbtn{border:1px solid var(--bd-2);border-radius:10px;padding:6px 10px;font-size:.78rem;color:var(--tx-1)}
+.sheet{border:1px solid var(--bd-2);border-radius:16px 16px 0 0;background:var(--bg-1);padding:12px;margin-top:10px}
+.sheet h5{margin:0 0 8px;color:var(--tx-1)}
+@media (max-width:860px){.app{grid-template-columns:1fr}.sb{display:none}.stats{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<span class="tag tag--gold">LOG-0 · propuesta para aprobación</span>
+<h1>Logros renovado</h1>
+<p class="lead">BL-067, paso 3 del restyle. Diagnóstico, maquetas y plan. No hay código implementado: primero necesito tu aprobación. Mismo proceso que la Cartera, Metas, la Bienvenida, la Armería y la Cámara. 2026-10-24.</p>
+
+<div class="voice"><div class="av">S</div><div>
+<p class="lbl">Shiruvana — en una línea</p>
+<p>Logros hoy es una lista larga que te asusta en rojo justo cuando estás por terminar algo, y que además mete sus filtros dentro de la Sidebar de navegación. Propongo lo mismo que funcionó en la Cámara: una cabecera que te dice cuántos puntos tenés al alcance, tres pestañas y tarjetas que te dicen <b>qué te falta</b> en vez de un porcentaje.</p>
+</div></div>
+
+<h2>1. Diagnóstico de Logros actual</h2>
+<p>Leí <code>js/achievements.js</code> 3.2.1 (52,4 KB, 1170 líneas) y <code>js/achievements-theme.js</code> 1.1.1 (5,8 KB). Son los mismos archivos en DEV y en producción (blob <code>7687c71</code>).</p>
+<table>
+<tr><th>Parte</th><th>Qué hace hoy</th></tr>
+<tr><td><b>Cabecera</b></td><td>Título «Logros» y un subtítulo «Próximos a completar». Abajo, una fila de 3 recuadros de AP: Permanente, Logro diario, «+» y Total. Al lado del subtítulo aparece un chip suelto: «AP potenciales (≥ 80%) +N».</td></tr>
+<tr><td><b>Barra de filtros</b></td><td>Una píldora con el buscador y 3 desplegables propios: Umbral (≥ 80, 90 o 95%), Categoría (todas las categorías del juego, por orden alfabético) y Recompensa (ítem, título o maestría).</td></tr>
+<tr><td><b>Grilla</b></td><td>Hasta 60 tarjetas de logros sin terminar por encima del umbral, ordenadas por porcentaje. Cada una tiene ícono, nombre, categoría, recompensas, «actual/total», AP, botón «Wiki» y una barra roja → naranja → amarilla.</td></tr>
+<tr><td><b>Sidebar</b></td><td>Inyecta un panel «Más cercanos» (los 5 primeros) y «Categorías» (30 botones) <b>dentro de <code>aside.col-side</code></b>. Desde BL-061 ese elemento es la Sidebar de navegación de toda la Bóveda.</td></tr>
+<tr><td><b>Legendarias</b></td><td>Si elegís la categoría «⚠ Legendarias», las tarjetas cambian a un modo «tracker» con «⚠ Componentes» y suma un recuadro «⚠ Componentes» a la fila de AP.</td></tr>
+<tr><td><b>Colores</b></td><td><code>achievements-theme.js</code> pinta el título de cada tarjeta con un pastel por expansión (verde HoT, durazno PoF, celeste EoD…) y le pone un borde izquierdo.</td></tr>
+</table>
+
+<h2>2. Problemas detectados</h2>
+<table>
+<tr><th>Nivel</th><th>Problema</th><th>Por qué importa</th></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>El panel de Logros vive dentro de la Sidebar de navegación.</b> <code>ensureAside()</code> agrega «Más cercanos» y 30 botones de categoría a <code>aside.col-side</code>, que hoy es la Sidebar (BL-061). En SBR la dejamos visible a propósito porque Logros todavía no tenía reemplazo; el router la muestra solo en Logros.</td><td>Mezcla navegación con filtros, empuja mi rincón hacia abajo y en el celular no tiene un lugar claro. Es lo primero que se va.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>El rojo marca lo que está por terminarse.</b> La barra es roja hasta el 80%, naranja hasta el 90% y amarilla después. Como solo se muestran logros de 80% o más, casi toda la pantalla es naranja y amarilla, y con el umbral bajo, roja.</td><td>En el resto de la Bóveda (GDS), rojo es error o peligro. Acá es «ya casi»: el color dice lo contrario del dato.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Colores fijos que ignoran el theme.</b> Los números de AP (<code>#ffd27a</code>), el recuadro de componentes (<code>#0d1a14</code>), el «legado» (<code>#12261b</code>) y los títulos pastel solo se adaptan a <code>prefers-color-scheme</code> del sistema, no al theme elegido.</td><td>En los themes claros (macOS, Notion) el título pastel sobre fondo claro no llega a AA. Es el mismo problema que corregimos en la Bienvenida y la Cámara.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Los desplegables no se usan con teclado.</b> Son <code>div</code> con <code>click</code>: no tienen rol, foco ni flechas, y las etiquetas no están asociadas.</td><td>No se puede filtrar sin mouse y el lector de pantalla no los anuncia.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Los filtros se desincronizan.</b> Si tocás una categoría en la Sidebar, el desplegable sigue diciendo «Todas» (busca <code>el.cat</code>, que no existe). Si entrás por un enlace con <code>?pct=0.9</code>, el botón sigue diciendo «≥ 80%».</td><td>La pantalla filtra por una cosa y muestra otra.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Las cifras de AP no se entienden.</b> «Permanente», «Logro diario», un «+» suelto entre el segundo y el tercero, «Total» y, aparte, el chip de «AP potenciales». Son cuatro números sin jerarquía.</td><td>La pregunta del jugador es una sola: «¿cuántos puntos tengo al alcance y por dónde empiezo?». Hoy hay que deducirla.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Categoría: una lista enorme sin orden útil.</b> El desplegable trae todas las categorías del juego por orden alfabético; la Sidebar, las 30 primeras del alfabeto.</td><td>Para encontrar «Janthir Wilds» hay que recorrer cientos de nombres; las 30 de la Sidebar son arbitrarias.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Un pedido por cada título o maestría, y en inglés.</b> Las recompensas de título y maestría se piden de a una, por <code>fetch</code> crudo y sin <code>lang=es</code>; cada respuesta vuelve a pintar toda la grilla.</td><td>Decenas de pedidos sueltos, nombres mezclados en inglés y español, y la grilla parpadea (y pierde el foco) mientras cargan.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>«⚠» para lo que no es una advertencia.</b> «⚠ Legendarias» y «⚠ Componentes».</td><td>El ícono de advertencia asusta sin motivo.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Borde inválido en la mayoría de las tarjetas.</b> <code>hexToRGBA('var(--acc-2)')</code> devuelve <code>null</code> y el borde queda <code>3px solid null</code>.</td><td>El navegador lo descarta: las tarjetas sin expansión reconocida no tienen borde, aunque el código lo intenta.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Enlace «Wiki» con el nombre en español</b> (los logros se piden con <code>lang=es</code>) sobre la wiki en inglés.</td><td>Muchos enlaces terminan en «no existe la página». Lo resuelvo en LOG-2 y lo pruebo con logros reales antes de publicarlo.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Código muerto y versión desalineada.</b> <code>ensureRefreshButton()</code> ya no se llama; el log dice «v3.2.0» y la cabecera, 3.2.1 (LES-033).</td><td>Peso sin uso en un archivo congelado (52,4 KB &gt; 48 KB, DEC-035).</td></tr>
+</table>
+
+<h2>3. Objetivos del rediseño</h2>
+<div class="cols">
+<div class="card"><h3>Para el jugador</h3><ul>
+<li>En un vistazo: cuántos AP tengo y <b>cuántos puedo sumar ya</b>.</li>
+<li>Cada tarjeta dice <b>qué me falta</b> («te faltan 2 de 50»), no solo un porcentaje.</li>
+<li>Encontrar una categoría por expansión o modo, no por orden alfabético.</li>
+<li>Las colecciones legendarias en su lugar, con salto a la Armería.</li>
+</ul></div>
+<div class="card"><h3>Para la Bóveda</h3><ul>
+<li>Misma cabecera, pestañas y tarjetas que la Cámara, la Cartera y Metas.</li>
+<li>La Sidebar vuelve a ser solo navegación.</li>
+<li>AA en los 19 themes, teclado y lector de pantalla.</li>
+<li><code>achievements.js</code> pasa de 52 KB a menos de 40 KB: sale de la zona congelada; lo nuevo va en archivos chicos por <code>modules.json</code>.</li>
+</ul></div>
+</div>
+
+<h2>4. Maquetas — computadora</h2>
+<h3>4.1 Pestaña «Casi listos» (la de entrada)</h3>
+<div class="frame">
+<div class="fbar"><svg class="logo" viewBox="0 0 32 32"><rect x="1" y="1" width="30" height="30" rx="8" fill="#232A3A" stroke="#7B5CFF"/><path d="M8 25V12l3-5 3 4h4l3-4 3 5v13c0 1-1 2-2 2H10c-1 0-2-1-2-2z" fill="#0F1117"/><ellipse cx="13" cy="17" rx="1.6" ry="2.2" fill="#F2B94B"/><ellipse cx="19" cy="17" rx="1.6" ry="2.2" fill="#F2B94B"/></svg>La Bóveda del Gato Negro<span class="sel">Pablo.1234 ▾</span></div>
+<div class="app">
+<nav class="sb" aria-label="Sidebar (maqueta)">
+<a><i></i>Bienvenida</a><a><i></i>Cartera</a><a><i></i>Metas y Eventos</a><a><i></i>Cámara del Brujo</a><a><i></i>Armería</a><a class="on"><i></i>Logros</a><a><i></i>Actividades</a><a><i></i>Raids y Strikes</a><a><i></i>Inventario</a><a><i></i>Cuentas</a>
+<div class="old">Hoy acá abajo aparecen «Más cercanos» y 30 categorías. En la propuesta se van: pasan a la pestaña «Por categoría».</div>
+</nav>
+<div class="main">
+<div class="hero">
+<div class="hrow"><div class="hico">★</div><div><h3>Logros</h3><p>Tenés 23 logros a punto de completar.</p></div>
+<div class="pills"><span class="pill"><span class="ap">AP</span>Total <b>31.482</b></span><span class="pill hot">Al alcance <b>+186 AP</b></span></div></div>
+<div class="stats">
+<div class="st"><small>Puntos de logro</small><b>31.482</b><em>28.910 permanentes · 2.572 de diarios y mensuales</em></div>
+<div class="st"><small>Al alcance (≥ 80%)</small><b>+186 <span>AP</span></b><em>Sumando los 23 logros de la lista</em></div>
+<div class="st"><small>A un paso (≥ 95%)</small><b>6</b><em>Te falta muy poco en cada uno</em></div>
+<div class="st"><small>Con recompensa</small><b>9</b><em>4 ítems · 3 títulos · 2 maestrías</em></div>
+</div>
+<div class="hv"><div class="av">S</div><span>Con 3 logros sumás 45 AP: el más cercano es «Explorador de Janthir» y te falta 1 punto de interés.</span></div>
+</div>
+
+<div class="tabs" role="tablist"><span class="tab on">Casi listos <small>23</small></span><span class="tab">Por categoría</span><span class="tab">Colecciones legendarias <small>4</small></span></div>
+
+<div class="filters"><span class="search">Buscar logro, categoría o recompensa…</span>
+<span class="seg" aria-label="Umbral"><span class="on">≥ 80%</span><span>≥ 90%</span><span>≥ 95%</span></span>
+<span class="seg" aria-label="Recompensa"><span class="on">Todas</span><span>Ítem</span><span>Título</span><span>Maestría</span></span>
+<span class="selx">Categoría: todas ▾</span></div>
+
+<div class="grid">
+<div class="ac top"><div class="ach"><div class="aico">J</div><div><b>Explorador de Janthir</b><small>Janthir Wilds · Exploración</small></div></div>
+<div class="miss">Te falta <em>1</em> de 24</div><div class="pb g"><i style="width:96%"></i></div>
+<div class="arow"><span><span class="ap">AP</span>+15 al terminar</span><span class="lnk">Wiki ↗</span></div></div>
+<div class="ac top"><div class="ach"><div class="aico">M</div><div><b>Maestro de los fractales</b><small>Fractales de la Niebla</small></div></div>
+<div class="miss">Te faltan <em>2</em> de 50</div><div class="pb g"><i style="width:96%"></i></div>
+<div class="rw"><span class="t">Título: Fractalero</span></div>
+<div class="arow"><span><span class="ap">AP</span>+20 al terminar</span><span class="lnk">Wiki ↗</span></div></div>
+<div class="ac"><div class="ach"><div class="aico">S</div><div><b>Cazador del Cielo</b><small>Secrets of the Obscure</small></div></div>
+<div class="miss">Te faltan <em>3</em> de 30</div><div class="pb"><i style="width:90%"></i></div>
+<div class="rw"><span>Ítem: Cofre de Amnytas</span><span class="m">Maestría</span></div>
+<div class="arow"><span><span class="ap">AP</span>+10 al terminar</span><span class="lnk">Wiki ↗</span></div></div>
+</div>
+</div></div></div>
+<p class="lead" style="margin-top:8px">Las tarjetas con el borde dorado son las de «a un paso» (≥ 95%). La barra es verde y pasa a dorada al 95%: nunca roja. El número grande es lo que te falta; el porcentaje queda en la barra y en el lector de pantalla.</p>
+
+<h3>4.2 Pestaña «Por categoría»</h3>
+<div class="frame"><div class="main">
+<div class="filters"><span class="search">Buscar categoría…</span><span class="seg"><span class="on">Con pendientes</span><span>Todas</span></span></div>
+<div class="cats">
+<div class="grp"><h4>Janthir Wilds <span>4 categorías · 61%</span></h4>
+<div class="crow"><b>Exploración</b><span>23/24</span><div class="pb g"><i style="width:96%"></i></div></div>
+<div class="crow"><b>Historia</b><span>12/18</span><div class="pb"><i style="width:66%"></i></div></div>
+<div class="crow"><b>Colecciones</b><span>3/11</span><div class="pb"><i style="width:27%"></i></div></div></div>
+<div class="grp"><h4>Fractales de la Niebla <span>3 categorías · 78%</span></h4>
+<div class="crow"><b>Fractales diarios</b><span>48/50</span><div class="pb g"><i style="width:96%"></i></div></div>
+<div class="crow"><b>Desafío</b><span>7/12</span><div class="pb"><i style="width:58%"></i></div></div></div>
+<div class="grp"><h4>Mundo contra Mundo <span>5 categorías · 44%</span></h4>
+<div class="crow"><b>Rangos</b><span>9/20</span><div class="pb"><i style="width:45%"></i></div></div>
+<div class="crow"><b>Asaltos</b><span>2/6</span><div class="pb"><i style="width:33%"></i></div></div></div>
+</div>
+<p class="lead" style="margin-top:8px">Tocar una categoría abre «Casi listos» filtrado por ella, sin umbral (ves todos sus pendientes). Reemplaza los 30 botones de la Sidebar y el desplegable gigante.</p>
+</div></div>
+
+<h3>4.3 Pestaña «Colecciones legendarias»</h3>
+<div class="frame"><div class="main">
+<div class="grid">
+<div class="ac"><div class="ach"><div class="aico">A</div><div><b>Colección: Aurora</b><small>Colecciones legendarias</small></div></div>
+<div class="miss">Te faltan <em>4</em> de 18 pasos</div><div class="pb"><i style="width:78%"></i></div>
+<div class="rw"><span>Te da: Regalo de Aurora</span></div>
+<div class="arow"><span><span class="ap">AP</span>+10</span><span class="lnk">Ver en la Armería →</span></div></div>
+<div class="ac"><div class="ach"><div class="aico">V</div><div><b>Precursor: Visión</b><small>Colecciones legendarias</small></div></div>
+<div class="miss">Te faltan <em>9</em> de 22 pasos</div><div class="pb"><i style="width:59%"></i></div>
+<div class="rw"><span>Te da: Regalo de Visión</span></div>
+<div class="arow"><span><span class="ap">AP</span>+5</span><span class="lnk">Ver en la Armería →</span></div></div>
+</div>
+<p class="lead" style="margin-top:8px">Sin «⚠». Lo que antes eran «componentes» ahora dice «te da», y cada tarjeta salta a la legendaria en la Armería, que ya sabe armar el árbol.</p>
+</div></div>
+
+<h2>5. Maquetas — celular</h2>
+<div class="phones">
+<div class="phone"><div class="ptop"><svg class="logo" viewBox="0 0 32 32"><rect x="1" y="1" width="30" height="30" rx="8" fill="#232A3A" stroke="#7B5CFF"/><path d="M8 25V12l3-5 3 4h4l3-4 3 5v13c0 1-1 2-2 2H10c-1 0-2-1-2-2z" fill="#0F1117"/><ellipse cx="13" cy="17" rx="1.6" ry="2.2" fill="#F2B94B"/><ellipse cx="19" cy="17" rx="1.6" ry="2.2" fill="#F2B94B"/></svg>Logros<span style="margin-left:auto">Pablo.1234</span></div>
+<div class="pmain">
+<div class="hero" style="padding:12px"><div class="hrow"><div class="hico" style="width:44px;height:44px">★</div><div><h3 style="font-size:1.1rem">Logros</h3><p>23 a punto de completar</p></div></div>
+<div class="stats"><div class="st"><small>AP</small><b>31.482</b></div><div class="st"><small>Al alcance</small><b>+186</b></div></div></div>
+<div class="tabs"><span class="tab on">Casi listos</span><span class="tab">Por categoría</span><span class="tab">Legendarias</span></div>
+<div class="filters"><span class="search">Buscar…</span><span class="fbtn">Filtros · 1</span></div>
+<div class="grid"><div class="ac top"><div class="ach"><div class="aico">J</div><div><b>Explorador de Janthir</b><small>Janthir Wilds</small></div></div><div class="miss">Te falta <em>1</em> de 24</div><div class="pb g"><i style="width:96%"></i></div></div></div>
+</div>
+<div class="pnav"><span>Inicio</span><span>Cartera</span><span>Metas</span><span class="on">Logros</span><span>Más</span></div>
+</div>
+<div class="phone"><div class="ptop">Filtros</div>
+<div class="pmain">
+<div class="sheet"><h5>Umbral</h5><span class="seg"><span class="on">≥ 80%</span><span>≥ 90%</span><span>≥ 95%</span></span>
+<h5 style="margin-top:12px">Recompensa</h5><span class="seg"><span class="on">Todas</span><span>Ítem</span><span>Título</span><span>Maestría</span></span>
+<h5 style="margin-top:12px">Categoría</h5><span class="selx">Todas ▾</span>
+<p style="margin:14px 0 0"><span class="fbtn">Ver 23 logros</span></p></div>
+</div></div>
+</div>
+<p class="lead" style="margin-top:8px">En el celular: una columna, mi línea se oculta (como en la Cámara) y los filtros van en una hoja con «Filtros · N» que dice cuántos tenés activos. Controles de 44 px.</p>
+
+<h2>6. Integración con el Gato Design System</h2>
+<table>
+<tr><th>Pieza</th><th>Cómo</th></tr>
+<tr><td><b>Cabecera</b></td><td>La misma de la Cámara y Metas: ícono, título, subtítulo con el dato, pastillas y 4 indicadores. Tinte ámbar propio de Logros (<code>--ach</code>), como el turquesa de la Cámara.</td></tr>
+<tr><td><b>Pestañas</b></td><td>Mismo componente que la Cámara (<code>role="tablist"</code>, flechas, foco visible) y estado en el enlace (<code>#/account/achievements?tab=…</code>), así funcionan los enlaces existentes.</td></tr>
+<tr><td><b>Filtros</b></td><td>Botones segmentados con <code>aria-pressed</code> y un <code>&lt;select&gt;</code> nativo para Categoría: teclado y lector sin código propio.</td></tr>
+<tr><td><b>Colores</b></td><td>Solo variables del theme (<code>--tx-*</code>, <code>--bg-*</code>, <code>--bd-*</code>). Verde para el avance y dorado para «a un paso». La guarda de contraste de la Bienvenida corre dentro de Logros, como en la Cámara y la Armería.</td></tr>
+<tr><td><b>Sidebar</b></td><td><code>#achAsidePanel</code> se oculta igual que <code>#asideNextFeatures</code> y <code>#metaAsideNext</code> (SBR); su contenido vive en la pestaña «Por categoría».</td></tr>
+</table>
+
+<h2>7. Mi voz en Logros (cuando aporta)</h2>
+<p>Una sola línea en la cabecera (N1–N2, DEC-024 y DEC-033), y solo si hay algo útil. Sin pedidos nuevos a la API. En este orden:</p>
+<ol class="plan">
+<li><b>Lo más barato primero:</b> «Con 3 logros sumás 45 AP: el más cercano es X y te falta 1». Si hay alguno a un paso.</li>
+<li><b>Una recompensa a mano:</b> «Te faltan 2 para el título “Fractalero”». Si hay un título o maestría por encima del 90%.</li>
+<li><b>Colecciones:</b> «Tu colección de Aurora va 78%: lo que te falta está en la Armería». Solo en esa pestaña.</li>
+<li>Si no hay nada cerca, no digo nada.</li>
+</ol>
+
+<h2>8. Plan de implementación por micro-ciclos (DEC-035)</h2>
+<p><code>achievements.js</code> está congelado (52,4 KB): cada paso que lo toca tiene que dejarlo más chico. Lo nuevo va en módulos de menos de 40 KB cargados por <code>js/modules.json</code>. Validación tuya entre pasos.</p>
+<table>
+<tr><th>Paso</th><th>Qué</th><th>Archivos</th><th>achievements.js</th></tr>
+<tr><td><b>LOG-1</b></td><td>Cabecera nueva, pestañas y mi línea. <code>achievements.js</code> publica su estado (<code>getSnapshot()</code> y el evento <code>gn:achievements</code>) para que los módulos nuevos no vuelvan a pedir nada.</td><td><code>ach-view.js</code> (nuevo), parche</td><td>Salen la fila de AP, el chip suelto y el botón muerto: ~52 → 46 KB</td></tr>
+<tr><td><b>LOG-2</b></td><td>Filtros accesibles y tarjetas «te falta». Recompensas en un solo pedido por tipo, en español, sin repintar la grilla. Reviso los enlaces a la wiki.</td><td><code>ach-cards.js</code> (nuevo), parche</td><td>Salen los desplegables y su CSS: ~46 → 37 KB</td></tr>
+<tr><td><b>LOG-3</b></td><td>Pestaña «Por categoría» agrupada por expansión o modo. Se va el panel de la Sidebar.</td><td><code>ach-categories.js</code> (nuevo), parche</td><td>Sale <code>ensureAside</code>: ~37 → 33 KB</td></tr>
+<tr><td><b>LOG-4</b></td><td>Pestaña «Colecciones legendarias» sin «⚠» y con salto a la Armería.</td><td><code>ach-cards.js</code>, parche</td><td>Sale el modo tracker: ~33 → 29 KB</td></tr>
+<tr><td><b>LOG-5</b></td><td>Revisión final: contraste en los 19 themes, teclado, lector, celular. <code>achievements-theme.js</code> se retira (o se reduce al tinte del borde, sin el error de <code>null</code>). Cierre de FEAT-012.</td><td>tests, <code>modules.json</code></td><td>—</td></tr>
+</table>
+<p>Cada paso: suite verde antes y después, canal de parches para los archivos grandes y test propio. Los tests que nombran <code>achievements.js</code> (<code>idea55.account-layer</code>: <code>fetchAccountAP</code> con <code>nocache:true</code>) se respetan tal cual: esa función no se toca (LES-035).</p>
+
+<h2>9. Decisiones que necesito</h2>
+<div class="dec"><b>1. Tres pestañas: «Casi listos», «Por categoría» y «Colecciones legendarias».</b> Recomiendo sí: es el mismo patrón que validaste en la Cámara y saca los filtros de la Sidebar.</div>
+<div class="dec"><b>2. Categorías agrupadas por expansión o modo.</b> Necesita un pedido más a la API (<code>/v2/achievements/groups</code>, uno solo, con caché y en español). Recomiendo sí: sin grupos, la pestaña sería la misma lista alfabética de hoy.</div>
+<div class="dec"><b>3. Tarjetas con «te falta» en grande y barra verde → dorada, nunca roja.</b> Recomiendo sí: hoy el color contradice el dato.</div>
+<div class="dec"><b>4. Colecciones legendarias con salto a la Armería.</b> Recomiendo sí: la Armería ya resuelve el árbol de materiales; Logros solo muestra el avance de la colección.</div>
+
+<div class="voice"><div class="av">S</div><div>
+<p class="lbl">Mi recomendación</p>
+<p>Las cuatro, y arrancar por LOG-1. Es el mismo camino que la Cámara: primero se ve la cabecera nueva, después cambian las tarjetas y al final se limpia lo viejo. Producción, solo cuando vos lo decidas.</p>
+</div></div>
+
+</div>
+</body>
+</html>
