@@ -1,0 +1,11 @@
+{
+  "id": "RUN-021",
+  "summary": "Cierre de BL-067: status, FEAT-013, LES-036, LES-037, informe final, backlog y CHANGELOG cumplen el formato de ai-memory; el resto sigue verde",
+  "tests": [
+    "tests/ai-memory.test.cjs",
+    "tests/gn-frame.test.cjs",
+    "tests/gn-surface.test.cjs",
+    "tests/legacy-census.test.cjs",
+    "tests/dev-pages.test.cjs"
+  ]
+}
