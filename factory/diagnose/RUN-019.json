@@ -1,0 +1,16 @@
+{
+  "id": "RUN-019",
+  "summary": "BL-067 pasos 4–8: con js/gn-frame.js 1.0.0 los siete paneles heredados quedan con superficies, cabecera, guarda AA en los 19 themes y accesibilidad; versiones, tamaño, boot, Bienvenida, Cámara y Logros siguen verdes",
+  "tests": [
+    "tests/gn-frame.test.cjs",
+    "tests/gn-surface.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/welcome-contrast.test.cjs",
+    "tests/welcome-view.test.cjs",
+    "tests/wv-camara-a11y.test.cjs",
+    "tests/ach-a11y.test.cjs",
+    "tests/psna-day.test.cjs"
+  ]
+}
