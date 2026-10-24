@@ -301,16 +301,18 @@ test('reglas de la Bóveda: sin claves crudas, sin pedidos propios y dentro de 4
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, 'archivo nuevo dentro del presupuesto de 40 KB');
 });
 
-// ---------------------------------------------------------------- achievements.js 3.5.0 (LOG-1 a LOG-3)
+// ---------------------------------------------------------------- achievements.js 3.6.0 (LOG-1 a LOG-5)
 // El archivo real publica su estado; la cabecera (ach-view.js), las tarjetas (ach-cards.js) y las categorías (ach-categories.js) lo leen.
 const ACH = fs.readFileSync(path.join(ROOT, 'js', 'achievements.js'), 'utf8');
 const CARDS = fs.readFileSync(path.join(ROOT, 'js', 'ach-cards.js'), 'utf8');
 const CATS = fs.readFileSync(path.join(ROOT, 'js', 'ach-categories.js'), 'utf8');
 
-test('achievements.js 3.5.0: publica su estado y ya no pinta cabecera, filtros, tarjetas ni el panel de la Sidebar', () => {
-  assert.match(ACH, /\* Versión: 3\.5\.0 /);
+test('achievements.js 3.6.0: publica su estado y ya no pinta cabecera, filtros, tarjetas ni el panel de la Sidebar', () => {
+  assert.match(ACH, /\* Versión: 3\.6\.0 /);
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /js\/achievements\.js\?v=3\.5\.0"/);
+  assert.match(html, /js\/achievements\.js\?v=3\.6\.0"/);
+  assert.doesNotMatch(html, /achievements-theme\.js/, 'LOG-5: se retiró el theme de las tarjetas viejas');
+  assert.doesNotMatch(ACH, /aria-live|showLegendaryTracker|chipsOld|el\.search/, 'LOG-5: la grilla no es región viva y no quedan restos');
   assert.doesNotMatch(html + ACH, /achAsidePanel/, 'la Sidebar vuelve a ser solo navegación');
   assert.doesNotMatch(ACH, /ensureAside|renderAside|col-side/);
   ['renderKpi', 'ach-potential', 'ensureRefreshButton', 'kpiWrap', 'cardMainHTML', 'cardLegendaryTrackerHTML', 'ensureToolbar', 'ach-select-btn', 'loadRewardTitleDetail']

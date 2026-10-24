@@ -1,6 +1,12 @@
 /* ===========================================================================
  * js/achievements.js — Logros enfocado en "próximo a completar"
- * Versión: 3.5.0 (2026-10-24)
+ * Versión: 3.6.0 (2026-10-24)
+ *  - LOG-5 (BL-067): la grilla deja de ser región viva (el lector leía todas las
+ *    tarjetas en cada filtro; ahora ach-cards.js avisa solo cuántas quedan). Se van
+ *    el interruptor viejo del tracker de legendarias y las referencias sin uso
+ *    (buscador viejo, cabecera vieja).
+ *    Con esto se retira también js/achievements-theme.js (pintaba tarjetas que ya no existen).
+ *  - 3.5.0:
  *  - LOG-3 (BL-067): se va el panel de Logros de la Sidebar («Más cercanos» y
  *    30 categorías de la barra lateral). «Por categoría» la arma js/ach-categories.js
  *    agrupada por expansión o modo. Se fueron también sus utilidades sin uso.
@@ -23,11 +29,6 @@
  *    El wrapper ya existia (api-gw2.js:393). Se conserva nocache:true,
  *    que es el equivalente del no-store de antes: el AP se relee siempre,
  *    no se mete un TTL de 30 s donde antes no habia ninguno.
- *  - Grid único de pendientes (sin completados, sin resumen duplicado)
- *  - Recompensas visibles: items, títulos, maestrías con íconos y nombres oficiales
- *  - Toolbar unificada con 3 dropdowns personalizados (Umbral, Categoría, Recompensa)
- *  - Cards compactas con pills y barras alineados al fondo
- *  - KPIs AP conservados
  * =========================================================================== */
 
 (function (root) {
@@ -40,11 +41,7 @@
   var _loadSeq = 0;
 
   // ---------------------------- Estado / DOM -------------------------------
-  var el = {
-    panel: null, head: null, body: null,
-    chipsOld: null, search: null,
-    mainGrid: null, toolbar: null
-  };
+  var el = { panel: null, body: null, mainGrid: null };
 
   var state = {
     token: null,
@@ -57,7 +54,6 @@
     qRaw: '', qNorm: '', pct: 0.8, cat: '',
     rewardFilter: '',
     legendaryCatId: '',
-    showLegendaryTracker: false,
     apDailyHist: 0,
     apPermanent: 0,
     apLegacyDelta: 0,
@@ -93,13 +89,11 @@
     if (isFinite(pNum) && pNum >= 0 && pNum <= 1) state.pct = pNum;
     state.cat = cat ? String(cat) : '';
     state.rewardFilter = reward ? String(reward) : '';
-
-    if (el.search) el.search.value = state.qRaw;
   }
   function writeFiltersToHashSilently(){
     var base = '#/account/achievements';
     var params = new URLSearchParams();
-    var qRaw = el.search ? (el.search.value || '') : state.qRaw;
+    var qRaw = state.qRaw;
     if (qRaw) params.set('q', qRaw);
     if (state.pct !== 0.8) params.set('pct', String(state.pct));
     if (state.cat) params.set('cat', String(state.cat));
@@ -211,7 +205,7 @@
     }
   }
 
-  // ----------------------- Tracker de legendarias ---------------------------
+  // ------------------ Categoría de colecciones legendarias ------------------
   // Keywords para identificar la categoría "Armas legendarias" en v2/achievements/categories.
   // La API devuelve el nombre en el lang configurado (es por defecto).
   var LEGENDARY_CATEGORY_KEYWORDS = ['legendaria', 'legendary', 'arma legendaria', 'legend'];
@@ -268,10 +262,8 @@
   function ensureDomRefs(){
     if (el.panel) return;
     el.panel      = document.getElementById('achievementsPanel');
-    el.head       = el.panel ? el.panel.querySelector('.panel-head') : null;
     el.body       = el.panel ? el.panel.querySelector('.panel__body') : null;
     el.mainGrid   = document.getElementById('achievementsMain');
-    if (el.mainGrid) el.mainGrid.setAttribute('aria-live','polite');
   }
 
   function setLoading(on){
@@ -434,6 +426,6 @@
     }
   })();
 
-  console.info(LOGP, 'OK v3.5.0 — cabecera en ach-view.js, tarjetas en ach-cards.js, categorías en ach-categories.js (LOG-3)');
+  console.info(LOGP, 'OK v3.6.0 — cabecera en ach-view.js, tarjetas en ach-cards.js, categorías en ach-categories.js (LOG-5)');
 
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
