@@ -1,0 +1,16 @@
+{
+  "id": "RUN-007",
+  "summary": "BL-064 CAM-3: después de PATCH-019, la Tienda nueva, Gestionar, versiones, manifiesto, tamaño, claves (idea61, hb98) y Compras siguen verdes",
+  "tests": [
+    "tests/wv-shop-ui.test.cjs",
+    "tests/wv-shop-manage.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/hb98-wv-shop-view.test.js",
+    "tests/idea61-claves-congeladas.test.js",
+    "tests/idea55.wv-online-parallel.test.js",
+    "tests/wv-view.test.cjs",
+    "tests/t19c-lectores-legacy.test.js"
+  ]
+}
