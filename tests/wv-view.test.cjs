@@ -99,10 +99,10 @@ const fire = (x, type, attrs, ev) => {
   (x.host().listeners[type] || []).forEach((f) => f(Object.assign({ target, preventDefault() {} }, ev || {})));
 };
 
-test('versión 1.0.0, la misma que pide js/modules.json', () => {
-  assert.match(SRC, /\* Versión: 1\.0\.0 /);
+test('versión 1.1.0, la misma que pide js/modules.json', () => {
+  assert.match(SRC, /\* Versión: 1\.1\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8'));
-  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.0.0' }]);
+  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.1.0' }]);
   assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /wv-view\.js/, 'se carga por el manifiesto, no por index.html');
   assert.match(SRC, /readyState === 'loading'[^\n]*DOMContentLoaded', init\);\s*else if \(doc\) init\(\);/, 'arranca aunque cargue tarde');
 });
@@ -135,9 +135,9 @@ test('temporada: nombre, fin en fecha UTC y días que quedan', () => {
 test('objetivos: completados, listos para reclamar y la recompensa del día (no «de la temporada»)', () => {
   const { P } = load();
   const c = P.countObjectives(OBJ([o(3, 3), o(1, 1, true), o(5, 10), o(0, 0)], { meta_progress_current: 3, meta_progress_complete: 4, meta_reward_astral: 150 }));
-  assert.deepEqual(c, { total: 4, done: 2, ready: 1, claimed: 1, meta: { cur: 3, total: 4, reward: 150 } });
+  assert.deepEqual(c, { total: 4, done: 2, ready: 1, claimed: 1, meta: { cur: 3, total: 4, reward: 150 }, aa: 0, readyAA: 0 });
   assert.deepEqual(P.countObjectives(OBJ([{ progress: 1, total: 0 }])).done, 1, 'sin total: con algo de avance cuenta como hecho');
-  assert.deepEqual(P.countObjectives(null), { total: 0, done: 0, ready: 0, claimed: 0, meta: null });
+  assert.deepEqual(P.countObjectives(null), { total: 0, done: 0, ready: 0, claimed: 0, meta: null, aa: 0, readyAA: 0 });
 });
 
 test('AA: gastada según la API y reservada para lo fijado (sin lo marcado ni lo comprado)', () => {
@@ -200,7 +200,7 @@ test('con la Tienda cargada usa su AA y dice cuánto queda reservado para lo fij
   await tick();
   const h = x.host().innerHTML;
   assert.match(h, /<small>AA disponible<\/small><b>900<\/b><em>reservada para fijados: 1\.200<\/em>/);
-  assert.match(h, /data-wvx-tab="shop" aria-selected="true" tabindex="0">Tienda<span class="wvx-badge">1 fijado<\/span>/);
+  assert.match(h, /data-wvx-tab="shop" aria-selected="true" aria-controls="wvTabShop" tabindex="0">Tienda<span class="wvx-badge">1 fijado<\/span>/);
 });
 
 test('tres pestañas con contadores; Objetivos trae el segmento Diarias, Semanales y Especiales', async () => {
@@ -208,9 +208,9 @@ test('tres pestañas con contadores; Objetivos trae el segmento Diarias, Semanal
   await tick();
   const h = x.host().innerHTML;
   assert.match(h, /<div class="wvx-tabs" role="tablist" aria-label="Secciones de la Cámara del Brujo">/);
-  assert.match(h, /id="wvxTab-objectives" data-wvx-tab="objectives" aria-selected="true" tabindex="0">Objetivos<span class="wvx-badge wvx-badge--gold">2 listos<\/span>/);
-  assert.match(h, /data-wvx-tab="shop" aria-selected="false" tabindex="-1">Tienda<\/button>/);
-  assert.match(h, /data-wvx-tab="accounts" aria-selected="false" tabindex="-1">Todas las cuentas<span class="wvx-badge">5<\/span>/);
+  assert.match(h, /id="wvxTab-objectives" data-wvx-tab="objectives" aria-selected="true" aria-controls="wvTabDaily" tabindex="0">Objetivos<span class="wvx-badge wvx-badge--gold">2 listos<\/span>/);
+  assert.match(h, /data-wvx-tab="shop" aria-selected="false" aria-controls="wvTabShop" tabindex="-1">Tienda<\/button>/);
+  assert.match(h, /data-wvx-tab="accounts" aria-selected="false" aria-controls="wvObjectivesDashboardPanel" tabindex="-1">Todas las cuentas<span class="wvx-badge">5<\/span>/);
   assert.match(h, /data-wvx-sub="daily" aria-pressed="true">Diarias<em>6\/8<\/em>/);
   assert.match(h, /data-wvx-sub="weekly" aria-pressed="false">Semanales<em>1\/2<\/em>/);
   assert.match(h, /data-wvx-sub="special" aria-pressed="false">Especiales<\/button>/, 'sin objetivos especiales, sin contador');
