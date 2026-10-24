@@ -1,6 +1,12 @@
 /* ===========================================================================
  * js/achievements.js — Logros enfocado en "próximo a completar"
- * Versión: 3.3.0 (2026-10-24)
+ * Versión: 3.4.0 (2026-10-24)
+ *  - LOG-2 (BL-067): las tarjetas, los filtros y las recompensas los pinta
+ *    js/ach-cards.js (por js/modules.json). Este archivo calcula la lista
+ *    (state.rows) y avisa con gn:achievements; setFilter acepta además
+ *    búsqueda (q) y recompensa (reward). Se fueron las tarjetas, los
+ *    desplegables propios y los pedidos de recompensas de a uno.
+ *  - 3.3.0:
  *  - LOG-1 (BL-067): la cabecera, las pestañas y mi línea las pinta
  *    js/ach-view.js (por js/modules.json). Este archivo publica su estado
  *    (getSnapshot, setFilter, _calc y el evento gn:achievements) y deja de
@@ -28,16 +34,6 @@
   var $$ = function (s, r) { return Array.from((r || document).querySelectorAll(s)); };
 
   var _loadSeq = 0;
-
-  // ======================= ICONOS =========================
-  var ICON_AP_18    = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
-
-  var REWARD_FALLBACK = {
-    'Item':    'assets/icons/Welcome/1228903.png',
-    'Title':   'assets/icons/Welcome/605001.png',
-    'Mastery': 'assets/icons/Welcome/1078543.png',
-    'Coins':   'assets/icons/733322.png'
-  };
 
   // ---------------------------- Estado / DOM -------------------------------
   var el = {
@@ -85,67 +81,6 @@
     if(!url) return '';
     var s = Number(size||18), style = extraStyle ? ' style="'+extraStyle+'"' : '';
     return '<img src="'+esc(url)+'" alt="'+esc(alt||'')+'" width="'+s+'" height="'+s+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"'+style+' />';
-  }
-
-  // ======================= CACHÉ DE RECOMPENSAS =========================
-  var _rewardCache   = {};
-  var _titleCache    = {};
-  var _masteryCache  = {};
-
-  function loadRewardItemDetail(itemId) {
-    if (_rewardCache[itemId] || _rewardCache['_loading_' + itemId]) return;
-    _rewardCache['_loading_' + itemId] = true;
-    root.GW2Api.getItemsMany([itemId], { nocache: false })
-      .then(function(items) {
-        if (items && items.length) {
-          _rewardCache[itemId] = {
-            icon: items[0].icon || REWARD_FALLBACK['Item'],
-            name: items[0].name || ('Ítem #' + itemId)
-          };
-        } else {
-          _rewardCache[itemId] = { icon: REWARD_FALLBACK['Item'], name: 'Ítem #' + itemId };
-        }
-        if (el.mainGrid && el.mainGrid.children.length) renderMainGrid();
-      })
-      .catch(function() {
-        _rewardCache[itemId] = { icon: REWARD_FALLBACK['Item'], name: 'Ítem #' + itemId };
-      });
-  }
-
-  function loadRewardTitleDetail(titleId) {
-    if (_titleCache[titleId] || _titleCache['_loading_' + titleId]) return;
-    _titleCache['_loading_' + titleId] = true;
-    fetch('https://api.guildwars2.com/v2/titles?id=' + encodeURIComponent(titleId))
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data && data.name) {
-          _titleCache[titleId] = { name: data.name, icon: data.icon || REWARD_FALLBACK['Title'] };
-        } else {
-          _titleCache[titleId] = { name: 'Título', icon: REWARD_FALLBACK['Title'] };
-        }
-        if (el.mainGrid && el.mainGrid.children.length) renderMainGrid();
-      })
-      .catch(function() {
-        _titleCache[titleId] = { name: 'Título', icon: REWARD_FALLBACK['Title'] };
-      });
-  }
-
-  function loadRewardMasteryDetail(masteryId) {
-    if (_masteryCache[masteryId] || _masteryCache['_loading_' + masteryId]) return;
-    _masteryCache['_loading_' + masteryId] = true;
-    fetch('https://api.guildwars2.com/v2/masteries?id=' + encodeURIComponent(masteryId))
-      .then(function(res) { return res.json(); })
-      .then(function(data) {
-        if (data && data.name) {
-          _masteryCache[masteryId] = { name: data.name, icon: data.icon || REWARD_FALLBACK['Mastery'] };
-        } else {
-          _masteryCache[masteryId] = { name: 'Maestría', icon: REWARD_FALLBACK['Mastery'] };
-        }
-        if (el.mainGrid && el.mainGrid.children.length) renderMainGrid();
-      })
-      .catch(function() {
-        _masteryCache[masteryId] = { name: 'Maestría', icon: REWARD_FALLBACK['Mastery'] };
-      });
   }
 
   // --------------------------- Deep‑links (hash) ----------------------------
@@ -305,212 +240,6 @@
     state.legendaryCatId = '148';
   }
 
-  function isLegendaryTrackerActive(){
-    return state.cat === state.legendaryCatId && !!state.legendaryCatId;
-  }
-
-  // Extrae los ítems-componente de una meta de logro legendario.
-  // En GW2, las achievements de armas legendarias recompensan ítems que son
-  // componentes de crafteo (Gift of ...). Esta función los filtra y cuenta.
-  function getLegendaryComponents(meta){
-    var rewards = Array.isArray(meta?.rewards) ? meta.rewards : [];
-    var components = [];
-    rewards.forEach(function(r){
-      if (r && r.type === 'Item' && r.id != null) {
-        var cached = _rewardCache[r.id];
-        components.push({
-          id: r.id,
-          name: cached ? cached.name : ('#'+ r.id),
-          icon: cached ? cached.icon : REWARD_FALLBACK['Item'],
-          count: typeof r.count === 'number' ? r.count : 1
-        });
-        if (!cached) loadRewardItemDetail(r.id); // prefetch nombre/icono
-      }
-    });
-    return components;
-  }
-
-  function injectLegendaryStyles(){
-    if (document.getElementById('ach-legendary-styles')) return;
-    var css = [
-      '.a-card--legendary{position:relative;overflow:visible}',
-      '.a-card--legendary .a-title{color:var(--color-amber);font-weight:700}',
-      '.ach-legendary-components{display:grid;gap:4px;margin-top:6px}',
-      '.ach-legendary-comp{display:inline-flex;align-items:center;gap:4px;padding:2px 6px;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:4px;font-size:0.72rem}',
-      '.ach-legendary-comp img{border-radius:3px;filter:brightness(0.9)}',
-      '.ach-legendary-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:rgba(255,211,107,0.15);border:1px solid rgba(255,211,107,0.4);border-radius:999px;font-size:0.7rem;color:var(--color-amber);font-weight:600}',
-      '@media (prefers-color-scheme: light){ .a-card--legendary .a-title{color:#a26a00} }'
-    ].join('');
-    var s = document.createElement('style'); s.id='ach-legendary-styles'; s.textContent=css;
-    document.head.appendChild(s);
-  }
-
-  function cardLegendaryTrackerHTML(meta, r, pr){
-    var iconUrl = meta?.icon || 'assets/icons/155059.png';
-    var icon = iconImg(iconUrl, 28, meta?.name || 'Logro', 'margin-right:8px;border-radius:4px;flex-shrink:0;');
-    var name = esc(meta?.name || ('#' + r.id));
-    var catBadge = categoryBadgeHTML(r.id);
-    var pctTxt = fmtPct(pr.pct);
-    var ratioTxt = pr.cur + '/' + pr.max;
-    var apTot = totalAP(meta);
-    var apGot = earnedAP(r, meta);
-    var wiki = wikiLinkHTML(meta);
-
-    // Componentes (ítems recompensa = componentes de crafteo)
-    var comps = getLegendaryComponents(meta);
-    var compHTML = comps.length ? (
-      '<div class="ach-legendary-components">' +
-        '<span class="ach-legendary-badge">⚠ Componentes</span>' +
-        comps.map(function(c){
-          return '<span class="ach-legendary-comp" title="'+esc(c.name)+'">' +
-            iconImg(c.icon, 18, c.name, 'margin-right:4px') +
-            '<span style="color:var(--tx-3);font-weight:500;">' + esc(c.name) + '</span>' +
-            (c.count > 1 ? (' <span style="color:var(--tx-3);">×'+c.count+'</span>') : '') +
-          '</span>';
-        }).join('') +
-      '</div>'
-    ) : '';
-
-    var apHtml = (apTot > 0)
-      ? '<span class="pill" title="Puntos de logro (ganados / posibles)">'+
-          '<span style="display:inline-flex;align-items:center;gap:6px;">'+
-            iconImg(ICON_AP_18, 18, 'AP', 'border-radius:3px')+
-            'AP: '+fmtInt(apGot)+' / '+fmtInt(apTot)+
-          '</span>'+
-        '</span>'
-      : '';
-
-    return (
-      '<article class="card a-card a-card--legendary" data-id="' + r.id + '" data-pct="' + Math.round(pr.pct * 100) + '">' +
-        '<div class="card__head a-head">' +
-          '<h3 class="card__title a-title">' + icon + name + '</h3>' +
-        '</div>' +
-        (catBadge ? ('<div class="card__desc a-desc">' + catBadge + '</div>') : '') +
-        (compHTML ? compHTML : '') +
-        '<div style="margin-top:auto;">' +
-          '<div class="card__meta a-meta">' +
-            '<span class="cats" style="font-size:0.72rem;">' + ratioTxt + '</span>' +
-            '<span class="a-actions">'+ (apHtml ? apHtml : '') + (wiki ? (' ' + wiki) : '') +'</span>' +
-          '</div>' +
-          '<div class="ach-progline"><span>Progreso</span><span>'+ pctTxt +'</span></div>' +
-          progressBarHTML(pr) +
-        '</div>' +
-      '</article>'
-    );
-  }
-
-  // ------------------------------- Render ----------------------------------
-  function categoryBadgeHTML(achId){
-    var cid = state.achIdToCat.get(String(achId)) || '';
-    if (!cid) return '';
-    var cat = state.catById.get(String(cid));
-    if (!cat) return '';
-    var icon = iconImg(cat.icon, 22, cat.name || 'Categoría', 'margin-right:6px;border-radius:3px');
-    var name = esc(cat.name || '');
-    return '<span class="ach-badge">'+ icon + name + '</span>';
-  }
-
-  function wikiLinkHTML(meta){
-    var name = meta?.name ? String(meta.name) : '';
-    if (!name) return '';
-    var href = 'https://wiki.guildwars2.com/wiki/' + encodeURIComponent(name);
-    return '<a class="btn btn--ghost" href="'+href+'" target="_blank" rel="noopener" title="Abrir en la Wiki">Wiki</a>';
-  }
-
-  function rewardsHTML(meta) {
-    if (!meta || !Array.isArray(meta.rewards) || !meta.rewards.length) return '';
-    var parts = meta.rewards.map(function(r) {
-      var icon = '';
-      var label = '';
-      switch(r.type) {
-        case 'Item':
-          icon = _rewardCache[r.id] ? _rewardCache[r.id].icon : REWARD_FALLBACK['Item'];
-          label = _rewardCache[r.id] ? _rewardCache[r.id].name : ('Ítem #' + r.id);
-          if (!_rewardCache[r.id]) loadRewardItemDetail(r.id);
-          break;
-        case 'Title':
-          icon = _titleCache[r.id] ? _titleCache[r.id].icon : REWARD_FALLBACK['Title'];
-          label = _titleCache[r.id] ? _titleCache[r.id].name : 'Título';
-          if (!_titleCache[r.id]) loadRewardTitleDetail(r.id);
-          break;
-        case 'Mastery':
-          icon = _masteryCache[r.id] ? _masteryCache[r.id].icon : REWARD_FALLBACK['Mastery'];
-          label = _masteryCache[r.id] ? _masteryCache[r.id].name : 'Maestría';
-          if (!_masteryCache[r.id]) loadRewardMasteryDetail(r.id);
-          break;
-        case 'Coins':
-          icon = REWARD_FALLBACK['Coins'];
-          label = fmtInt(r.count || 0) + ' cobre';
-          break;
-        default:
-          return '';
-      }
-      return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:0.72rem;color:var(--tx-2);margin-right:10px;" title="'+esc(label)+'">' +
-        '<img src="'+esc(icon)+'" width="22" height="22" alt="" style="border-radius:4px;filter:brightness(0.95);flex-shrink:0;">' +
-        '<span style="font-weight:500;">'+esc(label)+'</span>'+
-        '</span>';
-    }).filter(Boolean).join('');
-    return parts ? '<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;" class="a-rewards">' + parts + '</div>' : '';
-  }
-
-  function progressSeverity(pr){
-    var pct = Math.round((pr?.pct || 0) * 100);
-    if (pct >= 100) return 'done';
-    if (pct > 90)   return '90';
-    if (pct > 80)   return '80';
-    return '';
-  }
-  function progressBarHTML(pr){
-    var pct = Math.round((pr?.pct || 0) * 100);
-    var sev = progressSeverity(pr);
-    var cls = 'ach-prog__bar' + (sev ? (' ach-prog--' + sev) : '');
-    return (
-      '<div class="ach-prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+pct+'" aria-label="Progreso '+pct+'%">'+
-        '<div class="'+cls+'" style="width:'+pct+'%;"></div>'+
-      '</div>'
-    );
-  }
-
-  function cardMainHTML(meta, r, pr){
-    var iconUrl = meta?.icon || 'assets/icons/155059.png';
-    var icon = iconImg(iconUrl, 28, meta?.name || 'Logro', 'margin-right:8px;border-radius:4px;flex-shrink:0;');
-    var name = esc(meta?.name || ('#' + r.id));
-    var catBadge = categoryBadgeHTML(r.id);
-    var pctTxt = fmtPct(pr.pct);
-    var ratioTxt = pr.cur + '/' + pr.max;
-    var wiki = wikiLinkHTML(meta);
-    var apTot = totalAP(meta);
-    var apGot = earnedAP(r, meta);
-    var rewards = rewardsHTML(meta);
-
-    var apHtml = (apTot > 0)
-      ? '<span class="pill" title="Puntos de logro (ganados / posibles)">'+
-          '<span style="display:inline-flex;align-items:center;gap:6px;">'+
-            iconImg(ICON_AP_18, 18, 'AP', 'border-radius:3px')+
-            'AP: '+fmtInt(apGot)+' / '+fmtInt(apTot)+
-          '</span>'+
-        '</span>'
-      : '';
-
-    return (
-      '<article class="card a-card" data-id="' + r.id + '" data-pct="' + Math.round(pr.pct * 100) + '">' +
-        '<div class="card__head a-head">' +
-          '<h3 class="card__title a-title">' + icon + name + '</h3>' +
-        '</div>' +
-        (catBadge ? ('<div class="card__desc a-desc">' + catBadge + '</div>') : '') +
-        (rewards ? ('<div class="card__desc a-rewards">' + rewards + '</div>') : '') +
-        '<div style="margin-top:auto;">' +
-          '<div class="card__meta a-meta">' +
-            '<span class="cats" style="font-size:0.72rem;">' + ratioTxt + '</span>' +
-            '<span class="a-actions">'+ (apHtml ? apHtml : '') + (wiki ? (' ' + wiki) : '') +'</span>' +
-          '</div>' +
-          '<div class="ach-progline"><span>Progreso</span><span>'+ pctTxt +'</span></div>' +
-          progressBarHTML(pr) +
-        '</div>' +
-      '</article>'
-    );
-  }
-
   function passesFilters(meta, pr, achId){
     if (pr.pct >= 1) return false;
     if (state.cat) {
@@ -542,12 +271,7 @@
     });
     rows.sort(function(a,b){ return b.pr.pct - a.pr.pct; });
     state.rows = rows;
-    var shown = rows.slice(0, 60), leg = isLegendaryTrackerActive();
-    if (leg) injectLegendaryStyles();
-    el.mainGrid.innerHTML = shown.length
-      ? shown.map(function(x){ return (leg ? cardLegendaryTrackerHTML : cardMainHTML)(x.meta, x.r, x.pr); }).join('')
-      : '<p class="muted">' + (leg ? 'No hay logros legendarios pendientes.' : 'No hay logros que coincidan con los filtros.') + '</p>';
-    // ach-view.js (LOG-1) pinta la cabecera con este estado: sin pedidos nuevos.
+    // ach-view.js (cabecera) y ach-cards.js (filtros y tarjetas) pintan con este estado.
     try { document.dispatchEvent(new CustomEvent('gn:achievements', { detail: { count: rows.length } })); } catch (_) {}
   }
 
@@ -644,234 +368,11 @@
         btn.addEventListener('click', function(){
           var cid = btn.getAttribute('data-cid') || '';
           state.cat = (String(state.cat) === String(cid)) ? '' : String(cid);
-          syncButtons();
           writeFiltersToHashSilently();
           renderMainGrid();
         });
       });
     }
-  }
-
-  // ------------------------ Toolbar (CSS) ------------------------------
-  function injectToolbarStyles(){
-    if (document.getElementById('ach-toolbar-styles')) return;
-    var css = `
-      .ach-toolbar{
-        display:flex; flex-wrap:wrap; gap:10px; align-items:center;
-        margin:10px 0 0; padding:10px 12px;
-        background:var(--bg-1); border:1px solid var(--bd-1); border-radius:40px;
-      }
-      .ach-toolbar .group{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-      .ach-toolbar input[type="text"]{min-width:200px}
-      .a-card{ display:flex; flex-direction:column; gap:2px; overflow:visible; }
-      .a-card *{ min-width:0; }
-      .a-head{ display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
-      .a-head .a-title{ flex:1 1 auto; min-width:0; }
-      .a-title{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; overflow-wrap:anywhere; }
-      .a-desc{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; overflow-wrap:anywhere; }
-      .a-rewards{ display:flex; flex-wrap:wrap; gap:4px; align-items:center; }
-      .a-meta{ display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; width:100%; }
-      .a-meta .cats{ flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis; overflow-wrap:anywhere; }
-      .a-actions{ display:flex; gap:8px; flex-wrap:wrap; }
-      .a-actions .btn{ white-space:nowrap; flex:0 0 auto; }
-      .ach-progline{ display:grid; grid-template-columns:1fr auto; align-items:center; gap:8px; color:var(--tx-2); font-size:12px; margin-top:2px; }
-      .ach-prog{ position:relative; height:8px; background:var(--bg-0); border:1px solid var(--bd-1); border-radius:999px; overflow:hidden; width:100%; box-sizing:border-box; }
-      .ach-prog__bar{ position:absolute; left:0; top:0; bottom:0; width:0; transition:width .18s ease; background:linear-gradient(90deg, #f81313 0%, #ff4000 100%); }
-      .ach-prog__bar.ach-prog--80{  background: linear-gradient(90deg, #ff4000 0%, #ffa733 100%); }
-      .ach-prog__bar.ach-prog--90{  background: linear-gradient(90deg, #ffa733 0%, #f6e100 100%); }
-      .ach-prog__bar.ach-prog--done{background: linear-gradient(90deg, #7ff600 0%, #04ff4b 100%); }
-      .ach-custom-select { position:relative; display:inline-block; }
-      .ach-select-btn { display:flex; align-items:center; gap:6px; padding:5px 10px; background:var(--bg-1); border:1px solid var(--bd-1); border-radius:20px; color:var(--tx-1); font-size:0.75rem; cursor:pointer; min-width:130px; }
-      .ach-select-btn:hover { border-color:var(--bd-2); background:var(--bg-2); }
-      .ach-select-list { display:none; position:absolute; top:100%; left:0; z-index:50; background:var(--bg-1); border:1px solid var(--bd-1); border-radius:8px; padding:4px; min-width:160px; margin-top:4px; max-height:250px; overflow-y:auto; }
-      .ach-select-option { display:flex; align-items:center; gap:8px; padding:6px 10px; cursor:pointer; border-radius:6px; color:var(--tx-3); font-size:0.75rem; }
-      .ach-select-option:hover { background:var(--bg-2); color:var(--tx-1); }
-      .ach-select-option.active { background:var(--color-blue-bg); color:var(--color-blue); }
-    `;
-    var s = document.createElement('style'); s.id='ach-toolbar-styles'; s.textContent=css;
-    document.head.appendChild(s);
-  }
-
-  function ensureToolbar(){
-    injectToolbarStyles();
-    if (!el.panel) return;
-    if (!el.head) el.head = el.panel.querySelector('.panel-head');
-    if (!el.body) el.body = el.panel.querySelector('.panel__body');
-    var hostAfter = el.head || el.panel;
-
-    if (!el.chipsOld) el.chipsOld = $('#achievementsPanel .chips');
-    if (el.chipsOld) el.chipsOld.style.display = 'none';
-    if (el.toolbar) return;
-
-    var tb = document.createElement('div');
-    tb.className = 'ach-toolbar';
-    tb.innerHTML = [
-      '<div class="group">',
-        '<strong style="margin-right:6px;color:var(--tx-3);">Logros:</strong>',
-        '<input type="text" id="achSearch_alt" placeholder="Buscar logro…">',
-      '</div>',
-      '<div class="group">',
-        // Dropdown Umbral
-        '<label style="color:var(--tx-3);font-size:0.8rem;">Umbral:</label>',
-        '<div class="ach-custom-select">',
-          '<button class="ach-select-btn" data-dropdown="achDropdownPct">',
-            '<span class="ach-select-btn-text">≥ 80%</span>',
-            '<span style="margin-left:auto;font-size:0.6rem;">▼</span>',
-          '</button>',
-          '<div class="ach-select-list" id="achDropdownPct">',
-            '<div class="ach-select-option" data-value="0.8">≥ 80%</div>',
-            '<div class="ach-select-option" data-value="0.9">≥ 90%</div>',
-            '<div class="ach-select-option" data-value="0.95">≥ 95%</div>',
-            '<div class="ach-select-option" data-value="0">Todos</div>',
-          '</div>',
-        '</div>',
-        // Dropdown Categoría
-        '<label style="color:var(--tx-3);font-size:0.8rem;">Categoría:</label>',
-        '<div class="ach-custom-select" id="achCatDropdown">',
-          '<button class="ach-select-btn" data-dropdown="achDropdownCat">',
-            '<span class="ach-select-btn-text">Todas</span>',
-            '<span style="margin-left:auto;font-size:0.6rem;">▼</span>',
-          '</button>',
-          '<div class="ach-select-list" id="achDropdownCat">',
-            '<div class="ach-select-option" data-value="">Todas</div>',
-          '</div>',
-        '</div>',
-        // Dropdown Recompensa
-        '<label style="color:var(--tx-3);font-size:0.8rem;">Recompensa:</label>',
-        '<div id="achRewardDropdown" class="ach-custom-select">',
-          '<button id="achRewardBtn" class="ach-select-btn">',
-            '<span id="achRewardBtnText">Todas</span>',
-            '<span style="margin-left:auto;font-size:0.6rem;">▼</span>',
-          '</button>',
-          '<div id="achRewardList" class="ach-select-list">',
-            '<div class="ach-select-option" data-value="">Todas</div>',
-            '<div class="ach-select-option" data-value="Item"><img src="assets/icons/Welcome/1228903.png" width="18" height="18" alt="" style="border-radius:3px;filter:brightness(0.9);">Con ítem</div>',
-            '<div class="ach-select-option" data-value="Title"><img src="assets/icons/Welcome/605001.png" width="18" height="18" alt="" style="border-radius:3px;filter:brightness(0.9);">Con título</div>',
-            '<div class="ach-select-option" data-value="Mastery"><img src="assets/icons/Welcome/1078543.png" width="18" height="18" alt="" style="border-radius:3px;filter:brightness(0.9);">Con maestría</div>',
-          '</div>',
-        '</div>',
-      '</div>'
-    ].join('');
-
-    if (hostAfter && hostAfter.parentNode) hostAfter.parentNode.insertBefore(tb, hostAfter.nextSibling);
-    else el.panel.insertBefore(tb, el.panel.firstChild);
-
-    el.toolbar = tb;
-
-    var oldSearch = document.getElementById('achSearch');
-    el.search = oldSearch || document.getElementById('achSearch_alt');
-    if (oldSearch) {
-      var slot = document.getElementById('achSearch_alt');
-      if (slot) slot.replaceWith(oldSearch);
-    }
-  }
-
-  function fillCategoryDropdown(){
-    var list = document.getElementById('achDropdownCat');
-    if (!list || list.__filled === state.categories.length) return;
-    list.__filled = state.categories.length;
-
-    var categories = state.categories.slice().sort(function(a,b){
-      return String(a?.name || '').localeCompare(String(b?.name || ''));
-    });
-
-    var html = '<div class="ach-select-option" data-value="">Todas</div>';
-    if (state.legendaryCatId) {
-      html += '<div class="ach-select-option" data-value="' + esc(String(state.legendaryCatId)) + '" style="display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:pointer;border-radius:6px;color:var(--color-amber);font-weight:600;font-size:0.77rem;">⚠ Legendarias</div>';
-    }
-    categories.forEach(function(c) {
-      var icon = iconImg(c.icon, 16, c.name, 'margin-right:6px;border-radius:3px');
-      html += '<div class="ach-select-option" data-value="' + esc(String(c.id)) + '" style="display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:pointer;border-radius:6px;color:var(--tx-3);font-size:0.75rem;">' + icon + esc(c.name || ('#' + c.id)) + '</div>';
-    });
-    list.innerHTML = html;
-  }
-
-  // ------------------------ Toolbar (wiring) ------------------------------
-  function wireToolbar(){
-    if (el.search && !el.search.__wired) {
-      el.search.__wired = true;
-      var t = null;
-      el.search.addEventListener('input', function(){
-        clearTimeout(t);
-        t = setTimeout(function(){
-          state.qRaw  = el.search.value || '';
-          state.qNorm = norm(state.qRaw);
-          writeFiltersToHashSilently();
-          renderMainGrid();
-        }, 120);
-      });
-    }
-    wireCustomDropdowns();
-  }
-
-  function wireCustomDropdowns(){
-    var dropdowns = document.querySelectorAll('.ach-custom-select');
-    dropdowns.forEach(function(dropdown) {
-      var btn = dropdown.querySelector('.ach-select-btn');
-      var list = dropdown.querySelector('.ach-select-list');
-      var btnText = dropdown.querySelector('.ach-select-btn-text');
-      if (!btn || !list || btn.__wired) return;
-      btn.__wired = true;
-
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var isOpen = list.style.display === 'block';
-        closeAllDropdowns();
-        list.style.display = isOpen ? 'none' : 'block';
-      });
-
-      var options = list.querySelectorAll('.ach-select-option');
-      options.forEach(function(opt) {
-        opt.addEventListener('click', function(e) {
-          e.stopPropagation();
-          var value = this.dataset.value;
-          if (btnText) {
-            btnText.textContent = this.textContent.trim() || (value || 'Todas');
-          }
-          options.forEach(function(o) { o.classList.remove('active'); });
-          this.classList.add('active');
-
-          var listId = list.id;
-          if (listId === 'achDropdownPct') {
-            state.pct = isFinite(parseFloat(value)) ? parseFloat(value) : 0.8;
-          } else if (listId === 'achDropdownCat') {
-            state.cat = value || '';
-          } else if (listId === 'achRewardList') {
-            state.rewardFilter = value || '';
-          }
-
-          list.style.display = 'none';
-          writeFiltersToHashSilently();
-          renderMainGrid();
-        });
-      });
-    });
-
-    if (!document.__achDropdownGlobalWired) {
-      document.__achDropdownGlobalWired = true;
-      document.addEventListener('click', function() {
-        closeAllDropdowns();
-      });
-    }
-  }
-
-  // Los botones dicen lo que filtra la grilla (enlaces, Sidebar, setFilter).
-  function syncButtons(){
-    var set = function(id, val, txt){
-      var l = document.getElementById(id), b = l && l.parentNode ? l.parentNode.querySelector('.ach-select-btn span') : null;
-      if (b) b.textContent = txt;
-      if (l) l.querySelectorAll('.ach-select-option').forEach(function(o){ o.classList.toggle('active', o.dataset.value === String(val)); });
-    };
-    var c = state.catById.get(String(state.cat)), leg = state.cat && String(state.cat) === String(state.legendaryCatId);
-    set('achDropdownPct', state.pct, state.pct > 0 ? '≥ ' + Math.round(state.pct * 100) + '%' : 'Todos');
-    set('achDropdownCat', state.cat, !state.cat ? 'Todas' : leg ? 'Legendarias' : (c && c.name) || ('#' + state.cat));
-    set('achRewardList', state.rewardFilter, ({ Item: 'Con ítem', Title: 'Con título', Mastery: 'Con maestría' })[state.rewardFilter] || 'Todas');
-  }
-
-  function closeAllDropdowns(){
-    document.querySelectorAll('.ach-select-list').forEach(function(list) {
-      list.style.display = 'none';
-    });
   }
 
   // ------------------------------- Carga -----------------------------------
@@ -913,14 +414,13 @@
     if (el.mainGrid) el.mainGrid.innerHTML = '<p class="muted">Cargando logros…</p>';
 
     ensureDomRefs();
-    ensureToolbar();
     readFiltersFromHashIntoState();
 
     var token = getSelectedToken();
         if (!token) {
           state.token = null; state.acc = []; state.metaById = new Map();
           state.apDailyHist = 0; state.apPermanent = 0; state.apLegacyDelta = 0;
-          await ensureCategories(); discoverLegendaryCategory(); fillCategoryDropdown(); syncButtons(); ensureAside(); renderAside([]);
+          await ensureCategories(); discoverLegendaryCategory(); ensureAside(); renderAside([]);
           renderMainGrid();
           return;
         }
@@ -945,8 +445,6 @@
       await ensureCategories();
       if (mySeq !== _loadSeq || tokenAtStart !== getSelectedToken()) return;
       discoverLegendaryCategory();
-      fillCategoryDropdown();
-      syncButtons();
       ensureAside();
 
       state.apPermanent = computePermanentAP(state.acc, state.metaById);
@@ -962,7 +460,6 @@
       console.warn(LOGP, e);
       if (el.mainGrid) el.mainGrid.innerHTML = '<p class="muted">No se pudieron cargar logros.</p>';
     } finally {
-      wireToolbar();
       setLoading(false);
       if (!state._wiredTokenListener && document && document.addEventListener){
         document.addEventListener('gn:tokenchange', function(){
@@ -990,12 +487,10 @@
   var Achievements = {
     async initOnce(){
       ensureDomRefs();
-      ensureToolbar();
       await loadAll({ nocache: false });
     },
     async render(opts){
       ensureDomRefs();
-      ensureToolbar();
       if (!state.loaded) {
         await Achievements.initOnce();
         return;
@@ -1011,18 +506,20 @@
     getSnapshot: function(){
       return { loaded: state.loaded, loading: state.loading, hasToken: !!getSelectedToken(), acc: state.acc, rows: state.rows,
         metaById: state.metaById, catById: state.catById, achIdToCat: state.achIdToCat, pct: state.pct, cat: state.cat,
-        reward: state.rewardFilter, legendaryCatId: state.legendaryCatId,
+        reward: state.rewardFilter, q: state.qRaw, legendaryCatId: state.legendaryCatId,
         ap: { perm: state.apPermanent + state.apLegacyDelta, daily: state.apDailyHist } };
     },
-    // Cambia categoría y umbral (0 = todos los pendientes) y repinta, como los desplegables.
+    // Cambia filtros (cat, pct 0..1, q, reward) y repinta. Lo usan ach-view.js y ach-cards.js.
     setFilter: function(f){
       f = f || {};
       if ('cat' in f) state.cat = f.cat ? String(f.cat) : '';
       if (typeof f.pct === 'number' && f.pct >= 0 && f.pct <= 1) state.pct = f.pct;
-      syncButtons();
+      if ('q' in f) { state.qRaw = String(f.q || ''); state.qNorm = norm(state.qRaw); }
+      if ('reward' in f) state.rewardFilter = ({ Item: 1, Title: 1, Mastery: 1 })[f.reward] ? f.reward : '';
       writeFiltersToHashSilently();
       renderMainGrid();
     },
+    cardsByModule: true,
     _calc: { computeProgress: computeProgress, totalAP: totalAP, earnedAP: earnedAP }
   };
   root.Achievements = Achievements;
@@ -1049,6 +546,6 @@
     }
   })();
 
-  console.info(LOGP, 'OK v3.3.0 — la cabecera la pinta ach-view.js (LOG-1)');
+  console.info(LOGP, 'OK v3.4.0 — cabecera en ach-view.js, tarjetas en ach-cards.js (LOG-2)');
 
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));

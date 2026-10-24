@@ -24,7 +24,6 @@
     "js/welcome-panel.js": { "base": 49153, "techo": 49153, "nota": "1 byte sobre 48 KB: el próximo recorte lo saca de esta lista." }
   },
   "advertencia": {
-    "js/achievements.js": { "nota": "Logros (BL-067); bajó de 52,4 KB a 46,3 KB en LOG-1 y sigue achicándose en LOG-2 a LOG-4." },
     "js/converter-modal.js": { "nota": "Cartera (BL-056); se achicó de 68 KB a 48 KB en CAR-2A." },
     "js/activities-theme.js": { "nota": "Actividades; se achica al renovarla (BL-064, paso 4)." },
     "css/theme-polish.css": { "nota": "Capa visual común; se achica en el marco común (BL-064, paso 8)." }
