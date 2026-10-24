@@ -1,6 +1,6 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.2.2 (2026-10-23) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
+ * Versión: 2.2.3 (2026-10-24) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
  * Arma su lista desde la de la Bienvenida (Welcome._pure.MODULES): mismo orden, nombre, ícono y color.
@@ -35,10 +35,12 @@
  * 2.2.2 (SBR-5, revisión): «Nuevo» se lee igual en todos lados. En la barra del celular es un punto con
  *   el texto a tamaño 0, y algunos lectores de pantalla (VoiceOver) saltean ese texto. Ahora la marca
  *   visible queda oculta para el lector y se lee «(nuevo)» aparte, como «(falta permiso)».
+ * 2.2.3 (BL-070, RAI-5a): el módulo de raids se llama «Raids» (sin Strikes). El juego unificó strikes y raids el
+ *   2026-02-03 y el módulo ya es uno solo (Alas y Encuentros); #/account/strikes sigue marcando Raids.
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.2.2';
+  var VERSION = '2.2.3';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -49,7 +51,7 @@
     { id: 'achievements', name: 'Logros', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },
     { id: 'wv', name: 'Cámara del Brujo', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },
     { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },
-    { id: 'raids', name: 'Raids y Strikes', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },
+    { id: 'raids', name: 'Raids', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },
     { id: 'characters', name: 'Inventario y Personajes', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },
     { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3' }
   ];

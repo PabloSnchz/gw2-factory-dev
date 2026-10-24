@@ -128,10 +128,10 @@ const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.2.2', () => {
+test('versión 2.2.3', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.2\.2/);
-  assert.equal(x.S().version, '2.2.2');
+  assert.match(SRC, /Versión: 2\.2\.3/);
+  assert.equal(x.S().version, '2.2.3');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
@@ -416,7 +416,9 @@ test('celular: la hoja «Más» es un diálogo con la cuenta activa y los otros 
   assert.equal(byId(x, 'sbrScrim').getAttribute('hidden'), '');
   same(sheetLinks(x).map((a) => a.getAttribute('href')), ['#/account/achievements', '#/account/wizards-vault', '#/activities',
     '#/account/raids', '#/account/characters', '#/account/accounts']);
-  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Logros', 'Cámara del Brujo', 'Actividades', 'Raids y Strikes', 'Inventario y Personajes', 'Cuentas']);
+  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Logros', 'Cámara del Brujo', 'Actividades', 'Raids', 'Inventario y Personajes', 'Cuentas']);
+  // RAI-5a: el módulo es uno solo desde la unificación del juego; el nombre viejo no vuelve.
+  assert.doesNotMatch(SRC + WELCOME, /Raids y Strikes/);
   sheetLinks(x).forEach((a) => assert.equal(a.getAttribute('id'), null));
   const P = x.S()._pure;
   same(P.mobileGroups().tabs.map((m) => m.id), ['home', 'cards', 'meta', 'armory']);

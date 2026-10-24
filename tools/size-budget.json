@@ -20,10 +20,10 @@
     "js/render-catologo.js": { "base": 61534, "techo": 61534 },
     "js/strike-tracker.js": { "base": 57762, "techo": 57762 },
     "js/inventory-dashboard.js": { "base": 53460, "techo": 53460 },
-    "js/wallet-dashboard.js": { "base": 52505, "techo": 52505 },
-    "js/welcome-panel.js": { "base": 49153, "techo": 49153, "nota": "1 byte sobre 48 KB: el próximo recorte lo saca de esta lista." }
+    "js/wallet-dashboard.js": { "base": 52505, "techo": 52505 }
   },
   "advertencia": {
+    "js/welcome-panel.js": { "nota": "Bienvenida; bajó de 48 KB en BL-070 RAI-5a («Raids y Strikes» pasa a «Raids»). No puede volver a pasar 48 KB." },
     "js/converter-modal.js": { "nota": "Cartera (BL-056); se achicó de 68 KB a 48 KB en CAR-2A." },
     "js/activities-theme.js": { "nota": "Actividades; se achica al renovarla (BL-064, paso 4)." },
     "css/theme-polish.css": { "nota": "Capa visual común; se achica en el marco común (BL-064, paso 8)." }
