@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-052",
+ "summary": "BL-070 RAI-4 tanda 4b: índice de mecánicas con End of Dragons y Secrets of the Obscure; tests de la tanda (Visions of Eternity espera fuente del Nexo).",
+ "files": [
+  {
+   "path": "assets/data/raids/mechanics/index.json",
+   "base_sha": "4e9c0a74dc9b859031fb0bc060d9d8a3a34192d6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  \"core\": \"core.json\"\n",
+     "text": "  \"core\": \"core.json\",\n  \"eod\": \"eod.json\",\n  \"soto\": \"soto.json\"\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "67d0653c5d84aec455987c1faf9a57b01ac7e9db",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const CORE = JSON.parse(fs.readFileSync(path.join(MDIR, 'core.json'), 'utf8'));\n",
+     "text": "const CORE = JSON.parse(fs.readFileSync(path.join(MDIR, 'core.json'), 'utf8'));\nconst EOD = JSON.parse(fs.readFileSync(path.join(MDIR, 'eod.json'), 'utf8'));\nconst SOTO = JSON.parse(fs.readFileSync(path.join(MDIR, 'soto.json'), 'utf8'));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "['jw', 'hot', 'pof', 'ibs', 'core'], 'tandas publicadas: Janthir, Heart of Thorns, Path of Fire, The Icebrood Saga y juego base'",
+     "text": "['jw', 'hot', 'pof', 'ibs', 'core', 'eod', 'soto'], 'tandas publicadas: Janthir, Heart of Thorns, Path of Fire, The Icebrood Saga, juego base, End of Dragons y Secrets of the Obscure'"
+    },
+    {
+     "op": "replace",
+     "anchor": "/mechanics\\/core/.test(u) ? CORE :",
+     "text": "/mechanics\\/core/.test(u) ? CORE : /mechanics\\/eod/.test(u) ? EOD : /mechanics\\/soto/.test(u) ? SOTO :"
+    },
+    {
+     "op": "replace",
+     "anchor": "  await sb.RaidsSheet.open('aetherblade_hideout');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 5, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n",
+     "text": "  await sb.RaidsSheet.open('aetherblade_hideout');\n  assert.match(rs.innerHTML, /Destrucción concentrada/);\n  assert.deepEqual(mf().slice(5), ['assets/data/raids/mechanics/eod.json'], 'End of Dragons se pide al abrir su primera ficha');\n  await sb.RaidsSheet.open('guardians_glade');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 6, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.doesNotMatch(JSON.stringify([IBS, CORE]), /guildjen|hardstuck|mukluk|snowcrows/i);\n});\n",
+     "text": "  assert.doesNotMatch(JSON.stringify([IBS, CORE]), /guildjen|hardstuck|mukluk|snowcrows/i);\n});\n\ntest('tanda 4b: End of Dragons y Secrets of the Obscure; Visions of Eternity espera una fuente verificada', () => {\n  const xm = (d, id) => ({ e: d.encounters[id], roles: d.roles, sources: d.sources, verified: d.verified });\n  const of = (exp) => CAT.encounters.filter((e) => groupOf(e).expansion === exp).map((e) => e.id);\n  assert.deepEqual(Object.keys(EOD.encounters), of('eod'), 'en el orden del catálogo');\n  assert.deepEqual(Object.keys(SOTO.encounters), of('soto'), 'en el orden del catálogo');\n  assert.deepEqual(Object.keys(EOD.encounters).filter((id) => EOD.encounters[id].cm), of('eod'), 'los 4 de End of Dragons con modo desafío');\n  assert.ok(!SOTO.encounters.temple_of_febe.cm, 'Templo de Febe: sin cambios de modo desafío hasta tener fuente');\n  assert.ok(!('voe' in MIDX.files), 'Visions of Eternity espera una fuente verificada del Nexo de la Eternidad');\n  for (const [d, id, page] of [[EOD, 'aetherblade_hideout', 'Aetherblade_Hideout'], [EOD, 'xunlai_jade_junkyard', 'Xunlai_Jade_Junkyard'], [EOD, 'kaineng_overlook', 'Kaineng_Overlook'], [EOD, 'harvest_temple', 'Harvest_Temple'], [SOTO, 'cosmic_observatory', 'Cosmic_Observatory']]) {\n    const h = S.fightHTML(model(id), xm(d, id));\n    assert.match(h, new RegExp('href=\"https:\\\\/\\\\/wiki\\\\.guildwars2\\\\.com\\\\/wiki\\\\/' + page + '\"'), id + ': página de la wiki');\n    assert.match(h, /En modo desafío cambia/, id + ': modo desafío');\n    assert.match(h, /consultadas? el 2026-10-24/);\n  }\n  const ko = S.fightHTML(model('kaineng_overlook'), xm(EOD, 'kaineng_overlook'));\n  assert.equal((ko.match(/<ol class=\"rs-phases\">[\\s\\S]*?<\\/ol>/)[0].match(/<li>/g) || []).length, 5);\n  assert.match(ko, /Ecualizador de vitalidad/);\n  const tf = S.fightHTML(model('temple_of_febe'), xm(SOTO, 'temple_of_febe'));\n  assert.match(tf, /Petrificar/);\n  assert.match(tf, /Temple_of_Febe_Raid_Encounter_Strategy_Guide/);\n  assert.doesNotMatch(tf, /En modo desafío cambia/);\n  assert.doesNotMatch(JSON.stringify([EOD, SOTO]), /guildjen|hardstuck|mukluk|snowcrows|leykeep|tutorial\\.games/i);\n});\n"
+    }
+   ]
+  }
+ ]
+}
