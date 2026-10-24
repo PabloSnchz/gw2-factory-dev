@@ -1,0 +1,5 @@
+{
+  "id": "RUN-015",
+  "summary": "CAM-POLISH-001: superficies, bordes y sombras reales donde viven las tarjetas de la Tienda, Compras fijadas y Logros (main.css :root, reglas de .panel y los 19 themes), para comparar con las propuestas aprobadas",
+  "tests": ["tests/probe-polish.smoke.cjs"]
+}
