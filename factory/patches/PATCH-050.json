@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-050",
+ "summary": "BL-070 RAI-4 tanda 4a (The Icebrood Saga y Vieja Corte del León): el índice publica ibs.json y core.json y los tests cubren las 8 fichas",
+ "files": [
+  {
+   "path": "assets/data/raids/mechanics/index.json",
+   "base_sha": "e4f1c8afad5407d52aba7342a7c947ec335db445",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  \"pof\": \"pof.json\"\n",
+     "text": "  \"pof\": \"pof.json\",\n  \"ibs\": \"ibs.json\",\n  \"core\": \"core.json\"\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "0e0d1cb36f7e1e9d74f65d625890145ed27585f3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const POF = JSON.parse(fs.readFileSync(path.join(MDIR, 'pof.json'), 'utf8'));\n",
+     "text": "const POF = JSON.parse(fs.readFileSync(path.join(MDIR, 'pof.json'), 'utf8'));\nconst IBS = JSON.parse(fs.readFileSync(path.join(MDIR, 'ibs.json'), 'utf8'));\nconst CORE = JSON.parse(fs.readFileSync(path.join(MDIR, 'core.json'), 'utf8'));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof'], 'tandas publicadas: Janthir, Heart of Thorns y Path of Fire');\n",
+     "text": "  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof', 'ibs', 'core'], 'tandas publicadas: Janthir, Heart of Thorns, Path of Fire, The Icebrood Saga y juego base');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.doesNotMatch(JSON.stringify(POF), /guildjen|hardstuck|mukluk/i);\n});\n",
+     "text": "  assert.doesNotMatch(JSON.stringify(POF), /guildjen|hardstuck|mukluk/i);\n});\n\ntest('tanda 4a: los 7 encuentros de The Icebrood Saga y Vieja Corte del León', () => {\n  const im = (d, id) => ({ e: d.encounters[id], roles: d.roles, sources: d.sources, verified: d.verified });\n  const ibs = CAT.encounters.filter((e) => groupOf(e).expansion === 'ibs').map((e) => e.id);\n  assert.deepEqual(Object.keys(IBS.encounters), ibs, 'en el orden del catálogo');\n  assert.equal(ibs.length, 7);\n  assert.ok(Object.values(IBS.encounters).every((e) => !e.cm), 'ningún encuentro de la saga tiene modo desafío');\n  for (const [id, page] of [['shiverpeaks_pass', 'Shiverpeaks_Pass'], ['boneskinner', 'Boneskinner'], ['cold_war', 'Cold_War']]) {\n    const h = S.fightHTML(model(id), im(IBS, id));\n    assert.match(h, new RegExp('href=\"https:\\\\/\\\\/wiki\\\\.guildwars2\\\\.com\\\\/wiki\\\\/' + page + '\"'), id + ': página de la wiki');\n    assert.match(h, /consultadas el 2026-10-24/);\n    assert.doesNotMatch(h, /En modo desafío cambia/);\n  }\n  const sp = S.fightHTML(model('shiverpeaks_pass'), im(IBS, 'shiverpeaks_pass'));\n  assert.match(sp, /Antes del jefe: Paso helado\\./);\n  assert.match(sp, /Onda de choque mortal/);\n  const vc = S.fightHTML(model('voice_claw'), im(IBS, 'voice_claw'));\n  assert.equal((vc.match(/<ol class=\"rs-phases\">[\\s\\S]*?<\\/ol>/)[0].match(/<li>/g) || []).length, 6);\n  const cw = S.fightHTML(model('cold_war'), im(IBS, 'cold_war'));\n  assert.ok(cw.indexOf('8:00') < cw.indexOf('5:28'), 'Guerra fría por reloj');\n  assert.match(S.fightHTML(model('forging_steel'), im(IBS, 'forging_steel')), /Forjador antiguo/);\n  const olc = S.fightHTML(model('old_lions_court'), im(CORE, 'old_lions_court'));\n  assert.deepEqual(Object.keys(CORE.encounters), ['old_lions_court']);\n  assert.match(olc, /Triple amenaza/);\n  assert.match(olc, /En modo desafío cambia[\\s\\S]*23\\.594\\.400/);\n  assert.match(olc, /wiki\\/Old_Lion%27s_Court\"/);\n  assert.doesNotMatch(JSON.stringify([IBS, CORE]), /guildjen|hardstuck|mukluk|snowcrows/i);\n});\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "/mechanics\\/pof/.test(u) ? POF : ",
+     "text": "/mechanics\\/pof/.test(u) ? POF : /mechanics\\/ibs/.test(u) ? IBS : /mechanics\\/core/.test(u) ? CORE : "
+    },
+    {
+     "op": "replace",
+     "anchor": "  await sb.RaidsSheet.open('old_lions_court');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 4, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n",
+     "text": "  await sb.RaidsSheet.open('old_lions_court');\n  assert.match(rs.innerHTML, /Triple amenaza/);\n  assert.deepEqual(mf().slice(4), ['assets/data/raids/mechanics/core.json'], 'el juego base se pide al abrir su ficha');\n  await sb.RaidsSheet.open('aetherblade_hideout');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 5, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n"
+    }
+   ]
+  }
+ ]
+}
