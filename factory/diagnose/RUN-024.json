@@ -1,0 +1,9 @@
+{
+  "id": "RUN-024",
+  "summary": "BL-070 RAI-1: el test del catálogo de Raids pasa con los íconos reales del repo; ai-memory y presupuesto de tamaño siguen verdes",
+  "tests": [
+    "tests/raids-catalog.test.cjs",
+    "tests/ai-memory.test.cjs",
+    "tests/size-budget.test.cjs"
+  ]
+}
