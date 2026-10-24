@@ -1,0 +1,63 @@
+{
+ "id": "PATCH-049",
+ "summary": "BL-070 RAI-4 tanda 3 hecha («Cómo se pelea» de Path of Fire, 11 encuentros): status y backlog; registro del RECOVERY de las 20:22Z",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "60423ce71eca46000682700ef852c39cfe2ee3c1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "RAI-4 tanda 1 (Monte Balrior) VALIDADA (19:27Z); tanda 2 (Heart of Thorns) HECHA (19:40Z), espera validación en DEV.",
+     "text": "RAI-4 tanda 1 (Monte Balrior) VALIDADA (19:27Z); tandas 2 (Heart of Thorns, 19:40Z) y 3 (Path of Fire, 20:40Z) HECHAS, esperan validación en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 19:40Z",
+     "text": "Última actualización: 2026-10-24 20:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Pablo pidió seguir de corrido con Heart of Thorns, Path of Fire y los encuentros. Tanda 2 publicada; sigue la tanda 3, Path of Fire (alas 5 a 7), en el próximo turno de investigación. Pablo puede validar la tanda 2 en DEV cuando quiera.",
+     "text": "Próxima acción: Pablo pidió seguir de corrido con Heart of Thorns, Path of Fire y los encuentros. Tandas 2 y 3 publicadas; sigue la tanda 4, los 16 encuentros, en el próximo turno de investigación. Pablo puede validar las tandas 2 y 3 en DEV cuando quiera. RECOVERY 20:22Z: el chat se cortó por quinta vez; reconstruí el estado desde los commits (último punto seguro `ed23814`, PATCH-047) y no había trabajo a medias."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-4 tanda 2 — «Cómo se pelea» de Heart of Thorns: 15 encuentros de las alas 1 a 4. HECHO.\nArchivos:\n- assets/data/raids/mechanics/hot.json (`8bbd9b1`)\n- assets/data/raids/mechanics/index.json (`d9cb5d2`)\n- tests/raids-sheet.test.cjs (`6a01157`)\n\nAdemás: PATCH-046 (índice y tests); sin cambios de código.\n",
+     "text": "BL-070 RAI-4 tanda 3 — «Cómo se pelea» de Path of Fire: 11 encuentros de las alas 5 a 7. HECHO.\nArchivos:\n- assets/data/raids/mechanics/pof.json (`3189c67`)\n- assets/data/raids/mechanics/index.json (`e4f1c8a`)\n- tests/raids-sheet.test.cjs (`0e0d1cb`)\n\nAdemás: PATCH-048 (índice y tests); sin cambios de código.\n\nAntes: RAI-4 tanda 2 — Heart of Thorns (`hot.json` `8bbd9b1`, PATCH-046).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-4 tanda 2 hecha (2026-10-24 19:40Z):",
+     "text": "Último hecho: RAI-4 tanda 3 hecha (2026-10-24 20:40Z): «Cómo se pelea» de Path of Fire, las alas 5 a 7 con sus 11 encuentros (Horror sin alma, Río de Almas, Estatuas de Grenth, Dhuum, Amalgamado conjurado, Largos gemelos, Qadim, Puertas de Ahdashim, Cardenal Adina, Cardenal Sabir y Qadim el Simpar). Datos en `assets/data/raids/mechanics/pof.json` (`3189c67`, 34,9 KB) y el índice suma la tanda (`mechanics/index.json` `e4f1c8a`, PATCH-048); sin tocar código. Cada ficha trae resumen, tiempo de furia cuando la wiki lo da (Amalgamado y Adina 8 minutos, Sabir 9, Qadim el Simpar 12, Qadim 13), «Antes del jefe» en el Horror sin alma (las runas de los tanques) y Sabir (los espíritus del camino), fases (Dhuum 6 por reloj y vida; las Estatuas, una por estatua), hasta 7 mecánicas con su rol (se suman «Empuje», «Bloqueos» y «Control»), «Shiruvana recomienda» y fuentes: la guía de MetaBattle de cada ala y la página del ala en la wiki oficial, consultadas el 2026-10-24. «En modo desafío cambia» solo en los 8 que lo tienen, y solo con lo que dice la wiki oficial (página del ala o del jefe): por eso Dhuum dice 40 millones de vida en lugar de 32 y el Eco del Finalizador con barra de 2000, sin más detalle. Las Puertas de Ahdashim son un evento sin línea de tiempo. Descarté una guía de terceros (GuildJen) para el modo desafío: el test de fuentes solo admite la wiki oficial y MetaBattle. `tests/raids-sheet.test.cjs` (`0e0d1cb`, 16 tests; el humo de «sin tanda» pasa de Adina a Vieja Corte del León); RUN-032 verde (8 archivos). Esta vez no corrí pruebas de mutación: el corte de sesión de las 20:2xZ se llevó las herramientas locales y no hay copia del código en el entorno. Sigue la tanda 4, los 16 encuentros. Antes, RAI-4 tanda 2 hecha (2026-10-24 19:40Z):"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior VALIDADA; tanda 2 Heart of Thorns HECHA; siguen Path of Fire y los encuentros)",
+     "text": "RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior VALIDADA; tandas 2 Heart of Thorns y 3 Path of Fire HECHAS; siguen los encuentros)"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-4 «Cómo se pelea» con fases y mecánicas verificadas: Monte Balrior (validada) y Heart of Thorns.\n",
+     "text": "RAI-4 «Cómo se pelea» con fases y mecánicas verificadas: Monte Balrior (validada), Heart of Thorns y Path of Fire.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y recorré «Cómo se pelea» de las alas 1 a 4. Mirá sobre todo el Guardián del valle (guardianes de colores antes del jefe), el Campamento de prisioneros (fases por reloj), el Ensamblaje de la Fortaleza y Deimos (con «En modo desafío cambia») y el Castillo Retorcido (evento, sin línea de tiempo). Una ficha de Path of Fire, como Adina, todavía tiene que decir que llega en una próxima tanda.\n",
+     "text": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y recorré «Cómo se pelea» de las alas 1 a 7. De Heart of Thorns mirá el Guardián del valle, el Campamento de prisioneros (fases por reloj) y Deimos; de Path of Fire, el Horror sin alma (runas antes del jefe), Dhuum (6 fases y «En modo desafío cambia»), Qadim (la Colección) y las Puertas de Ahdashim (evento, sin línea de tiempo). Un encuentro, como Vieja Corte del León, todavía tiene que decir que llega en una próxima tanda.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "dc8dd704d470100feaee6ebdbdfe81fd11a1b79c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Siguen Path of Fire (alas 5 a 7) y los encuentros. SHIRUVANA-ART-001 queda en pausa",
+     "text": "Siguen Path of Fire (alas 5 a 7) y los encuentros. RAI-4 tanda 3 hecha (2026-10-24 20:40Z): «Cómo se pelea» de Path of Fire, las alas 5 a 7 con sus 11 encuentros (Horror sin alma, Río de Almas, Estatuas de Grenth, Dhuum, Amalgamado conjurado, Largos gemelos, Qadim, Puertas de Ahdashim, Cardenal Adina, Cardenal Sabir y Qadim el Simpar). Datos en `assets/data/raids/mechanics/pof.json` (`3189c67`, 34,9 KB) y el índice suma la tanda (`mechanics/index.json` `e4f1c8a`, PATCH-048); sin tocar código. Cada ficha trae resumen, tiempo de furia cuando la wiki lo da (Amalgamado y Adina 8 minutos, Sabir 9, Qadim el Simpar 12, Qadim 13), «Antes del jefe» en el Horror sin alma (las runas de los tanques) y Sabir (los espíritus del camino), fases (Dhuum 6 por reloj y vida; las Estatuas, una por estatua), hasta 7 mecánicas con su rol (se suman «Empuje», «Bloqueos» y «Control»), «Shiruvana recomienda» y fuentes: la guía de MetaBattle de cada ala y la página del ala en la wiki oficial, consultadas el 2026-10-24. «En modo desafío cambia» solo en los 8 que lo tienen, y solo con lo que dice la wiki oficial (página del ala o del jefe): por eso Dhuum dice 40 millones de vida en lugar de 32 y el Eco del Finalizador con barra de 2000, sin más detalle. Las Puertas de Ahdashim son un evento sin línea de tiempo. Descarté una guía de terceros (GuildJen) para el modo desafío: el test de fuentes solo admite la wiki oficial y MetaBattle. `tests/raids-sheet.test.cjs` (`0e0d1cb`, 16 tests; el humo de «sin tanda» pasa de Adina a Vieja Corte del León); RUN-032 verde (8 archivos). Esta vez no corrí pruebas de mutación: el corte de sesión de las 20:2xZ se llevó las herramientas locales y no hay copia del código en el entorno. Sigue la tanda 4, los 16 encuentros. SHIRUVANA-ART-001 queda en pausa"
+    }
+   ]
+  }
+ ]
+}
