@@ -1,22 +1,22 @@
 # STATUS
 
-Estado: EN CURSO
-Tarea actual: BL-067 paso 3 — Logros. LOG-3 en curso: «Por categoría» agrupada por expansión o modo en `js/ach-categories.js` (por manifiesto); se va el panel de Logros de la Sidebar.
+Estado: ESPERANDO A PABLO
+Tarea actual: BL-067 paso 3 — Logros. LOG-3 hecho en DEV: «Por categoría» agrupada por expansión o modo en `js/ach-categories.js` (por manifiesto) y la Sidebar sin el panel de Logros. Espera la validación de Pablo.
 Motivo: Pablo validó LOG-2 (2026-10-24) y pidió seguir con LOG-3.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: REVIEW
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 06:30Z
-Próxima acción: publicar `js/ach-view.js` 1.1.0 con su test, después `js/ach-categories.js` con su test y el manifiesto, y al final PATCH-030 (achievements.js 3.5.0, index.html, presupuesto y test conjunto).
+Última actualización: 2026-10-24 06:16Z
+Próxima acción: con la validación de Pablo, LOG-4: «Colecciones legendarias» con salto a la Armería.
 
 Micro-ciclo:
-LOG-3 — «Por categoría» agrupada y Sidebar sin el panel de Logros. EN CURSO.
+LOG-3 — «Por categoría» agrupada y Sidebar sin el panel de Logros. HECHO, espera validación.
 Archivos:
-- js/ach-categories.js 1.0.0 (nuevo), js/ach-view.js 1.1.0, sus tests y js/modules.json
-- PATCH-030: js/achievements.js 3.5.0, index.html (`?v` y sin #achAsidePanel), tools/size-budget.json y el test conjunto
-- ai-memory/status.md
+- js/ach-categories.js 1.0.0 (`a7353e3`), js/ach-view.js 1.1.0 (`43ee65b`), sus tests y js/modules.json (`4fccfe1`)
+- PATCH-030: js/achievements.js 3.5.0 (`c4c3dae`), index.html (`6555667`), tools/size-budget.json y el test conjunto — APLICADO
+- ai-memory: FEAT-012 y status.md
 
-Último hecho: LOG-2 validado. Probé en local la pestaña nueva contra el `achievements.js` 3.5.0 simulado: 43/43.
+Último hecho: publiqué primero `ach-view.js` 1.1.0 (sin el módulo nuevo muestra la lista de antes), después `ach-categories.js` con su test y el manifiesto, y al final PATCH-030. «Por categoría» ahora agrupa las categorías en sus grupos oficiales de Guild Wars 2 (un solo pedido público a `/v2/achievements/groups`, en español), con ícono oficial, «N de M», barra y cuántos tenés cerca; buscador y «Con pendientes / Todas». `achievements.js` 3.5.0 ya no inyecta «Más cercanos» ni las 30 categorías en la Sidebar y bajó de 23325 a 17897 bytes (en tres ciclos, −66 %); `index.html` perdió la sección vacía `#achAsidePanel` y bajó su techo. Tests: 43/43 (11 nuevos; los conjuntos corren los cuatro archivos reales); suite verde antes y después; los blobs publicados son iguales a los locales.
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
@@ -27,7 +27,7 @@ BL-064 (cerrada y validada por Pablo, 2026-10-24 02:25Z):
 2. Cámara del Brujo: CAM-0 a CAM-6 validados (FEAT-011). En producción y validada (BL-068).
 
 BL-067 (READY, sigue el mismo plan aprobado):
-3. Logros. ← LOG-0 a LOG-2 validados; LOG-3 en curso.
+3. Logros. ← LOG-0 a LOG-2 validados; LOG-3 hecho, espera validación.
 4. Actividades (después de decidir BL-055).
 5. Raids y Strikes.
 6. Inventario y Personajes.
@@ -49,6 +49,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
+- [BL-067] Validación: abrí Logros en DEV con recarga completa (Ctrl+F5) y entrá a «Por categoría». Las categorías aparecen agrupadas por expansión o modo (como en el juego), cada grupo con cuántas categorías tiene, cuánto llevás y cuántos tenés cerca; cada categoría con su ícono oficial, «N de M», una barra fina y sus pendientes. Probá el buscador (por ejemplo «janthir» o «fractal») y «Con pendientes / Todas»; tocar una categoría te lleva a «Casi listos» con todos sus logros. Fijate también que en la Sidebar ya no aparezcan «Más cercanos» ni la lista de categorías: queda solo la navegación.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
@@ -59,7 +60,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-067] Regla de Pablo para Logros: el ícono oficial de cada logro se queda en la tarjeta, destacado. Se puede reorganizar la tarjeta, pero no reemplazar ni ocultar el ícono. Lo vigilan `tests/ach-view.test.cjs` y `tests/ach-cards.test.cjs`.
 - [BL-064] Deuda registrada (DEBT-CAM-1): la Tienda, Objetivos semanales y Compras fijadas siguen leyendo la lista de cuentas desde la clave vieja `gw2_keys` (lectura tolerada que vigila idea61). Pasarla a `Storage` toca ese guard y va en un ciclo propio.
 - [BL-064] Quedan ocultos y sin borrar el título viejo de la Cámara, la línea de temporada y la nota de sincronización (`router.js` y `wizards-vault.js` todavía los usan). Se van cuando se renueven esos dos archivos.
-- [BL-065] Zonas de hoy: `index.html` (64.8 KB) y `router.js` (65.6 KB) siguen congelados pero con el techo más bajo; `welcome-panel.js` quedó congelado por 1 byte y sale con el próximo recorte; en advertencia `converter-modal.js`, `activities-theme.js` y `css/theme-polish.css`; `achievements.js` salió de advertencia en LOG-2 (22,8 KB, sano); excepciones, solo los datos generados de la Armería.
+- [BL-065] Zonas de hoy: `index.html` (63.2 KB, techo bajado en LOG-3) y `router.js` (65.6 KB) siguen congelados pero con el techo más bajo; `welcome-panel.js` quedó congelado por 1 byte y sale con el próximo recorte; en advertencia `converter-modal.js`, `activities-theme.js` y `css/theme-polish.css`; `achievements.js` salió de advertencia en LOG-2 y en LOG-3 quedó en 17,5 KB; excepciones, solo los datos generados de la Armería.
 - [BL-065] Regla de LES-033: cuando subo la versión de un módulo, en el mismo cambio sube su `?v`, o el módulo vive en `js/modules.json`. El test `index-versions` lo exige en CI.
 - [BL-065] El canal de parches solo corre en DEV, solo con pushes tuyos, y nunca puede tocar workflows ni a sí mismo. Guía: `factory/README.md`. El diagnóstico (`factory/diagnose/`) solo lee: corre tests y escribe la salida.
 - [BL-068] En producción `router.js` sigue en 2.17.0, con la Tienda de respaldo vieja adentro: no se usa y no se ve. Su limpieza (2.18.0) queda en DEV. La rama `promo/camara-armeria` fue mi prueba de publicación y se puede borrar.
