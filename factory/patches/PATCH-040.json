@@ -1,0 +1,68 @@
+{
+ "id": "PATCH-040",
+ "summary": "BL-070 RAI-2 hecho: status y backlog",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "cfdb73a5e493eb8f338d3a184ec2474f4e2be6ef",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 HECHO (16:15Z), espera validación.",
+     "text": "RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 HECHO (16:15Z); RAI-2 HECHO (16:55Z), espera validación en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 16:15Z",
+     "text": "Última actualización: 2026-10-24 16:58Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: esperar a Pablo. Él valida RAI-1 (sin cambios visibles: catálogo, íconos y marcado). Con su visto sigo con RAI-2: Raids unificado con cabecera, pestañas Alas y Encuentros y tarjetas, en DEV.",
+     "text": "Próxima acción: esperar a Pablo. Él valida RAI-2 en DEV (Raids unificado). Con su visto sigo con RAI-3: la ficha de cada encuentro a pantalla completa."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-1 — catálogo verificado, miniaturas oficiales y prueba de los logros semanales. HECHO.\nArchivos:\n- tests/probe-rai1-*.smoke.cjs (4 sondas temporales; resultados en OUT-022 y OUT-023; ya borradas)\n- assets/data/raids/catalog.json (`17e273e`)\n- tests/raids-catalog.test.cjs (`21ef95b`)\n",
+     "text": "BL-070 RAI-2 — Raids unificado: cabecera, pestañas Alas y Encuentros, tarjetas. HECHO.\nArchivos:\n- js/raids-view.js 1.0.0 (`d60e631`)\n- tests/raids-view.test.cjs (`3079010`)\n- js/modules.json (`ee028d3`)\n\nAntes: RAI-1 — catálogo verificado (`assets/data/raids/catalog.json` `17e273e`, `tests/raids-catalog.test.cjs` `21ef95b`). HECHO; Pablo dio el visto al pedir RAI-2 (16:41Z).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-1 hecho (2026-10-24 16:15Z):",
+     "text": "Último hecho: RAI-2 hecho (2026-10-24 16:55Z): Raids unificado en DEV con `js/raids-view.js` 1.0.0 (`d60e631`, 33,3 KB, por el manifiesto: `js/modules.json` `ee028d3`; sin tocar raid-tracker.js, strike-tracker.js ni index.html). Cabecera con hora local, servidor y reset semanal; 4 indicadores (alas, conocimiento legendario de la cartera y por cobrar, fragmentos por cobrar con tope 800, encuentros); mi línea con el ala empezada más cerca de terminarse; pestañas Alas (8 alas) y Encuentros (16), filtros Todos / Me faltan / Con modo desafío y por expansión; tarjetas con la miniatura oficial, conocimiento legendario, fragmentos o cristales con sus íconos oficiales, MD +10 y dificultad 1 a 5. Estados honestos: «Sin datos» si una lectura falla, nunca «Pendiente» falso. Los encuentros se marcan con los objetivos del logro 9125; Forjando acero y Nexo de la Eternidad con «Marcar hecho» (D2; clave nueva `gn:raids:marks`, por cuenta con una huella, nunca la Key, y vale hasta el reset). `#/account/strikes` lleva a Encuentros y la preferencia vieja queda fija en Raids (`gn:raids:strike:view`). `tests/raids-view.test.cjs` (`3079010`, 12 tests con prueba de humo de DOM, 14/14 mutaciones); RUN-025 verde (10 archivos, incluidos hb78, hb101, hb136 e idea61). La ficha a pantalla completa es RAI-3. Antes, RAI-1 hecho (2026-10-24 16:15Z):"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-1 catálogo verificado HECHO; siguen RAI-2 hub unificado,",
+     "text": "RAI-1 catálogo verificado HECHO; RAI-2 hub unificado HECHO (espera validación); siguen"
+    },
+    {
+     "op": "replace",
+     "anchor": "(la API trae un objetivo por encuentro en el logro semanal 9125).\n",
+     "text": "(la API trae un objetivo por encuentro en el logro semanal 9125); RAI-2 Raids unificado en DEV (`js/raids-view.js`).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: RAI-1 no cambia nada en pantalla. Revisá el resumen del catálogo (46 encuentros, 14 de los 16 encuentros se podrán marcar solos, íconos oficiales nuevos y los 5 que siguen sin miniatura) y dame el visto para seguir con RAI-2.\n",
+     "text": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5) y entrá a Raids. Mirá la cabecera (hora, reset y los 4 indicadores), mi línea, las pestañas Alas y Encuentros, los filtros y las tarjetas con las miniaturas. Confirmá que lo marcado coincide con tu semana en el juego, sobre todo los encuentros (es la primera lectura real del logro 9125), y probá «Marcar hecho» en Forjando acero. La ficha de cada encuentro llega en RAI-3.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-059] El frente de Shiruvana queda aprobado",
+     "text": "- [BL-070] RAI-2 suma una clave al navegador, `gn:raids:marks` (tus marcas a mano de la semana, por cuenta, sin la Key), y deja `gn:raids:strike:view` en «raids». Vuelta atrás: sacar `js/raids-view.js` de `js/modules.json` deja Raids y Strikes como estaban.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "31484a74e0c9ec907696a62174bf57ba9d3e1d85",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "«Táctica del Forjador de Mitos». · FEAT-013, LES-029",
+     "text": "«Táctica del Forjador de Mitos». RAI-2 hecho (2026-10-24 16:55Z): Raids unificado en DEV con `js/raids-view.js` 1.0.0 (`d60e631`, 33,3 KB, por el manifiesto: `js/modules.json` `ee028d3`; sin tocar raid-tracker.js, strike-tracker.js ni index.html). Cabecera con hora local, servidor y reset semanal; 4 indicadores (alas, conocimiento legendario de la cartera y por cobrar, fragmentos por cobrar con tope 800, encuentros); mi línea con el ala empezada más cerca de terminarse; pestañas Alas (8 alas) y Encuentros (16), filtros Todos / Me faltan / Con modo desafío y por expansión; tarjetas con la miniatura oficial, conocimiento legendario, fragmentos o cristales con sus íconos oficiales, MD +10 y dificultad 1 a 5. Estados honestos: «Sin datos» si una lectura falla, nunca «Pendiente» falso. Los encuentros se marcan con los objetivos del logro 9125; Forjando acero y Nexo de la Eternidad con «Marcar hecho» (D2; clave nueva `gn:raids:marks`, por cuenta con una huella, nunca la Key, y vale hasta el reset). `#/account/strikes` lleva a Encuentros y la preferencia vieja queda fija en Raids (`gn:raids:strike:view`). `tests/raids-view.test.cjs` (`3079010`, 12 tests con prueba de humo de DOM, 14/14 mutaciones); RUN-025 verde (10 archivos, incluidos hb78, hb101, hb136 e idea61). La ficha a pantalla completa es RAI-3. · FEAT-013, LES-029"
+    }
+   ]
+  }
+ ]
+}
