@@ -1,0 +1,7 @@
+{
+  "id": "RUN-020",
+  "summary": "Cierre de BL-067: leer la cabeza del CHANGELOG y la fila de BL-067 del backlog para parchearlos con anclas exactas",
+  "tests": [
+    "tests/probe-b67c.smoke.cjs"
+  ]
+}
