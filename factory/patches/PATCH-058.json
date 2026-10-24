@@ -1,0 +1,58 @@
+{
+ "id": "PATCH-058",
+ "summary": "BL-070 RAI-5b (1/2): status y backlog.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "290bb9c2ac5060f5cc4eff3d80a06069568f9fa9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 23:30Z",
+     "text": "Última actualización: 2026-10-24 23:42Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-5a (el nombre «Raids») está hecho; sigue RAI-5b, el retiro de `strike-tracker.js` (toca `router.js`, `index.html`, `gn-frame.js` y unos 10 tests heredados), y después RAI-6 (revisión final, FEAT-014).",
+     "text": "RAI-5a (el nombre «Raids») y la primera parte de RAI-5b (`strike-tracker.js` ya no se carga) están hechos; sigue la segunda parte de RAI-5b (borrar el archivo, su panel y los tests heredados que leen su código) y después RAI-6 (revisión final, FEAT-014)."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-5a — el módulo se llama «Raids» (Sidebar, celular y Bienvenida). HECHO.\nArchivos:\n- js/sidebar-nav.js (`9d630a4`, 2.2.3)\n- js/welcome-panel.js (`91614a6`, 2.2.1)\n- index.html (`6a5c7d2`)\n\nAdemás: PATCH-054 (también `tests/sidebar-nav.test.cjs` `6e09eeb` y `tools/size-budget.json` `532863a`: la Bienvenida pasa a advertencia); PATCH-055 (esta documentación).\n",
+     "text": "BL-070 RAI-5b (1/2) — `strike-tracker.js` deja de cargarse. HECHO.\nArchivos:\n- js/router.js (`2944ccf`, 2.18.1)\n- index.html (`e222d9b`)\n- tests/hb133-appjs-no-traga-gn.test.js (`00b90a9`)\n\nAdemás: PATCH-056 rechazado (hb133 pedía el script viejo) y PATCH-057 aplicado; PATCH-058 (esta documentación).\n\nAntes: RAI-5a — el módulo se llama «Raids» (`js/sidebar-nav.js` 2.2.3 `9d630a4`, `js/welcome-panel.js` 2.2.1 `91614a6`, PATCH-054 y PATCH-055).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-5a hecho (2026-10-24 23:27Z)",
+     "text": "Último hecho: RAI-5b, primera parte, hecha (2026-10-24 23:40Z): `js/strike-tracker.js` (57 KB) ya no se carga. `index.html` (`e222d9b`) no lo pide y `js/router.js` 2.18.1 (`2944ccf`, 65.334 bytes, debajo de su techo) hace que `#/account/strikes` muestre el panel de Raids; `raids-view.js` la lleva a la pestaña Encuentros, sin el instante en que antes arrancaba el módulo viejo. Se fue también el refresco de StrikeTracker. `tests/hb133-appjs-no-traga-gn.test.js` (`00b90a9`) ahora exige que `index.html` ya no lo cargue; el defecto de ALERT-197 se sigue midiendo con raid-tracker.js y app.js. PATCH-056 fue rechazado por el canal porque hb133 pedía el script viejo; PATCH-057 lo reintentó con el test al día y quedó aplicado con la suite completa en verde. Una sonda en CI (RUN-037, ya borrada) mostró qué falta para la segunda parte: borrar el archivo, el panel `#strikeTrackerPanel` de `index.html`, su entrada en `gn-frame.js` y en `tools/size-budget.json`, y retirar o reescribir los tests heredados que leen su código (hb101, hb125, hb136, hb94, hb106-t13, idea56, idea57t4, t19c, idea61 y el censo). Antes, RAI-5a hecho (2026-10-24 23:27Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-5a nombre «Raids» HECHO; siguen RAI-5b retiro de `strike-tracker.js`, RAI-6 revisión y FEAT-014.",
+     "text": "RAI-5a nombre «Raids» HECHO; RAI-5b (1/2) `strike-tracker.js` ya no se carga HECHO; siguen RAI-5b (2/2) borrar el archivo y sus tests, RAI-6 revisión y FEAT-014."
+    },
+    {
+     "op": "replace",
+     "anchor": "Y en la Sidebar, en «Más» del celular y en las tarjetas de la Bienvenida el módulo tiene que decir «Raids».",
+     "text": "Y en la Sidebar, en «Más» del celular y en las tarjetas de la Bienvenida el módulo tiene que decir «Raids». Si abrís `#/account/strikes` (un marcador viejo), tiene que llevarte directo a Raids, pestaña Encuentros."
+    },
+    {
+     "op": "replace",
+     "anchor": "Hoy `#/account/strikes` todavía arranca el módulo viejo un instante antes de que Raids lo lleve a Encuentros; 5b lo saca de raíz. Vuelta atrás de 5a: revertir PATCH-054.",
+     "text": "Desde PATCH-057 el módulo viejo ya no se carga y `#/account/strikes` lleva directo a Encuentros; el archivo sigue en el repo hasta la segunda parte. Vuelta atrás de 5a: revertir PATCH-054; de 5b (1/2): revertir PATCH-057."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "5ccd9c7f2325bc6435abd1f2bc45309d59323e46",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Siguen RAI-5b y RAI-6. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo.",
+     "text": "Siguen RAI-5b y RAI-6. RAI-5b, primera parte, hecha (2026-10-24 23:40Z): `js/strike-tracker.js` (57 KB) ya no se carga. `index.html` (`e222d9b`) no lo pide y `js/router.js` 2.18.1 (`2944ccf`, 65.334 bytes, debajo de su techo) hace que `#/account/strikes` muestre el panel de Raids; `raids-view.js` la lleva a la pestaña Encuentros, sin el instante en que antes arrancaba el módulo viejo. Se fue también el refresco de StrikeTracker. `tests/hb133-appjs-no-traga-gn.test.js` (`00b90a9`) ahora exige que `index.html` ya no lo cargue; el defecto de ALERT-197 se sigue midiendo con raid-tracker.js y app.js. PATCH-056 fue rechazado por el canal porque hb133 pedía el script viejo; PATCH-057 lo reintentó con el test al día y quedó aplicado con la suite completa en verde. Una sonda en CI (RUN-037, ya borrada) mostró qué falta para la segunda parte: borrar el archivo, el panel `#strikeTrackerPanel` de `index.html`, su entrada en `gn-frame.js` y en `tools/size-budget.json`, y retirar o reescribir los tests heredados que leen su código (hb101, hb125, hb136, hb94, hb106-t13, idea56, idea57t4, t19c, idea61 y el censo). Siguen RAI-5b (2/2) y RAI-6. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo."
+    }
+   ]
+  }
+ ]
+}
