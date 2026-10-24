@@ -1,0 +1,68 @@
+{
+ "id": "PATCH-042",
+ "summary": "BL-070 RAI-3 hecho (ficha de cada encuentro con cofres verificados): status y backlog; RAI-2 validado por Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "bbca1e84666d8f4acbd2e3bd9bf8515fd2b9daca",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "RAI-2 HECHO (16:55Z), espera validación en DEV.",
+     "text": "RAI-2 VALIDADO (18:36Z); RAI-3 HECHO (19:05Z), espera validación en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 16:58Z",
+     "text": "Última actualización: 2026-10-24 19:10Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: esperar a Pablo. Él valida RAI-2 en DEV (Raids unificado). Con su visto sigo con RAI-3: la ficha de cada encuentro a pantalla completa.",
+     "text": "Próxima acción: esperar a Pablo. Él valida RAI-3 en DEV (la ficha de cada encuentro). Con su visto sigo con RAI-4: fases y mecánicas verificadas, por tandas."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-2 — Raids unificado: cabecera, pestañas Alas y Encuentros, tarjetas. HECHO.\nArchivos:\n- js/raids-view.js 1.0.0 (`d60e631`)\n- tests/raids-view.test.cjs (`3079010`)\n- js/modules.json (`ee028d3`)\n",
+     "text": "BL-070 RAI-3 — Ficha de cada encuentro a pantalla completa, con los cofres verificados. HECHO.\nArchivos:\n- js/raids-sheet.js 1.0.0 (`5007b9e`)\n- assets/data/raids/rewards.json (`f45e59d`)\n- js/raids-view.js 1.1.0 (`9a9effa`)\n\nAdemás: `tests/raids-sheet.test.cjs` (`a74d6c8`), `js/modules.json` (`b566ad2`) y LES-038.\n\nAntes: RAI-2 — Raids unificado (`js/raids-view.js` 1.0.0 `d60e631`). VALIDADO por Pablo (2026-10-24 18:36Z).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-2 hecho (2026-10-24 16:55Z):",
+     "text": "Último hecho: RAI-3 hecho (2026-10-24 19:05Z): la ficha de cada encuentro a pantalla completa, como la de la legendaria. `js/raids-sheet.js` 1.0.0 (`5007b9e`, 21,3 KB) y `js/raids-view.js` 1.1.0 (`9a9effa`: toda la fila abre la ficha, con un botón por fila para teclado y lector), por el manifiesto (`js/modules.json` `b566ad2`); sin tocar raid-tracker.js, strike-tracker.js ni index.html. La ficha reemplaza la lista con «← Volver a Raids», Escape, anterior y siguiente del ala, y vuelve al mismo lugar y a la misma fila. Muestra la miniatura a 96 px, el nombre en español e inglés, expansión, tipo, dificultad, modo desafío y tu estado de la semana; «Lo que te llevás»: conocimiento legendario y fragmentos o cristales con sus íconos oficiales, y el cofre del encuentro con su ícono y nombre en español de /v2/items y lo garantizado (la ficha del jefe 1–5 y la pieza rara); «Lo que te puede tocar del cofre» por rareza (común, poco común, raro, muy raro; familias de armas con su cantidad, como Sea-Glass Wave, 17); y «Modo desafío»: +10 y el cofre magnífico (Heart of Thorns y Path of Fire no dan cofre magnífico). Datos en `assets/data/raids/rewards.json` (`f45e59d`, 25,6 KB): 36 cofres semanales y 12 magníficos copiados de la página de cada cofre en la wiki oficial, con su página y la fecha. No pude verificar el contenido de los cofres magníficos de Void y Decima: la ficha lo dice y enlaza la wiki. Vloxx sale de una copia de la wiki, y la ficha lo aclara. La wiki rechaza los pedidos desde CI (RUN-026 y RUN-027, sondas ya borradas; LES-038): los datos se leyeron por búsqueda. Keep Construct da 12 fragmentos (+10), como dice la tabla de «Magnetite Shard»; su página dice 15 y está desactualizada. `tests/raids-sheet.test.cjs` (`a74d6c8`, 9 tests, 22/22 mutaciones); RUN-028 verde (10 archivos). Las fases y las mecánicas llegan en RAI-4, por tandas. Antes, RAI-2 hecho (2026-10-24 16:55Z; validado por Pablo a las 18:36Z):"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-2 hub unificado HECHO (espera validación); siguen RAI-3 ficha a pantalla completa,",
+     "text": "RAI-2 hub unificado VALIDADO; RAI-3 ficha a pantalla completa HECHO (espera validación); siguen"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-2 Raids unificado en DEV (`js/raids-view.js`).\n",
+     "text": "RAI-2 Raids unificado en DEV (`js/raids-view.js`), validado; RAI-3 la ficha de cada encuentro con los cofres verificados en la wiki oficial (`js/raids-sheet.js`).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5) y entrá a Raids. Mirá la cabecera (hora, reset y los 4 indicadores), mi línea, las pestañas Alas y Encuentros, los filtros y las tarjetas con las miniaturas. Confirmá que lo marcado coincide con tu semana en el juego, sobre todo los encuentros (es la primera lectura real del logro 9125), y probá «Marcar hecho» en Forjando acero. La ficha de cada encuentro llega en RAI-3.\n",
+     "text": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y tocá una fila (por ejemplo Greer). Mirá la ficha: cabecera con la miniatura grande, «Lo que te llevás» con el cofre y su ícono, «Lo que te puede tocar» por rareza y «Modo desafío». Probá «Siguiente», «← Volver a Raids» y Escape (tiene que volver a la misma fila), una ficha de Heart of Thorns (Keep Construct), un evento del Valle Espiritual y un encuentro (Kela). Las fases y mecánicas llegan en RAI-4.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-059] El frente de Shiruvana queda aprobado",
+     "text": "- [BL-070] RAI-3: los nombres de los objetos del cofre van en inglés, como en la wiki, hasta verificar los de la wiki en español; el nombre del cofre sí va en español (lo trae la API). No pude verificar qué traen los cofres magníficos de Void y de Decima: la ficha lo dice y enlaza la wiki. Vuelta atrás: sacar `js/raids-sheet.js` de `js/modules.json` (las filas dejan de abrir la ficha y el resto sigue igual).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "df4278c86caf1f14886fed20c57ce2a57a35ccb3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "La ficha a pantalla completa es RAI-3. SHIRUVANA-ART-001 queda en pausa",
+     "text": "La ficha a pantalla completa es RAI-3. RAI-2 VALIDADO por Pablo (2026-10-24 18:36Z). RAI-3 hecho (2026-10-24 19:05Z): la ficha de cada encuentro a pantalla completa, como la de la legendaria. `js/raids-sheet.js` 1.0.0 (`5007b9e`, 21,3 KB) y `js/raids-view.js` 1.1.0 (`9a9effa`: toda la fila abre la ficha, con un botón por fila para teclado y lector), por el manifiesto (`js/modules.json` `b566ad2`); sin tocar raid-tracker.js, strike-tracker.js ni index.html. La ficha reemplaza la lista con «← Volver a Raids», Escape, anterior y siguiente del ala, y vuelve al mismo lugar y a la misma fila. Muestra la miniatura a 96 px, el nombre en español e inglés, expansión, tipo, dificultad, modo desafío y tu estado de la semana; «Lo que te llevás»: conocimiento legendario y fragmentos o cristales con sus íconos oficiales, y el cofre del encuentro con su ícono y nombre en español de /v2/items y lo garantizado (la ficha del jefe 1–5 y la pieza rara); «Lo que te puede tocar del cofre» por rareza (común, poco común, raro, muy raro; familias de armas con su cantidad, como Sea-Glass Wave, 17); y «Modo desafío»: +10 y el cofre magnífico (Heart of Thorns y Path of Fire no dan cofre magnífico). Datos en `assets/data/raids/rewards.json` (`f45e59d`, 25,6 KB): 36 cofres semanales y 12 magníficos copiados de la página de cada cofre en la wiki oficial, con su página y la fecha. No pude verificar el contenido de los cofres magníficos de Void y Decima: la ficha lo dice y enlaza la wiki. Vloxx sale de una copia de la wiki, y la ficha lo aclara. La wiki rechaza los pedidos desde CI (RUN-026 y RUN-027, sondas ya borradas; LES-038): los datos se leyeron por búsqueda. Keep Construct da 12 fragmentos (+10), como dice la tabla de «Magnetite Shard»; su página dice 15 y está desactualizada. `tests/raids-sheet.test.cjs` (`a74d6c8`, 9 tests, 22/22 mutaciones); RUN-028 verde (10 archivos). Las fases y las mecánicas llegan en RAI-4, por tandas. SHIRUVANA-ART-001 queda en pausa"
+    }
+   ]
+  }
+ ]
+}
