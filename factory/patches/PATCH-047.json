@@ -1,0 +1,63 @@
+{
+ "id": "PATCH-047",
+ "summary": "BL-070 RAI-4 tanda 2 hecha («Cómo se pelea» de Heart of Thorns, 15 encuentros): status y backlog; tanda 1 validada por Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c85bd9c719c2687eb84cb9fd3f11a398267542b2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "RAI-4 tanda 1 (Monte Balrior) HECHA (19:25Z), espera validación en DEV.",
+     "text": "RAI-4 tanda 1 (Monte Balrior) VALIDADA (19:27Z); tanda 2 (Heart of Thorns) HECHA (19:40Z), espera validación en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 19:25Z",
+     "text": "Última actualización: 2026-10-24 19:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: esperar a Pablo. Él valida en DEV la tanda 1 de RAI-4 («Cómo se pelea» de Monte Balrior). Con su visto sigo con la tanda de Heart of Thorns (alas 1 a 4).",
+     "text": "Próxima acción: Pablo pidió seguir de corrido con Heart of Thorns, Path of Fire y los encuentros. Tanda 2 publicada; sigue la tanda 3, Path of Fire (alas 5 a 7), en el próximo turno de investigación. Pablo puede validar la tanda 2 en DEV cuando quiera."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-4 tanda 1 — «Cómo se pelea» de Monte Balrior: fases, mecánicas con su rol, modo desafío y fuentes. HECHO.\nArchivos:\n- assets/data/raids/mechanics/jw.json (`e6f6d27`)\n- js/raids-sheet.js 1.1.0 (`af57876`)\n- tests/raids-sheet.test.cjs (`888be18`)\n\nAdemás: `assets/data/raids/mechanics/index.json` (`8e38116`) y `js/modules.json` (`52f8a6e`), por PATCH-044.\n",
+     "text": "BL-070 RAI-4 tanda 2 — «Cómo se pelea» de Heart of Thorns: 15 encuentros de las alas 1 a 4. HECHO.\nArchivos:\n- assets/data/raids/mechanics/hot.json (`8bbd9b1`)\n- assets/data/raids/mechanics/index.json (`d9cb5d2`)\n- tests/raids-sheet.test.cjs (`6a01157`)\n\nAdemás: PATCH-046 (índice y tests); sin cambios de código.\n\nAntes: RAI-4 tanda 1 — Monte Balrior (`jw.json` `e6f6d27`, `js/raids-sheet.js` 1.1.0 `af57876`, `js/modules.json` `52f8a6e`, PATCH-044). VALIDADA por Pablo (2026-10-24 19:27Z).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-4 tanda 1 hecha (2026-10-24 19:25Z):",
+     "text": "Último hecho: RAI-4 tanda 2 hecha (2026-10-24 19:40Z): «Cómo se pelea» de Heart of Thorns, las alas 1 a 4 con sus 15 encuentros (Guardián del valle, Bosques Espirituales, Gorseval, Sabetha, Perezón, Campamento de prisioneros, Matías Gabrel, Asedio a la fortaleza, Ensamblaje de la Fortaleza, Castillo Retorcido, Xera, Cairn, Dirigente mursaat, Samarog y Deimos). Datos en `assets/data/raids/mechanics/hot.json` (`8bbd9b1`, 35,8 KB) y el índice suma la tanda (`mechanics/index.json` `d9cb5d2`, PATCH-046); sin tocar código: `js/raids-sheet.js` 1.1.0 ya las muestra. Cada ficha trae resumen, tiempo de furia cuando la wiki lo da, «Antes del jefe» donde corresponde (guardianes de colores, torres de Xera, prisionero de Deimos), fases (Deimos 6, Matías 4 climas, el Campamento por reloj: 6:50 Berg, 4:50 Zane, 2:47 Narella), hasta 7 mecánicas con su rol (se suman «Daño de condición», «Quitar bendiciones» y «Rol asignado»), «Shiruvana recomienda» y fuentes: la guía de MetaBattle de cada ala y la página de la wiki oficial, consultadas el 2026-10-24. «En modo desafío cambia» solo en los 5 que lo tienen: Ensamblaje de la Fortaleza, Cairn, Dirigente mursaat (30 millones de vida y baldosas azules), Samarog (40 millones) y Deimos (42 millones, sin Saul). Los dos eventos (Bosques Espirituales y Castillo Retorcido) no muestran línea de tiempo si no tienen fases. El nombre del dominio «Forsaken Thicket Waters» queda en inglés hasta verificar el oficial en español. `tests/raids-sheet.test.cjs` (`6a01157`, 15 tests, 12/12 mutaciones nuevas); RUN-031 verde. Siguen Path of Fire (alas 5 a 7) y los encuentros. Antes, RAI-4 tanda 1 hecha (2026-10-24 19:25Z; validada por Pablo a las 19:27Z):"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior HECHA, espera validación; siguen Heart of Thorns, Path of Fire y los encuentros)",
+     "text": "RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior VALIDADA; tanda 2 Heart of Thorns HECHA; siguen Path of Fire y los encuentros)"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-4 «Cómo se pelea» con fases y mecánicas verificadas, tanda 1 Monte Balrior.\n",
+     "text": "RAI-4 «Cómo se pelea» con fases y mecánicas verificadas: Monte Balrior (validada) y Heart of Thorns.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y abrí Greer. Bajo las recompensas está «Cómo se pelea»: resumen, «Antes del jefe», «Shiruvana recomienda», las 5 fases, las mecánicas con su rol y «En modo desafío cambia». Con «Siguiente» pasá por Decima y Ura, y abrí el campamento de Monte Balrior (sin fases ni modo desafío). Abrí también Keep Construct: tiene que decir que sus mecánicas llegan en una próxima tanda. En el celular probá las pestañas Recompensas y Cómo se pelea.\n",
+     "text": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y recorré «Cómo se pelea» de las alas 1 a 4. Mirá sobre todo el Guardián del valle (guardianes de colores antes del jefe), el Campamento de prisioneros (fases por reloj), el Ensamblaje de la Fortaleza y Deimos (con «En modo desafío cambia») y el Castillo Retorcido (evento, sin línea de tiempo). Una ficha de Path of Fire, como Adina, todavía tiene que decir que llega en una próxima tanda.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "25c9e2821240c98d7a7be91c6e287a33d3e58091",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Siguen las tandas de Heart of Thorns (alas 1 a 4), Path of Fire (5 a 7) y los encuentros. SHIRUVANA-ART-001 queda en pausa",
+     "text": "Siguen las tandas de Heart of Thorns (alas 1 a 4), Path of Fire (5 a 7) y los encuentros. Tanda 1 VALIDADA por Pablo (2026-10-24 19:27Z), que pidió seguir de corrido con las tres tandas. RAI-4 tanda 2 hecha (2026-10-24 19:40Z): «Cómo se pelea» de Heart of Thorns, las alas 1 a 4 con sus 15 encuentros (Guardián del valle, Bosques Espirituales, Gorseval, Sabetha, Perezón, Campamento de prisioneros, Matías Gabrel, Asedio a la fortaleza, Ensamblaje de la Fortaleza, Castillo Retorcido, Xera, Cairn, Dirigente mursaat, Samarog y Deimos). Datos en `assets/data/raids/mechanics/hot.json` (`8bbd9b1`, 35,8 KB) y el índice suma la tanda (`mechanics/index.json` `d9cb5d2`, PATCH-046); sin tocar código: `js/raids-sheet.js` 1.1.0 ya las muestra. Cada ficha trae resumen, tiempo de furia cuando la wiki lo da, «Antes del jefe» donde corresponde (guardianes de colores, torres de Xera, prisionero de Deimos), fases (Deimos 6, Matías 4 climas, el Campamento por reloj: 6:50 Berg, 4:50 Zane, 2:47 Narella), hasta 7 mecánicas con su rol (se suman «Daño de condición», «Quitar bendiciones» y «Rol asignado»), «Shiruvana recomienda» y fuentes: la guía de MetaBattle de cada ala y la página de la wiki oficial, consultadas el 2026-10-24. «En modo desafío cambia» solo en los 5 que lo tienen: Ensamblaje de la Fortaleza, Cairn, Dirigente mursaat (30 millones de vida y baldosas azules), Samarog (40 millones) y Deimos (42 millones, sin Saul). Los dos eventos (Bosques Espirituales y Castillo Retorcido) no muestran línea de tiempo si no tienen fases. El nombre del dominio «Forsaken Thicket Waters» queda en inglés hasta verificar el oficial en español. `tests/raids-sheet.test.cjs` (`6a01157`, 15 tests, 12/12 mutaciones nuevas); RUN-031 verde. Siguen Path of Fire (alas 5 a 7) y los encuentros. SHIRUVANA-ART-001 queda en pausa"
+    }
+   ]
+  }
+ ]
+}
