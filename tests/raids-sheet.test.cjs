@@ -13,6 +13,9 @@ const SRC = fs.readFileSync(path.join(ROOT, 'js', 'raids-sheet.js'), 'utf8');
 const VIEW = fs.readFileSync(path.join(ROOT, 'js', 'raids-view.js'), 'utf8');
 const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'data', 'raids', 'catalog.json'), 'utf8'));
 const RW = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'data', 'raids', 'rewards.json'), 'utf8'));
+const MDIR = path.join(ROOT, 'assets', 'data', 'raids', 'mechanics');
+const MIDX = JSON.parse(fs.readFileSync(path.join(MDIR, 'index.json'), 'utf8'));
+const JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));
 const byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));
 const groupOf = (e) => CAT.groups.find((g) => g.id === e.group);
 
@@ -154,7 +157,77 @@ test('mi línea en la ficha: solo hechos del catálogo y de tu semana', () => {
   assert.equal(S.voiceOf(model('greer', data({ raids: null }))), null, 'sin datos no invento');
 });
 
+// ------------------------------------------------------------------ RAI-4: cómo se pelea
+const mech = (id) => ({ e: JW.encounters[id], roles: JW.roles, sources: JW.sources, verified: JW.verified });
+
+test('mecánicas, tanda Janthir: cada archivo del índice existe y cada dato tiene su fuente', () => {
+  for (const [exp, f] of Object.entries(MIDX.files)) {
+    assert.match(f, /^[\w-]+\.json$/);
+    const d = JSON.parse(fs.readFileSync(path.join(MDIR, f), 'utf8'));
+    assert.equal(d.expansion, exp);
+    assert.match(d.verified, /^\d{4}-\d{2}-\d{2}$/);
+    const ids = CAT.encounters.filter((e) => groupOf(e).expansion === exp).map((e) => e.id).sort();
+    assert.deepEqual(Object.keys(d.encounters).sort(), ids, exp + ': todos los encuentros de la tanda y solo esos');
+    for (const s of Object.values(d.sources)) assert.match(s.url, /^https:\/\/(wiki\.guildwars2\.com|metabattle\.com)\//);
+    for (const [id, E] of Object.entries(d.encounters)) {
+      assert.ok(E.summary && E.mechanics.length >= 1 && E.mechanics.length <= 7, id + ': de 1 a 7 mecánicas');
+      if (byId[id].type !== 'event') assert.ok(E.mechanics.length >= 3 && E.phases.length >= 3, id + ': jefe con fases y al menos 3 mecánicas');
+      for (const x of E.mechanics) {
+        assert.ok(x.roles.length && x.roles.every((r) => d.roles[r]), id + ' ' + x.name + ': roles conocidos');
+        assert.ok(d.sources[x.src], id + ' ' + x.name + ': fuente');
+      }
+      if (E.tip) assert.ok(d.sources[E.tip.src], id + ': consejo con fuente');
+      if (E.cm) assert.ok(byId[id].cm, id + ': cambios de modo desafío solo si tiene modo desafío');
+      assert.ok(E.links.every((k) => d.sources[k]));
+    }
+  }
+  const raw = fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8');
+  assert.doesNotMatch(raw, /youtube|dQw4w9WgXcQ/i, 'sin videos inventados');
+  // Lo que es solo de modo desafío no aparece en la pelea normal (corrige la maqueta de RAI-0).
+  const g = JW.encounters.greer;
+  assert.doesNotMatch(JSON.stringify([g.phases, g.mechanics, g.tip]), /Proto|Ereg/);
+  assert.match(g.cm.join(' '), /Proto-Greerlings/);
+  assert.match(g.cm.join(' '), /Ereg/);
+});
+
+test('ficha de Greer: fases en orden, mecánicas con su rol, modo desafío, consejo y fuentes', () => {
+  const h = S.sheetHTML(model('greer'), {}, mech('greer'), 'rew');
+  assert.match(h, /<h3 id="rsFight">Cómo se pelea<\/h3>/);
+  assert.equal((h.match(/<ol class="rs-phases">[\s\S]*?<\/ol>/)[0].match(/<li>/g) || []).length, 5);
+  assert.ok(h.indexOf('100→66 %') < h.indexOf('33→0 %'), 'fases en orden');
+  assert.match(h, /<b>Verdes de podredumbre<\/b> <small lang="en">Eruption of Rot<\/small><span class="rs-role">Todos<\/span>/);
+  assert.match(h, /<span class="rs-role">Proyectiles<\/span>/);
+  assert.match(h, /Antes del jefe: Bestia plagada legendaria\./);
+  assert.match(h, /<b>Shiruvana recomienda<\/b> Llevá defensa contra proyectiles/);
+  assert.match(h, /En modo desafío cambia[\s\S]*Proto-Greerlings/);
+  assert.match(h, /href="https:\/\/wiki\.guildwars2\.com\/wiki\/Mount_Balrior"/);
+  assert.match(h, /href="https:\/\/metabattle\.com\/wiki\/Guide:Raid_Wing_8_-_Mount_Balrior"/);
+  assert.match(h, /Fuentes: wiki oficial, «Mount Balrior» y MetaBattle, guía del ala 8, consultadas el 2026-10-24/);
+  assert.match(h, /role="tablist" aria-label="Secciones de la ficha"/);
+  assert.match(h, /data-rs-tab="rew" aria-selected="true"/);
+  assert.match(h, /data-rs-tab="fight" aria-selected="false"/);
+  assert.match(h, /class="rs-card" data-rs-pane="rew"/);
+  assert.match(h, /class="rs-card rs-fight" data-rs-pane="fight"/);
+  assert.match(S.sheetHTML(model('greer'), {}, mech('greer'), 'fight'), /data-rs-tab="fight" aria-selected="true"/);
+});
+
+test('cómo se pelea: sin tanda todavía lo dice; el campamento no muestra modo desafío', () => {
+  const kc = S.sheetHTML(model('keep_construct'), {}, null, 'rew');
+  assert.match(kc, /llegan en una próxima tanda, verificadas/);
+  assert.match(kc, /href="https:\/\/wiki\.guildwars2\.com\/wiki\/Keep_Construct"[^>]*>wiki oficial ↗/);
+  assert.doesNotMatch(kc, /rs-phases/);
+  const camp = S.fightHTML(model('camp'), mech('camp'));
+  assert.match(camp, /Titanspawn del campamento/);
+  assert.doesNotMatch(camp, /En modo desafío cambia/);
+  assert.doesNotMatch(camp, /rs-phases/, 'un evento sin fases no muestra la línea de tiempo');
+  const forced = Object.assign({}, mech('camp'), { e: Object.assign({}, JW.encounters.camp, { cm: ['solo de prueba'] }) });
+  assert.doesNotMatch(S.fightHTML(model('camp'), forced), /solo de prueba/, 'sin modo desafío en el catálogo, no hay cambios de modo desafío');
+  assert.match(S.fightHTML(model('greer'), { roles: JW.roles, sources: JW.sources }), /llegan en una próxima tanda/, 'archivo sin este encuentro: igual que sin tanda');
+});
+
 test('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {
+  assert.match(S.CSS, /max-width:720px[\s\S]*\.rs-tabs\{display:flex\}/, 'las pestañas solo en el celular');
+  assert.match(S.CSS, /#rsRoot\[data-pane=rew\] \[data-rs-pane=fight\],#rsRoot\[data-pane=fight\] \[data-rs-pane=rew\]\{display:none\}/);
   assert.match(S.CSS, /prefers-reduced-motion:reduce/);
   assert.match(S.CSS, /focus-visible/);
   assert.match(S.CSS, /max-width:720px[\s\S]*min-height:44px/);
@@ -196,17 +269,23 @@ function fakeDom() {
   return { els, panel, doc, docListeners, rows };
 }
 
-function boot() {
+function boot(o) {
+  o = o || {};
   const D = fakeDom();
   const winListeners = {};
   const itemCalls = [];
   const scrolls = [];
+  const fetches = [];
   const sb = {
     console: { info() {}, warn() {} }, document: D.doc, setTimeout: (f) => f(), setInterval: () => 1,
     location: { hash: '#/account/raids', href: 'https://dev/#/account/raids', replace() {} },
     addEventListener: (t, f) => { (winListeners[t] = winListeners[t] || []).push(f); },
     scrollY: 640, scrollTo: (x, y) => scrolls.push(y),
-    fetch: (u) => Promise.resolve({ ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(/rewards/.test(u) ? RW : CAT))) }),
+    fetch: (u) => {
+      fetches.push(u);
+      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /catalog/.test(u) ? CAT : null;
+      return Promise.resolve(body ? { ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(body))) } : { ok: false, status: 404 });
+    },
     Storage: { STORAGE_KEYS: { ACCOUNT_SELECTED: 'gn:account:selected' }, get: (k) => (k === 'gn:account:selected' ? 'TOKEN' : null), getRaw: () => 'raids', set() {} },
     GW2Api: {
       getAccountRaids: () => Promise.resolve(['decima']),
@@ -220,7 +299,7 @@ function boot() {
   vm.createContext(sb);
   vm.runInContext(VIEW, sb, { filename: 'raids-view.js' });
   vm.runInContext(SRC, sb, { filename: 'raids-sheet.js' });
-  return { sb, D, winListeners, itemCalls, scrolls };
+  return { sb, D, winListeners, itemCalls, scrolls, fetches };
 }
 
 const flush = () => new Promise((r) => setTimeout(r, 20));
@@ -261,6 +340,37 @@ test('humo: la fila abre la ficha, trae el cofre de la API, Escape vuelve a la m
   assert.equal(D.rows.greer && D.rows.greer.focused, 1, 'el foco vuelve a la fila del encuentro');
   assert.ok(!sb.RaidsSheet.isOpen());
   D.docListeners.keydown[0]({ key: 'Escape', preventDefault() { throw new Error('Escape sin ficha abierta no se toca'); } });
+});
+
+test('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestañas cambian de sección', async () => {
+  const { sb, D, fetches } = boot();
+  await flush();
+  await sb.RaidsSheet.open('greer');
+  const rs = D.els.rsRoot;
+  assert.match(rs.innerHTML, /Verdes de podredumbre/);
+  assert.equal(rs.getAttribute('data-pane'), 'rew');
+  const mf = () => fetches.filter((u) => /mechanics/.test(u));
+  assert.deepEqual(mf(), ['assets/data/raids/mechanics/index.json', 'assets/data/raids/mechanics/jw.json']);
+  rs.listeners.click[0]({ target: { getAttribute: (k) => (k === 'data-rs-tab' ? 'fight' : null), parentNode: null } });
+  assert.equal(rs.getAttribute('data-pane'), 'fight');
+  assert.match(rs.innerHTML, /data-rs-tab="fight" aria-selected="true"/);
+  await sb.RaidsSheet.open('ura');
+  assert.equal(rs.getAttribute('data-pane'), 'fight', 'anterior y siguiente mantienen la sección');
+  assert.match(rs.innerHTML, /Fragmentos de piedra de sangre/);
+  await sb.RaidsSheet.open('cairn');
+  assert.match(rs.innerHTML, /llegan en una próxima tanda/);
+  assert.equal(mf().length, 2, 'ni el índice ni Janthir se vuelven a pedir; sin tanda, no se pide nada');
+  sb.RaidsSheet.close();
+  await sb.RaidsSheet.open('decima');
+  assert.equal(rs.getAttribute('data-pane'), 'rew', 'abrir desde la lista vuelve a Recompensas');
+});
+
+test('humo: el índice solo puede nombrar archivos de la misma carpeta', async () => {
+  const { sb, D, fetches } = boot({ idx: { version: 1, files: { jw: '../rewards.json' } } });
+  await flush();
+  await sb.RaidsSheet.open('greer');
+  assert.ok(!fetches.some((u) => /mechanics\/\.\./.test(u)), 'no sale de assets/data/raids/mechanics/');
+  assert.match(D.els.rsRoot.innerHTML, /llegan en una próxima tanda/);
 });
 
 test('humo: salir de Raids cierra la ficha sin mover la página', async () => {

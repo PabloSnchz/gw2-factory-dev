@@ -1,6 +1,6 @@
 /**
  * raids-sheet.js — Ficha de cada encuentro de Raids a pantalla completa (BL-070 RAI-3).
- * Versión: 1.0.0 (2026-10-24)
+ * Versión: 1.1.0 (2026-10-24) — RAI-4: «Cómo se pelea» (fases, mecánicas, modo desafío y fuentes)
  *
  * Como la ficha de la legendaria: reemplaza la lista dentro del módulo, con
  * «← Volver a Raids» y Escape, y vuelve al mismo lugar y a la misma fila.
@@ -12,16 +12,19 @@
  * assets/data/raids/rewards.json (cofres verificados en la wiki oficial; se pide
  * solo al abrir la primera ficha). El nombre en español y el ícono oficial de cada
  * cofre los trae /v2/items con GW2Api.getItemsMany (con su caché). Lo que no está
- * verificado no se muestra. Las mecánicas llegan en RAI-4.
+ * verificado no se muestra. Fases y mecánicas: assets/data/raids/mechanics/<expansión>.json,
+ * por tandas (RAI-4), listadas en mechanics/index.json; se piden al abrir una ficha de esa
+ * expansión. En el celular, dos pestañas: Recompensas y Cómo se pelea.
  *
  * Se carga por js/modules.json después de raids-view.js (DEC-035).
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[RaidsSheet]';
   var DATA = 'assets/data/raids/rewards.json';
+  var MECH_DIR = 'assets/data/raids/mechanics/';
   var PANEL = 'raidTrackerPanel';
   var ROUTE = '#/account/raids';
   var ICON = 'assets/icons/raids/raid-icon.png';
@@ -135,7 +138,58 @@
       (verified ? ', consultada el ' + esc(verified) : '') + '.' + (c.src ? ' ' + esc(c.src) : '') + '</p>';
   }
 
-  function sheetHTML(m, items) {
+  function link(s) {
+    return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener noreferrer">' + esc(s.name) + ' ↗</a>';
+  }
+
+  // «Cómo se pelea». M = { e: entrada del encuentro, roles, sources, verified } o null si su tanda no llegó.
+  function fightHTML(m, M) {
+    var h = '<section class="rs-card rs-fight" data-rs-pane="fight" aria-labelledby="rsFight"><h3 id="rsFight">Cómo se pelea</h3>';
+    if (!M || !M.e) {
+      return h + '<p class="rs-note">Las fases y mecánicas de este encuentro llegan en una próxima tanda, verificadas. Mientras tanto: ' +
+        '<a href="' + esc(m.wiki) + '" target="_blank" rel="noopener noreferrer">wiki oficial ↗</a></p></section>';
+    }
+    var E = M.e, R = M.roles || {}, S = M.sources || {};
+    if (E.summary) h += '<p class="rs-sum">' + esc(E.summary) + '</p>';
+    if (E.pre) h += '<p class="rs-pre"><b>Antes del jefe: ' + esc(E.pre.name) + '.</b> ' + esc(E.pre.text) + '</p>';
+    if (E.tip) h += '<p class="rs-tip"><b>Shiruvana recomienda</b> ' + esc(E.tip.text) + '</p>';
+    h += '<div class="rs-fgrid">';
+    if (E.phases && E.phases.length) {
+      h += '<div><h4 class="rs-h4">Fases <small>· ' + E.phases.length + '</small></h4><ol class="rs-phases">';
+      E.phases.forEach(function (p) {
+        h += '<li><b>' + esc(p.at) + '</b> <span>' + esc(p.label) + '</span><p>' + esc(p.text) + '</p></li>';
+      });
+      h += '</ol></div>';
+    }
+    h += '<div><h4 class="rs-h4">Mecánicas que importan</h4><ul class="rs-mechs">';
+    (E.mechanics || []).forEach(function (x) {
+      h += '<li><div class="rs-mh"><b>' + esc(x.name) + '</b>' + (x.en ? ' <small lang="en">' + esc(x.en) + '</small>' : '');
+      (x.roles || []).forEach(function (r) { h += '<span class="rs-role">' + esc(R[r] || r) + '</span>'; });
+      h += '</div><p>' + esc(x.text) + '</p></li>';
+    });
+    h += '</ul></div></div>';
+    if (E.cm && E.cm.length && m.e.cm) {
+      h += '<h4 class="rs-h4">En modo desafío cambia</h4><ul class="rs-cmlist">';
+      E.cm.forEach(function (t) { h += '<li>' + esc(t) + '</li>'; });
+      h += '</ul>';
+    }
+    var used = (E.links || []).filter(function (k) { return S[k]; });
+    if (used.length) {
+      h += '<h4 class="rs-h4">Para aprender más</h4><p class="rs-links">' + used.map(function (k) { return link(S[k]); }).join(' · ') + '</p>';
+      h += '<p class="rs-src">Fuentes: ' + used.map(function (k) { return esc(S[k].name); }).join(' y ') + (M.verified ? ', consultadas el ' + esc(M.verified) : '') + '. Sin videos inventados: solo enlaces verificados.</p>';
+    }
+    return h + '</section>';
+  }
+
+  function tabsHTML(pane) {
+    var h = '<div class="rs-tabs" role="tablist" aria-label="Secciones de la ficha">';
+    [['rew', 'Recompensas'], ['fight', 'Cómo se pelea']].forEach(function (t) {
+      h += '<button type="button" role="tab" data-rs-tab="' + t[0] + '" aria-selected="' + (pane === t[0]) + '">' + t[1] + '</button>';
+    });
+    return h + '</div>';
+  }
+
+  function sheetHTML(m, items, M, pane) {
     var e = m.e, g = m.g, h = [], ic = e.icon || {};
     var where = g.kind === 'wing' ? 'Ala ' + g.wing + ' · ' + g.name : g.name;
     var liIcon = m.currencies.li && m.currencies.li.icon, curIcon = m.currencies[m.cur] && m.currencies[m.cur].icon;
@@ -150,9 +204,9 @@
     h.push('</div><div class="rs-acts"><a class="rs-btn" href="' + esc(m.wiki) + '" target="_blank" rel="noopener noreferrer">' + (m.wikiDirect ? 'Abrir en la wiki ↗' : 'Buscar en la wiki ↗') + '</a>');
     if (m.prev) h.push('<button type="button" class="rs-btn" data-rs-go="' + esc(m.prev.id) + '">‹ ' + esc(m.prev.name) + '</button>');
     if (m.next) h.push('<button type="button" class="rs-btn" data-rs-go="' + esc(m.next.id) + '">Siguiente: ' + esc(m.next.name) + ' ›</button>');
-    h.push('</div></div></header><div id="rsVoice" class="rs-voice" aria-live="polite"></div>');
+    h.push('</div></div></header><div id="rsVoice" class="rs-voice" aria-live="polite"></div>' + tabsHTML(pane === 'fight' ? 'fight' : 'rew'));
 
-    h.push('<div class="rs-grid"><section class="rs-card" aria-labelledby="rsWeek"><h3 id="rsWeek">Lo que te llevás <small>1 vez por semana</small></h3><ul class="rs-rows">');
+    h.push('<div class="rs-grid"><section class="rs-card" data-rs-pane="rew" aria-labelledby="rsWeek"><h3 id="rsWeek">Lo que te llevás <small>1 vez por semana</small></h3><ul class="rs-rows">');
     if (e.li) h.push(rowHTML(liIcon, 'Conocimiento legendario', m.cof ? 'dentro del cofre, garantizado' : 'al completarlo', String(e.li)));
     if (e.amount != null) h.push(rowHTML(curIcon, CUR[m.cur], m.cap ? 'tope semanal de ' + m.cap + ' para todas las raids' : '', amount(e.amount)));
     if (m.cof) {
@@ -172,7 +226,7 @@
     h.push('</section>');
 
     if (e.cm) {
-      h.push('<section class="rs-card rs-card--cm" aria-labelledby="rsCm"><h3 id="rsCm">Modo desafío <small>extra, 1 vez por semana</small></h3><ul class="rs-rows">');
+      h.push('<section class="rs-card rs-card--cm" data-rs-pane="rew" aria-labelledby="rsCm"><h3 id="rsCm">Modo desafío <small>extra, 1 vez por semana</small></h3><ul class="rs-rows">');
       if (e.amount != null) h.push(rowHTML(curIcon, CUR[m.cur], 'además de lo normal', '+' + m.cmBonus));
       if (m.mag) h.push(rowHTML(cofferIcon(m.mag, items), cofferName(m.mag, items), 'desde la unificación ya no da conocimiento legendario', '1'));
       if (m.mag && !m.mag.unverified) h.push(guaranteedHTML(m.mag));
@@ -182,7 +236,7 @@
       else if (m.hpNoMag) h.push('<p class="rs-note">Heart of Thorns y Path of Fire no dan cofre magnífico: el modo desafío suma los fragmentos.</p>');
       h.push('</section>');
     }
-    h.push('</div>');
+    h.push(fightHTML(m, M) + '</div>');
     return h.join('');
   }
 
@@ -217,15 +271,31 @@
     '.rs-drops em{font-style:normal;font-size:.72rem;color:var(--tx-2);margin-left:4px}',
     '.rs-r-uncommon span{color:var(--color-green,#3CC48A)}.rs-r-rare span{color:var(--acc-1)}.rs-r-superrare span{color:var(--color-amber,#F2B94B)}',
     '.rs-note,.rs-src{margin:10px 0 0;color:var(--tx-2);font-size:.8rem}.rs-src{font-size:.72rem}.rs-src a,.rs-note a{color:var(--acc-1)}',
+    '.rs-fight{grid-column:1/-1}.rs-sum{margin:0 0 10px;color:var(--tx-1);font-size:.9rem}',
+    '.rs-pre,.rs-tip{margin:0 0 10px;padding:8px 12px;border-radius:10px;background:var(--bg-0);border:1px solid var(--bd-1);font-size:.84rem;color:var(--tx-1)}',
+    '.rs-tip{border-color:color-mix(in srgb,var(--rs-mod) 55%,var(--bd-1))}.rs-tip b{color:var(--rs-mod);margin-right:4px}',
+    '.rs-fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}',
+    '.rs-phases{list-style:none;margin:0;padding:0;border-left:2px solid var(--bd-2)}',
+    '.rs-phases li{position:relative;padding:0 0 10px 14px}.rs-phases li::before{content:"";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--rs-mod)}',
+    '.rs-phases b{font-size:.8rem;color:var(--tx-2)}.rs-phases span{font-weight:700;color:var(--tx-1);font-size:.88rem}.rs-phases p{margin:2px 0 0;font-size:.82rem;color:var(--tx-1)}',
+    '.rs-mechs{list-style:none;margin:0;padding:0;display:grid;gap:8px}.rs-mechs li{border:1px solid var(--bd-1);border-radius:10px;padding:8px 10px;background:var(--bg-0)}',
+    '.rs-mh{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.rs-mh b{color:var(--tx-1);font-size:.88rem}.rs-mh small{color:var(--tx-2);font-size:.74rem}',
+    '.rs-role{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--bd-2);border-radius:999px;padding:0 7px;color:var(--tx-2)}',
+    '.rs-mechs p{margin:4px 0 0;font-size:.82rem;color:var(--tx-1)}.rs-cmlist{margin:0;padding-left:18px;font-size:.84rem;color:var(--tx-1)}',
+    '.rs-links{margin:0;font-size:.84rem}.rs-links a{color:var(--acc-1)}',
+    '.rs-tabs{display:none;gap:4px;margin-top:12px;border-bottom:1px solid var(--bd-1)}',
+    '.rs-tabs [role=tab]{font:inherit;font-size:.9rem;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:8px 14px;color:var(--tx-2);cursor:pointer;min-height:44px;flex:1}',
+    '.rs-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--rs-mod)}',
     '#rsRoot button:focus-visible,#rsRoot a:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '@media (prefers-reduced-motion:reduce){#rsRoot *{transition:none!important;animation:none!important}}',
     '@media (max-width:720px){.rs-head{padding:12px;gap:12px}.rs-mini,.rs-mini img{width:64px;height:64px}.rs-t h2{font-size:1.15rem}',
-    '.rs-grid{grid-template-columns:1fr}.rs-btn{min-height:44px}.rs-card{padding:12px}}'
+    '.rs-grid{grid-template-columns:1fr}.rs-btn{min-height:44px}.rs-card{padding:12px}.rs-fgrid{grid-template-columns:1fr}.rs-tabs{display:flex}',
+    '#rsRoot[data-pane=rew] [data-rs-pane=fight],#rsRoot[data-pane=fight] [data-rs-pane=rew]{display:none}}'
   ].join('\n');
 
   // ------------------------------------------------------------------ DOM
   var doc = root.document;
-  var st = { rw: null, rwP: null, open: null, scroll: 0, items: {}, seq: 0, voiceKey: null };
+  var st = { rw: null, rwP: null, open: null, scroll: 0, items: {}, seq: 0, voiceKey: null, pane: 'rew', idx: null, idxP: null, mech: {} };
 
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
   function hash() { return String((root.location && root.location.hash) || ''); }
@@ -240,6 +310,40 @@
       .then(function (d) { st.rw = d; return d; })
       .catch(function (e) { st.rwP = null; if (root.console) root.console.warn(LOG, 'recompensas', e); return null; });
     return st.rwP;
+  }
+
+  function getJSON(url) {
+    return root.fetch(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); });
+  }
+
+  // Mecánicas de una expansión: solo si su tanda figura en mechanics/index.json. Sin tanda, null.
+  function loadMech(exp) {
+    if (!exp || typeof root.fetch !== 'function') return Promise.resolve(null);
+    if (exp in st.mech) return Promise.resolve(st.mech[exp]);
+    if (!st.idxP) {
+      st.idxP = getJSON(MECH_DIR + 'index.json').then(function (d) { st.idx = (d && d.files) || {}; return st.idx; },
+        function (e) { st.idxP = null; if (root.console) root.console.warn(LOG, 'mecánicas', e); return {}; });
+    }
+    return st.idxP.then(function (idx) {
+      var f = idx[exp];
+      if (!f || !/^[\w-]+\.json$/.test(f)) return null;
+      return getJSON(MECH_DIR + f).then(function (d) { st.mech[exp] = d; return d; },
+        function (e) { if (root.console) root.console.warn(LOG, 'mecánicas ' + exp, e); return null; });
+    });
+  }
+
+  function mechFor(cat, id) {
+    var e = cat && cat.encounters ? cat.encounters.filter(function (x) { return x.id === id; })[0] : null;
+    var g = e && cat.groups ? cat.groups.filter(function (x) { return x.id === e.group; })[0] : null;
+    var d = g ? st.mech[g.expansion] : null;
+    if (!d || !d.encounters || !d.encounters[id]) return null;
+    return { e: d.encounters[id], roles: d.roles, sources: d.sources, verified: d.verified };
+  }
+
+  function expOf(cat, id) {
+    var e = cat && cat.encounters ? cat.encounters.filter(function (x) { return x.id === id; })[0] : null;
+    var g = e && cat.groups ? cat.groups.filter(function (x) { return x.id === e.group; })[0] : null;
+    return g ? g.expansion : null;
   }
 
   function ensureHost() {
@@ -287,7 +391,8 @@
     if (!host || !st.open) return null;
     var m = sheetModel(snap.cat, st.rw, st.open, snap.data, stateFn());
     if (!m) return null;
-    host.innerHTML = sheetHTML(m, st.items);
+    host.setAttribute('data-pane', st.pane);
+    host.innerHTML = sheetHTML(m, st.items, mechFor(snap.cat, st.open), st.pane);
     renderVoice(m);
     if (focus) { var t = byId('rsTitle'); if (t && t.focus) t.focus(); }
     return m;
@@ -309,11 +414,11 @@
   function open(id) {
     var host = ensureHost(), rv = byId('rvRoot');
     if (!host) return Promise.resolve(null);
-    if (!st.open) st.scroll = root.scrollY || root.pageYOffset || 0;
+    if (!st.open) { st.scroll = root.scrollY || root.pageYOffset || 0; st.pane = 'rew'; }
     st.open = id;
     st.seq++;
     var seq = st.seq;
-    return loadRewards().then(function () {
+    return Promise.all([loadRewards(), loadMech(expOf(snapshot().cat, id))]).then(function () {
       if (seq !== st.seq) return null;
       if (rv) rv.setAttribute('hidden', '');
       host.removeAttribute('hidden');
@@ -342,6 +447,14 @@
       for (var n = e.target, i = 0; n && n !== host && i < 6; n = n.parentNode, i++) {
         if (!n.getAttribute) continue;
         if (n.getAttribute('data-rs') === 'back') { close(false); return; }
+        var tab = n.getAttribute('data-rs-tab');
+        if (tab) {
+          st.pane = tab === 'fight' ? 'fight' : 'rew';
+          draw(false);
+          var b = host.querySelector ? host.querySelector('[data-rs-tab="' + st.pane + '"]') : null;
+          if (b && b.focus) b.focus();
+          return;
+        }
         var go = n.getAttribute('data-rs-go');
         if (go) { open(go); return; }
       }
@@ -360,7 +473,8 @@
   root.RaidsSheet = {
     version: VERSION, open: open, close: function () { close(false); },
     isOpen: function () { return !!st.open; },
-    _pure: { esc: esc, amount: amount, itemText: itemText, shownId: shownId, sheetModel: sheetModel, sheetHTML: sheetHTML, voiceOf: voiceOf, CSS: CSS }
+    _pure: { esc: esc, amount: amount, itemText: itemText, shownId: shownId, sheetModel: sheetModel, sheetHTML: sheetHTML, fightHTML: fightHTML,
+      voiceOf: voiceOf, CSS: CSS }
   };
 
   if (doc && doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', init);
