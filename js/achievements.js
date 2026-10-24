@@ -1,6 +1,13 @@
 /* ===========================================================================
  * js/achievements.js — Logros enfocado en "próximo a completar"
- * Versión: 3.2.1 (2026-09-30)
+ * Versión: 3.3.0 (2026-10-24)
+ *  - LOG-1 (BL-067): la cabecera, las pestañas y mi línea las pinta
+ *    js/ach-view.js (por js/modules.json). Este archivo publica su estado
+ *    (getSnapshot, setFilter, _calc y el evento gn:achievements) y deja de
+ *    pintar la fila de AP, el chip de AP potenciales y el botón Refrescar
+ *    sin uso. Los botones de filtro dicen lo que filtra la grilla
+ *    (syncButtons) y el umbral acepta «Todos» (pct 0).
+ *  - 3.2.1:
  *  - Idea 55 Tramo 3a: fetchAccountAP() pide /v2/account por
  *    GW2Api.getAccountInfo en vez de fetch crudo con cache:no-store.
  *    El wrapper ya existia (api-gw2.js:393). Se conserva nocache:true,
@@ -23,11 +30,7 @@
   var _loadSeq = 0;
 
   // ======================= ICONOS =========================
-  var ICON_AP_PERM  = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
-  var ICON_AP_DAILY = 'https://wiki.guildwars2.com/images/1/14/Daily_Achievement.png';
-  var ICON_AP_TOTAL = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
   var ICON_AP_18    = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
-  var ICON_AP_PAGE  = 'https://wiki.guildwars2.com/wiki/Achievement_Chest';
 
   var REWARD_FALLBACK = {
     'Item':    'assets/icons/Welcome/1228903.png',
@@ -41,13 +44,13 @@
     panel: null, head: null, body: null,
     chipsOld: null, search: null,
     mainGrid: null, toolbar: null,
-    aside: null, asideTopList: null, asideCats: null,
-    kpiWrap: null
+    aside: null, asideTopList: null, asideCats: null
   };
 
   var state = {
     token: null,
     acc: [],
+    rows: [],
     metaById: new Map(),
     categories: [],
     catById: new Map(),
@@ -163,7 +166,7 @@
 
     state.qRaw  = String(q||'');
     state.qNorm = norm(state.qRaw);
-    if (isFinite(pNum) && pNum > 0 && pNum <= 1) state.pct = pNum;
+    if (isFinite(pNum) && pNum >= 0 && pNum <= 1) state.pct = pNum;
     state.cat = cat ? String(cat) : '';
     state.rewardFilter = reward ? String(reward) : '';
 
@@ -174,7 +177,7 @@
     var params = new URLSearchParams();
     var qRaw = el.search ? (el.search.value || '') : state.qRaw;
     if (qRaw) params.set('q', qRaw);
-    if (state.pct && state.pct !== 0.8) params.set('pct', String(state.pct));
+    if (state.pct !== 0.8) params.set('pct', String(state.pct));
     if (state.cat) params.set('cat', String(state.cat));
     if (state.rewardFilter) params.set('reward', state.rewardFilter);
     var newHash = params.toString() ? (base + '?' + params.toString()) : base;
@@ -327,15 +330,6 @@
     return components;
   }
 
-  function countTotalComponents(allRows){
-    var total = 0;
-    allRows.forEach(function(x){
-      var comps = getLegendaryComponents(x.meta);
-      comps.forEach(function(c){ total += c.count; });
-    });
-    return total;
-  }
-
   function injectLegendaryStyles(){
     if (document.getElementById('ach-legendary-styles')) return;
     var css = [
@@ -403,118 +397,6 @@
         '</div>' +
       '</article>'
     );
-  }
-
-  // -------------------------- KPI visual de AP ------------------------------
-  function injectKpiStyles(){
-      if (document.getElementById('ach-kpi-styles')) return;
-      var css = `
-        .ach-kpi{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin:8px 0 6px}
-        .ach-kpi__tile{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:10px;background:var(--bg-1);border:1px solid var(--bd-1)}
-        .ach-kpi__tile--pot{
-          border-left:3px solid var(--color-green);
-          background:linear-gradient(135deg, #0d1a14 0%, var(--bg-1) 100%);
-          box-shadow:0 0 10px rgba(160,255,200,0.08);
-          margin-left:auto;
-          cursor:default;
-        }
-        .ach-kpi__num{font-size:16px;font-weight:700;color:#ffd27a}
-        .ach-kpi__lbl{font-size:12px;color:var(--tx-2)}
-        .ach-kpi__sep{opacity:.5}
-        .ach-kpi__icon img{vertical-align:middle;border-radius:4px;box-shadow:0 0 0 1px var(--bd-1) inset}
-        .ach-kpi__delta{font-size:12px;color:var(--color-green);background:#12261b;border:1px solid #265a3c;border-radius:999px;padding:2px 6px}
-        @media (prefers-color-scheme: light){ .ach-kpi__num{color:#a26a00} }
-      `;
-      var s = document.createElement('style'); s.id='ach-kpi-styles'; s.textContent=css;
-      document.head.appendChild(s);
-  }
-  function ensureKpiHeader(){
-    injectKpiStyles();
-    if (!el.panel) return;
-    if (!el.head) el.head = el.panel.querySelector('.panel-head');
-    if (el.head && !el.kpiWrap){
-      var box = document.createElement('div');
-      box.className = 'ach-kpi';
-      box.id = 'achKpi';
-      el.head.appendChild(box);
-      el.kpiWrap = box;
-    }
-  }
-
-  function potentialAPForThreshold(accArr, metaById, threshold){
-      var sum = 0;
-      (accArr || []).forEach(function(r){
-        var meta = metaById.get(r.id); if (!meta) return;
-        var pr = computeProgress(r, meta);
-        if (pr.pct >= 1) return;
-        if (pr.pct < (threshold||0)) return;
-        var left = totalAP(meta) - earnedAP(r, meta);
-        if (left > 0) sum += left;
-      });
-      return sum;
-  }
-  function renderPotentialAP(){
-      // Eliminar chips anteriores
-      var allOld = document.querySelectorAll('.ach-potential');
-      allOld.forEach(function(el) { el.remove(); });
-      
-      var head = el.panel ? el.panel.querySelector('.panel-head') : null;
-      var h3 = head ? head.querySelector('.panel-head__title') : null;
-      if (!h3) return;
-      
-      var apPot = 0;
-      try {
-        apPot = potentialAPForThreshold(state.acc, state.metaById, state.pct);
-        if (!isFinite(apPot)) apPot = 0;
-      } catch(e) { apPot = 0; }
-      
-      var chip = document.createElement('span');
-      chip.className = 'ach-potential';
-      chip.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:5px 14px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:20px;font-size:0.75rem;white-space:nowrap;';
-      chip.innerHTML = '<img src="assets/icons/155059.png" width="16" height="16" alt="" style="border-radius:3px;filter:brightness(0.9);"><span style="color:var(--muted);">AP potenciales (≥ ' + Math.round(state.pct*100) + '%)</span><span style="color:var(--color-green);font-weight:700;">+' + fmtInt(apPot) + '</span>';
-      
-      // Insertarlo justo después del <h3>, dentro del panel-head
-      h3.insertAdjacentElement('afterend', chip);
-  }
-  function renderKpi(apPerm, apDaily, apLegacyDelta, compCount){
-      ensureKpiHeader();
-      if (!el.kpiWrap) return;
-      var permFinal = Number(apPerm||0) + Number(apLegacyDelta||0);
-      var total = permFinal + Number(apDaily||0);
-      var tipPerm = 'Permanente API'+(apLegacyDelta>0?(' + Legado '+fmtInt(apLegacyDelta)):'');
-
-      var tiles = [
-        '<div class="ach-kpi__tile" title="'+esc(tipPerm)+'">',
-          '<a class="ach-kpi__icon" href="'+esc(ICON_AP_PAGE)+'" target="_blank" rel="noopener">'+iconImg(ICON_AP_PERM, 20, 'AP')+'</a>',
-          '<span class="ach-kpi__lbl">Permanente</span>',
-          (apLegacyDelta>0?('<span class="ach-kpi__delta">+'+fmtInt(apLegacyDelta)+' legado</span>'):''),
-          '<span class="ach-kpi__num">'+fmtInt(permFinal)+'</span>',
-        '</div>',
-        '<div class="ach-kpi__tile" title="Logro diario acumulado (incluye histórico mensual)">',
-          '<a class="ach-kpi__icon" href="'+esc(ICON_AP_PAGE)+'" target="_blank" rel="noopener">'+iconImg(ICON_AP_DAILY, 20, 'AP')+'</a>',
-          '<span class="ach-kpi__lbl">Logro diario</span>',
-          '<span class="ach-kpi__num">'+fmtInt(apDaily)+'</span>',
-        '</div>',
-        '<span class="ach-kpi__sep">+</span>',
-        '<div class="ach-kpi__tile" title="Total de puntos de logro acumulados">',
-          '<a class="ach-kpi__icon" href="'+esc(ICON_AP_PAGE)+'" target="_blank" rel="noopener">'+iconImg(ICON_AP_TOTAL, 20, 'AP')+'</a>',
-          '<span class="ach-kpi__lbl">Total</span>',
-          '<span class="ach-kpi__num">'+fmtInt(total)+'</span>',
-        '</div>'
-      ];
-
-      if (compCount > 0) {
-        tiles.push(
-          '<span class="ach-kpi__sep">⚠</span>',
-          '<div class="ach-kpi__tile--pot" title="Componentes de legendarias pendientes (ítems recompensa)">',
-            '<img src="assets/icons/155059.png" width="20" height="20" alt="Componentes" style="margin-right:6px;border-radius:4px">',
-            '<span class="ach-kpi__lbl">Componentes</span>',
-            '<span class="ach-kpi__num" style="color:var(--color-amber)">'+fmtInt(compCount)+'</span>',
-          '</div>'
-        );
-      }
-
-      el.kpiWrap.innerHTML = tiles.join('');
   }
 
   // ------------------------------- Render ----------------------------------
@@ -659,25 +541,14 @@
       if (passesFilters(meta, pr, r.id)) rows.push({ r: r, meta: meta, pr: pr });
     });
     rows.sort(function(a,b){ return b.pr.pct - a.pr.pct; });
-    rows = rows.slice(0, 60);
-    if (isLegendaryTrackerActive()) {
-      injectLegendaryStyles();
-      if (!rows.length) {
-        el.mainGrid.innerHTML = '<p class="muted">No hay logros legendarios pendientes.</p>';
-      } else {
-        el.mainGrid.innerHTML = rows.map(function(x){ return cardLegendaryTrackerHTML(x.meta, x.r, x.pr); }).join('');
-      }
-      var compCount = countTotalComponents(rows);
-      renderKpi(state.apPermanent, state.apDailyHist, state.apLegacyDelta, compCount);
-    } else {
-      if (!rows.length) {
-        el.mainGrid.innerHTML = '<p class="muted">No hay logros que coincidan con los filtros.</p>';
-      } else {
-        el.mainGrid.innerHTML = rows.map(function(x){ return cardMainHTML(x.meta, x.r, x.pr); }).join('');
-      }
-      renderKpi(state.apPermanent, state.apDailyHist, state.apLegacyDelta);
-    }
-    renderPotentialAP();
+    state.rows = rows;
+    var shown = rows.slice(0, 60), leg = isLegendaryTrackerActive();
+    if (leg) injectLegendaryStyles();
+    el.mainGrid.innerHTML = shown.length
+      ? shown.map(function(x){ return (leg ? cardLegendaryTrackerHTML : cardMainHTML)(x.meta, x.r, x.pr); }).join('')
+      : '<p class="muted">' + (leg ? 'No hay logros legendarios pendientes.' : 'No hay logros que coincidan con los filtros.') + '</p>';
+    // ach-view.js (LOG-1) pinta la cabecera con este estado: sin pedidos nuevos.
+    try { document.dispatchEvent(new CustomEvent('gn:achievements', { detail: { count: rows.length } })); } catch (_) {}
   }
 
   // --------------------------- Aside de Logros ------------------------------
@@ -773,7 +644,7 @@
         btn.addEventListener('click', function(){
           var cid = btn.getAttribute('data-cid') || '';
           state.cat = (String(state.cat) === String(cid)) ? '' : String(cid);
-          if (el.cat) el.cat.value = state.cat || '';
+          syncButtons();
           writeFiltersToHashSilently();
           renderMainGrid();
         });
@@ -821,22 +692,6 @@
     document.head.appendChild(s);
   }
 
-  function ensureRefreshButton(){
-    if (!el.panel) return;
-    if (!el.head) el.head = el.panel.querySelector('.panel-head');
-    if (el.head.querySelector('#achRefreshBtn')) return;
-    var btn = document.createElement('button');
-    btn.id = 'achRefreshBtn';
-    btn.className = 'btn btn--ghost';
-    btn.textContent = 'Refrescar';
-    btn.title = 'Volver a consultar (sin caché)';
-    btn.style.marginLeft = '8px';
-    btn.addEventListener('click', function () { loadAll({ nocache: true }).catch(function(){}); });
-    var titleHost = el.head.querySelector('.panel-head__title');
-    if (titleHost && titleHost.parentNode) titleHost.parentNode.appendChild(btn);
-    else el.head.appendChild(btn);
-  }
-
   function ensureToolbar(){
     injectToolbarStyles();
     if (!el.panel) return;
@@ -867,6 +722,7 @@
             '<div class="ach-select-option" data-value="0.8">≥ 80%</div>',
             '<div class="ach-select-option" data-value="0.9">≥ 90%</div>',
             '<div class="ach-select-option" data-value="0.95">≥ 95%</div>',
+            '<div class="ach-select-option" data-value="0">Todos</div>',
           '</div>',
         '</div>',
         // Dropdown Categoría
@@ -912,7 +768,8 @@
 
   function fillCategoryDropdown(){
     var list = document.getElementById('achDropdownCat');
-    if (!list) return;
+    if (!list || list.__filled === state.categories.length) return;
+    list.__filled = state.categories.length;
 
     var categories = state.categories.slice().sort(function(a,b){
       return String(a?.name || '').localeCompare(String(b?.name || ''));
@@ -976,7 +833,7 @@
 
           var listId = list.id;
           if (listId === 'achDropdownPct') {
-            state.pct = parseFloat(value) || 0.8;
+            state.pct = isFinite(parseFloat(value)) ? parseFloat(value) : 0.8;
           } else if (listId === 'achDropdownCat') {
             state.cat = value || '';
           } else if (listId === 'achRewardList') {
@@ -996,6 +853,19 @@
         closeAllDropdowns();
       });
     }
+  }
+
+  // Los botones dicen lo que filtra la grilla (enlaces, Sidebar, setFilter).
+  function syncButtons(){
+    var set = function(id, val, txt){
+      var l = document.getElementById(id), b = l && l.parentNode ? l.parentNode.querySelector('.ach-select-btn span') : null;
+      if (b) b.textContent = txt;
+      if (l) l.querySelectorAll('.ach-select-option').forEach(function(o){ o.classList.toggle('active', o.dataset.value === String(val)); });
+    };
+    var c = state.catById.get(String(state.cat)), leg = state.cat && String(state.cat) === String(state.legendaryCatId);
+    set('achDropdownPct', state.pct, state.pct > 0 ? '≥ ' + Math.round(state.pct * 100) + '%' : 'Todos');
+    set('achDropdownCat', state.cat, !state.cat ? 'Todas' : leg ? 'Legendarias' : (c && c.name) || ('#' + state.cat));
+    set('achRewardList', state.rewardFilter, ({ Item: 'Con ítem', Title: 'Con título', Mastery: 'Con maestría' })[state.rewardFilter] || 'Todas');
   }
 
   function closeAllDropdowns(){
@@ -1043,7 +913,6 @@
     if (el.mainGrid) el.mainGrid.innerHTML = '<p class="muted">Cargando logros…</p>';
 
     ensureDomRefs();
-    // ensureRefreshButton(); // Reemplazado por AP potencial en el KPI
     ensureToolbar();
     readFiltersFromHashIntoState();
 
@@ -1051,10 +920,8 @@
         if (!token) {
           state.token = null; state.acc = []; state.metaById = new Map();
           state.apDailyHist = 0; state.apPermanent = 0; state.apLegacyDelta = 0;
-          await ensureCategories(); discoverLegendaryCategory(); fillCategoryDropdown(); ensureAside(); renderAside([]);
+          await ensureCategories(); discoverLegendaryCategory(); fillCategoryDropdown(); syncButtons(); ensureAside(); renderAside([]);
           renderMainGrid();
-          var pot = document.querySelector('.ach-potential');
-          if (pot) pot.remove();
           return;
         }
         state.token = token;
@@ -1079,6 +946,7 @@
       if (mySeq !== _loadSeq || tokenAtStart !== getSelectedToken()) return;
       discoverLegendaryCategory();
       fillCategoryDropdown();
+      syncButtons();
       ensureAside();
 
       state.apPermanent = computePermanentAP(state.acc, state.metaById);
@@ -1122,13 +990,11 @@
   var Achievements = {
     async initOnce(){
       ensureDomRefs();
-      // ensureRefreshButton(); // Reemplazado por AP potencial en el KPI
       ensureToolbar();
       await loadAll({ nocache: false });
     },
     async render(opts){
       ensureDomRefs();
-      // ensureRefreshButton(); // Reemplazado por AP potencial en el KPI
       ensureToolbar();
       if (!state.loaded) {
         await Achievements.initOnce();
@@ -1140,7 +1006,24 @@
       ensureDomRefs();
       state.loaded = false;
       await loadAll({ nocache: true });
-    }
+    },
+    // LOG-1: estado de solo lectura para ach-view.js (la cabecera y las pestañas).
+    getSnapshot: function(){
+      return { loaded: state.loaded, loading: state.loading, hasToken: !!getSelectedToken(), acc: state.acc, rows: state.rows,
+        metaById: state.metaById, catById: state.catById, achIdToCat: state.achIdToCat, pct: state.pct, cat: state.cat,
+        reward: state.rewardFilter, legendaryCatId: state.legendaryCatId,
+        ap: { perm: state.apPermanent + state.apLegacyDelta, daily: state.apDailyHist } };
+    },
+    // Cambia categoría y umbral (0 = todos los pendientes) y repinta, como los desplegables.
+    setFilter: function(f){
+      f = f || {};
+      if ('cat' in f) state.cat = f.cat ? String(f.cat) : '';
+      if (typeof f.pct === 'number' && f.pct >= 0 && f.pct <= 1) state.pct = f.pct;
+      syncButtons();
+      writeFiltersToHashSilently();
+      renderMainGrid();
+    },
+    _calc: { computeProgress: computeProgress, totalAP: totalAP, earnedAP: earnedAP }
   };
   root.Achievements = Achievements;
 
@@ -1166,6 +1049,6 @@
     }
   })();
 
-  console.info(LOGP, 'OK v3.2.0 — Toolbar unificada con 3 dropdowns personalizados');
+  console.info(LOGP, 'OK v3.3.0 — la cabecera la pinta ach-view.js (LOG-1)');
 
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));

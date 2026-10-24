@@ -270,3 +270,109 @@ test('reglas de la Bóveda: sin claves crudas, sin pedidos propios y dentro de 4
   assert.doesNotMatch(SRC, /fetch\(|api\.guildwars2\.com/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, 'archivo nuevo dentro del presupuesto de 40 KB');
 });
+
+// ---------------------------------------------------------------- achievements.js 3.3.0 (LOG-1)
+// El archivo real publica su estado y la cabecera nueva lo lee: sin pedidos nuevos a la API.
+const ACH = fs.readFileSync(path.join(ROOT, 'js', 'achievements.js'), 'utf8');
+
+test('achievements.js 3.3.0: sin la fila de AP vieja, con estado publicado y los íconos de las tarjetas', () => {
+  assert.match(ACH, /\* Versión: 3\.3\.0 /);
+  assert.match(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /js\/achievements\.js\?v=3\.3\.0"/);
+  ['renderKpi', 'ach-potential', 'ensureRefreshButton', 'potentialAPForThreshold', 'kpiWrap'].forEach((w) => assert.ok(!ACH.includes(w), 'sin ' + w));
+  assert.match(ACH, /getSnapshot: function\(\)/);
+  assert.match(ACH, /setFilter: function\(f\)/);
+  assert.match(ACH, /_calc: \{ computeProgress: computeProgress, totalAP: totalAP, earnedAP: earnedAP \}/);
+  assert.match(ACH, /new CustomEvent\('gn:achievements'/);
+  // Pedido de Pablo (LOG-0): el ícono oficial de cada logro sigue en la tarjeta.
+  assert.equal((ACH.match(/var icon = iconImg\(iconUrl, 28, meta\?\.name \|\| 'Logro'/g) || []).length, 2, 'tarjeta común y de legendarias');
+  assert.ok(Buffer.byteLength(ACH) <= 48 * 1024, 'salió de la zona congelada (DEC-035)');
+});
+
+// Entorno mínimo para correr achievements.js real y ach-view.js juntos.
+function loadBoth(opts = {}) {
+  const nodes = {}, docListeners = {}, calls = [];
+  const add = (n) => { nodes[n.id] = n; return n; };
+  const panel = add(node('achievementsPanel'));
+  panel.firstChild = null;
+  panel.insertBefore = (c) => { panel.children.unshift(c); if (c.id) nodes[c.id] = c; };
+  add(node('achievementsMain'));
+  const s = sample();
+  const tiers = (m) => m.tiers.map((t) => ({ count: t.count, points: t.points }));
+  const win = {
+    console: { info() {}, log() {}, warn() {} }, setTimeout, clearTimeout, Promise, Date, Math, JSON, Map, Set, Array, Number, String, Object,
+    URL, URLSearchParams,
+    location: { hash: '#/account/achievements', href: 'https://dev/#/account/achievements' },
+    history: { replaceState: (a, b, u) => calls.push(['url', String(u)]) },
+    CustomEvent: function (t, o) { this.type = t; this.detail = o && o.detail; },
+    __GN__: { getSelectedToken: () => (opts.token === false ? null : 'KEY-1') },
+    GW2Api: {
+      getAccountAchievements: () => Promise.resolve(s.acc.map((r) => r.done ? { id: r.id, done: true, current: r.current, max: r.max } : { id: r.id, current: r.current, max: r.max })),
+      getAccountInfo: () => Promise.resolve({ daily_ap: 2000, monthly_ap: 572 }),
+      getAchievementsMeta: () => Promise.resolve(s.metas.map((m) => ({ id: m.id, name: m.name, tiers: tiers(m), rewards: m.rewards.map((r) => ({ type: r.type, id: r.id })), flags: [] }))),
+      getItemsMany: () => Promise.resolve([])
+    },
+    fetch: (u) => {
+      calls.push(['fetch', String(u)]);
+      const cats = s.cats.map((c) => ({ id: c.id, name: c.name, icon: c.icon, achievements: Object.keys(s.achToCat).filter((k) => s.achToCat[k] === String(c.id)).map(Number) }));
+      return Promise.resolve({ ok: true, json: () => Promise.resolve(String(u).includes('/categories') ? cats : { name: 'X' }) });
+    }
+  };
+  win.window = win;
+  win.document = {
+    readyState: 'complete', head: { appendChild() {} }, activeElement: null,
+    getElementById: (id) => nodes[id] || null,
+    querySelector: () => null, querySelectorAll: () => [],
+    createElement: () => node(''),
+    addEventListener: (t, f) => { (docListeners[t] = docListeners[t] || []).push(f); },
+    dispatchEvent: (e) => { calls.push(['event', e.type]); (docListeners[e.type] || []).forEach((f) => f(e)); }
+  };
+  win.addEventListener = () => {};
+  const ctx = vm.createContext(win);
+  vm.runInContext(ACH, ctx);
+  vm.runInContext(SRC, ctx);
+  return { win, nodes, calls, panel, host: () => nodes.achxHead };
+}
+
+test('juntos: achievements.js carga, avisa y la cabecera muestra la cuenta real', async () => {
+  const x = loadBoth();
+  await x.win.Achievements.render();
+  const snap = x.win.Achievements.getSnapshot();
+  assert.equal(snap.loaded, true);
+  assert.deepEqual(Array.from(snap.rows, (r) => r.r.id), [2, 1, 3], 'la lista de la grilla, ordenada');
+  assert.deepEqual(JSON.parse(JSON.stringify(snap.ap)), { perm: 5, daily: 2572 }, 'permanentes del único terminado; diarios y mensuales de /v2/account');
+  assert.ok(x.calls.some((c) => c[0] === 'event' && c[1] === 'gn:achievements'), 'avisa al pintar');
+  const h = x.host().innerHTML;
+  assert.match(h, /<p>Tenés 3 logros al 80 % o más\.<\/p>/);
+  assert.match(h, /Al alcance <b>\+45 AP<\/b>/);
+  assert.match(h, /<small>Puntos de logro<\/small><b>2\.577<\/b><em>5 permanentes · 2\.572 de diarios y mensuales<\/em>/);
+  assert.match(x.nodes.achievementsMain.innerHTML, /<article class="card a-card" data-id="2"/);
+  assert.match(x.nodes.achievementsMain.innerHTML, /<img src="[^"]*" alt="Maestro de los fractales" width="28" height="28"/, 'la tarjeta conserva el ícono del logro');
+  assert.equal(x.calls.filter((c) => c[0] === 'fetch' && /\/v2\/achievements\/categories/.test(c[1])).length, 1, 'el único pedido directo es el de siempre');
+});
+
+test('juntos: «Colecciones legendarias» y «Por categoría» filtran con el estado real', async () => {
+  const x = loadBoth();
+  await x.win.Achievements.render();
+  x.win.AchView.go('legendary');
+  let snap = x.win.Achievements.getSnapshot();
+  assert.equal(snap.cat, '2');
+  assert.equal(snap.pct, 0);
+  assert.deepEqual(Array.from(snap.rows, (r) => r.r.id), [4]);
+  assert.match(x.nodes.achievementsMain.innerHTML, /a-card--legendary" data-id="4"/);
+  assert.match(x.host().innerHTML, /<p>Tenés 1 colección legendaria en curso\.<\/p>/);
+  assert.ok(x.calls.some((c) => c[0] === 'url' && /pct=0&cat=2/.test(c[1])), 'el enlace guarda el filtro');
+  x.win.AchView.go('near');
+  snap = x.win.Achievements.getSnapshot();
+  assert.equal(snap.cat, '');
+  assert.equal(snap.pct, 0.8);
+  x.win.AchView.openCat('10');
+  snap = x.win.Achievements.getSnapshot();
+  assert.deepEqual(Array.from(snap.rows, (r) => r.r.id), [1, 3], 'todos los pendientes de Janthir');
+});
+
+test('juntos: sin API Key la cabecera lo dice y no hay números', async () => {
+  const x = loadBoth({ token: false });
+  await x.win.Achievements.render();
+  assert.match(x.host().innerHTML, /<p>Cargá tu API Key para ver tus logros\.<\/p>/);
+  assert.doesNotMatch(x.host().innerHTML, /NaN|undefined/);
+});
