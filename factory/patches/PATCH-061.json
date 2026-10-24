@@ -1,0 +1,17 @@
+{
+ "id": "PATCH-061",
+ "summary": "BL-070 RAI-5b (2/2, parte 2): js/strike-tracker.js ya no existe; sale de los congelados de tools/size-budget.json.",
+ "files": [
+  {
+   "path": "tools/size-budget.json",
+   "base_sha": "4ea62f57b829ffe9f7de4d947585a0252c5e0683",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    \"js/strike-tracker.js\": { \"base\": 57762, \"techo\": 57762 },\n",
+     "text": ""
+    }
+   ]
+  }
+ ]
+}
