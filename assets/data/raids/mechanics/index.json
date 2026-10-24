@@ -2,6 +2,7 @@
  "version": 1,
  "files": {
   "jw": "jw.json",
-  "hot": "hot.json"
+  "hot": "hot.json",
+  "pof": "pof.json"
  }
 }

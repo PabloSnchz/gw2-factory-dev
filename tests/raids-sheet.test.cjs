@@ -17,6 +17,7 @@ const MDIR = path.join(ROOT, 'assets', 'data', 'raids', 'mechanics');
 const MIDX = JSON.parse(fs.readFileSync(path.join(MDIR, 'index.json'), 'utf8'));
 const JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));
 const HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));
+const POF = JSON.parse(fs.readFileSync(path.join(MDIR, 'pof.json'), 'utf8'));
 const byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));
 const groupOf = (e) => CAT.groups.find((g) => g.id === e.group);
 
@@ -162,7 +163,7 @@ test('mi línea en la ficha: solo hechos del catálogo y de tu semana', () => {
 const mech = (id) => ({ e: JW.encounters[id], roles: JW.roles, sources: JW.sources, verified: JW.verified });
 
 test('mecánicas por tandas: cada archivo del índice existe y cada dato tiene su fuente', () => {
-  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot'], 'tandas publicadas: Janthir y Heart of Thorns');
+  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof'], 'tandas publicadas: Janthir, Heart of Thorns y Path of Fire');
   for (const [exp, f] of Object.entries(MIDX.files)) {
     assert.match(f, /^[\w-]+\.json$/);
     const d = JSON.parse(fs.readFileSync(path.join(MDIR, f), 'utf8'));
@@ -258,6 +259,40 @@ test('tanda Heart of Thorns: las 15 fichas de las alas 1 a 4, con modo desafío 
   assert.match(tc, /Estatuas acechantes/);
 });
 
+test('tanda Path of Fire: las 11 fichas de las alas 5 a 7, con modo desafío solo donde existe', () => {
+  const pm = (id) => ({ e: POF.encounters[id], roles: POF.roles, sources: POF.sources, verified: POF.verified });
+  const ids = Object.keys(POF.encounters);
+  const pof = CAT.encounters.filter((e) => groupOf(e).expansion === 'pof');
+  assert.equal(ids.length, 11);
+  assert.deepEqual(ids, pof.map((e) => e.id), 'en el orden del catálogo');
+  assert.deepEqual(ids.filter((id) => POF.encounters[id].cm), pof.filter((e) => e.cm).map((e) => e.id), 'modo desafío solo donde existe');
+  assert.equal(ids.filter((id) => POF.encounters[id].cm).length, 8);
+  // Cada ala cita su guía de MetaBattle y la página del ala en la wiki oficial.
+  for (const [id, w, page] of [['soulless_horror', 5, 'Hall_of_Chains'], ['qadim', 6, 'Mythwright_Gambit'], ['qadim_the_peerless', 7, 'The_Key_of_Ahdashim']]) {
+    const h = S.fightHTML(model(id), pm(id));
+    assert.match(h, new RegExp('Guide:Raid_Wing_' + w + '_'), id + ': guía del ala ' + w);
+    assert.match(h, new RegExp('href="https:\\/\\/wiki\\.guildwars2\\.com\\/wiki\\/' + page + '"'), id + ': página del ala en la wiki');
+    assert.match(h, /consultadas el 2026-10-24/);
+  }
+  const dh = S.fightHTML(model('voice_in_the_void'), pm('voice_in_the_void'));
+  assert.equal((dh.match(/<ol class="rs-phases">[\s\S]*?<\/ol>/)[0].match(/<li>/g) || []).length, 6);
+  assert.match(dh, /En modo desafío cambia[\s\S]*40 millones/);
+  assert.match(dh, /wiki\/Dhuum"/);
+  const sh = S.fightHTML(model('soulless_horror'), pm('soulless_horror'));
+  assert.match(sh, /Antes del jefe: Runas del acantilado\./);
+  assert.match(sh, /<span class="rs-role">Empuje<\/span>/);
+  assert.doesNotMatch(S.fightHTML(model('river_of_souls'), pm('river_of_souls')), /En modo desafío cambia/, 'el Río de Almas no tiene modo desafío');
+  const gt = S.fightHTML(model('gate'), pm('gate'));
+  assert.doesNotMatch(gt, /rs-phases/, 'las Puertas de Ahdashim son un evento sin fases');
+  assert.match(gt, /Defender a Glenna/);
+  const ad = S.fightHTML(model('adina'), pm('adina'));
+  assert.match(ad, /Levantamiento tectónico/);
+  assert.match(ad, /En modo desafío cambia[\s\S]*arena movediza/);
+  assert.match(S.fightHTML(model('qadim_the_peerless'), pm('qadim_the_peerless')), /Desatar/);
+  // Solo fuentes verificadas: la wiki oficial y MetaBattle.
+  assert.doesNotMatch(JSON.stringify(POF), /guildjen|hardstuck|mukluk/i);
+});
+
 test('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {
   assert.match(S.CSS, /max-width:720px[\s\S]*\.rs-tabs\{display:flex\}/, 'las pestañas solo en el celular');
   assert.match(S.CSS, /#rsRoot\[data-pane=rew\] \[data-rs-pane=fight\],#rsRoot\[data-pane=fight\] \[data-rs-pane=rew\]\{display:none\}/);
@@ -316,7 +351,7 @@ function boot(o) {
     scrollY: 640, scrollTo: (x, y) => scrolls.push(y),
     fetch: (u) => {
       fetches.push(u);
-      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /catalog/.test(u) ? CAT : null;
+      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /mechanics\/pof/.test(u) ? POF : /catalog/.test(u) ? CAT : null;
       return Promise.resolve(body ? { ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(body))) } : { ok: false, status: 404 });
     },
     Storage: { STORAGE_KEYS: { ACCOUNT_SELECTED: 'gn:account:selected' }, get: (k) => (k === 'gn:account:selected' ? 'TOKEN' : null), getRaw: () => 'raids', set() {} },
@@ -396,8 +431,11 @@ test('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestaña
   await sb.RaidsSheet.open('deimos');
   assert.match(rs.innerHTML, /Banquete de almas/);
   await sb.RaidsSheet.open('adina');
+  assert.match(rs.innerHTML, /Levantamiento tectónico/);
+  assert.deepEqual(mf().slice(3), ['assets/data/raids/mechanics/pof.json'], 'Path of Fire se pide al abrir su primera ficha');
+  await sb.RaidsSheet.open('old_lions_court');
   assert.match(rs.innerHTML, /llegan en una próxima tanda/);
-  assert.equal(mf().length, 3, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
+  assert.equal(mf().length, 4, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
   sb.RaidsSheet.close();
   await sb.RaidsSheet.open('decima');
   assert.equal(rs.getAttribute('data-pane'), 'rew', 'abrir desde la lista vuelve a Recompensas');
