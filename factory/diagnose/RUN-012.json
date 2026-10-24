@@ -1,0 +1,5 @@
+{
+  "id": "RUN-012",
+  "summary": "BL-067 LOG-5: antes de retirar achievements-theme.js y los restos de achievements.js, quién los nombra; y contraste de los colores de Logros en los 19 themes con la guarda de la Bienvenida",
+  "tests": ["tests/probe-log5.smoke.cjs"]
+}
