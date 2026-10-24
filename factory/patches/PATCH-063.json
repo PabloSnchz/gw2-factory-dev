@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-063",
+ "summary": "BL-070 RAI-5b (2/2): status y backlog.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "84a0792fd71ca1db4620ff022c4e00698c72e8f2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 23:42Z",
+     "text": "Última actualización: 2026-10-24 23:59Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-5a (el nombre «Raids») y la primera parte de RAI-5b (`strike-tracker.js` ya no se carga) están hechos; sigue la segunda parte de RAI-5b (borrar el archivo, su panel y los tests heredados que leen su código) y después RAI-6 (revisión final, FEAT-014).",
+     "text": "RAI-5 está hecho: el módulo se llama «Raids» y `strike-tracker.js` se retiró del repo. Sigue RAI-6 (revisión final, FEAT-014)."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-5b (1/2) — `strike-tracker.js` deja de cargarse. HECHO.\nArchivos:\n- js/router.js (`2944ccf`, 2.18.1)\n- index.html (`e222d9b`)\n- tests/hb133-appjs-no-traga-gn.test.js (`00b90a9`)\n\nAdemás: PATCH-056 rechazado (hb133 pedía el script viejo) y PATCH-057 aplicado; PATCH-058 (esta documentación).\n",
+     "text": "BL-070 RAI-5b (2/2) — `strike-tracker.js` retirado del repo. HECHO.\nArchivos:\n- js/strike-tracker.js (borrado, `580165c`)\n- index.html (`8355411`, sin `#strikeTrackerPanel`)\n- js/gn-frame.js (`77a90c1`, 1.0.1)\n\nAdemás: PATCH-060 (tests heredados y presupuesto; PATCH-059 rechazado), PATCH-061 y PATCH-062; hb101, hb125 y hb136 retirados; LES-039; PATCH-063 (esta documentación).\n\nAntes: RAI-5b (1/2) — `strike-tracker.js` deja de cargarse (`js/router.js` 2.18.1 `2944ccf`, PATCH-057).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-5b, primera parte, hecha (2026-10-24 23:40Z)",
+     "text": "Último hecho: RAI-5b, segunda parte, hecha (2026-10-24 23:57Z): `js/strike-tracker.js` (57 KB) ya no existe (commit `580165c`). Antes de borrarlo solté todo lo que dependía de él con el archivo presente y la suite en verde (PATCH-060; PATCH-059 fue rechazado porque mi comentario nuevo en `gn-frame.js` nombraba el archivo y un test lo prohíbe): `index.html` (`8355411`, 63.440 bytes) ya no tiene el panel `#strikeTrackerPanel` y su techo en el presupuesto bajó a ese tamaño; `js/gn-frame.js` 1.0.1 (`77a90c1`, por `js/modules.json` `6fe461c`) marca seis paneles; hb94, hb106-t13 (ahora mide el ciclo de vida solo con RaidTracker, 19/19), idea56, idea57t4 y t19c dejaron de leer su código. Retiré hb101, hb125 y hb136, que solo probaban el selector Raids|Strikes, que ya no existe. Después del borrado, PATCH-061 lo sacó de `tools/size-budget.json` (`057d486`) y PATCH-062 bajó a 3 el mínimo del censo del latch (`hb106-censo-latch`, `dd73e44`), que eran 4 con Strikes (RUN-038). Lección en `ai-memory/lessons/LES-039-retirar-un-modulo-heredado.md`. Deuda BAJA para RAI-6: `router.js` conserva `StrikeTracker` en `MODULOS_CON_LATCH` y la ruta `strikes` en su tabla; son inertes y se limpian con la próxima versión del router. `tools/legacy/importar.txt` sigue nombrando los tres tests retirados: es la historia de la migración y tocar esa carpeta dispara la reimportación. Antes, RAI-5b, primera parte, hecha (2026-10-24 23:40Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-5b (1/2) `strike-tracker.js` ya no se carga HECHO; siguen RAI-5b (2/2) borrar el archivo y sus tests, RAI-6 revisión y FEAT-014.",
+     "text": "RAI-5b `strike-tracker.js` retirado HECHO; siguen RAI-6 revisión y FEAT-014."
+    },
+    {
+     "op": "replace",
+     "anchor": "Desde PATCH-057 el módulo viejo ya no se carga y `#/account/strikes` lleva directo a Encuentros; el archivo sigue en el repo hasta la segunda parte. Vuelta atrás de 5a: revertir PATCH-054; de 5b (1/2): revertir PATCH-057.",
+     "text": "Desde PATCH-057 el módulo viejo ya no se carga y `#/account/strikes` lleva directo a Encuentros; desde el commit `580165c` el archivo ya no está en el repo. Vuelta atrás de 5a: revertir PATCH-054; de 5b: revertir `580165c`, PATCH-062, PATCH-061, PATCH-060 y PATCH-057, en ese orden."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "77755ef9895e0779862fd105a3d5e5c5c90a6ae0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Siguen RAI-5b (2/2) y RAI-6. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo.",
+     "text": "Siguen RAI-5b (2/2) y RAI-6. RAI-5b, segunda parte, hecha (2026-10-24 23:57Z): `js/strike-tracker.js` (57 KB) ya no existe (commit `580165c`). Antes de borrarlo solté todo lo que dependía de él con el archivo presente y la suite en verde (PATCH-060; PATCH-059 fue rechazado porque mi comentario nuevo en `gn-frame.js` nombraba el archivo y un test lo prohíbe): `index.html` (`8355411`, 63.440 bytes) ya no tiene el panel `#strikeTrackerPanel` y su techo en el presupuesto bajó a ese tamaño; `js/gn-frame.js` 1.0.1 (`77a90c1`, por `js/modules.json` `6fe461c`) marca seis paneles; hb94, hb106-t13 (ahora mide el ciclo de vida solo con RaidTracker, 19/19), idea56, idea57t4 y t19c dejaron de leer su código. Retiré hb101, hb125 y hb136, que solo probaban el selector Raids|Strikes, que ya no existe. Después del borrado, PATCH-061 lo sacó de `tools/size-budget.json` (`057d486`) y PATCH-062 bajó a 3 el mínimo del censo del latch (`hb106-censo-latch`, `dd73e44`), que eran 4 con Strikes (RUN-038). Lección en `ai-memory/lessons/LES-039-retirar-un-modulo-heredado.md`. Deuda BAJA para RAI-6: `router.js` conserva `StrikeTracker` en `MODULOS_CON_LATCH` y la ruta `strikes` en su tabla; son inertes y se limpian con la próxima versión del router. `tools/legacy/importar.txt` sigue nombrando los tres tests retirados: es la historia de la migración y tocar esa carpeta dispara la reimportación. Sigue RAI-6. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo."
+    }
+   ]
+  }
+ ]
+}
