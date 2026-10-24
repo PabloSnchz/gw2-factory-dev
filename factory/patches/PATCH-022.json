@@ -1,0 +1,154 @@
+{
+  "id": "PATCH-022",
+  "summary": "BL-064 CAM-6: wv-view.js 1.1.0 (por manifiesto) — mi voz en la cabecera (una línea, solo si hay algo para hacer), guarda de contraste de toda la Cámara sobre #wvPanel (AA en los 19 themes) y pestañas con aria-controls/aria-labelledby. modules.json pide 1.1.0 y su test la fija.",
+  "files": [
+    {
+      "path": "js/wv-view.js",
+      "base_sha": "b432ca6eb7f9d0501dac33d88e1432f4e96b0493",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.0.0 (2026-10-23)\n",
+          "text": " * Versión: 1.1.0 (2026-10-24)\n *\n * 1.1.0 (CAM-6):\n *  - Mi voz en la cabecera: una sola línea y solo si hay algo para hacer (listos para\n *    reclamar, reset cercano con pendientes, fijados sin AA suficiente, temporada\n *    terminando). Con Shiruvana.voice; sin pedidos nuevos a la API.\n *  - Guarda de contraste de toda la Cámara sobre #wvPanel (la de la Bienvenida), más los\n *    colores fijos de los módulos (rojo, «AA», marcado): AA en los 19 themes.\n *  - Pestañas con aria-controls y paneles con aria-labelledby; foco visible; movimiento\n *    reducido respetado.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var VERSION = '1.0.0';\n",
+          "text": "  var VERSION = '1.1.0';\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  // Objetivos crudos de la API → { total, done, ready, claimed, meta }.\n  // done = llegó al 100 % (reclamado o no); ready = al 100 % y sin reclamar.\n",
+          "text": "  // Objetivos crudos de la API → { total, done, ready, claimed, meta, aa, readyAA }.\n  // done = llegó al 100 % (reclamado o no); ready = al 100 % y sin reclamar;\n  // aa = AA de todos los objetivos; readyAA = AA de los listos.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    var out = { total: list.length, done: 0, ready: 0, claimed: 0, meta: null };\n",
+          "text": "    var out = { total: list.length, done: 0, ready: 0, claimed: 0, meta: null, aa: 0, readyAA: 0 };\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "      var full = tot > 0 ? cur >= tot : cur > 0;\n      if (o.claimed) { out.claimed++; out.done++; }\n",
+          "text": "      var full = tot > 0 ? cur >= tot : cur > 0;\n      var aa = Number(o.acclaim) || 0;\n      out.aa += aa;\n      if (o.claimed) { out.claimed++; out.done++; }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "      else if (full) { out.ready++; out.done++; }\n",
+          "text": "      else if (full) { out.ready++; out.done++; out.readyAA += aa; }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "      if (left > 0) s += left * (Number(r.cost) || 0);\n    });\n    return s;\n  }\n\n  // Qué vista está activa, leída del DOM que maneja el controlador.\n",
+          "text": "      if (left > 0) s += left * (Number(r.cost) || 0);\n    });\n    return s;\n  }\n\n  // AA ya comprometida en marcas (lo que marcaste y la API todavía no vio), con tope.\n  function markedAA(rows, marks) {\n    var s = 0;\n    marks = marks || {};\n    (rows || []).forEach(function (r) {\n      var m = Math.max(0, Number(marks[r.id]) || 0);\n      if (!m) return;\n      if (r.purchase_limit != null) m = Math.min(m, Math.max(0, Number(r.purchase_limit) - (Number(r.purchased) || 0)));\n      s += m * (Number(r.cost) || 0);\n    });\n    return s;\n  }\n\n  // Fijados a los que todavía les falta alguna compra.\n  function pinnedLeft(rows, pinned, marks) {\n    var n = 0;\n    pinned = pinned || {}; marks = marks || {};\n    (rows || []).forEach(function (r) {\n      if (!pinned[r.id] || r.purchase_limit == null) return;\n      if (Number(r.purchase_limit) - (Number(r.purchased) || 0) - (Number(marks[r.id]) || 0) > 0) n++;\n    });\n    return n;\n  }\n\n  // AA que dan por semana lo diario (×7) y lo semanal, con sus metas.\n  function weekIncome(c) {\n    var part = function (x, times) { return x ? (x.aa + (x.meta ? x.meta.reward : 0)) * times : 0; };\n    return part(c.daily, 7) + part(c.weekly, 1);\n  }\n\n  function plural(n, uno, varios) { return n + ' ' + (n === 1 ? uno : varios); }\n\n  // Mi voz en la cabecera (CAM-0, sección 7): una sola línea y solo si hay algo para hacer.\n  // Gana la primera que aplica: listos para reclamar, reset cercano con pendientes,\n  // fijados sin AA suficiente, temporada terminando con fijados. Todo al día: nada.\n  // v = { counts, now, aa, marked, reserved, income, seasonEnd, pinnedLeft }\n  function pickVoice(v) {\n    var c = v.counts || {}, now = v.now;\n    var ready = 0, readyAA = 0;\n    ['daily', 'weekly', 'special'].forEach(function (k) { if (c[k]) { ready += c[k].ready; readyAA += c[k].readyAA || 0; } });\n    if (ready) {\n      return { key: 'ready', kind: 'advierte', text: 'Tenés ' + plural(ready, 'objetivo listo', 'objetivos listos') +\n        ' para reclamar en el juego' + (readyAA ? ' (+' + fmtInt(readyAA) + ' AA).' : '.') };\n    }\n    var resets = [['daily', 'diario', nextDailyReset(now) - now, 'diario', 'diarios'], ['weekly', 'semanal', nextWeeklyReset(now) - now, 'semanal', 'semanales']];\n    for (var i = 0; i < resets.length; i++) {\n      var r = resets[i], x = c[r[0]], pend = x ? x.total - x.done : 0;\n      if (pend > 0 && r[2] <= 3600000) {\n        return { key: 'reset-' + r[0], kind: 'advierte', text: 'El reset ' + r[1] + ' es en ' + fmtLeft(r[2]) + ' y te ' +\n          (pend === 1 ? 'falta 1 objetivo ' + r[3] : 'faltan ' + pend + ' objetivos ' + r[4]) + '.' };\n      }\n    }\n    if (v.aa != null && v.reserved) {\n      var short = v.reserved - (v.aa - (v.marked || 0));\n      if (short > 0) {\n        var t = 'Para lo fijado te faltan ' + fmtInt(short) + ' AA.';\n        if (v.income > 0) {\n          var w = Math.ceil(short / v.income);\n          t += ' Si completás lo diario y lo semanal, llegás en ' + (w === 1 ? 'una semana' : 'unas ' + w + ' semanas') + '.';\n        }\n        return { key: 'short', kind: 'recomienda', text: t };\n      }\n    }\n    var left = v.seasonEnd - now;\n    if (v.pinnedLeft > 0 && left > 0 && left <= 7 * DAY) {\n      return { key: 'season', kind: 'advierte', text: 'La temporada termina en ' + (left >= DAY ? plural(Math.floor(left / DAY), 'día', 'días') : fmtLeft(left)) +\n        ' y te ' + (v.pinnedLeft === 1 ? 'queda 1 fijado' : 'quedan ' + v.pinnedLeft + ' fijados') + ' sin comprar.' };\n    }\n    return null;\n  }\n\n  // Colores fijos de la Cámara que no son del theme: la guarda los ajusta igual que a los del theme.\n  var EXTRA = { '--color-red': '#F47C7C', '--wvx-aa': '#4FC3D9', '--wvx-mark': '#9B7BFF' };\n\n  // Guarda de contraste de la Cámara (misma regla que la Bienvenida, la Sidebar y la Armería):\n  // lo que el theme no alcanza a 4.5:1 sobre --bg-0 y --bg-1 se corrige solo dentro de #wvPanel.\n  // fixes = Welcome._pure.contrastFixes. Devuelve las propiedades a poner en el panel.\n  function guardFixes(tokens, fixes) {\n    if (typeof fixes !== 'function') return {};\n    var out = Object.assign({}, fixes(tokens) || {});\n    Object.keys(EXTRA).forEach(function (k) {\n      var base = String(tokens[k] || '').trim() || EXTRA[k];\n      var probe = { '--bg-0': tokens['--bg-0'], '--bg-1': tokens['--bg-1'], '--tx-1': tokens['--tx-1'], '--color-amber': base };\n      var f = fixes(probe) || {};\n      out[k] = f['--color-amber'] || base;\n    });\n    return out;\n  }\n\n  // Qué vista está activa, leída del DOM que maneja el controlador.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    h.push('</div>');\n    h.push('<div class=\"wvx-why\"><button type=\"button\" class=\"wvx-link\" data-wvx=\"why\" aria-expanded=\"' + (m.whyOpen ? 'true' : 'false') + '\" aria-controls=\"wvxWhy\">ⓘ ¿Por qué tarda en actualizarse?</button>');\n",
+          "text": "    h.push('</div>');\n    h.push('<div id=\"wvxVoice\" class=\"wvx-voice\" aria-live=\"polite\"></div>');\n    h.push('<div class=\"wvx-why\"><button type=\"button\" class=\"wvx-link\" data-wvx=\"why\" aria-expanded=\"' + (m.whyOpen ? 'true' : 'false') + '\" aria-controls=\"wvxWhy\">ⓘ ¿Por qué tarda en actualizarse?</button>');\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "\n  function navHTML(m) {\n",
+          "text": "\n  // Qué panel controla cada pestaña (para aria-controls y aria-labelledby).\n  var OBJ_PANEL = { daily: 'wvTabDaily', weekly: 'wvTabWeekly', special: 'wvTabSpecial' };\n  function panelFor(tab, v, accountsSub) {\n    if (tab === 'shop') return 'wvTabShop';\n    if (tab === 'accounts') return (v.tab === 'accounts' ? v.sub : accountsSub) === 'purchases' ? 'wvPDPanel' : 'wvObjectivesDashboardPanel';\n    return OBJ_PANEL[v.tab === 'objectives' ? v.sub : 'daily'] || 'wvTabDaily';\n  }\n\n  function navHTML(m) {\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "      h.push('<button type=\"button\" role=\"tab\" id=\"wvxTab-' + t[0] + '\" data-wvx-tab=\"' + t[0] + '\" aria-selected=\"' + on + '\" tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + t[2] + '</button>');\n",
+          "text": "      h.push('<button type=\"button\" role=\"tab\" id=\"wvxTab-' + t[0] + '\" data-wvx-tab=\"' + t[0] + '\" aria-selected=\"' + on + '\" aria-controls=\"' +\n        panelFor(t[0], v, m.accountsSub) + '\" tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + t[2] + '</button>');\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    '#wvxHead button:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',\n    '@media (max-width:900px){.wvx-hero{padding:12px}.wvx-row>img{width:40px;height:40px;padding:4px}.wvx-title h2{font-size:1.05rem}',\n",
+          "text": "    '#wvxHead button:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',\n    '.wvx-voice{margin-top:12px}.wvx-voice:empty{display:none}.wvx-voice .shv-voice{margin:0;padding:8px 12px;background:var(--bg-0)}',\n    '.wvx-voice .shv-voice__avatar{width:36px;height:36px}.wvx-voice .shv-voice__label{font-size:.78rem}.wvx-voice .shv-voice__body p{font-size:.86rem}',\n    // Colores fijos de los módulos de la Cámara, por la guarda (EXTRA): legibles en los 19 themes.\n    '#wvPanel .wvo-aa,#wvPanel .wvd-aa,#wvPanel .wvp-aa{color:var(--wvx-aa,#4FC3D9)}#wvPanel .wvp-cnt em{color:var(--wvx-mark,#9B7BFF)}',\n    '#wvPanel [role=tab]:focus-visible,#wvPanel [role=tabpanel]:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',\n    '@media (prefers-reduced-motion:reduce){#wvPanel *{transition-duration:.001ms!important;animation-duration:.001ms!important;animation-iteration-count:1!important}}',\n    '@media (max-width:900px){.wvx-hero{padding:12px}.wvx-row>img{width:40px;height:40px;padding:4px}.wvx-title h2{font-size:1.05rem}',\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "\n  function shopState() {\n",
+          "text": "\n  // Fijados y marcas de la cuenta seleccionada, del almacén de la temporada (solo lectura).\n  function storedMarks() {\n    try {\n      var S = root.WVSeasonStore, tk = token();\n      if (!S || !tk || typeof S.listSeasons !== 'function') return { pinned: {}, marks: {} };\n      var s = S.listSeasons()[0] || {}, fp = tk.slice(0, 4) + '…' + tk.slice(-4);\n      return { pinned: S.getPinned(s.year, s.seq || 1, fp) || {}, marks: S.getMarks(s.year, s.seq || 1, fp) || {} };\n    } catch (_) { return { pinned: {}, marks: {} }; }\n  }\n\n  function shopState() {\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    var dl = nextDailyReset(now) - now;\n    return {\n",
+          "text": "    var dl = nextDailyReset(now) - now;\n    // Fijados y marcas: los de la Tienda si ya cargó; si no, los guardados de esta temporada.\n    var pm = shop && shop.pinned && Object.keys(shop.pinned).length ? { pinned: shop.pinned, marks: shop.marks } : storedMarks();\n    var end = d.season && d.season.end ? Date.parse(d.season.end) : NaN;\n    var voice = pickVoice({\n      counts: c, now: now, aa: aa, marked: markedAA(rows, pm.marks), reserved: reservedAA(rows, pm.pinned, pm.marks),\n      income: weekIncome(c), seasonEnd: isFinite(end) ? end : NaN, pinnedLeft: pinnedLeft(rows, pm.pinned, pm.marks)\n    });\n    return {\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    return {\n      view: view, season: seasonLine(d.season, now),\n",
+          "text": "    return {\n      voice: voice, accountsSub: st.accountsSub,\n      view: view, season: seasonLine(d.season, now),\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    host.innerHTML = headHTML(m);\n  }\n",
+          "text": "    host.innerHTML = headHTML(m);\n    st.voiceKey = null;\n    renderVoice(m.voice);\n    labelPanels(m);\n    applyGuard();\n  }\n\n  // Mi línea: con el componente de siempre (texto como texto, avatar decorativo).\n  function renderVoice(msg) {\n    var box = byId('wvxVoice');\n    if (!box) return;\n    var key = msg ? msg.key + '|' + msg.text : '';\n    if (key === st.voiceKey) return;\n    st.voiceKey = key;\n    while (box.firstChild) box.removeChild(box.firstChild);\n    if (msg && root.Shiruvana && typeof root.Shiruvana.voice === 'function') box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text }));\n  }\n\n  // Cada panel visible dice qué pestaña nueva lo controla (lector de pantalla).\n  function labelPanels(m) {\n    ['objectives', 'shop', 'accounts'].forEach(function (t) {\n      if (m.view.tab !== t) return;\n      var p = byId(panelFor(t, m.view, m.accountsSub));\n      if (p && p.setAttribute) { p.setAttribute('aria-labelledby', 'wvxTab-' + t); if (p.getAttribute && p.getAttribute('role') == null) p.setAttribute('role', 'tabpanel'); }\n    });\n  }\n\n  function readTokens() {\n    var t = {}, cs = typeof root.getComputedStyle === 'function' && doc.documentElement ? root.getComputedStyle(doc.documentElement) : null;\n    ['--bg-0', '--bg-1', '--tx-1', '--tx-3', '--muted', '--color-green', '--gn-gold', '--color-amber', '--acc-1', '--color-green-bg', '--color-amber-bg']\n      .concat(Object.keys(EXTRA)).forEach(function (k) { t[k] = cs && cs.getPropertyValue ? cs.getPropertyValue(k) : ''; });\n    return t;\n  }\n\n  // Pone en #wvPanel lo que la guarda corrige y saca lo que ya no hace falta.\n  function applyGuard(tokens) {\n    var panel = byId('wvPanel'), W = root.Welcome;\n    if (!panel || !panel.style || typeof panel.style.setProperty !== 'function' || !W || !W._pure) return {};\n    var fixes = guardFixes(tokens || readTokens(), W._pure.contrastFixes);\n    (st.guarded || []).forEach(function (k) { if (!(k in fixes)) panel.style.removeProperty(k); });\n    Object.keys(fixes).forEach(function (k) { panel.style.setProperty(k, fixes[k]); });\n    st.guarded = Object.keys(fixes);\n    return fixes;\n  }\n\n  // El theme cambia data-theme y carga su hoja aparte: la guarda corre al cambio y otra vez al rato.\n  function watchTheme() {\n    if (st.themeWatch || typeof root.MutationObserver !== 'function' || !doc.documentElement) return;\n    st.themeWatch = true;\n    new root.MutationObserver(function () { applyGuard(); setTimeout(function () { applyGuard(); }, 400); })\n      .observe(doc.documentElement, { attributes: true, attributeFilter: ['data-theme'] });\n  }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "        : 'lun 07:30 UTC · en ' + fmtLeft(nextWeeklyReset(now) - now);\n    });\n  }\n  function startClock() { if (!st.timer) st.timer = setInterval(tick, 30000); }\n",
+          "text": "        : 'lun 07:30 UTC · en ' + fmtLeft(nextWeeklyReset(now) - now);\n    });\n    renderVoice(buildModel(now).voice);\n  }\n  function startClock() { if (!st.timer) st.timer = setInterval(tick, 30000); }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    observe();\n    if (doc.addEventListener) {\n",
+          "text": "    observe();\n    watchTheme();\n    if (doc.addEventListener) {\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    if (doc.addEventListener) {\n      doc.addEventListener('gn:nav-active', function () { setTimeout(onShow, 50); });\n",
+          "text": "    if (doc.addEventListener) {\n      // Shiruvana y la Bienvenida (la guarda) pueden llegar después: se pinta otra vez al terminar boot.js.\n      doc.addEventListener('gn:boot-ready', function () { if (!isHidden(byId('wvPanel'))) render(); });\n      doc.addEventListener('gn:nav-active', function () { setTimeout(onShow, 50); });\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "      activeView: activeView, headHTML: headHTML, CSS: CSS, WHY: WHY }\n",
+          "text": "      activeView: activeView, headHTML: headHTML, CSS: CSS, WHY: WHY,\n      markedAA: markedAA, pinnedLeft: pinnedLeft, weekIncome: weekIncome, pickVoice: pickVoice, guardFixes: guardFixes,\n      panelFor: panelFor, EXTRA: EXTRA },\n    _guard: applyGuard, _tick: tick\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/wv-view.test.cjs",
+      "base_sha": "bd60084151300c5558f5b91724a09b04bca2fd58",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "test('versión 1.0.0, la misma que pide js/modules.json', () => {\n  assert.match(SRC, /\\* Versión: 1\\.0\\.0 /);\n",
+          "text": "test('versión 1.1.0, la misma que pide js/modules.json', () => {\n  assert.match(SRC, /\\* Versión: 1\\.1\\.0 /);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.0.0' }]);\n",
+          "text": "  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.1.0' }]);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.deepEqual(c, { total: 4, done: 2, ready: 1, claimed: 1, meta: { cur: 3, total: 4, reward: 150 } });\n",
+          "text": "  assert.deepEqual(c, { total: 4, done: 2, ready: 1, claimed: 1, meta: { cur: 3, total: 4, reward: 150 }, aa: 0, readyAA: 0 });\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.deepEqual(P.countObjectives(null), { total: 0, done: 0, ready: 0, claimed: 0, meta: null });\n",
+          "text": "  assert.deepEqual(P.countObjectives(null), { total: 0, done: 0, ready: 0, claimed: 0, meta: null, aa: 0, readyAA: 0 });\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.match(h, /data-wvx-tab=\"shop\" aria-selected=\"true\" tabindex=\"0\">Tienda<span class=\"wvx-badge\">1 fijado<\\/span>/);\n",
+          "text": "  assert.match(h, /data-wvx-tab=\"shop\" aria-selected=\"true\" aria-controls=\"wvTabShop\" tabindex=\"0\">Tienda<span class=\"wvx-badge\">1 fijado<\\/span>/);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.match(h, /id=\"wvxTab-objectives\" data-wvx-tab=\"objectives\" aria-selected=\"true\" tabindex=\"0\">Objetivos<span class=\"wvx-badge wvx-badge--gold\">2 listos<\\/span>/);\n  assert.match(h, /data-wvx-tab=\"shop\" aria-selected=\"false\" tabindex=\"-1\">Tienda<\\/button>/);\n  assert.match(h, /data-wvx-tab=\"accounts\" aria-selected=\"false\" tabindex=\"-1\">Todas las cuentas<span class=\"wvx-badge\">5<\\/span>/);\n",
+          "text": "  assert.match(h, /id=\"wvxTab-objectives\" data-wvx-tab=\"objectives\" aria-selected=\"true\" aria-controls=\"wvTabDaily\" tabindex=\"0\">Objetivos<span class=\"wvx-badge wvx-badge--gold\">2 listos<\\/span>/);\n  assert.match(h, /data-wvx-tab=\"shop\" aria-selected=\"false\" aria-controls=\"wvTabShop\" tabindex=\"-1\">Tienda<\\/button>/);\n  assert.match(h, /data-wvx-tab=\"accounts\" aria-selected=\"false\" aria-controls=\"wvObjectivesDashboardPanel\" tabindex=\"-1\">Todas las cuentas<span class=\"wvx-badge\">5<\\/span>/);\n"
+        }
+      ]
+    },
+    {
+      "path": "js/modules.json",
+      "base_sha": "4cf22f4081736d21ef3c7dba42b455128aa2fd5a",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "    { \"src\": \"js/wv-view.js\", \"v\": \"1.0.0\" },\n",
+          "text": "    { \"src\": \"js/wv-view.js\", \"v\": \"1.1.0\" },\n"
+        }
+      ]
+    }
+  ]
+}
