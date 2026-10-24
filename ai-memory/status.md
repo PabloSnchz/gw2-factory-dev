@@ -1,21 +1,21 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-067 paso 3 — Logros. LOG-5 hecho en DEV: revisión final (19 themes, teclado, lector, celular), `achievements-theme.js` retirado y FEAT-012 completa. Espera la validación de Pablo para cerrar Logros.
-Motivo: Pablo pidió seguir con LOG-5 (2026-10-24 06:42Z); LOG-4 queda validado.
+Tarea actual: CAM-POLISH-001 — fuerza visual de las tarjetas de la Tienda, Compras fijadas y Logros. Propuesta entregada (`docs/propuestas/propuesta-cam-polish-001.html`), sin implementar. Logros LOG-5 sigue esperando validación.
+Motivo: Pablo comparó el resultado con las propuestas aprobadas y pidió recuperar contraste, profundidad y jerarquía, solo en presentación (2026-10-24 07:02Z).
 Fase: F1 — Visibilidad
-Etapa actual: REVIEW
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 06:58Z
-Próxima acción: con la validación de Pablo, Logros queda cerrado; el paso 4 (Actividades) espera la decisión de BL-055.
+Última actualización: 2026-10-24 07:12Z
+Próxima acción: con la aprobación de Pablo, POL-1: `js/gn-surface.js` (superficies por panel) y su test en los 19 themes; después Tienda, Compras fijadas y Logros, un paso por vez.
 
 Micro-ciclo:
-LOG-5 — Revisión final de Logros y cierre de FEAT-012. HECHO, espera validación.
+CAM-POLISH-001 — POL-0 propuesta visual. ENTREGADA, espera aprobación.
 Archivos:
-- js/ach-cards.js 1.2.0 (`a73c9ba`), tests/ach-a11y.test.cjs (nuevo) y js/modules.json (`fb52fe5`); js/achievements-theme.js borrado
-- PATCH-031: js/achievements.js 3.6.0 (`b9cc84a`), index.html (`649a09b`), tools/size-budget.json y el test conjunto — APLICADO; PATCH-032: backlog — APLICADO
+- docs/propuestas/propuesta-cam-polish-001.html (diagnóstico, comparación, ajustes, maqueta e impacto)
+- factory/diagnose/RUN-015 (medición de superficies en los 19 themes; sonda borrada) y ai-memory/status.md
 
-Último hecho: medí con los 19 themes reales (RUN-012) y encontré lo importante: `achievements.js` marcaba toda la grilla como región viva, así que con lector de pantalla cada filtro leía las 60 tarjetas. Ahora la grilla no habla y `ach-cards.js` dice una sola frase («Ves 12 logros.»). Retiré `achievements-theme.js`, que seguía cargándose para pintar tarjetas que ya no existen, y los restos de `achievements.js` (17,6 KB). En el celular, «Ver en la Armería →» y «Wiki ↗» miden 44 px. El contraste no necesitó cambios: con la guarda, los 19 themes pasan AA. Tests de Logros: 63/63 en DEV (RUN-014, con `index-versions`, `size-budget`, `boot`, `welcome-contrast` y `legacy-census` en verde).
+Último hecho: medí dónde viven las tarjetas (RUN-015). Causa raíz: las maquetas usaban tres superficies (lienzo `#0F1117`, tarjeta `#1A1F2B`, pista `#232A3A`); en la Bóveda la tarjeta pinta lo mismo que su `.panel` (1.00:1) y en 17 de 19 themes `--bg-2` es igual a `--bg-1`, así que las barras perdieron la pista y el ícono de Logros su placa. No es una regresión del código: es el contenedor real. Propuse superficies propias de esas pantallas calculadas desde el theme (bandeja, tarjeta elevada, borde, pista y placa), íconos oficiales más grandes con anillo de rareza o dorado y jerarquía ícono → título → progreso → recompensa. En Gato Negro: tarjeta 1.00 → 1.29, pista 1.00 → 1.44, borde 1.36 → 1.65.
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
@@ -48,6 +48,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
+- [BL-067] Decisión: CAM-POLISH-001. Abrí `docs/propuestas/propuesta-cam-polish-001.html` en DEV y decidí tres cosas: la bandeja oscura detrás de las tarjetas (recomiendo que sí), el anillo dorado «a un paso» en el ícono de los logros (recomiendo que sí) y `gn-surface.js` como base del resto del restyle (recomiendo que sí). No cambia comportamiento ni datos.
 - [BL-067] Validación: abrí Logros en DEV con recarga completa (Ctrl+F5) y fijate que todo se vea y funcione como en LOG-4 (no cambia nada a la vista, salvo en el celular: «Ver en la Armería →» y «Wiki ↗» son más altos, para el dedo). Si querés probar el lector de pantalla (NVDA o el Narrador de Windows): al cambiar un filtro tiene que decir una sola frase, como «Ves 12 logros.», y no leer todas las tarjetas. Probá también un theme claro (Notion o macOS). Con tu validación cierro Logros (FEAT-012).
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
