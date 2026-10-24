@@ -1,0 +1,7 @@
+{
+  "id": "RUN-023",
+  "summary": "BL-070 RAI-1: miniaturas candidatas para los 23 encuentros sin ícono y cuál moneda Gaeting Crystal (39 o 77) es la actual",
+  "tests": [
+    "tests/probe-rai1-minis2.smoke.cjs"
+  ]
+}
