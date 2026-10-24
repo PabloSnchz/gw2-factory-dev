@@ -1,0 +1,16 @@
+{
+  "id": "RUN-008",
+  "summary": "BL-064 CAM-4: después de PATCH-020, Todas las cuentas → Objetivos semanales, versiones, tamaño, claves (idea61) y el resto de la Cámara siguen verdes",
+  "tests": [
+    "tests/wv-objectives-dashboard.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/idea61-claves-congeladas.test.js",
+    "tests/wv-view.test.cjs",
+    "tests/wv-objectives-ui.test.cjs",
+    "tests/wv-shop-ui.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/index-identity.test.cjs",
+    "tests/ai-memory.test.cjs"
+  ]
+}
