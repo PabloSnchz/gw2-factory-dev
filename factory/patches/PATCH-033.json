@@ -1,0 +1,96 @@
+{
+  "id": "PATCH-033",
+  "summary": "BL-067 CAM-POLISH-001 POL-1 (preparación): ach-view.js 1.3.0 y wv-view.js 1.2.0 calculan su guarda de contraste sobre la bandeja y la tarjeta reales cuando js/gn-surface.js está cargado (GNSurface.surfaceTokens); sin ese módulo se comportan igual que hoy. Tests y manifiesto suben de versión juntos.",
+  "files": [
+    {
+      "path": "js/ach-view.js",
+      "base_sha": "3e0966658cdf71b45307a51efdb7050958f5cf84",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.2.0 (2026-10-24)\n",
+          "text": " * Versión: 1.3.0 (2026-10-24)\n *  - 1.3.0 (CAM-POLISH-001): si js/gn-surface.js está cargado, la guarda de contraste se calcula\n *    sobre la bandeja y la tarjeta reales (GNSurface.surfaceTokens), no sobre el fondo del theme.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var VERSION = '1.2.0';\n",
+          "text": "  var VERSION = '1.3.0';\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    var fixes = W._pure.contrastFixes(tokens || readTokens()) || {};\n",
+          "text": "    var tk = tokens || readTokens(), GS = root.GNSurface;\n    if (GS && typeof GS.surfaceTokens === 'function') tk = GS.surfaceTokens(tk);\n    var fixes = W._pure.contrastFixes(tk) || {};\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/ach-view.test.cjs",
+      "base_sha": "fb7dd467f1f1ce882106dd0629d215a0a3ffa1cc",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "test('versión 1.2.0, la misma que pide js/modules.json, y por manifiesto', () => {\n  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);\n",
+          "text": "test('versión 1.3.0, la misma que pide js/modules.json, y por manifiesto', () => {\n  assert.match(SRC, /\\* Versión: 1\\.3\\.0 /);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.2.0' }]);\n",
+          "text": "  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.3.0' }]);\n"
+        }
+      ]
+    },
+    {
+      "path": "js/wv-view.js",
+      "base_sha": "69094340fe315648bbece2869429904bfefa97a8",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.1.0 (2026-10-24)\n",
+          "text": " * Versión: 1.2.0 (2026-10-24)\n *  - 1.2.0 (CAM-POLISH-001): si js/gn-surface.js está cargado, la guarda de contraste se calcula\n *    sobre la bandeja y la tarjeta reales (GNSurface.surfaceTokens), no sobre el fondo del theme.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var VERSION = '1.1.0';\n",
+          "text": "  var VERSION = '1.2.0';\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    var fixes = guardFixes(tokens || readTokens(), W._pure.contrastFixes);\n",
+          "text": "    var tk = tokens || readTokens(), GS = root.GNSurface;\n    if (GS && typeof GS.surfaceTokens === 'function') tk = GS.surfaceTokens(tk);\n    var fixes = guardFixes(tk, W._pure.contrastFixes);\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/wv-view.test.cjs",
+      "base_sha": "d6b25154a8d8194671aebeebe5f90dbd8e4f96e3",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "test('versión 1.1.0, la misma que pide js/modules.json', () => {\n  assert.match(SRC, /\\* Versión: 1\\.1\\.0 /);\n",
+          "text": "test('versión 1.2.0, la misma que pide js/modules.json', () => {\n  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.1.0' }]);\n",
+          "text": "  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.2.0' }]);\n"
+        }
+      ]
+    },
+    {
+      "path": "js/modules.json",
+      "base_sha": "fb52fe531c5f708ee1f15375a23b28d7778003f2",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "\"js/wv-view.js\", \"v\": \"1.1.0\"",
+          "text": "\"js/wv-view.js\", \"v\": \"1.2.0\""
+        },
+        {
+          "op": "replace",
+          "anchor": "\"js/ach-view.js\", \"v\": \"1.2.0\"",
+          "text": "\"js/ach-view.js\", \"v\": \"1.3.0\""
+        }
+      ]
+    }
+  ]
+}
