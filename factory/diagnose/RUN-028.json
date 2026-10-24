@@ -1,0 +1,16 @@
+{
+  "id": "RUN-028",
+  "summary": "BL-070 RAI-3: ficha del encuentro activa (raids-sheet.js 1.0.0, raids-view.js 1.1.0, rewards.json); suite de Raids y guardas del legado",
+  "tests": [
+    "tests/raids-sheet.test.cjs",
+    "tests/raids-view.test.cjs",
+    "tests/raids-catalog.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/gn-frame.test.cjs",
+    "tests/hb78-preferencia-pestana.test.js",
+    "tests/hb136-escena2-solo-strikes.test.js",
+    "tests/idea61-claves-congeladas.test.js",
+    "tests/legacy-census.test.cjs"
+  ]
+}
