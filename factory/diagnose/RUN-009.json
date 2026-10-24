@@ -1,0 +1,10 @@
+{
+  "id": "RUN-009",
+  "summary": "BL-064 CAM-5: antes de tocar wv-purchase-detail.js, quién usa sus globales, su CSS global (.badge, data-tip) y las tarjetas viejas de la Tienda; y qué fijan sus tests",
+  "tests": [
+    "tests/probe-cam5.smoke.cjs",
+    "tests/idea55.wv-online-parallel.test.js",
+    "tests/t19c-lectores-legacy.test.js",
+    "tests/hb89-premisa-raw-selected.test.js"
+  ]
+}
