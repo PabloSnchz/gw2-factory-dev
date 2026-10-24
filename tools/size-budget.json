@@ -5,7 +5,7 @@
   "limite": 49152,
   "holgura": 1024,
   "congelados": {
-    "index.html": { "base": 69606, "techo": 64835, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
+    "index.html": { "base": 69606, "techo": 64712, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
     "js/api-gw2.js": { "base": 132261, "techo": 132261 },
     "js/raid-tracker.js": { "base": 100052, "techo": 100052 },
     "js/router.js": { "base": 90495, "techo": 65576 },

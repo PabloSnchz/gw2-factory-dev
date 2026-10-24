@@ -1,6 +1,10 @@
 /* ===========================================================================
  * js/achievements.js — Logros enfocado en "próximo a completar"
- * Versión: 3.4.0 (2026-10-24)
+ * Versión: 3.5.0 (2026-10-24)
+ *  - LOG-3 (BL-067): se va el panel de Logros de la Sidebar («Más cercanos» y
+ *    30 categorías de la barra lateral). «Por categoría» la arma js/ach-categories.js
+ *    agrupada por expansión o modo. Se fueron también sus utilidades sin uso.
+ *  - 3.4.0:
  *  - LOG-2 (BL-067): las tarjetas, los filtros y las recompensas los pinta
  *    js/ach-cards.js (por js/modules.json). Este archivo calcula la lista
  *    (state.rows) y avisa con gn:achievements; setFilter acepta además
@@ -39,8 +43,7 @@
   var el = {
     panel: null, head: null, body: null,
     chipsOld: null, search: null,
-    mainGrid: null, toolbar: null,
-    aside: null, asideTopList: null, asideCats: null
+    mainGrid: null, toolbar: null
   };
 
   var state = {
@@ -63,25 +66,11 @@
   };
 
   // ------------------------------- Utils -----------------------------------
-  function pct100(x){ return Math.round(x*1000)/10; }
-  function fmtPct(x){ return pct100(x).toFixed(1) + '%'; }
-  function fmtInt(n){ n = Number(n||0); return n.toLocaleString('es-AR'); }
-  function esc(s) {
-    return String(s || '').replace(/[&<>"']/g, function (m) {
-      return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[m];
-    });
-  }
   function norm(s){
     return String(s||'').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'');
   }
   function getSelectedToken(){ try { return root.__GN__?.getSelectedToken?.() || null; } catch(_){ return null; } }
   function isActiveRoute(){ return (String(location.hash||'').toLowerCase().startsWith('#/account/achievements')); }
-
-  function iconImg(url, size, alt, extraStyle){
-    if(!url) return '';
-    var s = Number(size||18), style = extraStyle ? ' style="'+extraStyle+'"' : '';
-    return '<img src="'+esc(url)+'" alt="'+esc(alt||'')+'" width="'+s+'" height="'+s+'" loading="lazy" decoding="async" referrerpolicy="no-referrer"'+style+' />';
-  }
 
   // --------------------------- Deep‑links (hash) ----------------------------
   function parseHashParams(){
@@ -275,106 +264,6 @@
     try { document.dispatchEvent(new CustomEvent('gn:achievements', { detail: { count: rows.length } })); } catch (_) {}
   }
 
-  // --------------------------- Aside de Logros ------------------------------
-  function ensureAsideStyles(){
-    if (document.getElementById('ach-aside-styles')) return;
-    var css = `
-      #achAsidePanel[hidden]{display:none!important;}
-      #achAsidePanel .panel__title{margin:0 0 6px}
-      .ach-mini-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-      .ach-mini-item{display:grid;gap:2px}
-      .ach-mini-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-      .ach-mini-name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-      .ach-mini-next{font-size:12px;color:var(--muted)}
-      .ach-cats-chips{display:flex;flex-wrap:wrap;gap:6px}
-      .ach-chip{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:999px; background:var(--bg-1);border:1px solid var(--bd-1);color:var(--acc-2);font-size:12px;cursor:pointer}
-      .ach-chip:hover{border-color:var(--acc-1)}
-    `;
-    var s = document.createElement('style'); s.id='ach-aside-styles'; s.textContent=css;
-    document.head.appendChild(s);
-  }
-
-  function ensureAside(){
-    ensureAsideStyles();
-    const host = document.querySelector('aside.col-side');
-    if (!host) return;
-    let p = document.getElementById('achAsidePanel');
-    if (!p) {
-      p = document.createElement('section');
-      p.className = 'panel';
-      p.id = 'achAsidePanel';
-      host.appendChild(p);
-    } else if (p.parentElement !== host) {
-      host.appendChild(p);
-    }
-    const hasTop = !!p.querySelector('#achAsideTop');
-    const hasCats = !!p.querySelector('#achAsideCats');
-    if (!hasTop || !hasCats) {
-      p.innerHTML = '';
-      const head1 = document.createElement('div');
-      head1.className = 'panel-head';
-      const h3_1 = document.createElement('h3');
-      h3_1.className = 'panel-head__title';
-      h3_1.textContent = 'Más cercanos';
-      head1.appendChild(h3_1);
-      const hr1 = document.createElement('hr'); hr1.className = 'hr-hairline';
-      const body1 = document.createElement('div'); body1.className = 'panel__body';
-      const ul = document.createElement('ul'); ul.id = 'achAsideTop'; ul.className = 'ach-mini-list';
-      body1.appendChild(ul);
-      const head2 = document.createElement('div'); head2.className = 'panel-head';
-      const h3_2 = document.createElement('h3'); h3_2.className = 'panel-head__title'; h3_2.textContent = 'Categorías'; head2.appendChild(h3_2);
-      const hr2 = document.createElement('hr'); hr2.className = 'hr-hairline';
-      const body2 = document.createElement('div'); body2.className = 'panel__body';
-      const cats = document.createElement('div'); cats.id = 'achAsideCats'; cats.className = 'ach-cats-chips';
-      body2.appendChild(cats);
-      p.append(head1, hr1, body1, head2, hr2, body2);
-    }
-    el.aside = p;
-    el.asideTopList = p.querySelector('#achAsideTop');
-    el.asideCats = p.querySelector('#achAsideCats');
-    p.removeAttribute('hidden');
-  }
-
-  function renderAside(rows){
-    ensureAside();
-    var top = (rows || []).slice(0,5);
-    if (el.asideTopList) {
-      if (!top.length) {
-        el.asideTopList.innerHTML = '<li class="muted">Sin candidatos cercanos con los filtros actuales.</li>';
-      } else {
-        el.asideTopList.innerHTML = top.map(function(x){
-          var icon = iconImg(x.meta?.icon, 16, x.meta?.name, 'margin-right:6px;border-radius:3px');
-          var name = esc(x.meta?.name || ('#'+x.r.id));
-          var pct = fmtPct(x.pr.pct);
-          return (
-            '<li class="ach-mini-item">' +
-              '<div class="ach-mini-top"><span class="ach-mini-name">'+icon+name+'</span><span class="ach-mini-next">'+pct+'</span></div>' +
-            '</li>'
-          );
-        }).join('');
-      }
-    }
-    if (el.asideCats) {
-      var list = state.categories.slice().sort(function(a,b){ return String(a?.name||'').localeCompare(String(b?.name||'')); });
-      var activeIdx = list.findIndex(function(c){ return String(c?.id) === String(state.cat||''); });
-      var sliced = list.slice(0,30);
-      if (activeIdx >= 30 && activeIdx >= 0) sliced.unshift(list[activeIdx]);
-      el.asideCats.innerHTML = sliced.map(function(c){
-        var icon = iconImg(c.icon, 16, c.name, 'margin-right:6px;border-radius:3px');
-        var active = (String(state.cat) === String(c.id));
-        return '<button class="ach-chip" data-cid="'+esc(String(c.id))+'" title="'+esc(c.name||'')+'"'+(active?' style="outline:1px solid var(--acc-1)"':'')+'>'+icon+esc(c.name||('#'+c.id))+'</button>';
-      }).join('');
-      el.asideCats.querySelectorAll('.ach-chip').forEach(function(btn){
-        btn.addEventListener('click', function(){
-          var cid = btn.getAttribute('data-cid') || '';
-          state.cat = (String(state.cat) === String(cid)) ? '' : String(cid);
-          writeFiltersToHashSilently();
-          renderMainGrid();
-        });
-      });
-    }
-  }
-
   // ------------------------------- Carga -----------------------------------
   function ensureDomRefs(){
     if (el.panel) return;
@@ -420,7 +309,7 @@
         if (!token) {
           state.token = null; state.acc = []; state.metaById = new Map();
           state.apDailyHist = 0; state.apPermanent = 0; state.apLegacyDelta = 0;
-          await ensureCategories(); discoverLegendaryCategory(); ensureAside(); renderAside([]);
+          await ensureCategories(); discoverLegendaryCategory();
           renderMainGrid();
           return;
         }
@@ -445,7 +334,6 @@
       await ensureCategories();
       if (mySeq !== _loadSeq || tokenAtStart !== getSelectedToken()) return;
       discoverLegendaryCategory();
-      ensureAside();
 
       state.apPermanent = computePermanentAP(state.acc, state.metaById);
       var apiTotal = computeApiTotal(state.acc, state.metaById);
@@ -546,6 +434,6 @@
     }
   })();
 
-  console.info(LOGP, 'OK v3.4.0 — cabecera en ach-view.js, tarjetas en ach-cards.js (LOG-2)');
+  console.info(LOGP, 'OK v3.5.0 — cabecera en ach-view.js, tarjetas en ach-cards.js, categorías en ach-categories.js (LOG-3)');
 
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));

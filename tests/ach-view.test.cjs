@@ -288,14 +288,18 @@ test('reglas de la Bóveda: sin claves crudas, sin pedidos propios y dentro de 4
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, 'archivo nuevo dentro del presupuesto de 40 KB');
 });
 
-// ---------------------------------------------------------------- achievements.js 3.4.0 (LOG-1 y LOG-2)
-// El archivo real publica su estado; la cabecera (ach-view.js) y las tarjetas (ach-cards.js) lo leen.
+// ---------------------------------------------------------------- achievements.js 3.5.0 (LOG-1 a LOG-3)
+// El archivo real publica su estado; la cabecera (ach-view.js), las tarjetas (ach-cards.js) y las categorías (ach-categories.js) lo leen.
 const ACH = fs.readFileSync(path.join(ROOT, 'js', 'achievements.js'), 'utf8');
 const CARDS = fs.readFileSync(path.join(ROOT, 'js', 'ach-cards.js'), 'utf8');
+const CATS = fs.readFileSync(path.join(ROOT, 'js', 'ach-categories.js'), 'utf8');
 
-test('achievements.js 3.4.0: publica su estado y ya no pinta cabecera, filtros ni tarjetas', () => {
-  assert.match(ACH, /\* Versión: 3\.4\.0 /);
-  assert.match(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /js\/achievements\.js\?v=3\.4\.0"/);
+test('achievements.js 3.5.0: publica su estado y ya no pinta cabecera, filtros, tarjetas ni el panel de la Sidebar', () => {
+  assert.match(ACH, /\* Versión: 3\.5\.0 /);
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  assert.match(html, /js\/achievements\.js\?v=3\.5\.0"/);
+  assert.doesNotMatch(html + ACH, /achAsidePanel/, 'la Sidebar vuelve a ser solo navegación');
+  assert.doesNotMatch(ACH, /ensureAside|renderAside|col-side/);
   ['renderKpi', 'ach-potential', 'ensureRefreshButton', 'kpiWrap', 'cardMainHTML', 'cardLegendaryTrackerHTML', 'ensureToolbar', 'ach-select-btn', 'loadRewardTitleDetail']
     .forEach((w) => assert.ok(!ACH.includes(w), 'sin ' + w));
   assert.match(ACH, /getSnapshot: function\(\)/);
@@ -333,7 +337,8 @@ function loadBoth(opts = {}) {
     fetch: (u) => {
       calls.push(['fetch', String(u)]);
       const cats = s.cats.map((c) => ({ id: c.id, name: c.name, icon: c.icon, achievements: Object.keys(s.achToCat).filter((k) => s.achToCat[k] === String(c.id)).map(Number) }));
-      return Promise.resolve({ ok: true, json: () => Promise.resolve(String(u).includes('/categories') ? cats : []) });
+      const groups = [{ id: 'G-JW', name: 'Janthir Wilds', order: 1, categories: [10] }, { id: 'G-MO', name: 'Modos de juego', order: 2, categories: [11, 2] }];
+      return Promise.resolve({ ok: true, json: () => Promise.resolve(String(u).includes('/categories') ? cats : String(u).includes('/groups') ? groups : []) });
     }
   };
   win.window = win;
@@ -350,6 +355,7 @@ function loadBoth(opts = {}) {
   vm.runInContext(ACH, ctx);
   vm.runInContext(SRC, ctx);
   vm.runInContext(CARDS, ctx);
+  vm.runInContext(CATS, ctx);
   return { win, nodes, calls, panel, main, host: () => nodes.achxHead };
 }
 
@@ -394,6 +400,22 @@ test('juntos: «Colecciones legendarias», «Por categoría» y los filtros nuev
   assert.deepEqual(Array.from(x.win.Achievements.getSnapshot().rows, (r) => r.r.id), [2], 'solo con título');
   x.win.Achievements.setFilter({ reward: 'cualquiera' });
   assert.equal(x.win.Achievements.getSnapshot().reward, '', 'una recompensa desconocida no filtra');
+});
+
+test('juntos: «Por categoría» agrupada por expansión o modo, con los datos reales; tocar una abre sus pendientes', async () => {
+  const x = loadBoth();
+  await x.win.Achievements.render();
+  x.win.AchView.go('cats');
+  await new Promise((r) => setTimeout(r, 5));
+  x.win.AchView.render(); // en la página lo dispara ach-categories.js al llegar los grupos
+  const h = x.host().innerHTML;
+  assert.equal(x.calls.filter((c) => c[0] === 'fetch' && /\/v2\/achievements\/groups\?ids=all&lang=es/.test(c[1])).length, 1, 'grupos: un solo pedido');
+  assert.match(h, /<div id="achxCats" class="achx-cats" role="tabpanel" aria-labelledby="achxTab-cats"><div class="achg-ctrl">/);
+  assert.match(h, /<span>Janthir Wilds<\/span><small>1 categoría · 33 % · <b>2 cerca<\/b><\/small>/);
+  assert.match(h, /<span>Modos de juego<\/span><small>2 categorías · 0 %/);
+  assert.match(h, /data-achx-cat="10"><img src="https:\/\/x\/j\.png" alt="" width="32" height="32"/, 'ícono oficial de la categoría');
+  x.win.AchView.openCat('10');
+  assert.deepEqual(Array.from(x.win.Achievements.getSnapshot().rows, (r) => r.r.id), [1, 3]);
 });
 
 test('juntos: sin API Key la cabecera y la grilla lo dicen, sin números', async () => {
