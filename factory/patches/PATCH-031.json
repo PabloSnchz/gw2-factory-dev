@@ -1,0 +1,105 @@
+{
+  "id": "PATCH-031",
+  "summary": "BL-067 LOG-5: achievements.js 3.6.0 — la grilla deja de ser región viva (el lector leía todas las tarjetas en cada filtro; ahora avisa ach-cards.js 1.2.0) y se van showLegendaryTracker y referencias sin uso; index.html sube su ?v, deja de cargar js/achievements-theme.js (pintaba tarjetas .a-card que ya no existen) y baja su techo; el test conjunto lo vigila.",
+  "files": [
+    {
+      "path": "js/achievements.js",
+      "base_sha": "c4c3daed68e3e9c0949a41ab2fd6a4f8883bc454",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 3.5.0 (2026-10-24)\n",
+          "text": " * Versión: 3.6.0 (2026-10-24)\n *  - LOG-5 (BL-067): la grilla deja de ser región viva (el lector leía todas las\n *    tarjetas en cada filtro; ahora ach-cards.js avisa solo cuántas quedan). Se van\n *    el interruptor viejo del tracker de legendarias y las referencias sin uso\n *    (buscador viejo, cabecera vieja).\n *    Con esto se retira también js/achievements-theme.js (pintaba tarjetas que ya no existen).\n *  - 3.5.0:\n"
+        },
+        {
+          "op": "delete",
+          "anchor": " *  - Grid único de pendientes (sin completados, sin resumen duplicado)\n *  - Recompensas visibles: items, títulos, maestrías con íconos y nombres oficiales\n *  - Toolbar unificada con 3 dropdowns personalizados (Umbral, Categoría, Recompensa)\n *  - Cards compactas con pills y barras alineados al fondo\n *  - KPIs AP conservados\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var el = {\n    panel: null, head: null, body: null,\n    chipsOld: null, search: null,\n    mainGrid: null, toolbar: null\n  };\n",
+          "text": "  var el = { panel: null, body: null, mainGrid: null };\n"
+        },
+        {
+          "op": "delete",
+          "anchor": "    showLegendaryTracker: false,\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    state.rewardFilter = reward ? String(reward) : '';\n\n    if (el.search) el.search.value = state.qRaw;\n",
+          "text": "    state.rewardFilter = reward ? String(reward) : '';\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    var qRaw = el.search ? (el.search.value || '') : state.qRaw;\n",
+          "text": "    var qRaw = state.qRaw;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  // ----------------------- Tracker de legendarias ---------------------------\n",
+          "text": "  // ------------------ Categoría de colecciones legendarias ------------------\n"
+        },
+        {
+          "op": "delete",
+          "anchor": "    el.head       = el.panel ? el.panel.querySelector('.panel-head') : null;\n"
+        },
+        {
+          "op": "delete",
+          "anchor": "    if (el.mainGrid) el.mainGrid.setAttribute('aria-live','polite');\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "'OK v3.5.0 — cabecera en ach-view.js, tarjetas en ach-cards.js, categorías en ach-categories.js (LOG-3)'",
+          "text": "'OK v3.6.0 — cabecera en ach-view.js, tarjetas en ach-cards.js, categorías en ach-categories.js (LOG-5)'"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "65556670624bd7d7280ed65101a5933397c32d6b",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "js/achievements.js?v=3.5.0\"",
+          "text": "js/achievements.js?v=3.6.0\""
+        },
+        {
+          "op": "delete",
+          "anchor": "  <script src=\"js/achievements-theme.js?v=1.1.1\"></script>\n"
+        }
+      ]
+    },
+    {
+      "path": "tools/size-budget.json",
+      "base_sha": "cca7cc90ad17d0403d9ff69ff7e7f7a53f419778",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "\"index.html\": { \"base\": 69606, \"techo\": 64712,",
+          "text": "\"index.html\": { \"base\": 69606, \"techo\": 64653,"
+        }
+      ]
+    },
+    {
+      "path": "tests/ach-view.test.cjs",
+      "base_sha": "9ca02a40caa281e3d39f604c439e6df6fc14708a",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "// ---------------------------------------------------------------- achievements.js 3.5.0 (LOG-1 a LOG-3)\n",
+          "text": "// ---------------------------------------------------------------- achievements.js 3.6.0 (LOG-1 a LOG-5)\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "test('achievements.js 3.5.0: publica su estado y ya no pinta cabecera, filtros, tarjetas ni el panel de la Sidebar', () => {\n  assert.match(ACH, /\\* Versión: 3\\.5\\.0 /);\n",
+          "text": "test('achievements.js 3.6.0: publica su estado y ya no pinta cabecera, filtros, tarjetas ni el panel de la Sidebar', () => {\n  assert.match(ACH, /\\* Versión: 3\\.6\\.0 /);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.match(html, /js\\/achievements\\.js\\?v=3\\.5\\.0\"/);\n",
+          "text": "  assert.match(html, /js\\/achievements\\.js\\?v=3\\.6\\.0\"/);\n  assert.doesNotMatch(html, /achievements-theme\\.js/, 'LOG-5: se retiró el theme de las tarjetas viejas');\n  assert.doesNotMatch(ACH, /aria-live|showLegendaryTracker|chipsOld|el\\.search/, 'LOG-5: la grilla no es región viva y no quedan restos');\n"
+        }
+      ]
+    }
+  ]
+}
