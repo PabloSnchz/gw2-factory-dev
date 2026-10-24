@@ -1,0 +1,133 @@
+{
+  "id": "PATCH-035",
+  "summary": "BL-069: el ciclo de restyle validado por Pablo (2026-10-24 13:10Z) y promovido a producción por su orden. FEAT-007, 008, 011, 012 y 013 con su estado en producción; backlog con BL-057, BL-058 y BL-064 validados, BL-067 a DONE y BL-069 nuevo; CHANGELOG-FACTORY con las entradas de producción.",
+  "files": [
+    {
+      "path": "ai-memory/features/FEAT-007-metas-y-eventos-renovado.md",
+      "base_sha": "6c1c02580238f8379014205af90cf9bbe05011f2",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- Estado: EN DEV, validada por Pablo en pantalla (2026-10-23",
+          "text": "- Estado: EN PRODUCCIÓN desde 2026-10-23 (BL-062, orden de Pablo). Validada por Pablo en pantalla (2026-10-23"
+        },
+        {
+          "op": "replace",
+          "anchor": "Aprobado.»). Producción la decide Pablo.",
+          "text": "Aprobado.») y en la validación final del ciclo de restyle (2026-10-24 13:10Z). Sin cambios en DEV desde BL-062: BL-069 no la tocó."
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-008-bienvenida-puerta-de-la-boveda.md",
+      "base_sha": "ecc7f6a551e5500299f119eb8ebb5d31c12a5eba",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- Estado: EN DEV, validada por Pablo en pantalla paso a paso",
+          "text": "- Estado: EN PRODUCCIÓN desde 2026-10-23 (BL-062 y BL-063, orden de Pablo). Validada por Pablo en pantalla paso a paso"
+        },
+        {
+          "op": "replace",
+          "anchor": "es el correcto»). Producción la decide Pablo.",
+          "text": "es el correcto») y en la validación final del ciclo de restyle (2026-10-24 13:10Z). Sin cambios en DEV desde BL-063: BL-069 no la tocó."
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-011-camara-del-brujo-renovada.md",
+      "base_sha": "6102866bcd99853b1fb15cf6397d62b28cfd3080",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "(BL-068, Armería y Cámara juntas).",
+          "text": "(BL-068, Armería y Cámara juntas). `wv-view.js` 1.2.0 (guarda sobre las superficies de CAM-POLISH-001) en producción con BL-069 (2026-10-24 15:13Z). Validación final de Pablo del ciclo de restyle: 2026-10-24 13:10Z."
+        },
+        {
+          "op": "replace",
+          "anchor": "(PATCH-024) | espera validación |",
+          "text": "(PATCH-024) | validado |"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-012-logros-renovado.md",
+      "base_sha": "042e04d9ddd349447f6dddac6b840fe05b87e3ee",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "y espera su validación para cerrar.",
+          "text": "y validado por Pablo con todo BL-067, visual y funcional (2026-10-24 13:10Z). En producción por orden de Pablo (BL-069, 2026-10-24)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- **Producción:** no. La decide Pablo.",
+          "text": "- **Producción:** sí, por orden de Pablo (BL-069, 2026-10-24 15:07Z a 15:20Z): `ach-view.js` 1.3.0, `ach-cards.js` 1.2.0, `ach-categories.js` y `ach-armory.js` 1.0.0 por el manifiesto, `achievements.js` 3.6.0 e `index.html` sin `#achAsidePanel` ni `achievements-theme.js` (GA de producción intacto, DEC-006). Blobs idénticos a DEV. Vuelta atrás: rama `rollback/pre-restyle-ciclo` (`374b6f0`)."
+        },
+        {
+          "op": "replace",
+          "anchor": "| Hecho, espera validación |",
+          "text": "| Validado |"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-013-superficies-y-marco-comun.md",
+      "base_sha": "4114f9c305925e9ba00139ad5556a9511e698a62",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- **Estado:** hecho en DEV (2026-10-24 07:34Z).",
+          "text": "- **Estado:** validada por Pablo, visual y funcional (2026-10-24 13:10Z), y en producción (BL-069). Hecha en DEV el 2026-10-24 07:34Z."
+        },
+        {
+          "op": "replace",
+          "anchor": "- **Producción:** no. La decide Pablo.",
+          "text": "- **Producción:** sí, por orden de Pablo (BL-069, 2026-10-24): `gn-surface.js` primero e inerte, `gn-frame.js` último y aislado (15:20Z). Blobs idénticos a DEV. Vuelta atrás rápida: sacarlos de `js/modules.json`; total: rama `rollback/pre-restyle-ciclo` (`374b6f0`)."
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "0c855eabd1da1bcd5193cc51276fda1d78edd493",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "En producción por orden de Pablo (BL-062, 2026-10-23). · FEAT-007, DEC-031, BL-041, BL-062 — 2026-10-23",
+          "text": "En producción por orden de Pablo (BL-062, 2026-10-23). Validación final de Pablo del ciclo de restyle (2026-10-24 13:10Z): aprobado; sin cambios en DEV desde BL-062, así que BL-069 no lo tocó. · FEAT-007, DEC-031, BL-041, BL-062, BL-069 — 2026-10-23"
+        },
+        {
+          "op": "replace",
+          "anchor": "En producción por orden de Pablo (BL-062, 2026-10-23). · FEAT-008, DEC-032, DEC-033, BL-060, BL-062 — 2026-10-23",
+          "text": "En producción por orden de Pablo (BL-062, 2026-10-23). Validación final de Pablo del ciclo de restyle (2026-10-24 13:10Z): aprobado; sin cambios en DEV desde BL-063, así que BL-069 no lo tocó. · FEAT-008, DEC-032, DEC-033, BL-060, BL-062, BL-069 — 2026-10-23"
+        },
+        {
+          "op": "replace",
+          "anchor": "LES-035), espera la validación de Pablo. Solo DEV. · FEAT-010",
+          "text": "LES-035), validado por Pablo. En producción por orden de Pablo (BL-068, 2026-10-24) y `wv-view.js` 1.2.0 en BL-069. Validación final del ciclo de restyle: 2026-10-24 13:10Z. · FEAT-010"
+        },
+        {
+          "op": "replace",
+          "anchor": "\n- [BL-067] [ALTO] Restyle de la Bóveda, segunda tanda — sigue el plan aprobado de BL-064 (2026-10-23 15:33Z), que Pablo pidió cerrar con la Cámara (2026-10-24 01:45Z): 3 Logros, 4 Actividades (después de decidir BL-055), 5 Raids y Strikes, 6 Inventario y Personajes, 7 Cuentas, 8 marco común (barra de arriba, modales, avisos y pie). Mismo proceso que la Cartera, Metas, la Bienvenida, la Armería y la Cámara: propuesta visual primero, un paso por vez con validación de Pablo, lo nuevo en archivos de hasta 40 KB por `js/modules.json` y los congelados solo se achican (DEC-035). Paso 3, Logros: hecho en DEV en seis pasos (LOG-0 a LOG-5, FEAT-012; LOG-0 a LOG-4 validados, LOG-5 espera la validación de Pablo). CAM-POLISH-001 (POL-1 a POL-4) y pasos 4 a 8: hechos en DEV el 2026-10-24 con la autorización de Pablo de cerrar BL-067 sin validaciones intermedias (07:15Z). `js/gn-surface.js` 1.0.0 da bandeja oscura, tarjeta elevada, pista, bordes y placa por theme a la Cámara, a Logros y a los siete paneles heredados; anillo dorado «A UN PASO» en los íconos de los logros; `js/gn-frame.js` 1.0.0 es el marco común de Actividades, Raids y Strikes, Inventario y Personajes y Cuentas: cabecera con el ícono oficial, guarda AA en los 19 themes, foco, movimiento reducido y 44 px, sin tocar sus archivos congelados (PATCH-033; RUN-017 y RUN-019 en verde; FEAT-013; LES-036 y LES-037). CERRADA EN DEV (2026-10-24 07:40Z). Informe: `ai-memory/missions/BL-067-informe-final.md`. Home Nodes sigue en BL-055. Producción, solo con la orden de Pablo. · BL-064, FEAT-010, FEAT-011, FEAT-012, FEAT-013, DEC-035, DEC-024, DEC-033\n\n## IN_PROGRESS",
+          "text": "\n\n## IN_PROGRESS"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "· FEAT-010, FEAT-011, BL-064, DEC-006, DEC-035, RSK-020 — 2026-10-24\n",
+          "text": "- [BL-067] [ALTO] Restyle de la Bóveda, segunda tanda: Logros, superficies y marco común — Logros (FEAT-012, LOG-0 a LOG-5) y CAM-POLISH-001 con los pasos 4 a 8 (FEAT-013: `js/gn-surface.js` y `js/gn-frame.js` para la Cámara, Logros, Actividades, Raids y Strikes, Inventario y Personajes y Cuentas, sin tocar los archivos congelados). Cerrada en DEV el 2026-10-24 07:40Z con la autorización de Pablo de hacerla sin validaciones intermedias; informe en `ai-memory/missions/BL-067-informe-final.md`. Validada por Pablo, visual y funcional (2026-10-24 13:10Z). En producción por orden de Pablo (BL-069, 2026-10-24). Home Nodes sigue en BL-055; barra de arriba, modales, avisos y pie quedan para una propuesta propia. · BL-064, BL-069, FEAT-012, FEAT-013, DEC-035, DEC-024, DEC-033, LES-036, LES-037 — 2026-10-24\n- [BL-069] [ALTO] Promoción del ciclo de restyle a producción: Metas y Eventos, Bienvenida, Cámara del Brujo, Logros y marco común — Pablo validó BL-057, BL-058, BL-064 y BL-067 (2026-10-24 13:10Z) y aprobó la propuesta de promoción, plan A, archivo por archivo (15:04Z). Medí producción contra DEV: BL-057 y BL-058 ya estaban en producción (BL-062, BL-063) y BL-064 también (BL-068), salvo `wv-view.js` 1.2.0; faltaba BL-067 entero. Vuelta atrás: rama `rollback/pre-restyle-ciclo` = `374b6f0`. gw2-wallet-ligero, en serie, cada paso deja el sitio andando: `bdd9ff1` gn-surface.js 1.0.0, `9dc9b91` ach-armory.js, `f4ed647` ach-categories.js, `e7a490d` ach-cards.js 1.2.0, `b775b8a` ach-view.js 1.3.0 (inertes hasta el manifiesto), `005edf3` wv-view.js 1.2.0, `338bcab` modules.json sin gn-frame, `cf3cedf` achievements.js 3.6.0, `c013173` index.html (sin `#achAsidePanel`, `achievements.js?v=3.6.0`, sin `achievements-theme.js`; GA de producción intacto, DEC-006; blob `0cab653`, exactamente el calculado), `b6e9d8a` borra achievements-theme.js, `ca6e6d9` gn-frame.js 1.0.0 y `0b60eee` modules.json final. Integridad: `js/` de producción igual a DEV en 54 de 58 archivos, verificados blob a blob; difieren a propósito `analytics.js` (DEC-006), `router.js` 2.17.0, `wallet-theme.js` 2.1.0 y `settings-manager.js` (solo la cabecera de versión); `css/` igual. Sin claves nuevas en el navegador. Informe: `ai-memory/missions/BL-069-informe-promocion.md`. Espera la validación de Pablo en producción. · FEAT-007, FEAT-008, FEAT-011, FEAT-012, FEAT-013, BL-057, BL-058, BL-064, BL-067, BL-068, DEC-006, DEC-035 — 2026-10-24\n"
+        }
+      ]
+    },
+    {
+      "path": "docs/CHANGELOG-FACTORY.md",
+      "base_sha": "ea47d42e4d0c988368d58d8807e6d182350f2ecb",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "## 2026-10-23 — En DEV: la Armería renovada (BL-064, FEAT-010)",
+          "text": "## 2026-10-24 — En producción: Logros renovado, superficies y marco común (BL-067, BL-069, FEAT-012, FEAT-013)\n\n- **Logros con cabecera y tres pestañas**: «Casi listos», «Por categoría» y «Colecciones legendarias»; cuatro indicadores (puntos de logro, al alcance, a un paso y con recompensa) y mi línea solo si hay algo cerca.\n- **Tarjetas «te falta»**: el ícono oficial del logro destacado, «Te faltan N de M», barra verde que pasa a dorada desde el 95 %, recompensas con su ícono y «Wiki ↗». Los que están a un paso llevan anillo dorado y «A UN PASO».\n- **«Por categoría» agrupada** por expansión o modo, con el ícono oficial de cada categoría, buscador y «Con pendientes / Todas». El panel viejo de Logros de la barra lateral ya no está.\n- **«Ver en la Armería →»** cuando el logro da una legendaria o una pieza de una sola.\n- **Superficies y marco común**: bandeja oscura, tarjetas elevadas y barras con pista en la Cámara del Brujo, Logros, Actividades, Raids y Strikes, Inventario y Personajes y Cuentas; cabecera común con el ícono oficial de cada módulo. Se lee en los 19 themes, foco visible, movimiento reducido y 44 px en el celular. Sin cambios de comportamiento ni de datos.\n- **Lector de pantalla**: al filtrar Logros se anuncia cuántos quedan, ya no la grilla entera.\n- Sin claves nuevas en el navegador. Si no ves los cambios, recargá con Ctrl+F5 (RSK-020).\n- Vuelta atrás: rama `rollback/pre-restyle-ciclo`.\n\n## 2026-10-24 — En producción: la Cámara del Brujo renovada (BL-064, BL-068, FEAT-011)\n\n- **Cabecera** con la temporada, los resets con cuenta regresiva, la AA disponible, el avance del día y de la semana y «¿Por qué tarda?»; mi línea solo si hay algo para hacer.\n- **Tres pestañas**: Objetivos (Listos para reclamar, En curso y Reclamados), Tienda (−/+, fijados, «Gestionar» con «Deshacer») y Todas las cuentas (Objetivos semanales y Compras fijadas con −/+ por cuenta).\n- Se lee en los 19 themes. Desde BL-069, con las superficies del marco común: íconos de la Tienda a 52 px y lo fijado en dorado.\n- Vuelta atrás: rama `rollback/pre-camara-armeria` (BL-068) y `rollback/pre-restyle-ciclo` (BL-069).\n\n## 2026-10-23 — En producción desde el 2026-10-24: la Armería renovada (BL-064, BL-068, FEAT-010)"
+        }
+      ]
+    }
+  ]
+}
