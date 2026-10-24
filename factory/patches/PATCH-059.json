@@ -1,0 +1,241 @@
+{
+ "id": "PATCH-059",
+ "summary": "BL-070 RAI-5b (2/2, parte 1): sin el panel #strikeTrackerPanel en index.html ni en gn-frame.js 1.0.1; los tests heredados dejan de leer strike-tracker.js (hb94, hb106-t13, idea56, idea57t4, t19c); techo de index.html al tamaño nuevo.",
+ "files": [
+  {
+   "path": "index.html",
+   "base_sha": "e222d9b1d5baba6d252e349bc264f438e0106569",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\n    <!-- ======= Panel Strike Tracker (NUEVO) ======= -->\n    <section id=\"strikeTrackerPanel\" class=\"panel col-main\" aria-labelledby=\"strikeTrackerTitle\" hidden>\n      <h2 class=\"panel__title\" id=\"strikeTrackerTitle\" style=\"display: flex; align-items: center; justify-content: space-between; width: 100%;\">\n        <span style=\"display: flex; align-items: center; gap: 8px;\">\n          <img src=\"assets/icons/raids/raid-icon.png\" alt=\"\" width=\"32\" height=\"32\">\n          Seguimiento de Strikes\n        </span>\n        <span id=\"strikeLiBadgeContainer\" style=\"display: flex; align-items: center; gap: 6px; background: var(--bg-1); padding: 4px 12px; border-radius: 32px;\">\n          <img src=\"https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png\" width=\"16\" height=\"16\" alt=\"LI\" style=\"filter: brightness(0.9);\">\n          <span style=\"font-size: 0.75rem;\">LI Disponible:</span>\n          <strong id=\"strikeLiAvailable\" style=\"font-weight: 700; color: #ffd36b; font-size: 0.9rem;\">0</strong>\n        </span>\n      </h2>\n      <div class=\"panel__body\"></div>\n    </section>\n",
+     "text": "\n"
+    }
+   ]
+  },
+  {
+   "path": "js/gn-frame.js",
+   "base_sha": "bbb18edab6857edea3715427b919fc5e753d471a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-24)\n",
+     "text": " * Versión: 1.0.1 (2026-10-24) · BL-070 RAI-5b: sin el panel de Strikes (se retiró strike-tracker.js)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Actividades, Raids y Strikes, Inventario y Personajes y Cuentas viven",
+     "text": " * Actividades, Raids, Inventario y Personajes y Cuentas viven"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';",
+     "text": "  var VERSION = '1.0.1';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { id: 'strikeTrackerPanel', mod: 'raids', name: 'Strikes', color: '#F47C7C', icon: 'assets/icons/raids/raid-icon.png' },\n",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "52f8a6ee6f752156ea11e081c0d04cf37af09daf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/gn-frame.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/gn-frame.js\", \"v\": \"1.0.1\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-frame.test.cjs",
+   "base_sha": "76793eed99e1ed8a1494200a1d2c4da603acfa60",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "// Marco común (BL-067 pasos 4 a 8): Actividades, Raids y Strikes, Inventario",
+     "text": "// Marco común (BL-067 pasos 4 a 8): Actividades, Raids, Inventario"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('versión 1.0.0, en js/modules.json",
+     "text": "test('versión 1.0.1, en js/modules.json"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.0\\.0 /);",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.0\\.1 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "['js/gn-surface.js@1.0.0', 'js/gn-frame.js@1.0.0']",
+     "text": "['js/gn-surface.js@1.0.0', 'js/gn-frame.js@1.0.1']"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('los siete paneles de los pasos 4 a 8,",
+     "text": "test('los seis paneles de los pasos 4 a 8 (sin Strikes desde BL-070 RAI-5b),"
+    },
+    {
+     "op": "replace",
+     "anchor": "['activitiesPanel', 'raidTrackerPanel', 'strikeTrackerPanel', 'inventoryPanel',",
+     "text": "['activitiesPanel', 'raidTrackerPanel', 'inventoryPanel',"
+    }
+   ]
+  },
+  {
+   "path": "tests/hb94-raid-wing-card.test.js",
+   "base_sha": "6ea77a4199ff67e2bc9947f73bcb88ef2ff75b2d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  const strike = leer('js/strike-tracker.js');\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "  t('strike-tracker.js usa .raid-wing-card SIN animacion inline (100% dependiente de la capa 2)',\n    /class=\"raid-wing-card\"/.test(strike) && !/class=\"raid-wing-card\"[^>]*animation:/.test(strike),\n    'la tarjeta inline si lleva animacion: habria que revisar el supuesto');\n",
+     "text": "  // BL-070 RAI-5b: strike-tracker.js se retiró; la tarjeta de ala solo la pinta raid-tracker.js.\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/hb106-t13-invariante.test.js",
+   "base_sha": "ebbfd1853d13a085a7e96355f3a6780d3c20fe57",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const strikeSrc = rd('js/strike-tracker.js');\n",
+     "text": "// BL-070 RAI-5b: strike-tracker.js se retiró (los strikes son encuentros de Raids desde 2026-02-03)\n// y #/account/strikes muestra Raids. El ciclo de vida se sigue midiendo con RaidTracker.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('los 3 timers de startTimers de Strikes',\n  (strikeSrc.match(/=\\s*setInterval\\(/g) || []).length === 3);\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "const PANEL_DE = { RaidTracker: 'raidTrackerPanel', StrikeTracker: 'strikeTrackerPanel' };\nconst PANELES = ['metaPanel', 'raidTrackerPanel', 'strikeTrackerPanel', 'walletPanel',",
+     "text": "const PANEL_DE = { RaidTracker: 'raidTrackerPanel' };\nconst PANELES = ['metaPanel', 'raidTrackerPanel', 'walletPanel',"
+    },
+    {
+     "op": "replace",
+     "anchor": "  win.StrikeTracker = modulo(strikeSrc, 'StrikeTracker', t13b);\n  win.RaidTracker.wire(); win.StrikeTracker.wire();",
+     "text": "  win.RaidTracker.wire();"
+    },
+    {
+     "op": "replace",
+     "anchor": "      \"          { hash: '#/account/raids', mod: 'RaidTracker' },\",\n      \"          { hash: '#/account/strikes', mod: 'StrikeTracker' }\",\n",
+     "text": "      \"          { hash: '#/account/raids', mod: 'RaidTracker' }\",\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    \"  if (h === '#/account/strikes') { showPanel('strikeTrackerPanel'); if (window.StrikeTracker && typeof window.StrikeTracker.activate === 'function') window.StrikeTracker.activate(); return; }\",\n",
+     "text": "    \"  if (h === '#/account/strikes') { showPanel('raidTrackerPanel'); return; }\",\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    activos: () => ({ RaidTracker: win.RaidTracker.state.active, StrikeTracker: win.StrikeTracker.state.active }),",
+     "text": "    activos: () => ({ RaidTracker: win.RaidTracker.state.active }),"
+    },
+    {
+     "op": "replace",
+     "anchor": "// la SECUENCIA de Pablo: 7 pantallas",
+     "text": "// la SECUENCIA de Pablo: 5 pantallas (sin Strikes desde BL-070 RAI-5b)"
+    },
+    {
+     "op": "replace",
+     "anchor": "  A.irA('#/account/raids'); reg('vuelve a Raids');\n  A.irA('#/account/strikes'); reg('va a Strikes');\n  A.irA('#/account/raids'); reg('vuelve a Raids');\n",
+     "text": "  A.irA('#/account/raids'); reg('vuelve a Raids');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('HOY: stepping por Strikes deja 6 timers (3+3, los 2 trackers) — el \"6 timers\" del PO',\n  hoy[4].timers === 6);\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('HOY: en Meta quedan 6 timers vivos con 1 solo panel visible',\n  hoy[6].timers === 6 && hoy[6].vis.length === 1);\n",
+     "text": "chk('HOY: en Meta quedan 3 timers vivos con 1 solo panel visible',\n  hoy[4].timers === 3 && hoy[4].vis.length === 1);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('HOY: en Meta los 2 modulos siguen active: el latch NUNCA baja',\n  hoy[6].act.RaidTracker === true && hoy[6].act.StrikeTracker === true);\n",
+     "text": "chk('HOY: en Meta RaidTracker sigue active: el latch NUNCA baja',\n  hoy[4].act.RaidTracker === true);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('HOY: volver a Raids no reinicia los timers (el guard corta antes de startTimers)',\n  hoy[5].timers === 6);\n",
+     "text": "chk('HOY: volver a Raids no reinicia los timers (el guard corta antes de startTimers)',\n  hoy[3].timers === 3);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('T13-b NO baja el latch (sigue active en Meta)', soloB[6].act.RaidTracker === true);\nchk('T13-b NO corta los timers con el panel oculto (siguen 3 en Meta)', soloB[6].timers === 3);\n",
+     "text": "chk('T13-b NO baja el latch (sigue active en Meta)', soloB[4].act.RaidTracker === true);\nchk('T13-b NO corta los timers con el panel oculto (siguen 3 en Meta)', soloB[2].timers === 3);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  hoy[6].timers !== conA[6].timers);\nchk('T13-a: en Meta quedan 0 timers', conA[6].timers === 0);\nchk('T13-a: en Meta los 2 modulos quedan inactive (el latch baja)', conA[6].act.RaidTracker === false && conA[6].act.StrikeTracker === false);\n",
+     "text": "  hoy[4].timers !== conA[4].timers);\nchk('T13-a: en Meta quedan 0 timers', conA[4].timers === 0);\nchk('T13-a: en Meta RaidTracker queda inactive (el latch baja)', conA[4].act.RaidTracker === false);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('T13-a: ir a Strikes deja 3 timers y StrikeTracker active, RaidTracker inactive',\n  conA[4].timers === 3 && conA[4].act.StrikeTracker === true && conA[4].act.RaidTracker === false);\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "chk('T13-a NO introduce huerfanos en ninguna de las 7 pantallas'",
+     "text": "chk('T13-a NO introduce huerfanos en ninguna de las 5 pantallas'"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea56.f1-hint-permiso.test.js",
+   "base_sha": "940a12a85f4142fcc5e6f983976cc3371f386ee4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  { file: 'js/raid-tracker.js',   verb: 'raids'   },\n  { file: 'js/strike-tracker.js', verb: 'strikes' }\n",
+     "text": "  { file: 'js/raid-tracker.js',   verb: 'raids'   }\n  // BL-070 RAI-5b: strike-tracker.js se retiró (los strikes son encuentros de Raids).\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea57t4-idioma-contrato.test.js",
+   "base_sha": "5c17d24b0e9544c6b66da0fe6a8a42f72d27eeef",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "['raid-tracker.js', 'strike-tracker.js'].forEach(f => {",
+     "text": "['raid-tracker.js'].forEach(f => { // BL-070 RAI-5b: strike-tracker.js se retiró"
+    }
+   ]
+  },
+  {
+   "path": "tests/t19c-lectores-legacy.test.js",
+   "base_sha": "c8b2b4e5c5eba9754b28f32eedfc5a54bf76b15a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  'js/raid-tracker.js',\n  'js/strike-tracker.js',\n",
+     "text": "  'js/raid-tracker.js',\n  // BL-070 RAI-5b: strike-tracker.js se retiró del repo.\n"
+    }
+   ]
+  },
+  {
+   "path": "tools/size-budget.json",
+   "base_sha": "532863a4135d4ef09a375b97388f52f722f24e8a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"index.html\": { \"base\": 69606, \"techo\": 64653,",
+     "text": "\"index.html\": { \"base\": 69606, \"techo\": 63440,"
+    }
+   ]
+  }
+ ]
+}
