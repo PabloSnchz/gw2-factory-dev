@@ -198,9 +198,9 @@ ok(/<script src="js\/progress-eta\.js\?v=([\d.]+)"><\/script>/.test(html),
 
 const mEta = html.match(/js\/progress-eta\.js\?v=([\d.]+)/);
 ok(mEta && mEta[1] === '1.0.0', 'el buster de progress-eta.js es 1.0.0  (encontrado: ' + (mEta ? mEta[1] : '?') + ')');
-ok(/Versión: 1\.14\.0/.test(src), 'la cabecera de wv-purchase-detail.js declara v1.14.0');
+ok(/Versión: 2\.0\.0/.test(src), 'la cabecera de wv-purchase-detail.js declara v2.0.0 (BL-064 CAM-5; la 1.14.0 trajo la Idea 55)');
 const mWvpd = html.match(/js\/wv-purchase-detail\.js\?v=([\d.]+)/);
-ok(mWvpd && mWvpd[1] === '1.14.0', 'el buster de wv-purchase-detail.js subio a 1.14.0  (encontrado: ' + (mWvpd ? mWvpd[1] : '?') + ')');
+ok(mWvpd && mWvpd[1] === '2.0.0', 'el buster de wv-purchase-detail.js es 2.0.0, igual que su cabecera  (encontrado: ' + (mWvpd ? mWvpd[1] : '?') + ')');
 ok(/Cambios v1\.14\.0 \(Idea 55 Tramo 2\)/.test(src), 'la cabecera documenta el cambio y su motivo');
 
 // ── resumen ────────────────────────────────────────────────────────────────
