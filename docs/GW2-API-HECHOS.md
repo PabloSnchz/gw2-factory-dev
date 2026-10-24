@@ -4,7 +4,7 @@ Datos de la API que La Bóveda necesita y que no son obvios desde la documentaci
 
 - Origen: lo que aprendió el modelo anterior (gw2-wallet-agents), filtrado y vuelto a verificar en FACTORY-ASSET-001 (MIG-1, REQ-010).
 - Regla: un hecho entra acá solo si lo verifiqué contra la fuente. Si cambia, se corrige la fila y se deja la fecha nueva (LES-026, LES-029).
-- Última revisión: 2026-10-21.
+- Última revisión: 2026-10-24.
 
 ## Límite de pedidos (429)
 
@@ -26,6 +26,16 @@ Qué significa para La Bóveda: con 27 cuentas, una vista que hace 12 pedidos po
 | Legendary Conqueror of Vloxx | **9478** | Vencer a Vloxx después de elegir un desafío legendario en el modo desafío. Da el título 649 | 0 | 2026-10-21 (gw2treasures en 3 idiomas, wiki) |
 
 **Corrección al legado:** el modelo anterior registró que "el 9478 no existe" (ALERT-272). Era cierto cuando lo probó, pero el logro se agregó a la API después (build 208574). Hoy existe. Además, el 9472 lleva "Legendary" en el nombre pero corresponde al **modo desafío**, no al desafío legendario. Un seguimiento del "modo legendario" tiene que decidir cuál de los dos muestra, o mostrar los dos.
+
+## Raids y encuentros (desde la unificación del 2026-02-03)
+
+| Hecho | Fuente | Verificado |
+|---|---|---|
+| `/v2/raids` y `/v2/account/raids` traen solo las 8 alas (30 eventos, incluido `camp` de Monte Balrior). Los ex-strikes, Claro del Guardián y Nexo de la Eternidad no están (gw2-api #148). | API (RUN-022) · gw2-api issue #148 | 2026-10-24 |
+| El logro semanal **9125** «Weekly Raid Encounters» tiene un objetivo por encuentro (bits 0 a 13): Paso de las Picosescalofriantes, Fraenir, Voz y Garra, Susurro, Pelahuesos, Guerra fría, Escondite Filoetéreo, Chatarrería de Xunlai Jade, Mirador de Kaineng, Templo de la Cosecha, Observatorio Cósmico, Templo de Febe, Vieja Corte del León y Claro del Guardián. Con los `bits` de `/v2/account/achievements` debería saberse cuáles hizo la cuenta esta semana; falta confirmarlo con una clave real (RAI-2). Forjando acero y Nexo de la Eternidad no están. | API (RUN-022) | 2026-10-24 |
+| Cada ala tiene su logro semanal: 9128, 9147, 9182, 9144, 9111, 9120, 9156 y 9181 (alas 1 a 8). | API (RUN-022) | 2026-10-24 |
+| Monedas: conocimiento legendario 70, magnetita 28 (tope 800 por semana). Hay **dos** «Gaeting Crystal»: la 39 es la vieja de Path of Fire y la **77** es la actual (tope 150 por semana, Visions of Eternity). | API (RUN-022, RUN-023) · wiki | 2026-10-24 |
+| Miniaturas oficiales de los jefes en `/v2/minis` (984 en total); ids y render en `assets/data/raids/catalog.json`. | API (RUN-022, RUN-023) | 2026-10-24 |
 
 ## Permisos de las API keys
 
