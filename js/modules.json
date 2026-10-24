@@ -6,6 +6,7 @@
     { "src": "js/wv-shop-manage.js", "v": "1.0.0" },
     { "src": "js/wv-purchases-view.js", "v": "1.0.0" },
     { "src": "js/ach-view.js", "v": "1.1.0" },
-    { "src": "js/ach-cards.js", "v": "1.0.0" }
+    { "src": "js/ach-cards.js", "v": "1.0.0" },
+    { "src": "js/ach-categories.js", "v": "1.0.0" }
   ]
 }
