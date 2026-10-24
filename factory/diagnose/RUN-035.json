@@ -1,0 +1,4 @@
+{
+ "id": "RUN-035",
+ "tests": ["tests/wv-camara-a11y.test.cjs", "tests/ai-memory.test.cjs", "tests/raids-sheet.test.cjs"]
+}
