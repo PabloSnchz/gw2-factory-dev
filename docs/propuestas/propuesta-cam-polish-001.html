@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CAM-POLISH-001 — Fuerza visual de las tarjetas · Cámara del Brujo y Logros</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#1A1F2B;--bd-1:#2E3649;--bd-2:#3B4560;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--tx-3:#8E96A3;
+--acc-1:#A896FF;--gold:#F2B94B;--green:#3CC48A;--amber-bg:#38352F;--green-bg:#1D3436;--red:#F47C7C;--wv:#4FC3D9;--ach:#E8A33D;--glow:rgba(123,92,255,.14);
+--r-exo:#FFA405;--r-asc:#FB3E8D;--r-leg:#974EFF;--r-rare:#FCD00B;--mock2:#232A3A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-2);font:15px/1.45 Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1240px;margin:0 auto;padding:28px 20px 60px}
+h1{color:var(--tx-1);font-size:1.7rem;margin:0 0 4px}
+h2{color:var(--tx-1);font-size:1.15rem;margin:38px 0 10px;padding-top:18px;border-top:1px solid var(--bd-1)}
+h3{color:var(--tx-1);font-size:.95rem;margin:16px 0 6px}
+.lead{color:var(--tx-3);margin:0 0 18px}
+.tag{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-3)}
+.tag--gold{border-color:var(--gold);color:var(--gold)}
+table{width:100%;border-collapse:collapse;font-size:.86rem;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--bd-1)}
+th{color:var(--tx-3);font-weight:600;font-size:.74rem;text-transform:uppercase;letter-spacing:.05em}
+td b{color:var(--tx-1)}
+code{background:var(--mock2);border-radius:4px;padding:0 4px;font-size:.85em;color:var(--tx-1)}
+.voice{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(180deg,var(--glow),transparent);border:1px solid var(--bd-2);border-radius:12px;padding:12px 14px;margin:14px 0}
+.av{width:48px;height:48px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#C9BDFF,#7B5CFF 55%,#3B2A8A);display:grid;place-items:center;color:#fff;font-weight:800;box-shadow:0 0 0 2px var(--bd-2)}
+.voice p{margin:2px 0}.voice .lbl{color:var(--acc-1);font-weight:700;font-size:.82rem}
+.dec{border-left:3px solid var(--gold);background:var(--amber-bg);border-radius:8px;padding:10px 14px;margin:10px 0}.dec b{color:var(--gold)}
+.sev{font-size:.68rem;font-weight:800;border-radius:999px;padding:1px 7px;border:1px solid;white-space:nowrap}
+.sev--a{color:var(--gold);border-color:var(--gold)}.sev--m{color:var(--acc-1);border-color:var(--acc-1)}.sev--b{color:var(--tx-3);border-color:var(--bd-2)}
+.n{font-variant-numeric:tabular-nums;white-space:nowrap}.up{color:var(--green);font-weight:700}.zero{color:var(--red);font-weight:700}
+
+/* ===== comparación: tres columnas ===== */
+.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:10px}
+.col h4{margin:0 0 6px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-3);display:flex;gap:8px;align-items:center}
+.col h4 .tag{font-size:.62rem}
+.col p.cap{font-size:.76rem;color:var(--tx-3);margin:8px 2px 0}
+/* el panel real de la Bóveda: .panel = --bg-1 */
+.panel{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:14px;padding:14px}
+.canvas{background:var(--bg-0);border:1px dashed var(--bd-2);border-radius:14px;padding:14px}
+
+/* --- tokens de superficie propuestos (solo dentro de la Cámara y Logros) --- */
+.pol{--gn-tray:var(--bg-0);--gn-card:color-mix(in srgb,var(--tx-1) 4.5%,var(--bg-1));--gn-card-bd:color-mix(in srgb,var(--tx-1) 20%,var(--bg-1));
+--gn-track:color-mix(in srgb,var(--tx-1) 16%,var(--bg-1));--gn-plate:color-mix(in srgb,var(--tx-1) 10%,var(--bg-1));
+--gn-elev:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.tray{background:var(--gn-tray);border-radius:12px;padding:10px}
+
+/* ===== Tienda ===== */
+.it{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px;display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:4px 10px;align-items:center;margin-bottom:10px}
+.it .ic{width:44px;height:44px;border-radius:8px;grid-row:span 2;background:linear-gradient(135deg,#6b4bb8,#2b1c55);display:grid;place-items:center;color:#fff;font-weight:900;font-size:.8rem}
+.it .nm{font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx-1)}
+.it .s{font-size:.78rem;color:var(--tx-2)}
+.pin{grid-row:span 2;font-size:.74rem;border:1px solid var(--bd-2);border-radius:999px;padding:4px 9px;color:var(--tx-2);background:transparent;white-space:nowrap}
+.it .f{grid-column:1/-1;display:flex;align-items:center;gap:8px;margin-top:6px;padding-top:8px;border-top:1px solid var(--bd-1);font-size:.8rem;color:var(--tx-2)}
+.units{display:flex;gap:3px;flex:1}.units i{flex:1;height:7px;border-radius:3px;background:var(--bg-2)}.units i.a{background:var(--green)}.units i.m{background:var(--acc-1)}
+.step{display:inline-flex;align-items:center;border:1px solid var(--bd-2);border-radius:9px;overflow:hidden}
+.step b{width:28px;text-align:center;color:var(--tx-1);font-weight:400}.step span{min-width:22px;text-align:center;color:var(--tx-1);font-weight:700}
+.it--pinned{border-color:color-mix(in srgb,var(--gold) 55%,var(--bd-1))}
+.mock .it{background:var(--bg-1)}.mock .units i{background:var(--mock2)}
+.aa{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:4px;background:linear-gradient(135deg,#7BE3F2,#3A8FD9);color:#06222b;font-size:.55rem;font-weight:900;vertical-align:-2px;margin-right:3px}
+/* ajuste */
+.pol .it{background:var(--gn-card);border-color:var(--gn-card-bd);box-shadow:var(--gn-elev);grid-template-columns:52px minmax(0,1fr) auto;padding:12px 12px 10px}
+.pol .it .ic{width:52px;height:52px;border-radius:10px;box-shadow:0 0 0 2px var(--rar,var(--bd-2)),0 0 14px color-mix(in srgb,var(--rar,transparent) 35%,transparent)}
+.pol .it .nm{font-size:.95rem;font-weight:700}
+.pol .it .s{color:var(--tx-2)}.pol .it .s b{color:var(--tx-1);font-size:.92rem}
+.pol .it .f{border-top-color:var(--gn-card-bd)}
+.pol .units i{height:8px;background:var(--gn-track)}
+.pol .it--pinned{border-color:var(--gold);background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 10%,transparent),transparent 45%),var(--gn-card)}
+.pol .pin.on{border-color:var(--gold);color:var(--bg-0);background:var(--gold);font-weight:700}
+.pin.on{border-color:var(--gold);color:var(--gold)}
+.ok{font-size:.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:999px;padding:1px 8px;background:var(--green-bg)}
+
+/* ===== Compras fijadas ===== */
+.kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.kp div{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:8px 10px;min-width:0}
+.kp small{display:block;font-size:.62rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}
+.kp b{font-size:1.05rem;color:var(--tx-1)}
+.bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--green)}
+.mx{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);overflow:hidden;font-size:.78rem}
+.mx table{margin:0;font-size:.78rem}.mx th,.mx td{padding:7px 8px;text-align:center;color:var(--tx-1);border-bottom:1px solid var(--bd-1)}
+.mx th{font-size:.66rem;color:var(--tx-2);text-transform:none;letter-spacing:0;font-weight:500}
+.mx td:first-child,.mx th:first-child{text-align:left}
+.hi{display:block;width:28px;height:28px;border-radius:6px;margin:0 auto 3px;background:linear-gradient(135deg,#d99a2b,#5a3a08)}
+.hi.l{background:linear-gradient(135deg,#9b6bff,#2e1a6b)}
+.u{display:flex;width:56px;height:5px;margin:3px auto 0;border-radius:3px;background:var(--bg-2);overflow:hidden}.u i{background:var(--green)}.u em{background:#9B7BFF}
+.mx tr.hv td{background:var(--bg-2)}
+.mock .kp div,.mock .mx{background:var(--bg-1)}.mock .bar,.mock .u{background:var(--mock2)}.mock .mx tr.hv td{background:var(--mock2)}
+.pol .kp div{background:var(--gn-card);border-color:var(--gn-card-bd);box-shadow:var(--gn-elev);border-top:3px solid var(--k,var(--green))}
+.pol .kp b{font-size:1.2rem}
+.pol .bar{background:var(--gn-track);height:7px}
+.pol .mx{background:var(--gn-card);border-color:var(--gn-card-bd);box-shadow:var(--gn-elev)}
+.pol .mx th,.pol .mx td{border-bottom-color:var(--gn-card-bd)}
+.pol .mx thead th{background:var(--gn-plate)}
+.pol .hi{width:34px;height:34px;box-shadow:0 0 0 2px var(--rar,var(--bd-2))}
+.pol .u{background:var(--gn-track);height:6px;width:60px}
+.pol .mx tr.hv td{background:color-mix(in srgb,var(--acc-1) 12%,var(--gn-card))}
+
+/* ===== Logros ===== */
+.ac{display:flex;flex-direction:column;gap:8px;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:12px;margin-bottom:10px}
+.ac--step{border-color:var(--gold)}
+.at{display:flex;gap:12px;align-items:flex-start}
+.ai{width:48px;height:48px;flex-shrink:0;border-radius:10px;background:var(--bg-2);padding:3px;box-shadow:0 0 0 1px var(--bd-2);display:grid;place-items:center}
+.ai img{width:42px;height:42px}
+.ac h5{margin:0;font-size:.95rem;line-height:1.3;color:var(--tx-1)}
+.ac .ct{font-size:.76rem;color:var(--tx-2)}
+.ms{margin:0;font-size:.88rem;color:var(--tx-1)}.ms b{font-size:1.2rem;color:var(--gold)}
+.pg{height:8px;border-radius:8px;background:var(--bg-2);overflow:hidden}.pg i{display:block;height:100%;border-radius:8px;background:var(--green)}.pg.g i{background:var(--gold)}
+.rw{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.rw li{display:inline-flex;align-items:center;gap:6px;font-size:.76rem;color:var(--tx-2);border:1px solid var(--bd-1);border-radius:999px;padding:2px 10px 2px 3px;background:var(--bg-0)}
+.rw img{width:20px;height:20px;border-radius:4px}
+.ft{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;color:var(--tx-2)}
+.lk{border:1px solid var(--bd-2);border-radius:8px;padding:2px 8px;color:var(--acc-1)}.lk.ar{border-color:var(--gold);color:var(--tx-1);font-weight:600}
+.mock .ai{background:var(--mock2)}.mock .pg{background:var(--mock2)}
+.pol .ac{background:var(--gn-card);border-color:var(--gn-card-bd);box-shadow:var(--gn-elev);padding:14px}
+.pol .ac--step{border-color:var(--gold);background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 10%,transparent),transparent 40%),var(--gn-card)}
+.pol .ai{width:60px;height:60px;border-radius:12px;background:radial-gradient(circle at 50% 40%,var(--gn-plate),color-mix(in srgb,var(--bg-0) 60%,var(--gn-plate)));box-shadow:0 0 0 1px var(--gn-card-bd),inset 0 0 0 1px rgba(255,255,255,.04)}
+.pol .ai img{width:52px;height:52px}
+.pol .ac--step .ai{box-shadow:0 0 0 2px var(--gold),0 0 16px color-mix(in srgb,var(--gold) 35%,transparent)}
+.pol .ac h5{font-size:1rem;font-weight:700}
+.pol .ms b{font-size:1.4rem}
+.pol .pgw{display:flex;align-items:center;gap:8px}.pol .pgw .pg{flex:1}.pol .pgw span{font-size:.78rem;font-weight:700;color:var(--tx-1);min-width:36px;text-align:right}
+.pol .pg{height:10px;background:var(--gn-track)}
+.pol .rw li{background:var(--gn-plate);border-color:var(--gn-card-bd);color:var(--tx-1)}
+.pol .ft{padding-top:8px;border-top:1px solid var(--gn-card-bd)}
+.stepchip{font-size:.66rem;font-weight:800;color:var(--bg-0);background:var(--gold);border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:2px}
+
+/* theme claro */
+.light{--bg-0:#f5f5f7;--bg-1:#ffffff;--bg-2:#ffffff;--bd-1:rgba(0,0,0,.08);--bd-2:rgba(0,0,0,.08);--tx-1:#1d1d1f;--tx-2:#3a3a3c;--tx-3:#6e6e73;--acc-1:#5b4bd6;--gold:#9a6a00;--green:#1f8a55;--green-bg:#e3f4ea;--amber-bg:#fff4dc;color:var(--tx-2)}
+.light.pol{--gn-elev:0 1px 2px rgba(0,0,0,.06),0 6px 16px rgba(0,0,0,.08)}
+.lightwrap{background:#f5f5f7;border-radius:16px;padding:14px;margin-top:10px}
+.lightwrap h4{color:#3a3a3c}
+
+@media (max-width:900px){.cmp{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<span class="tag tag--gold">CAM-POLISH-001 · propuesta · sin implementar</span>
+<h1>Fuerza visual de las tarjetas</h1>
+<p class="lead">Cámara del Brujo (Tienda y Compras fijadas) y Logros. Solo presentación: no cambia comportamiento, navegación ni datos. 2026-10-24.</p>
+
+<div class="voice"><div class="av">S</div><div><p class="lbl">Shiruvana</p>
+<p>Tenías razón, y no es una impresión: lo medí. Las tarjetas no perdieron fuerza por cómo las diseñé, sino por <b>dónde</b> quedaron apoyadas. En las maquetas vivían sobre el fondo más oscuro y tenían tres niveles de superficie; en la Bóveda viven dentro de un panel del mismo color que ellas, y en 17 de los 19 themes el tercer nivel no existe. Resultado: tarjeta y panel son idénticos (1.00:1) y las barras de progreso perdieron la pista, así que <b>no se ve cuánto falta</b>. Lo arreglo con una capa de superficies propia de estas pantallas, sin tocar los themes ni el JS de comportamiento.</p></div></div>
+
+<h2>1. Diagnóstico visual</h2>
+<p>Medido en DEV con los 19 themes reales (RUN-015, <code>factory/diagnose/OUT-015.md</code>) y el CSS que se carga hoy.</p>
+<table>
+<tr><th>#</th><th>Hallazgo</th><th>Dónde</th><th>Medida (theme Gato Negro)</th><th>Nivel</th></tr>
+<tr><td>1</td><td><b>Tarjeta del mismo color que su panel.</b> <code>.panel</code> pinta <code>--bg-1</code> (theme-polish.css) y las tarjetas también pintan <code>--bg-1</code>. Lo único que las separa es un borde de 1 px.</td><td>Tienda, Compras fijadas (indicadores y tabla), Logros</td><td>tarjeta/panel <span class="zero">1.00:1</span> · en la maqueta, tarjeta/lienzo 1.15:1</td><td><span class="sev sev--a">ALTO</span></td></tr>
+<tr><td>2</td><td><b>Las barras perdieron la pista.</b> El tramo vacío de cada barra usa <code>--bg-2</code>, y en 17 themes <code>--bg-2</code> es igual a <code>--bg-1</code>. Se ve el tramo lleno flotando, sin la referencia de cuánto falta.</td><td>Unidades de la Tienda, línea de AA, barras de Compras fijadas, progreso de Logros</td><td>pista/tarjeta <span class="zero">1.00:1</span> en 17 de 19 themes · maqueta 1.15:1 (<code>#232A3A</code>)</td><td><span class="sev sev--a">ALTO</span></td></tr>
+<tr><td>3</td><td><b>La placa del ícono de Logros desapareció.</b> El fondo del ícono usa <code>--bg-2</code>: solo queda el anillo. El ícono oficial se ve, pero sin el "marco" que lo hace protagonista.</td><td>Logros</td><td>placa/tarjeta 1.00:1</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td>4</td><td><b>Bordes débiles.</b> <code>--bd-1</code> sobre <code>--bg-1</code> queda entre 1.13:1 (Notion) y 1.58:1 (Catppuccin); Cyberpunk es la excepción (cian, 14.9:1).</td><td>todas</td><td>Gato Negro 1.36:1</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td>5</td><td><b>Sin profundidad.</b> Ninguna tarjeta tiene sombra ni luz superior; en la maqueta tampoco, pero allí el lienzo oscuro hacía ese trabajo.</td><td>todas</td><td>—</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+<tr><td>6</td><td><b>El hover de la tabla de Compras fijadas no se nota</b> (usa <code>--bg-2</code>).</td><td>Compras fijadas</td><td>1.00:1</td><td><span class="sev sev--b">BAJO</span></td></tr>
+<tr><td>7</td><td><b>Jerarquía plana.</b> Ícono, título, progreso y recompensa tienen casi el mismo peso: lo deseado (el ítem, la recompensa) no se destaca sobre la información secundaria.</td><td>Tienda, Logros</td><td>título .90–.95rem · ícono 44–48 px</td><td><span class="sev sev--m">MEDIO</span></td></tr>
+</table>
+<div class="dec"><b>Causa raíz.</b> Las maquetas usaron tres superficies: lienzo <code>#0F1117</code>, tarjeta <code>#1A1F2B</code> y pista <code>#232A3A</code>. La app real tiene una y media: el panel ya es <code>#1A1F2B</code> y <code>--bg-2</code> vale lo mismo. No hay ninguna regresión del código; es una diferencia entre el lienzo de la maqueta y el contenedor real. Es la misma lección de LES de BL-047: <i>una maqueta aprobada se valida en el contenedor real</i>.</div>
+
+<h2>2. Propuesta aprobada · Hoy en la Bóveda · Ajuste</h2>
+<p>Las tres columnas usan el theme Gato Negro. "Hoy" reproduce el CSS real dentro de un <code>.panel</code>; "Propuesta aprobada" es el CSS de CAM-0 / LOG-0 sobre su lienzo; "Ajuste" es lo que propongo.</p>
+
+<h3>Tienda</h3>
+<div class="cmp">
+  <div class="col mock"><h4>Propuesta aprobada <span class="tag">CAM-0</span></h4><div class="canvas">
+    <div class="it it--pinned"><span class="ic">LEG</span><span class="nm">Cofre de Mística Legendaria</span><span class="pin on">★ Fijado</span><span class="s">350 AA · Legendario</span>
+      <div class="f"><span class="units"><i class="a"></i><i class="m"></i><i></i><i></i></span><span class="step"><b>−</b><span>1</span><b>+</b></span></div></div>
+    <div class="it"><span class="ic" style="background:linear-gradient(135deg,#ffa405,#5a3a08)">EXO</span><span class="nm">Trébol místico ×5</span><span class="pin">☆ Fijar</span><span class="s">60 AA · Material</span>
+      <div class="f"><span class="units"><i class="a"></i><i></i><i></i><i></i><i></i></span><span class="step"><b>−</b><span>0</span><b>+</b></span></div></div>
+  </div><p class="cap">Tarjeta 1.15:1 sobre el lienzo; pista de unidades visible.</p></div>
+
+  <div class="col"><h4>Hoy en la Bóveda <span class="tag">DEV y PRD</span></h4><div class="panel">
+    <div class="it it--pinned"><span class="ic">LEG</span><span class="nm">Cofre de Mística Legendaria</span><span class="pin on">★ Fijado</span><span class="s">350 AA · Legendario</span>
+      <div class="f"><span class="units"><i class="a"></i><i class="m"></i><i></i><i></i></span><span class="step"><b>−</b><span>1</span><b>+</b></span></div></div>
+    <div class="it"><span class="ic" style="background:linear-gradient(135deg,#ffa405,#5a3a08)">EXO</span><span class="nm">Trébol místico ×5</span><span class="pin">☆ Fijar</span><span class="s">60 AA · Material</span>
+      <div class="f"><span class="units"><i class="a"></i><i></i><i></i><i></i><i></i></span><span class="step"><b>−</b><span>0</span><b>+</b></span></div></div>
+  </div><p class="cap">Tarjeta = panel (1.00:1). Las unidades que faltan comprar no se ven: la barra parece "llena" con 1 de 4.</p></div>
+
+  <div class="col pol"><h4>Ajuste <span class="tag tag--gold">CAM-POLISH</span></h4><div class="panel"><div class="tray">
+    <div class="it it--pinned"><span class="ic" style="--rar:var(--r-leg)">LEG</span><span class="nm">Cofre de Mística Legendaria</span><span class="pin on">★ Fijado</span><span class="s"><span class="aa">AA</span><b>350</b> · Legendario</span>
+      <div class="f"><span class="units"><i class="a"></i><i class="m"></i><i></i><i></i></span><span class="step"><b>−</b><span>1</span><b>+</b></span></div></div>
+    <div class="it"><span class="ic" style="--rar:var(--r-exo);background:linear-gradient(135deg,#ffa405,#5a3a08)">EXO</span><span class="nm">Trébol místico ×5</span><span class="pin">☆ Fijar</span><span class="s"><span class="aa">AA</span><b>60</b> · Material</span>
+      <div class="f"><span class="units"><i class="a"></i><i></i><i></i><i></i><i></i></span><span class="step"><b>−</b><span>0</span><b>+</b></span></div></div>
+  </div></div><p class="cap">Bandeja oscura como en la maqueta, tarjeta elevada (1.29:1), anillo de rareza con brillo, costo en AA destacado, fijado con banda dorada y unidades con pista visible (1.44:1).</p></div>
+</div>
+
+<h3>Compras fijadas</h3>
+<div class="cmp">
+  <div class="col mock"><h4>Propuesta aprobada <span class="tag">CAM-0</span></h4><div class="canvas">
+    <div class="kp"><div><small>Fijados</small><b>6</b><div class="bar"><i style="width:50%"></i></div></div><div><small>AA reservada</small><b>1.180</b></div><div><small>Te faltan</small><b>380 AA</b></div></div>
+    <div class="mx"><table><thead><tr><th>Cuenta</th><th><span class="hi l"></span>Cofre</th><th><span class="hi"></span>Trébol</th></tr></thead>
+      <tbody><tr><td>Pablo.1234</td><td>1/4<span class="u"><i style="width:25%"></i><em style="width:25%"></em></span></td><td>2/5<span class="u"><i style="width:40%"></i></span></td></tr>
+      <tr class="hv"><td>Gato.5678</td><td>0/4<span class="u"></span></td><td>5/5<span class="u"><i style="width:100%"></i></span></td></tr></tbody></table></div>
+  </div><p class="cap">Indicadores y matriz despegados del lienzo.</p></div>
+
+  <div class="col"><h4>Hoy en la Bóveda</h4><div class="panel">
+    <div class="kp"><div><small>Fijados</small><b>6</b><div class="bar"><i style="width:50%"></i></div></div><div><small>AA reservada</small><b>1.180</b></div><div><small>Te faltan</small><b>380 AA</b></div></div>
+    <div class="mx"><table><thead><tr><th>Cuenta</th><th><span class="hi l"></span>Cofre</th><th><span class="hi"></span>Trébol</th></tr></thead>
+      <tbody><tr><td>Pablo.1234</td><td>1/4<span class="u"><i style="width:25%"></i><em style="width:25%"></em></span></td><td>2/5<span class="u"><i style="width:40%"></i></span></td></tr>
+      <tr class="hv"><td>Gato.5678</td><td>0/4<span class="u"></span></td><td>5/5<span class="u"><i style="width:100%"></i></span></td></tr></tbody></table></div>
+  </div><p class="cap">Todo al mismo plano; 0/4 no muestra barra y el hover de la fila no se ve.</p></div>
+
+  <div class="col pol"><h4>Ajuste <span class="tag tag--gold">CAM-POLISH</span></h4><div class="panel"><div class="tray">
+    <div class="kp"><div style="--k:var(--green)"><small>Fijados</small><b>6</b><div class="bar"><i style="width:50%"></i></div></div><div style="--k:var(--acc-1)"><small>AA reservada</small><b>1.180</b></div><div style="--k:var(--gold)"><small>Te faltan</small><b>380 AA</b></div></div>
+    <div class="mx"><table><thead><tr><th>Cuenta</th><th><span class="hi l" style="--rar:var(--r-leg)"></span>Cofre</th><th><span class="hi" style="--rar:var(--r-exo)"></span>Trébol</th></tr></thead>
+      <tbody><tr><td>Pablo.1234</td><td>1/4<span class="u"><i style="width:25%"></i><em style="width:25%"></em></span></td><td>2/5<span class="u"><i style="width:40%"></i></span></td></tr>
+      <tr class="hv"><td>Gato.5678</td><td>0/4<span class="u"></span></td><td>5/5<span class="u"><i style="width:100%"></i></span></td></tr></tbody></table></div>
+  </div></div><p class="cap">Indicadores con filete de color por significado, encabezado de la matriz en placa, íconos de 34 px con anillo de rareza, pista en cada mini barra (también en 0/4) y hover visible.</p></div>
+</div>
+
+<h3>Logros</h3>
+<div class="cmp">
+  <div class="col mock"><h4>Propuesta aprobada <span class="tag">LOG-0</span></h4><div class="canvas">
+    <div class="ac ac--step"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Maestro de los fractales</h5><span class="ct">Fractales</span></div></div>
+      <p class="ms">Te faltan <b>2</b> de 50</p><div class="pg g"><i style="width:96%"></i></div>
+      <ul class="rw"><li><img src="../../assets/icons/Welcome/605001.png" alt="">Título «Fractalero»</li></ul>
+      <div class="ft"><span>+20 AP al terminar</span><span class="lk">Wiki ↗</span></div></div>
+    <div class="ac"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Colección: Colmillo de Escarcha</h5><span class="ct">Armas legendarias</span></div></div>
+      <p class="ms">Te faltan <b>4</b> de 18</p><div class="pg"><i style="width:77%"></i></div>
+      <ul class="rw"><li><img src="../../assets/icons/Welcome/1228903.png" alt="">Colmillo de Escarcha</li></ul>
+      <div class="ft"><span>+10 AP</span><span><span class="lk ar">Ver en la Armería →</span> <span class="lk">Wiki ↗</span></span></div></div>
+  </div><p class="cap">Placa del ícono visible, pista de la barra visible.</p></div>
+
+  <div class="col"><h4>Hoy en la Bóveda</h4><div class="panel">
+    <div class="ac ac--step"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Maestro de los fractales</h5><span class="ct">Fractales</span></div></div>
+      <p class="ms">Te faltan <b>2</b> de 50</p><div class="pg g"><i style="width:96%"></i></div>
+      <ul class="rw"><li><img src="../../assets/icons/Welcome/605001.png" alt="">Título «Fractalero»</li></ul>
+      <div class="ft"><span>+20 AP al terminar</span><span class="lk">Wiki ↗</span></div></div>
+    <div class="ac"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Colección: Colmillo de Escarcha</h5><span class="ct">Armas legendarias</span></div></div>
+      <p class="ms">Te faltan <b>4</b> de 18</p><div class="pg"><i style="width:77%"></i></div>
+      <ul class="rw"><li><img src="../../assets/icons/Welcome/1228903.png" alt="">Colmillo de Escarcha</li></ul>
+      <div class="ft"><span>+10 AP</span><span><span class="lk ar">Ver en la Armería →</span> <span class="lk">Wiki ↗</span></span></div></div>
+  </div><p class="cap">El ícono queda sin placa, la barra sin pista: 77 % y 96 % se ven casi iguales.</p></div>
+
+  <div class="col pol"><h4>Ajuste <span class="tag tag--gold">CAM-POLISH</span></h4><div class="panel"><div class="tray">
+    <div class="ac ac--step"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Maestro de los fractales<span class="stepchip">A UN PASO</span></h5><span class="ct">Fractales</span></div></div>
+      <p class="ms">Te faltan <b>2</b> de 50</p><div class="pgw"><div class="pg g"><i style="width:96%"></i></div><span>96 %</span></div>
+      <ul class="rw"><li><img src="../../assets/icons/Welcome/605001.png" alt="">Título «Fractalero»</li></ul>
+      <div class="ft"><span>+20 AP al terminar</span><span class="lk">Wiki ↗</span></div></div>
+    <div class="ac"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Colección: Colmillo de Escarcha</h5><span class="ct">Armas legendarias</span></div></div>
+      <p class="ms">Te faltan <b>4</b> de 18</p><div class="pgw"><div class="pg"><i style="width:77%"></i></div><span>77 %</span></div>
+      <ul class="rw"><li><img src="../../assets/icons/Welcome/1228903.png" alt="">Colmillo de Escarcha</li></ul>
+      <div class="ft"><span>+10 AP</span><span><span class="lk ar">Ver en la Armería →</span> <span class="lk">Wiki ↗</span></span></div></div>
+  </div></div><p class="cap">Ícono oficial más grande (48 → 52 px) en una placa de 60 px; a un paso, anillo dorado con brillo. Barra de 10 px con pista y el % a la derecha. Recompensas en placa.</p></div>
+</div>
+
+<h3>El mismo ajuste en un theme claro (macOS)</h3>
+<div class="lightwrap"><div class="cmp">
+  <div class="col light"><h4>Hoy</h4><div class="panel">
+    <div class="ac ac--step"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Maestro de los fractales</h5><span class="ct">Fractales</span></div></div>
+      <p class="ms">Te faltan <b>2</b> de 50</p><div class="pg g"><i style="width:96%"></i></div></div>
+    <div class="it"><span class="ic">LEG</span><span class="nm">Cofre de Mística Legendaria</span><span class="pin">☆ Fijar</span><span class="s">350 AA · Legendario</span>
+      <div class="f"><span class="units"><i class="a"></i><i></i><i></i><i></i></span></div></div>
+  </div></div>
+  <div class="col light pol"><h4>Ajuste</h4><div class="panel"><div class="tray">
+    <div class="ac ac--step"><div class="at"><span class="ai"><img src="../../assets/icons/155059.png" alt=""></span><div><h5>Maestro de los fractales<span class="stepchip">A UN PASO</span></h5><span class="ct">Fractales</span></div></div>
+      <p class="ms">Te faltan <b>2</b> de 50</p><div class="pgw"><div class="pg g"><i style="width:96%"></i></div><span>96 %</span></div></div>
+    <div class="it"><span class="ic" style="--rar:var(--r-leg)">LEG</span><span class="nm">Cofre de Mística Legendaria</span><span class="pin">☆ Fijar</span><span class="s"><span class="aa">AA</span><b>350</b> · Legendario</span>
+      <div class="f"><span class="units"><i class="a"></i><i></i><i></i><i></i></span></div></div>
+  </div></div></div>
+  <div class="col light"><h4>Qué cambia en claro</h4><div class="panel" style="font-size:.84rem">
+    <p>La bandeja es el gris de fondo (<code>--bg-0</code>) y las tarjetas quedan blancas encima, como en macOS. La sombra es más suave que en los themes oscuros.</p>
+    <p>Pista de barra 1.39:1 y borde 1.51:1 (hoy 1.00 y 1.20). Los colores de texto no cambian: siguen pasando por la guarda AA ya validada en LOG-5 y CAM-6.</p></div></div>
+</div></div>
+
+<h2>3. Ajustes sugeridos</h2>
+<table>
+<tr><th>Capa</th><th>Ajuste</th><th>Aplica a</th></tr>
+<tr><td><b>Superficies</b> (base)</td><td>Cuatro variables propias, calculadas desde el theme activo y solo dentro de <code>#wvPanel</code> y <code>#achievementsPanel</code>: <code>--gn-tray</code> = <code>--bg-0</code>; <code>--gn-card</code> = <code>--bg-1</code> + 4,5 % del texto; <code>--gn-card-bd</code> = 20 %; <code>--gn-track</code> = 16 %; <code>--gn-plate</code> = 10 % (con <code>color-mix</code>, que la Tienda ya usa). Así funciona en los 19 themes sin tocarlos.</td><td>las tres pantallas</td></tr>
+<tr><td><b>Bandeja</b></td><td>La grilla de tarjetas (y los indicadores de Compras fijadas) se apoya sobre una bandeja <code>--gn-tray</code> con 10 px de aire, como el lienzo de la maqueta.</td><td>Tienda, Compras fijadas, Logros</td></tr>
+<tr><td><b>Profundidad</b></td><td>Tarjeta con luz superior de 1 px y sombra <code>0 6px 18px rgba(0,0,0,.28)</code> (en themes claros, <code>.08</code>). Sin animaciones nuevas: respeta movimiento reducido.</td><td>tarjetas, indicadores, matriz</td></tr>
+<tr><td><b>Progreso</b></td><td>Toda pista vacía usa <code>--gn-track</code>. Barras de Logros 8 → 10 px con el % al lado; unidades de la Tienda 7 → 8 px; mini barras de Compras fijadas visibles también en 0.</td><td>las tres</td></tr>
+<tr><td><b>Ícono (identidad GW2)</b></td><td>Logros: ícono oficial 42 → 52 px en placa de 60 px; a un paso, anillo dorado con brillo. Tienda: 44 → 52 px con anillo de rareza de 2 px y brillo suave del mismo color. Compras fijadas: 28 → 34 px con anillo de rareza. Ningún ícono se reemplaza ni se oculta.</td><td>las tres</td></tr>
+<tr><td><b>Jerarquía</b></td><td>Orden visual ícono → título → progreso → recompensa. Título a 700; número de «Te faltan» 1.2 → 1.4rem; costo en AA con su ícono y en negrita; recompensas en placa con texto principal; pie separado por un filete.</td><td>Tienda, Logros</td></tr>
+<tr><td><b>Lo deseado</b></td><td>Fijado: borde dorado, banda dorada arriba y botón «★ Fijado» relleno. Logro a un paso: misma banda dorada y la etiqueta «A UN PASO». Indicadores con filete de color por significado (verde fijados, violeta reservada, dorado te faltan).</td><td>Tienda, Compras fijadas, Logros</td></tr>
+<tr><td><b>Tabla</b></td><td>Encabezado en placa, filetes con <code>--gn-card-bd</code> y hover con un tinte del acento (hoy no se ve).</td><td>Compras fijadas</td></tr>
+</table>
+
+<h3>Dónde vive (Architecture)</h3>
+<ul>
+<li>Un módulo chico nuevo, <code>js/gn-surface.js</code> (≈3 KB, por <code>js/modules.json</code>), que declara las variables de superficie dentro de los paneles que lo piden. Es reutilizable para los pasos 4 a 8 del restyle (Actividades, Raids, Inventario, Cuentas y marco común).</li>
+<li>Los cambios de cada tarjeta van en el CSS que ya tiene cada módulo (<code>wv-shop-ui.js</code>, <code>wv-purchases-view.js</code>, <code>ach-cards.js</code>), siempre con respaldo: <code>var(--gn-track, var(--bg-2))</code>. Si el módulo nuevo no carga, todo queda como hoy.</li>
+<li>No toco los themes: arreglar <code>--bg-2</code> en los 19 es BL-060 y cambiaría la Bóveda entera. Esto queda contenido en tres pantallas.</li>
+<li>Sin cambios en HTML generado salvo dos agregados sin lógica: el envoltorio de bandeja y el % al lado de la barra de Logros (que ya está en el <code>aria-label</code>). Los tests de comportamiento no cambian.</li>
+</ul>
+
+<h2>4. Impacto esperado</h2>
+<table>
+<tr><th>Medida (Gato Negro)</th><th>Maqueta</th><th>Hoy</th><th>Ajuste</th></tr>
+<tr><td>Tarjeta contra lo que tiene detrás</td><td class="n">1.15:1</td><td class="n zero">1.00:1</td><td class="n up">1.29:1</td></tr>
+<tr><td>Borde de la tarjeta</td><td class="n">1.36:1</td><td class="n">1.36:1</td><td class="n up">1.65:1</td></tr>
+<tr><td>Pista de las barras</td><td class="n">1.15:1</td><td class="n zero">1.00:1</td><td class="n up">1.44:1</td></tr>
+<tr><td>Placa del ícono de Logros</td><td class="n">1.15:1</td><td class="n zero">1.00:1</td><td class="n up">1.18:1 + anillo</td></tr>
+<tr><td>Ícono de Logros / Tienda / Compras</td><td class="n">36 / 44 / 28 px</td><td class="n">42 / 44 / 28 px</td><td class="n up">52 / 52 / 34 px</td></tr>
+<tr><td>Theme claro (macOS): pista · borde</td><td>—</td><td class="n zero">1.00 · 1.20</td><td class="n up">1.39 · 1.51</td></tr>
+</table>
+<p>Los 19 themes los mido en un test al implementar (como <code>ach-a11y</code> y <code>wv-camara-a11y</code>): tarjeta ≥ 1.15:1 contra la bandeja, pista ≥ 1.3:1 y borde ≥ 1.4:1 en todos, y los textos siguen en AA. Lo que esperás ver: la tarjeta se despega del panel, cada barra muestra cuánto falta, el ícono oficial vuelve a ser lo primero que se ve y lo fijado o a un paso se reconoce de lejos.</p>
+<p><b>Sin cambios en:</b> qué se muestra, en qué orden, filtros, −/+, Gestionar, Deshacer, sincronización, navegación, teclado, lector de pantalla ni datos guardados. Peso: ≈3 KB nuevos y unos cientos de bytes en cada módulo; los archivos congelados no crecen.</p>
+
+<h2>5. Plan, si lo aprobás</h2>
+<ol>
+<li><b>POL-1</b> · <code>js/gn-surface.js</code> y el test de superficies en los 19 themes. Sin cambio visible todavía.</li>
+<li><b>POL-2</b> · Tienda.</li>
+<li><b>POL-3</b> · Compras fijadas.</li>
+<li><b>POL-4</b> · Logros.</li>
+</ol>
+<p>Un paso por vez, cada uno con tu validación en DEV. Producción, solo con tu orden.</p>
+
+<h3>Para decidir</h3>
+<div class="dec"><b>1.</b> ¿Aprobás la bandeja oscura detrás de las tarjetas (lo que más fuerza devuelve) o preferís solo elevar la tarjeta sin bandeja?<br>
+<b>2.</b> ¿Aplico el anillo dorado «a un paso» también al ícono oficial de los logros, o lo dejo solo en el borde de la tarjeta?<br>
+<b>3.</b> ¿Querés que <code>gn-surface.js</code> quede como base para el resto del restyle (mi recomendación) o lo limito a estas tres pantallas?</div>
+</div>
+</body>
+</html>
