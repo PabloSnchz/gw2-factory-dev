@@ -1,0 +1,16 @@
+{
+  "id": "RUN-014",
+  "summary": "BL-067 LOG-5: después de PATCH-031 y del retiro de achievements-theme.js, la revisión final de Logros (19 themes reales) y los vecinos (versiones, tamaño, boot, contraste de la Bienvenida) siguen verdes",
+  "tests": [
+    "tests/ach-a11y.test.cjs",
+    "tests/ach-view.test.cjs",
+    "tests/ach-cards.test.cjs",
+    "tests/ach-categories.test.cjs",
+    "tests/ach-armory.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/welcome-contrast.test.cjs",
+    "tests/legacy-census.test.cjs"
+  ]
+}
