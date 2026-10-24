@@ -1,22 +1,21 @@
 # STATUS
 
-Estado: EN CURSO
-Tarea actual: BL-067 paso 3 — Logros. LOG-4 en curso: las tarjetas de colecciones legendarias saltan a su legendaria en la Armería (`js/ach-armory.js`, por manifiesto) y mi línea en esa pestaña.
+Estado: ESPERANDO A PABLO
+Tarea actual: BL-067 paso 3 — Logros. LOG-4 hecho en DEV: las tarjetas de colecciones legendarias saltan a su legendaria en la Armería (`js/ach-armory.js`, por manifiesto) y mi línea en esa pestaña. Espera la validación de Pablo.
 Motivo: Pablo pidió seguir con LOG-4 (2026-10-24 06:20Z); LOG-3 queda validado.
 Fase: F1 — Visibilidad
-Etapa actual: DEVELOPMENT
+Etapa actual: REVIEW
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 06:25Z
-Próxima acción: publicar `js/ach-armory.js` con su test y el manifiesto; después `ach-cards.js` 1.1.0 y `ach-view.js` 1.2.0 con sus tests.
+Última actualización: 2026-10-24 06:36Z
+Próxima acción: con la validación de Pablo, LOG-5: revisión final (19 themes, teclado, lector, celular), retirar `achievements-theme.js` y los restos de `achievements.js`, y cerrar FEAT-012.
 
 Micro-ciclo:
-LOG-4 — Colecciones legendarias con salto a la Armería. EN CURSO.
+LOG-4 — Colecciones legendarias con salto a la Armería. HECHO, espera validación.
 Archivos:
-- js/ach-armory.js 1.0.0 (nuevo) y su test; js/modules.json
-- js/ach-cards.js 1.1.0 y js/ach-view.js 1.2.0, con sus tests (sin parche: no se tocan archivos grandes)
-- ai-memory/status.md
+- js/ach-armory.js 1.0.0 (`3c29765`), js/ach-cards.js 1.1.0 (`58a89ec`), js/ach-view.js 1.2.0 (`3e09666`), sus tests y js/modules.json (`6169da7`); sin parche
+- ai-memory: FEAT-012 (`5e0e86f`) y status.md
 
-Último hecho: LOG-3 validado (Pablo pidió seguir). Revisé la Armería: `LegendaryTracker.openItemModal(id)` es API pública y `LegendaryRecipes` trae las 206 legendarias con sus ingredientes.
+Último hecho: publiqué en tres pasos seguros: `ach-armory.js` con su test y el manifiesto (`72660fe`), `ach-cards.js` 1.1.0 (`dba5400`) y `ach-view.js` 1.2.0 (`008f994`). Las tarjetas cuya recompensa es una legendaria o una pieza de una sola legendaria muestran «Ver en la Armería →»; el clic abre la ficha de esa legendaria. Las piezas compartidas no llevan enlace. En «Colecciones legendarias» se cargan los precursores una vez y mi línea dice cuál es la colección más avanzada y para qué legendaria es. Sin pedidos nuevos: usa las recetas que la Armería ya carga. Tests de Logros: 54/54 (10 nuevos); los blobs publicados son iguales a los locales.
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
@@ -27,7 +26,7 @@ BL-064 (cerrada y validada por Pablo, 2026-10-24 02:25Z):
 2. Cámara del Brujo: CAM-0 a CAM-6 validados (FEAT-011). En producción y validada (BL-068).
 
 BL-067 (READY, sigue el mismo plan aprobado):
-3. Logros. ← LOG-0 a LOG-3 validados; LOG-4 en curso.
+3. Logros. ← LOG-0 a LOG-3 validados; LOG-4 hecho, espera validación.
 4. Actividades (después de decidir BL-055).
 5. Raids y Strikes.
 6. Inventario y Personajes.
@@ -49,6 +48,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
+- [BL-067] Validación: abrí Logros en DEV con recarga completa (Ctrl+F5) y entrá a «Colecciones legendarias». En las tarjetas que llevan a una legendaria aparece «Ver en la Armería →» (borde dorado) al lado de «Wiki ↗»; tocalo: te lleva a la Armería y se abre la ficha de esa legendaria. Con Ctrl+clic se abre en otra pestaña. Arriba, mi línea te dice cuál es tu colección más avanzada y, si la conozco, para qué legendaria es. Si alguna colección que sabés que es de una legendaria no muestra el enlace, decime cuál: prefiero no mostrarlo antes que llevarte a la equivocada.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
