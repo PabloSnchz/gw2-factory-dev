@@ -1,22 +1,22 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-067 paso 3 — Logros. LOG-2 hecho en DEV: tarjetas «te falta» con el ícono oficial a 48 px, recompensas con ícono y filtros accesibles, en `js/ach-cards.js` por manifiesto. Espera la validación de Pablo.
-Motivo: Pablo validó LOG-1 (2026-10-24) y pidió seguir con LOG-2.
+Estado: EN CURSO
+Tarea actual: BL-067 paso 3 — Logros. LOG-3 en curso: «Por categoría» agrupada por expansión o modo en `js/ach-categories.js` (por manifiesto); se va el panel de Logros de la Sidebar.
+Motivo: Pablo validó LOG-2 (2026-10-24) y pidió seguir con LOG-3.
 Fase: F1 — Visibilidad
-Etapa actual: REVIEW
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 05:43Z
-Próxima acción: con la validación de Pablo, LOG-3: «Por categoría» agrupada por expansión o modo, en `js/ach-categories.js`; se va el panel de Logros de la Sidebar.
+Última actualización: 2026-10-24 06:30Z
+Próxima acción: publicar `js/ach-view.js` 1.1.0 con su test, después `js/ach-categories.js` con su test y el manifiesto, y al final PATCH-030 (achievements.js 3.5.0, index.html, presupuesto y test conjunto).
 
 Micro-ciclo:
-LOG-2 — Filtros y tarjetas «te falta» en Logros. HECHO, espera validación.
+LOG-3 — «Por categoría» agrupada y Sidebar sin el panel de Logros. EN CURSO.
 Archivos:
-- js/ach-cards.js 1.0.0 (`4d488b9`), tests/ach-cards.test.cjs y js/modules.json (`f3290bb`)
-- PATCH-029: js/achievements.js 3.4.0 (`5395658`), index.html (`5cd2d4d`), tools/size-budget.json y el test conjunto — APLICADO
-- ai-memory: FEAT-012 y status.md
+- js/ach-categories.js 1.0.0 (nuevo), js/ach-view.js 1.1.0, sus tests y js/modules.json
+- PATCH-030: js/achievements.js 3.5.0, index.html (`?v` y sin #achAsidePanel), tools/size-budget.json y el test conjunto
+- ai-memory/status.md
 
-Último hecho: publiqué primero `js/ach-cards.js` (no hace nada si `achievements.js` no lo habilita), después su test con el manifiesto y al final PATCH-029. `achievements.js` 3.4.0 ya no pinta tarjetas ni filtros: calcula la lista y avisa; `setFilter` suma búsqueda y recompensa. Bajó de 47454 a 23325 bytes y salió de advertencia (en dos ciclos, −55 %). Las recompensas se piden una vez por tipo y en español, sin repintar la grilla; la wiki busca en la wiki en español. Tests: 30/30 (13 nuevos; los conjuntos corren los tres archivos reales); suite verde antes y después; los blobs publicados son iguales a los locales.
+Último hecho: LOG-2 validado. Probé en local la pestaña nueva contra el `achievements.js` 3.5.0 simulado: 43/43.
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
@@ -27,7 +27,7 @@ BL-064 (cerrada y validada por Pablo, 2026-10-24 02:25Z):
 2. Cámara del Brujo: CAM-0 a CAM-6 validados (FEAT-011). En producción y validada (BL-068).
 
 BL-067 (READY, sigue el mismo plan aprobado):
-3. Logros. ← LOG-0 y LOG-1 validados; LOG-2 hecho, espera validación.
+3. Logros. ← LOG-0 a LOG-2 validados; LOG-3 en curso.
 4. Actividades (después de decidir BL-055).
 5. Raids y Strikes.
 6. Inventario y Personajes.
@@ -49,7 +49,6 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-067] Validación: abrí Logros en DEV con recarga completa (Ctrl+F5). En «Casi listos», cada tarjeta lleva arriba el ícono oficial del logro (más grande que antes), el nombre y la categoría; en grande «Te faltan N de M», la barra verde (dorada desde el 95 %, ya no roja) y abajo «+N AP al terminar» y «Wiki ↗» (abre la wiki en español). Las recompensas aparecen con su ícono y se completan solas en un instante. Probá los filtros: buscador, umbral (≥ 80 %, ≥ 90 %, ≥ 95 %, Todos), recompensa (Ítem, Título, Maestría) y el desplegable de categoría; con un filtro sin resultados aparece «Ver todos los pendientes». En el celular, los filtros se abren con «Filtros · N». «Colecciones legendarias» usa la misma tarjeta, sin «⚠».
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
