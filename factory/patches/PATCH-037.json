@@ -1,0 +1,63 @@
+{
+ "id": "PATCH-037",
+ "summary": "BL-070 registrada (IN_PROGRESS) y status con RAI-0 entregada",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "07d39d8af48f02bede9839cd9133fa02aeffec5d",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n",
+     "text": "\n- [BL-070] [ALTO] Restyle completo de los módulos heredados — pedido de Pablo (2026-10-24 15:39Z), después de que le confirmé que BL-067 solo les dio el marco común (FEAT-013) a Actividades, Raids y Strikes, Inventario y Personajes y Cuentas, sin propuesta ni rediseño de contenido. Mismo proceso que BL-064 y BL-067: propuesta visual primero y cada paso validado por Pablo. Orden: Raids y Strikes → Inventario y Personajes → Actividades (con BL-055) → Cuentas → barra de arriba, modales, avisos y pie. Paso 1, Raids y Strikes: RAI-0 propuesta ENTREGADA (2026-10-24 15:49Z, `docs/propuestas/propuesta-raids-bl070.html`, `366801f`). Lo que medí: los 46 enlaces de video son el mismo video de relleno, mecánicas genéricas y con errores, recompensas que no son las del juego (sin fragmentos de magnetita ni cristales de Gaeting), los 8 íconos de ala son el mismo archivo y faltan 23; el juego unificó strikes y raids el 2026-02-03 y la API no informa los encuentros nuevos (gw2-api #148), así que Strikes nunca marca nada. Propuesta: un solo módulo Raids con pestañas Alas y Encuentros, miniatura oficial de cada jefe, y la ficha de cada encuentro como pantalla propia (como la legendaria, BL-049) con recompensas y mecánicas verificadas; plan RAI-1 a RAI-6; decisiones D1 a D4 pendientes. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo. · FEAT-013, LES-029, LES-030, LES-037, DEC-035, BL-049, BL-055\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "52f58e685604c2471a4569730e0f3a2280592f62",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-069 — Promoción del ciclo de restyle a producción. HECHA (2026-10-24 15:21Z).",
+     "text": "Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 propuesta ENTREGADA (2026-10-24 15:49Z)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Motivo: Pablo validó BL-057, BL-058, BL-064 y BL-067 (2026-10-24 13:10Z) y aprobó la promoción a producción, plan A (15:04Z).",
+     "text": "Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa."
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: DOCUMENTATION",
+     "text": "Etapa actual: PRODUCT"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 15:27Z",
+     "text": "Última actualización: 2026-10-24 15:52Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: esperar a Pablo. Él valida BL-069 en producción. Después sigue SHIRUVANA-ART-001, cuando él la abra; no empiezo BL-059 ni otro frente.",
+     "text": "Próxima acción: esperar a Pablo. Él decide RAI-0 (D1 a D4). Con su aprobación empiezo RAI-1 (catálogo verificado de los 45 encuentros, miniaturas oficiales y prueba de los logros semanales); sin código antes."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-069 — promoción del ciclo de restyle a producción (PRD-0 a PRD-9). HECHO.",
+     "text": "BL-070 RAI-0 — propuesta visual de Raids renovado. ENTREGADA.\nArchivos:\n- docs/propuestas/propuesta-raids-bl070.html (`366801f`)\n\nAnterior: BL-069 — promoción del ciclo de restyle a producción (PRD-0 a PRD-9). HECHO."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-069] Validación: abrí producción",
+     "text": "- [BL-070] Decisión: aprobá o corregí la propuesta de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`). D1 un solo módulo Raids con pestañas Alas y Encuentros; D2 marcar a mano los encuentros que la API no informa, solo si los logros semanales no alcanzan; D3 reemplazar los 46 videos de relleno por enlaces verificados; D4 mecánicas resumidas (3 a 6 por encuentro). Recomiendo sí en las cuatro.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-059] El frente de Shiruvana queda aprobado",
+     "text": "- [BL-070] SHIRUVANA-ART-001 queda en pausa por pedido de Pablo (2026-10-24 15:39Z) mientras avanza el restyle de los módulos heredados.\n"
+    }
+   ]
+  }
+ ]
+}
