@@ -1,6 +1,7 @@
 {
  "version": 1,
  "files": {
-  "jw": "jw.json"
+  "jw": "jw.json",
+  "hot": "hot.json"
  }
 }

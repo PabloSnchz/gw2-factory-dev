@@ -16,6 +16,7 @@ const RW = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'data', 'raids',
 const MDIR = path.join(ROOT, 'assets', 'data', 'raids', 'mechanics');
 const MIDX = JSON.parse(fs.readFileSync(path.join(MDIR, 'index.json'), 'utf8'));
 const JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));
+const HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));
 const byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));
 const groupOf = (e) => CAT.groups.find((g) => g.id === e.group);
 
@@ -160,7 +161,8 @@ test('mi línea en la ficha: solo hechos del catálogo y de tu semana', () => {
 // ------------------------------------------------------------------ RAI-4: cómo se pelea
 const mech = (id) => ({ e: JW.encounters[id], roles: JW.roles, sources: JW.sources, verified: JW.verified });
 
-test('mecánicas, tanda Janthir: cada archivo del índice existe y cada dato tiene su fuente', () => {
+test('mecánicas por tandas: cada archivo del índice existe y cada dato tiene su fuente', () => {
+  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot'], 'tandas publicadas: Janthir y Heart of Thorns');
   for (const [exp, f] of Object.entries(MIDX.files)) {
     assert.match(f, /^[\w-]+\.json$/);
     const d = JSON.parse(fs.readFileSync(path.join(MDIR, f), 'utf8'));
@@ -180,9 +182,9 @@ test('mecánicas, tanda Janthir: cada archivo del índice existe y cada dato tie
       if (E.cm) assert.ok(byId[id].cm, id + ': cambios de modo desafío solo si tiene modo desafío');
       assert.ok(E.links.every((k) => d.sources[k]));
     }
+    const raw = fs.readFileSync(path.join(MDIR, f), 'utf8');
+    assert.doesNotMatch(raw, /youtube|dQw4w9WgXcQ/i, f + ': sin videos inventados');
   }
-  const raw = fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8');
-  assert.doesNotMatch(raw, /youtube|dQw4w9WgXcQ/i, 'sin videos inventados');
   // Lo que es solo de modo desafío no aparece en la pelea normal (corrige la maqueta de RAI-0).
   const g = JW.encounters.greer;
   assert.doesNotMatch(JSON.stringify([g.phases, g.mechanics, g.tip]), /Proto|Ereg/);
@@ -223,6 +225,37 @@ test('cómo se pelea: sin tanda todavía lo dice; el campamento no muestra modo 
   const forced = Object.assign({}, mech('camp'), { e: Object.assign({}, JW.encounters.camp, { cm: ['solo de prueba'] }) });
   assert.doesNotMatch(S.fightHTML(model('camp'), forced), /solo de prueba/, 'sin modo desafío en el catálogo, no hay cambios de modo desafío');
   assert.match(S.fightHTML(model('greer'), { roles: JW.roles, sources: JW.sources }), /llegan en una próxima tanda/, 'archivo sin este encuentro: igual que sin tanda');
+});
+
+test('tanda Heart of Thorns: las 15 fichas de las alas 1 a 4, con modo desafío solo donde existe', () => {
+  const hm = (id) => ({ e: HOT.encounters[id], roles: HOT.roles, sources: HOT.sources, verified: HOT.verified });
+  const ids = Object.keys(HOT.encounters);
+  assert.equal(ids.length, 15);
+  assert.deepEqual(ids, CAT.encounters.filter((e) => groupOf(e).expansion === 'hot').map((e) => e.id), 'en el orden del catálogo');
+  assert.deepEqual(ids.filter((id) => HOT.encounters[id].cm), ['keep_construct', 'cairn', 'mursaat_overseer', 'samarog', 'deimos']);
+  // Cada ala cita su guía de MetaBattle y su página de la wiki.
+  for (const [id, w] of [['vale_guardian', 1], ['slothasor', 2], ['xera', 3], ['deimos', 4]]) {
+    const h = S.fightHTML(model(id), hm(id));
+    assert.match(h, new RegExp('Guide:Raid_Wing_' + w + '_'), id + ': guía del ala ' + w);
+    assert.match(h, /href="https:\/\/wiki\.guildwars2\.com\/wiki\//, id + ': wiki oficial');
+    assert.match(h, /consultadas el 2026-10-24/);
+  }
+  const kc = S.fightHTML(model('keep_construct'), hm('keep_construct'));
+  assert.match(kc, /Abrazo de Xera/);
+  assert.match(kc, /En modo desafío cambia[\s\S]*anillo rojo/);
+  const de = S.fightHTML(model('deimos'), hm('deimos'));
+  assert.equal((de.match(/<ol class="rs-phases">[\s\S]*?<\/ol>/)[0].match(/<li>/g) || []).length, 6);
+  assert.match(de, /Antes del jefe: Prisionero encadenado\./);
+  assert.match(de, /En modo desafío cambia[\s\S]*Saul no pelea/);
+  const vg = S.fightHTML(model('vale_guardian'), hm('vale_guardian'));
+  assert.match(vg, /<span class="rs-role">Daño de condición<\/span>/);
+  assert.match(vg, /<span class="rs-role">Quitar bendiciones<\/span>/);
+  assert.doesNotMatch(vg, /En modo desafío cambia/, 'el Guardián del valle no tiene modo desafío');
+  const bt = S.fightHTML(model('bandit_trio'), hm('bandit_trio'));
+  assert.ok(bt.indexOf('6:50') < bt.indexOf('4:50') && bt.indexOf('4:50') < bt.indexOf('2:47'), 'campeones en el orden del reloj');
+  const tc = S.fightHTML(model('twisted_castle'), hm('twisted_castle'));
+  assert.doesNotMatch(tc, /rs-phases/, 'el Castillo Retorcido es un evento sin fases');
+  assert.match(tc, /Estatuas acechantes/);
 });
 
 test('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {
@@ -283,7 +316,7 @@ function boot(o) {
     scrollY: 640, scrollTo: (x, y) => scrolls.push(y),
     fetch: (u) => {
       fetches.push(u);
-      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /catalog/.test(u) ? CAT : null;
+      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /catalog/.test(u) ? CAT : null;
       return Promise.resolve(body ? { ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(body))) } : { ok: false, status: 404 });
     },
     Storage: { STORAGE_KEYS: { ACCOUNT_SELECTED: 'gn:account:selected' }, get: (k) => (k === 'gn:account:selected' ? 'TOKEN' : null), getRaw: () => 'raids', set() {} },
@@ -358,8 +391,13 @@ test('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestaña
   assert.equal(rs.getAttribute('data-pane'), 'fight', 'anterior y siguiente mantienen la sección');
   assert.match(rs.innerHTML, /Fragmentos de piedra de sangre/);
   await sb.RaidsSheet.open('cairn');
+  assert.match(rs.innerHTML, /Carga invisible/);
+  assert.deepEqual(mf().slice(2), ['assets/data/raids/mechanics/hot.json'], 'Heart of Thorns se pide al abrir su primera ficha');
+  await sb.RaidsSheet.open('deimos');
+  assert.match(rs.innerHTML, /Banquete de almas/);
+  await sb.RaidsSheet.open('adina');
   assert.match(rs.innerHTML, /llegan en una próxima tanda/);
-  assert.equal(mf().length, 2, 'ni el índice ni Janthir se vuelven a pedir; sin tanda, no se pide nada');
+  assert.equal(mf().length, 3, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
   sb.RaidsSheet.close();
   await sb.RaidsSheet.open('decima');
   assert.equal(rs.getAttribute('data-pane'), 'rew', 'abrir desde la lista vuelve a Recompensas');
