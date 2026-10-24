@@ -1,11 +1,11 @@
 # FEAT-012 — Logros renovado
 
-- **Estado:** hecho en DEV. LOG-0 aprobado (2026-10-24 05:00Z); LOG-1 a LOG-4 validados por Pablo; LOG-5, la revisión final, hecho (2026-10-24 06:58Z) y espera su validación para cerrar.
+- **Estado:** hecho en DEV. LOG-0 aprobado (2026-10-24 05:00Z); LOG-1 a LOG-4 validados por Pablo; LOG-5, la revisión final, hecho (2026-10-24 06:58Z) y validado por Pablo con todo BL-067, visual y funcional (2026-10-24 13:10Z). En producción por orden de Pablo (BL-069, 2026-10-24).
 - **Fecha:** 2026-10-24
 - **Backlog:** BL-067, paso 3 del restyle de la Bóveda
 - **Propuesta aprobada:** `docs/propuestas/propuesta-logros-bl067.html` (`9798082`), con las 4 decisiones: tres pestañas, categorías agrupadas por expansión o modo, tarjetas «te falta» e integración con la Armería.
 - **Regla de Pablo (LOG-0):** el ícono oficial de Guild Wars 2 de cada logro se queda en la tarjeta, destacado. Se puede reorganizar la tarjeta y mejorar la jerarquía, pero no reemplazar ni ocultar el ícono. Lo vigilan `tests/ach-view.test.cjs` y `tests/ach-cards.test.cjs`. En «Por categoría» va el ícono oficial de cada categoría (`tests/ach-categories.test.cjs`).
-- **Producción:** no. La decide Pablo.
+- **Producción:** sí, por orden de Pablo (BL-069, 2026-10-24 15:07Z a 15:20Z): `ach-view.js` 1.3.0, `ach-cards.js` 1.2.0, `ach-categories.js` y `ach-armory.js` 1.0.0 por el manifiesto, `achievements.js` 3.6.0 e `index.html` sin `#achAsidePanel` ni `achievements-theme.js` (GA de producción intacto, DEC-006). Blobs idénticos a DEV. Vuelta atrás: rama `rollback/pre-restyle-ciclo` (`374b6f0`).
 
 ## Pasos
 
@@ -16,7 +16,7 @@
 | LOG-2 | Filtros accesibles y tarjetas «te falta» (con el ícono oficial destacado) | `js/ach-cards.js` 1.0.0 (`4d488b9`), `tests/ach-cards.test.cjs` (`4c6c1dc`), PATCH-029 (`achievements.js` 3.4.0 `5395658`, `index.html` `5cd2d4d`, `tools/size-budget.json`, test conjunto) | Validado |
 | LOG-3 | «Por categoría» agrupada por expansión o modo; se va el panel de Logros de la Sidebar | `js/ach-categories.js` 1.0.0 (`a7353e3`), `tests/ach-categories.test.cjs` (`850d5cb`), `js/ach-view.js` 1.1.0 (`43ee65b`), `js/modules.json` (`4fccfe1`), PATCH-030 (`achievements.js` 3.5.0 `c4c3dae`, `index.html` `6555667`, `tools/size-budget.json` `cca7cc9`, `tests/ach-view.test.cjs` `ddb33c1`) | Validado |
 | LOG-4 | Colecciones legendarias con salto a la Armería | `js/ach-armory.js` 1.0.0 (`3c29765`), `tests/ach-armory.test.cjs` (`a33451a`), `js/ach-cards.js` 1.1.0 (`58a89ec`), `js/ach-view.js` 1.2.0 (`3e09666`), sus tests y `js/modules.json` (`6169da7`). Sin parche | Validado |
-| LOG-5 | Revisión final: 19 themes, teclado, lector, celular; se retira `achievements-theme.js` | `js/ach-cards.js` 1.2.0 (`a73c9ba`), `tests/ach-cards.test.cjs` (`37ec40c`), `js/modules.json` (`fb52fe5`), PATCH-031 (`achievements.js` 3.6.0 `b9cc84a`, `index.html` `649a09b`, `tools/size-budget.json` `1c681cc`, `tests/ach-view.test.cjs` `fb7dd46`), `js/achievements-theme.js` borrado (`c1d0021`), `tests/ach-a11y.test.cjs` nuevo | Hecho, espera validación |
+| LOG-5 | Revisión final: 19 themes, teclado, lector, celular; se retira `achievements-theme.js` | `js/ach-cards.js` 1.2.0 (`a73c9ba`), `tests/ach-cards.test.cjs` (`37ec40c`), `js/modules.json` (`fb52fe5`), PATCH-031 (`achievements.js` 3.6.0 `b9cc84a`, `index.html` `649a09b`, `tools/size-budget.json` `1c681cc`, `tests/ach-view.test.cjs` `fb7dd46`), `js/achievements-theme.js` borrado (`c1d0021`), `tests/ach-a11y.test.cjs` nuevo | Validado |
 
 ## LOG-1: qué cambió para el usuario
 

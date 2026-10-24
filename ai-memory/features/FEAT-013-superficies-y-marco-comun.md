@@ -1,11 +1,11 @@
 # FEAT-013 — Superficies y marco común de la Bóveda
 
-- **Estado:** hecho en DEV (2026-10-24 07:34Z). Cierra CAM-POLISH-001 (POL-1 a POL-4) y los pasos 4 a 8 de BL-067.
+- **Estado:** validada por Pablo, visual y funcional (2026-10-24 13:10Z), y en producción (BL-069). Hecha en DEV el 2026-10-24 07:34Z. Cierra CAM-POLISH-001 (POL-1 a POL-4) y los pasos 4 a 8 de BL-067.
 - **Fecha:** 2026-10-24
 - **Backlog:** BL-067 (restyle, pasos 4 a 8) y CAM-POLISH-001
 - **Propuesta aprobada:** `docs/propuestas/propuesta-cam-polish-001.html` (`d3c89f0`), aprobada por Pablo el 2026-10-24 a las 07:15Z con tres decisiones: bandeja oscura detrás de las tarjetas, anillo dorado «A UN PASO» en los íconos de los logros y un módulo de superficies reutilizable para Logros, Actividades, Raids y Strikes, Inventario y Personajes y Cuentas.
 - **Autorización:** Pablo autorizó BL-067 de punta a punta sin validaciones intermedias (07:15Z).
-- **Producción:** no. La decide Pablo.
+- **Producción:** sí, por orden de Pablo (BL-069, 2026-10-24): `gn-surface.js` primero e inerte, `gn-frame.js` último y aislado (15:20Z). Blobs idénticos a DEV. Vuelta atrás rápida: sacarlos de `js/modules.json`; total: rama `rollback/pre-restyle-ciclo` (`374b6f0`).
 
 ## Qué cambió para el usuario
 

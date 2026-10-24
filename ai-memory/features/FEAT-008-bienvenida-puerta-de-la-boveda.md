@@ -1,6 +1,6 @@
 # FEAT-008 — Bienvenida: la puerta de entrada de la Bóveda
 
-- Estado: EN DEV, validada por Pablo en pantalla paso a paso (WEL-1, WEL-2 y WEL-3; WEL-3 el 2026-10-23 05:54Z: «El rol de Shiruvana como guía de la Bóveda es el correcto»). Producción la decide Pablo.
+- Estado: EN PRODUCCIÓN desde 2026-10-23 (BL-062 y BL-063, orden de Pablo). Validada por Pablo en pantalla paso a paso (WEL-1, WEL-2 y WEL-3; WEL-3 el 2026-10-23 05:54Z: «El rol de Shiruvana como guía de la Bóveda es el correcto») y en la validación final del ciclo de restyle (2026-10-24 13:10Z). Sin cambios en DEV desde BL-063: BL-069 no la tocó.
 - Fecha: 2026-10-23
 - Backlog: BL-058 · Propuesta: WEL-0b (aprobada por Pablo 2026-10-23 05:00Z), maqueta en `docs/propuestas/propuesta-bienvenida-bl058.html` (`9b45215`) · Decisiones: DEC-032, DEC-033, DEC-024, DEC-025, DEC-021 · Riesgo: RSK-020 · Lecciones: LES-013, LES-028
 - Commits (gw2-factory-dev): `4ec91ff` WEL-0 · `9b45215`, `e696be8` WEL-0b y DEC-032 · `5ee02d8`, `08ea3a1` WEL-1 · `c55503e` WEL-2 · `01b0778` WEL-3 · `2c7184e`, `767e0fd` WEL-4a · `3b668ff` WEL-4b

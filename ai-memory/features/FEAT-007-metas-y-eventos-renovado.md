@@ -1,6 +1,6 @@
 # FEAT-007 — Metas y Eventos renovado
 
-- Estado: EN DEV, validada por Pablo en pantalla (2026-10-23 04:14Z: «coincide con la propuesta aprobada. Aprobado.»). Producción la decide Pablo.
+- Estado: EN PRODUCCIÓN desde 2026-10-23 (BL-062, orden de Pablo). Validada por Pablo en pantalla (2026-10-23 04:14Z: «coincide con la propuesta aprobada. Aprobado.») y en la validación final del ciclo de restyle (2026-10-24 13:10Z). Sin cambios en DEV desde BL-062: BL-069 no la tocó.
 - Fecha: 2026-10-23
 - Backlog: BL-057 (incluye BL-041) · Propuesta: MET-0 (aprobada por Pablo 2026-10-23 00:39Z, con la vista previa de infusiones como diferencial y sin «Vista compacta») · Decisiones: DEC-031, DEC-021, DEC-024, DEC-025 · Riesgo: RSK-020 · Lecciones: LES-017, LES-028
 - Commits (gw2-factory-dev): `e98a25a`, `8838217` MET-1 · `3375bfd`, `2361b96`, `d0540c7`, `2f298db` cierre de MET-1b · `28df57a`, `7f17458`, `30b0f18` MET-1c · `c381ed9`, `3630a56` MET-2 · `31fb0d4`, `14377ef` MET-2b

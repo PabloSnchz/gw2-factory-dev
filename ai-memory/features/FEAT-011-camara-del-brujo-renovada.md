@@ -1,6 +1,6 @@
 # FEAT-011 — La Cámara del Brujo renovada
 
-- **Estado:** validada por Pablo (CAM-0 a CAM-6) y en producción desde 2026-10-24 por orden de Pablo (BL-068, Armería y Cámara juntas). gw2-wallet-ligero `3cd00da`…`374b6f0`; vuelta atrás: rama `rollback/pre-camara-armeria` (`f72cde8`).
+- **Estado:** validada por Pablo (CAM-0 a CAM-6) y en producción desde 2026-10-24 por orden de Pablo (BL-068, Armería y Cámara juntas). `wv-view.js` 1.2.0 (guarda sobre las superficies de CAM-POLISH-001) en producción con BL-069 (2026-10-24 15:13Z). Validación final de Pablo del ciclo de restyle: 2026-10-24 13:10Z. gw2-wallet-ligero `3cd00da`…`374b6f0`; vuelta atrás: rama `rollback/pre-camara-armeria` (`f72cde8`).
 - **Fecha:** 2026-10-24
 - **Backlog:** BL-064, paso 2 (segundo módulo del restyle; el resto sigue en BL-067)
 - **Propuesta aprobada:** `docs/propuestas/propuesta-camara-bl064.html` (CAM-0)
@@ -27,7 +27,7 @@ La Cámara del Brujo habla el mismo idioma que la Cartera, Metas y Eventos, la B
 | CAM-3 | Tienda | `js/wv-shop-ui.js` 2.0.0, `js/wv-shop-manage.js` | validado |
 | CAM-4 | Todas las cuentas → Objetivos semanales | `js/wv-objectives-dashboard.js` 2.0.0 | validado |
 | CAM-5 | Compras fijadas | `js/wv-purchase-detail.js` 2.0.0 (91 → 28 KB), `js/wv-purchases-view.js` 1.0.0 | validado |
-| CAM-6 | Voz, contraste, teclado, limpieza | `js/wv-view.js` 1.1.0 (PATCH-022), `index.html` y `js/router.js` 2.18.0 (PATCH-024) | espera validación |
+| CAM-6 | Voz, contraste, teclado, limpieza | `js/wv-view.js` 1.1.0 (PATCH-022), `index.html` y `js/router.js` 2.18.0 (PATCH-024) | validado |
 
 ## CAM-6
 

@@ -6,7 +6,25 @@ Cada entrada dice si está en **producción** (`gw2-wallet-ligero`) o solo en **
 
 ---
 
-## 2026-10-23 — En DEV: la Armería renovada (BL-064, FEAT-010)
+## 2026-10-24 — En producción: Logros renovado, superficies y marco común (BL-067, BL-069, FEAT-012, FEAT-013)
+
+- **Logros con cabecera y tres pestañas**: «Casi listos», «Por categoría» y «Colecciones legendarias»; cuatro indicadores (puntos de logro, al alcance, a un paso y con recompensa) y mi línea solo si hay algo cerca.
+- **Tarjetas «te falta»**: el ícono oficial del logro destacado, «Te faltan N de M», barra verde que pasa a dorada desde el 95 %, recompensas con su ícono y «Wiki ↗». Los que están a un paso llevan anillo dorado y «A UN PASO».
+- **«Por categoría» agrupada** por expansión o modo, con el ícono oficial de cada categoría, buscador y «Con pendientes / Todas». El panel viejo de Logros de la barra lateral ya no está.
+- **«Ver en la Armería →»** cuando el logro da una legendaria o una pieza de una sola.
+- **Superficies y marco común**: bandeja oscura, tarjetas elevadas y barras con pista en la Cámara del Brujo, Logros, Actividades, Raids y Strikes, Inventario y Personajes y Cuentas; cabecera común con el ícono oficial de cada módulo. Se lee en los 19 themes, foco visible, movimiento reducido y 44 px en el celular. Sin cambios de comportamiento ni de datos.
+- **Lector de pantalla**: al filtrar Logros se anuncia cuántos quedan, ya no la grilla entera.
+- Sin claves nuevas en el navegador. Si no ves los cambios, recargá con Ctrl+F5 (RSK-020).
+- Vuelta atrás: rama `rollback/pre-restyle-ciclo`.
+
+## 2026-10-24 — En producción: la Cámara del Brujo renovada (BL-064, BL-068, FEAT-011)
+
+- **Cabecera** con la temporada, los resets con cuenta regresiva, la AA disponible, el avance del día y de la semana y «¿Por qué tarda?»; mi línea solo si hay algo para hacer.
+- **Tres pestañas**: Objetivos (Listos para reclamar, En curso y Reclamados), Tienda (−/+, fijados, «Gestionar» con «Deshacer») y Todas las cuentas (Objetivos semanales y Compras fijadas con −/+ por cuenta).
+- Se lee en los 19 themes. Desde BL-069, con las superficies del marco común: íconos de la Tienda a 52 px y lo fijado en dorado.
+- Vuelta atrás: rama `rollback/pre-camara-armeria` (BL-068) y `rollback/pre-restyle-ciclo` (BL-069).
+
+## 2026-10-23 — En producción desde el 2026-10-24: la Armería renovada (BL-064, BL-068, FEAT-010)
 
 - **Cabecera** con cuánto tenés («N de 206»), buscador que no distingue acentos ni mayúsculas y pestañas Catálogo / Mi cola.
 - **Filtros en una fila**: «Todas / Las tengo / Me faltan», tipo, expansión y generación.
