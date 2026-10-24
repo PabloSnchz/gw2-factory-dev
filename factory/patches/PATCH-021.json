@@ -1,0 +1,33 @@
+{
+  "id": "PATCH-021",
+  "summary": "BL-064 CAM-5: index.html pide js/wv-purchase-detail.js con ?v=2.0.0 (Todas las cuentas → Compras fijadas: números, −/+ por cuenta, «Gestionar» con «Deshacer»; de 91 KB a 28 KB, la vista en js/wv-purchases-view.js por manifiesto). LES-033: la versión y su ?v suben juntas, y el test de la Idea 55 pasa a fijar la 2.0.0 (la función de online no cambió).",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "43cdb0443834b8448a8816667e805bf7851513b8",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "src=\"js/wv-purchase-detail.js?v=1.14.0\"",
+          "text": "src=\"js/wv-purchase-detail.js?v=2.0.0\""
+        }
+      ]
+    },
+    {
+      "path": "tests/idea55.wv-online-parallel.test.js",
+      "base_sha": "f96438052978d79d38a0e311a9bc96caf99fca51",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "/Versión: 1\\.14\\.0/.test(src), 'la cabecera de wv-purchase-detail.js declara v1.14.0'",
+          "text": "/Versión: 2\\.0\\.0/.test(src), 'la cabecera de wv-purchase-detail.js declara v2.0.0 (BL-064 CAM-5; la 1.14.0 trajo la Idea 55)'"
+        },
+        {
+          "op": "replace",
+          "anchor": "mWvpd[1] === '1.14.0', 'el buster de wv-purchase-detail.js subio a 1.14.0",
+          "text": "mWvpd[1] === '2.0.0', 'el buster de wv-purchase-detail.js es 2.0.0, igual que su cabecera"
+        }
+      ]
+    }
+  ]
+}
