@@ -1,0 +1,79 @@
+{
+ "id": "PATCH-053",
+ "summary": "BL-070 RAI-4 tanda 4b: status y backlog; wv-camara-a11y deja de depender de la hora a la que corre.",
+ "files": [
+  {
+   "path": "tests/wv-camara-a11y.test.cjs",
+   "base_sha": "443ac48c60088899982b51974a61599b6255216c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    daily: { objectives: [{ progress_current: 0, progress_complete: 1, acclaim: 10 }] } });\n  await flush();\n  assert.match(z.calls",
+     "text": "    // Diario hecho y cobrado: con el reloj real, entre las 23:00 y las 00:00 UTC ganaría la línea del reset diario.\n    daily: { objectives: [{ progress_current: 1, progress_complete: 1, acclaim: 10, claimed: true }] } });\n  await flush();\n  assert.match(z.calls"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "a50d347fc872634c69c8320be06a08cc2cd03b53",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " y 4a (Icebrood Saga y Vieja Corte del León, 21:02Z) HECHAS, esperan validación en DEV.",
+     "text": ", 4a (Icebrood Saga y Vieja Corte del León, 21:02Z) y 4b (End of Dragons y Secrets of the Obscure, 23:10Z) HECHAS, esperan validación en DEV; Visions of Eternity espera una fuente verificada del Nexo de la Eternidad."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 21:02Z",
+     "text": "Última actualización: 2026-10-24 23:12Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tandas 2, 3 y 4a publicadas; sigue la tanda 4b (End of Dragons, Secrets of the Obscure y Visions of Eternity, 8 encuentros) en el próximo turno de investigación. Pablo puede validar las tandas 2, 3 y 4a en DEV cuando quiera.",
+     "text": "Tandas 2, 3, 4a y 4b publicadas: 44 de los 46 encuentros tienen «Cómo se pelea». Faltan los 2 de Visions of Eternity: el Nexo de la Eternidad no tiene todavía página de recorrido en la wiki oficial ni guía en MetaBattle (solo guías de terceros), y no publico contenido provisorio (LES-030); el Claro del Guardián ya está investigado y sale junto con el Nexo. Pablo puede validar las tandas 2 a 4b en DEV cuando quiera; después siguen RAI-5 (retiro de `strike-tracker.js`) y RAI-6 (revisión final, FEAT-014)."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-4 tanda 4a — «Cómo se pelea» de The Icebrood Saga (7) y Vieja Corte del León. HECHO.\nArchivos:\n- assets/data/raids/mechanics/ibs.json (`ebfdf47`)\n- assets/data/raids/mechanics/core.json (`4a1caa7`)\n- tests/raids-sheet.test.cjs (`67d0653`)\n\nAdemás: PATCH-050 (índice `4e9c0a7` y tests); sin cambios de código.\n",
+     "text": "BL-070 RAI-4 tanda 4b — «Cómo se pelea» de End of Dragons (4) y Secrets of the Obscure (2). HECHO.\nArchivos:\n- assets/data/raids/mechanics/eod.json (`ac2267c`)\n- assets/data/raids/mechanics/soto.json (`263ba19`)\n- tests/raids-sheet.test.cjs (`153c35c`)\n\nAdemás: PATCH-052 (índice `797d85a` y tests); PATCH-053 (arreglo de `tests/wv-camara-a11y.test.cjs`, que dependía del reloj, y esta documentación); sin cambios de código.\n\nAntes: RAI-4 tanda 4a — The Icebrood Saga y Vieja Corte del León (`ibs.json` `ebfdf47`, `core.json` `4a1caa7`, PATCH-050).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-4 tanda 4a hecha (2026-10-24 21:02Z)",
+     "text": "Último hecho: RAI-4 tanda 4b hecha (2026-10-24 23:10Z): «Cómo se pelea» de End of Dragons (Escondite Filoetéreo, Chatarrería de Xunlai Jade, Mirador de Kaineng y Templo de la Cosecha) y Secrets of the Obscure (Observatorio Cósmico y Templo de Febe). Datos en `assets/data/raids/mechanics/eod.json` (`ac2267c`, 15,8 KB) y `soto.json` (`263ba19`, 7,5 KB); el índice suma las dos (`mechanics/index.json` `797d85a`, PATCH-052); sin tocar código. Fuentes: la página de cada encuentro en la wiki oficial y su guía de MetaBattle, consultadas el 2026-10-24; el Templo de la Cosecha solo de la wiki y el Templo de Febe solo de MetaBattle (la wiki no tiene su página). «En modo desafío cambia» en los 4 de End of Dragons y en el Observatorio Cósmico, con la vida y el tiempo de la wiki (Mai Trin 8.898.600 y el Eco 40.082.400 en 10 minutos; Ankka 52.173.072; el Ministro Li 42.469.920 en 16 minutos; Dagda 56.626.560 en 10 minutos). En el Mirador de Kaineng parte del modo desafío sale de MetaBattle porque la página de la wiki llegó cortada. El Templo de Febe no muestra «En modo desafío cambia»: no encontré fuente verificada. Descarté las guías de terceros (GuildJen, Snow Crows, Leykeep, tutorial.games). Visions of Eternity no sale todavía: el Nexo de la Eternidad no tiene página de recorrido en la wiki oficial (solo las de tres habilidades de Vloxx) ni guía en MetaBattle, y el test exige que cada tanda traiga todos sus encuentros; el Claro del Guardián está listo y sale con el Nexo. `tests/raids-sheet.test.cjs` (`153c35c`, 18 tests; el humo de «sin tanda» pasa al Claro del Guardián); RUN-034 verde en Raids (18/18). La suite tenía una falla ajena a Raids: `tests/wv-camara-a11y.test.cjs` usaba el reloj real y entre las 23:00 y las 00:00 UTC ganaba la línea del reset diario; lo arreglé en PATCH-053 sin cambiar lo que comprueba. Antes, RAI-4 tanda 4a hecha (2026-10-24 21:02Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "tandas 2 Heart of Thorns, 3 Path of Fire y 4a Icebrood Saga y Vieja Corte del León HECHAS; sigue la 4b)",
+     "text": "tandas 2 Heart of Thorns, 3 Path of Fire, 4a Icebrood Saga y Vieja Corte del León y 4b End of Dragons y Secrets of the Obscure HECHAS; Visions of Eternity espera fuente verificada)"
+    },
+    {
+     "op": "replace",
+     "anchor": "The Icebrood Saga y Vieja Corte del León.\n- BL-069",
+     "text": "The Icebrood Saga, Vieja Corte del León, End of Dragons y Secrets of the Obscure (44 de 46); Visions of Eternity espera una fuente verificada del Nexo.\n- BL-069"
+    },
+    {
+     "op": "replace",
+     "anchor": "Escondite Filoetéreo todavía tiene que decir que llega en una próxima tanda.",
+     "text": "De End of Dragons y Secrets of the Obscure mirá el Mirador de Kaineng (5 fases y «En modo desafío cambia»), el Templo de la Cosecha y el Templo de Febe (sin «En modo desafío cambia»: no encontré fuente verificada). El Claro del Guardián y el Nexo de la Eternidad todavía tienen que decir que llegan en una próxima tanda."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-059] El frente de Shiruvana queda aprobado",
+     "text": "- [BL-070] RAI-4: `tests/wv-camara-a11y.test.cjs` fallaba solo entre las 23:00 y las 00:00 UTC porque usaba el reloj real; lo arreglé en PATCH-053 (el objetivo diario del caso queda hecho y cobrado). Regla: un test de la voz no puede depender de la hora a la que corre.\n- [BL-059] El frente de Shiruvana queda aprobado"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "17826b8e06e813c16742874dc3bb7fb05973a852",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "en la tanda 4b. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo.",
+     "text": "en la tanda 4b. RAI-4 tanda 4b hecha (2026-10-24 23:10Z): «Cómo se pelea» de End of Dragons (Escondite Filoetéreo, Chatarrería de Xunlai Jade, Mirador de Kaineng y Templo de la Cosecha) y Secrets of the Obscure (Observatorio Cósmico y Templo de Febe). Datos en `assets/data/raids/mechanics/eod.json` (`ac2267c`, 15,8 KB) y `soto.json` (`263ba19`, 7,5 KB); índice `797d85a` (PATCH-052); sin tocar código. Fuentes: wiki oficial y MetaBattle, consultadas el 2026-10-24 (el Templo de la Cosecha solo de la wiki; el Templo de Febe solo de MetaBattle). «En modo desafío cambia» en los 4 de End of Dragons y en el Observatorio Cósmico; el Templo de Febe no lo muestra porque no encontré fuente verificada; en el Mirador de Kaineng parte sale de MetaBattle porque la página de la wiki llegó cortada. Visions of Eternity espera: el Nexo de la Eternidad no tiene página de recorrido en la wiki oficial ni guía en MetaBattle, y no publico contenido provisorio (LES-030); el Claro del Guardián está listo y sale con el Nexo. `tests/raids-sheet.test.cjs` (`153c35c`, 18 tests); RUN-034 verde en Raids. Arreglé `tests/wv-camara-a11y.test.cjs`, que fallaba entre las 23:00 y las 00:00 UTC por usar el reloj real (PATCH-053). Siguen RAI-5 y RAI-6. SHIRUVANA-ART-001 queda en pausa por pedido de Pablo."
+    }
+   ]
+  }
+ ]
+}
