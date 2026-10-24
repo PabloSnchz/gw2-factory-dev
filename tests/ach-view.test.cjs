@@ -124,10 +124,10 @@ const fire = (x, type, attrs, ev) => {
 };
 const voices = (x) => x.calls.filter((c) => c[0] === 'voice').map((c) => c[2]);
 
-test('versión 1.0.0, la misma que pide js/modules.json, y por manifiesto', () => {
-  assert.match(SRC, /\* Versión: 1\.0\.0 /);
+test('versión 1.1.0, la misma que pide js/modules.json, y por manifiesto', () => {
+  assert.match(SRC, /\* Versión: 1\.1\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8'));
-  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.0.0' }]);
+  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.1.0' }]);
   assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /ach-view\.js/, 'se carga por el manifiesto, no por index.html');
   assert.match(SRC, /readyState === 'loading'[^\n]*DOMContentLoaded', init\);\s*else if \(doc\) init\(\);/, 'arranca aunque cargue tarde');
 });
@@ -229,6 +229,23 @@ test('«Por categoría»: lista con íconos oficiales; al tocar una, sus pendien
   h = x.host().innerHTML;
   assert.ok(!x.panel.classes.has('achx-cats-on'));
   assert.match(h, /<p>Tenés 1 logro pendiente en «Fractales»\.<\/p>/);
+});
+
+test('LOG-3: con ach-categories.js cargado, «Por categoría» es suya; el clic en una categoría sigue igual', () => {
+  const x = load();
+  const got = [];
+  x.win.AchCategories = { html: (snap, calc) => { got.push([snap.loaded, typeof calc.computeProgress]); return '<button type="button" class="achg-row" data-achx-cat="10">Grupos</button>'; } };
+  fire(x, 'click', { 'data-achx-tab': 'cats' });
+  const h = x.host().innerHTML;
+  assert.match(h, /<div id="achxCats" class="achx-cats" role="tabpanel" aria-labelledby="achxTab-cats"><button type="button" class="achg-row" data-achx-cat="10">Grupos<\/button><\/div>/);
+  assert.doesNotMatch(h, /achx-clist/, 'sin la lista de antes');
+  assert.deepEqual(got, [[true, 'function']], 'recibe el estado y el cálculo de achievements.js');
+  fire(x, 'click', { 'data-achx-cat': '10' });
+  assert.deepEqual(x.calls.filter((c) => c[0] === 'setFilter').map((c) => c[1]), ['{"cat":"10","pct":0}']);
+  x.win.AchCategories = { html: () => { throw new Error('x'); } };
+  fire(x, 'click', { 'data-achx-tab': 'cats' });
+  assert.match(x.host().innerHTML, /achx-clist/, 'si falla, la lista de antes');
+  assert.match(SRC, /a\.id === 'achgSearch' \? '#achgSearch'/, 'el buscador no pierde el foco al redibujar');
 });
 
 test('«Colecciones legendarias» usa el filtro de legendarias y «Casi listos» vuelve al que tenías', () => {

@@ -1,7 +1,9 @@
 /*!
  * js/ach-view.js — Logros: cabecera, pestañas y mi línea (BL-067, LOG-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-24)
+ * Versión: 1.1.0 (2026-10-24)
+ *  - 1.1.0 (LOG-3): «Por categoría» la arma js/ach-categories.js si está cargado (grupos por
+ *    expansión o modo); si no, queda la lista de antes. Devuelve el foco al buscador al redibujar.
  *
  * Capa de vista sobre achievements.js (3.3.0 o más), como wv-view.js sobre la Cámara:
  *  - Cabecera con el ícono oficial de Logros, el dato en el subtítulo, «Al alcance» y
@@ -18,7 +20,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[AchView]';
   var ICON = 'assets/icons/155059.png';
   var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
@@ -182,6 +184,7 @@
 
   function catsHTML(m) {
     var h = ['<div id="achxCats" class="achx-cats" role="tabpanel" aria-labelledby="achxTab-cats">'];
+    if (m.catsBody != null) return h[0] + m.catsBody + '</div>';
     if (!m.loaded || !m.cats.length) {
       h.push('<p class="achx-note">' + esc(m.loaded ? 'No tenés logros pendientes.' : subtitle(m)) + '</p></div>');
       return h.join('');
@@ -277,16 +280,19 @@
   function focusKey() {
     var a = doc.activeElement;
     if (!a || !a.getAttribute) return null;
-    var t = a.getAttribute('data-achx-tab'), x = a.getAttribute('data-achx');
-    return t ? '[data-achx-tab="' + t + '"]' : x ? '[data-achx="' + x + '"]' : null;
+    var t = a.getAttribute('data-achx-tab'), x = a.getAttribute('data-achx'), g = a.getAttribute('data-achg-mode');
+    return t ? '[data-achx-tab="' + t + '"]' : x ? '[data-achx="' + x + '"]' : g ? '[data-achg-mode="' + g + '"]' : a.id === 'achgSearch' ? '#achgSearch' : null;
   }
 
   function render() {
     var A = api(), panel = byId('achievementsPanel');
     if (!A || !panel) return null;
     var host = ensureHost(panel);
-    var m = buildModel(A.getSnapshot(), A._calc, st.chosen);
+    var snap = A.getSnapshot(), m = buildModel(snap, A._calc, st.chosen), C = root.AchCategories;
     st.chosen = m.tab;
+    if (m.tab === 'cats' && m.loaded && C && typeof C.html === 'function') {
+      try { m.catsBody = C.html(snap, A._calc); } catch (e) { if (root.console) root.console.warn(LOG, 'categorías', e); }
+    }
     var fk = host.contains && host.contains(doc.activeElement) ? focusKey() : null;
     host.innerHTML = headHTML(m);
     cls(panel, 'achx-cats-on', m.tab === 'cats');
