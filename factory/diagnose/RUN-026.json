@@ -1,0 +1,8 @@
+{
+  "id": "RUN-026",
+  "summary": "BL-070 RAI-3: recompensas y contenido de los cofres de los 46 encuentros desde la wiki oficial (API de MediaWiki)",
+  "tests": [
+    "tests/probe-rai3-wiki-a.smoke.cjs",
+    "tests/probe-rai3-wiki-b.smoke.cjs"
+  ]
+}
