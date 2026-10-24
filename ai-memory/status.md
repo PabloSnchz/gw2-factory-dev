@@ -1,21 +1,22 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-067 paso 3 — Logros. LOG-0 entregado: diagnóstico, problemas, objetivos, maquetas de computadora y celular, GDS, mi voz y plan LOG-1 a LOG-5 (`docs/propuestas/propuesta-logros-bl067.html`). Espera la aprobación de Pablo.
-Motivo: Pablo autorizó LOG-0 (2026-10-24 04:37Z) después de validar Cartera, Metas y Eventos, Bienvenida y Cámara del Brujo.
+Estado: EN CURSO
+Tarea actual: BL-067 paso 3 — Logros. LOG-1 en curso: cabecera, tres pestañas y mi línea en `js/ach-view.js` (por manifiesto); `achievements.js` publica su estado y se achica.
+Motivo: Pablo aprobó LOG-0 (2026-10-24 05:00Z): tres pestañas, categorías agrupadas por expansión o modo, tarjetas «te falta» e integración con la Armería. Pidió además mantener destacada la iconografía oficial de Guild Wars 2 en las tarjetas.
 Fase: F1 — Visibilidad
-Etapa actual: PRODUCT
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 04:45Z
-Próxima acción: con la aprobación de Pablo (y sus 4 decisiones), LOG-1: cabecera, pestañas y mi línea en `js/ach-view.js` por manifiesto; `achievements.js` se achica.
+Última actualización: 2026-10-24 05:20Z
+Próxima acción: publicar `js/ach-view.js`, su test y `js/modules.json`; después PATCH-027 (achievements.js 3.3.0, `?v` en index.html, presupuesto de tamaño y test conjunto).
 
 Micro-ciclo:
-LOG-0 — Propuesta visual de Logros. HECHO, espera aprobación.
+LOG-1 — Cabecera, pestañas y mi línea en Logros. EN CURSO.
 Archivos:
-- docs/propuestas/propuesta-logros-bl067.html (97980827)
+- js/ach-view.js 1.0.0 (nuevo), tests/ach-view.test.cjs y js/modules.json
+- PATCH-027: js/achievements.js 3.3.0, index.html (`?v`), tools/size-budget.json y el test conjunto
 - ai-memory/status.md
 
-Último hecho: leí `achievements.js` 3.2.1 (52,4 KB, congelado) y `achievements-theme.js` 1.1.1 (mismos blobs en DEV y producción). Hallazgos ALTO: el panel de Logros («Más cercanos» y 30 categorías) vive dentro de la Sidebar de navegación; la barra es roja justo en lo que está por terminarse; colores fijos que ignoran el theme. MEDIO: desplegables sin teclado, filtros que se desincronizan, cuatro cifras de AP sin jerarquía, categorías en una lista alfabética enorme, un pedido por título o maestría y en inglés. BAJO: «⚠» sin motivo, borde `3px solid null`, enlaces a la wiki con nombres en español, código muerto. Propuesta: cabecera con «AP al alcance», tres pestañas (Casi listos, Por categoría, Colecciones legendarias), tarjetas «te falta» y barra verde → dorada.
+Último hecho: LOG-0 aprobado. Probé en local la cabecera nueva contra el `achievements.js` real: 17/17.
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
@@ -26,7 +27,7 @@ BL-064 (cerrada y validada por Pablo, 2026-10-24 02:25Z):
 2. Cámara del Brujo: CAM-0 a CAM-6 validados (FEAT-011). En producción y validada (BL-068).
 
 BL-067 (READY, sigue el mismo plan aprobado):
-3. Logros. ← LOG-0 entregado, espera aprobación.
+3. Logros. ← LOG-0 aprobado; LOG-1 en curso.
 4. Actividades (después de decidir BL-055).
 5. Raids y Strikes.
 6. Inventario y Personajes.
@@ -48,7 +49,6 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-067] Decisión: aprobá la propuesta de Logros (`docs/propuestas/propuesta-logros-bl067.html`). Recomiendo sí a las 4 decisiones: tres pestañas; categorías agrupadas por expansión o modo (un pedido más a la API, con caché); tarjetas «te falta» con barra verde → dorada, nunca roja; colecciones legendarias con salto a la Armería.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
@@ -56,6 +56,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Para tu información
 
+- [BL-067] Regla de Pablo para Logros: el ícono oficial de cada logro se queda en la tarjeta, destacado. Se puede reorganizar la tarjeta, pero no reemplazar ni ocultar el ícono. Lo vigila `tests/ach-view.test.cjs`.
 - [BL-064] Deuda registrada (DEBT-CAM-1): la Tienda, Objetivos semanales y Compras fijadas siguen leyendo la lista de cuentas desde la clave vieja `gw2_keys` (lectura tolerada que vigila idea61). Pasarla a `Storage` toca ese guard y va en un ciclo propio.
 - [BL-064] Quedan ocultos y sin borrar el título viejo de la Cámara, la línea de temporada y la nota de sincronización (`router.js` y `wizards-vault.js` todavía los usan). Se van cuando se renueven esos dos archivos.
 - [BL-065] Zonas de hoy: `index.html` (64.8 KB) y `router.js` (65.6 KB) siguen congelados pero con el techo más bajo; `welcome-panel.js` quedó congelado por 1 byte y sale con el próximo recorte; en advertencia `converter-modal.js`, `activities-theme.js` y `css/theme-polish.css`; excepciones, solo los datos generados de la Armería.
