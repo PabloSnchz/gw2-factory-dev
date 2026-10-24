@@ -5,6 +5,8 @@
   "hot": "hot.json",
   "pof": "pof.json",
   "ibs": "ibs.json",
-  "core": "core.json"
+  "core": "core.json",
+  "eod": "eod.json",
+  "soto": "soto.json"
  }
 }

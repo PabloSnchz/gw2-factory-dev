@@ -20,6 +20,8 @@ const HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));
 const POF = JSON.parse(fs.readFileSync(path.join(MDIR, 'pof.json'), 'utf8'));
 const IBS = JSON.parse(fs.readFileSync(path.join(MDIR, 'ibs.json'), 'utf8'));
 const CORE = JSON.parse(fs.readFileSync(path.join(MDIR, 'core.json'), 'utf8'));
+const EOD = JSON.parse(fs.readFileSync(path.join(MDIR, 'eod.json'), 'utf8'));
+const SOTO = JSON.parse(fs.readFileSync(path.join(MDIR, 'soto.json'), 'utf8'));
 const byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));
 const groupOf = (e) => CAT.groups.find((g) => g.id === e.group);
 
@@ -165,7 +167,7 @@ test('mi línea en la ficha: solo hechos del catálogo y de tu semana', () => {
 const mech = (id) => ({ e: JW.encounters[id], roles: JW.roles, sources: JW.sources, verified: JW.verified });
 
 test('mecánicas por tandas: cada archivo del índice existe y cada dato tiene su fuente', () => {
-  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof', 'ibs', 'core'], 'tandas publicadas: Janthir, Heart of Thorns, Path of Fire, The Icebrood Saga y juego base');
+  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot', 'pof', 'ibs', 'core', 'eod', 'soto'], 'tandas publicadas: Janthir, Heart of Thorns, Path of Fire, The Icebrood Saga, juego base, End of Dragons y Secrets of the Obscure');
   for (const [exp, f] of Object.entries(MIDX.files)) {
     assert.match(f, /^[\w-]+\.json$/);
     const d = JSON.parse(fs.readFileSync(path.join(MDIR, f), 'utf8'));
@@ -323,6 +325,30 @@ test('tanda 4a: los 7 encuentros de The Icebrood Saga y Vieja Corte del León', 
   assert.doesNotMatch(JSON.stringify([IBS, CORE]), /guildjen|hardstuck|mukluk|snowcrows/i);
 });
 
+test('tanda 4b: End of Dragons y Secrets of the Obscure; Visions of Eternity espera una fuente verificada', () => {
+  const xm = (d, id) => ({ e: d.encounters[id], roles: d.roles, sources: d.sources, verified: d.verified });
+  const of = (exp) => CAT.encounters.filter((e) => groupOf(e).expansion === exp).map((e) => e.id);
+  assert.deepEqual(Object.keys(EOD.encounters), of('eod'), 'en el orden del catálogo');
+  assert.deepEqual(Object.keys(SOTO.encounters), of('soto'), 'en el orden del catálogo');
+  assert.deepEqual(Object.keys(EOD.encounters).filter((id) => EOD.encounters[id].cm), of('eod'), 'los 4 de End of Dragons con modo desafío');
+  assert.ok(!SOTO.encounters.temple_of_febe.cm, 'Templo de Febe: sin cambios de modo desafío hasta tener fuente');
+  assert.ok(!('voe' in MIDX.files), 'Visions of Eternity espera una fuente verificada del Nexo de la Eternidad');
+  for (const [d, id, page] of [[EOD, 'aetherblade_hideout', 'Aetherblade_Hideout'], [EOD, 'xunlai_jade_junkyard', 'Xunlai_Jade_Junkyard'], [EOD, 'kaineng_overlook', 'Kaineng_Overlook'], [EOD, 'harvest_temple', 'Harvest_Temple'], [SOTO, 'cosmic_observatory', 'Cosmic_Observatory']]) {
+    const h = S.fightHTML(model(id), xm(d, id));
+    assert.match(h, new RegExp('href="https:\\/\\/wiki\\.guildwars2\\.com\\/wiki\\/' + page + '"'), id + ': página de la wiki');
+    assert.match(h, /En modo desafío cambia/, id + ': modo desafío');
+    assert.match(h, /consultadas? el 2026-10-24/);
+  }
+  const ko = S.fightHTML(model('kaineng_overlook'), xm(EOD, 'kaineng_overlook'));
+  assert.equal((ko.match(/<ol class="rs-phases">[\s\S]*?<\/ol>/)[0].match(/<li>/g) || []).length, 5);
+  assert.match(ko, /Ecualizador de vitalidad/);
+  const tf = S.fightHTML(model('temple_of_febe'), xm(SOTO, 'temple_of_febe'));
+  assert.match(tf, /Petrificar/);
+  assert.match(tf, /Temple_of_Febe_Raid_Encounter_Strategy_Guide/);
+  assert.doesNotMatch(tf, /En modo desafío cambia/);
+  assert.doesNotMatch(JSON.stringify([EOD, SOTO]), /guildjen|hardstuck|mukluk|snowcrows|leykeep|tutorial\.games/i);
+});
+
 test('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {
   assert.match(S.CSS, /max-width:720px[\s\S]*\.rs-tabs\{display:flex\}/, 'las pestañas solo en el celular');
   assert.match(S.CSS, /#rsRoot\[data-pane=rew\] \[data-rs-pane=fight\],#rsRoot\[data-pane=fight\] \[data-rs-pane=rew\]\{display:none\}/);
@@ -381,7 +407,7 @@ function boot(o) {
     scrollY: 640, scrollTo: (x, y) => scrolls.push(y),
     fetch: (u) => {
       fetches.push(u);
-      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /mechanics\/pof/.test(u) ? POF : /mechanics\/ibs/.test(u) ? IBS : /mechanics\/core/.test(u) ? CORE : /catalog/.test(u) ? CAT : null;
+      const body = /rewards/.test(u) ? RW : /mechanics\/index/.test(u) ? (o.idx || MIDX) : /mechanics\/jw/.test(u) ? JW : /mechanics\/hot/.test(u) ? HOT : /mechanics\/pof/.test(u) ? POF : /mechanics\/ibs/.test(u) ? IBS : /mechanics\/core/.test(u) ? CORE : /mechanics\/eod/.test(u) ? EOD : /mechanics\/soto/.test(u) ? SOTO : /catalog/.test(u) ? CAT : null;
       return Promise.resolve(body ? { ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(body))) } : { ok: false, status: 404 });
     },
     Storage: { STORAGE_KEYS: { ACCOUNT_SELECTED: 'gn:account:selected' }, get: (k) => (k === 'gn:account:selected' ? 'TOKEN' : null), getRaw: () => 'raids', set() {} },
@@ -467,8 +493,11 @@ test('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestaña
   assert.match(rs.innerHTML, /Triple amenaza/);
   assert.deepEqual(mf().slice(4), ['assets/data/raids/mechanics/core.json'], 'el juego base se pide al abrir su ficha');
   await sb.RaidsSheet.open('aetherblade_hideout');
+  assert.match(rs.innerHTML, /Destrucción concentrada/);
+  assert.deepEqual(mf().slice(5), ['assets/data/raids/mechanics/eod.json'], 'End of Dragons se pide al abrir su primera ficha');
+  await sb.RaidsSheet.open('guardians_glade');
   assert.match(rs.innerHTML, /llegan en una próxima tanda/);
-  assert.equal(mf().length, 5, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
+  assert.equal(mf().length, 6, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');
   sb.RaidsSheet.close();
   await sb.RaidsSheet.open('decima');
   assert.equal(rs.getAttribute('data-pane'), 'rew', 'abrir desde la lista vuelve a Recompensas');
