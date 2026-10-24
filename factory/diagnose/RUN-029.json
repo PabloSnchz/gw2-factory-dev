@@ -1,0 +1,14 @@
+{
+  "id": "RUN-029",
+  "summary": "BL-070 RAI-3 después de PATCH-043: index-versions con raids-sheet.js declarando su versión, ai-memory con LES-038 y la suite de Raids",
+  "tests": [
+    "tests/index-versions.test.cjs",
+    "tests/ai-memory.test.cjs",
+    "tests/raids-sheet.test.cjs",
+    "tests/raids-view.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/dev-pages.test.cjs",
+    "tests/index-identity.test.cjs"
+  ]
+}
