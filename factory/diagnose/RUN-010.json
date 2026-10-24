@@ -1,0 +1,16 @@
+{
+  "id": "RUN-010",
+  "summary": "BL-064 CAM-5: después de PATCH-021, Compras fijadas (controlador y vista), el online en paralelo de la Idea 55, versiones, tamaño, claves (idea61, T19-c, hb89) y el resto de la Cámara siguen verdes",
+  "tests": [
+    "tests/wv-purchase-detail.test.cjs",
+    "tests/wv-purchases-view.test.cjs",
+    "tests/idea55.wv-online-parallel.test.js",
+    "tests/index-versions.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/idea61-claves-congeladas.test.js",
+    "tests/t19c-lectores-legacy.test.js",
+    "tests/hb89-premisa-raw-selected.test.js",
+    "tests/wv-view.test.cjs",
+    "tests/boot.test.cjs"
+  ]
+}
