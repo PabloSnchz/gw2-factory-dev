@@ -22,9 +22,9 @@ Texto: `EVOLVING` (reemplaza a FASTBOOT: describe un estado), barra de progreso 
 |---|---|---|---|
 | Original (plana) | `art.py` | `evolving-*.png` | Ilustración vectorial plana, fondo obsidiana. |
 | Anime | `art_anime.py` (reusa la escena de `art.py`) | `evolving-anime-*.png` | Cielo violeta-magenta con rayos desde el gato, líneas de velocidad, contorno de tinta, sombreado cel en dos tonos, ojos anime con brillos, destellos de 4 puntas y subtítulo 進化中 («evolucionando»). |
-| Realista | IA externa (no se puede con código) | — | `prompts.md`: escena base, prompts para Midjourney, ChatGPT/Gemini y Stable Diffusion, y reglas para que siga siendo nuestra obra. |
+| Realista / anime con IA | Gemini (recomendado) o ChatGPT | — | `prompts.md`: fotos reales de referencia de Pablo y de la persona en quien se basa Shiruvana (con su consentimiento), escena base y reglas. |
 
-La variante anime con código es una aproximación (póster plano con estética anime), no un dibujo de ilustrador. Para anime «de serie» o realismo, `prompts.md`.
+La variante anime con código es una aproximación (póster plano con estética anime), no un dibujo de ilustrador.
 
 ## Paleta
 
@@ -66,7 +66,7 @@ La fuente tiene que incluir japonés para el 進化中 (por ejemplo Noto Sans CJ
 
 - El gato es la silueta de la marca, no un animal: sin pelo, bigotes ni boca.
 - Los ojos ámbar siempre encendidos.
-- Shiruvana sale del avatar oficial ilustrado, con ropa sobria; nunca de la foto de una persona real.
+- Shiruvana: en las versiones dibujadas, desde el avatar oficial; en las versiones con IA, desde la foto real que aporta Pablo, con el consentimiento de esa persona. Ropa sobria. Las fotos reales nunca se suben al repo.
 - Pablo señala y sostiene el plano; Shiruvana construye.
 
 ## Pendiente (no implementar sin pedido de Pablo)
