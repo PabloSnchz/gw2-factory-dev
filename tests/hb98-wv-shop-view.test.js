@@ -127,15 +127,15 @@ console.log('\n== [4] CONTROL: el escritor correcto tiene que pasar ==');
 }
 console.log('  (sin este control, un arnes que dijera "CONGELADA" siempre passes igual)');
 
-console.log('\n== [5] La copia de router.js sigue siendo alcanzable o no ==');
-// No se afirma que sea codigo muerto: se afirma lo medido, que saveView y
-// saveLegacyFilter tienen UN solo caller cada una, los dos dentro del bloque
-// que renderShopArea/ensureLoadTab cortan cuando WVShopUI existe.
+console.log('\n== [5] router.js ya no tiene la copia de la Tienda (BL-064 CAM-6) ==');
+// Antes se medía que saveView y saveLegacyFilter tenían un solo caller cada una, dentro
+// de la copia de respaldo. En CAM-6 esa copia se fue: la vista y el filtro los escribe
+// solo wv-shop-ui.js, con Storage.set (lo que mide la última verificación).
 const routerSrc = leer('js/router.js');
 const callers = (re) => (routerSrc.match(re) || []).length;
-t('saveView tiene 1 solo caller', callers(/saveView\(/g) === 2, // definicion + 1 uso
+t('router.js ya no escribe la vista de la Tienda', callers(/saveView\(/g) === 0,
   'cuenta ' + callers(/saveView\(/g));
-t('saveLegacyFilter tiene 1 solo caller', callers(/saveLegacyFilter\(/g) === 2,
+t('router.js ya no escribe el filtro de Legado', callers(/saveLegacyFilter\(/g) === 0,
   'cuenta ' + callers(/saveLegacyFilter\(/g));
 t('las 2 escrituras pasan por Storage.set, no por localStorage crudo',
   /Storage\.set\(Storage\.STORAGE_KEYS\.WV_SHOP_VIEW/.test(shopSrc)
