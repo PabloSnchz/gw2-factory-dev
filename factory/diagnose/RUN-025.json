@@ -1,0 +1,16 @@
+{
+  "id": "RUN-025",
+  "summary": "BL-070 RAI-2: raids-view.js por el manifiesto; tests propios, cargador, presupuesto, marco común, interruptor viejo Raids/Strikes y claves del navegador siguen verdes",
+  "tests": [
+    "tests/raids-view.test.cjs",
+    "tests/raids-catalog.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/gn-frame.test.cjs",
+    "tests/hb78-preferencia-pestana.test.js",
+    "tests/hb136-escena2-solo-strikes.test.js",
+    "tests/hb101-t12-camino.test.js",
+    "tests/idea61-claves-congeladas.test.js",
+    "tests/legacy-census.test.cjs"
+  ]
+}
