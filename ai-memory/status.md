@@ -1,16 +1,20 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-069 — Promoción del ciclo de restyle a producción. HECHA (2026-10-24 15:21Z).
-Motivo: Pablo validó BL-057, BL-058, BL-064 y BL-067 (2026-10-24 13:10Z) y aprobó la promoción a producción, plan A (15:04Z).
+Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 propuesta ENTREGADA (2026-10-24 15:49Z).
+Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.
 Fase: F1 — Visibilidad
-Etapa actual: DOCUMENTATION
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 15:27Z
-Próxima acción: esperar a Pablo. Él valida BL-069 en producción. Después sigue SHIRUVANA-ART-001, cuando él la abra; no empiezo BL-059 ni otro frente.
+Última actualización: 2026-10-24 15:52Z
+Próxima acción: esperar a Pablo. Él decide RAI-0 (D1 a D4). Con su aprobación empiezo RAI-1 (catálogo verificado de los 45 encuentros, miniaturas oficiales y prueba de los logros semanales); sin código antes.
 
 Micro-ciclo:
-BL-069 — promoción del ciclo de restyle a producción (PRD-0 a PRD-9). HECHO.
+BL-070 RAI-0 — propuesta visual de Raids renovado. ENTREGADA.
+Archivos:
+- docs/propuestas/propuesta-raids-bl070.html (`366801f`)
+
+Anterior: BL-069 — promoción del ciclo de restyle a producción (PRD-0 a PRD-9). HECHO.
 Archivos:
 - gw2-wallet-ligero: gn-surface, ach-view, ach-cards, ach-categories, ach-armory, wv-view 1.2.0, achievements 3.6.0, index.html, gn-frame y modules.json; achievements-theme.js borrado
 - PATCH-035 (FEAT-007, 008, 011, 012 y 013, backlog, CHANGELOG-FACTORY), PATCH-036 (status) y ai-memory/missions/BL-069-informe-promocion.md
@@ -44,6 +48,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
+- [BL-070] Decisión: aprobá o corregí la propuesta de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`). D1 un solo módulo Raids con pestañas Alas y Encuentros; D2 marcar a mano los encuentros que la API no informa, solo si los logros semanales no alcanzan; D3 reemplazar los 46 videos de relleno por enlaces verificados; D4 mecánicas resumidas (3 a 6 por encuentro). Recomiendo sí en las cuatro.
 - [BL-069] Validación: abrí producción con recarga completa (Ctrl+F5) y recorré Logros (cabecera, tres pestañas, tarjetas con el ícono oficial grande y anillo dorado en los que están a un paso; la barra lateral ya sin el panel viejo de Logros), la Cámara del Brujo y Actividades, Raids, Strikes, Inventario, Personajes y Cuentas con la cabecera común. Probá también un theme claro (Notion o macOS). Si algo no va, la vuelta atrás es la rama `rollback/pre-restyle-ciclo`; para quitar solo el marco común, sacar `js/gn-frame.js` de `js/modules.json`.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas.
@@ -60,6 +65,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-065] El canal de parches solo corre en DEV, solo con pushes tuyos, y nunca puede tocar workflows ni a sí mismo. Guía: `factory/README.md`.
 - [BL-068] En producción `router.js` sigue en 2.17.0; su limpieza (2.18.0) queda en DEV. La rama `promo/camara-armeria` se puede borrar.
 - [BL-069] Producción conserva a propósito `router.js` 2.17.0, `wallet-theme.js` 2.1.0, la cabecera vieja de `settings-manager.js` y su GA (DEC-006). La rama `rollback/pre-restyle-ciclo` se puede borrar cuando valides.
+- [BL-070] SHIRUVANA-ART-001 queda en pausa por pedido de Pablo (2026-10-24 15:39Z) mientras avanza el restyle de los módulos heredados.
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 
 ## Bloqueos
