@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-032",
+  "summary": "BL-067 LOG-5: el backlog registra que el paso 3 del restyle (Logros, FEAT-012) quedó hecho en DEV con LOG-0 a LOG-5 y que sigue Actividades cuando se decida BL-055.",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "8984dd6526dccb0ae7e3b7ac78e50e49eeab72bb",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Empieza por Logros con la validación de CAM-6. Producción, solo con la orden de Pablo. · BL-064, FEAT-010, FEAT-011, DEC-035, DEC-024, DEC-033",
+          "text": "Paso 3, Logros: hecho en DEV en seis pasos (LOG-0 a LOG-5, FEAT-012; LOG-0 a LOG-4 validados, LOG-5 espera la validación de Pablo). Sigue el paso 4, Actividades, cuando se decida BL-055. Producción, solo con la orden de Pablo. · BL-064, FEAT-010, FEAT-011, FEAT-012, DEC-035, DEC-024, DEC-033"
+        }
+      ]
+    }
+  ]
+}
