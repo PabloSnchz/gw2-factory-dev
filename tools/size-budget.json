@@ -8,7 +8,6 @@
     "index.html": { "base": 69606, "techo": 69606, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
     "js/api-gw2.js": { "base": 132261, "techo": 132261 },
     "js/raid-tracker.js": { "base": 100052, "techo": 100052 },
-    "js/wv-purchase-detail.js": { "base": 91227, "techo": 91227, "nota": "Primero en achicarse: Cámara del Brujo (BL-064)." },
     "js/router.js": { "base": 90495, "techo": 90495 },
     "js/inventory-hub.js": { "base": 70258, "techo": 70258 },
     "js/accounts-panel.js": { "base": 67648, "techo": 67648 },
