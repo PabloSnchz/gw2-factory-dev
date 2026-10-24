@@ -1,10 +1,10 @@
 # FEAT-011 — La Cámara del Brujo renovada
 
-- **Estado:** en DEV. CAM-0 a CAM-5 validados por Pablo en pantalla; CAM-6 (voz, accesibilidad, contraste, teclado y limpieza) espera su validación.
+- **Estado:** validada por Pablo (CAM-0 a CAM-6) y en producción desde 2026-10-24 por orden de Pablo (BL-068, Armería y Cámara juntas). gw2-wallet-ligero `3cd00da`…`374b6f0`; vuelta atrás: rama `rollback/pre-camara-armeria` (`f72cde8`).
 - **Fecha:** 2026-10-24
 - **Backlog:** BL-064, paso 2 (segundo módulo del restyle; el resto sigue en BL-067)
 - **Propuesta aprobada:** `docs/propuestas/propuesta-camara-bl064.html` (CAM-0)
-- **Producción:** no. La decide Pablo.
+- **Producción:** sí (BL-068, 2026-10-24). `router.js` queda 2.17.0 en producción: la limpieza de la Tienda de respaldo (2.18.0) es solo de DEV.
 
 ## Qué cambió para el usuario
 

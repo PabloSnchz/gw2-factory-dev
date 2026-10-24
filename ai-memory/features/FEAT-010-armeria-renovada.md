@@ -1,10 +1,10 @@
 # FEAT-010 — La Armería Legendaria renovada
 
-- **Estado:** en DEV. ARM-1 a ARM-4 validados por Pablo en pantalla; ARM-5 (revisión final) y el ajuste 1.6.1 esperan su validación.
+- **Estado:** validada por Pablo al 100% (2026-10-23) y en producción desde 2026-10-24 por orden de Pablo (BL-068, Armería y Cámara juntas). gw2-wallet-ligero `3cd00da`…`374b6f0`; vuelta atrás: rama `rollback/pre-camara-armeria` (`f72cde8`).
 - **Fecha:** 2026-10-23
 - **Backlog:** BL-064 (primer módulo del restyle completo de la Bóveda)
 - **Propuesta aprobada:** `docs/propuestas/propuesta-armeria-bl064.html` (`7ac2f3f`)
-- **Producción:** no. La decide Pablo.
+- **Producción:** sí (BL-068, 2026-10-24), `render-catologo.js` 1.6.1 idéntico a DEV.
 
 ## Qué cambió para el usuario
 
