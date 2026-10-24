@@ -1,0 +1,73 @@
+{
+ "id": "PATCH-045",
+ "summary": "BL-070 RAI-4 tanda 1 hecha («Cómo se pelea» de Monte Balrior): status y backlog; RAI-3 validado por Pablo; blobs de raids-sheet al día",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "72bd2a26877b47580bcfceae12756e067c33522e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "RAI-3 HECHO (19:05Z), espera validación en DEV.",
+     "text": "RAI-3 VALIDADO (19:12Z); RAI-4 tanda 1 (Monte Balrior) HECHA (19:25Z), espera validación en DEV."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 19:10Z",
+     "text": "Última actualización: 2026-10-24 19:25Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: esperar a Pablo. Él valida RAI-3 en DEV (la ficha de cada encuentro). Con su visto sigo con RAI-4: fases y mecánicas verificadas, por tandas.",
+     "text": "Próxima acción: esperar a Pablo. Él valida en DEV la tanda 1 de RAI-4 («Cómo se pelea» de Monte Balrior). Con su visto sigo con la tanda de Heart of Thorns (alas 1 a 4)."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-3 — Ficha de cada encuentro a pantalla completa, con los cofres verificados. HECHO.\nArchivos:\n- js/raids-sheet.js 1.0.0 (`5007b9e`)\n- assets/data/raids/rewards.json (`f45e59d`)\n- js/raids-view.js 1.1.0 (`9a9effa`)\n\nAdemás: `tests/raids-sheet.test.cjs` (`a74d6c8`), `js/modules.json` (`b566ad2`) y LES-038.\n",
+     "text": "BL-070 RAI-4 tanda 1 — «Cómo se pelea» de Monte Balrior: fases, mecánicas con su rol, modo desafío y fuentes. HECHO.\nArchivos:\n- assets/data/raids/mechanics/jw.json (`e6f6d27`)\n- js/raids-sheet.js 1.1.0 (`af57876`)\n- tests/raids-sheet.test.cjs (`888be18`)\n\nAdemás: `assets/data/raids/mechanics/index.json` (`8e38116`) y `js/modules.json` (`52f8a6e`), por PATCH-044.\n\nAntes: RAI-3 — Ficha de cada encuentro (`js/raids-sheet.js` 1.0.0 `3ade835`, `assets/data/raids/rewards.json` `f45e59d`, `js/raids-view.js` 1.1.0 `9a9effa`). VALIDADO por Pablo (2026-10-24 19:12Z).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: RAI-3 hecho (2026-10-24 19:05Z): la ficha de cada encuentro a pantalla completa, como la de la legendaria. `js/raids-sheet.js` 1.0.0 (`5007b9e`, 21,3 KB)",
+     "text": "Último hecho: RAI-4 tanda 1 hecha (2026-10-24 19:25Z): «Cómo se pelea» en la ficha de cada encuentro, empezando por Monte Balrior (Janthir Wilds: el campamento, Greer, Decima y Ura). `js/raids-sheet.js` 1.1.0 (`af57876`, 29,1 KB, por el manifiesto: `js/modules.json` `52f8a6e`; PATCH-044) y los datos en `assets/data/raids/mechanics/jw.json` (`e6f6d27`, 10,2 KB) con su índice `mechanics/index.json` (`8e38116`). La ficha muestra un resumen, «Antes del jefe», «Shiruvana recomienda», las fases en una línea de tiempo (Greer 5, Decima 5, Ura 4), hasta 7 mecánicas por jefe con su nombre en español y en inglés y para quién son (Todos, Tanque, Kiter, Proyectiles, Fragmento…), «En modo desafío cambia» solo si el encuentro tiene modo desafío, «Para aprender más» y las fuentes con la fecha: la wiki oficial («Mount Balrior») y la guía del ala 8 de MetaBattle, consultadas el 2026-10-24. Sin videos inventados: solo enlaces verificados. En el celular, dos pestañas: Recompensas y Cómo se pelea; anterior y siguiente mantienen la pestaña y abrir desde la lista vuelve a Recompensas. Las mecánicas se piden una sola vez por expansión y solo si su tanda figura en el índice; el índice no puede nombrar archivos fuera de su carpeta. Los encuentros sin tanda lo dicen («llegan en una próxima tanda, verificadas») y enlazan la wiki. Correcciones a la maqueta de RAI-0: los Proto-Greerlings y Ereg son solo del modo desafío (van en «En modo desafío cambia»); saqué las bendiciones de los titanes porque no las pude verificar; el corte de Greer es al 66 %, como dice la wiki. `tests/raids-sheet.test.cjs` (`888be18`, 14 tests, 20/20 mutaciones); RUN-030 verde (9 archivos). Siguen las tandas de Heart of Thorns (alas 1 a 4), Path of Fire (5 a 7) y los encuentros. Antes, RAI-3 hecho (2026-10-24 19:05Z; validado por Pablo a las 19:12Z): la ficha de cada encuentro a pantalla completa, como la de la legendaria. `js/raids-sheet.js` 1.0.0 (`3ade835` después de PATCH-043, 21,3 KB)"
+    },
+    {
+     "op": "replace",
+     "anchor": "`tests/raids-sheet.test.cjs` (`a74d6c8`, 9 tests, 22/22 mutaciones)",
+     "text": "`tests/raids-sheet.test.cjs` (`24fa245` después de PATCH-043, 9 tests, 22/22 mutaciones)"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-3 ficha a pantalla completa HECHO (espera validación); siguen RAI-4 mecánicas por tandas,",
+     "text": "RAI-3 ficha a pantalla completa VALIDADO; RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior HECHA, espera validación; siguen Heart of Thorns, Path of Fire y los encuentros); siguen"
+    },
+    {
+     "op": "replace",
+     "anchor": "RAI-3 la ficha de cada encuentro con los cofres verificados en la wiki oficial (`js/raids-sheet.js`).\n",
+     "text": "RAI-3 la ficha de cada encuentro con los cofres verificados en la wiki oficial (`js/raids-sheet.js`), validada; RAI-4 «Cómo se pelea» con fases y mecánicas verificadas, tanda 1 Monte Balrior.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y tocá una fila (por ejemplo Greer). Mirá la ficha: cabecera con la miniatura grande, «Lo que te llevás» con el cofre y su ícono, «Lo que te puede tocar» por rareza y «Modo desafío». Probá «Siguiente», «← Volver a Raids» y Escape (tiene que volver a la misma fila), una ficha de Heart of Thorns (Keep Construct), un evento del Valle Espiritual y un encuentro (Kela). Las fases y mecánicas llegan en RAI-4.\n",
+     "text": "- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5), entrá a Raids y abrí Greer. Bajo las recompensas está «Cómo se pelea»: resumen, «Antes del jefe», «Shiruvana recomienda», las 5 fases, las mecánicas con su rol y «En modo desafío cambia». Con «Siguiente» pasá por Decima y Ura, y abrí el campamento de Monte Balrior (sin fases ni modo desafío). Abrí también Keep Construct: tiene que decir que sus mecánicas llegan en una próxima tanda. En el celular probá las pestañas Recompensas y Cómo se pelea.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-059] El frente de Shiruvana queda aprobado",
+     "text": "- [BL-070] RAI-4: corregí la maqueta de RAI-0 con la wiki: los Proto-Greerlings y Ereg son solo del modo desafío y las bendiciones de los titanes no se pudieron verificar (no se muestran). Vuelta atrás de las mecánicas: sacar la línea de `jw` de `assets/data/raids/mechanics/index.json` (la ficha vuelve a decir «llegan en una próxima tanda»); de toda la ficha, sacar `js/raids-sheet.js` de `js/modules.json`.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "9909449b09a5278c244ae84a2983f44c8ec61574",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Las fases y las mecánicas llegan en RAI-4, por tandas. SHIRUVANA-ART-001 queda en pausa",
+     "text": "Las fases y las mecánicas llegan en RAI-4, por tandas. RAI-3 VALIDADO por Pablo (2026-10-24 19:12Z). RAI-4 tanda 1 hecha (2026-10-24 19:25Z): «Cómo se pelea» en la ficha de cada encuentro, empezando por Monte Balrior (Janthir Wilds: el campamento, Greer, Decima y Ura). `js/raids-sheet.js` 1.1.0 (`af57876`, 29,1 KB, por el manifiesto: `js/modules.json` `52f8a6e`; PATCH-044) y los datos en `assets/data/raids/mechanics/jw.json` (`e6f6d27`, 10,2 KB) con su índice `mechanics/index.json` (`8e38116`). La ficha muestra un resumen, «Antes del jefe», «Shiruvana recomienda», las fases en una línea de tiempo (Greer 5, Decima 5, Ura 4), hasta 7 mecánicas por jefe con su nombre en español y en inglés y para quién son (Todos, Tanque, Kiter, Proyectiles, Fragmento…), «En modo desafío cambia» solo si el encuentro tiene modo desafío, «Para aprender más» y las fuentes con la fecha: la wiki oficial («Mount Balrior») y la guía del ala 8 de MetaBattle, consultadas el 2026-10-24. Sin videos inventados: solo enlaces verificados. En el celular, dos pestañas: Recompensas y Cómo se pelea; anterior y siguiente mantienen la pestaña y abrir desde la lista vuelve a Recompensas. Las mecánicas se piden una sola vez por expansión y solo si su tanda figura en el índice; el índice no puede nombrar archivos fuera de su carpeta. Los encuentros sin tanda lo dicen («llegan en una próxima tanda, verificadas») y enlazan la wiki. Correcciones a la maqueta de RAI-0: los Proto-Greerlings y Ereg son solo del modo desafío (van en «En modo desafío cambia»); saqué las bendiciones de los titanes porque no las pude verificar; el corte de Greer es al 66 %, como dice la wiki. `tests/raids-sheet.test.cjs` (`888be18`, 14 tests, 20/20 mutaciones); RUN-030 verde (9 archivos). Siguen las tandas de Heart of Thorns (alas 1 a 4), Path of Fire (5 a 7) y los encuentros. SHIRUVANA-ART-001 queda en pausa"
+    }
+   ]
+  }
+ ]
+}
