@@ -1,0 +1,28 @@
+{
+ "id": "PATCH-043",
+ "summary": "BL-070 RAI-3: raids-sheet.js declara «Versión: 1.0.0» en la cabecera (index-versions lo pedía) y tests/raids-sheet.test.cjs lo vigila",
+ "files": [
+  {
+   "path": "js/raids-sheet.js",
+   "base_sha": "5007b9ecb2aaa76cfdf79a32557d3108c07cc793",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * raids-sheet.js — Ficha de cada encuentro de Raids a pantalla completa (BL-070 RAI-3).\n *\n",
+     "text": " * raids-sheet.js — Ficha de cada encuentro de Raids a pantalla completa (BL-070 RAI-3).\n * Versión: 1.0.0 (2026-10-24)\n *\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "a74d6c8719f6efe769650800060e71f05b0c8138",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.1.0');\n});\n",
+     "text": "  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.1.0');\n  // index-versions lee «Versión: X» de la cabecera: tiene que coincidir con el manifiesto y con VERSION.\n  const head = /Versi[oó]n:\\s*(\\d+\\.\\d+\\.\\d+)/.exec(SRC.slice(0, 3000));\n  assert.ok(head, 'raids-sheet.js declara «Versión:» en la cabecera');\n  assert.equal(head[1], man.find((m) => m.src === 'js/raids-sheet.js').v);\n  assert.equal(head[1], /var VERSION = '([\\d.]+)'/.exec(SRC)[1]);\n});\n"
+    }
+   ]
+  }
+ ]
+}
