@@ -1,5 +1,6 @@
 /**
  * raids-sheet.js — Ficha de cada encuentro de Raids a pantalla completa (BL-070 RAI-3).
+ * Versión: 1.0.0 (2026-10-24)
  *
  * Como la ficha de la legendaria: reemplaza la lista dentro del módulo, con
  * «← Volver a Raids» y Escape, y vuelve al mismo lugar y a la misma fila.

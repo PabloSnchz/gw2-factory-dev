@@ -37,6 +37,11 @@ test('el archivo entra en el presupuesto y se carga por el manifiesto después d
   const src = man.map((m) => m.src);
   assert.ok(src.indexOf('js/raids-sheet.js') > src.indexOf('js/raids-view.js'), 'la ficha va después de la vista');
   assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.1.0');
+  // index-versions lee «Versión: X» de la cabecera: tiene que coincidir con el manifiesto y con VERSION.
+  const head = /Versi[oó]n:\s*(\d+\.\d+\.\d+)/.exec(SRC.slice(0, 3000));
+  assert.ok(head, 'raids-sheet.js declara «Versión:» en la cabecera');
+  assert.equal(head[1], man.find((m) => m.src === 'js/raids-sheet.js').v);
+  assert.equal(head[1], /var VERSION = '([\d.]+)'/.exec(SRC)[1]);
 });
 
 test('recompensas: cada encuentro del catálogo tiene su entrada y cada cofre existe', () => {
