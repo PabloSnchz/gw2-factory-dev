@@ -10,6 +10,7 @@
     { "src": "js/ach-view.js", "v": "1.3.0" },
     { "src": "js/ach-armory.js", "v": "1.0.0" },
     { "src": "js/ach-cards.js", "v": "1.2.0" },
-    { "src": "js/ach-categories.js", "v": "1.0.0" }
+    { "src": "js/ach-categories.js", "v": "1.0.0" },
+    { "src": "js/raids-view.js", "v": "1.0.0" }
   ]
 }
