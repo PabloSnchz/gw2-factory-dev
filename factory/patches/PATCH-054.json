@@ -1,0 +1,111 @@
+{
+ "id": "PATCH-054",
+ "summary": "BL-070 RAI-5a: «Raids y Strikes» pasa a «Raids» en la Sidebar, la barra del celular, la Bienvenida e index.html; welcome-panel.js baja de 48 KB y pasa a advertencia.",
+ "files": [
+  {
+   "path": "js/welcome-panel.js",
+   "base_sha": "cd8587a0f51401df35871e05ca29e0d3b175ef20",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.2.0 (2026-10-23) ·",
+     "text": " * Versión: 2.2.1 (2026-10-24) ·"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.2.0';",
+     "text": "var VERSION = '2.2.1';"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ id: 'raids', name: 'Raids y Strikes',",
+     "text": "{ id: 'raids', name: 'Raids',"
+    }
+   ]
+  },
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "13264c266104cf59cb68e2326013bd5127f5b842",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.2.2 (2026-10-23) ·",
+     "text": " * Versión: 2.2.3 (2026-10-24) ·"
+    },
+    {
+     "op": "replace",
+     "anchor": " *   visible queda oculta para el lector y se lee «(nuevo)» aparte, como «(falta permiso)».\n",
+     "text": " *   visible queda oculta para el lector y se lee «(nuevo)» aparte, como «(falta permiso)».\n * 2.2.3 (BL-070, RAI-5a): el módulo de raids se llama «Raids» (sin Strikes). El juego unificó strikes y raids el\n *   2026-02-03 y el módulo ya es uno solo (Alas y Encuentros); #/account/strikes sigue marcando Raids.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.2.2';",
+     "text": "var VERSION = '2.2.3';"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ id: 'raids', name: 'Raids y Strikes',",
+     "text": "{ id: 'raids', name: 'Raids',"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "649a09bd1eb2ce5f60e139cff490823c75a3b256",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "                <span>Raids y Strikes</span>",
+     "text": "                <span>Raids</span>"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/sidebar-nav.js?v=2.2.2",
+     "text": "js/sidebar-nav.js?v=2.2.3"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/welcome-panel.js?v=2.2.0",
+     "text": "js/welcome-panel.js?v=2.2.1"
+    }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "0e9423cb74edf5e98a20b494f08c4bc4e2ee4be7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.2.2', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.2/);\n  assert.equal(x.S().version, '2.2.2');",
+     "text": "test('versión 2.2.3', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.3/);\n  assert.equal(x.S().version, '2.2.3');"
+    },
+    {
+     "op": "replace",
+     "anchor": "'Actividades', 'Raids y Strikes', 'Inventario y Personajes', 'Cuentas']",
+     "text": "'Actividades', 'Raids', 'Inventario y Personajes', 'Cuentas']);\n  // RAI-5a: el módulo es uno solo desde la unificación del juego; el nombre viejo no vuelve.\n  assert.doesNotMatch(SRC + WELCOME, /Raids y Strikes/"
+    }
+   ]
+  },
+  {
+   "path": "tools/size-budget.json",
+   "base_sha": "1c681cc8d2f24ea41bd4ec61016e074dc04f27bd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    \"js/welcome-panel.js\": { \"base\": 49153, \"techo\": 49153, \"nota\": \"1 byte sobre 48 KB: el próximo recorte lo saca de esta lista.\" }\n  },",
+     "text": "  },"
+    },
+    {
+     "op": "replace",
+     "anchor": "    \"js/strike-tracker.js\": { \"base\": 57762, \"techo\": 57762 },\n    \"js/inventory-dashboard.js\": { \"base\": 53460, \"techo\": 53460 },\n    \"js/wallet-dashboard.js\": { \"base\": 52505, \"techo\": 52505 },",
+     "text": "    \"js/strike-tracker.js\": { \"base\": 57762, \"techo\": 57762 },\n    \"js/inventory-dashboard.js\": { \"base\": 53460, \"techo\": 53460 },\n    \"js/wallet-dashboard.js\": { \"base\": 52505, \"techo\": 52505 }"
+    },
+    {
+     "op": "replace",
+     "anchor": "  \"advertencia\": {\n",
+     "text": "  \"advertencia\": {\n    \"js/welcome-panel.js\": { \"nota\": \"Bienvenida; bajó de 48 KB en BL-070 RAI-5a («Raids y Strikes» pasa a «Raids»). No puede volver a pasar 48 KB.\" },\n"
+    }
+   ]
+  }
+ ]
+}
