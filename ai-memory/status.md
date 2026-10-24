@@ -1,20 +1,22 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 HECHO (16:15Z), espera validación.
+Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 HECHO (16:15Z); RAI-2 HECHO (16:55Z), espera validación en DEV.
 Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 16:15Z
-Próxima acción: esperar a Pablo. Él valida RAI-1 (sin cambios visibles: catálogo, íconos y marcado). Con su visto sigo con RAI-2: Raids unificado con cabecera, pestañas Alas y Encuentros y tarjetas, en DEV.
+Última actualización: 2026-10-24 16:58Z
+Próxima acción: esperar a Pablo. Él valida RAI-2 en DEV (Raids unificado). Con su visto sigo con RAI-3: la ficha de cada encuentro a pantalla completa.
 
 Micro-ciclo:
-BL-070 RAI-1 — catálogo verificado, miniaturas oficiales y prueba de los logros semanales. HECHO.
+BL-070 RAI-2 — Raids unificado: cabecera, pestañas Alas y Encuentros, tarjetas. HECHO.
 Archivos:
-- tests/probe-rai1-*.smoke.cjs (4 sondas temporales; resultados en OUT-022 y OUT-023; ya borradas)
-- assets/data/raids/catalog.json (`17e273e`)
-- tests/raids-catalog.test.cjs (`21ef95b`)
+- js/raids-view.js 1.0.0 (`d60e631`)
+- tests/raids-view.test.cjs (`3079010`)
+- js/modules.json (`ee028d3`)
+
+Antes: RAI-1 — catálogo verificado (`assets/data/raids/catalog.json` `17e273e`, `tests/raids-catalog.test.cjs` `21ef95b`). HECHO; Pablo dio el visto al pedir RAI-2 (16:41Z).
 
 Antes: RAI-0 — propuesta visual de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`, `366801f`). APROBADA por Pablo (2026-10-24 15:57Z): «Propuesta brillante… validada y aprobada»; D1 a D4 sí.
 
@@ -23,7 +25,7 @@ Archivos:
 - gw2-wallet-ligero: gn-surface, ach-view, ach-cards, ach-categories, ach-armory, wv-view 1.2.0, achievements 3.6.0, index.html, gn-frame y modules.json; achievements-theme.js borrado
 - PATCH-035 (FEAT-007, 008, 011, 012 y 013, backlog, CHANGELOG-FACTORY), PATCH-036 (status) y ai-memory/missions/BL-069-informe-promocion.md
 
-Último hecho: RAI-1 hecho (2026-10-24 16:15Z): `assets/data/raids/catalog.json` (`17e273e`, 22,8 KB) con 46 encuentros verificados (30 de las 8 alas, con el evento «camp» de Monte Balrior que la propuesta no contaba, y 16 encuentros) y `tests/raids-catalog.test.cjs` (`21ef95b`, 10 tests, 10/10 mutaciones; RUN-024 verde con los íconos reales). Medido en la API desde CI (RUN-022 y RUN-023, 4 sondas temporales ya borradas): la API sí trae los encuentros en el logro semanal «Weekly Raid Encounters» (9125), con un objetivo por encuentro, así que 14 de los 16 se pueden marcar solos (la lectura con una cuenta real la confirmo en RAI-2: CI no tiene clave); solo Forjando acero y Nexo de la Eternidad quedan para marcar a mano (D2). Íconos: 23 miniaturas locales, 16 oficiales nuevas de /v2/minis (McLeod, Berg, Xera ilusoria, Desmina, Llave de Ahdashim, Caballeras de asalto, Mai Trin, Kela, Vloxx…), 2 eventos con el jefe que sigue y 5 sin miniatura oficial (Voz y Garra, Fraenir, Chatarrería, Kaineng, Cosecha). Correcciones al módulo de hoy: Gaeting actual es la moneda 77 (no la 39 de Path of Fire), tope 150 por semana; conocimiento legendario 44 por semana; nombres oficiales «Sala de las Cadenas» y «Táctica del Forjador de Mitos». Sin cambios visibles todavía. Antes: promoví a producción, por orden de Pablo, lo que faltaba del ciclo de restyle (BL-069): Logros, superficies y marco común, y `wv-view.js` 1.2.0 de la Cámara. 13 commits en serie con vuelta atrás en la rama `rollback/pre-restyle-ciclo`; cada blob igual al de DEV y `index.html` con el GA de producción intacto. `js/` de producción quedó igual a DEV salvo 4 archivos a propósito (`analytics.js`, `router.js`, `wallet-theme.js` y la cabecera de `settings-manager.js`). Antes, en DEV: con `js/gn-surface.js` la Cámara del Brujo, Logros y los siete paneles heredados tienen bandeja oscura, tarjeta elevada, pista, bordes y placa, calculadas desde el theme. En Gato Negro la bandeja es `#0f1117`, como en la maqueta. `js/gn-frame.js` da a Actividades, Raids y Strikes, Inventario y Personajes y Cuentas una cabecera común con el ícono oficial, la guarda AA en los 19 themes, foco visible, movimiento reducido y 44 px en el celular. No toqué ninguno de sus archivos congelados. RUN-017 y RUN-019 en verde; la suite local con el árbol de DEV, 106/106.
+Último hecho: RAI-2 hecho (2026-10-24 16:55Z): Raids unificado en DEV con `js/raids-view.js` 1.0.0 (`d60e631`, 33,3 KB, por el manifiesto: `js/modules.json` `ee028d3`; sin tocar raid-tracker.js, strike-tracker.js ni index.html). Cabecera con hora local, servidor y reset semanal; 4 indicadores (alas, conocimiento legendario de la cartera y por cobrar, fragmentos por cobrar con tope 800, encuentros); mi línea con el ala empezada más cerca de terminarse; pestañas Alas (8 alas) y Encuentros (16), filtros Todos / Me faltan / Con modo desafío y por expansión; tarjetas con la miniatura oficial, conocimiento legendario, fragmentos o cristales con sus íconos oficiales, MD +10 y dificultad 1 a 5. Estados honestos: «Sin datos» si una lectura falla, nunca «Pendiente» falso. Los encuentros se marcan con los objetivos del logro 9125; Forjando acero y Nexo de la Eternidad con «Marcar hecho» (D2; clave nueva `gn:raids:marks`, por cuenta con una huella, nunca la Key, y vale hasta el reset). `#/account/strikes` lleva a Encuentros y la preferencia vieja queda fija en Raids (`gn:raids:strike:view`). `tests/raids-view.test.cjs` (`3079010`, 12 tests con prueba de humo de DOM, 14/14 mutaciones); RUN-025 verde (10 archivos, incluidos hb78, hb101, hb136 e idea61). La ficha a pantalla completa es RAI-3. Antes, RAI-1 hecho (2026-10-24 16:15Z): `assets/data/raids/catalog.json` (`17e273e`, 22,8 KB) con 46 encuentros verificados (30 de las 8 alas, con el evento «camp» de Monte Balrior que la propuesta no contaba, y 16 encuentros) y `tests/raids-catalog.test.cjs` (`21ef95b`, 10 tests, 10/10 mutaciones; RUN-024 verde con los íconos reales). Medido en la API desde CI (RUN-022 y RUN-023, 4 sondas temporales ya borradas): la API sí trae los encuentros en el logro semanal «Weekly Raid Encounters» (9125), con un objetivo por encuentro, así que 14 de los 16 se pueden marcar solos (la lectura con una cuenta real la confirmo en RAI-2: CI no tiene clave); solo Forjando acero y Nexo de la Eternidad quedan para marcar a mano (D2). Íconos: 23 miniaturas locales, 16 oficiales nuevas de /v2/minis (McLeod, Berg, Xera ilusoria, Desmina, Llave de Ahdashim, Caballeras de asalto, Mai Trin, Kela, Vloxx…), 2 eventos con el jefe que sigue y 5 sin miniatura oficial (Voz y Garra, Fraenir, Chatarrería, Kaineng, Cosecha). Correcciones al módulo de hoy: Gaeting actual es la moneda 77 (no la 39 de Path of Fire), tope 150 por semana; conocimiento legendario 44 por semana; nombres oficiales «Sala de las Cadenas» y «Táctica del Forjador de Mitos». Sin cambios visibles todavía. Antes: promoví a producción, por orden de Pablo, lo que faltaba del ciclo de restyle (BL-069): Logros, superficies y marco común, y `wv-view.js` 1.2.0 de la Cámara. 13 commits en serie con vuelta atrás en la rama `rollback/pre-restyle-ciclo`; cada blob igual al de DEV y `index.html` con el GA de producción intacto. `js/` de producción quedó igual a DEV salvo 4 archivos a propósito (`analytics.js`, `router.js`, `wallet-theme.js` y la cabecera de `settings-manager.js`). Antes, en DEV: con `js/gn-surface.js` la Cámara del Brujo, Logros y los siete paneles heredados tienen bandeja oscura, tarjeta elevada, pista, bordes y placa, calculadas desde el theme. En Gato Negro la bandeja es `#0f1117`, como en la maqueta. `js/gn-frame.js` da a Actividades, Raids y Strikes, Inventario y Personajes y Cuentas una cabecera común con el ícono oficial, la guarda AA en los 19 themes, foco visible, movimiento reducido y 44 px en el celular. No toqué ninguno de sus archivos congelados. RUN-017 y RUN-019 en verde; la suite local con el árbol de DEV, 106/106.
 
 Plan del restyle:
 
@@ -40,14 +42,14 @@ BL-067 (validada por Pablo el 2026-10-24 13:10Z; en producción con BL-069):
 8. Marco común: `js/gn-surface.js` y `js/gn-frame.js` (FEAT-013).
 
 BL-070 (en curso desde 2026-10-24 15:39Z; propuesta primero y cada paso validado por Pablo):
-9. Raids y Strikes: RAI-0 propuesta aprobada; RAI-1 catálogo verificado HECHO; siguen RAI-2 hub unificado, RAI-3 ficha a pantalla completa, RAI-4 mecánicas por tandas, RAI-5 retiro de `strike-tracker.js`, RAI-6 revisión y FEAT-014.
+9. Raids y Strikes: RAI-0 propuesta aprobada; RAI-1 catálogo verificado HECHO; RAI-2 hub unificado HECHO (espera validación); siguen RAI-3 ficha a pantalla completa, RAI-4 mecánicas por tandas, RAI-5 retiro de `strike-tracker.js`, RAI-6 revisión y FEAT-014.
 10. Inventario y Personajes, 11. Actividades (con BL-055), 12. Cuentas, 13. barra de arriba, modales, avisos y pie.
 
 Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR, CAM, LOG): en el backlog y en git (`ai-memory/status.md` hasta `27a4dd6`).
 
 ## Resumen de la sesión
 
-- BL-070: Raids renovado. Propuesta RAI-0 aprobada por Pablo; RAI-1 catálogo verificado de 46 encuentros con la API oficial (la API trae un objetivo por encuentro en el logro semanal 9125).
+- BL-070: Raids renovado. Propuesta RAI-0 aprobada por Pablo; RAI-1 catálogo verificado de 46 encuentros con la API oficial (la API trae un objetivo por encuentro en el logro semanal 9125); RAI-2 Raids unificado en DEV (`js/raids-view.js`).
 - BL-069: el ciclo de restyle en producción (Logros, superficies y marco común; la Cámara al día). Informe: `ai-memory/missions/BL-069-informe-promocion.md`.
 - BL-067 validada por Pablo: Logros (FEAT-012) y superficies y marco común (FEAT-013).
 - BL-064 cerrada y validada: la Armería (FEAT-010) y la Cámara del Brujo (FEAT-011), en producción y validadas por Pablo (BL-068).
@@ -57,7 +59,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-070] Validación: RAI-1 no cambia nada en pantalla. Revisá el resumen del catálogo (46 encuentros, 14 de los 16 encuentros se podrán marcar solos, íconos oficiales nuevos y los 5 que siguen sin miniatura) y dame el visto para seguir con RAI-2.
+- [BL-070] Validación: abrí DEV con recarga completa (Ctrl+F5) y entrá a Raids. Mirá la cabecera (hora, reset y los 4 indicadores), mi línea, las pestañas Alas y Encuentros, los filtros y las tarjetas con las miniaturas. Confirmá que lo marcado coincide con tu semana en el juego, sobre todo los encuentros (es la primera lectura real del logro 9125), y probá «Marcar hecho» en Forjando acero. La ficha de cada encuentro llega en RAI-3.
 - [BL-069] Validación: abrí producción con recarga completa (Ctrl+F5) y recorré Logros (cabecera, tres pestañas, tarjetas con el ícono oficial grande y anillo dorado en los que están a un paso; la barra lateral ya sin el panel viejo de Logros), la Cámara del Brujo y Actividades, Raids, Strikes, Inventario, Personajes y Cuentas con la cabecera común. Probá también un theme claro (Notion o macOS). Si algo no va, la vuelta atrás es la rama `rollback/pre-restyle-ciclo`; para quitar solo el marco común, sacar `js/gn-frame.js` de `js/modules.json`.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas.
@@ -75,6 +77,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-068] En producción `router.js` sigue en 2.17.0; su limpieza (2.18.0) queda en DEV. La rama `promo/camara-armeria` se puede borrar.
 - [BL-069] Producción conserva a propósito `router.js` 2.17.0, `wallet-theme.js` 2.1.0, la cabecera vieja de `settings-manager.js` y su GA (DEC-006). La rama `rollback/pre-restyle-ciclo` se puede borrar cuando valides.
 - [BL-070] SHIRUVANA-ART-001 queda en pausa por pedido de Pablo (2026-10-24 15:39Z) mientras avanza el restyle de los módulos heredados.
+- [BL-070] RAI-2 suma una clave al navegador, `gn:raids:marks` (tus marcas a mano de la semana, por cuenta, sin la Key), y deja `gn:raids:strike:view` en «raids». Vuelta atrás: sacar `js/raids-view.js` de `js/modules.json` deja Raids y Strikes como estaban.
 - [BL-059] El frente de Shiruvana queda aprobado conceptualmente y sin implementar hasta que lo habilites.
 
 ## Bloqueos
