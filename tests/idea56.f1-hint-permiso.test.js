@@ -30,8 +30,8 @@ function ok(cond, label, extra) {
 function section(t) { console.log('\n[' + t + ']'); }
 
 const CONSUMERS = [
-  { file: 'js/raid-tracker.js',   verb: 'raids'   },
-  { file: 'js/strike-tracker.js', verb: 'strikes' }
+  { file: 'js/raid-tracker.js',   verb: 'raids'   }
+  // BL-070 RAI-5b: strike-tracker.js se retiró (los strikes son encuentros de Raids).
 ];
 
 // El texto de la pista que el Reviewer marco como enganosa.

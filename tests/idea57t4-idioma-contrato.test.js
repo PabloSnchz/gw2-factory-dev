@@ -91,7 +91,7 @@ WRAPPERS.forEach(([nombre, endpoint]) => {
 
 /* ---------- SECCION 3: los consumidores siguen filtrando por esa cadena ---- */
 
-['raid-tracker.js', 'strike-tracker.js'].forEach(f => {
+['raid-tracker.js'].forEach(f => { // BL-070 RAI-5b: strike-tracker.js se retiró
   const t = fs.readFileSync(path.join(__dirname, '..', 'js', f), 'utf8');
   ok(f + ': su consumidor filtra por la clave del contrato',
      t.indexOf(CLAVE) !== -1);

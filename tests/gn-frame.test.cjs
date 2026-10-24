@@ -1,4 +1,4 @@
-// Marco común (BL-067 pasos 4 a 8): Actividades, Raids y Strikes, Inventario y Personajes y Cuentas
+// Marco común (BL-067 pasos 4 a 8): Actividades, Raids, Inventario y Personajes y Cuentas
 // reciben superficies, cabecera, guarda de contraste y accesibilidad sin tocar sus archivos.
 // Corre con: node --test tests/*.test.cjs
 'use strict';
@@ -54,17 +54,17 @@ function load(opts = {}) {
 const { F } = load();
 const SP = load().S._pure;
 
-test('versión 1.0.0, en js/modules.json justo después de gn-surface.js, fuera de index.html y dentro de 40 KB', () => {
-  assert.match(SRC, /\* Versión: 1\.0\.0 /);
+test('versión 1.0.1, en js/modules.json justo después de gn-surface.js, fuera de index.html y dentro de 40 KB', () => {
+  assert.match(SRC, /\* Versión: 1\.0\.1 /);
   const m = JSON.parse(read('js/modules.json')).modules.map((x) => x.src + '@' + x.v);
-  assert.deepEqual(m.slice(0, 2), ['js/gn-surface.js@1.0.0', 'js/gn-frame.js@1.0.0']);
+  assert.deepEqual(m.slice(0, 2), ['js/gn-surface.js@1.0.0', 'js/gn-frame.js@1.0.1']);
   assert.doesNotMatch(read('index.html'), /gn-frame\.js/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
 });
 
-test('los siete paneles de los pasos 4 a 8, con el color y el ícono oficial que muestra la Bienvenida', () => {
+test('los seis paneles de los pasos 4 a 8 (sin Strikes desde BL-070 RAI-5b), con el color y el ícono oficial que muestra la Bienvenida', () => {
   const P = J(F._pure.PANELS);
-  assert.deepEqual(P.map((p) => p.id), ['activitiesPanel', 'raidTrackerPanel', 'strikeTrackerPanel', 'inventoryPanel', 'charactersPanel', 'inventoryDashboardPanel', 'accountsPanel']);
+  assert.deepEqual(P.map((p) => p.id), ['activitiesPanel', 'raidTrackerPanel', 'inventoryPanel', 'charactersPanel', 'inventoryDashboardPanel', 'accountsPanel']);
   const wel = read('js/welcome-panel.js');
   P.forEach((p) => {
     assert.ok(fs.existsSync(path.join(ROOT, p.icon)), p.id + ' ícono ' + p.icon);

@@ -179,13 +179,10 @@ t('COMPORTAMIENTO: la tarjeta de ala queda VISIBLE con movimiento reducido', rea
 console.log('\n[4] Alcance de la tarjeta invisible');
 {
   const raid = leer('js/raid-tracker.js');
-  const strike = leer('js/strike-tracker.js');
   t('raid-tracker.js pone la animacion INLINE y opacity:0 en el mismo style',
     /class="raid-wing-card"[^>]*animation:\s*raidFadeInUp[^>]*opacity:\s*0/.test(raid),
     'no coincide el orden inline');
-  t('strike-tracker.js usa .raid-wing-card SIN animacion inline (100% dependiente de la capa 2)',
-    /class="raid-wing-card"/.test(strike) && !/class="raid-wing-card"[^>]*animation:/.test(strike),
-    'la tarjeta inline si lleva animacion: habria que revisar el supuesto');
+  // BL-070 RAI-5b: strike-tracker.js se retiró; la tarjeta de ala solo la pinta raid-tracker.js.
   // Los encuentros van DENTRO de la tarjeta -> se pierden con ella.
   // No se adivina el token: se toma el bloque real de la tarjeta y se comprueba
   // que dentro de ese bloque hay un bucle sobre `encounters`.

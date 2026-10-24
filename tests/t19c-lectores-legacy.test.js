@@ -35,7 +35,7 @@ function ok(cond, msg, detail) {
 const MODULOS = [
   'js/inventory-hub.js',
   'js/raid-tracker.js',
-  'js/strike-tracker.js',
+  // BL-070 RAI-5b: strike-tracker.js se retiró del repo.
   'js/wv-purchase-detail.js',
 ];
 

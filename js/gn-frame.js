@@ -1,9 +1,9 @@
 /*!
  * js/gn-frame.js — Marco común de la Bóveda para los módulos heredados (BL-067, pasos 4 a 8)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-24)
+ * Versión: 1.0.1 (2026-10-24) · BL-070 RAI-5b: sin el panel de Strikes (los strikes son encuentros de Raids)
  *
- * Actividades, Raids y Strikes, Inventario y Personajes y Cuentas viven en archivos grandes y
+ * Actividades, Raids, Inventario y Personajes y Cuentas viven en archivos grandes y
  * congelados (53 a 100 KB, DEC-035). En vez de reescribirlos, este marco les da lo mismo que ya
  * tienen la Cámara del Brujo y Logros, sin tocar su comportamiento:
  *  - superficies de js/gn-surface.js (bandeja, tarjeta elevada, pista, bordes);
@@ -20,13 +20,12 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var LOG = '[GNFrame]';
   // id del panel → módulo, color (el de la Bienvenida) e ícono oficial de su cabecera
   var PANELS = [
     { id: 'activitiesPanel', mod: 'activities', name: 'Actividades', color: '#3CC48A', icon: 'assets/icons/1302773.png' },
     { id: 'raidTrackerPanel', mod: 'raids', name: 'Raids', color: '#F47C7C', icon: 'assets/icons/raids/raid-icon.png' },
-    { id: 'strikeTrackerPanel', mod: 'raids', name: 'Strikes', color: '#F47C7C', icon: 'assets/icons/raids/raid-icon.png' },
     { id: 'inventoryPanel', mod: 'characters', name: 'Inventario y Personajes', color: '#7EC3FF', icon: 'assets/icons/Welcome/358409.png' },
     { id: 'charactersPanel', mod: 'characters', name: 'Personajes', color: '#7EC3FF', icon: 'assets/icons/Welcome/358409.png' },
     { id: 'inventoryDashboardPanel', mod: 'characters', name: 'Inventario', color: '#7EC3FF', icon: 'assets/icons/Welcome/358409.png' },
