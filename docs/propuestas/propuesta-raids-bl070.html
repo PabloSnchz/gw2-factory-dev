@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAI-0 · Propuesta: Raids renovado (BL-070)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--green:#3CC48A;--red:#F47C7C;--blue:#6EA3FF;--acc:#A896FF;--mod:#F47C7C}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}small,.mut{color:var(--muted)}
+a{color:#B9A8FF}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(244,124,124,.10),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2)}
+.tag--wait{border-color:var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px}
+.sev--c{background:#5a1f25;color:#ffb3b8}.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+/* --- maqueta: cabecera del módulo --- */
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(244,124,124,.12),var(--bg-1) 70%);padding:16px 18px}
+.row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px rgba(244,124,124,.7)}
+.ttl h3{margin:0;font-size:1.3rem}.ttl p{margin:2px 0 0;font-size:.86rem}
+.pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}
+.pill b{color:var(--tx-1)}.pill--hot{border-color:var(--amber)}.pill--hot b{color:var(--amber)}
+.btn{font:inherit;font-size:.8rem;border:1px solid var(--bd-2);border-radius:999px;padding:5px 12px;color:var(--tx-1);background:transparent}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem}.st b span{font-size:.8rem;color:var(--muted);font-weight:500}.st em{display:block;font-style:normal;font-size:.74rem;color:var(--muted)}
+.bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--green)}
+.voice{display:flex;gap:10px;align-items:center;margin-top:12px;border:1px solid var(--bd-1);border-radius:12px;padding:8px 12px;background:var(--bg-0)}
+.voice .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2C9398,#442283);flex-shrink:0}
+.voice small{display:block;font-size:.72rem;color:var(--acc);font-weight:700}
+.tabs{display:flex;gap:4px;margin:16px 0 10px;border-bottom:1px solid var(--bd-1)}
+.tabs span{padding:8px 14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs .on{color:var(--tx-1);font-weight:700;border-bottom-color:var(--mod)}
+.badge{font-size:.72rem;margin-left:6px;border:1px solid var(--bd-1);border-radius:999px;padding:0 6px;color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--bd-2);border-radius:10px;overflow:hidden;margin:0 8px 12px 0;font-size:.82rem}
+.seg span{padding:6px 12px;border-right:1px solid var(--bd-1);color:var(--muted)}.seg span:last-child{border-right:0}.seg .on{background:var(--bg-2);color:var(--tx-1);font-weight:600}
+/* --- tarjetas de ala --- */
+.wings{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px;align-items:start}
+.wing{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.wing-h{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--bd-1)}
+.stack{display:flex}.stack img{width:30px;height:30px;border-radius:8px;background:var(--bg-2);border:2px solid var(--bg-1);margin-left:-8px}.stack img:first-child{margin-left:0}
+.wing-h .nm{flex:1;min-width:0}.wing-h .nm b{display:block}.wing-h .nm small{font-size:.76rem}
+.exp{font-size:.7rem;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-2);white-space:nowrap}
+.cnt{font-weight:800;font-size:.95rem}
+.enc{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--bd-1);cursor:pointer}
+.enc:first-of-type{border-top:0}.enc:hover{background:var(--bg-2)}
+.mini{width:48px;height:48px;border-radius:10px;background:radial-gradient(circle at 50% 40%,#2b3346,var(--bg-1));padding:3px;box-shadow:0 0 0 1px var(--bd-2)}
+.enc--done .mini{box-shadow:0 0 0 2px var(--green)}
+.enc .n{font-weight:650}.enc .n small{font-weight:500;margin-left:6px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:3px}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:.72rem;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px 1px 3px;color:var(--tx-2);background:var(--bg-0)}
+.chip img{width:16px;height:16px;border-radius:3px}.chip .gem{width:12px;height:12px;margin:0 2px 0 3px;transform:rotate(45deg);border-radius:2px;background:linear-gradient(135deg,#9fd6ff,#4a7dc9)}
+.chip .gem--g{background:linear-gradient(135deg,#ffe6a8,#c98a2a)}
+.chip--cm{padding:1px 8px;color:var(--amber);border-color:rgba(242,185,75,.6)}
+.dots{letter-spacing:2px;color:var(--mod);font-size:.8rem}.dots i{font-style:normal;color:var(--bd-2)}
+.state{font-size:.76rem;font-weight:700;white-space:nowrap;text-align:right}
+.state--done{color:var(--green)}.state--todo{color:var(--tx-2)}.state--na{color:var(--muted);font-weight:600}.state--hand{color:var(--acc)}
+.go{color:var(--muted);font-size:1.1rem;margin-left:6px}
+/* --- ficha --- */
+.back{font-size:.85rem;color:var(--tx-2);margin-bottom:10px}
+.sheet-h{display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:16px 18px;background:linear-gradient(180deg,rgba(244,124,124,.14),var(--bg-1) 75%)}
+.sheet-h .big{width:96px;height:96px;border-radius:16px;padding:6px;background:radial-gradient(circle at 50% 40%,#2b3346,var(--bg-1));box-shadow:0 0 0 2px rgba(242,185,75,.9),0 0 18px rgba(242,185,75,.25)}
+.sheet-h h3{margin:0;font-size:1.5rem}.sheet-h .en{color:var(--muted);font-size:.86rem}
+.sheet-h .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.sheet-h .acts{margin-left:auto;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.grid2{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(300px,1fr);gap:14px;margin-top:14px;align-items:start}
+.card{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.card h4{margin:0 0 10px;font-size:.95rem;display:flex;justify-content:space-between;gap:8px}
+.card h4 small{font-weight:500}
+.phases{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:4px 0 6px}
+.ph{border-radius:8px;padding:6px 6px;font-size:.72rem;text-align:center;background:var(--bg-2);color:var(--tx-2)}
+.ph b{display:block;font-size:.8rem;color:var(--tx-1)}
+.ph--burn{background:rgba(244,124,124,.18);border:1px solid rgba(244,124,124,.45)}
+.ph--split{background:rgba(110,163,255,.14);border:1px solid rgba(110,163,255,.4)}
+.ph--add{background:rgba(242,185,75,.14);border:1px solid rgba(242,185,75,.45)}
+.mech{display:grid;grid-template-columns:1fr;gap:8px}
+.m{border:1px solid var(--bd-1);border-radius:10px;padding:9px 12px;background:var(--bg-0)}
+.m b{display:block}.m p{margin:2px 0 0;font-size:.86rem}
+.role{display:inline-block;font-size:.68rem;font-weight:700;border-radius:6px;padding:0 6px;margin-right:4px;vertical-align:1px}
+.r-all{background:#3a2f55;color:#d6c9ff}.r-proj{background:#1f3a4a;color:#a9dcff}.r-cc{background:#4a3a1a;color:#ffd38a}.r-heal{background:#1f4033;color:#a9e6c6}
+.titans{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.ti{border:1px solid var(--bd-1);border-radius:10px;padding:8px 10px;background:var(--bg-0);font-size:.84rem}
+.ti b{display:block}
+.rw{display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--bd-1)}
+.rw:first-of-type{border-top:0}
+.rw .ic{width:36px;height:36px;border-radius:8px;background:var(--bg-2);display:flex;align-items:center;justify-content:center}
+.rw .ic img{width:30px;height:30px}.rw .ic .gem{width:16px;height:16px;transform:rotate(45deg);border-radius:3px;background:linear-gradient(135deg,#9fd6ff,#4a7dc9)}
+.rw .q{font-weight:800}.rw small{display:block;font-size:.74rem}
+.rar{font-size:.7rem;font-weight:700;border-radius:6px;padding:0 6px}
+.rar-c{background:#2b3346;color:#c9d0da}.rar-u{background:#1f3a4a;color:#a9dcff}.rar-r{background:#3a2f55;color:#d6c9ff}.rar-s{background:#4a3a1a;color:#ffd38a}
+.links a{display:block;padding:6px 0;border-top:1px solid var(--bd-1);text-decoration:none}.links a:first-child{border-top:0}
+.src{font-size:.74rem;color:var(--muted);margin-top:8px}
+/* --- celular --- */
+.phone{width:360px;max-width:100%;border:10px solid #050608;border-radius:34px;padding:12px;background:var(--bg-0);margin:0 auto}
+.phone .sheet-h{padding:12px}.phone .big{width:64px;height:64px}
+.phone .tabs span{padding:8px 10px;font-size:.86rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.grid2,.cols{grid-template-columns:1fr}.phases{grid-template-columns:repeat(4,1fr)}.titans{grid-template-columns:1fr}.pills{margin-left:0}}
+</style>
+</head>
+<body>
+<main>
+
+<div class="doc-head">
+  <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt="">
+  <div style="flex:1;min-width:260px">
+    <h1>Raids renovado — propuesta visual</h1>
+    <p>RAI-0 · BL-070 (restyle completo de los módulos heredados), paso 1: Raids y Strikes · 2026-10-24</p>
+  </div>
+  <span class="tag tag--wait">ESPERA TU APROBACIÓN · SIN CÓDIGO</span>
+</div>
+
+<div class="note"><b>En una línea:</b> un solo módulo <b>Raids</b> (como el juego desde el 3 de febrero de 2026), con la miniatura oficial de cada jefe como identidad, y cada encuentro con su <b>pantalla propia</b> —igual que la ficha de la legendaria— con lo que te llevás esa semana y las mecánicas que importan. Antes de dibujar, medí el módulo de hoy: el problema principal no es el modal, es que <b>buena parte de lo que muestra no es cierto</b>.</div>
+
+<h2>1. Lo que medí en el módulo de hoy</h2>
+<p>Leí <code>js/raid-tracker.js</code> (100 KB) y <code>js/strike-tracker.js</code> (57 KB) enteros, el inventario de íconos de <code>assets/icons/raids/</code> y las fuentes oficiales del juego y de la API.</p>
+<table>
+<tr><th>Nivel</th><th>Hallazgo</th><th>Evidencia</th></tr>
+<tr><td><span class="sev sev--c">CRÍTICO</span></td><td><b>Los 46 enlaces «Ver video tutorial» son el mismo video de relleno</b>, que no tiene nada que ver con Guild Wars 2 (<code>watch?v=dQw4w9WgXcQ</code>).</td><td>30 en raids, 16 en strikes. Herencia del legado (LES-029).</td></tr>
+<tr><td><span class="sev sev--c">CRÍTICO</span></td><td><b>Mecánicas y estrategias genéricas y con errores.</b> Ejemplo: el Campamento de Prisioneros dice «hay que matar a los tres a la vez»; el objetivo real del juego es <i>proteger a los prisioneros enjaulados</i>. Las «estrategias» son 5 frases con el mismo molde (TANQUE / DPS / APOYO / TODOS / CRÍTICO) para casi todos los jefes.</td><td>Objetivos oficiales de «Weekly Salvation Pass» (wiki).</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>El modelo Raids / Strikes ya no existe en el juego.</b> Desde el 3/2/2026 las Strike Missions son «raid encounters», con la misma interfaz, recompensas y moneda. El módulo los separa, pone a Vloxx como «Ala 9» y repite Monte Balrior como strike.</td><td>Anuncio oficial de ArenaNet (22/1/2026).</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>La pestaña Strikes nunca marca nada.</b> Lee <code>/v2/account/raids</code>, que solo informa las alas 1 a 8: los 16 encuentros salen siempre «Pendiente», en rojo, aunque los hayas hecho.</td><td>Error abierto de la API #148 (desde 3/2/2026): faltan todos los raid encounters.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Las recompensas no son las del juego.</b> No aparecen los fragmentos de magnetita ni los cristales de Gaeting (las monedas reales de las raids); a todos los jefes les pone «+2~4 oro, +200.025 XP, +10.000 karma»; algunos drops están mal rotulados («Cofre de armadura de Dhuum» como infusión). <code>REWARDS_DATA</code> es código muerto con ids inventados e íconos que no existen.</td><td>Wiki: Magnetite Shard, Legendary Insight, cofres por jefe.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Iconografía incompleta.</b> Los 8 íconos de ala son el mismo archivo (igual a <code>raid-icon.png</code>). Faltan 23 íconos: 6 eventos de ala, los 16 encuentros ex-strike y Vloxx; hoy se ven emojis (👑 ⚡ 🏰). Una imagen de detalle pesa 8,6 MB (GIF de los Largos).</td><td>Blobs idénticos <code>72d7002</code>; lista de <code>assets/icons/raids/bosses/</code>.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Interfaz:</b> modal de 650 px y 60 % de alto con 4 pestañas; «Pendiente» en rojo para todo; emojis en indicadores; estilos en línea y colores fijos (<code>#ffd36b</code>) que no siguen el theme; animación que ignora «movimiento reducido».</td><td>RUN-016 y lectura del código.</td></tr>
+</table>
+
+<h2>2. Raids: un solo módulo, como el juego</h2>
+<p>La entrada «Raids y Strikes» de la barra lateral pasa a ser <b>Raids</b>, con dos pestañas: <b>Alas</b> (las 8 alas, que la API sí informa) y <b>Encuentros</b> (los 16 ex-strikes y los de Visions of Eternity). La ruta vieja <code>#/account/strikes</code> lleva a la pestaña Encuentros.</p>
+
+<div class="frame">
+<p class="frame-label">Maqueta A · Raids, pestaña Alas (computadora) · datos de ejemplo</p>
+<div class="hero">
+  <div class="row">
+    <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt="">
+    <div class="ttl"><h3>Raids</h3><p>Semana del lunes 19/10 · 18 de 29 encuentros de alas hechos</p></div>
+    <div class="pills">
+      <span class="pill">Local <b>12:41</b></span><span class="pill">Servidor <b>15:41 UTC</b></span>
+      <span class="pill pill--hot">Reset semanal <b>lun 07:30 UTC · en 2 d 15 h</b></span>
+      <button class="btn">↻ Actualizar</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="st"><small>Alas esta semana</small><b>18 <span>de 29</span></b><div class="bar"><i style="width:62%"></i></div></div>
+    <div class="st"><small>Conocimiento legendario</small><b>214</b><em>en tu cartera · 11 por cobrar en las alas</em></div>
+    <div class="st"><small>Fragmentos por cobrar</small><b>148</b><em>en las alas que te faltan · tope semanal 800</em></div>
+    <div class="st"><small>Encuentros</small><b>— <span>de 16</span></b><em>la API todavía no los informa</em></div>
+  </div>
+  <div class="voice"><span class="av" aria-hidden="true"></span><div><small>Shiruvana recomienda</small>Te quedan 2 jefes de Monte Balrior: <b>Greer</b> y <b>Ura</b>. Son 2 de conocimiento legendario y 30 fragmentos antes del reset del lunes.</div></div>
+</div>
+<div class="tabs"><span class="on">Alas <span class="badge">18/29</span></span><span>Encuentros <span class="badge">16</span></span></div>
+<span class="seg"><span class="on">Todos</span><span>Me faltan</span><span>Con modo desafío</span></span>
+<span class="seg"><span class="on">Todas las expansiones</span><span>HoT</span><span>PoF</span><span>JW</span></span>
+<div class="wings">
+  <section class="wing">
+    <div class="wing-h">
+      <span class="stack"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/vale_guardian.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/gorseval.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/sabetha.png" alt=""></span>
+      <div class="nm"><b>Ala 1 · Valle Espiritual</b><small class="mut">Heart of Thorns</small></div>
+      <span class="cnt">2/4</span>
+    </div>
+    <div class="enc enc--done"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/vale_guardian.png" alt=""><div><div class="n">Guardián del Valle<small class="mut">Jefe</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>10</span><span class="dots">●●<i>●●●</i></span></div></div><div class="state state--done">✓ Hecho<span class="go">›</span></div></div>
+    <div class="enc enc--done"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt=""><div><div class="n">Bosques Espirituales<small class="mut">Evento</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span></div></div><div class="state state--done">✓ Hecho<span class="go">›</span></div></div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/gorseval.png" alt=""><div><div class="n">Gorseval el Múltiple<small class="mut">Jefe</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>8</span><span class="dots">●<i>●●●●</i></span></div></div><div class="state state--todo">Pendiente<span class="go">›</span></div></div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/sabetha.png" alt=""><div><div class="n">Sabetha la Saboteadora<small class="mut">Jefe</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>10</span><span class="dots">●●<i>●●●</i></span></div></div><div class="state state--todo">Pendiente<span class="go">›</span></div></div>
+  </section>
+  <section class="wing">
+    <div class="wing-h">
+      <span class="stack"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/104013_Greer.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/decimus.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/ura_guardian.png" alt=""></span>
+      <div class="nm"><b>Ala 8 · Monte Balrior</b><small class="mut">Janthir Wilds</small></div>
+      <span class="cnt">1/3</span>
+    </div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/104013_Greer.png" alt=""><div><div class="n">Greer, el Portarruina<small class="mut">Jefe</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>16</span><span class="chip chip--cm">MD +10</span><span class="dots">●●●●●</span></div></div><div class="state state--todo">Pendiente<span class="go">›</span></div></div>
+    <div class="enc enc--done"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/decimus.png" alt=""><div><div class="n">Decima, la Invocatormentas<small class="mut">Jefe</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>14</span><span class="chip chip--cm">MD +10</span><span class="dots">●●●●<i>●</i></span></div></div><div class="state state--done">✓ Hecho<span class="go">›</span></div></div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/ura_guardian.png" alt=""><div><div class="n">Ura, la Aulladora de Vapores<small class="mut">Jefe</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>14</span><span class="chip chip--cm">MD +10</span><span class="dots">●●●●<i>●</i></span></div></div><div class="state state--todo">Pendiente<span class="go">›</span></div></div>
+  </section>
+</div>
+<p class="src">Fragmentos por encuentro y modo desafío (MD): wiki, «Magnetite Shard». Los puntos (●) son la categoría de dificultad del juego: ArenaNet agrupó los jefes en 5 categorías y cada una da la misma cantidad de fragmentos (8, 10, 12, 14 o 16).</p>
+</div>
+
+<h3>Qué cambia en las tarjetas</h3>
+<ul>
+<li><b>Identidad:</b> la miniatura oficial de cada jefe a 48 px, en su placa; el ala se reconoce por las miniaturas de sus jefes apiladas, en vez de un ícono genérico repetido.</li>
+<li><b>Lo que te da, a la vista:</b> conocimiento legendario, fragmentos de magnetita (o cristales de Gaeting en Visions of Eternity) y lo extra del modo desafío. Los íconos de monedas e ítems salen de la API oficial.</li>
+<li><b>Estado sin rojo:</b> «✓ Hecho» en verde y anillo verde en la miniatura; «Pendiente» neutro. El rojo queda para errores reales.</li>
+<li><b>Toda la fila abre la ficha</b> (mouse, teclado y celular); ya no hay un botón «Detalle» chico.</li>
+</ul>
+
+<div class="frame">
+<p class="frame-label">Maqueta B · pestaña Encuentros · los estados posibles</p>
+<div class="wings">
+  <section class="wing">
+    <div class="wing-h"><div class="nm"><b>End of Dragons</b><small class="mut">4 encuentros · todos con modo desafío</small></div><span class="cnt mut">—</span></div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt=""><div><div class="n">Escondite Filoetéreo<small class="mut">Encuentro</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>8</span><span class="chip chip--cm">MD +10</span></div></div><div class="state state--na">La API no lo informa<span class="go">›</span></div></div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt=""><div><div class="n">Templo de la Cosecha<small class="mut">Encuentro</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem"></span>16</span><span class="chip chip--cm">MD +10</span></div></div><div class="state state--hand">✓ Marcado por vos<span class="go">›</span></div></div>
+  </section>
+  <section class="wing">
+    <div class="wing-h"><div class="nm"><b>Visions of Eternity</b><small class="mut">Monedas: cristales de Gaeting</small></div><span class="cnt mut">—</span></div>
+    <div class="enc"><img class="mini" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt=""><div><div class="n">Claro del Guardián · Kela<small class="mut">Encuentro</small></div><div class="chips"><span class="chip"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt="">1</span><span class="chip"><span class="gem gem--g"></span>12</span><span class="chip chip--cm">MD +10</span></div></div><div class="state state--na">La API no lo informa<span class="go">›</span></div></div>
+  </section>
+</div>
+<p class="src">Las miniaturas que hoy faltan (16 encuentros, 6 eventos y Vloxx) aparecen acá con el ícono genérico solo en la maqueta: en RAI-1 las busco en la API oficial (<code>/v2/minis</code>, por ejemplo «Mini Kela») y quedan como enlaces a <code>render.guildwars2.com</code>, sin subir imágenes. Claro del Guardián da 12 cristales de Gaeting y 10 más en modo desafío (wiki, «Guardian's Glade»).</p>
+</div>
+
+<h2>3. La ficha del encuentro: pantalla propia</h2>
+<p>Como la ficha de la legendaria (BL-049): reemplaza la lista dentro del módulo, con «← Volver a Raids» y Escape, y vuelve al mismo lugar del scroll. Arriba está lo que te llevás y abajo cómo se pelea. Ejemplo con <b>Greer</b>, con datos verificados.</p>
+
+<div class="frame">
+<p class="frame-label">Maqueta C · ficha de Greer (computadora) · contenido verificado, estado de cuenta de ejemplo</p>
+<div class="back">← Volver a Raids <span class="mut">· Ala 8 · Monte Balrior · encuentro 2 de 3</span></div>
+<div class="sheet-h">
+  <img class="big" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/104013_Greer.png" alt="">
+  <div>
+    <h3>Greer, el Portarruina</h3>
+    <div class="en">Greer, the Blightbringer · titán de la podredumbre, hermano de Decima</div>
+    <div class="meta"><span class="exp">Janthir Wilds</span><span class="exp">Jefe</span><span class="exp">Dificultad <span class="dots">●●●●●</span></span><span class="exp">Modo desafío</span><span class="exp" style="border-color:var(--amber);color:var(--amber)">Pendiente esta semana</span></div>
+  </div>
+  <div class="acts"><button class="btn">Abrir en la wiki ↗</button><span class="mut" style="font-size:.8rem">Siguiente: Ura ›</span></div>
+</div>
+<div class="voice"><span class="av" aria-hidden="true"></span><div><small>Shiruvana recomienda</small>Si buscás el logro <b>«Spare the Ereg»</b>, no mates a Ereg: es opcional, pero sigue pegando en las fases finales.</div></div>
+<div class="grid2">
+  <div>
+    <div class="card">
+      <h4>Cómo es la pelea <small class="mut">7 fases</small></h4>
+      <div class="phases">
+        <div class="ph ph--burn"><b>Quema</b>100→65 %</div><div class="ph ph--split"><b>Separación</b>Greer inmune</div><div class="ph ph--burn"><b>Quema</b>65→35 %</div><div class="ph ph--split"><b>Separación</b>Greer inmune</div><div class="ph ph--burn"><b>Quema</b>35→10 %</div><div class="ph ph--add"><b>Proto-Greerlings</b>3 campeones</div><div class="ph ph--burn"><b>Quema final</b>10→0 %</div>
+      </div>
+      <p style="font-size:.86rem">En cada quema, al 80 %, 50 % y 20 % Greer se vuelve invulnerable y abre su barra de desafío: hay que romperla rápido, porque mientras tanto llueven áreas sobre el grupo.</p>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h4>Los titanes menores <small class="mut">dan una bendición que no se puede quitar</small></h4>
+      <div class="titans">
+        <div class="ti"><b>Reeg, the Blighter</b>Da Resolución a los demás titanes.</div>
+        <div class="ti"><b>Gree, the Bringer</b>Da Protección.</div>
+        <div class="ti"><b>Ereg, the Enabler</b>Da Poder ×25. Opcional: dejarlo vivo da el logro.</div>
+      </div>
+      <p style="font-size:.86rem;margin-top:8px">Si los bajás hasta el umbral de la fase (75 % en la primera quema, 50 % en la primera separación, 25 % en la segunda quema) desaparecen y dejan de dar su bendición. Gree y Reeg tienen que morir al final de la segunda separación.</p>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h4>Mecánicas que importan</h4>
+      <div class="mech">
+        <div class="m"><b><span class="role r-all">TODOS</span>Verdes de podredumbre (Eruption of Rot)</b><p>Círculos verdes grandes que se resuelven con 2 o 3 jugadores adentro. En las últimas fases salen hasta tres a la vez.</p></div>
+        <div class="m"><b><span class="role r-proj">PROYECTILES</span>Orbes que potencian (Empowering Blast)</b><p>Orbes chicos violetas que dan 2 de «Empowered» a cada titán que tocan. Se destruyen con reflejo o destrucción de proyectiles.</p></div>
+        <div class="m"><b><span class="role r-all">TODOS</span>Conos venenosos (Enfeebling Miasma)</b><p>Ola de gas que aplica condiciones, corrompe bendiciones y deja charcos de plaga en el suelo.</p></div>
+        <div class="m"><b><span class="role r-all">TODOS</span>Orbes de plaga (Blob of Blight)</b><p>Tres orbes grandes que te persiguen, empujan y sueltan proyectiles.</p></div>
+        <div class="m"><b><span class="role r-heal">CURACIÓN</span><span class="role r-proj">PROYECTILES</span>Fase de Proto-Greerlings</b><p>Al 10 % aparecen tres campeones con daño entrante muy alto: bloqueo de proyectiles constante. Greer sigue lanzando sus mecánicas.</p></div>
+      </div>
+      <p style="font-size:.86rem;margin-top:8px"><b>Composición:</b> las bendiciones de los titanes empujan a llevar todo el grupo de poder o todo de condición.</p>
+    </div>
+  </div>
+  <div>
+    <div class="card">
+      <h4>Lo que te llevás <small class="mut">1 vez por semana</small></h4>
+      <div class="rw"><span class="ic"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt=""></span><div>Conocimiento legendario<small class="mut">dentro del cofre de Greer, garantizado</small></div><span class="q">1</span></div>
+      <div class="rw"><span class="ic"><span class="gem"></span></span><div>Fragmentos de magnetita<small class="mut">tope semanal de 800 para todas las raids</small></div><span class="q">16</span></div>
+      <div class="rw"><span class="ic">◈</span><div>Ficha de Greer<small class="mut">Greer's Token, garantizada</small></div><span class="q">1–5</span></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h4>Lo que te puede tocar <small class="mut">del cofre</small></h4>
+      <div class="rw"><span class="ic">◇</span><div>Mini Rot Strider<small class="mut">si ya la tenés: 40 fragmentos</small></div><span class="rar rar-u">poco común</span></div>
+      <div class="rw"><span class="ic">◇</span><div>Greer's Blighted Touch</div><span class="rar rar-r">raro</span></div>
+      <div class="rw"><span class="ic">◇</span><div>Armas Sea-Glass Wave<small class="mut">16 armas posibles</small></div><span class="rar rar-r">raro</span></div>
+      <div class="rw"><span class="ic">◇</span><div>Chunk of Pulsing Bloodstone</div><span class="rar rar-s">muy raro</span></div>
+      <div class="rw"><span class="ic">◇</span><div>Pieza rara sin identificar</div><span class="rar rar-c">común</span></div>
+    </div>
+    <div class="card" style="margin-top:12px">
+      <h4>Modo desafío <small class="mut">extra, 1 vez por semana</small></h4>
+      <div class="rw"><span class="ic"><span class="gem"></span></span><div>Fragmentos de magnetita</div><span class="q">+10</span></div>
+      <div class="rw"><span class="ic">◈</span><div>Cofre magnífico de Greer<small class="mut">misma tabla de premios; desde la unificación ya no da conocimiento legendario</small></div><span class="q">1</span></div>
+    </div>
+    <div class="card links" style="margin-top:12px">
+      <h4>Para aprender más</h4>
+      <a href="https://wiki.guildwars2.com/wiki/Greer,_the_Blightbringer">Wiki oficial (inglés) ↗</a>
+      <a href="https://silverhalf.github.io/mount-balrior/greer/mechanics.html">Referencia de mecánicas de Greer (comunidad) ↗</a>
+      <span class="mut" style="font-size:.8rem">Sin videos inventados: solo enlaces verificados.</span>
+    </div>
+  </div>
+</div>
+<p class="src">Fuentes (consultadas el 2026-10-24): wiki «Greer's Coffer» y «Greer's Magnificent Coffer» (contenido de los cofres), «Magnetite Shard» (16 +10), «Legendary Insight» (1 por encuentro; el modo desafío ya no da), referencia de mecánicas de Greer de silverhalf (fases, titanes, mecánicas). Los nombres de ítems quedan en inglés hasta verificar los de la wiki en español.</p>
+</div>
+
+<div class="cols">
+<div class="frame">
+<p class="frame-label">Maqueta D · ficha en el celular</p>
+<div class="phone">
+  <div class="back">← Raids</div>
+  <div class="sheet-h">
+    <img class="big" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/104013_Greer.png" alt="">
+    <div><h3 style="font-size:1.15rem">Greer</h3><div class="meta"><span class="exp">Ala 8</span><span class="dots">●●●●●</span></div></div>
+  </div>
+  <div class="tabs"><span class="on">Recompensas</span><span>Mecánicas</span><span>Más</span></div>
+  <div class="rw"><span class="ic"><img src="https://render.guildwars2.com/file/6D33B7387BAF2E2CC9B5D37D1D1B01246AB6FA22/1302744.png" alt=""></span><div>Conocimiento legendario</div><span class="q">1</span></div>
+  <div class="rw"><span class="ic"><span class="gem"></span></span><div>Fragmentos</div><span class="q">16</span></div>
+  <div class="rw"><span class="ic">◇</span><div>Mini Rot Strider</div><span class="rar rar-u">poco común</span></div>
+  <p class="mut" style="font-size:.8rem">Pestañas de 44 px; «Volver» y Escape; la ficha usa todo el ancho.</p>
+</div>
+</div>
+<div class="frame">
+<p class="frame-label">Lo que tiene cada ficha (los 45 encuentros)</p>
+<ol style="color:var(--tx-2);font-size:.9rem;padding-left:20px">
+<li><b>Cabecera:</b> miniatura oficial a 96 px, nombre en español e inglés, ala o expansión, tipo, dificultad, modo desafío y tu estado de la semana.</li>
+<li><b>Lo que te llevás:</b> conocimiento legendario, fragmentos o cristales, cofre y lo garantizado.</li>
+<li><b>Lo que te puede tocar:</b> miniatura, armas, infusiones y monturas propias del jefe, con su rareza.</li>
+<li><b>Modo desafío:</b> qué da de más y, si cambia la pelea, qué cambia.</li>
+<li><b>Cómo es la pelea:</b> fases en una línea de tiempo.</li>
+<li><b>Mecánicas que importan:</b> de 3 a 6, con a quién le tocan (todos, curación, proyectiles, barra de desafío, tanque o kiter).</li>
+<li><b>Mi línea:</b> solo si hay un consejo verificado que valga la pena.</li>
+<li><b>Para aprender más:</b> wiki y una guía de la comunidad verificada. Cada ficha guarda sus fuentes y la fecha.</li>
+</ol>
+</div>
+</div>
+
+<h2>4. Íconos: los del juego, y los que faltan</h2>
+<table>
+<tr><th>Dónde</th><th>Hoy</th><th>Propuesta</th></tr>
+<tr><td>Jefes de las alas (23)</td><td>Miniatura del jefe, local</td><td>Se queda: es la identidad que pediste</td></tr>
+<tr><td>Eventos de ala (6), encuentros (16) y Vloxx</td><td>Emoji 👑 ⚡ o ícono roto</td><td>Miniatura oficial del jefe desde <code>/v2/minis</code> (render de ArenaNet). Si un evento no tiene miniatura propia, el ícono del jefe que lo sigue, con una marca de «Evento»</td></tr>
+<tr><td>Alas (8)</td><td>Un mismo ícono genérico repetido</td><td>Las miniaturas de sus jefes apiladas</td></tr>
+<tr><td>Monedas e ítems de recompensa</td><td>Rutas a una carpeta que no existe</td><td>Íconos oficiales de <code>/v2/currencies</code> y <code>/v2/items</code>, pedidos una vez y guardados en caché (como las recompensas de Logros)</td></tr>
+<tr><td>Imágenes de detalle</td><td>Hasta 8,6 MB (GIF)</td><td>No se usan: la ficha se arma con la miniatura grande y los datos</td></tr>
+</table>
+
+<h2>5. Cómo lo construyo</h2>
+<ul>
+<li><b>Datos verificados aparte:</b> <code>assets/data/raids/</code> con el catálogo de los 45 encuentros (id de la API, nombres en español e inglés, ala, fragmentos, conocimiento legendario, modo desafío y miniatura) y un archivo de contenido por expansión, que se carga solo al abrir una ficha. Cada dato lleva su fuente y fecha (LES-026). Lo que no pueda verificar no se publica.</li>
+<li><b>Vista nueva por el manifiesto</b> (DEC-035, archivos de hasta 40 KB): <code>js/raids-view.js</code> (cabecera, pestañas y tarjetas) y <code>js/raids-sheet.js</code> (ficha).</li>
+<li><b>Los archivos viejos se achican, no se reescriben:</b> por el canal de parches, <code>raid-tracker.js</code> publica su estado (encuentros hechos y conocimiento legendario) como hizo <code>achievements.js</code>, y deja de dibujar. <code>strike-tracker.js</code> (57 KB) se retira al final y su ruta lleva a «Encuentros».</li>
+<li><b>Lo que la API no informa:</b> pruebo si los logros semanales («Weekly Raid Encounters», con un objetivo por encuentro) sirven para marcarlos solos. Si sirven, se marcan solos; si no, el módulo dice «La API no lo informa», nunca un «Pendiente» falso.</li>
+<li><b>Sin pedidos nuevos innecesarios:</b> los mismos <code>/v2/account/raids</code> y la cartera; íconos y nombres de ítems una vez, con caché.</li>
+</ul>
+
+<h2>6. Plan, paso por paso (cada uno con tu validación)</h2>
+<table>
+<tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr>
+<tr><td>RAI-1</td><td>Catálogo verificado de los 45 encuentros, miniaturas oficiales, prueba de los logros semanales y tests</td><td>Nada todavía; te paso lo que medí</td></tr>
+<tr><td>RAI-2</td><td>Raids unificado: cabecera, indicadores, pestañas Alas / Encuentros y tarjetas; <code>raid-tracker.js</code> publica su estado</td><td>Maquetas A y B en DEV</td></tr>
+<tr><td>RAI-3</td><td>Ficha a pantalla completa con recompensas y fases</td><td>Maqueta C con recompensas reales en todos</td></tr>
+<tr><td>RAI-4</td><td>Mecánicas verificadas, por tandas: HoT, PoF, Janthir, encuentros</td><td>Fichas completas, una tanda por validación</td></tr>
+<tr><td>RAI-5</td><td>Se retira <code>strike-tracker.js</code>; «Raids y Strikes» pasa a «Raids» en la barra lateral y la Bienvenida</td><td>Un solo módulo</td></tr>
+<tr><td>RAI-6</td><td>Revisión: 19 themes, teclado, lector de pantalla, celular y movimiento reducido; FEAT-014 y cierre</td><td>Todo junto</td></tr>
+</table>
+
+<h2>7. Lo que necesito que decidas</h2>
+<table>
+<tr><th>#</th><th>Decisión</th><th>Recomiendo</th></tr>
+<tr><td>D1</td><td>Unificar Raids y Strikes en un solo módulo <b>Raids</b> con pestañas Alas / Encuentros, como el juego</td><td><b>Sí.</b> Es lo que el jugador ve en el juego desde febrero y elimina un módulo duplicado de 57 KB</td></tr>
+<tr><td>D2</td><td>Encuentros que la API no informa: si los logros semanales no alcanzan, ¿permito marcarlos a mano por semana? (una clave nueva en el navegador, <code>gn:raids:marks</code>, que se vacía sola en el reset)</td><td><b>Sí, como respaldo.</b> Primero pruebo los logros; marcar a mano solo si no sirven, y siempre distinguido («✓ Marcado por vos»)</td></tr>
+<tr><td>D3</td><td>Videos: reemplazar los 46 enlaces de relleno por enlaces verificados (wiki y una guía de la comunidad por encuentro), sin video si no hay uno confiable</td><td><b>Sí.</b> Un enlace falso es peor que ninguno</td></tr>
+<tr><td>D4</td><td>Alcance del contenido: mecánicas resumidas (3 a 6 por encuentro, con su rol), no una guía completa</td><td><b>Sí.</b> La ficha te prepara y la guía queda enlazada; así puedo verificar todo lo que publico</td></tr>
+</table>
+
+<p class="src">Fuentes generales: ArenaNet, «New Raid Encounter, Quickplay, and Raid System Improvements Coming February 3» (22/1/2026); wiki oficial: «Legendary Insight», «Magnetite Shard», «Weekly Raids», «Guardian's Glade», «Greer's Coffer»; gw2-api/issues #148 (raid encounters ausentes de <code>/v2/raids</code> y <code>/v2/account/raids</code>). Sin cambios de código en este paso.</p>
+</main>
+</body>
+</html>
