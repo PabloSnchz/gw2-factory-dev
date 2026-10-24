@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-046",
+ "summary": "BL-070 RAI-4 tanda 2 (Heart of Thorns): el índice publica hot.json y los tests cubren las 15 fichas de las alas 1 a 4",
+ "files": [
+  {
+   "path": "assets/data/raids/mechanics/index.json",
+   "base_sha": "8e38116f492959434c009c8e778c748b60d3808f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  \"jw\": \"jw.json\"\n",
+     "text": "  \"jw\": \"jw.json\",\n  \"hot\": \"hot.json\"\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "888be1865a977197a7da6d8d2b8ddf6b301e7d04",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));\nconst byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));\n",
+     "text": "const JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));\nconst HOT = JSON.parse(fs.readFileSync(path.join(MDIR, 'hot.json'), 'utf8'));\nconst byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('mecánicas, tanda Janthir: cada archivo del índice existe y cada dato tiene su fuente', () => {\n",
+     "text": "test('mecánicas por tandas: cada archivo del índice existe y cada dato tiene su fuente', () => {\n  assert.deepEqual(Object.keys(MIDX.files), ['jw', 'hot'], 'tandas publicadas: Janthir y Heart of Thorns');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      assert.ok(E.links.every((k) => d.sources[k]));\n    }\n  }\n  const raw = fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8');\n  assert.doesNotMatch(raw, /youtube|dQw4w9WgXcQ/i, 'sin videos inventados');\n",
+     "text": "      assert.ok(E.links.every((k) => d.sources[k]));\n    }\n    const raw = fs.readFileSync(path.join(MDIR, f), 'utf8');\n    assert.doesNotMatch(raw, /youtube|dQw4w9WgXcQ/i, f + ': sin videos inventados');\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(S.fightHTML(model('greer'), { roles: JW.roles, sources: JW.sources }), /llegan en una próxima tanda/, 'archivo sin este encuentro: igual que sin tanda');\n});\n",
+     "text": "  assert.match(S.fightHTML(model('greer'), { roles: JW.roles, sources: JW.sources }), /llegan en una próxima tanda/, 'archivo sin este encuentro: igual que sin tanda');\n});\n\ntest('tanda Heart of Thorns: las 15 fichas de las alas 1 a 4, con modo desafío solo donde existe', () => {\n  const hm = (id) => ({ e: HOT.encounters[id], roles: HOT.roles, sources: HOT.sources, verified: HOT.verified });\n  const ids = Object.keys(HOT.encounters);\n  assert.equal(ids.length, 15);\n  assert.deepEqual(ids, CAT.encounters.filter((e) => groupOf(e).expansion === 'hot').map((e) => e.id), 'en el orden del catálogo');\n  assert.deepEqual(ids.filter((id) => HOT.encounters[id].cm), ['keep_construct', 'cairn', 'mursaat_overseer', 'samarog', 'deimos']);\n  // Cada ala cita su guía de MetaBattle y su página de la wiki.\n  for (const [id, w] of [['vale_guardian', 1], ['slothasor', 2], ['xera', 3], ['deimos', 4]]) {\n    const h = S.fightHTML(model(id), hm(id));\n    assert.match(h, new RegExp('Guide:Raid_Wing_' + w + '_'), id + ': guía del ala ' + w);\n    assert.match(h, /href=\"https:\\/\\/wiki\\.guildwars2\\.com\\/wiki\\//, id + ': wiki oficial');\n    assert.match(h, /consultadas el 2026-10-24/);\n  }\n  const kc = S.fightHTML(model('keep_construct'), hm('keep_construct'));\n  assert.match(kc, /Abrazo de Xera/);\n  assert.match(kc, /En modo desafío cambia[\\s\\S]*anillo rojo/);\n  const de = S.fightHTML(model('deimos'), hm('deimos'));\n  assert.equal((de.match(/<ol class=\"rs-phases\">[\\s\\S]*?<\\/ol>/)[0].match(/<li>/g) || []).length, 6);\n  assert.match(de, /Antes del jefe: Prisionero encadenado\\./);\n  assert.match(de, /En modo desafío cambia[\\s\\S]*Saul no pelea/);\n  const vg = S.fightHTML(model('vale_guardian'), hm('vale_guardian'));\n  assert.match(vg, /<span class=\"rs-role\">Daño de condición<\\/span>/);\n  assert.match(vg, /<span class=\"rs-role\">Quitar bendiciones<\\/span>/);\n  assert.doesNotMatch(vg, /En modo desafío cambia/, 'el Guardián del valle no tiene modo desafío');\n  const bt = S.fightHTML(model('bandit_trio'), hm('bandit_trio'));\n  assert.ok(bt.indexOf('6:50') < bt.indexOf('4:50') && bt.indexOf('4:50') < bt.indexOf('2:47'), 'campeones en el orden del reloj');\n  const tc = S.fightHTML(model('twisted_castle'), hm('twisted_castle'));\n  assert.doesNotMatch(tc, /rs-phases/, 'el Castillo Retorcido es un evento sin fases');\n  assert.match(tc, /Estatuas acechantes/);\n});\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      const body = /rewards/.test(u) ? RW : /mechanics\\/index/.test(u) ? (o.idx || MIDX) : /mechanics\\/jw/.test(u) ? JW : /catalog/.test(u) ? CAT : null;\n",
+     "text": "      const body = /rewards/.test(u) ? RW : /mechanics\\/index/.test(u) ? (o.idx || MIDX) : /mechanics\\/jw/.test(u) ? JW : /mechanics\\/hot/.test(u) ? HOT : /catalog/.test(u) ? CAT : null;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  await sb.RaidsSheet.open('cairn');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 2, 'ni el índice ni Janthir se vuelven a pedir; sin tanda, no se pide nada');\n",
+     "text": "  await sb.RaidsSheet.open('cairn');\n  assert.match(rs.innerHTML, /Carga invisible/);\n  assert.deepEqual(mf().slice(2), ['assets/data/raids/mechanics/hot.json'], 'Heart of Thorns se pide al abrir su primera ficha');\n  await sb.RaidsSheet.open('deimos');\n  assert.match(rs.innerHTML, /Banquete de almas/);\n  await sb.RaidsSheet.open('adina');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 3, 'ni el índice ni las tandas se vuelven a pedir; sin tanda, no se pide nada');\n"
+    }
+   ]
+  }
+ ]
+}
