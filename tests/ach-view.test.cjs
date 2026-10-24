@@ -124,10 +124,10 @@ const fire = (x, type, attrs, ev) => {
 };
 const voices = (x) => x.calls.filter((c) => c[0] === 'voice').map((c) => c[2]);
 
-test('versión 1.1.0, la misma que pide js/modules.json, y por manifiesto', () => {
-  assert.match(SRC, /\* Versión: 1\.1\.0 /);
+test('versión 1.2.0, la misma que pide js/modules.json, y por manifiesto', () => {
+  assert.match(SRC, /\* Versión: 1\.2\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8'));
-  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.1.0' }]);
+  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.2.0' }]);
   assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /ach-view\.js/, 'se carga por el manifiesto, no por index.html');
   assert.match(SRC, /readyState === 'loading'[^\n]*DOMContentLoaded', init\);\s*else if \(doc\) init\(\);/, 'arranca aunque cargue tarde');
 });
@@ -258,6 +258,19 @@ test('«Colecciones legendarias» usa el filtro de legendarias y «Casi listos»
   assert.deepEqual(x.calls.filter((c) => c[0] === 'setFilter').map((c) => c[1]).slice(-1), ['{"cat":"10","pct":0.9}'], 'recupera categoría y umbral');
   fire(x, 'click', { 'data-achx-tab': 'near' });
   assert.equal(x.calls.filter((c) => c[0] === 'setFilter').length, 2, 'tocar la pestaña activa no refiltra');
+});
+
+test('LOG-4: en «Colecciones legendarias» hablo de la colección más avanzada y, si la conozco, de su legendaria', () => {
+  const x = load();
+  x.win.AchArmory = { legendaryFor: (r) => (r && r.r.id === 4 ? { id: 99, name: 'Aurora' } : null) };
+  fire(x, 'click', { 'data-achx-tab': 'legendary' });
+  assert.deepEqual(voices(x).slice(-1), ['Tu colección más avanzada es «Colección: Aurora»: vas 77 % y te faltan 4. Es para «Aurora»: lo que falta de la legendaria lo ves en la Armería.']);
+  const { P } = load();
+  const mk = (id, cur, max) => ({ r: { id }, meta: { name: 'C' + id, tiers: [{ count: max, points: 5 }] }, pr: { cur, max, pct: cur / max } });
+  const sum = P.summarize([mk(7, 9, 10)], CALC);
+  assert.equal(P.pickVoice(sum, 'legendary', null).text, 'Tu colección más avanzada es «C7»: vas 90 % y te falta 1.', 'sin legendaria conocida, sin la Armería');
+  assert.equal(P.pickVoice(P.summarize([], CALC), 'legendary', null), null, 'sin colecciones en curso, no hablo');
+  assert.equal(P.pickVoice(sum, 'near'), null, 'en «Casi listos», las reglas de siempre (90 % sin premio: nada)');
 });
 
 test('teclado: flechas, Inicio y Fin recorren las tres pestañas', () => {

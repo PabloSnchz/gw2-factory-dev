@@ -1,7 +1,9 @@
 /*!
  * js/ach-view.js — Logros: cabecera, pestañas y mi línea (BL-067, LOG-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-24)
+ * Versión: 1.2.0 (2026-10-24)
+ *  - 1.2.0 (LOG-4): en «Colecciones legendarias», mi línea dice cuál es la colección más
+ *    avanzada y, si js/ach-armory.js la une a una legendaria, que lo que falta está en la Armería.
  *  - 1.1.0 (LOG-3): «Por categoría» la arma js/ach-categories.js si está cargado (grupos por
  *    expansión o modo); si no, queda la lista de antes. Devuelve el foco al buscador al redibujar.
  *
@@ -20,7 +22,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[AchView]';
   var ICON = 'assets/icons/155059.png';
   var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
@@ -60,9 +62,10 @@
 
   // La lista que muestra la grilla (snapshot.rows, ya filtrada y ordenada) en números.
   function summarize(rows, calc) {
-    var s = { count: 0, apLeft: 0, step: [], withReward: 0, rewards: { Item: 0, Title: 0, Mastery: 0 }, prize: null };
+    var s = { count: 0, apLeft: 0, step: [], withReward: 0, rewards: { Item: 0, Title: 0, Mastery: 0 }, prize: null, first: null };
     (rows || []).forEach(function (x) {
       if (!x || !x.pr) return;
+      if (!s.first) s.first = x;
       s.count++;
       var left = apLeft(x, calc);
       s.apLeft += left;
@@ -105,8 +108,16 @@
   function nameOf(x) { return '«' + ((x.meta && x.meta.name) || '#' + x.r.id) + '»'; }
 
   // Mi línea: lo más barato primero, después una recompensa a mano. Si no hay nada cerca, nada.
-  function pickVoice(sum, tab) {
+  // En «Colecciones legendarias» hablo de la colección más avanzada y, si sé a qué legendaria
+  // lleva (leg = { name }), de la Armería.
+  function pickVoice(sum, tab, leg) {
     if (!sum || tab === 'cats') return null;
+    if (tab === 'legendary') {
+      if (!sum.first) return null;
+      var c = sum.first, pc = Math.min(99, Math.floor((Number(c.pr.pct) || 0) * 100));
+      return { key: 'leg', kind: 'recomienda', text: 'Tu colección más avanzada es ' + nameOf(c) + ': vas ' + pc + ' % y ' + falta(missing(c.pr)) + '.' +
+        (leg && leg.name ? ' Es para «' + leg.name + '»: lo que falta de la legendaria lo ves en la Armería.' : '') };
+    }
     if (sum.step.length) {
       var f = sum.step[0].x, n = sum.step.length, k = missing(f.pr);
       var ap = sum.step.reduce(function (a, s) { return a + s.ap; }, 0);
@@ -200,6 +211,12 @@
     return h.join('');
   }
 
+  function legOf(x) {
+    var AR = root.AchArmory;
+    if (!x || !AR || typeof AR.legendaryFor !== 'function') return null;
+    try { return AR.legendaryFor(x); } catch (e) { return null; }
+  }
+
   function buildModel(snap, calc, chosen) {
     var tab = activeTab(snap, chosen);
     var cat = snap && snap.cat && snap.catById ? snap.catById.get(String(snap.cat)) : null;
@@ -208,7 +225,7 @@
       tab: tab, loaded: !!(snap && snap.loaded), hasToken: !!(snap && snap.hasToken),
       pct: snap ? Number(snap.pct) || 0 : NEAR, catName: tab === 'near' && cat ? cat.name : '',
       ap: { perm: Number(snap && snap.ap && snap.ap.perm) || 0, daily: Number(snap && snap.ap && snap.ap.daily) || 0 },
-      sum: sum, t: t, cats: t.cats, voice: pickVoice(sum, tab)
+      sum: sum, t: t, cats: t.cats, voice: pickVoice(sum, tab, tab === 'legendary' ? legOf(sum.first) : null)
     };
   }
 
