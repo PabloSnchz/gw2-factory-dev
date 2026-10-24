@@ -1,0 +1,7 @@
+{
+  "id": "RUN-027",
+  "summary": "BL-070 RAI-3: qué vía de lectura de la wiki oficial responde desde CI (RUN-026 recibió HTML en vez de JSON)",
+  "tests": [
+    "tests/probe-rai3-host.smoke.cjs"
+  ]
+}
