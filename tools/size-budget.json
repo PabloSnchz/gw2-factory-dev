@@ -18,7 +18,6 @@
     "js/meta.js": { "base": 63600, "techo": 63600 },
     "js/characters.js": { "base": 62006, "techo": 62006 },
     "js/render-catologo.js": { "base": 61534, "techo": 61534 },
-    "js/strike-tracker.js": { "base": 57762, "techo": 57762 },
     "js/inventory-dashboard.js": { "base": 53460, "techo": 53460 },
     "js/wallet-dashboard.js": { "base": 52505, "techo": 52505 }
   },
