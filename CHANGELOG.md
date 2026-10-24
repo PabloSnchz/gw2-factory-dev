@@ -11,6 +11,14 @@ y el versionado **SemVer** (https://semver.org/).
 ## [Unreleased]
 
 ### Added
+- **BL-067 cerrada en DEV — superficies y marco común de la Bóveda (FEAT-013, CAM-POLISH-001, 2026-10-24)**:
+  - `js/gn-surface.js` 1.0.0: bandeja, tarjeta elevada, pista, bordes y placa calculados desde el theme y declarados solo dentro de los paneles registrados (Cámara del Brujo, Logros y los siete heredados). En Gato Negro la bandeja vuelve a ser `#0f1117`, como en la maqueta; la pista de las barras vuelve en 17 de 19 themes
+  - Cámara: íconos de la Tienda a 52 px con anillo de rareza, lo fijado en dorado, Compras fijadas con filete por significado. Logros: ícono oficial a 52 px en placa de 60, anillo dorado y «A UN PASO», % junto a la barra
+  - `js/gn-frame.js` 1.0.0: marco común para Actividades, Raids y Strikes, Inventario y Personajes y Cuentas (cabecera con ícono oficial a 40 px y el color del módulo, guarda AA en los 19 themes, foco visible, movimiento reducido, 44 px en el celular), sin tocar sus archivos congelados
+  - PATCH-033: `ach-view.js` 1.3.0 y `wv-view.js` 1.2.0 calculan su guarda sobre las superficies reales
+  - Tests: `tests/gn-surface.test.cjs` (8) y `tests/gn-frame.test.cjs` (9); RUN-017 y RUN-019 en verde
+  - Lecciones: LES-036 (la maqueta se valida en el contenedor real) y LES-037 (marco antes que reescritura)
+
 - **Mejoras de UX en flujo de API Keys (9 propuestas del PO Pablo)**:
   - Propuesta 1: Loading state en botón "Guardar" (`.btn--loading` + spinner CSS)
   - Propuesta 2: Focus automático en `kfValue` tras éxito (con `select()`)
