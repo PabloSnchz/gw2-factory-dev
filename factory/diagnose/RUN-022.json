@@ -1,0 +1,9 @@
+{
+  "id": "RUN-022",
+  "summary": "BL-070 RAI-1: medir la API oficial antes de armar el catálogo de Raids (alas y eventos de /v2/raids, monedas, categorías y logros semanales de raids, miniaturas de los jefes)",
+  "tests": [
+    "tests/probe-rai1-raids.smoke.cjs",
+    "tests/probe-rai1-weekly.smoke.cjs",
+    "tests/probe-rai1-minis.smoke.cjs"
+  ]
+}
