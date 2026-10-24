@@ -1,7 +1,7 @@
 /*!
  * js/raids-view.js — Raids renovado: cabecera, pestañas Alas y Encuentros, tarjetas (BL-070, RAI-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-24)
+ * Versión: 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
  *
  * Un solo módulo Raids, como el juego desde el 2026-02-03 (D1 de RAI-0):
  *  - Cabecera con el ícono del módulo, hora local, servidor y reset semanal (lunes 07:30 UTC),
@@ -14,12 +14,13 @@
  * Datos: assets/data/raids/catalog.json (RAI-1). Pedidos: los mismos de raid-tracker.js
  * (getAccountRaids y la cartera, con su caché) más /v2/account/achievements, que Logros ya cachea.
  * Toma el panel #raidTrackerPanel y oculta lo viejo sin borrarlo; #/account/strikes lleva a
- * Encuentros. La ficha de cada encuentro llega en RAI-3. Se carga por js/modules.json (DEC-035).
+ * Encuentros. Toda la fila abre la ficha del encuentro (RaidsSheet, RAI-3). Se carga por
+ * js/modules.json (DEC-035).
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[RaidsView]';
   var CATALOG = 'assets/data/raids/catalog.json';
   var ICON = 'assets/icons/raids/raid-icon.png';
@@ -234,7 +235,8 @@
     var e = r.e, s = r.s, ic = e.icon || {};
     var h = '<li class="rv-enc rv-s-' + s + '"><span class="rv-mini' + (ic.kind === 'next-boss' ? ' rv-mini--ev' : '') + '">' +
       '<img src="' + esc(ic.src || ICON) + '" alt="" width="48" height="48" loading="lazy" referrerpolicy="no-referrer"></span><div class="rv-main">' +
-      '<div class="rv-n">' + esc(e.name) + ' <small>' + esc(TYPE_TXT[e.type] || '') + '</small></div><div class="rv-chips">';
+      '<div class="rv-n"><button type="button" class="rv-open" data-rv-open="' + esc(e.id) + '">' + esc(e.name) +
+      '<span class="rv-sr">, ver ficha</span></button> <small>' + esc(TYPE_TXT[e.type] || '') + '</small></div><div class="rv-chips">';
     if (e.li) h += chip(curIcon(m, 'li'), String(e.li), 'Conocimiento legendario');
     if (e.amount != null) {
       var cur = e.currency === 'gaeting' ? 'gaeting' : 'magnetite';
@@ -247,7 +249,7 @@
       h += '<button type="button" class="rv-btn rv-btn--sm" data-rv-mark="' + esc(e.id) + '" aria-pressed="' + (s === 'hand') + '">' +
         (s === 'hand' ? 'Desmarcar' : 'Marcar hecho') + '<span class="rv-sr"> ' + esc(e.name) + '</span></button>';
     }
-    return h + '</div></li>';
+    return h + '</div><span class="rv-go" aria-hidden="true">›</span></li>';
   }
 
   function groupHTML(G, m) {
@@ -300,7 +302,7 @@
     if (m.tab === 'enc') h.push('<p class="rv-note">Desde febrero de 2026 los strikes son encuentros de raid. Forjando acero y Nexo de la Eternidad no los informa la API: marcalos vos y la marca vale hasta el reset del lunes.</p>');
     if (!m.groups.length) h.push('<p class="rv-note">No hay encuentros con este filtro.</p>');
     else { h.push('<div class="rv-wings">'); m.groups.forEach(function (G) { h.push(groupHTML(G, m)); }); h.push('</div>'); }
-    h.push('<p class="rv-src">Fragmentos, cristales y conocimiento legendario: wiki oficial y API, verificados el ' + esc(m.verified) + '. La ficha de cada encuentro llega en el próximo paso.</p></div>');
+    h.push('<p class="rv-src">Fragmentos, cristales y conocimiento legendario: wiki oficial y API, verificados el ' + esc(m.verified) + '. Tocá un encuentro para ver su ficha.</p></div>');
     return h.join('');
   }
 
@@ -341,7 +343,10 @@
     '.rv-wn{flex:1;min-width:0}.rv-wn h3{margin:0;font-size:.95rem;color:var(--tx-1)}.rv-wn small{font-size:.76rem;color:var(--tx-2)}',
     '.rv-cnt{font-weight:800;font-size:.95rem;color:var(--tx-1)}.rv-cnt--ok{color:var(--color-green,#3CC48A)}',
     '.rv-list{list-style:none;margin:0;padding:0}',
-    '.rv-enc{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--bd-1)}.rv-enc:first-child{border-top:0}',
+    '.rv-enc{position:relative;display:grid;grid-template-columns:48px 1fr auto 10px;gap:12px;align-items:center;padding:10px 14px;border-top:1px solid var(--bd-1)}.rv-enc:first-child{border-top:0}',
+    '.rv-enc:hover{background:color-mix(in srgb,var(--tx-1) 5%,transparent)}.rv-go{color:var(--tx-2);font-size:1.1rem}',
+    '.rv-open{font:inherit;font-weight:650;color:inherit;background:none;border:0;padding:0;text-align:left;cursor:pointer}',
+    '.rv-open::after{content:"";position:absolute;inset:0}.rv-state .rv-btn{position:relative;z-index:1}',
     '.rv-mini{position:relative;width:48px;height:48px;border-radius:10px;background:radial-gradient(circle at 50% 40%,var(--bg-2),var(--bg-1));box-shadow:0 0 0 1px var(--bd-2);display:block}',
     '.rv-mini img{width:48px;height:48px;border-radius:10px;display:block;object-fit:contain}',
     '.rv-mini--ev img{opacity:.55;filter:grayscale(.4)}.rv-mini--ev::after{content:"Evento";position:absolute;left:0;right:0;bottom:-2px;font-size:.58rem;text-align:center;color:var(--tx-1);background:var(--bg-0);border-radius:0 0 10px 10px}',
@@ -359,7 +364,7 @@
     '@media (max-width:900px){.rv-hero{padding:12px}.rv-ico{width:40px;height:40px;padding:4px}.rv-title h2{font-size:1.05rem}',
     '.rv-pills{margin-left:0;width:100%}.rv-stats{grid-template-columns:1fr 1fr;gap:6px}.rv-st{padding:8px 10px}.rv-st b{font-size:1.05rem}',
     '.rv-wings{grid-template-columns:1fr}.rv-tabs [role=tab],.rv-seg button,.rv-btn{min-height:44px}.rv-enc{grid-template-columns:44px 1fr;padding:10px}',
-    '.rv-mini,.rv-mini img{width:44px;height:44px}.rv-state{grid-column:2;text-align:left}}'
+    '.rv-mini,.rv-mini img{width:44px;height:44px}.rv-state{grid-column:2;text-align:left}.rv-go{display:none}}'
   ].join('\n');
 
   // ------------------------------------------------------------------ DOM
@@ -449,7 +454,7 @@
   function focusKey() {
     var a = doc.activeElement;
     if (!a || !a.getAttribute) return null;
-    var keys = ['data-rv-tab', 'data-rv-filter', 'data-rv-exp', 'data-rv-mark', 'data-rv'];
+    var keys = ['data-rv-tab', 'data-rv-filter', 'data-rv-exp', 'data-rv-mark', 'data-rv-open', 'data-rv'];
     for (var i = 0; i < keys.length; i++) { var v = a.getAttribute(keys[i]); if (v) return '[' + keys[i] + '="' + v + '"]'; }
     return null;
   }
@@ -496,8 +501,8 @@
     for (var n = t, i = 0; n && i < 6; n = n.parentNode, i++) {
       if (!n.getAttribute) continue;
       var a = { act: n.getAttribute('data-rv'), tab: n.getAttribute('data-rv-tab'), filter: n.getAttribute('data-rv-filter'),
-        exp: n.getAttribute('data-rv-exp'), mark: n.getAttribute('data-rv-mark') };
-      if (a.act || a.tab || a.filter || a.exp || a.mark) return a;
+        exp: n.getAttribute('data-rv-exp'), mark: n.getAttribute('data-rv-mark'), open: n.getAttribute('data-rv-open') };
+      if (a.act || a.tab || a.filter || a.exp || a.mark || a.open) return a;
     }
     return null;
   }
@@ -513,6 +518,7 @@
       else if (a.filter) { st.ui.filter = a.filter; render(); }
       else if (a.exp) { st.ui.exp = a.exp; render(); }
       else if (a.mark) mark(a.mark);
+      else if (a.open && root.RaidsSheet && typeof root.RaidsSheet.open === 'function') root.RaidsSheet.open(a.open);
     });
     // Flechas, Inicio y Fin entre las dos pestañas (patrón tablist).
     host.addEventListener('keydown', function (e) {
