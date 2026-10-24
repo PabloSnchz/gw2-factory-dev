@@ -1,18 +1,22 @@
 # STATUS
 
-Estado: ESPERANDO A PABLO
-Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 propuesta ENTREGADA (2026-10-24 15:49Z).
+Estado: EN CURSO
+Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 EN CURSO.
 Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.
 Fase: F1 — Visibilidad
-Etapa actual: PRODUCT
+Etapa actual: DEVELOPMENT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 15:52Z
-Próxima acción: esperar a Pablo. Él decide RAI-0 (D1 a D4). Con su aprobación empiezo RAI-1 (catálogo verificado de los 45 encuentros, miniaturas oficiales y prueba de los logros semanales); sin código antes.
+Última actualización: 2026-10-24 16:05Z
+Próxima acción: RAI-1. Mido la API oficial desde CI (RUN-022: /v2/raids, minis, monedas y logros semanales), armo `assets/data/raids/catalog.json` con los 45 encuentros verificados y su test. Sin cambios visibles.
 
 Micro-ciclo:
-BL-070 RAI-0 — propuesta visual de Raids renovado. ENTREGADA.
+BL-070 RAI-1 — catálogo verificado, miniaturas oficiales y prueba de los logros semanales. EN CURSO.
 Archivos:
-- docs/propuestas/propuesta-raids-bl070.html (`366801f`)
+- tests/probe-rai1-*.smoke.cjs (sondas temporales de la API, se borran al terminar)
+- assets/data/raids/catalog.json
+- tests/raids-catalog.test.cjs
+
+Antes: RAI-0 — propuesta visual de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`, `366801f`). APROBADA por Pablo (2026-10-24 15:57Z): «Propuesta brillante… validada y aprobada»; D1 a D4 sí.
 
 Anterior: BL-069 — promoción del ciclo de restyle a producción (PRD-0 a PRD-9). HECHO.
 Archivos:
@@ -48,7 +52,6 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-070] Decisión: aprobá o corregí la propuesta de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`). D1 un solo módulo Raids con pestañas Alas y Encuentros; D2 marcar a mano los encuentros que la API no informa, solo si los logros semanales no alcanzan; D3 reemplazar los 46 videos de relleno por enlaces verificados; D4 mecánicas resumidas (3 a 6 por encuentro). Recomiendo sí en las cuatro.
 - [BL-069] Validación: abrí producción con recarga completa (Ctrl+F5) y recorré Logros (cabecera, tres pestañas, tarjetas con el ícono oficial grande y anillo dorado en los que están a un paso; la barra lateral ya sin el panel viejo de Logros), la Cámara del Brujo y Actividades, Raids, Strikes, Inventario, Personajes y Cuentas con la cabecera común. Probá también un theme claro (Notion o macOS). Si algo no va, la vuelta atrás es la rama `rollback/pre-restyle-ciclo`; para quitar solo el marco común, sacar `js/gn-frame.js` de `js/modules.json`.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas.
