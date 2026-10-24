@@ -109,7 +109,8 @@ for (const f of jsFiles) {
 
 console.log('  modulos con el latch: ' + (conGuard.length ? conGuard.map(m => m.archivo).join(', ') : '(ninguno)'));
 check('el censo NO esta vacio (si fuera 0, el arnes no matchea y no mide)',
-  conGuard.length >= 4, 'solo ' + conGuard.length);
+  // BL-070 RAI-5b: eran 4 con strike-tracker.js; desde su retiro son 3 (RUN-038).
+  conGuard.length >= 3, 'solo ' + conGuard.length);
 check('el latch de cada modulo tiene una bajada: todos exportan deactivate()',
   sinBajada.length === 0, sinBajada.join(', '));
 
