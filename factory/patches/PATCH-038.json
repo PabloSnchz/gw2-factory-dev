@@ -1,0 +1,46 @@
+{
+ "id": "PATCH-038",
+ "summary": "status: RAI-0 aprobada por Pablo (D1 a D4 sí); checkpoint de inicio de RAI-1",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "9cdf3c1839744bf6e6a23dc5528168f153dd8804",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 propuesta ENTREGADA (2026-10-24 15:49Z).",
+     "text": "Tarea actual: BL-070 — Restyle completo de los módulos heredados. Paso 1, Raids y Strikes: RAI-0 APROBADA (2026-10-24 15:57Z, D1 a D4 sí); RAI-1 EN CURSO."
+    },
+    {
+     "op": "replace",
+     "anchor": "Estado: ESPERANDO A PABLO",
+     "text": "Estado: EN CURSO"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: PRODUCT",
+     "text": "Etapa actual: DEVELOPMENT"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-24 15:52Z",
+     "text": "Última actualización: 2026-10-24 16:05Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: esperar a Pablo. Él decide RAI-0 (D1 a D4). Con su aprobación empiezo RAI-1 (catálogo verificado de los 45 encuentros, miniaturas oficiales y prueba de los logros semanales); sin código antes.",
+     "text": "Próxima acción: RAI-1. Mido la API oficial desde CI (RUN-022: /v2/raids, minis, monedas y logros semanales), armo `assets/data/raids/catalog.json` con los 45 encuentros verificados y su test. Sin cambios visibles."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070 RAI-0 — propuesta visual de Raids renovado. ENTREGADA.\nArchivos:\n- docs/propuestas/propuesta-raids-bl070.html (`366801f`)\n",
+     "text": "BL-070 RAI-1 — catálogo verificado, miniaturas oficiales y prueba de los logros semanales. EN CURSO.\nArchivos:\n- tests/probe-rai1-*.smoke.cjs (sondas temporales de la API, se borran al terminar)\n- assets/data/raids/catalog.json\n- tests/raids-catalog.test.cjs\n\nAntes: RAI-0 — propuesta visual de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`, `366801f`). APROBADA por Pablo (2026-10-24 15:57Z): «Propuesta brillante… validada y aprobada»; D1 a D4 sí.\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-070] Decisión: aprobá o corregí la propuesta de Raids renovado (`docs/propuestas/propuesta-raids-bl070.html`). D1 un solo módulo Raids con pestañas Alas y Encuentros; D2 marcar a mano los encuentros que la API no informa, solo si los logros semanales no alcanzan; D3 reemplazar los 46 videos de relleno por enlaces verificados; D4 mecánicas resumidas (3 a 6 por encuentro). Recomiendo sí en las cuatro.\n"
+    }
+   ]
+  }
+ ]
+}
