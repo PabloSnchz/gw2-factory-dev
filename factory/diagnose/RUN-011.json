@@ -1,0 +1,5 @@
+{
+  "id": "RUN-011",
+  "summary": "BL-064 CAM-6: antes de tocar la Cámara, cómo se aplica la guarda de contraste (Bienvenida, Armería), qué expone window.WV y quién usa todavía la tienda vieja y los botones viejos",
+  "tests": ["tests/probe-cam6.smoke.cjs"]
+}
