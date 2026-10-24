@@ -1,22 +1,20 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-068 — Armería y Cámara del Brujo en producción, en una sola tarea, como pidió Pablo. Espera su validación en producción.
-Motivo: Pablo validó CAM-6 y cerró BL-064 («funcionamiento ok, todo estable», 2026-10-24 02:25Z) y ordenó pasar a producción la Cámara junto con la Armería.
+Tarea actual: BL-067 paso 3 — Logros. Siguiente módulo del restyle; empieza por LOG-0 (diagnóstico y propuesta visual) cuando Pablo lo autorice.
+Motivo: Pablo validó en producción la renovación de Cartera, Metas y Eventos, Bienvenida y Cámara del Brujo (2026-10-24 04:25Z) y pidió volver al restyle.
 Fase: F1 — Visibilidad
-Etapa actual: REVIEW
+Etapa actual: PRODUCT
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-24 02:55Z
-Próxima acción: con la validación de producción, empezar BL-067 por Logros (propuesta visual primero, como en la Armería y la Cámara), salvo que Pablo elija otro orden.
+Última actualización: 2026-10-24 04:27Z
+Próxima acción: LOG-0 — diagnóstico de Logros, problemas, objetivos, mockups desktop y celular, integración con el GDS y mi voz, plan por micro-ciclos. Sin implementar hasta la aprobación de Pablo.
 
 Micro-ciclo:
-BL-068 — Promoción de la Armería y la Cámara a producción. HECHO, espera validación.
+Ninguno en curso. BL-068 cerrado y validado.
 Archivos:
-- gw2-wallet-ligero: 11 archivos en 10 commits (`3cd00da` … `374b6f0`)
-- ai-memory: backlog, FEAT-010, FEAT-011 e índice (PATCH-026)
 - ai-memory/status.md
 
-Último hecho: medí producción contra DEV, guardé la vuelta atrás en la rama `rollback/pre-camara-armeria` (`f72cde8`) y publiqué en serie, en el mismo orden en que se armó en DEV, para que cada commit deje el sitio andando: primero el cargador (`boot.js`, `modules.json`) y los módulos nuevos de la Cámara, después `index.html`, después los 4 módulos renovados de la Cámara y al final la Armería (`render-catologo.js` 1.6.1). Comprobé cada archivo publicado contra DEV: idénticos. Quedan distintos a propósito tres archivos: `analytics.js` (producción mide, DEV no), `router.js` (producción sigue en 2.17.0: la 2.18.0 solo borra código que ya no se usa y no entra entera en una publicación mía) y `wallet-theme.js` (2.1.0; la corrección de BL-066 no se pidió). El `index.html` de producción conserva Google Analytics y pide esas dos versiones.
+Último hecho: Pablo validó la promoción de BL-068. Entre medio entregué SHIRUVANA-ART-001 (obra «EVOLVING», versión plana y anime, y pack de prompts para IA en `docs/arte/shiruvana-art-001/`).
 
 Plan BL-065 (DEC-035): CERRADA y validada por Pablo (2026-10-23 23:12Z).
 
@@ -24,10 +22,10 @@ Plan del restyle:
 
 BL-064 (cerrada y validada por Pablo, 2026-10-24 02:25Z):
 1. Armería Legendaria: validada al 100% (FEAT-010). En producción (BL-068).
-2. Cámara del Brujo: CAM-0 a CAM-6 validados (FEAT-011). En producción (BL-068).
+2. Cámara del Brujo: CAM-0 a CAM-6 validados (FEAT-011). En producción y validada (BL-068).
 
 BL-067 (READY, sigue el mismo plan aprobado):
-3. Logros.
+3. Logros. ← siguiente (LOG-0).
 4. Actividades (después de decidir BL-055).
 5. Raids y Strikes.
 6. Inventario y Personajes.
@@ -41,14 +39,14 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - BL-057 cerrada: Metas y Eventos renovado (FEAT-007), en producción.
 - BL-058 cerrada: Bienvenida, la puerta de entrada de la Bóveda (FEAT-008), en producción.
 - BL-061 cerrada: la Sidebar (FEAT-009). Completa en producción (BL-062 y BL-063).
-- BL-064 cerrada y validada: la Armería (FEAT-010) y la Cámara del Brujo (FEAT-011), en producción (BL-068). El resto del restyle sigue en BL-067.
+- BL-064 cerrada y validada: la Armería (FEAT-010) y la Cámara del Brujo (FEAT-011), en producción y validadas por Pablo (BL-068, 2026-10-24). El resto del restyle sigue en BL-067.
+- SHIRUVANA-ART-001: obra «EVOLVING» entregada (A + B, plana y anime, más prompts para IA).
 - BL-065 cerrada y validada: canal de parches, manifiesto de módulos y presupuesto de tamaño (DEC-035; LES-031 a LES-034).
 - BL-066 cerrada: suite de DEV en verde; las 3 fallas eran mías (LES-032).
 - BL-005 cerrada con el primer parche sobre `index.html` (FP-4).
 
 ## Esperando a Pablo
 
-- [BL-068] Validación: abrí producción con recarga completa (Ctrl+F5). Armería: cabecera con buscador, pestañas Catálogo / Mi cola (sin la barra «Modo:»), filtros en una fila y armaduras por set. Cámara del Brujo: 3 pestañas sin los botones viejos, mi línea en la cabecera cuando hay algo para hacer, Tienda con −/+ y «Gestionar», y Compras fijadas. Si algo no va, la vuelta atrás es la rama `rollback/pre-camara-armeria`.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas. Mientras tanto dicen «Sin vista previa», sin imágenes rotas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular (Drive, iCloud o lo que tengas, sin cuentas nuevas) y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
