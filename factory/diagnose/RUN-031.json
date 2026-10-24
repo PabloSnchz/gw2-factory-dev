@@ -1,0 +1,14 @@
+{
+  "id": "RUN-031",
+  "summary": "BL-070 RAI-4 tanda 2 después de PATCH-046: Heart of Thorns en el índice de mecánicas; ficha, vista, catálogo, versiones, arranque, tamaño y memoria",
+  "tests": [
+    "tests/raids-sheet.test.cjs",
+    "tests/raids-view.test.cjs",
+    "tests/raids-catalog.test.cjs",
+    "tests/index-versions.test.cjs",
+    "tests/boot.test.cjs",
+    "tests/size-budget.test.cjs",
+    "tests/ai-memory.test.cjs",
+    "tests/dev-pages.test.cjs"
+  ]
+}
