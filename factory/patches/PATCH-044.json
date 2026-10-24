@@ -1,0 +1,154 @@
+{
+ "id": "PATCH-044",
+ "summary": "BL-070 RAI-4 tanda 1 (Monte Balrior): raids-sheet.js 1.1.0 con «Cómo se pelea» (fases, mecánicas con rol, modo desafío, fuentes) y pestañas en el celular; tests y manifiesto",
+ "files": [
+  {
+   "path": "js/raids-sheet.js",
+   "base_sha": "3ade83533ff649456228ec87e0130f47b2ed7826",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-24)\n",
+     "text": " * Versión: 1.1.0 (2026-10-24) — RAI-4: «Cómo se pelea» (fases, mecánicas, modo desafío y fuentes)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * verificado no se muestra. Las mecánicas llegan en RAI-4.\n",
+     "text": " * verificado no se muestra. Fases y mecánicas: assets/data/raids/mechanics/<expansión>.json,\n * por tandas (RAI-4), listadas en mechanics/index.json; se piden al abrir una ficha de esa\n * expansión. En el celular, dos pestañas: Recompensas y Cómo se pelea.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';\n",
+     "text": "  var VERSION = '1.1.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var DATA = 'assets/data/raids/rewards.json';\n  var PANEL = 'raidTrackerPanel';\n",
+     "text": "  var DATA = 'assets/data/raids/rewards.json';\n  var MECH_DIR = 'assets/data/raids/mechanics/';\n  var PANEL = 'raidTrackerPanel';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function sheetHTML(m, items) {\n",
+     "text": "  function link(s) {\n    return '<a href=\"' + esc(s.url) + '\" target=\"_blank\" rel=\"noopener noreferrer\">' + esc(s.name) + ' ↗</a>';\n  }\n\n  // «Cómo se pelea». M = { e: entrada del encuentro, roles, sources, verified } o null si su tanda no llegó.\n  function fightHTML(m, M) {\n    var h = '<section class=\"rs-card rs-fight\" data-rs-pane=\"fight\" aria-labelledby=\"rsFight\"><h3 id=\"rsFight\">Cómo se pelea</h3>';\n    if (!M || !M.e) {\n      return h + '<p class=\"rs-note\">Las fases y mecánicas de este encuentro llegan en una próxima tanda, verificadas. Mientras tanto: ' +\n        '<a href=\"' + esc(m.wiki) + '\" target=\"_blank\" rel=\"noopener noreferrer\">wiki oficial ↗</a></p></section>';\n    }\n    var E = M.e, R = M.roles || {}, S = M.sources || {};\n    if (E.summary) h += '<p class=\"rs-sum\">' + esc(E.summary) + '</p>';\n    if (E.pre) h += '<p class=\"rs-pre\"><b>Antes del jefe: ' + esc(E.pre.name) + '.</b> ' + esc(E.pre.text) + '</p>';\n    if (E.tip) h += '<p class=\"rs-tip\"><b>Shiruvana recomienda</b> ' + esc(E.tip.text) + '</p>';\n    h += '<div class=\"rs-fgrid\">';\n    if (E.phases && E.phases.length) {\n      h += '<div><h4 class=\"rs-h4\">Fases <small>· ' + E.phases.length + '</small></h4><ol class=\"rs-phases\">';\n      E.phases.forEach(function (p) {\n        h += '<li><b>' + esc(p.at) + '</b> <span>' + esc(p.label) + '</span><p>' + esc(p.text) + '</p></li>';\n      });\n      h += '</ol></div>';\n    }\n    h += '<div><h4 class=\"rs-h4\">Mecánicas que importan</h4><ul class=\"rs-mechs\">';\n    (E.mechanics || []).forEach(function (x) {\n      h += '<li><div class=\"rs-mh\"><b>' + esc(x.name) + '</b>' + (x.en ? ' <small lang=\"en\">' + esc(x.en) + '</small>' : '');\n      (x.roles || []).forEach(function (r) { h += '<span class=\"rs-role\">' + esc(R[r] || r) + '</span>'; });\n      h += '</div><p>' + esc(x.text) + '</p></li>';\n    });\n    h += '</ul></div></div>';\n    if (E.cm && E.cm.length && m.e.cm) {\n      h += '<h4 class=\"rs-h4\">En modo desafío cambia</h4><ul class=\"rs-cmlist\">';\n      E.cm.forEach(function (t) { h += '<li>' + esc(t) + '</li>'; });\n      h += '</ul>';\n    }\n    var used = (E.links || []).filter(function (k) { return S[k]; });\n    if (used.length) {\n      h += '<h4 class=\"rs-h4\">Para aprender más</h4><p class=\"rs-links\">' + used.map(function (k) { return link(S[k]); }).join(' · ') + '</p>';\n      h += '<p class=\"rs-src\">Fuentes: ' + used.map(function (k) { return esc(S[k].name); }).join(' y ') + (M.verified ? ', consultadas el ' + esc(M.verified) : '') + '. Sin videos inventados: solo enlaces verificados.</p>';\n    }\n    return h + '</section>';\n  }\n\n  function tabsHTML(pane) {\n    var h = '<div class=\"rs-tabs\" role=\"tablist\" aria-label=\"Secciones de la ficha\">';\n    [['rew', 'Recompensas'], ['fight', 'Cómo se pelea']].forEach(function (t) {\n      h += '<button type=\"button\" role=\"tab\" data-rs-tab=\"' + t[0] + '\" aria-selected=\"' + (pane === t[0]) + '\">' + t[1] + '</button>';\n    });\n    return h + '</div>';\n  }\n\n  function sheetHTML(m, items, M, pane) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    h.push('</div></div></header><div id=\"rsVoice\" class=\"rs-voice\" aria-live=\"polite\"></div>');\n",
+     "text": "    h.push('</div></div></header><div id=\"rsVoice\" class=\"rs-voice\" aria-live=\"polite\"></div>' + tabsHTML(pane === 'fight' ? 'fight' : 'rew'));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    h.push('<div class=\"rs-grid\"><section class=\"rs-card\" aria-labelledby=\"rsWeek\"><h3 id=\"rsWeek\">Lo que te llevás <small>1 vez por semana</small></h3><ul class=\"rs-rows\">');\n",
+     "text": "    h.push('<div class=\"rs-grid\"><section class=\"rs-card\" data-rs-pane=\"rew\" aria-labelledby=\"rsWeek\"><h3 id=\"rsWeek\">Lo que te llevás <small>1 vez por semana</small></h3><ul class=\"rs-rows\">');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      h.push('<section class=\"rs-card rs-card--cm\" aria-labelledby=\"rsCm\"><h3 id=\"rsCm\">Modo desafío <small>extra, 1 vez por semana</small></h3><ul class=\"rs-rows\">');\n",
+     "text": "      h.push('<section class=\"rs-card rs-card--cm\" data-rs-pane=\"rew\" aria-labelledby=\"rsCm\"><h3 id=\"rsCm\">Modo desafío <small>extra, 1 vez por semana</small></h3><ul class=\"rs-rows\">');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    h.push('</div>');\n",
+     "text": "    h.push(fightHTML(m, M) + '</div>');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.rs-note,.rs-src{margin:10px 0 0;color:var(--tx-2);font-size:.8rem}.rs-src{font-size:.72rem}.rs-src a,.rs-note a{color:var(--acc-1)}',\n    '#rsRoot button:focus-visible,#rsRoot a:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',\n",
+     "text": "    '.rs-note,.rs-src{margin:10px 0 0;color:var(--tx-2);font-size:.8rem}.rs-src{font-size:.72rem}.rs-src a,.rs-note a{color:var(--acc-1)}',\n    '.rs-fight{grid-column:1/-1}.rs-sum{margin:0 0 10px;color:var(--tx-1);font-size:.9rem}',\n    '.rs-pre,.rs-tip{margin:0 0 10px;padding:8px 12px;border-radius:10px;background:var(--bg-0);border:1px solid var(--bd-1);font-size:.84rem;color:var(--tx-1)}',\n    '.rs-tip{border-color:color-mix(in srgb,var(--rs-mod) 55%,var(--bd-1))}.rs-tip b{color:var(--rs-mod);margin-right:4px}',\n    '.rs-fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}',\n    '.rs-phases{list-style:none;margin:0;padding:0;border-left:2px solid var(--bd-2)}',\n    '.rs-phases li{position:relative;padding:0 0 10px 14px}.rs-phases li::before{content:\"\";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--rs-mod)}',\n    '.rs-phases b{font-size:.8rem;color:var(--tx-2)}.rs-phases span{font-weight:700;color:var(--tx-1);font-size:.88rem}.rs-phases p{margin:2px 0 0;font-size:.82rem;color:var(--tx-1)}',\n    '.rs-mechs{list-style:none;margin:0;padding:0;display:grid;gap:8px}.rs-mechs li{border:1px solid var(--bd-1);border-radius:10px;padding:8px 10px;background:var(--bg-0)}',\n    '.rs-mh{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.rs-mh b{color:var(--tx-1);font-size:.88rem}.rs-mh small{color:var(--tx-2);font-size:.74rem}',\n    '.rs-role{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--bd-2);border-radius:999px;padding:0 7px;color:var(--tx-2)}',\n    '.rs-mechs p{margin:4px 0 0;font-size:.82rem;color:var(--tx-1)}.rs-cmlist{margin:0;padding-left:18px;font-size:.84rem;color:var(--tx-1)}',\n    '.rs-links{margin:0;font-size:.84rem}.rs-links a{color:var(--acc-1)}',\n    '.rs-tabs{display:none;gap:4px;margin-top:12px;border-bottom:1px solid var(--bd-1)}',\n    '.rs-tabs [role=tab]{font:inherit;font-size:.9rem;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:8px 14px;color:var(--tx-2);cursor:pointer;min-height:44px;flex:1}',\n    '.rs-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--rs-mod)}',\n    '#rsRoot button:focus-visible,#rsRoot a:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.rs-grid{grid-template-columns:1fr}.rs-btn{min-height:44px}.rs-card{padding:12px}}'\n",
+     "text": "    '.rs-grid{grid-template-columns:1fr}.rs-btn{min-height:44px}.rs-card{padding:12px}.rs-fgrid{grid-template-columns:1fr}.rs-tabs{display:flex}',\n    '#rsRoot[data-pane=rew] [data-rs-pane=fight],#rsRoot[data-pane=fight] [data-rs-pane=rew]{display:none}}'\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { rw: null, rwP: null, open: null, scroll: 0, items: {}, seq: 0, voiceKey: null };\n",
+     "text": "  var st = { rw: null, rwP: null, open: null, scroll: 0, items: {}, seq: 0, voiceKey: null, pane: 'rew', idx: null, idxP: null, mech: {} };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return st.rwP;\n  }\n",
+     "text": "    return st.rwP;\n  }\n\n  function getJSON(url) {\n    return root.fetch(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(url + ' ' + r.status); return r.json(); });\n  }\n\n  // Mecánicas de una expansión: solo si su tanda figura en mechanics/index.json. Sin tanda, null.\n  function loadMech(exp) {\n    if (!exp || typeof root.fetch !== 'function') return Promise.resolve(null);\n    if (exp in st.mech) return Promise.resolve(st.mech[exp]);\n    if (!st.idxP) {\n      st.idxP = getJSON(MECH_DIR + 'index.json').then(function (d) { st.idx = (d && d.files) || {}; return st.idx; },\n        function (e) { st.idxP = null; if (root.console) root.console.warn(LOG, 'mecánicas', e); return {}; });\n    }\n    return st.idxP.then(function (idx) {\n      var f = idx[exp];\n      if (!f || !/^[\\w-]+\\.json$/.test(f)) return null;\n      return getJSON(MECH_DIR + f).then(function (d) { st.mech[exp] = d; return d; },\n        function (e) { if (root.console) root.console.warn(LOG, 'mecánicas ' + exp, e); return null; });\n    });\n  }\n\n  function mechFor(cat, id) {\n    var e = cat && cat.encounters ? cat.encounters.filter(function (x) { return x.id === id; })[0] : null;\n    var g = e && cat.groups ? cat.groups.filter(function (x) { return x.id === e.group; })[0] : null;\n    var d = g ? st.mech[g.expansion] : null;\n    if (!d || !d.encounters || !d.encounters[id]) return null;\n    return { e: d.encounters[id], roles: d.roles, sources: d.sources, verified: d.verified };\n  }\n\n  function expOf(cat, id) {\n    var e = cat && cat.encounters ? cat.encounters.filter(function (x) { return x.id === id; })[0] : null;\n    var g = e && cat.groups ? cat.groups.filter(function (x) { return x.id === e.group; })[0] : null;\n    return g ? g.expansion : null;\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    host.innerHTML = sheetHTML(m, st.items);\n",
+     "text": "    host.setAttribute('data-pane', st.pane);\n    host.innerHTML = sheetHTML(m, st.items, mechFor(snap.cat, st.open), st.pane);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (!st.open) st.scroll = root.scrollY || root.pageYOffset || 0;\n",
+     "text": "    if (!st.open) { st.scroll = root.scrollY || root.pageYOffset || 0; st.pane = 'rew'; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return loadRewards().then(function () {\n",
+     "text": "    return Promise.all([loadRewards(), loadMech(expOf(snapshot().cat, id))]).then(function () {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "        if (n.getAttribute('data-rs') === 'back') { close(false); return; }\n        var go = n.getAttribute('data-rs-go');\n",
+     "text": "        if (n.getAttribute('data-rs') === 'back') { close(false); return; }\n        var tab = n.getAttribute('data-rs-tab');\n        if (tab) {\n          st.pane = tab === 'fight' ? 'fight' : 'rew';\n          draw(false);\n          var b = host.querySelector ? host.querySelector('[data-rs-tab=\"' + st.pane + '\"]') : null;\n          if (b && b.focus) b.focus();\n          return;\n        }\n        var go = n.getAttribute('data-rs-go');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    _pure: { esc: esc, amount: amount, itemText: itemText, shownId: shownId, sheetModel: sheetModel, sheetHTML: sheetHTML, voiceOf: voiceOf, CSS: CSS }\n",
+     "text": "    _pure: { esc: esc, amount: amount, itemText: itemText, shownId: shownId, sheetModel: sheetModel, sheetHTML: sheetHTML, fightHTML: fightHTML,\n      voiceOf: voiceOf, CSS: CSS }\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "24fa245758181bdd2a1715b1aae2d58d272b2b63",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const RW = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'data', 'raids', 'rewards.json'), 'utf8'));\nconst byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));\n",
+     "text": "const RW = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'data', 'raids', 'rewards.json'), 'utf8'));\nconst MDIR = path.join(ROOT, 'assets', 'data', 'raids', 'mechanics');\nconst MIDX = JSON.parse(fs.readFileSync(path.join(MDIR, 'index.json'), 'utf8'));\nconst JW = JSON.parse(fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8'));\nconst byId = Object.fromEntries(CAT.encounters.map((e) => [e.id, e]));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "\ntest('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {\n  assert.match(S.CSS, /prefers-reduced-motion:reduce/);\n",
+     "text": "\n// ------------------------------------------------------------------ RAI-4: cómo se pelea\nconst mech = (id) => ({ e: JW.encounters[id], roles: JW.roles, sources: JW.sources, verified: JW.verified });\n\ntest('mecánicas, tanda Janthir: cada archivo del índice existe y cada dato tiene su fuente', () => {\n  for (const [exp, f] of Object.entries(MIDX.files)) {\n    assert.match(f, /^[\\w-]+\\.json$/);\n    const d = JSON.parse(fs.readFileSync(path.join(MDIR, f), 'utf8'));\n    assert.equal(d.expansion, exp);\n    assert.match(d.verified, /^\\d{4}-\\d{2}-\\d{2}$/);\n    const ids = CAT.encounters.filter((e) => groupOf(e).expansion === exp).map((e) => e.id).sort();\n    assert.deepEqual(Object.keys(d.encounters).sort(), ids, exp + ': todos los encuentros de la tanda y solo esos');\n    for (const s of Object.values(d.sources)) assert.match(s.url, /^https:\\/\\/(wiki\\.guildwars2\\.com|metabattle\\.com)\\//);\n    for (const [id, E] of Object.entries(d.encounters)) {\n      assert.ok(E.summary && E.mechanics.length >= 1 && E.mechanics.length <= 7, id + ': de 1 a 7 mecánicas');\n      if (byId[id].type !== 'event') assert.ok(E.mechanics.length >= 3 && E.phases.length >= 3, id + ': jefe con fases y al menos 3 mecánicas');\n      for (const x of E.mechanics) {\n        assert.ok(x.roles.length && x.roles.every((r) => d.roles[r]), id + ' ' + x.name + ': roles conocidos');\n        assert.ok(d.sources[x.src], id + ' ' + x.name + ': fuente');\n      }\n      if (E.tip) assert.ok(d.sources[E.tip.src], id + ': consejo con fuente');\n      if (E.cm) assert.ok(byId[id].cm, id + ': cambios de modo desafío solo si tiene modo desafío');\n      assert.ok(E.links.every((k) => d.sources[k]));\n    }\n  }\n  const raw = fs.readFileSync(path.join(MDIR, 'jw.json'), 'utf8');\n  assert.doesNotMatch(raw, /youtube|dQw4w9WgXcQ/i, 'sin videos inventados');\n  // Lo que es solo de modo desafío no aparece en la pelea normal (corrige la maqueta de RAI-0).\n  const g = JW.encounters.greer;\n  assert.doesNotMatch(JSON.stringify([g.phases, g.mechanics, g.tip]), /Proto|Ereg/);\n  assert.match(g.cm.join(' '), /Proto-Greerlings/);\n  assert.match(g.cm.join(' '), /Ereg/);\n});\n\ntest('ficha de Greer: fases en orden, mecánicas con su rol, modo desafío, consejo y fuentes', () => {\n  const h = S.sheetHTML(model('greer'), {}, mech('greer'), 'rew');\n  assert.match(h, /<h3 id=\"rsFight\">Cómo se pelea<\\/h3>/);\n  assert.equal((h.match(/<ol class=\"rs-phases\">[\\s\\S]*?<\\/ol>/)[0].match(/<li>/g) || []).length, 5);\n  assert.ok(h.indexOf('100→66 %') < h.indexOf('33→0 %'), 'fases en orden');\n  assert.match(h, /<b>Verdes de podredumbre<\\/b> <small lang=\"en\">Eruption of Rot<\\/small><span class=\"rs-role\">Todos<\\/span>/);\n  assert.match(h, /<span class=\"rs-role\">Proyectiles<\\/span>/);\n  assert.match(h, /Antes del jefe: Bestia plagada legendaria\\./);\n  assert.match(h, /<b>Shiruvana recomienda<\\/b> Llevá defensa contra proyectiles/);\n  assert.match(h, /En modo desafío cambia[\\s\\S]*Proto-Greerlings/);\n  assert.match(h, /href=\"https:\\/\\/wiki\\.guildwars2\\.com\\/wiki\\/Mount_Balrior\"/);\n  assert.match(h, /href=\"https:\\/\\/metabattle\\.com\\/wiki\\/Guide:Raid_Wing_8_-_Mount_Balrior\"/);\n  assert.match(h, /Fuentes: wiki oficial, «Mount Balrior» y MetaBattle, guía del ala 8, consultadas el 2026-10-24/);\n  assert.match(h, /role=\"tablist\" aria-label=\"Secciones de la ficha\"/);\n  assert.match(h, /data-rs-tab=\"rew\" aria-selected=\"true\"/);\n  assert.match(h, /data-rs-tab=\"fight\" aria-selected=\"false\"/);\n  assert.match(h, /class=\"rs-card\" data-rs-pane=\"rew\"/);\n  assert.match(h, /class=\"rs-card rs-fight\" data-rs-pane=\"fight\"/);\n  assert.match(S.sheetHTML(model('greer'), {}, mech('greer'), 'fight'), /data-rs-tab=\"fight\" aria-selected=\"true\"/);\n});\n\ntest('cómo se pelea: sin tanda todavía lo dice; el campamento no muestra modo desafío', () => {\n  const kc = S.sheetHTML(model('keep_construct'), {}, null, 'rew');\n  assert.match(kc, /llegan en una próxima tanda, verificadas/);\n  assert.match(kc, /href=\"https:\\/\\/wiki\\.guildwars2\\.com\\/wiki\\/Keep_Construct\"[^>]*>wiki oficial ↗/);\n  assert.doesNotMatch(kc, /rs-phases/);\n  const camp = S.fightHTML(model('camp'), mech('camp'));\n  assert.match(camp, /Titanspawn del campamento/);\n  assert.doesNotMatch(camp, /En modo desafío cambia/);\n  assert.doesNotMatch(camp, /rs-phases/, 'un evento sin fases no muestra la línea de tiempo');\n  const forced = Object.assign({}, mech('camp'), { e: Object.assign({}, JW.encounters.camp, { cm: ['solo de prueba'] }) });\n  assert.doesNotMatch(S.fightHTML(model('camp'), forced), /solo de prueba/, 'sin modo desafío en el catálogo, no hay cambios de modo desafío');\n  assert.match(S.fightHTML(model('greer'), { roles: JW.roles, sources: JW.sources }), /llegan en una próxima tanda/, 'archivo sin este encuentro: igual que sin tanda');\n});\n\ntest('el CSS respeta movimiento reducido, foco visible y 44 px en el celular', () => {\n  assert.match(S.CSS, /max-width:720px[\\s\\S]*\\.rs-tabs\\{display:flex\\}/, 'las pestañas solo en el celular');\n  assert.match(S.CSS, /#rsRoot\\[data-pane=rew\\] \\[data-rs-pane=fight\\],#rsRoot\\[data-pane=fight\\] \\[data-rs-pane=rew\\]\\{display:none\\}/);\n  assert.match(S.CSS, /prefers-reduced-motion:reduce/);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "function boot() {\n",
+     "text": "function boot(o) {\n  o = o || {};\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const scrolls = [];\n  const sb = {\n",
+     "text": "  const scrolls = [];\n  const fetches = [];\n  const sb = {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    fetch: (u) => Promise.resolve({ ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(/rewards/.test(u) ? RW : CAT))) }),\n",
+     "text": "    fetch: (u) => {\n      fetches.push(u);\n      const body = /rewards/.test(u) ? RW : /mechanics\\/index/.test(u) ? (o.idx || MIDX) : /mechanics\\/jw/.test(u) ? JW : /catalog/.test(u) ? CAT : null;\n      return Promise.resolve(body ? { ok: true, json: () => Promise.resolve(JSON.parse(JSON.stringify(body))) } : { ok: false, status: 404 });\n    },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  return { sb, D, winListeners, itemCalls, scrolls };\n",
+     "text": "  return { sb, D, winListeners, itemCalls, scrolls, fetches };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "\ntest('humo: salir de Raids cierra la ficha sin mover la página', async () => {\n",
+     "text": "\ntest('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestañas cambian de sección', async () => {\n  const { sb, D, fetches } = boot();\n  await flush();\n  await sb.RaidsSheet.open('greer');\n  const rs = D.els.rsRoot;\n  assert.match(rs.innerHTML, /Verdes de podredumbre/);\n  assert.equal(rs.getAttribute('data-pane'), 'rew');\n  const mf = () => fetches.filter((u) => /mechanics/.test(u));\n  assert.deepEqual(mf(), ['assets/data/raids/mechanics/index.json', 'assets/data/raids/mechanics/jw.json']);\n  rs.listeners.click[0]({ target: { getAttribute: (k) => (k === 'data-rs-tab' ? 'fight' : null), parentNode: null } });\n  assert.equal(rs.getAttribute('data-pane'), 'fight');\n  assert.match(rs.innerHTML, /data-rs-tab=\"fight\" aria-selected=\"true\"/);\n  await sb.RaidsSheet.open('ura');\n  assert.equal(rs.getAttribute('data-pane'), 'fight', 'anterior y siguiente mantienen la sección');\n  assert.match(rs.innerHTML, /Fragmentos de piedra de sangre/);\n  await sb.RaidsSheet.open('cairn');\n  assert.match(rs.innerHTML, /llegan en una próxima tanda/);\n  assert.equal(mf().length, 2, 'ni el índice ni Janthir se vuelven a pedir; sin tanda, no se pide nada');\n  sb.RaidsSheet.close();\n  await sb.RaidsSheet.open('decima');\n  assert.equal(rs.getAttribute('data-pane'), 'rew', 'abrir desde la lista vuelve a Recompensas');\n});\n\ntest('humo: el índice solo puede nombrar archivos de la misma carpeta', async () => {\n  const { sb, D, fetches } = boot({ idx: { version: 1, files: { jw: '../rewards.json' } } });\n  await flush();\n  await sb.RaidsSheet.open('greer');\n  assert.ok(!fetches.some((u) => /mechanics\\/\\.\\./.test(u)), 'no sale de assets/data/raids/mechanics/');\n  assert.match(D.els.rsRoot.innerHTML, /llegan en una próxima tanda/);\n});\n\ntest('humo: salir de Raids cierra la ficha sin mover la página', async () => {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "b566ad2f68cadbd7b9a718f24d974377e04b0a71",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/raids-sheet.js\", \"v\": \"1.0.0\" }\n",
+     "text": "    { \"src\": \"js/raids-sheet.js\", \"v\": \"1.1.0\" }\n"
+    }
+   ]
+  }
+ ]
+}
