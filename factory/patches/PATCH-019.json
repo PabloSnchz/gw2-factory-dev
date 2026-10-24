@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-019",
+  "summary": "BL-064 CAM-3: index.html pide js/wv-shop-ui.js con ?v=2.0.0 (Tienda para planificar: línea de AA, progreso por unidades, selector −/+, segmentos y menú «Gestionar» con confirmación y deshacer). wv-shop-manage.js entra por js/modules.json. LES-033: la versión del archivo y su ?v suben juntas.",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "c0c81d16f747ba8ff5cf5521d2a2d51887a5cf5e",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "src=\"js/wv-shop-ui.js?v=1.0.2\"",
+          "text": "src=\"js/wv-shop-ui.js?v=2.0.0\""
+        }
+      ]
+    }
+  ]
+}
