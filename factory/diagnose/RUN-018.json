@@ -1,0 +1,7 @@
+{
+  "id": "RUN-018",
+  "summary": "BL-067 pasos 4–8: cabeceras, APIs públicas, eventos y paneles de Actividades, Raids y Strikes, Personajes, Inventario y Cuentas, para diseñar el marco común sin tocar su comportamiento",
+  "tests": [
+    "tests/probe-b67b.smoke.cjs"
+  ]
+}
