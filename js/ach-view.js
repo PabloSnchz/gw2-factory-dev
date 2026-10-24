@@ -1,7 +1,9 @@
 /*!
  * js/ach-view.js — Logros: cabecera, pestañas y mi línea (BL-067, LOG-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-24)
+ * Versión: 1.3.0 (2026-10-24)
+ *  - 1.3.0 (CAM-POLISH-001): si js/gn-surface.js está cargado, la guarda de contraste se calcula
+ *    sobre la bandeja y la tarjeta reales (GNSurface.surfaceTokens), no sobre el fondo del theme.
  *  - 1.2.0 (LOG-4): en «Colecciones legendarias», mi línea dice cuál es la colección más
  *    avanzada y, si js/ach-armory.js la une a una legendaria, que lo que falta está en la Armería.
  *  - 1.1.0 (LOG-3): «Por categoría» la arma js/ach-categories.js si está cargado (grupos por
@@ -22,7 +24,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[AchView]';
   var ICON = 'assets/icons/155059.png';
   var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';
@@ -343,7 +345,9 @@
   function applyGuard(tokens) {
     var panel = byId('achievementsPanel'), W = root.Welcome;
     if (!panel || !panel.style || typeof panel.style.setProperty !== 'function' || !W || !W._pure || typeof W._pure.contrastFixes !== 'function') return {};
-    var fixes = W._pure.contrastFixes(tokens || readTokens()) || {};
+    var tk = tokens || readTokens(), GS = root.GNSurface;
+    if (GS && typeof GS.surfaceTokens === 'function') tk = GS.surfaceTokens(tk);
+    var fixes = W._pure.contrastFixes(tk) || {};
     st.guarded.forEach(function (k) { if (!(k in fixes)) panel.style.removeProperty(k); });
     Object.keys(fixes).forEach(function (k) { panel.style.setProperty(k, fixes[k]); });
     st.guarded = Object.keys(fixes);
