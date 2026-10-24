@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-028",
+  "summary": "BL-067 LOG-1: suma FEAT-012 (Logros renovado, en curso) al índice de la memoria.",
+  "files": [
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "b57cb5c1c3f8872e323df79a7a9f0fdb22576f89",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "mi voz en una línea y contraste AA en los 19 themes (BL-064, CAM-0 a CAM-6). En producción (BL-068).\n",
+          "text": "- [FEAT-012](features/FEAT-012-logros-renovado.md) — Logros renovado: cabecera con «Al alcance», tres pestañas (Casi listos, Por categoría, Colecciones legendarias), mi línea, tarjetas «te falta» con el ícono oficial de cada logro destacado (regla de Pablo) y la Sidebar solo para navegar (BL-067, LOG-0 a LOG-5). En DEV, en curso.\n"
+        }
+      ]
+    }
+  ]
+}
