@@ -1,0 +1,43 @@
+{
+  "id": "PATCH-025",
+  "summary": "BL-064 CAM-6: memoria al día. Backlog: BL-064 cerrada en DEV por pedido de Pablo (Armería y Cámara del Brujo) y los pasos 3 a 8 del plan pasan a BL-067 en READY. Índice: FEAT-011 y LES-035.",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "98f88f96292b90679ef267bee9b450d1e66ff816",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "## IN_PROGRESS\n\n- [BL-064] [ALTO] Restyle completo de la Bóveda — RETOMADO el 2026-10-23 al cerrar BL-065 (en pausa desde las 18:46Z). Pedido de Pablo (15:14Z): terminar el restyle de toda la webapp antes de BL-060 y BL-055. Plan aprobado (15:33Z): 1 Armería, 2 Cámara del Brujo, 3 Logros, 4 Actividades, 5 Raids y Strikes, 6 Inventario y Personajes, 7 Cuentas, 8 marco común (`docs/propuestas/propuesta-armeria-bl064.html`, `7ac2f3f`). **Armería terminada y validada por Pablo al 100% (FEAT-010, 18:46Z):** ARM-1 a ARM-5 y el ajuste 1.6.1 que saca «Modo: Catálogo / Mi progreso»; `js/render-catologo.js` 1.6.1 (`84ac02f`); `legendary-tracker.js` sin tocar. Sigue la Cámara del Brujo: propuesta visual primero; lo nuevo en archivos de hasta 40 KB cargados por `js/modules.json`, y `wv-purchase-detail.js` (congelado, 89 KB) solo se achica (DEC-035). Producción, solo con la orden de Pablo. · FEAT-010, DEC-035, BL-049, FEAT-006, FEAT-007, FEAT-008, FEAT-009, DEC-024, DEC-033, LES-028\n\n## BLOCKED\n",
+          "text": "## IN_PROGRESS\n\n## BLOCKED\n"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "\n## IN_PROGRESS\n",
+          "text": "- [BL-067] [ALTO] Restyle de la Bóveda, segunda tanda — sigue el plan aprobado de BL-064 (2026-10-23 15:33Z), que Pablo pidió cerrar con la Cámara (2026-10-24 01:45Z): 3 Logros, 4 Actividades (después de decidir BL-055), 5 Raids y Strikes, 6 Inventario y Personajes, 7 Cuentas, 8 marco común (barra de arriba, modales, avisos y pie). Mismo proceso que la Cartera, Metas, la Bienvenida, la Armería y la Cámara: propuesta visual primero, un paso por vez con validación de Pablo, lo nuevo en archivos de hasta 40 KB por `js/modules.json` y los congelados solo se achican (DEC-035). Empieza por Logros con la validación de CAM-6. Producción, solo con la orden de Pablo. · BL-064, FEAT-010, FEAT-011, DEC-035, DEC-024, DEC-033\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "BL-005, BL-053, BL-066 — 2026-10-23\n",
+          "text": "- [BL-064] [ALTO] Restyle de la Bóveda, primera tanda: Armería y Cámara del Brujo — cerrada en DEV por pedido de Pablo (2026-10-24 01:45Z, al autorizar CAM-6); los pasos 3 a 8 del plan siguen en BL-067. Armería validada por Pablo al 100% (FEAT-010; `js/render-catologo.js` 1.6.1). Cámara del Brujo (FEAT-011): CAM-0 propuesta (`docs/propuestas/propuesta-camara-bl064.html`), CAM-1 cabecera y tres pestañas (`js/wv-view.js` 1.0.0, por manifiesto), CAM-2 objetivos por estado (`wv-objectives-ui.js` 2.0.0), CAM-3 Tienda con −/+, «Gestionar» y «Deshacer» (`wv-shop-ui.js` 2.0.0), CAM-4 Objetivos semanales de todas las cuentas (`wv-objectives-dashboard.js` 2.0.0), CAM-5 Compras fijadas (`wv-purchase-detail.js` 2.0.0, 91 → 28 KB, + `wv-purchases-view.js`), todos validados; CAM-6 mi voz en la cabecera, contraste AA de toda la Cámara en los 19 themes, aria y teclado (`wv-view.js` 1.1.0, PATCH-022; `tests/wv-camara-a11y.test.cjs`) y limpieza de lo viejo (PATCH-024: `index.html` 69.6 → 64.8 KB, `router.js` 2.18.0 90.5 → 65.6 KB; PATCH-023 rechazado por hb98, LES-035), espera la validación de Pablo. Solo DEV. · FEAT-010, FEAT-011, BL-067, DEC-035, LES-035, DEC-024, DEC-033 — 2026-10-24\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "762345948253d770afcb50f31f37352b2342a77e",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "- [LES-034](lessons/LES-034-un-limite-que-no-se-mide-se-rompe.md) — Un límite que no se mide se rompe en silencio: los archivos pasaron los 64 KB porque nada lo frenaba y agregar un archivo nuevo era caro. Un límite se mide en CI, se acompaña de un camino barato para cumplirlo y se aplica con trinquete, sin migraciones masivas.\n",
+          "text": "- [LES-035](lessons/LES-035-al-borrar-codigo-cambian-sus-tests.md) — Al borrar código, también cambian los tests que lo describían: `hb98` contaba los usos de la copia vieja de la Tienda y el canal rechazó PATCH-023. Antes de borrar, buscar en `tests/` todo lo que nombra lo que se va y actualizarlo en el mismo parche.\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "- [FEAT-010](features/FEAT-010-armeria-renovada.md) — La Armería Legendaria renovada: cabecera con buscador, filtros en una fila, tarjetas con teclado, «Mi cola» como vista propia, armaduras por set y contraste AA en los 19 themes (BL-064, ARM-1 a ARM-5). En DEV.\n",
+          "text": "- [FEAT-011](features/FEAT-011-camara-del-brujo-renovada.md) — La Cámara del Brujo renovada: cabecera con temporada y resets, tres pestañas, objetivos por estado, Tienda con −/+ y «Deshacer», todas las cuentas en matrices, mi voz en una línea y contraste AA en los 19 themes (BL-064, CAM-0 a CAM-6). En DEV.\n"
+        }
+      ]
+    }
+  ]
+}
