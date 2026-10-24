@@ -1,0 +1,65 @@
+{
+  "id": "PATCH-026",
+  "summary": "BL-068: memoria de la promoción a producción de la Armería y la Cámara del Brujo (backlog, FEAT-010, FEAT-011, índice).",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "c40f9a5491914934f87fe1bbd687c59c6d1c79d5",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "LES-035, DEC-024, DEC-033 — 2026-10-24\n",
+          "text": "- [BL-068] [ALTO] Armería y Cámara del Brujo en producción — orden de Pablo (2026-10-24 02:25Z: «funcionamiento ok, todo estable, BL064 cerrada. pasar a prd junto con armeria»). Medí producción contra DEV: en `js/` cambiaban `render-catologo.js` (1.1.0 → 1.6.1) y la Cámara (`wv-objectives-ui`, `wv-shop-ui`, `wv-objectives-dashboard`, `wv-purchase-detail` 2.0.0) y faltaban `boot.js`, `modules.json`, `wv-view.js`, `wv-shop-manage.js` y `wv-purchases-view.js`; `css/` y `assets/` iguales (salvo lo ya sabido de previews). Vuelta atrás: rama `rollback/pre-camara-armeria` = `f72cde8`. Como no puedo abrir PR, publiqué el `index.html` de producción primero en una rama de prueba (`promo/camara-armeria`) para confirmar que 64 KB llegan enteros (blob `7d05b10`, idéntico), y recién después en `main`. gw2-wallet-ligero, en serie y en el orden de DEV (cada paso deja el sitio andando): `3cd00da` boot.js + modules.json, `bb1ab56` wv-shop-manage.js, `8e79c5e` wv-purchases-view.js, `9570775` wv-view.js 1.1.0, `4ffbdf2` index.html (cargador, Cámara sin botones viejos, `?v` al día, `viewport-fit=cover`; GA de producción intacto, DEC-006), `79d5685` wv-objectives-ui.js, `6ba0fc9` wv-shop-ui.js, `fde48d6` wv-objectives-dashboard.js, `dbb7430` wv-purchase-detail.js, `374b6f0` render-catologo.js 1.6.1. Blobs de `js/` idénticos a DEV, verificados uno por uno, salvo tres a propósito: `analytics.js` (DEC-006), `router.js` (queda 2.17.0: la 2.18.0 de DEV solo borra código muerto y pesa 65,6 KB, más de lo que llega entero; el `index.html` de producción pide `?v=2.17.0`) y `wallet-theme.js` (queda 2.1.0: la 2.1.1 de BL-066 no se pidió; el `index.html` pide `?v=2.1.0`). Queda la rama `promo/camara-armeria` sin uso (no puedo borrar ramas). · FEAT-010, FEAT-011, BL-064, DEC-006, DEC-035, RSK-020 — 2026-10-24\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-011-camara-del-brujo-renovada.md",
+      "base_sha": "d4800ffc22224f7026114c2fc89ed350dc6e0ebf",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- **Estado:** en DEV. CAM-0 a CAM-5 validados por Pablo en pantalla; CAM-6 (voz, accesibilidad, contraste, teclado y limpieza) espera su validación.\n",
+          "text": "- **Estado:** validada por Pablo (CAM-0 a CAM-6) y en producción desde 2026-10-24 por orden de Pablo (BL-068, Armería y Cámara juntas). gw2-wallet-ligero `3cd00da`…`374b6f0`; vuelta atrás: rama `rollback/pre-camara-armeria` (`f72cde8`).\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- **Producción:** no. La decide Pablo.\n",
+          "text": "- **Producción:** sí (BL-068, 2026-10-24). `router.js` queda 2.17.0 en producción: la limpieza de la Tienda de respaldo (2.18.0) es solo de DEV.\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-010-armeria-renovada.md",
+      "base_sha": "5dfaf27040a687b00471b35da81a6b91f3ca25d1",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- **Estado:** en DEV. ARM-1 a ARM-4 validados por Pablo en pantalla; ARM-5 (revisión final) y el ajuste 1.6.1 esperan su validación.\n",
+          "text": "- **Estado:** validada por Pablo al 100% (2026-10-23) y en producción desde 2026-10-24 por orden de Pablo (BL-068, Armería y Cámara juntas). gw2-wallet-ligero `3cd00da`…`374b6f0`; vuelta atrás: rama `rollback/pre-camara-armeria` (`f72cde8`).\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- **Producción:** no. La decide Pablo.\n",
+          "text": "- **Producción:** sí (BL-068, 2026-10-24), `render-catologo.js` 1.6.1 idéntico a DEV.\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "cb91f4143c302333b1afa852fd13083e82614d21",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "armaduras por set y contraste AA en los 19 themes (BL-064, ARM-1 a ARM-5). En DEV.\n",
+          "text": "armaduras por set y contraste AA en los 19 themes (BL-064, ARM-1 a ARM-5). En producción (BL-068).\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "mi voz en una línea y contraste AA en los 19 themes (BL-064, CAM-0 a CAM-6). En DEV.\n",
+          "text": "mi voz en una línea y contraste AA en los 19 themes (BL-064, CAM-0 a CAM-6). En producción (BL-068).\n"
+        }
+      ]
+    }
+  ]
+}
