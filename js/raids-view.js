@@ -1,7 +1,7 @@
 /*!
  * js/raids-view.js — Raids renovado: cabecera, pestañas Alas y Encuentros, tarjetas (BL-070, RAI-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
+ * Versión: 1.2.0 (2026-10-25) — RAI-6: estados y error legibles (AA) en los 19 themes · antes 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
  *
  * Un solo módulo Raids, como el juego desde el 2026-02-03 (D1 de RAI-0):
  *  - Cabecera con el ícono del módulo, hora local, servidor y reset semanal (lunes 07:30 UTC),
@@ -20,7 +20,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[RaidsView]';
   var CATALOG = 'assets/data/raids/catalog.json';
   var ICON = 'assets/icons/raids/raid-icon.png';
@@ -324,7 +324,7 @@
     '.rv-st b{font-size:1.25rem;color:var(--tx-1)}.rv-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',
     '.rv-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',
     '.rv-bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:6px}.rv-bar i{display:block;height:100%;background:var(--color-green,#3CC48A)}',
-    '.rv-err{margin:10px 0 0;font-size:.82rem;color:var(--color-red,#F47C7C)}',
+    '.rv-err{margin:10px 0 0;padding-left:8px;border-left:3px solid var(--color-red,#F47C7C);font-size:.82rem;color:var(--tx-1)}',
     '.rv-voice{margin-top:12px}.rv-voice:empty{display:none}.rv-voice .shv-voice{margin:0;padding:8px 12px;background:var(--bg-0)}',
     '.rv-voice .shv-voice__avatar{width:36px;height:36px}.rv-voice .shv-voice__label{font-size:.78rem}.rv-voice .shv-voice__body p{font-size:.86rem}',
     '.rv-tabs{display:flex;gap:4px;margin:16px 0 10px;border-bottom:1px solid var(--bd-1);overflow-x:auto}',
@@ -357,7 +357,7 @@
     '.rv-chip img{width:16px;height:16px;border-radius:3px}.rv-chip--cm{padding:1px 8px;color:var(--color-amber,#F2B94B);border-color:color-mix(in srgb,var(--color-amber,#F2B94B) 60%,transparent)}',
     '.rv-dots{display:inline-flex;gap:2px}.rv-dots i{width:6px;height:6px;border-radius:50%;background:var(--bd-2)}.rv-dots i.on{background:var(--rv-mod)}',
     '.rv-state{text-align:right;font-size:.76rem;font-weight:700;white-space:nowrap;color:var(--tx-2)}.rv-state>span{display:block}',
-    '.rv-s-done .rv-state>span{color:var(--color-green,#3CC48A)}.rv-s-hand .rv-state>span{color:var(--acc-1)}.rv-s-na .rv-state>span,.rv-s-unknown .rv-state>span{font-weight:600}',
+    '.rv-s-done .rv-state>span{color:var(--color-green,#3CC48A)}.rv-s-hand .rv-state>span{color:var(--gn-link,var(--acc-1))}.rv-s-na .rv-state>span,.rv-s-unknown .rv-state>span{font-weight:600}',
     '.rv-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}',
     '#rvRoot button:focus-visible,#rvRoot [role=tabpanel]:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '@media (prefers-reduced-motion:reduce){#rvRoot *{transition:none!important;animation:none!important}}',

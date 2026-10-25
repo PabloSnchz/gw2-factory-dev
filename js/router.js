@@ -1,6 +1,11 @@
 /*!
  * Router y Vistas (WV Objetivos + Tienda unificada)
- * v2.18.1 (2026-10-24) — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)
+ * v2.18.2 (2026-10-25) — sin restos de StrikeTracker (BL-070 RAI-6)
+ *
+ * Cambios v2.18.2:
+ *  - StrikeTracker sale de MODULOS_CON_LATCH, de showPanel y de updateSidebarFor: el módulo ya no existe.
+ *
+ * Antes, v2.18.1 — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)
  *
  * Cambios v2.18.1:
  *  - La ruta vieja de Strikes muestra el panel de Raids y raids-view.js la lleva a Encuentros.
@@ -36,7 +41,7 @@
 (function () {
   'use strict';
 
-  console.info('[WV] router-wv.js v2.18.1 — Fases 1-3 completas + fixes');
+  console.info('[WV] router-wv.js v2.18.2 — Fases 1-3 completas + fixes');
 
   var $  = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -155,7 +160,6 @@
       else if (view==='welcome'){ /* no sidebar específico para bienvenida */ }
       else if (view==='walletDashboard'){ /* no sidebar específico */ }
       else if (view==='raids'){ /* no sidebar específico para raids */ }
-      else if (view==='strikes'){ /* no sidebar específico para strikes */ }
       else if (view==='legendaryArmory'){ /* no sidebar específico para arm. legendaria */ }
       else if (view==='inventory'){ /* no sidebar específico para inventario */ }
       else if (view==='inventoryDashboard'){ /* no sidebar específico */ }
@@ -163,7 +167,7 @@
   }
 
   function showPanel(idToShow) {
-    ['walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','inventoryPanel','charactersPanel','accountsPanel','welcomePanel','walletDashboardPanel','inventoryDashboardPanel','wvObjectivesDashboardPanel','raidTrackerPanel','strikeTrackerPanel','legendaryArmoryPanel'].forEach(function(id){
+    ['walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','inventoryPanel','charactersPanel','accountsPanel','welcomePanel','walletDashboardPanel','inventoryDashboardPanel','wvObjectivesDashboardPanel','raidTrackerPanel','legendaryArmoryPanel'].forEach(function(id){
       var node=el(id); if (!node) return;
       if (id===idToShow) node.removeAttribute('hidden'); else node.setAttribute('hidden','hidden');
     });
@@ -1039,7 +1043,6 @@
   // latch es inerte por partida doble, y sin panel no hay predicado posible.
   var MODULOS_CON_LATCH = [
     { mod: 'RaidTracker',     panel: 'raidTrackerPanel' },
-    { mod: 'StrikeTracker',   panel: 'strikeTrackerPanel' },
     { mod: 'LegendaryTracker', panel: 'legendaryArmoryPanel' },
     { mod: 'InventoryHub',    panel: 'inventoryPanel' }
   ];

@@ -45,7 +45,7 @@ test('el archivo entra en el presupuesto y se carga por el manifiesto después d
   const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).modules;
   const src = man.map((m) => m.src);
   assert.ok(src.indexOf('js/raids-sheet.js') > src.indexOf('js/raids-view.js'), 'la ficha va después de la vista');
-  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.1.0');
+  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.2.0');
   // index-versions lee «Versión: X» de la cabecera: tiene que coincidir con el manifiesto y con VERSION.
   const head = /Versi[oó]n:\s*(\d+\.\d+\.\d+)/.exec(SRC.slice(0, 3000));
   assert.ok(head, 'raids-sheet.js declara «Versión:» en la cabecera');
@@ -478,6 +478,18 @@ test('humo: la ficha trae las mecánicas de su tanda una sola vez y las pestaña
   rs.listeners.click[0]({ target: { getAttribute: (k) => (k === 'data-rs-tab' ? 'fight' : null), parentNode: null } });
   assert.equal(rs.getAttribute('data-pane'), 'fight');
   assert.match(rs.innerHTML, /data-rs-tab="fight" aria-selected="true"/);
+  // RAI-6: patrón tablist completo: cada pestaña dice qué sección controla, foco itinerante y flechas.
+  assert.match(rs.innerHTML, /id="rsTab-fight" data-rs-tab="fight" aria-selected="true" aria-controls="rsPaneFight" tabindex="0"/);
+  assert.match(rs.innerHTML, /id="rsTab-rew" data-rs-tab="rew" aria-selected="false" aria-controls="rsPaneRew" tabindex="-1"/);
+  assert.match(rs.innerHTML, /<section id="rsPaneFight" class="rs-card rs-fight"/);
+  assert.match(rs.innerHTML, /<section id="rsPaneRew" class="rs-card"/);
+  const key = (k, on) => rs.listeners.keydown[0]({ key: k, target: { getAttribute: (a) => (a === 'data-rs-tab' ? on : null) }, preventDefault() {} });
+  key('ArrowLeft', 'fight');
+  assert.equal(rs.getAttribute('data-pane'), 'rew', 'las flechas cambian de pestaña');
+  key('Enter', 'rew');
+  assert.equal(rs.getAttribute('data-pane'), 'rew', 'otras teclas no hacen nada');
+  key('End', 'rew');
+  assert.equal(rs.getAttribute('data-pane'), 'fight', 'Fin va a la última');
   await sb.RaidsSheet.open('ura');
   assert.equal(rs.getAttribute('data-pane'), 'fight', 'anterior y siguiente mantienen la sección');
   assert.match(rs.innerHTML, /Fragmentos de piedra de sangre/);

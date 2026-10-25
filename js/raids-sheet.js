@@ -1,6 +1,6 @@
 /**
  * raids-sheet.js — Ficha de cada encuentro de Raids a pantalla completa (BL-070 RAI-3).
- * Versión: 1.1.0 (2026-10-24) — RAI-4: «Cómo se pelea» (fases, mecánicas, modo desafío y fuentes)
+ * Versión: 1.2.0 (2026-10-25) — RAI-6: enlaces AA en los 19 themes y pestañas con teclado · antes 1.1.0 (2026-10-24) — RAI-4: «Cómo se pelea» (fases, mecánicas, modo desafío y fuentes)
  *
  * Como la ficha de la legendaria: reemplaza la lista dentro del módulo, con
  * «← Volver a Raids» y Escape, y vuelve al mismo lugar y a la misma fila.
@@ -21,7 +21,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[RaidsSheet]';
   var DATA = 'assets/data/raids/rewards.json';
   var MECH_DIR = 'assets/data/raids/mechanics/';
@@ -144,7 +144,7 @@
 
   // «Cómo se pelea». M = { e: entrada del encuentro, roles, sources, verified } o null si su tanda no llegó.
   function fightHTML(m, M) {
-    var h = '<section class="rs-card rs-fight" data-rs-pane="fight" aria-labelledby="rsFight"><h3 id="rsFight">Cómo se pelea</h3>';
+    var h = '<section id="rsPaneFight" class="rs-card rs-fight" data-rs-pane="fight" aria-labelledby="rsFight"><h3 id="rsFight">Cómo se pelea</h3>';
     if (!M || !M.e) {
       return h + '<p class="rs-note">Las fases y mecánicas de este encuentro llegan en una próxima tanda, verificadas. Mientras tanto: ' +
         '<a href="' + esc(m.wiki) + '" target="_blank" rel="noopener noreferrer">wiki oficial ↗</a></p></section>';
@@ -184,7 +184,9 @@
   function tabsHTML(pane) {
     var h = '<div class="rs-tabs" role="tablist" aria-label="Secciones de la ficha">';
     [['rew', 'Recompensas'], ['fight', 'Cómo se pelea']].forEach(function (t) {
-      h += '<button type="button" role="tab" data-rs-tab="' + t[0] + '" aria-selected="' + (pane === t[0]) + '">' + t[1] + '</button>';
+      var on = pane === t[0];
+      h += '<button type="button" role="tab" id="rsTab-' + t[0] + '" data-rs-tab="' + t[0] + '" aria-selected="' + on + '" aria-controls="' +
+        (t[0] === 'fight' ? 'rsPaneFight' : 'rsPaneRew') + '" tabindex="' + (on ? '0' : '-1') + '">' + t[1] + '</button>';
     });
     return h + '</div>';
   }
@@ -206,7 +208,7 @@
     if (m.next) h.push('<button type="button" class="rs-btn" data-rs-go="' + esc(m.next.id) + '">Siguiente: ' + esc(m.next.name) + ' ›</button>');
     h.push('</div></div></header><div id="rsVoice" class="rs-voice" aria-live="polite"></div>' + tabsHTML(pane === 'fight' ? 'fight' : 'rew'));
 
-    h.push('<div class="rs-grid"><section class="rs-card" data-rs-pane="rew" aria-labelledby="rsWeek"><h3 id="rsWeek">Lo que te llevás <small>1 vez por semana</small></h3><ul class="rs-rows">');
+    h.push('<div class="rs-grid"><section id="rsPaneRew" class="rs-card" data-rs-pane="rew" aria-labelledby="rsWeek"><h3 id="rsWeek">Lo que te llevás <small>1 vez por semana</small></h3><ul class="rs-rows">');
     if (e.li) h.push(rowHTML(liIcon, 'Conocimiento legendario', m.cof ? 'dentro del cofre, garantizado' : 'al completarlo', String(e.li)));
     if (e.amount != null) h.push(rowHTML(curIcon, CUR[m.cur], m.cap ? 'tope semanal de ' + m.cap + ' para todas las raids' : '', amount(e.amount)));
     if (m.cof) {
@@ -263,17 +265,17 @@
     '.rs-card h3{margin:0 0 10px;font-size:1rem;color:var(--tx-1)}.rs-card h3 small,.rs-h4 small{font-weight:500;color:var(--tx-2);font-size:.78rem}',
     '.rs-rows{list-style:none;margin:0;padding:0}',
     '.rs-row{display:grid;grid-template-columns:32px 1fr auto;gap:10px;align-items:center;padding:7px 0;border-top:1px solid var(--bd-1)}.rs-row:first-child{border-top:0}',
-    '.rs-ri{width:32px;height:32px;border-radius:6px;object-fit:contain}.rs-ri--g{display:flex;align-items:center;justify-content:center;background:var(--bg-2);color:var(--rs-mod)}',
+    '.rs-ri{width:32px;height:32px;border-radius:6px;object-fit:contain}.rs-ri--g{display:flex;align-items:center;justify-content:center;background:var(--bg-2);color:var(--tx-2)}',
     '.rs-rl{min-width:0;color:var(--tx-1);font-size:.88rem}.rs-rl small{display:block;color:var(--tx-2);font-size:.74rem}',
     '.rs-q{font-size:1rem;color:var(--tx-1)}',
     '.rs-h4{margin:14px 0 6px;font-size:.88rem;color:var(--tx-1)}',
     '.rs-drops{list-style:none;margin:0;padding:0;display:grid;gap:4px}.rs-drops li{font-size:.84rem;color:var(--tx-1)}',
     '.rs-drops em{font-style:normal;font-size:.72rem;color:var(--tx-2);margin-left:4px}',
-    '.rs-r-uncommon span{color:var(--color-green,#3CC48A)}.rs-r-rare span{color:var(--acc-1)}.rs-r-superrare span{color:var(--color-amber,#F2B94B)}',
-    '.rs-note,.rs-src{margin:10px 0 0;color:var(--tx-2);font-size:.8rem}.rs-src{font-size:.72rem}.rs-src a,.rs-note a{color:var(--acc-1)}',
+    '.rs-r-uncommon span{color:var(--color-green,#3CC48A)}.rs-r-rare span{color:var(--gn-link,var(--acc-1))}.rs-r-superrare span{color:var(--color-amber,#F2B94B)}',
+    '.rs-note,.rs-src{margin:10px 0 0;color:var(--tx-2);font-size:.8rem}.rs-src{font-size:.72rem}.rs-src a,.rs-note a{color:var(--gn-link,var(--acc-1))}',
     '.rs-fight{grid-column:1/-1}.rs-sum{margin:0 0 10px;color:var(--tx-1);font-size:.9rem}',
     '.rs-pre,.rs-tip{margin:0 0 10px;padding:8px 12px;border-radius:10px;background:var(--bg-0);border:1px solid var(--bd-1);font-size:.84rem;color:var(--tx-1)}',
-    '.rs-tip{border-color:color-mix(in srgb,var(--rs-mod) 55%,var(--bd-1))}.rs-tip b{color:var(--rs-mod);margin-right:4px}',
+    '.rs-tip{border-color:color-mix(in srgb,var(--rs-mod) 55%,var(--bd-1))}.rs-tip b{color:var(--tx-1);margin-right:4px}',
     '.rs-fgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:16px}',
     '.rs-phases{list-style:none;margin:0;padding:0;border-left:2px solid var(--bd-2)}',
     '.rs-phases li{position:relative;padding:0 0 10px 14px}.rs-phases li::before{content:"";position:absolute;left:-6px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--rs-mod)}',
@@ -282,7 +284,7 @@
     '.rs-mh{display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.rs-mh b{color:var(--tx-1);font-size:.88rem}.rs-mh small{color:var(--tx-2);font-size:.74rem}',
     '.rs-role{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border:1px solid var(--bd-2);border-radius:999px;padding:0 7px;color:var(--tx-2)}',
     '.rs-mechs p{margin:4px 0 0;font-size:.82rem;color:var(--tx-1)}.rs-cmlist{margin:0;padding-left:18px;font-size:.84rem;color:var(--tx-1)}',
-    '.rs-links{margin:0;font-size:.84rem}.rs-links a{color:var(--acc-1)}',
+    '.rs-links{margin:0;font-size:.84rem}.rs-links a{color:var(--gn-link,var(--acc-1))}',
     '.rs-tabs{display:none;gap:4px;margin-top:12px;border-bottom:1px solid var(--bd-1)}',
     '.rs-tabs [role=tab]{font:inherit;font-size:.9rem;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:8px 14px;color:var(--tx-2);cursor:pointer;min-height:44px;flex:1}',
     '.rs-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--rs-mod)}',
@@ -442,19 +444,30 @@
     if (row && row.focus) row.focus();
   }
 
+  // Pestañas del celular: cambia la sección y deja el foco en la pestaña elegida.
+  function setPane(host, tab) {
+    st.pane = tab === 'fight' ? 'fight' : 'rew';
+    draw(false);
+    var b = host.querySelector ? host.querySelector('[data-rs-tab="' + st.pane + '"]') : null;
+    if (b && b.focus) b.focus();
+  }
+
   function wire(host) {
+    // Flechas, Inicio y Fin entre las dos pestañas (patrón tablist), como en la lista.
+    host.addEventListener('keydown', function (e) {
+      var t = e && e.target && e.target.getAttribute ? e.target.getAttribute('data-rs-tab') : null;
+      if (!t) return;
+      var to = e.key === 'ArrowRight' || e.key === 'ArrowLeft' ? (t === 'fight' ? 'rew' : 'fight') : e.key === 'Home' ? 'rew' : e.key === 'End' ? 'fight' : null;
+      if (!to) return;
+      if (e.preventDefault) e.preventDefault();
+      setPane(host, to);
+    });
     host.addEventListener('click', function (e) {
       for (var n = e.target, i = 0; n && n !== host && i < 6; n = n.parentNode, i++) {
         if (!n.getAttribute) continue;
         if (n.getAttribute('data-rs') === 'back') { close(false); return; }
         var tab = n.getAttribute('data-rs-tab');
-        if (tab) {
-          st.pane = tab === 'fight' ? 'fight' : 'rew';
-          draw(false);
-          var b = host.querySelector ? host.querySelector('[data-rs-tab="' + st.pane + '"]') : null;
-          if (b && b.focus) b.focus();
-          return;
-        }
+        if (tab) { setPane(host, tab); return; }
         var go = n.getAttribute('data-rs-go');
         if (go) { open(go); return; }
       }
