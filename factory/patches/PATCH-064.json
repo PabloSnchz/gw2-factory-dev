@@ -1,0 +1,172 @@
+{
+ "id": "PATCH-064",
+ "summary": "BL-070 RAI-6: Raids legible en los 19 themes (enlaces y estado «marcado por vos» con --gn-link, error y consejo en el texto principal), pestañas de la ficha con el patrón tablist completo (aria-controls, foco itinerante, flechas); router.js 2.18.2 sin restos de StrikeTracker. raids-view.js y raids-sheet.js 1.2.0.",
+ "files": [
+  {
+   "path": "js/raids-view.js",
+   "base_sha": "9a9effa232b9d047ab9c947b4162127272468aff",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-24)",
+     "text": " * Versión: 1.2.0 (2026-10-25) — RAI-6: estados y error legibles (AA) en los 19 themes · antes 1.1.0 (2026-10-24)"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.1.0';",
+     "text": "var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "'.rv-err{margin:10px 0 0;font-size:.82rem;color:var(--color-red,#F47C7C)}',",
+     "text": "'.rv-err{margin:10px 0 0;padding-left:8px;border-left:3px solid var(--color-red,#F47C7C);font-size:.82rem;color:var(--tx-1)}',"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rv-s-hand .rv-state>span{color:var(--acc-1)}",
+     "text": ".rv-s-hand .rv-state>span{color:var(--gn-link,var(--acc-1))}"
+    }
+   ]
+  },
+  {
+   "path": "js/raids-sheet.js",
+   "base_sha": "af578766a685932ea52fd68bb79492e78704edff",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-24)",
+     "text": " * Versión: 1.2.0 (2026-10-25) — RAI-6: enlaces AA en los 19 themes y pestañas con teclado · antes 1.1.0 (2026-10-24)"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.1.0';",
+     "text": "var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "background:var(--bg-2);color:var(--rs-mod)}",
+     "text": "background:var(--bg-2);color:var(--tx-2)}"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rs-r-rare span{color:var(--acc-1)}",
+     "text": ".rs-r-rare span{color:var(--gn-link,var(--acc-1))}"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rs-src a,.rs-note a{color:var(--acc-1)}",
+     "text": ".rs-src a,.rs-note a{color:var(--gn-link,var(--acc-1))}"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rs-tip b{color:var(--rs-mod);margin-right:4px}",
+     "text": ".rs-tip b{color:var(--tx-1);margin-right:4px}"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rs-links a{color:var(--acc-1)}",
+     "text": ".rs-links a{color:var(--gn-link,var(--acc-1))}"
+    },
+    {
+     "op": "replace",
+     "anchor": "      h += '<button type=\"button\" role=\"tab\" data-rs-tab=\"' + t[0] + '\" aria-selected=\"' + (pane === t[0]) + '\">' + t[1] + '</button>';",
+     "text": "      var on = pane === t[0];\n      h += '<button type=\"button\" role=\"tab\" id=\"rsTab-' + t[0] + '\" data-rs-tab=\"' + t[0] + '\" aria-selected=\"' + on + '\" aria-controls=\"' +\n        (t[0] === 'fight' ? 'rsPaneFight' : 'rsPaneRew') + '\" tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + '</button>';"
+    },
+    {
+     "op": "replace",
+     "anchor": "<section class=\"rs-card rs-fight\" data-rs-pane=\"fight\"",
+     "text": "<section id=\"rsPaneFight\" class=\"rs-card rs-fight\" data-rs-pane=\"fight\""
+    },
+    {
+     "op": "replace",
+     "anchor": "<section class=\"rs-card\" data-rs-pane=\"rew\"",
+     "text": "<section id=\"rsPaneRew\" class=\"rs-card\" data-rs-pane=\"rew\""
+    },
+    {
+     "op": "replace",
+     "anchor": "        var tab = n.getAttribute('data-rs-tab');\n        if (tab) {\n          st.pane = tab === 'fight' ? 'fight' : 'rew';\n          draw(false);\n          var b = host.querySelector ? host.querySelector('[data-rs-tab=\"' + st.pane + '\"]') : null;\n          if (b && b.focus) b.focus();\n          return;\n        }\n",
+     "text": "        var tab = n.getAttribute('data-rs-tab');\n        if (tab) { setPane(host, tab); return; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function wire(host) {\n",
+     "text": "  // Pestañas del celular: cambia la sección y deja el foco en la pestaña elegida.\n  function setPane(host, tab) {\n    st.pane = tab === 'fight' ? 'fight' : 'rew';\n    draw(false);\n    var b = host.querySelector ? host.querySelector('[data-rs-tab=\"' + st.pane + '\"]') : null;\n    if (b && b.focus) b.focus();\n  }\n\n  function wire(host) {\n    // Flechas, Inicio y Fin entre las dos pestañas (patrón tablist), como en la lista.\n    host.addEventListener('keydown', function (e) {\n      var t = e && e.target && e.target.getAttribute ? e.target.getAttribute('data-rs-tab') : null;\n      if (!t) return;\n      var to = e.key === 'ArrowRight' || e.key === 'ArrowLeft' ? (t === 'fight' ? 'rew' : 'fight') : e.key === 'Home' ? 'rew' : e.key === 'End' ? 'fight' : null;\n      if (!to) return;\n      if (e.preventDefault) e.preventDefault();\n      setPane(host, to);\n    });\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "6fe461c9271ed4e1baf655b4b7f84c641b7b4ff1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/raids-view.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/raids-view.js\", \"v\": \"1.2.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/raids-sheet.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/raids-sheet.js\", \"v\": \"1.2.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "153c35cb4ca243b9a847bf1847a1cf89a277a1de",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.1.0');",
+     "text": "  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.2.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(rs.innerHTML, /data-rs-tab=\"fight\" aria-selected=\"true\"/);\n  await sb.RaidsSheet.open('ura');",
+     "text": "  assert.match(rs.innerHTML, /data-rs-tab=\"fight\" aria-selected=\"true\"/);\n  // RAI-6: patrón tablist completo: cada pestaña dice qué sección controla, foco itinerante y flechas.\n  assert.match(rs.innerHTML, /id=\"rsTab-fight\" data-rs-tab=\"fight\" aria-selected=\"true\" aria-controls=\"rsPaneFight\" tabindex=\"0\"/);\n  assert.match(rs.innerHTML, /id=\"rsTab-rew\" data-rs-tab=\"rew\" aria-selected=\"false\" aria-controls=\"rsPaneRew\" tabindex=\"-1\"/);\n  assert.match(rs.innerHTML, /<section id=\"rsPaneFight\" class=\"rs-card rs-fight\"/);\n  assert.match(rs.innerHTML, /<section id=\"rsPaneRew\" class=\"rs-card\"/);\n  const key = (k, on) => rs.listeners.keydown[0]({ key: k, target: { getAttribute: (a) => (a === 'data-rs-tab' ? on : null) }, preventDefault() {} });\n  key('ArrowLeft', 'fight');\n  assert.equal(rs.getAttribute('data-pane'), 'rew', 'las flechas cambian de pestaña');\n  key('Enter', 'rew');\n  assert.equal(rs.getAttribute('data-pane'), 'rew', 'otras teclas no hacen nada');\n  key('End', 'rew');\n  assert.equal(rs.getAttribute('data-pane'), 'fight', 'Fin va a la última');\n  await sb.RaidsSheet.open('ura');"
+    }
+   ]
+  },
+  {
+   "path": "js/router.js",
+   "base_sha": "2944ccf738cf36d012de0cdf2a346ccf6e87aea6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.18.1 (2026-10-24) — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)\n *\n * Cambios v2.18.1:",
+     "text": " * v2.18.2 (2026-10-25) — sin restos de StrikeTracker (BL-070 RAI-6)\n *\n * Cambios v2.18.2:\n *  - StrikeTracker sale de MODULOS_CON_LATCH, de showPanel y de updateSidebarFor: el módulo ya no existe.\n *\n * Antes, v2.18.1 — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)\n *\n * Cambios v2.18.1:"
+    },
+    {
+     "op": "replace",
+     "anchor": "router-wv.js v2.18.1 —",
+     "text": "router-wv.js v2.18.2 —"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { mod: 'StrikeTracker',   panel: 'strikeTrackerPanel' },\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "      else if (view==='strikes'){ /* no sidebar específico para strikes */ }\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "'raidTrackerPanel','strikeTrackerPanel'",
+     "text": "'raidTrackerPanel'"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "8355411b116fa253d09bf180e64c325a61eb0fbb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/router.js?v=2.18.1",
+     "text": "js/router.js?v=2.18.2"
+    }
+   ]
+  }
+ ]
+}
