@@ -1,0 +1,160 @@
+{
+ "id": "PATCH-115",
+ "summary": "ACT-7b, parte 3 (reintento de PATCH-114, que rechazó hb106-t13 y t19c) (BL-070): router 2.21.0 sin Activities (no se precarga, activa ni desactiva; #activitiesPanel lo dibuja js/act-view.js) e index.html con su ?v; el presupuesto saca js/activities.js y js/activities-theme.js (borrados en la parte 2) y baja el techo del router; los tests heredados dejan de leer js/activities.js: idea49 (dos) ahora exigen que no exista y que la vista nueva no toque localStorage, idea61 saca sus dos lectores crudos y el censo del latch baja su piso a 1. hb106-t13 copia del router solo el bloque de WV (3 líneas) y t19c prueba su control con una entrada sintética.",
+ "files": [
+  {
+   "path": "js/router.js",
+   "base_sha": "8525d160c97cd3540ae1c9f5dd127a0ec4bc478b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.20.0 (2026-10-25) — BL-070 ACT-5: la Heredad (#/account/homestead) es un módulo propio\n",
+     "text": " * v2.21.0 (2026-10-25) — BL-070 ACT-7b: Actividades ya no usa js/activities.js\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Cambios de BL-070 (el detalle de cada paso está en ai-memory/status.md):\n *  - 2.20.0 (ACT-5): ruta #/account/homestead y #homesteadPanel (js/home-view.js, BL-055).\n",
+     "text": " * Cambios de BL-070 (el detalle de cada paso está en ai-memory/status.md):\n *  - 2.21.0 (ACT-7b): js/activities.js se retiró: el módulo viejo no se precarga, activa ni desactiva;\n *    #activitiesPanel vive en index.html y lo dibuja js/act-view.js (escucha gn:tokenchange solo).\n *  - 2.20.0 (ACT-5): ruta #/account/homestead y #homesteadPanel (js/home-view.js, BL-055).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var _actInflight = null;\n  var _actAbort = null;\n  function prefetchActivitiesOnce(token) {\n    if (_actInflight) return _actInflight;\n    try { if (_actAbort) _actAbort.abort(); } catch(_) {}\n    _actAbort = new AbortController();\n    _actInflight = Promise.resolve().then(function(){\n      return window.Activities?.prefetch?.({ token: token || getSelectedToken(), signal: _actAbort.signal });\n    }).catch(function(e){\n      console.debug('[router] activities prefetch skipped/failed', e?.message || e);\n    }).finally(function(){\n      _actInflight = null;\n    });\n    return _actInflight;\n  }\n\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "        }\n        try { if (h !== '#/activities' && _actAbort) { _actAbort.abort(); } } catch(_) {}\n        if (h !== '#/activities' && window.Activities && typeof window.Activities.deactivate === 'function') {\n          try { window.Activities.deactivate(); } catch (_) {}\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "            prefetchActivitiesOnce(getSelectedToken());\n            showPanel('activitiesPanel');\n",
+     "text": "            showPanel('activitiesPanel'); // la vista nueva (js/act-view.js) se dibuja sola al verse\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "            if (typeof Analytics !== 'undefined') Analytics.viewModule('activities');\n            window.Activities?.activate?.();\n          } catch (e) {\n",
+     "text": "            if (typeof Analytics !== 'undefined') Analytics.viewModule('activities');\n          } catch (e) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "          } catch (e) {\n            console.warn('[router] Activities.activate error', e);\n          } finally {\n",
+     "text": "          } catch (e) {\n            console.warn('[router] activities', e);\n          } finally {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "        var p = document.getElementById('activitiesPanel');\n        if (p && !p.hasAttribute('hidden')) {\n          try {\n            window.Activities?.activate?.();\n          } catch (e) {\n            console.warn('[router] Activities.activate error', e);\n          }\n        }\n",
+     "text": "        // BL-070 ACT-7: js/act-view.js y js/act-week.js escuchan gn:tokenchange y releen solas.\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "d5aecddb454b91d1760bb32068bcf8bbd03dcb95",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/router.js?v=2.20.0",
+     "text": "js/router.js?v=2.21.0"
+    }
+   ]
+  },
+  {
+   "path": "tools/size-budget.json",
+   "base_sha": "559f37958b30a9725764ddb90cadc5c6ff9362c5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/router.js\": { \"base\": 90495, \"techo\": 64348 }",
+     "text": "\"js/router.js\": { \"base\": 90495, \"techo\": 63255 }"
+    },
+    {
+     "op": "replace",
+     "anchor": "    \"js/activities.js\": { \"base\": 64918, \"techo\": 64918 },\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    \"js/activities-theme.js\": { \"nota\": \"Actividades; se achica al renovarla (BL-064, paso 4).\" },\n",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "path": "tests/hb106-censo-latch.test.js",
+   "base_sha": "f2314fb7cf185bfff3a7ba58b00804965537b571",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  // BL-070 INV-7b: inventory-hub.js se retiró; quedan 2.\n  conGuard.length >= 2, 'solo ' + conGuard.length);",
+     "text": "  // BL-070 INV-7b: inventory-hub.js se retiró; quedan 2.\n  // BL-070 ACT-7b: activities.js se retiró; el piso baja a 1 (el censo sigue mirando a los que quedan).\n  conGuard.length >= 1, 'solo ' + conGuard.length);"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea61-claves-congeladas.test.js",
+   "base_sha": "69ff40a30008cf19e65f5dc25a7cf8503e1b6a30",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    'activities-theme.js[gn_home_nodes_marked]',\n    'activities.js[gn_activities_toggles]',\n",
+     "text": "    // BL-070 ACT-7b: activities.js y activities-theme.js se retiraron con sus dos lecturas crudas\n    // (gn_activities_toggles y gn_home_nodes_marked); la Heredad lee sus marcas por Storage.\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea49.activities-cache-wipe.test.js",
+   "base_sha": "efb3d3203c84e4a4aad9125731a666cfbebbf24a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "console.log('\\n[2] El archivo real activities.js: activate() no borra cache de otro modulo');\n\nconst activitiesSrc = fs.readFileSync(path.join(ROOT, 'js', 'activities.js'), 'utf8');\nconst activateBody = activitiesSrc.slice(activitiesSrc.indexOf('async function activate()'));\n// recorte estable: los primeros 4000 chars de la función bastan y no dependen\n// de dónde se cierre\nconst activateWindow = activateBody.slice(0, 4000);\n\nok(!/^\\s*cleanAchievementsCache\\(\\);/m.test(activateWindow),\n   'activate() YA NO llama a cleanAchievementsCache()  <-- el fix');\nok(/^\\s*cleanActivitiesCache\\(\\);/m.test(activateWindow),\n   'activate() CONSERVA cleanActivitiesCache() (prefijo psna:, datos propios)');\nok(/function cleanAchievementsCache\\(\\)/.test(activitiesSrc),\n   'cleanAchievementsCache() sigue DEFINIDA para llamadas explicitas (no se borro la funcion)');\n",
+     "text": "console.log('\\n[2] js/activities.js se retiró (BL-070 ACT-7b): ya no hay activate() que borre cache ajena');\n\n// El hallazgo no puede volver por ahí: el archivo no existe y la vista nueva de Actividades no toca localStorage.\nok(!fs.existsSync(path.join(ROOT, 'js', 'activities.js')),\n   'js/activities.js ya no existe: su activate() no puede borrar la cache de logros');\nconst actViewSrc = fs.readFileSync(path.join(ROOT, 'js', 'act-view.js'), 'utf8');\nok(!/cleanAchievementsCache|localStorage/.test(actViewSrc),\n   'la vista nueva de Actividades (js/act-view.js) no borra ni toca localStorage');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "console.log('\\n[4] router.js llama Activities.activate() al entrar a #/activities');\n",
+     "text": "console.log('\\n[4] router.js ya no llama Activities.activate() al entrar a #/activities (BL-070 ACT-7b)');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "ok(nCalls >= 1, 'router.js invoca Activities.activate() (' + nCalls + ' sitio(s))');",
+     "text": "ok(nCalls === 0, 'router.js ya no invoca Activities.activate() (' + nCalls + ' sitio(s))');"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea49.quotavisible.test.js",
+   "base_sha": "ef73fd5d6b237d9043a4b75f702db5aa1a8d50e3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    console.log('\\n[3] activities.js:activate() no borra la cache de logros');\n    const act = fs.readFileSync(path.join(ROOT, 'js', 'activities.js'), 'utf8');\n    const body = act.slice(act.indexOf('async function activate()'), act.indexOf('async function activate()') + 4000);\n    const callIdx = body.search(/^\\s*clean\\w+Cache\\(\\);/m);\n    const callLine = callIdx === -1 ? '' : body.slice(callIdx, body.indexOf('\\n', callIdx));\n    ok(!/cleanAchievementsCache/.test(callLine),\n       'la unica llamada de limpieza que sobrevive es cleanActivitiesCache (datos propios)');\n    ok(/cleanActivitiesCache/.test(body),\n       'cleanActivitiesCache() se sigue llamando: sus prefijos psna: son de este modulo');\n",
+     "text": "    console.log('\\n[3] js/activities.js se retiró (BL-070 ACT-7b): nadie borra la cache de logros al abrir Actividades');\n    ok(!fs.existsSync(path.join(ROOT, 'js', 'activities.js')),\n       'js/activities.js ya no existe: su activate() no puede volver a borrar cache ajena');\n    const view = fs.readFileSync(path.join(ROOT, 'js', 'act-view.js'), 'utf8');\n    ok(!/cleanAchievementsCache|localStorage/.test(view),\n       'la vista nueva de Actividades no borra ni toca localStorage');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/hb106-t13-invariante.test.js",
+   "base_sha": "247cf64888dc92657755a9831d8939dad63836be",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  let deact = L.slice(di, di + 7).join('\\n');",
+     "text": "  // BL-070 ACT-7b: el bloque de Activities (4 líneas) se fue con js/activities.js; queda el de WV (3 líneas).\n  let deact = L.slice(di, di + 3).join('\\n');"
+    }
+   ]
+  },
+  {
+   "path": "tests/t19c-lectores-legacy.test.js",
+   "base_sha": "c46e7086ea4ea13a3071a65ef906bb4ab9e1cbf7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  ok(entradas.some((e) => porPar(e).includes('gn_activities_toggles')),\n     'CONTROL: y puede dar positivo con otra legacy (el filtro no es literal a gw2_keys)');",
+     "text": "  // BL-070 ACT-7b: la única entrada con otra legacy (activities.js[gn_activities_toggles]) se retiró con el archivo;\n  // el control usa una entrada sintética con dos legacy para seguir probando que el filtro no es literal.\n  ok(porPar('sintetico.js[gw2_keys, gn_activities_toggles]').includes('gn_activities_toggles'),\n     'CONTROL: y puede dar positivo con otra legacy (el filtro no es literal a gw2_keys)');"
+    }
+   ]
+  }
+ ]
+}
