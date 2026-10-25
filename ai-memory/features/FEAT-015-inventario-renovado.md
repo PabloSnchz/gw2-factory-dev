@@ -1,6 +1,6 @@
 # FEAT-015 — Inventario y Personajes renovado
 
-- **Estado:** HECHO EN DEV (2026-10-25 05:00Z). Espera la validación de Pablo.
+- **Estado:** VALIDADO por Pablo (2026-10-25 05:14Z). Hecho en DEV el 2026-10-25 05:00Z.
 - **Fecha:** 2026-10-25 00:28Z (INV-0) → 2026-10-25 05:00Z (INV-7b).
 - **Backlog:** BL-070, paso 2 (Inventario y Personajes).
 - **Propuesta:** `docs/propuestas/propuesta-inventario-bl070.html` (b849cb5), aprobada con D1 a D6 (2026-10-25 00:55Z).
