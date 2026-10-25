@@ -1,6 +1,6 @@
 // Actividades, pestaña Semana (BL-070, ACT-4): js/act-week.js. Corre con: node --test tests/*.test.cjs
 // La llave como señal (humano, «Plebeyo» y profesión, no filtro), mi voz, la guía de la comunidad, las piedras por
-// moneda con la cartera, las marcas por cuenta y semana, el paso del −/+ de antes (D3) y el contraste en los 19 themes.
+// moneda con la cartera, las marcas por cuenta y semana (sin leer la pantalla vieja, ACT-7c) y el contraste en los 19 themes.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -35,7 +35,9 @@ const NORN = { name: 'Brok', level: 11, created: '2026-10-20T11:00:00Z', race: '
 
 test('archivo: presupuesto, manifiesto después de act-view, sin emojis ni almacenamiento propio; datos verificados', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.doesNotMatch(SRC, /\bActivities\b|oldCount|migrated/, 'ACT-7c: no lee la pantalla vieja de Actividades');
+  assert.equal(JSON.parse(read('js/modules.json')).modules.filter((m) => m.src === 'js/act-week.js')[0].v, '1.1.0');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u, 'sin emojis');
   assert.doesNotMatch(SRC, /localStorage|sessionStorage/, 'guarda solo por Storage');
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
@@ -121,7 +123,9 @@ test('las piedras: una casilla por moneda, con lo que tenés; el oro en oro; sin
   assert.match(h, /data-aw-wp="1">Copiar el punto de ruta de Piedra Arbórea/);
   const off = W.stonesHTML({ data: DATA, hasToken: false, stones: W.stones(CAT.leivas.offers, null, {}, DATA) });
   assert.equal((off.match(/aria-pressed="false" disabled>/g) || []).length, 5);
-  assert.match(W.stonesHTML({ data: DATA, hasToken: true, migrated: true, walletState: 'error', stones: s }), /pasó a las primeras casillas\. No pude leer tu cartera/);
+  const err = W.stonesHTML({ data: DATA, hasToken: true, migrated: true, walletState: 'error', stones: s });
+  assert.match(err, /Marcá las que compraste: valen hasta el reset del lunes\. No pude leer tu cartera/);
+  assert.doesNotMatch(err, /primeras casillas/, 'ACT-7c: el −/+ de antes ya no pasa');
 });
 
 test('CSS: solo el texto del theme, foco visible, 44 px y sin teñir el fondo del texto', () => {
@@ -179,31 +183,32 @@ function boot(opts) {
     head: { appendChild(n) { els[n.id] = n; } }, createElement: () => ({ id: '' }),
     getElementById: (id) => (id === 'awKeyVoice' ? (els.awKeyVoice = els.awKeyVoice || { children: [], get firstChild() { return this.children[0] || null; }, removeChild(c) { this.children = this.children.filter((x) => x !== c); }, appendChild(c) { this.children.push(c); } }) : els[id] || null),
   };
-  let old = opts.old || 0, tk = opts.tk === undefined ? 'TOKEN-DE-PRUEBA' : opts.tk;
+  const tk = opts.tk === undefined ? 'TOKEN-DE-PRUEBA' : opts.tk;
   const sb = box({
     document,
     fetch: () => Promise.resolve({ ok: true, json: () => Promise.resolve(J(DATA)) }),
     Storage: { get: (k) => (k in store ? JSON.parse(store[k]) : null), set: (k, v) => { store[k] = JSON.stringify(v); } },
-    Activities: { _debug: () => ({ token: 'x', weeklyStones: old }) },
+    Activities: opts.legacy ? { _debug: () => ({ token: 'x', weeklyStones: 4 }) } : undefined,
     GW2Api: { getAccountWallet: () => { renders.push('wallet'); return Promise.resolve([{ id: 1, value: 20000 }]); } },
     Shiruvana: { voice: (m) => { voices.push(m.text); return { text: m.text }; } },
     navigator: { clipboard: { writeText: (t) => { renders.push('copy:' + t); return Promise.resolve(); } } },
   });
   sb.ActView = { getSnapshot: () => ({ data: tk ? { hasToken: true, tk, chars: [LYRA] } : { hasToken: false } }), render: () => renders.push('render'), _cat: () => CAT };
-  return { sb, store, renders, voices, setOld: (n) => { old = n; } };
+  return { sb, store, renders, voices };
 }
 const click = (attrs) => ({ target: { getAttribute: (k) => (k in attrs ? attrs[k] : null), parentNode: null } });
 
-test('humo: el −/+ de antes pasa una vez (D3), marcar y desmarcar por cuenta y semana, sin guardar la Key', async () => {
-  const { sb, store, renders, setOld } = boot({ old: 2 });
+test('humo: marcar y desmarcar por cuenta y semana, sin guardar la Key y sin leer la pantalla vieja (ACT-7c)', async () => {
+  const { sb, store, renders } = boot({ legacy: true });
   const A = sb.ActWeek, now = Date.now();
-  assert.deepEqual(J(A.state(now)), { bought: 2 }, 'oro y karma, en el orden de Leivas');
+  assert.deepEqual(J(A.state(now)), { bought: 0 }, 'un Activities viejo con 4 piedras no se lee');
+  assert.equal(A.onClick(click({ 'data-aw-stone': '1' })), true);
+  assert.equal(A.onClick(click({ 'data-aw-stone': '2' })), true);
+  assert.deepEqual(J(A.state(now)), { bought: 2 }, 'oro y karma');
   const raw = store[A._pure.STORE];
   assert.ok(raw && !raw.includes('TOKEN-DE-PRUEBA'), 'la Key nunca se guarda');
   assert.equal(A.onClick(click({ 'data-aw-stone': '1' })), true);
   assert.equal(A.state(now).bought, 1, 'desmarqué el oro');
-  setOld(4);
-  assert.equal(A.state(now).bought, 1, 'el −/+ de antes no vuelve a pisar lo que marcaste');
   A.onClick(click({ 'data-aw-key': 'yes' }));
   assert.equal(A.state(now).keyMark, true);
   A.onClick(click({ 'data-aw-key': 'no' }));
@@ -211,7 +216,6 @@ test('humo: el −/+ de antes pasa una vez (D3), marcar y desmarcar por cuenta y
   A.onClick(click({ 'data-aw-key': 'auto' }));
   assert.equal(A.state(now).keyMark, undefined);
   assert.ok(renders.filter((r) => r === 'render').length >= 4, 'cada marca redibuja');
-  setOld(0);
   assert.deepEqual(J(A.state(now + 7 * DAY)), { bought: 0 }, 'la semana que viene empieza en cero');
   assert.equal(A.onClick(click({ 'data-aw-wp': '1' })), true);
   await new Promise((r) => setTimeout(r, 10));

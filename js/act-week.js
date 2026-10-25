@@ -1,7 +1,7 @@
 /*!
  * js/act-week.js — Actividades, pestaña Semana: la llave del León Negro y las piedras de Leivas (BL-070, ACT-4)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25) — ACT-4
+ * Versión: 1.1.0 (2026-10-25) — ACT-7c: sin el paso del −/+ de la pantalla vieja (retirada en ACT-7b)
  *
  * La pestaña Semana de js/act-view.js la dibuja este archivo:
  *  - Llave semanal: «Probable» con un personaje de nivel 10 o más creado desde el reset (cualquier profesión).
@@ -9,8 +9,8 @@
  *    un humano «Plebeyo» es la combinación que usa la comunidad, y lo digo con mi voz. La API no informa el
  *    capítulo terminado: vos confirmás «Ya la saqué» o «Todavía no» (D2) y vale hasta el reset del lunes.
  *  - Cómo la saca la comunidad: raza y clase social, las profesiones más usadas con su ícono oficial y los pasos.
- *  - Piedras de invocación vetustas: una casilla por moneda (D3), con lo que tenés de cada una en la cartera, y lo
- *    que marcaste con el −/+ de antes pasa a las primeras casillas de esta semana.
+ *  - Piedras de invocación vetustas: una casilla por moneda (D3), con lo que tenés de cada una en la cartera.
+ *    El paso del −/+ de la pantalla vieja se fue con ella en ACT-7c: esa pantalla ya no existe desde ACT-7b.
  * Marcas por cuenta con una huella (nunca la Key) en gn:activities:week. Datos: assets/data/activities/key-farm.json
  * (RUN-060 y wiki oficial) y la cartera por GW2Api.getAccountWallet (con su caché). Se carga por js/modules.json,
  * después de js/act-view.js; sin este archivo, Semana queda como en ACT-2.
@@ -18,7 +18,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[ActWeek]';
   var DATA_URL = 'assets/data/activities/key-farm.json';
   var STORE = 'gn:activities:week';
@@ -98,7 +98,7 @@
     return '<span class="aw-chip' + (on ? ' aw-chip--ok' : '') + '">' + esc(on ? yes : no) + '</span>';
   }
 
-  // s: { data, hasToken, loaded, key: keyModel, mark, weekly, since, stones, migrated, walletState }
+  // s: { data, hasToken, loaded, key: keyModel, mark, weekly, since, stones, walletState }
   function keyHTML(s) {
     var d = s.data || {}, km = s.key, c = d.combo || {}, cs = (c.backstory && c.backstory.name) || 'Plebeyo', pn = d.professionNames || {}, pi = d.professionIcons || {};
     var b = km.state === 'probable' ? (km.combo ? ['pend', 'Muy probable'] : ['pend', 'Probable']) : BADGE[km.state] || BADGE.unknown;
@@ -158,7 +158,6 @@
     });
     h += '</ul><div class="aw-acts"><button type="button" class="av-btn" data-aw-wp="1">Copiar el punto de ruta de Piedra Arbórea</button></div>';
     var note = s.hasToken ? 'Marcá las que compraste: valen hasta el reset del ' + (s.weekly || 'lunes') + '.' : 'Con tu API Key marcás las que compraste y ves lo que tenés de cada moneda.';
-    if (s.migrated) note += ' Lo que marcaste con el −/+ de antes pasó a las primeras casillas.';
     if (s.hasToken && s.walletState === 'error') note += ' No pude leer tu cartera: no sé cuánto tenés de cada moneda.';
     return h + '<p class="av-note">' + esc(note) + '</p></section>';
   }
@@ -200,7 +199,7 @@
 
   // ------------------------------------------------------------------ estado y DOM
   var doc = root.document;
-  var st = { data: null, dataP: null, wallet: {}, walletState: {}, migrated: {} };
+  var st = { data: null, dataP: null, wallet: {}, walletState: {} };
 
   function storage() { var S = root.Storage; return S && typeof S.get === 'function' && typeof S.set === 'function' ? S : null; }
   function view() { var V = root.ActView; return V && typeof V.getSnapshot === 'function' ? V.getSnapshot() : null; }
@@ -209,26 +208,11 @@
   function offers() { var c = root.ActView && root.ActView._cat ? root.ActView._cat() : null; return (c && c.leivas && c.leivas.offers) || []; }
   function repaint() { if (root.ActView && typeof root.ActView.render === 'function') root.ActView.render(); }
 
-  // Lo que marcaste esta semana para la cuenta. D3: si esta semana todavía no marcaste nada acá y el −/+ de antes
-  // tiene un número, pasa a las primeras casillas (una sola vez por semana y cuenta).
+  // Lo que marcaste esta semana para la cuenta (por huella, nunca la Key).
   function marks(now) {
     var P = M(), S = storage(), f = fp();
     if (!P || !S || !f) return null;
-    var store = S.get(STORE) || {}, m = P.marksFor(store, f, now);
-    if (!store[f] || store[f].week !== m.week) {
-      var old = oldCount();
-      if (old > 0) {
-        var seeded = P.stonesFromCount(offers(), old), next = store;
-        Object.keys(seeded).forEach(function (cur) { next = P.setMark(next, f, now, 'stone', { currency: Number(cur), on: true }); });
-        S.set(STORE, next);
-        st.migrated[f] = m.week;
-        m = P.marksFor(next, f, now);
-      }
-    }
-    return m;
-  }
-  function oldCount() {
-    try { var a = root.Activities, d = a && typeof a._debug === 'function' ? a._debug() : null; return d && d.token ? Number(d.weeklyStones) || 0 : 0; } catch (e) { return 0; }
+    return P.marksFor(S.get(STORE) || {}, f, now);
   }
 
   // Para los indicadores de act-view: cuántas piedras marcaste y qué confirmaste de la llave (null sin Key).
@@ -272,7 +256,7 @@
     var v = view(), chars = v && v.data ? v.data.chars : null;
     return { data: d, hasToken: !!m.hasToken, loaded: !!m.loaded, mark: mk ? mk.key : undefined, weekly: m.clocks ? m.clocks.weekly : '', since: m.lastWeekly,
       key: keyModel(m.key, chars, d), stones: stones(offers(), tk ? st.wallet[tk] || null : null, mk ? mk.stones : {}, d),
-      migrated: !!(mk && st.migrated[fp()] === mk.week), walletState: tk ? st.walletState[tk] : null };
+      walletState: tk ? st.walletState[tk] : null };
   }
   function semana(m) { ensureCss(); loadData(); return html(snapshot(m)); }
 
