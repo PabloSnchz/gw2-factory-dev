@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-110",
+ "summary": "Docs ACT-6 (BL-070, BL-055): status y backlog con Glifos y Decoraciones de la Heredad hechos; ACT-5 validado; corte del chat registrado.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "9ebee76b0f0d3141eb781f1016168ff9689698ed",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "ACT-5 la Heredad como módulo propio (BL-055) HECHO (19:00Z), espera tu validación; sigue ACT-6, glifos y decoraciones.",
+     "text": "ACT-5 la Heredad como módulo propio (BL-055) VALIDADO; ACT-6 glifos y decoraciones de la Heredad HECHO (19:40Z), espera tu validación; sigue ACT-7, retirar lo viejo de Actividades y la revisión final."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-5 HECHO (2026-10-25 19:00Z)",
+     "text": "Último hecho: ACT-6 HECHO (2026-10-25 19:40Z): la Heredad suma las pestañas Glifos y Decoraciones. Pablo validó ACT-5 (19:09Z). Medido en CI (RUN-066, sonda ya borrada en 20e048b): /v2/homestead/glyphs trae 36 (12 glifos por las 3 cajas de recolección: cosecha, tala y minería) y /v2/items el nombre en español y el ícono de los 12 ítems; /v2/homestead/decorations trae 1210 decoraciones en 27 categorías con nombre en español (tope 250 por decoración; ids=all no se acepta, se piden de a 200). Efectos de cada glifo: wiki oficial «Glyph (upgrade)»; saqué un tope diario del glifo de alquimia que la wiki no menciona. assets/data/homestead/glyphs.json (203a8ed, 3,8 KB): los 12 glifos con ítem, nombre, ícono oficial, tipo (más materiales, cambia el material, moneda o karma) y efecto. js/home-extra.js 1.0.0 (06d0b31, 18,4 KB): Glifos con su ícono, efecto y, por caja, «La tenés» o «Te falta» desde /v2/account/homestead/glyphs; Decoraciones con el catálogo pedido recién al abrir la pestaña, cuántas tenés de cada una sobre 250 desde /v2/account/homestead/decorations, piezas y decoraciones al tope, selector de las 27 categorías con lo que tenés de cada una, «Las tengo», «Me faltan», búsqueda sin tildes y de a 120 con «Mostrar más». Estados honestos: «sin datos» y el permiso nombrado (account y unlocks), nunca «te falta» sin lectura. No guarda nada en el navegador. PATCH-109 (aplicado, suite verde antes y después): js/home-view.js 1.1.0 (27e886c, 34,2 KB) dibuja las pestañas Nodos y gatos, Glifos y Decoraciones (flechas, Inicio y Fin) y le pasa a home-extra los clics, la búsqueda y el selector; js/modules.json (9bbfc96) carga home-extra después de home-view; tests/home-view.test.cjs (bec6020) pide la 1.1.0. tests/home-extra.test.cjs (cbe8d33, 9 tests con contraste en los 19 themes y humo con DOM; 13/14 mutaciones, la que sobrevive es equivalente). RUN-067 verde: 10 archivos (home-extra, home-view, act-view, act-week, sidebar-nav, welcome-view, size-budget, index-versions, hb106-t13 y gn-shell). El chat se cortó otra vez (MCS-4035, 19:2xZ) sin daño: reconstruí desde los commits y el espacio de trabajo. Antes, ACT-5 HECHO (2026-10-25 19:00Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: ACT-5, la Heredad como módulo propio (https://pablosnchz.github.io/gw2-factory-dev/#/account/homestead, también desde «Heredad» en la barra lateral y la Bienvenida): los 57 nodos con su ícono y nombre en español, tus marcas de «Recolectado» de siempre, filtros por herramienta, «Me faltan» y «Sin recolectar hoy», búsqueda, «Lo tengo» en los 6 de Janthir y los 4 contratos que la API no informa, y los 35 gatos. En Actividades, la pestaña Semana ya no tiene los nodos y enlaza a la Heredad. Clave nueva: gn:homestead:owned. Con tu dale sigo con ACT-6, glifos y decoraciones.\n",
+     "text": "- [BL-070] Validación: ACT-6, Glifos y Decoraciones de la Heredad (https://pablosnchz.github.io/gw2-factory-dev/#/account/homestead, pestañas «Glifos» y «Decoraciones», se recorren también con las flechas): los 12 glifos con ícono y efecto y cuál tenés en cada caja (cosecha, tala, minería); las decoraciones del juego con cuántas tenés de cada una sobre 250, por categoría, «Las tengo», «Me faltan» y búsqueda. Necesita los permisos account y unlocks; si no hay heredad desbloqueada la lista viene vacía y lo digo. Sin claves nuevas en el navegador. Con tu dale sigo con ACT-7: retirar lo viejo de Actividades y la revisión final del paso 3.\n- [BL-070] Info: ACT-5 VALIDADO por Pablo (19:09Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "50ed8ea784e183425b6ba27d8979a394d6f1600a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera la validación de Pablo; sigue ACT-6 (glifos y decoraciones). SHIRUVANA-ART-001",
+     "text": "VALIDADO por Pablo (19:09Z). ACT-6 HECHO (2026-10-25 19:40Z, PATCH-109): la Heredad suma Glifos y Decoraciones con js/home-extra.js 1.0.0 y assets/data/homestead/glyphs.json (12 glifos x 3 cajas = 36), decoraciones de la API (1210, 27 categorías, tope 250) pedidas al abrir la pestaña; home-view 1.1.0 con pestañas por teclado; sin claves nuevas; tests/home-extra.test.cjs 9 tests; RUN-067 verde. Espera la validación de Pablo; sigue ACT-7 (retirar activities.js y activities-theme.js viejos y revisión final). SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
