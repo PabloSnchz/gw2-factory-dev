@@ -1,7 +1,8 @@
 /*!
  * js/inv-multi.js — Multicuenta: lo de valor de cada cuenta, set por set (BL-070, INV-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.1 (2026-10-25) — INV-4: presta su lector (InvMulti.read) a Buscar, con la misma caché
+ * Versión: 1.1.0 (2026-10-25) — INV-7b: el nombre de cada ítem abre su ficha (precio del Bazar y dónde está)
+ *          1.0.1 (2026-10-25) — INV-4: presta su lector (InvMulti.read) a Buscar, con la misma caché
  *          1.0.0 (2026-10-25) — INV-3: el Dashboard multicuenta como pestaña de Inventario y Personajes
  *
  * Todo lo que hacía el Dashboard multicuenta (js/inventory-dashboard.js), en una pestaña del módulo:
@@ -12,6 +13,7 @@
  *  - D5: cuenta las bolsas de TODOS los personajes y las ranuras compartidas (antes, solo el primer
  *    personaje de la lista). /v2/characters?ids=all trae todos los personajes de una cuenta en un pedido.
  *  - Tocar un número muestra dónde está: depósito, banco y su pestaña, ranuras compartidas y cada personaje.
+ *  - Tocar el nombre de un ítem (arriba de la tabla) abre su ficha, como en el resto del módulo (js/inv-sheet.js).
  *  - Valor por cuenta en su fila. Las cuentas salen de la lista actual (gn:account:keys), no de gw2_keys.
  * Banco y materiales por GW2Api (con su caché). Ranuras compartidas y personajes no tienen función en
  * GW2Api, que está congelado (DEC-035): se leen acá, de a 3 cuentas, con un reintento ante 429 y caché
@@ -21,7 +23,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.1';
+  var VERSION = '1.1.0';
   var LOG = '[InvMulti]';
   var SETS_URL = 'assets/data/inventory-sets.json';
   var API = 'https://api.guildwars2.com';
@@ -197,7 +199,8 @@
     h.push('<ul class="im-kpis">');
     T.cols.forEach(function (id, k) {
       var p = s.prices && s.prices[id], unit = p && p.sells ? p.sells.unit_price || 0 : 0;
-      h.push('<li>' + ico(id, meta, 24) + '<span><small>' + esc(nameOf(id, meta, s.sets)) + '</small><b>' + fmtInt(T.totals[k]) + '</b>' + (unit ? '<em>' + coins(unit * T.totals[k]) + '</em>' : '') + '</span></li>');
+      h.push('<li><button type="button" class="iv-open" data-inv-item="' + id + '" aria-haspopup="dialog">' + ico(id, meta, 24) + '<span><small>' + esc(nameOf(id, meta, s.sets)) + '</small><b>' + fmtInt(T.totals[k]) + '</b>' +
+        (unit ? '<em>' + coins(unit * T.totals[k]) + '</em>' : '') + '<span class="iv-sr">. Ver la ficha</span></span></button></li>');
     });
     h.push('</ul><div class="im-wrap"><table class="im-table"><caption class="iv-sr">' + esc(set ? set.name : '') + ' por cuenta</caption><thead><tr><th scope="col">Cuenta</th>');
     T.cols.forEach(function (id) {
@@ -223,7 +226,8 @@
     h.push('<td class="im-v">' + coins(T.value) + '</td></tr></tbody></table></div>');
     h.push('<div class="im-where" aria-live="polite">');
     var w = s.where, wa = w && list(s.accounts)[w.i], wi = wa ? accIndex(wa) : null;
-    if (wi) h.push('<p>' + esc(whereText(wi, w.id, nameOf(w.id, meta, s.sets), wa.label)) + '</p><button type="button" class="iv-btn" id="imWhereClose" data-im-close="1">Cerrar</button>');
+    if (wi) h.push('<p>' + esc(whereText(wi, w.id, nameOf(w.id, meta, s.sets), wa.label)) + '</p><button type="button" class="iv-btn" id="imWhereSheet" data-inv-item="' + w.id + '" aria-haspopup="dialog">Ver la ficha</button>' +
+      '<button type="button" class="iv-btn" id="imWhereClose" data-im-close="1">Cerrar</button>');
     h.push('</div><p class="iv-src">Cuenta el depósito de materiales, el banco, las ranuras compartidas y las bolsas de todos tus personajes. Valor con el precio de venta del Bazar.</p></div>');
     return h.join('');
   }
@@ -243,6 +247,7 @@
     '.im-status{margin:4px 0 10px;font-size:.8rem;color:var(--tx-2)}',
     '.im-kpis{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}',
     '.im-kpis li{display:flex;gap:8px;align-items:center;border:1px solid var(--bd-1);border-radius:10px;background:var(--bg-0);padding:6px 8px;min-width:0}',
+    '.im-kpis .iv-open{gap:8px;min-width:0;min-height:44px}.im-where .iv-btn+.iv-btn{margin-left:6px}',
     '.im-kpis img{border-radius:6px;flex-shrink:0}.im-kpis span{min-width:0}.im-kpis small{display:block;font-size:.72rem;color:var(--tx-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
     '.im-kpis b{font-size:1rem;color:var(--tx-1)}.im-kpis em{display:block;font-style:normal;font-size:.72rem;color:var(--tx-2)}',
     '.im-wrap{overflow-x:auto;border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);box-shadow:var(--gn-elev,0 6px 18px rgba(0,0,0,.28))}',

@@ -149,6 +149,12 @@ test('vista: sets como botones con estado, encabezados que ordenan con aria-sort
   assert.match(h, /<tr class="im-tot"><th scope="row">Total<\/th><td>63<\/td><td>115<\/td>/);
   assert.match(h, /role="status">Leí 3 de 3 cuentas a las 01:40\./);
   assert.match(h, /Pegote de ectoplasma en Alt Uno: 108 — Depósito 100/);
+  // INV-7b: el nombre abre la ficha (inv-sheet escucha data-inv-item); el número sigue abriendo el detalle
+  assert.match(h, /<li><button type="button" class="iv-open" data-inv-item="19721" aria-haspopup="dialog"><img[^>]*><span><small>Pegote de ectoplasma<\/small><b>[\d.]+<\/b>/);
+  assert.match(h, /<span class="iv-sr">\. Ver la ficha<\/span><\/span><\/button><\/li>/);
+  assert.match(h, /id="imWhereSheet" data-inv-item="19721" aria-haspopup="dialog">Ver la ficha<\/button>/);
+  assert.doesNotMatch(h, /class="im-n[^"]*"[^>]*data-inv-item/, 'el número no abre la ficha');
+  assert.doesNotMatch(h, /class="im-sort"[^>]*data-inv-item/, 'el encabezado sigue ordenando');
   assert.match(h, /<span class="iv-sr">, cuenta principal<\/span>/);
   assert.match(h, /assets\/icons\/Cuentas\/547827\.png/);
   assert.match(h, /Ocultar cuentas principales/);

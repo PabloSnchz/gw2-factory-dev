@@ -40,7 +40,7 @@ function ok(cond, msg) {
 }
 function read(f) { return fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'); }
 
-const chars = read('characters.js');
+// BL-070 INV-7b: characters.js se retiró; su resumen de cuenta vuelve en el paso Cuentas.
 const achs  = read('achievements.js');
 const panel = read('accounts-panel.js');
 const api   = read('api-gw2.js');
@@ -53,7 +53,7 @@ console.log('\n[1] /v2/account ya no se baja con fetch crudo en los 3 modulos');
 // a mano con access_token pegado.
 const RAW = /api\.guildwars2\.com\/v2\/account\?access_token=/g;
 
-for (const [name, src] of [['characters.js', chars], ['achievements.js', achs], ['accounts-panel.js', panel]]) {
+for (const [name, src] of [['achievements.js', achs], ['accounts-panel.js', panel]]) {
   const hits = (src.match(RAW) || []).length;
   ok(hits === 0, name + ': 0 fetch crudo(s) de /v2/account  <-- el fix (encontrados: ' + hits + ')');
 }
@@ -62,8 +62,6 @@ for (const [name, src] of [['characters.js', chars], ['achievements.js', achs], 
 // api.guildwars2.com/v2/account a mano. accounts-panel.js queda exceptuado
 // porque /v2/account/home/nodes (otro endpoint, sin wrapper) sigue crudo a
 // proposito, y su regex tiene que distinguir uno del otro.
-ok(!/api\.guildwars2\.com\/v2\/account\?/.test(chars),
-   'characters.js: ya no arma ninguna URL de /v2/account a mano');
 ok(!/api\.guildwars2\.com\/v2\/account\?/.test(achs),
    'achievements.js: ya no arma ninguna URL de /v2/account a mano');
 ok(!/api\.guildwars2\.com\/v2\/account\?access_token=/.test(panel),
@@ -72,8 +70,6 @@ ok(!/api\.guildwars2\.com\/v2\/account\?access_token=/.test(panel),
 // --- 2. Los 3 usan el wrapper ---------------------------------------------
 console.log('\n[2] los 3 sitios usan root.GW2Api.getAccountInfo');
 
-ok(/root\.GW2Api\.getAccountInfo\(token\)/.test(chars),
-   'characters.js: loadAccountData() usa getAccountInfo(token)');
 ok(/root\.GW2Api\.getAccountInfo\(token,\s*\{\s*nocache:\s*true\s*\}\)/.test(achs),
    'achievements.js: fetchAccountAP() usa getAccountInfo con nocache:true');
 ok(/root\.GW2Api\.getAccountInfo\(apiKey\)/.test(panel),
@@ -114,24 +110,6 @@ ok(/'if:account_info:'\s*\+\s*fpToken\(token\)/.test(api),
 // --- 4. Contrato de error: la migracion no puede romper la carga ----------
 console.log('\n[4] contrato de error preservado en los 3 sitios');
 
-// characters.js: antes `if (accountRes.ok)` era un SKIP (seguia al resto).
-// El wrapper RECHAZA. Sin catch propio, el error se come el try de
-// loadAccountData y PvP/WvW quedan sin leer -> las 3 filas del header en '-'.
-const cStart = chars.indexOf('Solicitando account info');
-ok(cStart !== -1, 'characters.js: el log "Solicitando account info" sigue ahi (ancla del bloque)');
-const cBlock = cStart === -1 ? '' : chars.slice(cStart, cStart + 900);
-ok(/try\s*\{/.test(cBlock), 'characters.js: getAccountInfo va dentro de un try propio');
-ok(/catch\s*\(/.test(cBlock), 'characters.js: ese try tiene catch (el rechazo no se propaga)');
-ok(/getAccountInfo\(token\)/.test(cBlock), 'characters.js: la llamada esta dentro del bloque try');
-ok(/if\s*\(accountInfo\)/.test(cBlock),
-   'characters.js: el guard de exito paso de `if (accountRes.ok)` a `if (accountInfo)`');
-
-// El `res.ok` no puede quedar colgando: si alguien migra la llamada pero deja
-// el `if (accountRes.ok)` de arriba, accountRes ya no existe -> ReferenceError.
-// Igual que arriba: fuera los comentarios, o el test matchea su propia nota.
-const charsCode = chars.split('\n').filter(function(l){ return !/^\s*(\/\/|\*|\/\*)/.test(l); }).join('\n');
-ok(!/accountRes/.test(charsCode),
-   'characters.js: no queda ninguna referencia a accountRes en el CODIGO (variable del fetch crudo)');
 
 // achievements.js: fetchAccountAP se usa DENTRO de un Promise.all en loadAll.
 // Antes tiraba `if (!r.ok) throw`, o sea que PROPAGABA. El wrapper tambien
@@ -170,10 +148,6 @@ console.log('\n[5] regresiones que el test impide');
 ok(/v2\/account\/home\/nodes\?access_token=/.test(panel),
    'accounts-panel.js: home/nodes sigue crudo (no tiene wrapper; decision de alcance)');
 
-// characters.js mantiene su propio contrato para /v2/pvp/stats y /v2/account
-// NO: el account ya no debe aparecer crudo. PvP sigue siendo del Tramo 3b.
-ok(/v2\/pvp\/stats\?access_token=/.test(chars),
-   'characters.js: /v2/pvp/stats sigue crudo (Tramo 3b, no en este commit)');
 
 // Un modulo no debe meter su propio estrangulador. El defecto de la Idea 46
 // fue un MAX local de 3 DENTRO del pool global = 9 requests reales.

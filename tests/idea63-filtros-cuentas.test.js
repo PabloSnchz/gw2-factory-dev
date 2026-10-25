@@ -48,7 +48,9 @@ function chk(name, cond, extra) {
   else { fail++; console.log('  FAIL  ' + name + (extra ? '  ->  ' + extra : '')); }
 }
 
-const chars = fs.readFileSync(path.join(ROOT, 'js', 'characters.js'), 'utf8');
+// BL-070 INV-7b: characters.js se retiró. Personajes vive en js/inv-chars.js (sin filtros ni páginas que
+// sobrevivan al cambio de cuenta: se arma de nuevo con la cuenta nueva). Quedan los tramos de app.js.
+const chars = '';
 const app   = fs.readFileSync(path.join(ROOT, 'js', 'app.js'), 'utf8');
 
 // ── 1. El CASO que hay que proteger (aritmetica real, no afirmacion) ────────
@@ -66,7 +68,6 @@ chk('el caso del PO se reproduce: pagina 2 sobre 12 personajes queda VACIA',
 // ── 2. characters.js: el handler de gn:tokenchange resetea filtros y pagina ─
 // Se acota al CUERPO del handler. Un reset en otra parte del archivo no cuenta.
 const wg = chars.indexOf("document.addEventListener('gn:tokenchange'");
-chk('characters.js tiene el handler de gn:tokenchange', wg >= 0);
 if (wg >= 0) {
   // El cuerpo va del handler hasta el cierre de wireGlobal.
   const fin = chars.indexOf('function wireGlobal()', wg);
@@ -82,7 +83,6 @@ if (wg >= 0) {
 // El clamp es la garantia de fondo: aunque el reset se esquive por otro camino,
 // una pagina imposible se corrige sola en vez de borrar el panel.
 const rl = chars.indexOf('function renderList()');
-chk('characters.js declara renderList', rl >= 0);
 if (rl >= 0) {
   const finRl = chars.indexOf('function createEl(', rl);
   const cuerpoRl = chars.slice(rl, finRl > rl ? finRl : rl + 6000);

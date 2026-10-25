@@ -131,7 +131,8 @@ console.log('\n[5] Contrato de getCommerceDelivery intacto (ya propagaba)');
 console.log('\n[6] Sintaxis de todo lo tocado');
 {
   const vm = require('vm');
-  for (const f of ['api-gw2.js', 'inventory-hub.js', 'inventory-dashboard.js',
+  // BL-070 INV-7b: inventory-hub.js e inventory-dashboard.js se retiraron.
+  for (const f of ['api-gw2.js',
                    'raid-tracker.js', 'wallet-dashboard.js', 'converter-modal.js']) {
     let good = true, msg = '';
     try { new vm.Script(SRC[f]); } catch (e) { good = false; msg = e.message; }

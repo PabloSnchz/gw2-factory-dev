@@ -267,7 +267,7 @@ const FROSTFANG = 30684;
   });
 
   await seccion('[4] El color viene del mapa local, no del rarity_color de la API', async () => {
-    // Tal cual inventory-hub.js:26-30 (el mapa canonico del proyecto).
+    // El mapa canonico del proyecto (era inventory-hub.js:26-30, retirado en BL-070 INV-7b).
     const ESPERADO = {
       'Chatarra': '#AAAAAA', 'Básico': '#FFFFFF', 'Bueno': '#62A4DA',
       'Obra maestra': '#1A9306', 'Raro': '#FCD00B', 'Exótico': '#FFA405',
@@ -289,19 +289,12 @@ const FROSTFANG = 30684;
     eq(m2.Icons.colorDe(19678), '#FB3E8D', 'el color NO es el rarity_color de la respuesta');
     ok(m2.Icons.colorDe(19678) !== '#BADA55', 'control negativo: rarity_color queda afuera');
 
-    // El mapa del modulo es el MISMO que el de inventory-hub.js.
-    const hub = leer('js/inventory-hub.js');
-    const bloque = hub.match(/RARITY_COLORS:\s*\{([\s\S]*?)\}/);
-    ok(!!bloque, 'se encontro RARITY_COLORS en inventory-hub.js');
-    if (bloque) {
-      const orig = {};
-      bloque[1].replace(/'([^']+)'\s*:\s*'(#[0-9A-Fa-f]{6})'/g,
-        function (_, k, v) { orig[k] = v; });
-      eq(Object.keys(orig).length, 8, 'el mapa canonico tiene 8 claves');
-      const mio = m2.Icons.RARITY_COLORS;
-      const disto = Object.keys(orig).filter((k) => mio[k] !== orig[k]);
-      eq(disto.length, 0, 'el modulo tiene los MISMOS valores que inventory-hub', disto.join(','));
-    }
+    // El mapa del modulo es el canonico del proyecto: el de inventory-hub.js, que se retiro en
+    // BL-070 INV-7b. Sus 8 valores quedan fijados en ESPERADO (arriba).
+    const mio = m2.Icons.RARITY_COLORS;
+    eq(Object.keys(ESPERADO).length, 8, 'el mapa canonico tiene 8 claves');
+    const disto = Object.keys(ESPERADO).filter((k) => mio[k] !== ESPERADO[k]);
+    eq(disto.length, 0, 'el modulo tiene los valores del mapa canonico', disto.join(','));
 
     // Una rareza desconocida NO inventa color: null, no el de otra rareza.
     const m3 = montar({ rareza: function () { return 'Rarisimo'; } });

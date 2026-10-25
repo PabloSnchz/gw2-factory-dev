@@ -54,17 +54,17 @@ function load(opts = {}) {
 const { F } = load();
 const SP = load().S._pure;
 
-test('versión 1.0.1, en js/modules.json justo después de gn-surface.js, fuera de index.html y dentro de 40 KB', () => {
-  assert.match(SRC, /\* Versión: 1\.0\.1 /);
+test('versión 1.0.2, en js/modules.json justo después de gn-surface.js, fuera de index.html y dentro de 40 KB', () => {
+  assert.match(SRC, /\* Versión: 1\.0\.2 /);
   const m = JSON.parse(read('js/modules.json')).modules.map((x) => x.src + '@' + x.v);
-  assert.deepEqual(m.slice(0, 2), ['js/gn-surface.js@1.0.0', 'js/gn-frame.js@1.0.1']);
+  assert.deepEqual(m.slice(0, 2), ['js/gn-surface.js@1.0.0', 'js/gn-frame.js@1.0.2']);
   assert.doesNotMatch(read('index.html'), /gn-frame\.js/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
 });
 
-test('los seis paneles de los pasos 4 a 8 (sin Strikes desde BL-070 RAI-5b), con el color y el ícono oficial que muestra la Bienvenida', () => {
+test('los cuatro paneles de los pasos 4 a 8 (sin Strikes desde BL-070 RAI-5b ni las pantallas viejas de Inventario desde INV-7b), con el color y el ícono oficial que muestra la Bienvenida', () => {
   const P = J(F._pure.PANELS);
-  assert.deepEqual(P.map((p) => p.id), ['activitiesPanel', 'raidTrackerPanel', 'inventoryPanel', 'charactersPanel', 'inventoryDashboardPanel', 'accountsPanel']);
+  assert.deepEqual(P.map((p) => p.id), ['activitiesPanel', 'raidTrackerPanel', 'inventoryPanel', 'accountsPanel']);
   const wel = read('js/welcome-panel.js');
   P.forEach((p) => {
     assert.ok(fs.existsSync(path.join(ROOT, p.icon)), p.id + ' ícono ' + p.icon);
@@ -117,10 +117,10 @@ test('los paneles que arma el JS al navegar se marcan cuando aparecen (hashchang
   x.listeners.hashchange.forEach((f) => f());
   x.flush();
   assert.equal(x.nodes.activitiesPanel.attrs['data-gn-frame'], 'activities');
-  x.nodes.charactersPanel = panel('charactersPanel');
+  x.nodes.accountsPanel = panel('accountsPanel');
   x.listeners['doc:gn:tabchange'].forEach((f) => f());
   x.flush();
-  assert.equal(x.nodes.charactersPanel.attrs['data-gn-frame'], 'characters');
+  assert.equal(x.nodes.accountsPanel.attrs['data-gn-frame'], 'accounts');
 });
 
 test('sin gn-surface.js no rompe: marca y nombra, sin superficies ni guarda', () => {

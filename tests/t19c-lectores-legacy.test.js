@@ -33,9 +33,8 @@ function ok(cond, msg, detail) {
 }
 
 const MODULOS = [
-  'js/inventory-hub.js',
   'js/raid-tracker.js',
-  // BL-070 RAI-5b: strike-tracker.js se retiró del repo.
+  // BL-070 RAI-5b e INV-7b: strike-tracker.js e inventory-hub.js se retiraron del repo.
   'js/wv-purchase-detail.js',
 ];
 

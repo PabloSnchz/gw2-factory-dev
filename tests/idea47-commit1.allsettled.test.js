@@ -71,23 +71,8 @@ function fakeApi(overrides) {
 
 (async function main() {
 
-  console.log('\n[1] inventory-hub.js loadAllData — allSettled + state.readErrors');
-  {
-    const src = fs.readFileSync(path.join(JS, 'inventory-hub.js'), 'utf-8');
-    ok('usa Promise.allSettled', /Promise\.allSettled/.test(src));
-    ok('ya no usa Promise.all para bank/materials/armory',
-       !/var res = await Promise\.all\(\[/.test(src));
-    ok('expone readErrors en state', /readErrors:\s*\[\]/.test(src));
-    ok('banner de lectura incompleta', /readErrBanner/.test(src));
-  }
-
-  console.log('\n[2] inventory-dashboard.js FASE 1 — allSettled por cuenta');
-  {
-    const src = fs.readFileSync(path.join(JS, 'inventory-dashboard.js'), 'utf-8');
-    ok('usa Promise.allSettled', /Promise\.allSettled/.test(src));
-    ok('lee results[n].status', /results\[0\]\.status === 'fulfilled'/.test(src));
-    ok('el error nombra la fuente', /No se pudo leer:/.test(src));
-  }
+  // [1] y [2] miraban inventory-hub.js e inventory-dashboard.js, que se retiraron en BL-070 INV-7b:
+  // la lectura por cuenta de Inventario vive en js/inv-multi.js y dice «sin datos» por fuente.
 
   console.log('\n[3] raid-tracker.js — allSettled defensivo (sin cambio de comportamiento)');
   {
@@ -136,7 +121,7 @@ function fakeApi(overrides) {
 
   console.log('\n[6] Sin regresion de sintaxis de los 3 modulos');
   {
-    ['inventory-hub.js', 'inventory-dashboard.js', 'raid-tracker.js'].forEach(f => {
+    ['raid-tracker.js'].forEach(f => {
       let good = true, msg = '';
       try { new (require('vm').Script)(fs.readFileSync(path.join(JS, f), 'utf-8')); }
       catch (e) { good = false; msg = e.message; }
@@ -146,16 +131,7 @@ function fakeApi(overrides) {
 
   console.log('\n[7] CSS de 3 capas: sin inline, sin !important, en la capa correcta');
   {
-    const hub = fs.readFileSync(path.join(JS, 'inventory-hub.js'), 'utf-8');
-    const m = hub.match(/var readErrBanner[\s\S]*?: '';/);
-    ok('el banner existe', !!m);
-    if (m) {
-      ok('sin !important', !/!important/.test(m[0]));
-      ok('sin style= inline', !/style=/.test(m[0]));
-      ok('usa la clase, no estilos sueltos', /class="inv-read-error"/.test(m[0]));
-      ok('escapa el contenido dinamico', /esc\(state\.readErrors\.join/.test(m[0]));
-    }
-
+    // El banner de inventory-hub.js se retiró con el archivo (BL-070 INV-7b); quedan las 2 capas de CSS.
     const main = fs.readFileSync(path.join(__dirname, '..', 'css', 'main.css'), 'utf-8');
     const polish = fs.readFileSync(path.join(__dirname, '..', 'css', 'theme-polish.css'), 'utf-8');
     const mainRule = main.match(/\.inv-read-error \{[\s\S]*?\}/);
