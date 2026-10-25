@@ -1,0 +1,64 @@
+{
+ "id": "PATCH-118",
+ "summary": "Docs ACT-7c (BL-070): status, backlog (BL-055 a DONE) y memory-index con FEAT-016; ACT-7b validado; el paso 3 espera la validación de Pablo.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "52ae33a86277646a9650b31bfe48bec64ff34b8e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 18:00Z",
+     "text": "Última actualización: 2026-10-25 21:12Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ACT-7b la pantalla vieja de Actividades retirada HECHO (20:36Z), espera tu validación; sigue ACT-7c, la revisión final del paso 3 y FEAT-016.",
+     "text": "ACT-7b la pantalla vieja de Actividades retirada VALIDADO (20:57Z); ACT-7c la revisión final del paso 3 y FEAT-016 HECHO (21:12Z): el paso 3 completo (Actividades y la Heredad) espera tu validación; después sigue el paso 4, Cuentas, empezando por la propuesta visual."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-7b HECHO (2026-10-25 20:36Z)",
+     "text": "Último hecho: ACT-7c HECHO (2026-10-25 21:12Z): la revisión final del paso 3 y FEAT-016. Pablo validó ACT-7b (20:57Z). PATCH-117 (aplicado, suite verde antes y después): js/act-week.js 1.1.0 (2af9253, 21.690 bytes, 870 menos) ya no intenta leer el −/+ de la pantalla vieja (D3, código muerto desde ACT-7b: sin oldCount, sin root.Activities y sin el aviso «pasó a las primeras casillas»); js/modules.json (faa5bc4) con act-week 1.1.0; tests/act-week.test.cjs (197dd78) exige que act-week no nombre Activities y prueba que un Activities viejo con 4 piedras no se lee. Revisión final: 19 themes, teclado, lector de pantalla, celular, movimiento reducido, almacenamiento y restos; RUN-072 verde: 10 archivos y 119 tests (act-model, act-view, act-psna, act-week, home-view, home-extra, gn-shell, sidebar-nav, size-budget e index-versions), con 6 tests de contraste en los 19 themes. Sin hallazgos CRÍTICO, ALTO ni MEDIO. BAJO, anotados en FEAT-016 para el próximo cambio de cada archivo: ActModel.stonesFromCount sin uso; una regla de act-view que oculta el contenido viejo de #activitiesPanel, que ya nace vacío; el título de un test de humo de act-view que todavía dice «reubica el PSNA»; un comentario del router 2.21.0 que atribuye a act-week la escucha de gn:tokenchange (es act-view); .fractal-card en theme-polish.css (paso 8); las claves gn:activities:toggles y gn:activities:stones sin escritor. ai-memory/features/FEAT-016-actividades-y-heredad.md (7ed0621). BL-055 pasa a DONE: la Heredad quedó hecha y validada en ACT-5 y ACT-6. Antes, ACT-7b HECHO (2026-10-25 20:36Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: ACT-7b, la pantalla vieja de Actividades retirada (https://pablosnchz.github.io/gw2-factory-dev/#/activities y #/account/homestead): todo tiene que verse y funcionar igual que en ACT-7a (Hoy con fabricación, fractales y PSNA; Semana con llave y piedras; la Heredad con sus 3 pestañas), entrando también desde la barra lateral y cambiando de cuenta. Ya no se cargan js/activities.js, js/activities-theme.js ni js/fractal-tracker-theme.js. Con tu dale sigo con ACT-7c, la revisión final del paso 3.\n",
+     "text": "- [BL-070] Validación: el paso 3 completo, Actividades y la Heredad (FEAT-016). Recorré https://pablosnchz.github.io/gw2-factory-dev/#/activities (Hoy: fabricación, fractales y PSNA; Semana: la llave con la guía de la comunidad y las piedras, marcá una y cambiá de cuenta) y https://pablosnchz.github.io/gw2-factory-dev/#/account/homestead (Nodos y gatos, Glifos y Decoraciones), también con el teclado y en el celular. Lo único que cambió en ACT-7c no se ve: act-week ya no busca el −/+ de la pantalla vieja. Con tu ok cierro el paso 3 y arranco el paso 4, Cuentas, con la propuesta visual.\n- [BL-070] Info: ACT-7b VALIDADO por Pablo (20:57Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "cf7e7e7baffe87056ab9fd1dcf1c1cb8c90b4229",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera la validación de Pablo; sigue ACT-7c (revisión final y FEAT-016). SHIRUVANA-ART-001",
+     "text": "VALIDADO por Pablo (20:57Z). ACT-7c HECHO (2026-10-25 21:12Z, PATCH-117): act-week 1.1.0 sin el −/+ de la pantalla vieja (D3), revisión final en los 19 themes, teclado, lector, celular y movimiento reducido (solo hallazgos BAJO, anotados) y FEAT-016; RUN-072 verde (119 tests). El paso 3 completo espera la validación de Pablo; sigue el paso 4, Cuentas, con la propuesta visual primero. SHIRUVANA-ART-001"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-055] [MEDIO] Módulo Homestead propio — decisión de Pablo (2026-10-22 15:48Z). Primero mudar los Home Nodes desde la pestaña de Actividades (sin perder lo marcado: `gn:activities:home:nodes`) y después sumar decoraciones y glyphs (`/v2/account/homestead/decorations`, `/v2/homestead/glyphs`, `/v2/homestead/decorations/categories`) con lo que la comunidad valore. El código del legado (`homestead-tracker.js`, MIT, en el repo archivado) es punto de partida, no se copia tal cual (LES-029). Pide propuesta visual antes de implementar, como BL-056. · DISC-011, BL-043\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-067, BL-068, DEC-006, DEC-035 — 2026-10-24\n",
+     "text": "BL-067, BL-068, DEC-006, DEC-035 — 2026-10-24\n- [BL-055] [MEDIO] Módulo Homestead propio — hecho dentro de BL-070, paso 3: ACT-5 la Heredad como módulo propio en #/account/homestead (57 nodos de la API y 10 a mano, 35 gatos, marcas de siempre conservadas; VALIDADO por Pablo 19:09Z) y ACT-6 Glifos y Decoraciones (12 glifos x 3 cajas, 1210 decoraciones en 27 categorías con tope 250; VALIDADO 19:46Z). · FEAT-016, BL-070, DISC-011 — 2026-10-25\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "c2cd71ae0cddadb6662112409f34f355ad008b53",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "las pantallas viejas retiradas (BL-070, paso 2). Validado por Pablo.\n",
+     "text": "las pantallas viejas retiradas (BL-070, paso 2). Validado por Pablo.\n- [FEAT-016](features/FEAT-016-actividades-y-heredad.md) — Actividades renovado (Hoy con fabricación, fractales y PSNA; Semana con la llave y las piedras) y la Heredad como módulo propio con Nodos y gatos, Glifos y Decoraciones; pantalla vieja retirada (BL-070, paso 3, con BL-055). En DEV.\n"
+    }
+   ]
+  }
+ ]
+}
