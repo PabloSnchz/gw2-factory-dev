@@ -1,0 +1,244 @@
+{
+ "id": "PATCH-085",
+ "summary": "BL-070 INV-7b (1/2): con los archivos viejos todavía presentes, nada nuevo depende de ellos. gn-frame.js 1.0.2 sin los paneles charactersPanel e inventoryDashboardPanel; inv-multi.js 1.1.0: el nombre de cada ítem del Multicuenta abre su ficha (el número sigue mostrando dónde está), pedido de Pablo; manifiesto al día; 7 tests heredados dejan de leer inventory-hub.js, inventory-dashboard.js y characters.js, conservando lo que miden de achievements.js, accounts-panel.js, app.js, raid-tracker.js, api-gw2.js y la Armería.",
+ "files": [
+  {
+   "path": "js/gn-frame.js",
+   "base_sha": "77a90c1f79173ec9732e035690495973e7d0f6c9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.1 (2026-10-24) · BL-070 RAI-5b: sin el panel de Strikes (los strikes son encuentros de Raids)\n",
+     "text": " * Versión: 1.0.2 (2026-10-25) · BL-070 INV-7b: sin los paneles de las pantallas viejas de Inventario y Personajes\n *          1.0.1 (2026-10-24) · BL-070 RAI-5b: sin el panel de Strikes (los strikes son encuentros de Raids)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Los paneles que arma el JS al navegar (Actividades, Personajes) se marcan cuando aparecen.",
+     "text": " * Los paneles que arma el JS al navegar (Actividades) se marcan cuando aparecen."
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.1';",
+     "text": "  var VERSION = '1.0.2';"
+    },
+    {
+     "op": "delete",
+     "anchor": "    { id: 'charactersPanel', mod: 'characters', name: 'Personajes', color: '#7EC3FF', icon: 'assets/icons/Welcome/358409.png' },\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    { id: 'inventoryDashboardPanel', mod: 'characters', name: 'Inventario', color: '#7EC3FF', icon: 'assets/icons/Welcome/358409.png' },\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "072d10dfb33e9c23f2d466316c325c997b5b73dd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/gn-frame.js\", \"v\": \"1.0.1\" }",
+     "text": "{ \"src\": \"js/gn-frame.js\", \"v\": \"1.0.2\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/inv-multi.js\", \"v\": \"1.0.1\" }",
+     "text": "{ \"src\": \"js/inv-multi.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "js/inv-multi.js",
+   "base_sha": "33deb7a3453cdb7f1c045b9eee45d7fff632faaa",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.1 (2026-10-25) — INV-4: presta su lector (InvMulti.read) a Buscar, con la misma caché\n",
+     "text": " * Versión: 1.1.0 (2026-10-25) — INV-7b: el nombre de cada ítem abre su ficha (precio del Bazar y dónde está)\n *          1.0.1 (2026-10-25) — INV-4: presta su lector (InvMulti.read) a Buscar, con la misma caché\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.1';",
+     "text": "  var VERSION = '1.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": " *  - Tocar un número muestra dónde está: depósito, banco y su pestaña, ranuras compartidas y cada personaje.\n",
+     "text": " *  - Tocar un número muestra dónde está: depósito, banco y su pestaña, ranuras compartidas y cada personaje.\n *  - Tocar el nombre de un ítem (arriba de la tabla) abre su ficha, como en el resto del módulo (js/inv-sheet.js).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      h.push('<li>' + ico(id, meta, 24) + '<span><small>' + esc(nameOf(id, meta, s.sets)) + '</small><b>' + fmtInt(T.totals[k]) + '</b>' + (unit ? '<em>' + coins(unit * T.totals[k]) + '</em>' : '') + '</span></li>');",
+     "text": "      h.push('<li><button type=\"button\" class=\"iv-open\" data-inv-item=\"' + id + '\" aria-haspopup=\"dialog\">' + ico(id, meta, 24) + '<span><small>' + esc(nameOf(id, meta, s.sets)) + '</small><b>' + fmtInt(T.totals[k]) + '</b>' +\n        (unit ? '<em>' + coins(unit * T.totals[k]) + '</em>' : '') + '<span class=\"iv-sr\">. Ver la ficha</span></span></button></li>');"
+    },
+    {
+     "op": "replace",
+     "anchor": "'</p><button type=\"button\" class=\"iv-btn\" id=\"imWhereClose\" data-im-close=\"1\">Cerrar</button>'",
+     "text": "'</p><button type=\"button\" class=\"iv-btn\" id=\"imWhereSheet\" data-inv-item=\"' + w.id + '\" aria-haspopup=\"dialog\">Ver la ficha</button>' +\n      '<button type=\"button\" class=\"iv-btn\" id=\"imWhereClose\" data-im-close=\"1\">Cerrar</button>'"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.im-kpis img{border-radius:6px;flex-shrink:0}",
+     "text": "    '.im-kpis .iv-open{gap:8px;min-width:0;min-height:44px}.im-where .iv-btn+.iv-btn{margin-left:6px}',\n    '.im-kpis img{border-radius:6px;flex-shrink:0}"
+    }
+   ]
+  },
+  {
+   "path": "tests/inv-multi.test.cjs",
+   "base_sha": "bb6c53990c22e65aa630da14b1f27c4056205204",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /Pegote de ectoplasma en Alt Uno: 108 — Depósito 100/);\n",
+     "text": "  assert.match(h, /Pegote de ectoplasma en Alt Uno: 108 — Depósito 100/);\n  // INV-7b: el nombre abre la ficha (inv-sheet escucha data-inv-item); el número sigue abriendo el detalle\n  assert.match(h, /<li><button type=\"button\" class=\"iv-open\" data-inv-item=\"19721\" aria-haspopup=\"dialog\"><img[^>]*><span><small>Pegote de ectoplasma<\\/small><b>[\\d.]+<\\/b>/);\n  assert.match(h, /<span class=\"iv-sr\">\\. Ver la ficha<\\/span><\\/span><\\/button><\\/li>/);\n  assert.match(h, /id=\"imWhereSheet\" data-inv-item=\"19721\" aria-haspopup=\"dialog\">Ver la ficha<\\/button>/);\n  assert.doesNotMatch(h, /class=\"im-n[^\"]*\"[^>]*data-inv-item/, 'el número no abre la ficha');\n  assert.doesNotMatch(h, /class=\"im-sort\"[^>]*data-inv-item/, 'el encabezado sigue ordenando');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-frame.test.cjs",
+   "base_sha": "30958d4e578c3eaecc07f29fc5b256b23ab1708b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 1.0.1, en js/modules.json",
+     "text": "test('versión 1.0.2, en js/modules.json"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /\\* Versión: 1\\.0\\.1 /);",
+     "text": "assert.match(SRC, /\\* Versión: 1\\.0\\.2 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "'js/gn-frame.js@1.0.1'",
+     "text": "'js/gn-frame.js@1.0.2'"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('los seis paneles de los pasos 4 a 8 (sin Strikes desde BL-070 RAI-5b),",
+     "text": "test('los cuatro paneles de los pasos 4 a 8 (sin Strikes desde BL-070 RAI-5b ni las pantallas viejas de Inventario desde INV-7b),"
+    },
+    {
+     "op": "replace",
+     "anchor": "['activitiesPanel', 'raidTrackerPanel', 'inventoryPanel', 'charactersPanel', 'inventoryDashboardPanel', 'accountsPanel']",
+     "text": "['activitiesPanel', 'raidTrackerPanel', 'inventoryPanel', 'accountsPanel']"
+    },
+    {
+     "op": "replace",
+     "anchor": "  x.nodes.charactersPanel = panel('charactersPanel');\n  x.listeners['doc:gn:tabchange'].forEach((f) => f());\n  x.flush();\n  assert.equal(x.nodes.charactersPanel.attrs['data-gn-frame'], 'characters');",
+     "text": "  x.nodes.accountsPanel = panel('accountsPanel');\n  x.listeners['doc:gn:tabchange'].forEach((f) => f());\n  x.flush();\n  assert.equal(x.nodes.accountsPanel.attrs['data-gn-frame'], 'accounts');"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea47-commit1.allsettled.test.js",
+   "base_sha": "f329b34cb9b41eaeeb00db827538e0c18d51a70c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  console.log('\\n[1] inventory-hub.js loadAllData — allSettled + state.readErrors');\n  {\n    const src = fs.readFileSync(path.join(JS, 'inventory-hub.js'), 'utf-8');\n    ok('usa Promise.allSettled', /Promise\\.allSettled/.test(src));\n    ok('ya no usa Promise.all para bank/materials/armory',\n       !/var res = await Promise\\.all\\(\\[/.test(src));\n    ok('expone readErrors en state', /readErrors:\\s*\\[\\]/.test(src));\n    ok('banner de lectura incompleta', /readErrBanner/.test(src));\n  }\n\n  console.log('\\n[2] inventory-dashboard.js FASE 1 — allSettled por cuenta');\n  {\n    const src = fs.readFileSync(path.join(JS, 'inventory-dashboard.js'), 'utf-8');\n    ok('usa Promise.allSettled', /Promise\\.allSettled/.test(src));\n    ok('lee results[n].status', /results\\[0\\]\\.status === 'fulfilled'/.test(src));\n    ok('el error nombra la fuente', /No se pudo leer:/.test(src));\n  }\n",
+     "text": "  // [1] y [2] miraban inventory-hub.js e inventory-dashboard.js, que se retiraron en BL-070 INV-7b:\n  // la lectura por cuenta de Inventario vive en js/inv-multi.js y dice «sin datos» por fuente.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    ['inventory-hub.js', 'inventory-dashboard.js', 'raid-tracker.js'].forEach(f => {",
+     "text": "    ['raid-tracker.js'].forEach(f => {"
+    },
+    {
+     "op": "replace",
+     "anchor": "    const hub = fs.readFileSync(path.join(JS, 'inventory-hub.js'), 'utf-8');\n    const m = hub.match(/var readErrBanner[\\s\\S]*?: '';/);\n    ok('el banner existe', !!m);\n    if (m) {\n      ok('sin !important', !/!important/.test(m[0]));\n      ok('sin style= inline', !/style=/.test(m[0]));\n      ok('usa la clase, no estilos sueltos', /class=\"inv-read-error\"/.test(m[0]));\n      ok('escapa el contenido dinamico', /esc\\(state\\.readErrors\\.join/.test(m[0]));\n    }\n\n",
+     "text": "    // El banner de inventory-hub.js se retiró con el archivo (BL-070 INV-7b); quedan las 2 capas de CSS.\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea47-commit2.propagate.test.js",
+   "base_sha": "ea300e4f2addac87d8096c4a53bfd6b4b641fc58",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  for (const f of ['api-gw2.js', 'inventory-hub.js', 'inventory-dashboard.js',\n                   'raid-tracker.js',",
+     "text": "  // BL-070 INV-7b: inventory-hub.js e inventory-dashboard.js se retiraron.\n  for (const f of ['api-gw2.js',\n                   'raid-tracker.js',"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea55.account-layer.test.js",
+   "base_sha": "f1f435d810cd133f3fafaa5fcd251970f5a5a82d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const chars = read('characters.js');\n",
+     "text": "// BL-070 INV-7b: characters.js se retiró; su resumen de cuenta vuelve en el paso Cuentas.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "for (const [name, src] of [['characters.js', chars], ['achievements.js', achs], ['accounts-panel.js', panel]]) {",
+     "text": "for (const [name, src] of [['achievements.js', achs], ['accounts-panel.js', panel]]) {"
+    },
+    {
+     "op": "delete",
+     "anchor": "ok(!/api\\.guildwars2\\.com\\/v2\\/account\\?/.test(chars),\n   'characters.js: ya no arma ninguna URL de /v2/account a mano');\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "ok(/root\\.GW2Api\\.getAccountInfo\\(token\\)/.test(chars),\n   'characters.js: loadAccountData() usa getAccountInfo(token)');\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "// characters.js: antes `if (accountRes.ok)` era un SKIP (seguia al resto).\n// El wrapper RECHAZA. Sin catch propio, el error se come el try de\n// loadAccountData y PvP/WvW quedan sin leer -> las 3 filas del header en '-'.\nconst cStart = chars.indexOf('Solicitando account info');\nok(cStart !== -1, 'characters.js: el log \"Solicitando account info\" sigue ahi (ancla del bloque)');\nconst cBlock = cStart === -1 ? '' : chars.slice(cStart, cStart + 900);\nok(/try\\s*\\{/.test(cBlock), 'characters.js: getAccountInfo va dentro de un try propio');\nok(/catch\\s*\\(/.test(cBlock), 'characters.js: ese try tiene catch (el rechazo no se propaga)');\nok(/getAccountInfo\\(token\\)/.test(cBlock), 'characters.js: la llamada esta dentro del bloque try');\nok(/if\\s*\\(accountInfo\\)/.test(cBlock),\n   'characters.js: el guard de exito paso de `if (accountRes.ok)` a `if (accountInfo)`');\n\n// El `res.ok` no puede quedar colgando: si alguien migra la llamada pero deja\n// el `if (accountRes.ok)` de arriba, accountRes ya no existe -> ReferenceError.\n// Igual que arriba: fuera los comentarios, o el test matchea su propia nota.\nconst charsCode = chars.split('\\n').filter(function(l){ return !/^\\s*(\\/\\/|\\*|\\/\\*)/.test(l); }).join('\\n');\nok(!/accountRes/.test(charsCode),\n   'characters.js: no queda ninguna referencia a accountRes en el CODIGO (variable del fetch crudo)');\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "// characters.js mantiene su propio contrato para /v2/pvp/stats y /v2/account\n// NO: el account ya no debe aparecer crudo. PvP sigue siendo del Tramo 3b.\nok(/v2\\/pvp\\/stats\\?access_token=/.test(chars),\n   'characters.js: /v2/pvp/stats sigue crudo (Tramo 3b, no en este commit)');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea63-filtros-cuentas.test.js",
+   "base_sha": "5571ebbcb5778978000df282d8e1b5c9642607f7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const chars = fs.readFileSync(path.join(ROOT, 'js', 'characters.js'), 'utf8');\n",
+     "text": "// BL-070 INV-7b: characters.js se retiró. Personajes vive en js/inv-chars.js (sin filtros ni páginas que\n// sobrevivan al cambio de cuenta: se arma de nuevo con la cuenta nueva). Quedan los tramos de app.js.\nconst chars = '';\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "chk('characters.js tiene el handler de gn:tokenchange', wg >= 0);\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "chk('characters.js declara renderList', rl >= 0);\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/t19c-lectores-legacy.test.js",
+   "base_sha": "a461201a17df1b2a7bfa885e486b78eb3706d30c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  'js/inventory-hub.js',\n  'js/raid-tracker.js',\n  // BL-070 RAI-5b: strike-tracker.js se retiró del repo.\n",
+     "text": "  'js/raid-tracker.js',\n  // BL-070 RAI-5b e INV-7b: strike-tracker.js e inventory-hub.js se retiraron del repo.\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/armeria-item-icons.test.js",
+   "base_sha": "cf60bfa2716ceffd2f1d39f93acf8ac73acb3975",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    // El mapa del modulo es el MISMO que el de inventory-hub.js.\n    const hub = leer('js/inventory-hub.js');\n    const bloque = hub.match(/RARITY_COLORS:\\s*\\{([\\s\\S]*?)\\}/);\n    ok(!!bloque, 'se encontro RARITY_COLORS en inventory-hub.js');\n    if (bloque) {\n      const orig = {};\n      bloque[1].replace(/'([^']+)'\\s*:\\s*'(#[0-9A-Fa-f]{6})'/g,\n        function (_, k, v) { orig[k] = v; });\n      eq(Object.keys(orig).length, 8, 'el mapa canonico tiene 8 claves');\n      const mio = m2.Icons.RARITY_COLORS;\n      const disto = Object.keys(orig).filter((k) => mio[k] !== orig[k]);\n      eq(disto.length, 0, 'el modulo tiene los MISMOS valores que inventory-hub', disto.join(','));\n    }\n",
+     "text": "    // El mapa del modulo es el canonico del proyecto: el de inventory-hub.js, que se retiro en\n    // BL-070 INV-7b. Sus 8 valores quedan fijados en ESPERADO (arriba).\n    const mio = m2.Icons.RARITY_COLORS;\n    eq(Object.keys(ESPERADO).length, 8, 'el mapa canonico tiene 8 claves');\n    const disto = Object.keys(ESPERADO).filter((k) => mio[k] !== ESPERADO[k]);\n    eq(disto.length, 0, 'el modulo tiene los valores del mapa canonico', disto.join(','));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    // Tal cual inventory-hub.js:26-30 (el mapa canonico del proyecto).",
+     "text": "    // El mapa canonico del proyecto (era inventory-hub.js:26-30, retirado en BL-070 INV-7b)."
+    }
+   ]
+  }
+ ]
+}
