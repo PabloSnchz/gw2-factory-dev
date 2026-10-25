@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-090",
+ "summary": "BL-070 ACT-0 aprobada y ACT-1 hecho: catálogo verificado de Actividades, modelo puro y su test; validación para Pablo. Solo documentación.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "e6c31366b363018aebb00605f4c7b1e1ca568a4c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 05:25Z",
+     "text": "Última actualización: 2026-10-25 05:45Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Paso 2, Inventario y Personajes, VALIDADO (05:14Z). Paso 3, Actividades con la Heredad (BL-055): ACT-0 propuesta ENTREGADA (05:25Z), espera tu aprobación y las decisiones D1 a D6.",
+     "text": "Paso 3, Actividades con la Heredad (BL-055): ACT-0 APROBADA (05:35Z, D1 a D6 como recomendé); ACT-1 datos y modelo HECHO (05:45Z), espera tu validación; sigue ACT-2, la vista nueva con la pestaña Hoy."
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-070 ACT-0 — propuesta visual de Actividades renovado y la Heredad (BL-055). ENTREGADA.",
+     "text": "Micro-ciclo:\nBL-070 ACT-1 — datos verificados y modelo de Actividades. HECHO.\nArchivos:\n- assets/data/activities/catalog.json (`d9880cb`)\n- js/act-model.js (`abbef97`, 1.0.0, sin cargar)\n- tests/act-model.test.cjs (`d67623e`)\n\nAdemás: RUN-055 (sonda tests/zz-probe-act1.test.cjs, ya borrada), RUN-056 (verde, 59 tests) y PATCH-090 (esta documentación).\n\nAntes: BL-070 ACT-0 — propuesta visual de Actividades renovado y la Heredad (BL-055). ENTREGADA."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-0 ENTREGADA (2026-10-25 05:25Z): ",
+     "text": "Último hecho: ACT-1 HECHO (2026-10-25 05:45Z): datos verificados y modelo de Actividades, sin pantalla nueva todavía. Pablo aprobó ACT-0 con D1 a D6 como recomendé (2026-10-25 05:35Z). `assets/data/activities/catalog.json` (d9880cb): resets (diario 00:00, PSNA 08:00, semanal lunes 07:30 UTC); las 5 fabricaciones diarias con sus ítems y nombres en español (el cristal de cuarzo cargado es el 43772); fractales del día por la categoría 88 con rango 1 a 4 = escala 1, 26, 51 y 76 o más; la regla de la llave (capítulo de nivel 10, una por cuenta por semana, cualquier profesión; la API no informa el capítulo terminado); Leivas: 5 piedras por semana, una por moneda: 1 de oro, 7.000 de karma, 100 de favor imperial, 10 monedas antiguas y 10 esquirlas de magnetita (la wiki registra que la de magnetita usaba esquirlas de profecía azules antes de la unificación de raids y que la moneda inusual de End of Dragons pasó a llamarse moneda antigua); waypoint de Arborstone [&BGMNAAA=] verificado en la wiki. Se retira el seguimiento «Solitary Throne CM»: los logros 9423, 9412, 9373 y 9388 son los diarios de rango 1 a 4 del fractal Solitary Throne (no del modo desafío) y solo aparecen cuando entra en la rotación; lo cubre «Fractales del día» (RUN-055). `js/act-model.js` 1.0.0 (abbef97, 9,2 KB, sin cargar: lo carga ACT-2 por el manifiesto): relojes, fabricación diaria («sin datos» si no se leyó la cuenta), fractales de hoy y mañana en español o inglés (lo que no reconoce lo dice), progreso de fractales, llave «probable» / «sin señal» / confirmada por vos, piedras por moneda con lo que tenés en la cartera, el −/+ viejo trasladado en orden (D3) y marcas por cuenta con huella y por semana. `tests/act-model.test.cjs` (d67623e, 10 tests, 17/17 mutaciones). Sonda RUN-055 ya borrada. RUN-056 verde (6 archivos, 59 tests: act-model, size-budget, index-versions, gn-frame, psna-day y psna-data). La Heredad (nodos, gatos, glifos y decoraciones) arma sus datos en ACT-5, con su módulo: la verificación de la API ya está hecha (RUN-054). Antes, ACT-0 ENTREGADA (2026-10-25 05:25Z): "
+    },
+    {
+     "op": "replace",
+     "anchor": "paso 3 Actividades + Heredad: ACT-0 propuesta ENTREGADA (05:25Z), espera aprobación;",
+     "text": "paso 3 Actividades + Heredad: ACT-0 APROBADA (05:35Z); ACT-1 datos y modelo HECHO (05:45Z), espera validación;"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Decisión: ACT-0, Actividades renovado y la Heredad. Abrí docs/propuestas/propuesta-actividades-bl070.html: lo que medí, las maquetas de Hoy, Semana y la Heredad, el plan ACT-1 a ACT-7 y 6 decisiones con mi recomendación (D1 la Heredad como módulo propio; D2 la llave como «Probable» más tu confirmación; D3 una casilla por moneda para las piedras vetustas; D4 los fractales de mañana en una línea; D5 marca a mano para los nodos que la API no informa; D6 Actividades abre en Hoy). Con tu aprobación arranco ACT-1.\n",
+     "text": "- [BL-070] Validación: ACT-1, datos verificados de Actividades (todavía sin pantalla). Revisá si coincide con lo que ves en el juego: la fabricación diaria son 5 (con el cristal de cuarzo cargado); Leivas te vende 5 piedras por semana, una con 1 de oro, otra con 7.000 de karma, otra con 100 de favor imperial, otra con 10 monedas antiguas y otra con 10 esquirlas de magnetita; y el seguimiento «Solitary Throne CM» se va porque eran los diarios del fractal, no del modo desafío. Con tu dale sigo con ACT-2, la vista nueva con la pestaña Hoy.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "c2842ae784dd60ca1bdec1a820f62be1fe1cc77f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Propuesta: Actividades con Hoy y Semana; la Heredad como módulo propio con Nodos y gatos, Glifos (36) y Decoraciones (1.210 en 27 categorías). Plan ACT-1 a ACT-7, D1 a D6. SHIRUVANA-ART-001",
+     "text": "Propuesta: Actividades con Hoy y Semana; la Heredad como módulo propio con Nodos y gatos, Glifos (36) y Decoraciones (1.210 en 27 categorías). Plan ACT-1 a ACT-7, D1 a D6. ACT-0 APROBADA por Pablo (2026-10-25 05:35Z) con D1 a D6 como recomendé. ACT-1 HECHO (2026-10-25 05:45Z): datos verificados y modelo de Actividades, sin pantalla nueva todavía. `assets/data/activities/catalog.json` (d9880cb): resets (diario 00:00, PSNA 08:00, semanal lunes 07:30 UTC); las 5 fabricaciones diarias con sus ítems y nombres en español (el cristal de cuarzo cargado es el 43772); fractales del día por la categoría 88 con rango 1 a 4 = escala 1, 26, 51 y 76 o más; la regla de la llave (capítulo de nivel 10, una por cuenta por semana, cualquier profesión; la API no informa el capítulo terminado); Leivas: 5 piedras por semana, una por moneda: 1 de oro, 7.000 de karma, 100 de favor imperial, 10 monedas antiguas y 10 esquirlas de magnetita (la wiki registra que la de magnetita usaba esquirlas de profecía azules antes de la unificación de raids y que la moneda inusual de End of Dragons pasó a llamarse moneda antigua); waypoint de Arborstone [&BGMNAAA=] verificado en la wiki. Se retira el seguimiento «Solitary Throne CM»: los logros 9423, 9412, 9373 y 9388 son los diarios de rango 1 a 4 del fractal Solitary Throne (no del modo desafío) y solo aparecen cuando entra en la rotación; lo cubre «Fractales del día» (RUN-055). `js/act-model.js` 1.0.0 (abbef97, 9,2 KB, sin cargar: lo carga ACT-2 por el manifiesto): relojes, fabricación diaria («sin datos» si no se leyó la cuenta), fractales de hoy y mañana en español o inglés (lo que no reconoce lo dice), progreso de fractales, llave «probable» / «sin señal» / confirmada por vos, piedras por moneda con lo que tenés en la cartera, el −/+ viejo trasladado en orden (D3) y marcas por cuenta con huella y por semana. `tests/act-model.test.cjs` (d67623e, 10 tests, 17/17 mutaciones). Sonda RUN-055 ya borrada. RUN-056 verde (6 archivos, 59 tests: act-model, size-budget, index-versions, gn-frame, psna-day y psna-data). La Heredad (nodos, gatos, glifos y decoraciones) arma sus datos en ACT-5, con su módulo: la verificación de la API ya está hecha (RUN-054). SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
