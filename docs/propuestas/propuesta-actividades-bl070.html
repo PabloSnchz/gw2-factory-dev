@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACT-0 · Propuesta: Actividades renovado y la Heredad (BL-070, BL-055)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--green:#3CC48A;--red:#F47C7C;--blue:#6EA3FF;--acc:#A896FF;--mod:#3CC48A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}small,.mut{color:var(--muted)}
+a{color:#B9A8FF}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(60,196,138,.10),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2)}
+.tag--wait{border-color:var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(60,196,138,.12),var(--bg-1) 70%);padding:16px 18px}
+.row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px rgba(60,196,138,.7)}
+.ttl h3{margin:0;font-size:1.3rem}.ttl p{margin:2px 0 0;font-size:.86rem}
+.pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}
+.pill b{color:var(--tx-1)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem}.st b span{font-size:.8rem;color:var(--muted);font-weight:500}.st em{display:block;font-style:normal;font-size:.74rem;color:var(--muted)}
+.bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--mod)}
+.voice{display:flex;gap:10px;align-items:center;margin-top:12px;border:1px solid var(--bd-1);border-radius:12px;padding:8px 12px;background:var(--bg-0)}
+.voice .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2C9398,#442283);flex-shrink:0}
+.voice small{display:block;font-size:.72rem;color:var(--acc);font-weight:700}
+.tabs{display:flex;gap:4px;margin:16px 0 10px;border-bottom:1px solid var(--bd-1);flex-wrap:wrap}
+.tabs span{padding:8px 14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs .on{color:var(--tx-1);font-weight:700;border-bottom-color:var(--mod)}
+.search{display:flex;align-items:center;gap:10px;border:1px solid var(--bd-2);border-radius:12px;background:var(--bg-0);padding:10px 14px;font-size:.95rem;color:var(--tx-1)}
+.search i{width:14px;height:14px;border:2px solid var(--muted);border-radius:50%;display:inline-block}
+.card{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.hit{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center}
+.ico{width:44px;height:44px;border-radius:9px;background:var(--bg-2);box-shadow:inset 0 0 0 2px var(--rar,#3A4358)}
+.ico--asc{--rar:#FB3E8D}.ico--exo{--rar:#FFA405}.ico--fine{--rar:#62A4DA}.ico--leg{--rar:#974EFF}.ico--rare{--rar:#FCD00B}.ico--basic{--rar:#8E96A3}
+.rar{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--tx-2);border:1px solid var(--bd-1);border-radius:999px;padding:0 8px;background:var(--bg-0)}
+.rar::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--rar,#8E96A3)}
+.where{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.wh{font-size:.78rem;border:1px solid var(--bd-1);border-radius:8px;padding:2px 8px;background:var(--bg-0);color:var(--tx-2)}
+.wh b{color:var(--tx-1)}
+.tot{font-size:1.2rem;font-weight:800;text-align:right}.tot small{display:block;font-size:.72rem;font-weight:500}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.cat{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px}
+.cat b{display:block}.cat small{font-size:.76rem}
+.mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px}
+.mt{display:flex;gap:8px;align-items:center;border:1px solid var(--bd-1);border-radius:10px;padding:6px 8px;background:var(--bg-0);font-size:.8rem}
+.mt .ico{width:30px;height:30px;border-radius:7px}
+.mt b{margin-left:auto}
+.chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.ch{border:1px solid var(--bd-1);border-left:3px solid var(--pc);border-radius:14px;background:var(--bg-1);padding:12px 14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.ch-h{display:flex;gap:12px;align-items:center}
+.prof{width:56px;height:56px;border-radius:12px;background:var(--bg-2);box-shadow:0 0 0 2px var(--pc);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--tx-1)}
+.ch-h .nm{flex:1;min-width:0}.ch-h .nm b{font-size:1.05rem}.ch-h .nm small{display:block;font-size:.78rem}
+.spec{font-size:.72rem;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-2)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.fc{border:1px solid var(--bd-1);border-radius:9px;padding:6px 8px;background:var(--bg-0);font-size:.76rem;color:var(--muted)}
+.fc b{display:block;color:var(--tx-1);font-size:.9rem}
+.crafts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cr{font-size:.72rem;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px;color:var(--tx-2);background:var(--bg-0)}
+.bday{margin-top:8px;font-size:.8rem;color:var(--amber)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.phone{width:360px;max-width:100%;border:10px solid #050608;border-radius:34px;padding:12px;background:var(--bg-0);margin:0 auto}
+.phone .tabs span{padding:8px 9px;font-size:.84rem}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}.pills{margin-left:0}.facts{grid-template-columns:1fr 1fr}}
+.chk{display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--bd-1);padding:7px 0;font-size:.9rem}
+.chk .ico{width:30px;height:30px;border-radius:7px;flex-shrink:0}.chk>span:last-child{margin-left:auto}
+.ok{font-size:.74rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:999px;padding:1px 8px}
+.pend{font-size:.74rem;font-weight:700;color:var(--amber);border:1px solid var(--amber);border-radius:999px;padding:1px 8px}
+.frac{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid var(--bd-1)}.frac b{min-width:130px}
+.tier{font-size:.74rem;border:1px solid var(--bd-2);border-radius:8px;padding:1px 8px;color:var(--tx-2)}
+.tier.on{border-color:var(--green);color:var(--tx-1);background:rgba(60,196,138,.15)}
+.box{width:20px;height:20px;border:2px solid var(--bd-2);border-radius:5px;flex-shrink:0;display:inline-block}
+.box.on{background:var(--green);border-color:var(--green)}
+.btn{font-size:.85rem;font-weight:700;border-radius:10px;padding:7px 12px;background:var(--mod);color:#0F1117}
+.btn--ghost{background:transparent;color:var(--tx-1);border:1px solid var(--bd-2)}
+.nodes{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;margin-top:10px}
+.nd{display:flex;gap:10px;align-items:center;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:8px 10px}
+.nd .ico{width:36px;height:36px;border-radius:8px}.nd small{display:block;font-size:.74rem;color:var(--muted)}.nd .box{margin-left:auto}
+.nd.off{opacity:.7}
+</style>
+</head>
+<body>
+<main>
+
+<div class="doc-head">
+  <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/1302773.png" alt="">
+  <div style="flex:1;min-width:260px">
+    <h1>Actividades renovado y la Heredad — propuesta visual</h1>
+    <p>BL-070, paso 3 (con BL-055) · ACT-0 · Shiruvana · 2026-10-25</p>
+  </div>
+  <span class="tag tag--wait">ESPERA TU APROBACIÓN</span>
+</div>
+
+<p class="note">Mismo proceso que en Raids e Inventario: te muestro lo que medí y cómo lo veo, decidís, y después voy paso por paso con tu validación en cada uno. No toco código hasta que apruebes. En las maquetas, los cuadrados de color marcan dónde van los íconos oficiales del juego, que en la Bóveda salen de la API.</p>
+
+<h2>1. Lo que medí en el módulo de hoy</h2>
+<p>Leí los dos archivos del módulo (<code>activities.js</code> 3.23.0, 64,9 KB, congelado; <code>activities-theme.js</code> 2.6.1, 47,3 KB, en advertencia) y medí contra la API oficial desde CI (RUN-054, sonda ya borrada) y contra la wiki oficial.</p>
+<table>
+<thead><tr><th>Gravedad</th><th>Qué pasa</th><th>Lo que medí</th></tr></thead>
+<tbody>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>«Fractales: rotación diaria no disponible» es falso.</b> El panel dice que la API no informa los fractales del día.</td><td>La API los trae en la categoría de logros 88, «Fractales del día»: 15 logros, los 3 fractales del día en rango 1 a 4 y las 3 escalas recomendadas, y también los de mañana. Hoy: Rocahonda, Océano Sólido y Cenagal; recomendados escala 16, 42 y 62.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>La llave semanal del León Negro se detecta mal.</b></td><td>Solo cuenta ladrones (<code>profession !== 'Thief'</code>). Según la wiki oficial, la llave sale del capítulo de nivel 10 de la historia personal con <b>cualquier</b> profesión, una por cuenta por semana, y se reinicia el lunes a las 07:30 UTC. Además, la API no informa si terminaste ese capítulo: lo máximo que se puede decir es «probablemente».</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Abrir Actividades pide un personaje por vez.</b></td><td>Para la llave baja la lista de personajes y después la ficha de cada uno, uno por uno: con 40 personajes son 41 pedidos cada vez que entrás, al cambiar de cuenta y al actualizar. La API los trae todos en un pedido.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>«Refinamiento de Ecto» muestra 4 de los 5 materiales del día.</b></td><td>La fabricación diaria de la API tiene 5: falta el <b>cristal de cuarzo cargado</b>. Además el título está mal: no es refinamiento de ectoplasma, es la fabricación diaria limitada.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Los Home Nodes no coinciden con la API.</b></td><td>La API tiene 57 nodos de casa. El módulo lista 2 que no existen (<code>garden_plot_04</code>, <code>expedition_board_s3</code>), le falta 1 nuevo (<code>black_lion_expedition_board</code>) y trae 6 nodos de Janthir con identificadores inventados que nunca se van a marcar como desbloqueados. Los 35 gatos de la casa no aparecen.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Piedras de invocación vetustas como un contador de 0 a 5.</b></td><td>Leivas, en Piedra Arbórea, vende 5 por semana, <b>una por cada moneda</b> (oro, karma, favor imperial y dos más). Un −/+ no dice cuál te falta comprar.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>El tracker «Solitary Throne CM» está sin verificar.</b></td><td>Usa 4 logros (9423, 9412, 9373 y 9388) rotulados T1 a T4 con escalas; no encontré una fuente que lo respalde. Lo verifico en ACT-1 y, si no corresponde, lo saco (LES-030: nada provisorio).</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>«Actualizar» recarga toda la página</b> y el indicador «x / 2 actividades» cuenta el PSNA como hecho por tener datos.</td><td>—</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Herencia visual.</b></td><td>Entre los dos archivos: 57 emojis, 114 estilos en línea y 46 asignados por código, 2 atributos de accesibilidad y 48 mensajes de depuración en la consola. 9 pedidos a la API sin la capa común.</td></tr>
+</tbody>
+</table>
+<p class="mut">Lo que funciona bien y se queda: el PSNA (validado por vos en BL-048, con su día y su cuenta regresiva) y las marcas de nodos que tenés guardadas (<code>gn:activities:home:nodes</code>), que no se pierden.</p>
+
+<h2>2. Actividades: «¿qué me falta hoy y esta semana?»</h2>
+<p>Un solo módulo con cabecera común y dos pestañas: <b>Hoy</b> y <b>Semana</b>. Arriba, los tres relojes que importan (reset diario 00:00 UTC, cambio del PSNA 08:00 UTC y reset semanal lunes 07:30 UTC) en tu hora local, y cuántas cosas te faltan.</p>
+
+<div class="frame">
+<p class="frame-label">Maqueta · computadora · pestaña Hoy</p>
+<div class="hero">
+  <div class="row">
+    <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/1302773.png" alt="">
+    <div class="ttl"><h3>Actividades</h3><p class="mut">Cuenta: Gato Negro.1234 · leído hace 1 min</p></div>
+    <div class="pills"><span class="pill">Reset diario <b>en 18 h 42 min</b></span><span class="pill">PSNA cambia <b>en 2 h 42 min</b></span><span class="pill">Semanal <b>lunes 04:30</b></span><span class="pill">Actualizar</span></div>
+  </div>
+  <div class="stats">
+    <div class="st"><small>Fabricación diaria</small><b>2 <span>/ 5</span></b><div class="bar"><i style="width:40%"></i></div><em>te faltan 3</em></div>
+    <div class="st"><small>Fractales del día</small><b>4 <span>/ 15</span></b><div class="bar"><i style="width:27%"></i></div><em>Rocahonda, Océano Sólido, Cenagal</em></div>
+    <div class="st"><small>Llave semanal</small><b>Probable</b><em>Lyra, nivel 12, creada el lunes</em></div>
+    <div class="st"><small>Piedras vetustas</small><b>3 <span>/ 5</span></b><div class="bar"><i style="width:60%"></i></div><em>faltan favor imperial y la 5.ª moneda</em></div>
+  </div>
+  <div class="voice"><span class="av"></span><div><small>Shiruvana</small>Hoy te faltan 3 fabricaciones y los fractales recomendados. El PSNA cambia en 2 h 42 min: si vas a comprar, es ahora.</div></div>
+</div>
+<div class="tabs"><span class="on">Hoy</span><span>Semana</span></div>
+
+<div class="cols">
+<div class="card">
+  <h3 style="margin-top:0">Fabricación diaria <small class="mut">· una vez por día, por cuenta</small></h3>
+  <div class="chk"><span class="ico ico--asc"></span>Pegote de residuo de espíritus ancestrales<span class="ok">Hecho</span></div>
+  <div class="chk"><span class="ico ico--asc"></span>Trozo de mithrilio<span class="ok">Hecho</span></div>
+  <div class="chk"><span class="ico ico--asc"></span>Carrete de hilo de seda para tejer<span class="pend">Te falta</span></div>
+  <div class="chk"><span class="ico ico--asc"></span>Carrete de hilo grueso eloniano<span class="pend">Te falta</span></div>
+  <div class="chk"><span class="ico ico--fine"></span>Cristal de cuarzo cargado<span class="pend">Te falta</span></div>
+  <p class="mut" style="font-size:.8rem;margin-top:8px">Se marca solo con tu cuenta (<code>/v2/account/dailycrafting</code>).</p>
+</div>
+<div class="card">
+  <h3 style="margin-top:0">Fractales del día <small class="mut">· cambian a las 00:00 UTC</small></h3>
+  <div class="frac"><b>Rocahonda</b><span class="tier on">R1</span><span class="tier on">R2</span><span class="tier">R3</span><span class="tier">R4</span></div>
+  <div class="frac"><b>Océano Sólido</b><span class="tier on">R1</span><span class="tier on">R2</span><span class="tier">R3</span><span class="tier">R4</span></div>
+  <div class="frac"><b>Cenagal</b><span class="tier">R1</span><span class="tier">R2</span><span class="tier">R3</span><span class="tier">R4</span></div>
+  <div class="frac"><b>Recomendados</b><span class="tier">Escala 16</span><span class="tier">Escala 42</span><span class="tier">Escala 62</span></div>
+  <p class="mut" style="font-size:.8rem;margin-top:8px">Mañana: los 3 de mañana, en una línea. Los nombres salen de la API en español.</p>
+</div>
+</div>
+
+<div class="card" style="margin-top:12px">
+  <h3 style="margin-top:0">Agente de red de suministros del Pacto <small class="mut">· como hoy (BL-048)</small></h3>
+  <p class="mut">Los 6 lugares con «Copiar», el día y la cuenta regresiva. Solo cambia la cara: queda dentro de la cabecera común y sin estilos en línea.</p>
+</div>
+</div>
+
+<div class="frame">
+<p class="frame-label">Maqueta · pestaña Semana</p>
+<div class="cols">
+<div class="card">
+  <h3 style="margin-top:0">Llave del León Negro <small class="mut">· 1 por semana, por cuenta</small></h3>
+  <p>Se gana al terminar el capítulo de nivel 10 de la historia personal, con cualquier profesión.</p>
+  <div class="chk"><span class="ico ico--rare"></span>Lyra · nivel 12 · creada el lunes 20/10<span class="pend">Probable</span></div>
+  <div class="row" style="margin-top:8px"><span class="btn">Ya la saqué</span><span class="btn btn--ghost">Todavía no</span></div>
+  <p class="mut" style="font-size:.8rem;margin-top:8px">La API no dice si terminaste el capítulo. Si un personaje creado esta semana llegó a nivel 10, te aviso que es probable; vos lo confirmás y vale hasta el lunes 07:30 UTC.</p>
+</div>
+<div class="card">
+  <h3 style="margin-top:0">Piedras de invocación vetustas <small class="mut">· Leivas, Piedra Arbórea</small></h3>
+  <div class="chk"><span class="box on"></span>Con oro<span class="mut">1</span></div>
+  <div class="chk"><span class="box on"></span>Con karma<span class="mut">7.000</span></div>
+  <div class="chk"><span class="box"></span>Con favor imperial<span class="mut">100</span></div>
+  <div class="chk"><span class="box on"></span>Con la 4.ª moneda<span class="mut">10</span></div>
+  <div class="chk"><span class="box"></span>Con la 5.ª moneda<span class="mut">10</span></div>
+  <p class="mut" style="font-size:.8rem;margin-top:8px">Una casilla por moneda, con lo que tenés de cada una en la cartera. Copiar el waypoint de Piedra Arbórea, como hoy. Los nombres de las dos monedas de 10 los verifico en ACT-1: dos fuentes no coinciden.</p>
+</div>
+</div>
+<p class="mut" style="margin-top:10px">Las marcas a mano (llave y piedras) se guardan por cuenta con una huella, nunca la Key, y vencen solas en el reset semanal, como en Raids.</p>
+</div>
+
+<h2>3. La Heredad, un módulo propio (BL-055)</h2>
+<p>Lo decidiste el 2026-10-22: los Home Nodes salen de Actividades y van a un módulo propio, con lo que suma la API desde Janthir Wilds. El nombre oficial en español es <b>Heredad</b> (la API describe cada decoración como «Se fabrica con el dominio de heredades»). Tres pestañas:</p>
+<table>
+<thead><tr><th>Pestaña</th><th>Qué muestra</th><th>De dónde sale</th></tr></thead>
+<tbody>
+<tr><td><b>Nodos y gatos</b></td><td>Los 57 nodos de casa con su ícono y nombre en español, desbloqueados o no, tu marca de «recolectado hoy» (la de siempre, sin perder nada) y los 35 gatos. Los nodos que la API no informa (los de Janthir y los contratos de expedición) quedan con marca a mano y lo dicen.</td><td><code>/v2/home/nodes</code>, <code>/v2/home/cats</code> y tu cuenta</td></tr>
+<tr><td><b>Glifos</b></td><td>Los 36 glifos, separados por herramienta (recolección, tala y minería), cuáles tenés y qué hace cada uno.</td><td><code>/v2/homestead/glyphs</code> y tu cuenta</td></tr>
+<tr><td><b>Decoraciones</b></td><td>Las 1.210 decoraciones en sus 27 categorías oficiales (Arquitectura, Iluminación, Trofeos, Janthir Wilds, Día Invernal…), cuántas tenés de cada una y el tope de 250, con búsqueda.</td><td><code>/v2/homestead/decorations</code>, sus categorías y tu cuenta</td></tr>
+</tbody>
+</table>
+
+<div class="frame">
+<p class="frame-label">Maqueta · Heredad · pestaña Nodos y gatos</p>
+<div class="hero">
+  <div class="row">
+    <span class="hero-ico" style="display:inline-block"></span>
+    <div class="ttl"><h3>Heredad</h3><p class="mut">Tu casa y tu heredad de Janthir</p></div>
+  </div>
+  <div class="stats">
+    <div class="st"><small>Nodos</small><b>41 <span>/ 57</span></b><div class="bar"><i style="width:72%"></i></div><em>12 recolectados hoy</em></div>
+    <div class="st"><small>Gatos</small><b>18 <span>/ 35</span></b><div class="bar"><i style="width:51%"></i></div></div>
+    <div class="st"><small>Glifos</small><b>14 <span>/ 36</span></b><div class="bar"><i style="width:39%"></i></div></div>
+    <div class="st"><small>Decoraciones</small><b>312 <span>tipos</span></b><em>de 1.210</em></div>
+  </div>
+</div>
+<div class="tabs"><span class="on">Nodos y gatos</span><span>Glifos</span><span>Decoraciones</span></div>
+<div class="row" style="gap:6px"><span class="pill">Todos</span><span class="pill"><b>Minería</b></span><span class="pill">Tala</span><span class="pill">Cosecha</span><span class="pill">Me faltan</span><span class="pill">Sin recolectar hoy</span></div>
+<div class="nodes">
+  <div class="nd"><span class="ico ico--rare"></span><div><b>Nodo de mineral de oricalco</b><small>Desbloqueado</small></div><span class="box on"></span></div>
+  <div class="nd"><span class="ico ico--exo"></span><div><b>Nodo de mineral de mithril</b><small>Desbloqueado</small></div><span class="box"></span></div>
+  <div class="nd off"><span class="ico ico--basic"></span><div><b>Nieblonio</b><small>No lo tenés</small></div></div>
+</div>
+<p class="mut" style="margin-top:10px">La casilla es «recolectado hoy» y se limpia sola en el reset diario, como ahora.</p>
+</div>
+
+<h2>4. Cómo lo construyo</h2>
+<ul>
+<li>Archivos nuevos y chicos (40 KB, DEC-035) por <code>js/modules.json</code>, como Raids e Inventario: la vista de Actividades toma <code>#activitiesPanel</code> y la Heredad va con su ruta propia (<code>#/account/homestead</code>), su entrada en la barra lateral y en la Bienvenida. <code>activities.js</code> no se toca hasta el retiro final; el PSNA se reutiliza con sus funciones probadas.</li>
+<li>Una lectura por fuente: personajes en un pedido, logros por la capa <code>GW2Api</code> con caché, y la Heredad solo cuando la abrís.</li>
+<li>Estados honestos: «Sin datos» si una lectura falla, «Probable» cuando la API no alcanza para afirmar, y si la Key no tiene el permiso necesario lo digo.</li>
+<li>Marco común (FEAT-013) y la guarda de contraste en los 19 themes desde el primer paso, con su test.</li>
+<li>Vuelta atrás simple en cada paso: sacar el archivo nuevo de <code>js/modules.json</code> deja el módulo como hoy.</li>
+</ul>
+
+<h2>5. Plan, paso por paso (cada uno con tu validación)</h2>
+<table>
+<thead><tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr></thead>
+<tbody>
+<tr><td>ACT-1</td><td>Datos verificados: fabricación diaria, Leivas (monedas y costos), la regla de la llave, los 57 nodos y 35 gatos con sus ítems, y qué pasa con el tracker de CM. Modelo con sus tests.</td><td>Nada en pantalla todavía; el informe de lo verificado.</td></tr>
+<tr><td>ACT-2</td><td>Vista nueva de Actividades: cabecera con los 3 relojes, 4 indicadores, pestaña Hoy con la fabricación diaria (los 5) y el PSNA.</td><td>Actividades nuevo, con el cuarzo que faltaba.</td></tr>
+<tr><td>ACT-3</td><td>Fractales del día de verdad: los 3 de hoy por rango, los recomendados y los de mañana, con tu progreso si la API lo informa.</td><td>Se acaba el «no disponible».</td></tr>
+<tr><td>ACT-4</td><td>Pestaña Semana: la llave (probable + tu confirmación) y las piedras por moneda.</td><td>Sin 41 pedidos al entrar.</td></tr>
+<tr><td>ACT-5</td><td>Heredad: módulo, ruta, barra lateral y Bienvenida; pestaña Nodos y gatos con tus marcas de siempre.</td><td>La Heredad en la barra; los nodos salen de Actividades.</td></tr>
+<tr><td>ACT-6</td><td>Heredad: Glifos y Decoraciones.</td><td>Las 1.210 decoraciones por categoría.</td></tr>
+<tr><td>ACT-7</td><td>Retiro de lo viejo (lo que deje de usarse de <code>activities.js</code> y <code>activities-theme.js</code>, con el orden de LES-039) y revisión final: 19 themes, teclado, lector, celular, movimiento reducido. FEAT-016.</td><td>Lo mismo, más liviano.</td></tr>
+</tbody>
+</table>
+
+<h2>6. Lo que necesito que decidas</h2>
+<table>
+<thead><tr><th></th><th>Decisión</th><th>Lo que recomiendo</th></tr></thead>
+<tbody>
+<tr><td><b>D1</b></td><td>¿La Heredad como módulo propio en la barra lateral, como decidiste en BL-055, o como pestaña de Actividades?</td><td><b>Módulo propio.</b> Con glifos y 1.210 decoraciones ya no es una lista de tareas del día; Actividades queda enfocado en «qué me falta».</td></tr>
+<tr><td><b>D2</b></td><td>¿La llave semanal como «Probable» más tu confirmación, en lugar de afirmar «Reclamada»?</td><td><b>Sí.</b> La API no informa el capítulo terminado. Prefiero decir «probable» y que vos confirmes antes que mentir.</td></tr>
+<tr><td><b>D3</b></td><td>¿Piedras vetustas con una casilla por moneda en lugar del −/+?</td><td><b>Sí.</b> Te dice cuál te falta comprar. Lo que marcaste esta semana con el −/+ se traslada como «compradas» en orden.</td></tr>
+<tr><td><b>D4</b></td><td>¿Mostrar los fractales de mañana?</td><td><b>Sí, en una línea</b> debajo de los de hoy. La API los trae y sirve para planificar.</td></tr>
+<tr><td><b>D5</b></td><td>¿Los nodos que la API no informa (Janthir y contratos de expedición) se quedan con marca a mano?</td><td><b>Sí,</b> con la leyenda «la API no lo informa». Si en ACT-1 encuentro su identificador oficial, pasan a marcarse solos.</td></tr>
+<tr><td><b>D6</b></td><td>¿Con qué pestaña abre Actividades?</td><td><b>Hoy</b>, siempre. Es la que contesta «qué me falta».</td></tr>
+</tbody>
+</table>
+
+<p class="note">Fuentes: la API oficial (<code>/v2/dailycrafting</code>, <code>/v2/home/nodes</code>, <code>/v2/home/cats</code>, <code>/v2/homestead/glyphs</code>, <code>/v2/homestead/decorations</code> y sus categorías, <code>/v2/achievements/categories/88</code> y <code>/v2/items</code>, leídas desde CI en RUN-054 el 2026-10-25) y las páginas «Key farming», «Antique Summoning Stone» y «Leivas» de la wiki oficial, consultadas el 2026-10-25.</p>
+
+</main>
+</body>
+</html>
