@@ -1,0 +1,116 @@
+{
+ "id": "PATCH-086",
+ "summary": "BL-070 INV-7b (2/2): después de borrar inventory-hub.js, inventory-dashboard.js, characters.js y characters-theme.js. router.js 2.19.1 sin InventoryHub en MODULOS_CON_LATCH ni los 2 paneles viejos en showPanel; index.html sin #inventoryDashboardPanel y con router ?v=2.19.1; el censo de hb106 baja a 2 módulos con latch; idea61 deja de contar inventory-dashboard.js (umbral 3, la 49D sigue bloqueada); tools/size-budget.json sin los 3 congelados retirados y con los techos nuevos de index.html y router.js.",
+ "files": [
+  {
+   "path": "js/router.js",
+   "base_sha": "95110c57a5b84fb0ef0416575bba71d70b99fb62",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.19.0 (2026-10-25) — Inventario y Personajes sin las pantallas viejas (BL-070 INV-7a)\n *\n * Cambios v2.19.0:\n *  - #/account/characters ya no activa InventoryHub: la vista nueva (js/inv-*.js) se activa sola.\n *  - #/inventory/dashboard abre la pestaña Multicuenta de #/account/characters.\n *  - Cambiar de cuenta ya no refresca InventoryHub, Characters ni InventoryDashboard.\n *\n * Antes, v2.18.2 — sin restos de StrikeTracker (BL-070 RAI-6)\n *\n * Cambios v2.18.2:\n *  - StrikeTracker sale de MODULOS_CON_LATCH, de showPanel y de updateSidebarFor: el módulo ya no existe.\n *\n * Antes, v2.18.1 — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)\n *\n * Cambios v2.18.1:\n *  - La ruta vieja de Strikes muestra el panel de Raids y raids-view.js la lleva a Encuentros.\n *  - Se fue el refresco de StrikeTracker: el módulo ya no se carga.\n",
+     "text": " * v2.19.1 (2026-10-25) — BL-070: sin las pantallas viejas de Inventario y Personajes ni de Strikes\n *\n * Cambios de BL-070 (el detalle de cada paso está en ai-memory/status.md):\n *  - 2.19.1 (INV-7b): MODULOS_CON_LATCH y showPanel ya no nombran a InventoryHub ni a sus 2 paneles.\n *  - 2.19.0 (INV-7a): #/account/characters es la vista nueva (js/inv-*.js); #/inventory/dashboard\n *    abre la pestaña Multicuenta; cambiar de cuenta ya no refresca los módulos viejos.\n *  - 2.18.2 (RAI-6) y 2.18.1 (RAI-5b): sin StrikeTracker; #/account/strikes muestra Raids.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "'inventoryPanel','charactersPanel','accountsPanel'",
+     "text": "'inventoryPanel','accountsPanel'"
+    },
+    {
+     "op": "replace",
+     "anchor": "'walletDashboardPanel','inventoryDashboardPanel','wvObjectivesDashboardPanel'",
+     "text": "'walletDashboardPanel','wvObjectivesDashboardPanel'"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Es lo que protege a InventoryHub, cuyo deactivate() además resetea la\n  // subvista (inventory-hub.js:1455): si su panel quedó visible, no se toca.\n",
+     "text": "  // Si el panel de un módulo quedó visible, ese módulo es el dueño de la pantalla y no se toca.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { mod: 'LegendaryTracker', panel: 'legendaryArmoryPanel' },\n    { mod: 'InventoryHub',    panel: 'inventoryPanel' }\n",
+     "text": "    { mod: 'LegendaryTracker', panel: 'legendaryArmoryPanel' }\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "11eeb6959cb986afec6883b0acd3736d6996873c",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "    <!-- ======= Panel de Dashboard de Inventario (NUEVO) ======= -->\n    <section id=\"inventoryDashboardPanel\" class=\"panel col-main\" aria-labelledby=\"inventoryDashboardTitle\" hidden>\n      <div class=\"panel__body\"></div>\n    </section>\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "<script defer src=\"js/router.js?v=2.19.0\"></script>",
+     "text": "<script defer src=\"js/router.js?v=2.19.1\"></script>"
+    }
+   ]
+  },
+  {
+   "path": "tools/size-budget.json",
+   "base_sha": "02c9a393725b5b505cfe78776a3a527f2b48285c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"index.html\": { \"base\": 69606, \"techo\": 63170,",
+     "text": "\"index.html\": { \"base\": 69606, \"techo\": 62931,"
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/router.js\": { \"base\": 90495, \"techo\": 64806 }",
+     "text": "\"js/router.js\": { \"base\": 90495, \"techo\": 64348 }"
+    },
+    {
+     "op": "delete",
+     "anchor": "    \"js/inventory-hub.js\": { \"base\": 70258, \"techo\": 70258 },\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    \"js/characters.js\": { \"base\": 62006, \"techo\": 62006 },\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    \"js/inventory-dashboard.js\": { \"base\": 53460, \"techo\": 53460 },\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/hb106-censo-latch.test.js",
+   "base_sha": "dd73e4448bdea50448f3b1bce3b09f2f83a2ee65",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  // BL-070 RAI-5b: eran 4 con strike-tracker.js; desde su retiro son 3 (RUN-038).\n  conGuard.length >= 3, 'solo ' + conGuard.length);",
+     "text": "  // BL-070 RAI-5b: eran 4 con strike-tracker.js; desde su retiro son 3 (RUN-038).\n  // BL-070 INV-7b: inventory-hub.js se retiró; quedan 2.\n  conGuard.length >= 2, 'solo ' + conGuard.length);"
+    }
+   ]
+  },
+  {
+   "path": "tests/idea61-claves-congeladas.test.js",
+   "base_sha": "2d681bfa1e94785eda73e32ef169a38b46e13782",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  const lectores = ['app.js', 'accounts-panel.js', 'inventory-dashboard.js',\n                    'wv-objectives-dashboard.js',",
+     "text": "  // BL-070 INV-7b: inventory-dashboard.js se retiró (su lector de gw2_keys se fue con él).\n  const lectores = ['app.js', 'accounts-panel.js',\n                    'wv-objectives-dashboard.js',"
+    },
+    {
+     "op": "replace",
+     "anchor": "  ok(porCodigo.length >= 4,\n     'al menos 4 modulos la LEEN a pelo (por codigo): ' + porCodigo.join(', '),",
+     "text": "  ok(porCodigo.length >= 3,\n     'al menos 3 modulos la LEEN a pelo (por codigo): ' + porCodigo.join(', '),"
+    },
+    {
+     "op": "replace",
+     "anchor": "' — si esto baja de 4, la 49D tiene que reevaluarse antes de borrar nada');",
+     "text": "' — si esto baja de 3, la 49D tiene que reevaluarse antes de borrar nada');"
+    },
+    {
+     "op": "delete",
+     "anchor": "    'inventory-dashboard.js[gw2_keys]',\n"
+    }
+   ]
+  }
+ ]
+}
