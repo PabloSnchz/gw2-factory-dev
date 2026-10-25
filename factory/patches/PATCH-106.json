@@ -1,0 +1,267 @@
+{
+ "id": "PATCH-106",
+ "summary": "ACT-5 (BL-070, BL-055), parte 1: la Heredad en la navegación. Ruta #/account/homestead y #homesteadPanel (router 2.20.0, index.html), en la Bienvenida (2.3.0, 10 módulos) y en la barra lateral (2.2.4), con sus tests. PATCH-105 fue rechazado por tener 57 operaciones (máximo 50): lo partí en dos.",
+ "files": [
+  {
+   "path": "js/router.js",
+   "base_sha": "aa85ed67734846e4f12a94cde040defca754f8be",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.19.1 (2026-10-25) — BL-070: sin las pantallas viejas de Inventario y Personajes ni de Strikes\n",
+     "text": " * v2.20.0 (2026-10-25) — BL-070 ACT-5: la Heredad (#/account/homestead) es un módulo propio\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " *  - 2.19.1 (INV-7b):",
+     "text": " *  - 2.20.0 (ACT-5): ruta #/account/homestead y #homesteadPanel (js/home-view.js, BL-055).\n *  - 2.19.1 (INV-7b):"
+    },
+    {
+     "op": "replace",
+     "anchor": " *\n * Cambios v2.16.0:\n *  - Eliminada referencia a asideConvSection en updateSidebarFor\n *  - Sidebar liberada (~80 líneas menos en index.html)\n *  - Soporte para InventoryHub como pantalla principal de #/account/characters\n *\n * Cambios v2.15.0:\n *  - FASE 2: __getShopState expone estado de tienda a wv-shop-ui.js\n *  - FASE 2: ensureLoadTab('shop') y onTokenChanged delegan a WVShopUI con fallback\n *  - FASE 3: __getObjState/__setObjState exponen estado de objetivos\n *  - FASE 3: renderObjectivesTab y renderObjectivesZero delegan a WVObjectivesUI con fallback\n *\n * Cambios v2.14.0:\n *  - Agregada ruta '#/account/raids' para el seguimiento semanal de raids\n *\n * Cambios v2.13.0:\n *  - Agregada ruta '#/wallet/dashboard' para el dashboard multi-cuenta de wallet\n */",
+     "text": " * Antes: v2.13.0 a v2.16.0 (historia en git).\n */"
+    },
+    {
+     "op": "replace",
+     "anchor": "          '#/activities':'activities',\n",
+     "text": "          '#/activities':'activities',\n          '#/account/homestead':'homestead',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "'walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','inventoryPanel',",
+     "text": "'walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','homesteadPanel','inventoryPanel',"
+    },
+    {
+     "op": "replace",
+     "anchor": "        if (h === '#/account/characters') {\n",
+     "text": "        if (h === '#/account/homestead') {\n          try {\n            showPanel('homesteadPanel');\n            if (typeof Analytics !== 'undefined') Analytics.viewModule('homestead');\n          } catch (e) {\n            console.warn('[router] show homestead error', e);\n          } finally {\n            updateSidebarFor('homestead');\n            setActiveNav(h);\n          }\n          return;\n        }\n\n        if (h === '#/account/characters') {\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "d1d8b6d421c5f0ae2fdcf35c89d1d2407af9d74f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "              <a id=\"navAC\" class=\"side-nav__link\" href=\"#/activities\">\n                <span class=\"side-nav__icon\">\n                  <img class=\"icon-img\" src=\"assets/icons/1302773.png\" alt=\"Actividades\" width=\"28\" height=\"28\" loading=\"lazy\" referrerpolicy=\"no-referrer\">\n                </span>\n                <span>Actividades</span>\n              </a>\n            </li>\n",
+     "text": "              <a id=\"navAC\" class=\"side-nav__link\" href=\"#/activities\">\n                <span class=\"side-nav__icon\">\n                  <img class=\"icon-img\" src=\"assets/icons/1302773.png\" alt=\"Actividades\" width=\"28\" height=\"28\" loading=\"lazy\" referrerpolicy=\"no-referrer\">\n                </span>\n                <span>Actividades</span>\n              </a>\n            </li>\n\n            <li>\n              <a id=\"navHS\" class=\"side-nav__link\" href=\"#/account/homestead\">\n                <span class=\"side-nav__icon\">\n                  <img class=\"icon-img\" src=\"assets/icons/Welcome/3380755.png\" alt=\"Heredad\" width=\"28\" height=\"28\" loading=\"lazy\" referrerpolicy=\"no-referrer\">\n                </span>\n                <span>Heredad</span>\n              </a>\n            </li>\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "            <!-- ====== NUEVO: Raids ====== -->\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "            <!-- ====== FIN NUEVO ====== -->\n\n            <li>\n              <a id=\"navChars\"",
+     "text": "\n            <li>\n              <a id=\"navChars\""
+    },
+    {
+     "op": "replace",
+     "anchor": "            <!-- ====== NUEVO: Armería Legendaria ====== -->\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "            <!-- ====== FIN NUEVO ====== -->\n\n            <li>\n              <a id=\"navAccounts\"",
+     "text": "\n            <li>\n              <a id=\"navAccounts\""
+    },
+    {
+     "op": "replace",
+     "anchor": "      <!-- Conversor movido a modal (converter-modal.js) -->\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    <!-- ======= Panel Raid Tracker ======= -->\n",
+     "text": "    <section id=\"homesteadPanel\" class=\"panel col-main\" aria-labelledby=\"hsTitle\" hidden></section>\n\n    <!-- ======= Panel Raid Tracker ======= -->\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      <!-- Próximas funciones -->\n      <section class=\"panel\" id=\"asideNextFeatures\">\n        <h3 class=\"panel__title\">Próximas funciones</h3>\n        <div class=\"panel__body\">\n          <ul class=\"muted\">\n            <li>Panel de Actividades</li>\n            <li>Historial y variación</li>\n            <li>Deep‑links</li>\n          </ul>\n        </div>\n      </section>\n\n      <!-- Sidebar MetaEventos: Top 3 próximos (visible sólo en Meta) -->\n",
+     "text": "      <section class=\"panel\" id=\"asideNextFeatures\">\n        <h3 class=\"panel__title\">Próximas funciones</h3>\n        <div class=\"panel__body\"></div>\n      </section>\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    <!-- ======= Dashboard de Cartera (nuevo - en posición correcta dentro de col-main) ======= -->\n",
+     "text": "    <!-- ======= Dashboard de Cartera ======= -->\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/router.js?v=2.19.1",
+     "text": "js/router.js?v=2.20.0"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/sidebar-nav.js?v=2.2.3",
+     "text": "js/sidebar-nav.js?v=2.2.4"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/welcome-panel.js?v=2.2.1",
+     "text": "js/welcome-panel.js?v=2.3.0"
+    }
+   ]
+  },
+  {
+   "path": "js/welcome-panel.js",
+   "base_sha": "91614a6f50086026887dd5f6be8043a986b25845",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.2.1 (2026-10-24) · BL-058, propuesta WEL-0b aprobada por Pablo\n",
+     "text": " * Versión: 2.3.0 (2026-10-25) · BL-058, propuesta WEL-0b aprobada por Pablo\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '2.2.1';",
+     "text": "  var VERSION = '2.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": " * 2.2.0 (WEL-4): guarda de contraste. Los 19 themes no garantizan 4.5:1 en los colores que uso como\n *   texto (en macOS y Notion el verde de «listo» queda en 1.1:1 sobre blanco). Cada vez que cambia el\n *   theme leo sus tokens y, solo dentro de #welcomePanel, corrijo los que no llegan: los acerco al\n *   color de texto principal del mismo theme lo justo para pasar AA. Los themes no se tocan.\n *   Accesibilidad: grupos con role, nombre de la barra de progreso y foco visible en «Ver cuáles».\n",
+     "text": " * 2.2.0 (WEL-4): guarda de contraste AA en los 19 themes, solo dentro de #welcomePanel, y accesibilidad.\n * 2.3.0 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio: 10 módulos.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Los 9 módulos, en el orden de la barra lateral.",
+     "text": "  // Los 10 módulos, en el orden de la barra lateral."
+    },
+    {
+     "op": "replace",
+     "anchor": "    { id: 'activities', name: 'Actividades', desc: 'PSNA del día, Home Nodes y semanales', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n",
+     "text": "    { id: 'activities', name: 'Actividades', desc: 'Lo de hoy y la semana: fractales, llave y PSNA', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n    { id: 'homestead', name: 'Heredad', desc: 'Nodos de casa, gatos y tu heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "mods: ['cards', 'armory', 'achievements', 'wv', 'activities', 'raids', 'characters'] },",
+     "text": "mods: ['cards', 'armory', 'achievements', 'wv', 'activities', 'homestead', 'raids', 'characters'] },"
+    },
+    {
+     "op": "replace",
+     "anchor": "mods: ['achievements', 'activities', 'raids'] },",
+     "text": "mods: ['achievements', 'activities', 'homestead', 'raids'] },"
+    },
+    {
+     "op": "replace",
+     "anchor": "mods: ['armory', 'activities'] },",
+     "text": "mods: ['armory', 'activities', 'homestead'] },"
+    },
+    {
+     "op": "replace",
+     "anchor": "'Tus 9 módulos, a un clic' : 'Los 9 módulos de la Bóveda'",
+     "text": "'Tus 10 módulos, a un clic' : 'Los 10 módulos de la Bóveda'"
+    }
+   ]
+  },
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "9d630a493bcde3c5b61184fb1b2fdfde2e5e3c97",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.2.3 (2026-10-24) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)\n",
+     "text": " * Versión: 2.2.4 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " *   2026-02-03 y el módulo ya es uno solo (Alas y Encuentros); #/account/strikes sigue marcando Raids.\n */",
+     "text": " *   2026-02-03 y el módulo ya es uno solo (Alas y Encuentros); #/account/strikes sigue marcando Raids.\n * 2.2.4 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio, después de Actividades.\n */"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '2.2.3';",
+     "text": "  var VERSION = '2.2.4';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n",
+     "text": "    { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n    { id: 'homestead', name: 'Heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    wv: 'navWV', activities: 'navAC', raids: 'navRaids',",
+     "text": "    wv: 'navWV', activities: 'navAC', homestead: 'navHS', raids: 'navRaids',"
+    },
+    {
+     "op": "replace",
+     "anchor": "    wv: 'wv', activities: 'activities', raids: 'raids',",
+     "text": "    wv: 'wv', activities: 'activities', homestead: 'homestead', raids: 'raids',"
+    }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "6e09eebe98da205566cf76d9d0c1ec80e29b4983",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.2.3', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.3/);\n  assert.equal(x.S().version, '2.2.3');",
+     "text": "test('versión 2.2.4', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.4/);\n  assert.equal(x.S().version, '2.2.4');"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('arma la Sidebar: Inicio, los 8 módulos",
+     "text": "test('arma la Sidebar: Inicio, los 9 módulos"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '#/account/wizards-vault', '#/activities', '#/account/raids', '#/account/characters', '#/account/accounts']);",
+     "text": "    '#/account/wizards-vault', '#/activities', '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    'navWV:wv', 'navAC:activities', 'navRaids:raids',",
+     "text": "    'navWV:wv', 'navAC:activities', 'navHS:homestead', 'navRaids:raids',"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(x.document.querySelectorAll('#sbrNav a').length, 10);",
+     "text": "  assert.equal(x.document.querySelectorAll('#sbrNav a').length, 11);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(hrefs(x).length, 10);",
+     "text": "  assert.equal(hrefs(x).length, 11);"
+    },
+    {
+     "op": "replace",
+     "anchor": "con la cuenta activa y los otros 6 destinos'",
+     "text": "con la cuenta activa y los otros 7 destinos'"
+    },
+    {
+     "op": "replace",
+     "anchor": "['#/account/achievements', '#/account/wizards-vault', '#/activities',\n    '#/account/raids',",
+     "text": "['#/account/achievements', '#/account/wizards-vault', '#/activities',\n    '#/account/homestead', '#/account/raids',"
+    },
+    {
+     "op": "replace",
+     "anchor": "['Logros', 'Cámara del Brujo', 'Actividades', 'Raids',",
+     "text": "['Logros', 'Cámara del Brujo', 'Actividades', 'Heredad', 'Raids',"
+    }
+   ]
+  },
+  {
+   "path": "tests/welcome-view.test.cjs",
+   "base_sha": "243ba6a5d760146cd6ea977587159cdfd8b5eb5b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('los 9 módulos de la barra lateral",
+     "text": "test('los 10 módulos de la barra lateral"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '#/account/wizards-vault', '#/activities', '#/account/raids', '#/account/characters', '#/account/accounts']);",
+     "text": "    '#/account/wizards-vault', '#/activities', '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);"
+    },
+    {
+     "op": "replace",
+     "anchor": "wl-tag--key\">Con Key/g) || []).length, 7, 'Cuentas no necesita Key');",
+     "text": "wl-tag--key\">Con Key/g) || []).length, 8, 'Cuentas no necesita Key');"
+    }
+   ]
+  }
+ ]
+}
