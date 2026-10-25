@@ -1,7 +1,8 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.1 (2026-10-25) — ACT-2: la ruta real del módulo es #/activities (la de js/router.js), no #/account/activities
+ * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)
+ *          1.0.1 (2026-10-25) — ACT-2: la ruta real del módulo es #/activities (la de js/router.js), no #/account/activities
  *          1.0.0 (2026-10-25) — ACT-2: la vista nueva sobre el modelo de js/act-model.js
  *
  * Toma el panel #activitiesPanel (#/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario:
@@ -23,7 +24,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.1';
+  var VERSION = '1.1.0';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
   var ROUTE = '#/activities'; // la misma que usa js/router.js
@@ -77,6 +78,7 @@
       m.fr = P.fractals(d.fractals, c.fractals.patterns, c.fractals.tierMinScale);
       m.frProg = P.fractalProgress(m.fr, ok ? d.progress : null);
     }
+    m.frTomorrow = c.fractals && Array.isArray(d.tomorrow) ? P.fractals(d.tomorrow, c.fractals.patterns, c.fractals.tierMinScale) : null;
     if (ok) m.key = P.weeklyKey(d.chars, now, (c.weeklyKey && c.weeklyKey.storyLevel) || 10);
     m.lastWeekly = P.lastWeekly(now);
     if (ok && typeof d.stones === 'number') m.stones = Math.max(0, Math.min(m.stonesTotal, d.stones));
@@ -167,8 +169,46 @@
       esc(clk ? clk.weekly : 'lunes') + '.</p></section>';
   }
 
+  // ------------------------------------------------------------------ fractales del día (ACT-3)
+  // Estado de un logro del día: true hecho, false te falta, null sin datos (nunca «te falta» sin leer la cuenta).
+  function fracState(m, id) {
+    var p = m.frProg;
+    if (!m.loaded || !m.hasToken || !p || p.done == null) return null;
+    return !!p.ids[id];
+  }
+  function tierChip(label, sub, state) {
+    var cls = state === true ? ' av-tier--ok' : state === false ? ' av-tier--pend' : '';
+    var said = state === true ? 'hecho' : state === false ? 'te falta' : 'sin datos';
+    return '<li class="av-tier' + cls + '"><i aria-hidden="true"></i><b>' + esc(label) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') +
+      '<span class="av-sr">: ' + said + '</span></li>';
+  }
+  function fractalsHTML(m) {
+    var clk = m.clocks, fr = m.fr, tm = m.frTomorrow;
+    var h = '<section class="av-card" aria-labelledby="avFrT"><div class="av-card-h"><h3 id="avFrT">Fractales del día</h3>' +
+      '<small>los 3 de hoy en sus 4 rangos y las escalas recomendadas' + (clk ? ' · cambian a las ' + clk.dailyAt : '') + '</small></div>';
+    if (!fr) return h + '<p class="av-note">' + (m.loaded && m.hasToken ? 'No pude leer los fractales del día de la API del juego.' : m.loaded ? 'Sin datos de los fractales del día.' : 'Leyendo los fractales del día…') + '</p></section>';
+    if (!fr.fractals.length && !fr.recommended.length) return h + '<p class="av-note">La API no trae fractales del día en este momento.</p></section>';
+    h += '<ul class="av-frs">';
+    fr.fractals.forEach(function (f) {
+      h += '<li class="av-fr"><b class="av-frn">' + esc(f.name) + '</b><ul class="av-tiers" aria-label="Rangos de ' + esc(f.name) + '">';
+      [1, 2, 3, 4].forEach(function (k) { var x = f.tiers[k]; if (x) h += tierChip('R' + k, x.minScale ? 'escala ' + x.minScale + '+' : '', fracState(m, x.id)); });
+      h += '</ul></li>';
+    });
+    if (fr.recommended.length) {
+      h += '<li class="av-fr"><b class="av-frn">Recomendados</b><ul class="av-tiers" aria-label="Fractales recomendados">' +
+        fr.recommended.map(function (r) { return tierChip('Escala ' + r.scale, '', fracState(m, r.id)); }).join('') + '</ul></li>';
+    }
+    h += '</ul>';
+    if (fr.unknown.length) h += '<p class="av-note">' + (fr.unknown.length === 1 ? 'Hay 1 logro del día que no reconozco' : 'Hay ' + fr.unknown.length + ' logros del día que no reconozco') + ': no lo cuento.</p>';
+    if (tm && (tm.fractals.length || tm.recommended.length)) {
+      h += '<p class="av-tmw"><b>Mañana:</b> ' + esc(tm.fractals.map(function (f) { return f.name; }).join(', ')) +
+        (tm.recommended.length ? (tm.fractals.length ? ' · ' : '') + 'recomendados escala ' + tm.recommended.map(function (r) { return r.scale; }).join(', ') : '') + '</p>';
+    }
+    return h + '<p class="av-note">' + (m.hasToken ? 'Se marcan solos con los logros del día de tu cuenta.' : 'Con tu API Key se marcan solos.') + '</p></section>';
+  }
+
   function hoyHTML(m) {
-    return craftingHTML(m) + (m.old.psna ? '<div id="avPsnaSlot" class="av-slot"></div>' : '');
+    return craftingHTML(m) + fractalsHTML(m) + (m.old.psna ? '<div id="avPsnaSlot" class="av-slot"></div>' : '');
   }
   function semanaHTML(m) {
     return keyHTML(m) + (m.old.stones ? '<div id="avStonesSlot" class="av-slot"></div>' : '') +
@@ -241,6 +281,15 @@
     '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}',
     '.av-note,.av-src{margin:8px 0 0;color:var(--tx-2);font-size:.8rem}.av-src{font-size:.74rem;margin-top:12px}',
     '.av-slot{margin-bottom:12px}.av-slot>.card,.av-slot>section{margin-top:0}',
+    '.av-frs{list-style:none;margin:0;padding:0}',
+    '.av-fr{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--bd-1);padding:8px 0}.av-fr:last-child{border-bottom:0}',
+    '.av-frn{min-width:150px;font-size:.9rem;color:var(--tx-1)}',
+    '.av-tiers{list-style:none;margin:0;padding:0;display:flex;gap:6px;flex-wrap:wrap}',
+    '.av-tier{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;border:1px solid var(--bd-2);border-radius:8px;padding:2px 8px;color:var(--tx-1);min-height:28px;box-sizing:border-box}',
+    '.av-tier b{font-weight:700}.av-tier small{font-size:.7rem;color:var(--tx-2)}',
+    '.av-tier i{width:8px;height:8px;border-radius:50%;background:var(--bd-2);flex-shrink:0}',
+    '.av-tier--ok{border-color:var(--color-green,#3CC48A)}.av-tier--ok i{background:var(--color-green,#3CC48A)}.av-tier--pend{border-color:var(--color-amber,#F2B94B)}',
+    '.av-tmw{margin:10px 0 0;font-size:.84rem;color:var(--tx-2)}.av-tmw b{color:var(--tx-1)}',
     '.av-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}',
     R + ' button:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '@media (prefers-reduced-motion:reduce){' + R + ' *{transition:none!important;animation:none!important}}',
@@ -303,15 +352,18 @@
     return Promise.resolve().then(p).then(function (v) { return { ok: true, v: v }; }, function (e) { return { ok: false, e: e }; });
   }
 
-  // Los fractales de hoy: la categoría 88 trae los ids; los nombres en español, de /v2/achievements.
+  // Los fractales de hoy y de mañana (D4): la categoría 88 trae los ids de los dos días; los nombres en
+  // español, de /v2/achievements, en un solo pedido.
   function fractalsToday(nocache) {
+    var ids = function (x) { return (Array.isArray(x) ? x : []).map(function (a) { return typeof a === 'number' ? a : a && a.id; }).filter(Boolean); };
     return readJSON('/v2/achievements/categories/88?v=latest', null, nocache).then(function (c) {
-      var ids = (c && Array.isArray(c.achievements) ? c.achievements : []).map(function (a) { return typeof a === 'number' ? a : a && a.id; }).filter(Boolean);
-      if (!ids.length) return [];
-      return readJSON('/v2/achievements?ids=' + ids.join(',') + '&lang=es', null, nocache).then(function (list) {
+      var today = ids(c && c.achievements), tomorrow = ids(c && c.tomorrow), all = today.concat(tomorrow.filter(function (id) { return today.indexOf(id) < 0; }));
+      if (!all.length) return { today: [], tomorrow: [] };
+      return readJSON('/v2/achievements?ids=' + all.join(',') + '&lang=es', null, nocache).then(function (list) {
         var by = {};
         (Array.isArray(list) ? list : []).forEach(function (a) { if (a && a.id) by[a.id] = a.name; });
-        return ids.filter(function (id) { return by[id]; }).map(function (id) { return { id: id, name: by[id] }; });
+        var named = function (l) { return l.filter(function (id) { return by[id]; }).map(function (id) { return { id: id, name: by[id] }; }); };
+        return { today: named(today), tomorrow: named(tomorrow) };
       });
     });
   }
@@ -341,7 +393,7 @@
       var chars = arr(r[1]);
       var d = { loaded: true, hasToken: true, tk: tk, items: items, unread: [], crafting: arr(r[0]), progress: null,
         chars: chars ? chars.map(function (c) { return { name: c && c.name, level: c && c.level, created: c && c.created }; }) : null,
-        fractals: arr(r[2]) };
+        fractals: r[2].ok && r[2].v ? r[2].v.today : null, tomorrow: r[2].ok && r[2].v ? r[2].v.tomorrow : null };
       if (!d.crafting) d.unread.push('crafting');
       if (!d.chars) d.unread.push('chars');
       if (!d.fractals) d.unread.push('fractals');

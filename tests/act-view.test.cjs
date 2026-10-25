@@ -2,6 +2,7 @@
 // Lógica pura con el catálogo real y una prueba de humo con un DOM mínimo: la ruta #/account/activities,
 // la API simulada, los relojes, los 4 indicadores, las pestañas, el PSNA reubicado y lo que no se pudo leer.
 // 1.0.1: la ruta es #/activities, la de js/router.js (1.0.0 escuchaba #/account/activities y no se veía).
+// 1.1.0 (ACT-3): los fractales del día por rango y escala, con tu progreso y los de mañana.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -158,6 +159,29 @@ test('CSS: solo oculta lo viejo con la vista activa; foco visible, movimiento re
   assert.doesNotMatch(P.CSS, /\.av-badge[^{]*\{[^}]*background/, 'las marcas de estado no tiñen el fondo del texto');
 });
 
+test('ACT-3: fractales del día en Hoy, por rango con su escala, recomendados, tu progreso y los de mañana', () => {
+  const TMW = [{ id: 4510, name: 'Cantera de rango 1 del día' }, { id: 4511, name: 'Cantera de rango 2 del día' }, { id: 4520, name: 'Fractal recomendado: escala 30' }];
+  const m = P.buildModel(sample({ tomorrow: TMW }), CAT, {}, NOW);
+  assert.deepEqual(J(m.frTomorrow.fractals.map((f) => f.name)), ['Cantera']);
+  const h = P.viewHTML(m);
+  assert.match(h, /<h3 id="avFrT">Fractales del día<\/h3>/);
+  assert.match(h, /<b class="av-frn">Rocahonda<\/b><ul class="av-tiers" aria-label="Rangos de Rocahonda">/);
+  assert.match(h, /av-tier av-tier--ok"><i aria-hidden="true"><\/i><b>R1<\/b><small>escala 1\+<\/small><span class="av-sr">: hecho<\/span>/);
+  assert.match(h, /av-tier av-tier--pend"><i aria-hidden="true"><\/i><b>R1<\/b><small>escala 1\+<\/small><span class="av-sr">: te falta/, 'Océano Sólido rango 1 no está hecho');
+  assert.match(h, /<b class="av-frn">Recomendados<\/b>.*<b>Escala 16<\/b>.*<b>Escala 42<\/b>/);
+  assert.match(h, /<p class="av-tmw"><b>Mañana:<\/b> Cantera · recomendados escala 30<\/p>/);
+  assert.ok(h.indexOf('avFrT') > h.indexOf('avCraftT') && h.indexOf('avFrT') < h.indexOf('id="avPanel-semana"'), 'en Hoy, después de la fabricación');
+  // Sin lectura de la cuenta: los rangos se ven, pero «sin datos», nunca «te falta».
+  const nd = P.viewHTML(P.buildModel(sample({ progress: null }), CAT, {}, NOW));
+  assert.match(nd, /<b>R1<\/b><small>escala 1\+<\/small><span class="av-sr">: sin datos/);
+  assert.doesNotMatch(nd, /av-tier--pend/);
+  // Si la API no trajo los fractales, se dice.
+  assert.match(P.viewHTML(P.buildModel(sample({ fractals: null, unread: ['fractals'] }), CAT, {}, NOW)), /<p class="av-note">No pude leer los fractales del día de la API del juego\.<\/p><\/section>/);
+  // Lo que no reconozco no se cuenta y se dice.
+  assert.match(P.viewHTML(P.buildModel(sample({ fractals: FRACS.concat([{ id: 9999, name: 'Otra cosa' }]) }), CAT, {}, NOW)), /Hay 1 logro del día que no reconozco: no lo cuento\./);
+  assert.doesNotMatch(P.viewHTML(P.buildModel(sample(), CAT, {}, NOW)), /av-tmw/, 'sin los de mañana, no hay línea');
+});
+
 // ------------------------------------------------------------------ contraste en los 19 themes
 test('en los 19 themes cada texto de la vista llega a 4.5:1 sobre las superficies donde se pinta', () => {
   const TD = path.join(ROOT, 'css', 'themes');
@@ -238,8 +262,8 @@ function boot(opts) {
   const api = {
     '/v2/account/dailycrafting': ['lump_of_mithrilium'],
     '/v2/characters': [{ name: 'Lyra', level: 14, created, profession: 'Guardian', bags: [] }],
-    '/v2/achievements/categories/88': { id: 88, achievements: FRACS.map((f) => ({ id: f.id, flags: [] })), tomorrow: [] },
-    '/v2/achievements': FRACS,
+    '/v2/achievements/categories/88': { id: 88, achievements: FRACS.map((f) => ({ id: f.id, flags: [] })), tomorrow: [{ id: 4510, flags: [] }] },
+    '/v2/achievements': FRACS.concat([{ id: 4510, name: 'Cantera de rango 1 del día' }]),
     '/v2/account/achievements': [{ id: 4210, done: true }],
   };
   const sb = {
@@ -283,7 +307,10 @@ test('humo: en #/activities toma el panel, lee la cuenta una vez por fuente y re
   const api = calls.filter((u) => u.startsWith('https://'));
   assert.equal(api.filter((u) => u.includes('/v2/characters')).length, 1, 'los personajes en un solo pedido');
   assert.ok(api.some((u) => u.includes('/v2/characters?ids=all&access_token=')));
-  assert.ok(api.some((u) => u.includes('/v2/achievements?ids=4210,4211,4220,4230,4300,4301&lang=es') && !u.includes('access_token')), 'lo público sin la Key');
+  assert.ok(api.some((u) => u.includes('/v2/achievements?ids=4210,4211,4220,4230,4300,4301,4510&lang=es') && !u.includes('access_token')), 'hoy y mañana en un pedido, lo público sin la Key');
+  assert.ok(!api.some((u) => u.includes('/v2/account/achievements') && u.includes('4510')), 'el progreso se pide solo de hoy');
+  assert.match(h, /<b>Mañana:<\/b> Cantera<\/p>/);
+  assert.match(h, /<b class="av-frn">Rocahonda<\/b>/);
   assert.ok(api.some((u) => u.includes('/v2/account/achievements?ids=4210,')));
   assert.equal(D.els.avPsnaSlot.children[0], D.els.psnaPanel, 'el PSNA de siempre, en Hoy');
   assert.equal(D.els.avNodesSlot.children[0], D.els.homeNodesContainer);
