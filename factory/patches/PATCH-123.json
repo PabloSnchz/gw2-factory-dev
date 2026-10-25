@@ -1,0 +1,111 @@
+{
+ "id": "PATCH-123",
+ "summary": "BL-070 PUL-3: el orden de la barra lateral y de la Bienvenida que eligió Pablo (Cartera; lo diario; lo semanal; el progreso de la cuenta); sidebar-nav 2.2.5, welcome-panel 2.4.0, index.html con sus versiones y los 2 tests.",
+ "files": [
+  {
+   "path": "js/welcome-panel.js",
+   "base_sha": "3abd6f12da5ea8e1169258882ad1d37db92c39df",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.3.0 (2026-10-25)",
+     "text": " * Versión: 2.4.0 (2026-10-25)"
+    },
+    {
+     "op": "replace",
+     "anchor": " * 2.3.0 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio: 10 módulos.\n",
+     "text": " * 2.3.0 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio: 10 módulos.\n * 2.4.0 (PUL-3): nuevo orden de los módulos.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '2.3.0';",
+     "text": "  var VERSION = '2.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "\n    { id: 'cards', name: 'Cartera', desc: 'Divisas, conversor y todas tus cuentas', href: '#/cards', icon: 'assets/icons/733322.png', color: '#F2B94B', tag: 'Renovada' },\n    { id: 'meta', name: 'Metas y Eventos', desc: 'Horarios de metas y world bosses', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF', tag: 'Renovada', free: true },\n    { id: 'armory', name: 'Armería Legendaria', desc: 'Las 206 legendarias, recetas y lo que te falta', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },\n    { id: 'achievements', name: 'Logros', desc: 'Los que tenés cerca de completar', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },\n    { id: 'wv', name: 'Cámara del Brujo', desc: 'Objetivos diarios, semanales y tienda', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },\n    { id: 'activities', name: 'Actividades', desc: 'Lo de hoy y la semana: fractales, llave y PSNA', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n    { id: 'homestead', name: 'Heredad', desc: 'Nodos de casa, gatos y tu heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },\n    { id: 'raids', name: 'Raids', desc: 'Alas y encuentros de la semana', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },\n    { id: 'characters', name: 'Inventario y Personajes', desc: 'Buscá un objeto en toda la cuenta', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },\n    { id: 'accounts', name: 'Cuentas', desc: 'Tus cuentas y Keys, cifradas en tu PC', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3', local: true }",
+     "text": "\n    { id: 'cards', name: 'Cartera', desc: 'Divisas, conversor y todas tus cuentas', href: '#/cards', icon: 'assets/icons/733322.png', color: '#F2B94B', tag: 'Renovada' },\n    { id: 'meta', name: 'Metas y Eventos', desc: 'Horarios de metas y world bosses', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF', tag: 'Renovada', free: true },\n    { id: 'wv', name: 'Cámara del Brujo', desc: 'Objetivos diarios, semanales y tienda', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },\n    { id: 'activities', name: 'Actividades', desc: 'Lo de hoy y la semana: fractales, llave y PSNA', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n    { id: 'homestead', name: 'Heredad', desc: 'Nodos de casa, gatos y tu heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },\n    { id: 'raids', name: 'Raids', desc: 'Alas y encuentros de la semana', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },\n    { id: 'achievements', name: 'Logros', desc: 'Los que tenés cerca de completar', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },\n    { id: 'characters', name: 'Inventario y Personajes', desc: 'Buscá un objeto en toda la cuenta', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },\n    { id: 'armory', name: 'Armería Legendaria', desc: 'Las 206 legendarias, recetas y lo que te falta', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },\n    { id: 'accounts', name: 'Cuentas', desc: 'Tus cuentas y Keys, cifradas en tu PC', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3', local: true }"
+    }
+   ]
+  },
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "5256abf83d066220779937a8b94b78c02f61cb48",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.2.4 (2026-10-25)",
+     "text": " * Versión: 2.2.5 (2026-10-25)"
+    },
+    {
+     "op": "replace",
+     "anchor": " * 2.2.4 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio, después de Actividades.\n",
+     "text": " * 2.2.4 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio, después de Actividades.\n * 2.2.5 (BL-070, PUL-3): el orden que eligió Pablo: Cartera; lo diario (Metas, Cámara, Actividades, Heredad);\n *   lo semanal (Raids); el progreso de la cuenta (Logros, Inventario y Personajes, Armería). La barra del celular no cambia.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '2.2.4';",
+     "text": "  var VERSION = '2.2.5';"
+    },
+    {
+     "op": "replace",
+     "anchor": "\n    { id: 'cards', name: 'Cartera', href: '#/cards', icon: 'assets/icons/733322.png', color: '#F2B94B' },\n    { id: 'meta', name: 'Metas y Eventos', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF' },\n    { id: 'armory', name: 'Armería Legendaria', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },\n    { id: 'achievements', name: 'Logros', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },\n    { id: 'wv', name: 'Cámara del Brujo', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },\n    { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n    { id: 'homestead', name: 'Heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },\n    { id: 'raids', name: 'Raids', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },\n    { id: 'characters', name: 'Inventario y Personajes', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },\n    { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3' }",
+     "text": "\n    { id: 'cards', name: 'Cartera', href: '#/cards', icon: 'assets/icons/733322.png', color: '#F2B94B' },\n    { id: 'meta', name: 'Metas y Eventos', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF' },\n    { id: 'wv', name: 'Cámara del Brujo', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },\n    { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },\n    { id: 'homestead', name: 'Heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },\n    { id: 'raids', name: 'Raids', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },\n    { id: 'achievements', name: 'Logros', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },\n    { id: 'characters', name: 'Inventario y Personajes', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },\n    { id: 'armory', name: 'Armería Legendaria', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },\n    { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3' }"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "5285796a57c32192d4f5497432da020a4deb3a4e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/sidebar-nav.js?v=2.2.4",
+     "text": "js/sidebar-nav.js?v=2.2.5"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/welcome-panel.js?v=2.3.0",
+     "text": "js/welcome-panel.js?v=2.4.0"
+    }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "df3a840676dc1083f36c603392f09ed1c3bb8c49",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.2.4', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.4/);\n  assert.equal(x.S().version, '2.2.4');",
+     "text": "test('versión 2.2.5', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.5/);\n  assert.equal(x.S().version, '2.2.5');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  same(hrefs(x), ['#/welcome', '#/cards', '#/meta', '#/account/legendary-armory', '#/account/achievements',\n    '#/account/wizards-vault', '#/activities', '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);",
+     "text": "  // PUL-3 (orden de Pablo): Cartera; lo diario; lo semanal; el progreso de la cuenta; Cuentas aparte.\n  same(hrefs(x), ['#/welcome', '#/cards', '#/meta', '#/account/wizards-vault', '#/activities', '#/account/homestead',\n    '#/account/raids', '#/account/achievements', '#/account/characters', '#/account/legendary-armory', '#/account/accounts']);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  same(ids, ['navHome:welcome', 'navCards:cards', 'navMeta:meta', 'navLegendaryArmory:legendaryArmory', 'navAch:achievements',\n    'navWV:wv', 'navAC:activities', 'navHS:homestead', 'navRaids:raids', 'navChars:inventory', 'navAccounts:accounts']);",
+     "text": "  same(ids, ['navHome:welcome', 'navCards:cards', 'navMeta:meta', 'navWV:wv', 'navAC:activities', 'navHS:homestead',\n    'navRaids:raids', 'navAch:achievements', 'navChars:inventory', 'navLegendaryArmory:legendaryArmory', 'navAccounts:accounts']);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  same(sheetLinks(x).map((a) => a.getAttribute('href')), ['#/account/achievements', '#/account/wizards-vault', '#/activities',\n    '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);\n  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Logros', 'Cámara del Brujo', 'Actividades', 'Heredad', 'Raids', 'Inventario y Personajes', 'Cuentas']);",
+     "text": "  same(sheetLinks(x).map((a) => a.getAttribute('href')), ['#/account/wizards-vault', '#/activities', '#/account/homestead',\n    '#/account/raids', '#/account/achievements', '#/account/characters', '#/account/accounts']);\n  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Cámara del Brujo', 'Actividades', 'Heredad', 'Raids', 'Logros', 'Inventario y Personajes', 'Cuentas']);"
+    }
+   ]
+  },
+  {
+   "path": "tests/welcome-view.test.cjs",
+   "base_sha": "a0ac2781baeced827aef49aae80bd0a533571419",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.deepEqual(hrefs, ['#/cards', '#/meta', '#/account/legendary-armory', '#/account/achievements',\n    '#/account/wizards-vault', '#/activities', '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);",
+     "text": "  assert.deepEqual(hrefs, ['#/cards', '#/meta', '#/account/wizards-vault', '#/activities', '#/account/homestead',\n    '#/account/raids', '#/account/achievements', '#/account/characters', '#/account/legendary-armory', '#/account/accounts']);"
+    }
+   ]
+  }
+ ]
+}
