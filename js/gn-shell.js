@@ -1,7 +1,8 @@
 /*!
  * js/gn-shell.js — Un solo contenedor por módulo renovado (BL-070, pedido de Pablo del 2026-10-25)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25)
+ * Versión: 1.1.0 (2026-10-25) · PUL-1: la Armería Legendaria también tiene un solo contenedor
+ *          1.0.0 (2026-10-25)
  *
  * Por qué existe: en Raids, Inventario y Personajes, Actividades, Logros y la Cámara del Brujo la
  * cabecera nueva es una caja con borde y degradado metida dentro del panel, que ya tiene su borde.
@@ -20,7 +21,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[GNShell]';
   var SIDE = 24, SIDE_M = 12, TINT = 12, FADE = 300;
   // panel: selector del panel con la vista montada · head: lo que la vista inserta arriba ·
@@ -30,27 +31,31 @@
     { id: 'inventory', panel: '#inventoryPanel.iv-on', head: '#ivRoot', hero: '.iv-hero', mod: 'var(--gn-mod,#7EC3FF)', hex: '#7EC3FF' },
     { id: 'activities', panel: '#activitiesPanel.av-on', head: '#avRoot', hero: '.av-hero', mod: 'var(--gn-mod,#3CC48A)', hex: '#3CC48A' },
     { id: 'achievements', panel: '#achievementsPanel.achx-on', head: '#achxHead', hero: '.achx-hero', mod: '#E8A33D', hex: '#E8A33D' },
-    { id: 'wv', panel: '#wvPanel', head: '#wvxHead', hero: '.wvx-hero', mod: '#4FC3D9', hex: '#4FC3D9' }
+    { id: 'wv', panel: '#wvPanel', head: '#wvxHead', hero: '.wvx-hero', mod: '#4FC3D9', hex: '#4FC3D9' },
+    // La Armería (PUL-1): js/render-catologo.js dibuja su cabecera dentro de #legendaryArmoryBody >
+    // #legendaryModeContent (body) y el panel no lleva clase al montarse: la marca es :has(.arm-hero).
+    { id: 'armory', panel: '#legendaryArmoryPanel:has(.arm-hero)', head: '#legendaryArmoryBody', body: '#legendaryModeContent', hero: '.arm-hero', mod: '#E545CA', hex: '#E545CA' }
   ];
 
   // ------------------------------------------------------------------ CSS (puro)
   function shellCSS(s) {
-    var P = s.panel, H = P + ' ' + s.head;
+    var P = s.panel, H = P + ' ' + s.head, B = s.body ? H + ' ' + s.body : H;
     return [
       // un solo contenedor: el panel, con el degradado del módulo de fondo
       P + '{padding:0 0 22px;background:linear-gradient(180deg,color-mix(in srgb,' + s.mod + ' ' + TINT + '%,transparent),transparent ' + FADE + 'px),var(--gn-tray,var(--bg-1))}',
       // la cabecera, sin caja: a todo el ancho y con una línea abajo
       P + ' ' + s.hero + '{border:0;border-bottom:1px solid var(--bd-1);border-radius:0;background:none;box-shadow:none;padding:20px ' + SIDE + 'px 18px}',
-      H + '{margin:0 0 12px}',
+      // con body (la Armería) la cabecera vive adentro: sin relleno, para que vaya a todo el ancho
+      s.body ? H + '{padding:0;margin:0}' : H + '{margin:0 0 12px}',
       // el resto, con aire a los costados
-      P + '>:not(' + s.head + '),' + H + '>:not(' + s.hero + '){margin-left:' + SIDE + 'px;margin-right:' + SIDE + 'px}'
+      P + '>:not(' + s.head + '),' + B + '>:not(' + s.hero + '){margin-left:' + SIDE + 'px;margin-right:' + SIDE + 'px}'
     ];
   }
 
   function mobileCSS(s) {
-    var P = s.panel, H = P + ' ' + s.head;
+    var P = s.panel, H = P + ' ' + s.head, B = s.body ? H + ' ' + s.body : H;
     return P + ' ' + s.hero + '{padding:14px ' + SIDE_M + 'px 12px}' +
-      P + '>:not(' + s.head + '),' + H + '>:not(' + s.hero + '){margin-left:' + SIDE_M + 'px;margin-right:' + SIDE_M + 'px}';
+      P + '>:not(' + s.head + '),' + B + '>:not(' + s.hero + '){margin-left:' + SIDE_M + 'px;margin-right:' + SIDE_M + 'px}';
   }
 
   function buildCSS(list) {

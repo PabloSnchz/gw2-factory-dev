@@ -21,10 +21,13 @@ function load(extra) {
   return sb;
 }
 const P = load().GNShell._pure;
-const VIEWS = { raids: 'js/raids-view.js', inventory: 'js/inv-view.js', activities: 'js/act-view.js', achievements: 'js/ach-view.js', wv: 'js/wv-view.js' };
+const VIEWS = { raids: 'js/raids-view.js', inventory: 'js/inv-view.js', activities: 'js/act-view.js', achievements: 'js/ach-view.js', wv: 'js/wv-view.js',
+  armory: ['js/render-catologo.js', 'js/legendary-tracker.js'] };
+const viewSrc = (id) => [].concat(VIEWS[id]).map(read).join('\n');
+const inner = (s) => s.panel + ' ' + s.head + (s.body ? ' ' + s.body : '');
 
 test('versión, presupuesto y manifiesto: después de gn-frame.js, fuera de index.html, sin pedidos ni almacenamiento', () => {
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.match(SRC, /Versión: 1\.1\.0/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
   assert.doesNotMatch(SRC, /fetch\(|localStorage|sessionStorage|Storage\.set/);
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}]/u, 'sin emojis');
@@ -34,14 +37,15 @@ test('versión, presupuesto y manifiesto: después de gn-frame.js, fuera de inde
   assert.doesNotMatch(read('index.html'), /gn-shell\.js/);
 });
 
-test('los 5 módulos renovados, cada uno con lo que su vista monta de verdad (si cambia, este test avisa)', () => {
+test('los 6 módulos renovados, cada uno con lo que su vista monta de verdad (si cambia, este test avisa)', () => {
   assert.deepEqual(JSON.parse(JSON.stringify(P.SHELLS.map((s) => s.id))), Object.keys(VIEWS));
   P.SHELLS.forEach((s) => {
-    const v = read(VIEWS[s.id]);
+    const v = viewSrc(s.id);
     const panelId = s.panel.match(/^#(\w+)/)[1], cls = (s.panel.match(/\.([\w-]+)$/) || [])[1];
     assert.ok(v.includes(panelId), s.id + ': la vista usa #' + panelId);
     if (cls) assert.ok(v.includes("'" + cls + "'"), s.id + ': la vista pone la clase ' + cls);
-    assert.ok(v.includes("'" + s.head.slice(1) + "'"), s.id + ': la vista crea ' + s.head);
+    assert.ok(v.includes("'" + s.head.slice(1) + "'") || v.includes("'" + s.head + "'"), s.id + ': la vista crea ' + s.head);
+    if (s.body) assert.ok(v.includes('id="' + s.body.slice(1) + '"'), s.id + ': la vista crea ' + s.body);
     assert.ok(v.includes(s.hero.slice(1) + '{'), s.id + ': la vista dibuja ' + s.hero);
   });
 });
@@ -51,12 +55,22 @@ test('un solo contenedor: panel sin relleno y con el degradado; cabecera sin caj
     const css = P.shellCSS(s).join('\n');
     assert.ok(css.includes(s.panel + '{padding:0 0 22px;background:linear-gradient(180deg,color-mix(in srgb,' + s.mod + ' 12%,transparent),transparent 300px),var(--gn-tray,var(--bg-1))}'), s.id + ': degradado en el panel');
     assert.ok(css.includes(s.panel + ' ' + s.hero + '{border:0;border-bottom:1px solid var(--bd-1);border-radius:0;background:none;box-shadow:none;'), s.id + ': la cabecera deja de ser una caja');
-    assert.ok(css.includes(s.panel + '>:not(' + s.head + '),' + s.panel + ' ' + s.head + '>:not(' + s.hero + '){margin-left:24px;margin-right:24px}'), s.id + ': aire a los costados');
+    assert.ok(css.includes(s.panel + '>:not(' + s.head + '),' + inner(s) + '>:not(' + s.hero + '){margin-left:24px;margin-right:24px}'), s.id + ': aire a los costados');
+    if (s.body) assert.ok(css.includes(s.panel + ' ' + s.head + '{padding:0;margin:0}'), s.id + ': el cuerpo sin relleno, la cabecera a todo el ancho');
     assert.ok(P.CSS.includes(s.panel + ' ' + s.hero + '{padding:14px 12px 12px}'), s.id + ': en el celular');
   });
   assert.match(P.CSS, /@media \(max-width:900px\)\{/);
   // Lo que se ve en Cartera y Metas: nada de borde ni esquinas propias en la cabecera.
   assert.doesNotMatch(P.CSS, /hero\{[^}]*border:1px solid/);
+});
+
+test('PUL-1: la Armería con un solo contenedor, en su color de la barra lateral y solo cuando su cabecera está montada', () => {
+  const a = P.SHELLS.filter((s) => s.id === 'armory')[0];
+  assert.equal(a.panel, '#legendaryArmoryPanel:has(.arm-hero)');
+  assert.match(read('js/render-catologo.js'), /var ARM_COLOR = '#E545CA';/);
+  assert.match(read('js/welcome-panel.js'), /id: 'armory'[^}]*color: '#E545CA'/);
+  assert.equal(a.hex, '#E545CA');
+  assert.ok(P.CSS.includes('#legendaryArmoryPanel:has(.arm-hero) #legendaryArmoryBody #legendaryModeContent>:not(.arm-hero){margin-left:12px;margin-right:12px}'), 'en el celular');
 });
 
 test('la cabecera de cada vista gana: las reglas pesan más que las de la vista', () => {
