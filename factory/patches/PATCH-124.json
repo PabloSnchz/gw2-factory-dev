@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-124",
+ "summary": "Docs PUL-3 (BL-070): orden nuevo de la barra lateral y la Bienvenida; PUL-1 y PUL-2 validados.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "9f04678dfe51b6cf4dc645f1eb897f617a0fee02",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 22:17Z",
+     "text": "Última actualización: 2026-10-25 22:42Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: PUL-2 HECHO (2026-10-25 22:17Z)",
+     "text": "Último hecho: PUL-3 HECHO (2026-10-25 22:42Z): el orden nuevo de la barra lateral y de la Bienvenida. Pablo validó PUL-1 y PUL-2 (22:38Z). Orden (D2): Cartera; lo diario: Metas y Eventos, Cámara del Brujo, Actividades y Heredad; lo semanal: Raids; el progreso de la cuenta: Logros, Inventario y Personajes y Armería Legendaria; Cuentas aparte. PATCH-123 (aplicado, suite verde antes y después): js/welcome-panel.js 2.4.0 (f2fc97a, 49.112 bytes, debajo del tope de 49.152 de su zona de advertencia) y js/sidebar-nav.js 2.2.5 (c5fd076) con la misma lista; index.html (1a19688, mismo tamaño) con ?v=2.4.0 y ?v=2.2.5; tests/sidebar-nav.test.cjs (af885b2) y tests/welcome-view.test.cjs (e01bb23) con el orden nuevo. La barra del celular no cambia (Inicio, Cartera, Metas, Armería y «Más»); la hoja «Más» sigue el orden nuevo. Mismos ids y rutas: el router no cambia. Antes, PUL-2 HECHO (2026-10-25 22:17Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: PUL-1 y PUL-2. La Armería con un solo contenedor (https://pablosnchz.github.io/gw2-factory-dev/#/account/legendary-armory) y el ícono de la cabecera igual en los 9 módulos: placa de 56 px, fondo oscuro y el brillo de su color de la barra lateral; Logros ahora en azul y la Cámara en su turquesa. Recorré los 9 módulos con Ctrl+F5, también en el celular (placa de 40 px).\n- [BL-070] Info: Pablo aprobó D1, D2 y D3 del pulido (22:13Z). Siguen PUL-3, el orden de la barra lateral, y PUL-4, el ícono de Inicio.\n",
+     "text": "- [BL-070] Validación: PUL-3, el orden nuevo de la barra lateral y de la Bienvenida (https://pablosnchz.github.io/gw2-factory-dev/#/welcome, con Ctrl+F5): Cartera, Metas y Eventos, Cámara del Brujo, Actividades, Heredad, Raids, Logros, Inventario y Personajes, Armería Legendaria y Cuentas aparte. En el celular, la hoja «Más» en el mismo orden.\n- [BL-070] Info: PUL-1 y PUL-2 VALIDADOS por Pablo (22:38Z). Sigue PUL-4, el ícono de Inicio.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "616bce8efa5f92c35b46a1940258133ec8d5fa58",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Pablo aprobó D1 a D3 (22:13Z); siguen PUL-3 el orden de la barra lateral y PUL-4 el ícono de Inicio.",
+     "text": "Pablo aprobó D1 a D3 (22:13Z); PUL-1 y PUL-2 VALIDADOS (22:38Z); PUL-3 el orden de la barra lateral y la Bienvenida HECHO (22:42Z, PATCH-123); sigue PUL-4 el ícono de Inicio."
+    }
+   ]
+  }
+ ]
+}
