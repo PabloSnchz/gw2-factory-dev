@@ -1,0 +1,114 @@
+{
+ "id": "PATCH-109",
+ "summary": "ACT-6 (BL-070, BL-055): home-view 1.1.0 dibuja las pestañas Glifos y Decoraciones de js/home-extra.js 1.0.0 (flechas, Inicio y Fin) y le pasa clics, búsqueda y selector; el manifiesto carga home-extra después de home-view; el test de home-view pide la 1.1.0.",
+ "files": [
+  {
+   "path": "js/home-view.js",
+   "base_sha": "b50e098f56f536e4a8e68040ec58e12b708ad576",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Proyecto: Bóveda del Gato Negro\n * Versión: 1.0.0 (2026-10-25) — ACT-5: módulo, ruta, barra lateral y la pestaña Nodos y gatos\n",
+     "text": " * Proyecto: Bóveda del Gato Negro\n * Versión: 1.1.0 (2026-10-25) — ACT-6: pestañas Glifos y Decoraciones (las dibuja js/home-extra.js); las\n *          pestañas se recorren con las flechas, Inicio y Fin\n * Versión: 1.0.0 (2026-10-25) — ACT-5: módulo, ruta, barra lateral y la pestaña Nodos y gatos\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Glifos y Decoraciones llegan en ACT-6. Se carga por js/modules.json (DEC-035).\n",
+     "text": " * Glifos y Decoraciones: si js/home-extra.js está cargado, sus pestañas aparecen y yo le paso los clics,\n * la búsqueda y el selector. Se carga por js/modules.json (DEC-035).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';\n",
+     "text": "  var VERSION = '1.1.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function viewHTML(m) {\n",
+     "text": "  /** Pestañas: Nodos y gatos siempre; las de HomeExtra si está cargado. ext = { tabs, tab, html }. */\n  function tabsHTML(tabs, cur) {\n    var h = '<div class=\"hs-tabs\" role=\"tablist\" aria-label=\"Secciones de la Heredad\">';\n    tabs.forEach(function (t) {\n      var on = t[0] === cur;\n      h += '<button type=\"button\" role=\"tab\" id=\"hsTab-' + t[0] + '\" data-hs-tab=\"' + t[0] + '\" aria-selected=\"' + on + '\" aria-controls=\"hsPanel-' + t[0] + '\" tabindex=\"' + (on ? 0 : -1) + '\">' + esc(t[1]) + '</button>';\n    });\n    return h + '</div>';\n  }\n\n  function viewHTML(m, ext) {\n    var tabs = [['nodes', 'Nodos y gatos']].concat((ext && ext.tabs) || []), tab = ext && ext.tab;\n    if (!tabs.some(function (t) { return t[0] === tab; })) tab = 'nodes';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    h += '<div class=\"hs-tabs\" role=\"tablist\" aria-label=\"Secciones de la Heredad\"><button type=\"button\" role=\"tab\" id=\"hsTab-nodes\" aria-selected=\"true\" aria-controls=\"hsPanel-nodes\" tabindex=\"0\">Nodos y gatos</button></div>';\n    h += '<div id=\"hsPanel-nodes\" role=\"tabpanel\" aria-labelledby=\"hsTab-nodes\">' + nodesHTML(m) + catsHTML(m) + '</div>';\n",
+     "text": "    h += tabsHTML(tabs, tab);\n    h += '<div id=\"hsPanel-' + tab + '\" role=\"tabpanel\" aria-labelledby=\"hsTab-' + tab + '\">' + (tab === 'nodes' ? nodesHTML(m) + catsHTML(m) : (ext.html || '')) + '</div>';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.hs-tabs [role=tab]{font:inherit;font-size:.92rem;background:none;border:0;border-bottom:2px solid var(--hs-mod);margin-bottom:-1px;padding:8px 14px;color:var(--tx-1);font-weight:700;min-height:40px}',\n",
+     "text": "    '.hs-tabs{overflow-x:auto}.hs-tabs [role=tab]{font:inherit;font-size:.92rem;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:8px 14px;color:var(--tx-2);min-height:40px;cursor:pointer;white-space:nowrap}',\n    '.hs-tabs [role=tab]:hover{color:var(--tx-1)}.hs-tabs [aria-selected=true]{border-bottom-color:var(--hs-mod);color:var(--tx-1);font-weight:700}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { cat: null, catP: null, data: null, ui: { group: 'all', only: 'all', q: '' }, cache: {}, shown: false, seq: 0, voiceKey: null, tick: null, day: null };\n",
+     "text": "  var st = { cat: null, catP: null, data: null, ui: { group: 'all', only: 'all', q: '', tab: 'nodes' }, cache: {}, shown: false, seq: 0, voiceKey: null, tick: null, day: null };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var ks = ['data-hs', 'data-hs-group', 'data-hs-only', 'data-hs-done', 'data-hs-own'];\n",
+     "text": "    var ks = ['data-hs', 'data-hs-tab', 'data-hs-group', 'data-hs-only', 'data-hs-done', 'data-hs-own', 'data-hx-only', 'data-hx-more'];\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var caret = a && a.id === 'hsQ' ? a.selectionStart : null;\n    host.innerHTML = viewHTML(m);\n",
+     "text": "    var caret = a && (a.id === 'hsQ' || a.id === 'hxQ') ? a.selectionStart : null;\n    host.innerHTML = viewHTML(m, extFor(st.ui.tab));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return m;\n  }\n",
+     "text": "    return m;\n  }\n\n  function extra() { var X = root.HomeExtra; return X && typeof X.html === 'function' && Array.isArray(X.tabs) ? X : null; }\n  function extFor(tab) {\n    var X = extra();\n    if (!X) return null;\n    var ok = X.tabs.some(function (t) { return t[0] === tab; }), html = '';\n    if (ok) { try { html = X.html(tab, { token: token() }); } catch (e) { html = '<p class=\"hs-txt\">Sin datos: no pude dibujar esta pestaña.</p>'; } }\n    return { tabs: X.tabs, tab: ok ? tab : 'nodes', html: html };\n  }\n  function tabIds() { var X = extra(); return ['nodes'].concat(X ? X.tabs.map(function (t) { return t[0]; }) : []); }\n  function goTab(id, focus) {\n    st.ui.tab = id;\n    render();\n    var b = focus && byId('hsTab-' + id);\n    if (b && b.focus) b.focus();\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    host.addEventListener('click', function (e) {\n      var a = attrOf(e.target);\n",
+     "text": "    host.addEventListener('click', function (e) {\n      var X = extra(), tb = null;\n      for (var n = e.target, i = 0; n && i < 4 && !tb; n = n.parentNode, i++) tb = n.getAttribute ? n.getAttribute('data-hs-tab') : null;\n      if (tb) { goTab(tb, false); return; }\n      if (X && typeof X.onClick === 'function' && X.onClick(e)) return;\n      var a = attrOf(e.target);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      if (a.act === 'refresh') { if (root.toast) root.toast('info', 'Actualizando tu heredad…', { ttl: 1500 }); load(true); return; }\n",
+     "text": "      if (a.act === 'refresh') {\n        if (root.toast) root.toast('info', 'Actualizando tu heredad…', { ttl: 1500 });\n        if (X && typeof X.refresh === 'function') X.refresh();\n        load(true); return;\n      }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    });\n    host.addEventListener('input', function (e) {\n",
+     "text": "    });\n    host.addEventListener('keydown', function (e) {\n      var t = e && e.target, id = t && t.getAttribute && t.getAttribute('data-hs-tab');\n      if (!id) return;\n      var ids = tabIds(), i = ids.indexOf(id), n = ids.length, k = e.key, j = -1;\n      if (k === 'ArrowRight') j = (i + 1) % n; else if (k === 'ArrowLeft') j = (i - 1 + n) % n;\n      else if (k === 'Home') j = 0; else if (k === 'End') j = n - 1;\n      if (j < 0) return;\n      if (e.preventDefault) e.preventDefault();\n      goTab(ids[j], true);\n    });\n    host.addEventListener('change', function (e) { var X = extra(); if (X && typeof X.onChange === 'function') X.onChange(e); });\n    host.addEventListener('input', function (e) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      var t = e && e.target;\n",
+     "text": "      var t = e && e.target, X = extra();\n      if (X && typeof X.onInput === 'function' && X.onInput(e)) return;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      nodesHTML: nodesHTML, catsHTML: catsHTML, viewHTML: viewHTML, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL, DONE_KEY: DONE_KEY, OWNED_KEY: OWNED_KEY }\n",
+     "text": "      nodesHTML: nodesHTML, catsHTML: catsHTML, tabsHTML: tabsHTML, viewHTML: viewHTML, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL, DONE_KEY: DONE_KEY, OWNED_KEY: OWNED_KEY }\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "c96cf12bfc3a80455f78820973ef485687d8f491",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/home-view.js\", \"v\": \"1.0.0\" }\n",
+     "text": "    { \"src\": \"js/home-view.js\", \"v\": \"1.1.0\" },\n    { \"src\": \"js/home-extra.js\", \"v\": \"1.0.0\" }\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/home-view.test.cjs",
+   "base_sha": "d71a9cdeec42c0acbdb2a7784cb579e048871888",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.0\\.0/);\n",
+     "text": "  assert.match(SRC, /Versión: 1\\.1\\.0/);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man[i].v, '1.0.0');\n",
+     "text": "  assert.equal(man[i].v, '1.1.0');\n"
+    }
+   ]
+  }
+ ]
+}
