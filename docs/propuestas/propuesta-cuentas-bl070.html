@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CTA-0 · Propuesta: Cuentas renovado (BL-070, paso 4)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--green:#3CC48A;--red:#F47C7C;--blue:#6EA3FF;--acc:#A896FF;--mod:#8E96A3;--main:#F2B94B;--alter:#B19CD9;--f2p:#7BC2FF}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}small,.mut{color:var(--muted)}
+a{color:#B9A8FF}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(142,150,163,.14),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2)}
+.tag--wait{border-color:var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(142,150,163,.16),var(--bg-1) 70%);padding:16px 18px}
+.row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-0);padding:6px;border:1px solid var(--bd-2);box-shadow:0 0 14px rgba(142,150,163,.55)}
+.ttl h3{margin:0;font-size:1.3rem}.ttl p{margin:2px 0 0;font-size:.86rem}
+.pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}
+.pill b{color:var(--tx-1)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem}.st b span{font-size:.8rem;color:var(--muted);font-weight:500}.st em{display:block;font-style:normal;font-size:.74rem;color:var(--muted)}
+.voice{display:flex;gap:10px;align-items:center;margin-top:12px;border:1px solid var(--bd-1);border-radius:12px;padding:8px 12px;background:var(--bg-0)}
+.voice .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2C9398,#442283);flex-shrink:0}
+.voice small{display:block;font-size:.72rem;color:var(--acc);font-weight:700}
+.tabs{display:flex;gap:4px;margin:16px 0 10px;border-bottom:1px solid var(--bd-1);flex-wrap:wrap}
+.tabs span{padding:8px 14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs .on{color:var(--tx-1);font-weight:700;border-bottom-color:var(--mod)}
+.accs{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.ac{border:1px solid var(--bd-1);border-left:3px solid var(--tc);border-radius:14px;background:var(--bg-1);padding:12px 14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.ac--main{--tc:var(--main)}.ac--alter{--tc:var(--alter)}.ac--f2p{--tc:var(--f2p)}
+.ac-h{display:flex;gap:12px;align-items:center}
+.av2{width:52px;height:52px;border-radius:12px;background:var(--bg-0);border:1px solid var(--bd-2);box-shadow:0 0 12px color-mix(in srgb,var(--tc) 55%,transparent);flex-shrink:0}
+.ac-h .nm{flex:1;min-width:0}.ac-h .nm b{font-size:1.05rem}.ac-h .nm small{display:block;font-size:.78rem}
+.typ{font-size:.72rem;font-weight:700;border:1px solid var(--tc);color:var(--tc);border-radius:999px;padding:1px 8px}
+.act{font-size:.72rem;font-weight:700;color:var(--green);border:1px solid var(--green);border-radius:999px;padding:1px 8px}
+.exps{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
+.ex{width:28px;height:28px;border-radius:6px;background:var(--bg-2);border:1px solid var(--bd-2);font-size:.6rem;display:flex;align-items:center;justify-content:center;color:var(--tx-2);font-weight:700}
+.ex.off{opacity:.3}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.fc{border:1px solid var(--bd-1);border-radius:9px;padding:6px 8px;background:var(--bg-0);font-size:.76rem;color:var(--muted)}
+.fc b{display:block;color:var(--tx-1);font-size:.9rem}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cr{font-size:.72rem;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px;color:var(--tx-2);background:var(--bg-0)}
+.warn{font-size:.78rem;color:var(--amber);margin-top:8px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.card{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.cred{display:grid;grid-template-columns:22px 110px 1fr auto auto;gap:8px;align-items:center;border-bottom:1px solid var(--bd-1);padding:7px 0;font-size:.88rem}
+.cred .k{color:var(--muted)}.cred .v{font-family:ui-monospace,monospace}
+.i{width:20px;height:20px;border-radius:5px;background:var(--bg-2);border:1px solid var(--bd-2)}
+.btn{font-size:.82rem;font-weight:700;border-radius:10px;padding:6px 11px;background:var(--mod);color:#0F1117;white-space:nowrap}
+.btn--ghost{background:transparent;color:var(--tx-1);border:1px solid var(--bd-2)}
+.lock{display:flex;gap:10px;align-items:center;border:1px solid var(--bd-1);border-radius:12px;padding:10px 12px;background:var(--bg-0);font-size:.85rem}
+.input{flex:1;border:1px solid var(--bd-2);border-radius:10px;padding:8px 12px;color:var(--muted);background:var(--bg-1)}
+.phone{width:360px;max-width:100%;border:10px solid #050608;border-radius:34px;padding:12px;background:var(--bg-0);margin:0 auto}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}.pills{margin-left:0}.facts{grid-template-columns:1fr 1fr}.cred{grid-template-columns:22px 1fr auto}.cred .k{display:none}}
+</style>
+</head>
+<body>
+<main>
+
+<div class="doc-head">
+  <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/3601748.png" alt="">
+  <div style="flex:1;min-width:260px">
+    <h1>Cuentas renovado — propuesta visual</h1>
+    <p>BL-070, paso 4 · CTA-0 · Shiruvana · 2026-10-25</p>
+  </div>
+  <span class="tag tag--wait">ESPERA TU APROBACIÓN</span>
+</div>
+
+<p class="note">El proceso es el mismo que en los pasos anteriores: te muestro lo que medí y cómo lo veo, vos decidís, y después avanzo paso por paso con tu validación en cada uno. No toco código hasta que apruebes. Este módulo guarda <b>contraseñas</b>, así que esta vez la seguridad pesa tanto como el diseño. En las maquetas, los cuadrados marcan dónde van los íconos oficiales del juego. Los nombres y números son de ejemplo.</p>
+
+<h2>1. Lo que medí en el módulo de hoy</h2>
+<p>Leí <code>js/accounts-panel.js</code> completo (2.0.2, 67,6 KB, congelado) y lo comparé con la documentación oficial de la API (<code>/v2/account</code>) y con la de la librería de cifrado que usa.</p>
+<table>
+<thead><tr><th>Gravedad</th><th>Qué pasa</th><th>Lo que medí</th></tr></thead>
+<tbody>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Los puntos de logro, los espacios de personaje, las bolsas, el banco y los materiales nunca se completan.</b> La tarjeta muestra «0 AP» y «— chars».</td><td>Al completar los datos desde la API, el código lee <code>achievement_points</code>, <code>slots</code>, <code>bag_slots</code>, <code>bank_slots</code> y <code>material_storage</code>. <code>/v2/account</code> no devuelve ninguno de esos campos. Devuelve nombre, edad, mundo, clanes, fecha de creación, <code>access</code>, comandante, nivel de fractales, puntos de logro diarios y mensuales y rango de WvW.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Las expansiones se detectan mal.</b></td><td>El código busca «hot», «pof», «eod»… dentro de los nombres de los nodos de la casa. Pero la API ya informa las expansiones directamente en <code>access</code>: <code>GuildWars2</code>, <code>HeartOfThorns</code>, <code>PathOfFire</code> (que también da Heart of Thorns), <code>EndOfDragons</code>, <code>SecretsOfTheObscure</code> y <code>JanthirWilds</code>. Visions of Eternity no se marca nunca: el código no la busca. Cómo la nombra la API lo confirmo en CTA-1.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>El asistente te descarga tus contraseñas sin cifrar.</b></td><td>Los pasos 2 y 3 del asistente (Excel → JSON → completar con la API) bajan a tu disco un <code>.json</code> en texto plano con todas las contraseñas. Recién en el paso 4 se cifra. Ese archivo y el Excel quedan en Descargas si no los borrás a mano.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>El cifrado es débil frente a un ataque de fuerza bruta.</b></td><td>Usa <code>CryptoJS.AES</code> con la contraseña tal cual. Con eso, CryptoJS genera la clave con una sola pasada de MD5 (EVP_BytesToKey) y cifra en CBC sin verificar que el archivo no haya sido alterado. OWASP recomienda PBKDF2-HMAC-SHA256 con 600.000 iteraciones o más. Además queda una copia cifrada en el navegador (<code>accounts:lastFile</code>), de modo que alcanza con acceder al navegador para intentar adivinar la contraseña.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Lo que viene de la API es una foto vieja.</b></td><td>Los datos de la API se guardan dentro del archivo el día que lo completaste y no se actualizan nunca más. Tampoco usa las Keys que ya cargaste en la Bóveda: para ver algo nuevo hay que rehacer el archivo.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>No se puede editar nada desde la app.</b></td><td>Para cambiar una contraseña o una etiqueta hay que volver a pasar por Excel → JSON → completar → cifrar: son 4 archivos y 4 subidas.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Las contraseñas quedan a la vista.</b></td><td>Una vez que las mostrás, quedan visibles hasta que las ocultes a mano. No hay bloqueo automático, y lo que copiás queda en el portapapeles indefinidamente.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Legendarias siempre en 0.</b></td><td>El campo <code>legendaries</code> no se completa en ningún lado. Ese número la API lo informa en <code>/v2/account/legendaryarmory</code>.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>El ícono de cada tarjeta se elige al azar</b> y cambia cada vez que se redibuja, por ejemplo al escribir en el buscador.</td><td><code>Math.random()</code> sobre 9 íconos.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Falta el resumen que tenía Personajes</b> y que quedó pendiente para acá en FEAT-015: puntos de logro, rango de PvP y WvW y etiqueta del clan.</td><td>—</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Herencia visual.</b></td><td>193 estilos en línea, 29 emojis y 1 solo atributo de accesibilidad. El título «Panel de Cuentas» usa un ícono de 32 px, fuera del marco común. La consola dice «v2.0.0» y el archivo es 2.0.2.</td></tr>
+</tbody>
+</table>
+<p class="mut">Lo que funciona y se queda: tu archivo <code>.enc</code> actual (lo sigo leyendo sin que hagas nada), las etiquetas (main, alter, f2p, farming, llaves, weekly, taxi) y su sincronización con las Keys, la plantilla Excel como forma de importar, y que todo pase en tu navegador, sin servidores.</p>
+
+<h2>2. Dos preguntas, dos pestañas</h2>
+<p>Hoy el módulo mezcla dos cosas distintas. Una es <b>«¿cómo están mis cuentas?»</b>, que son datos del juego y no son secretos. La otra es <b>«¿cuál era la contraseña de esta cuenta?»</b>, que sí es secreto. Las separo:</p>
+<ul>
+<li><b>Mis cuentas</b>: en vivo, con las Keys que ya tenés en la Bóveda, sin archivo ni contraseña. Es la pestaña con la que abre el módulo.</li>
+<li><b>Llavero</b>: tus credenciales cifradas. Se abre con tu contraseña y se cierra solo.</li>
+</ul>
+
+<div class="frame">
+<p class="frame-label">Maqueta · computadora · pestaña Mis cuentas</p>
+<div class="hero">
+  <div class="row">
+    <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/3601748.png" alt="">
+    <div class="ttl"><h3>Cuentas</h3><p class="mut">4 cuentas con Key · leído hace 1 min</p></div>
+    <div class="pills"><span class="pill">Activa <b>Gato Negro.1234</b></span><span class="pill">Administrar Keys</span><span class="pill">Actualizar</span></div>
+  </div>
+  <div class="stats">
+    <div class="st"><small>Cuentas</small><b>4</b><em>1 main · 2 alter · 1 f2p</em></div>
+    <div class="st"><small>Puntos de logro</small><b>58.214</b><em>sumando las 4</em></div>
+    <div class="st"><small>Legendarias</small><b>37</b><em>en la armería, entre todas</em></div>
+    <div class="st"><small>Keys</small><b>3 <span>/ 4 completas</span></b><em>a 1 le faltan permisos</em></div>
+  </div>
+  <div class="voice"><span class="av"></span><div><small>Shiruvana</small>A «Farm 2» le faltan los permisos de progreso: no puedo leer su nivel de fractales ni su rango de WvW. Si querés verlos, generá la Key de nuevo con «progression».</div></div>
+</div>
+<div class="tabs"><span class="on">Mis cuentas</span><span>Llavero</span></div>
+<div class="accs">
+  <div class="ac ac--main">
+    <div class="ac-h"><span class="av2"></span><div class="nm"><b>Gato Negro.1234</b><small>Creada el 28/08/2012 · 14 años</small></div><span class="typ">main</span><span class="act">Activa</span></div>
+    <div class="exps"><span class="ex">GW2</span><span class="ex">HoT</span><span class="ex">PoF</span><span class="ex">EoD</span><span class="ex">SotO</span><span class="ex">JW</span><span class="ex">VoE</span></div>
+    <div class="facts">
+      <div class="fc">Logros<b>41.870</b></div>
+      <div class="fc">Maestría<b>412</b></div>
+      <div class="fc">Legendarias<b>31</b></div>
+      <div class="fc">Fractales<b>nivel 100</b></div>
+      <div class="fc">WvW<b>rango 2.318</b></div>
+      <div class="fc">PvP<b>rango 84</b></div>
+    </div>
+    <div class="chips"><span class="cr">[GN] Gato Negro</span><span class="cr">[DUO] Dúo</span><span class="cr">Comandante</span><span class="cr">llaves</span><span class="cr">weekly</span></div>
+  </div>
+  <div class="ac ac--alter">
+    <div class="ac-h"><span class="av2"></span><div class="nm"><b>Farm Dos.5678</b><small>Creada el 03/05/2019 · 7 años</small></div><span class="typ">alter</span><span class="btn btn--ghost">Usar esta</span></div>
+    <div class="exps"><span class="ex">GW2</span><span class="ex">HoT</span><span class="ex">PoF</span><span class="ex off">EoD</span><span class="ex off">SotO</span><span class="ex off">JW</span><span class="ex off">VoE</span></div>
+    <div class="facts">
+      <div class="fc">Logros<b>9.204</b></div>
+      <div class="fc">Maestría<b>96</b></div>
+      <div class="fc">Legendarias<b>4</b></div>
+      <div class="fc">Fractales<b>Sin permiso</b></div>
+      <div class="fc">WvW<b>Sin permiso</b></div>
+      <div class="fc">PvP<b>rango 12</b></div>
+    </div>
+    <div class="chips"><span class="cr">farming</span><span class="cr">taxi</span></div>
+    <p class="warn">A la Key le falta «progression».</p>
+  </div>
+</div>
+<p class="mut" style="margin-top:10px">Cada tarjeta lleva el color de su tipo (main oro, alter violeta, f2p celeste), con el mismo brillo que los íconos de los títulos. Las expansiones van con su ícono oficial, apagado si no la tenés. Los números salen de la API cada vez que abrís el módulo, con caché. Si una lectura falla, la tarjeta dice «Sin datos», y si a la Key le falta un permiso dice «Sin permiso». Nunca muestra un 0 falso.</p>
+</div>
+
+<div class="frame">
+<p class="frame-label">Maqueta · pestaña Llavero (abierto)</p>
+<div class="lock"><span class="i"></span><span>Llavero abierto · <b>cuentas.enc</b> · se cierra solo en <b>4:12</b></span><span class="btn btn--ghost" style="margin-left:auto">Cerrar ya</span><span class="btn btn--ghost">Agregar cuenta</span><span class="btn">Guardar</span></div>
+<div class="cols" style="margin-top:12px">
+<div class="card">
+  <h3 style="margin-top:0">Gato Negro.1234 <small class="mut">· main</small></h3>
+  <div class="cred"><span class="i"></span><span class="k">Email</span><span class="v">gato•••@gmail.com</span><span class="btn btn--ghost">Ver</span><span class="btn btn--ghost">Copiar</span></div>
+  <div class="cred"><span class="i"></span><span class="k">Contraseña</span><span class="v">••••••••••</span><span class="btn btn--ghost">Ver</span><span class="btn btn--ghost">Copiar</span></div>
+  <div class="cred"><span class="i"></span><span class="k">Gmail</span><span class="v">••••••••••</span><span class="btn btn--ghost">Ver</span><span class="btn btn--ghost">Copiar</span></div>
+  <div class="cred"><span class="i"></span><span class="k">Twitch</span><span class="v">@gatonegro · vinculada</span><span class="btn btn--ghost">Ver</span><span class="btn btn--ghost">Copiar</span></div>
+  <div class="cred"><span class="i"></span><span class="k">GeForce NOW</span><span class="v">vinculada</span><span></span><span></span></div>
+  <div class="cred"><span class="i"></span><span class="k">API Key</span><span class="v">ABCD-••••-••••-5678</span><span></span><span class="btn btn--ghost">Copiar</span></div>
+  <p class="mut" style="font-size:.8rem;margin-top:8px">Notas: «cuenta principal, todas las expansiones». Botón «Editar» para cambiar cualquier dato desde acá.</p>
+</div>
+<div class="card">
+  <h3 style="margin-top:0">Cómo te cuido los datos</h3>
+  <ul style="margin:0;padding-left:18px;color:var(--tx-2);font-size:.9rem">
+    <li>Todo enmascarado. «Ver» muestra un dato y se vuelve a ocultar a los 20 segundos.</li>
+    <li>«Copiar» intenta vaciar el portapapeles a los 30 segundos, si seguís en la pestaña.</li>
+    <li>El Llavero se cierra solo a los 5 minutos sin uso y al salir del módulo. Al cerrarse se borran de la memoria los datos descifrados.</li>
+    <li>Cifrado nuevo (D2): PBKDF2-SHA256 con 600.000 iteraciones y AES-GCM de 256 bits, con la criptografía del navegador, sin librerías externas.</li>
+    <li>Importar desde Excel cifra directamente en el navegador. Nunca baja un archivo con tus contraseñas en claro.</li>
+  </ul>
+</div>
+</div>
+<p class="mut" style="margin-top:10px">Con el Llavero cerrado se ve un solo recuadro: «Abrir con tu contraseña» si ya hay archivo guardado, o «Elegir archivo .enc» / «Crear Llavero nuevo» / «Importar desde Excel» si no.</p>
+</div>
+
+<div class="frame">
+<p class="frame-label">Maqueta · celular · Mis cuentas</p>
+<div class="phone">
+  <div class="row" style="gap:10px"><span class="hero-ico" style="width:40px;height:40px;display:inline-block"></span><b>Cuentas</b><span class="pill" style="margin-left:auto">4</span></div>
+  <div class="tabs"><span class="on">Mis cuentas</span><span>Llavero</span></div>
+  <div class="ac ac--main">
+    <div class="ac-h"><span class="av2" style="width:40px;height:40px"></span><div class="nm"><b>Gato Negro.1234</b><small>14 años · Activa</small></div><span class="typ">main</span></div>
+    <div class="exps"><span class="ex">GW2</span><span class="ex">HoT</span><span class="ex">PoF</span><span class="ex">EoD</span><span class="ex">SotO</span><span class="ex">JW</span><span class="ex">VoE</span></div>
+    <div class="facts"><div class="fc">Logros<b>41.870</b></div><div class="fc">Legend.<b>31</b></div></div>
+  </div>
+</div>
+</div>
+
+<h2>3. Cómo lo construyo</h2>
+<ul>
+<li>Archivos nuevos y chicos (40 KB como máximo, DEC-035) cargados por <code>js/modules.json</code>, como en Raids, Inventario y Actividades: un modelo para leer la API, la vista de las dos pestañas y el Llavero con el cifrado aparte, para poder testearlo solo. <code>accounts-panel.js</code> no se toca hasta el retiro final.</li>
+<li>Mis cuentas usa las Keys del gestor de la Bóveda (<code>gn:account:keys</code>) y la capa <code>GW2Api</code> con caché. Para cada cuenta: <code>/v2/account</code> (expansiones, edad, comandante, fractales, WvW), <code>/v2/tokeninfo</code> (permisos), <code>/v2/account/mastery/points</code>, <code>/v2/account/legendaryarmory</code>, <code>/v2/pvp/stats</code> y <code>/v2/guild/:id</code> (etiqueta del clan). Los puntos de logro se calculan igual que en Logros, sumando con <code>Number(a.current)||0</code> (lo aprendido en idea78).</li>
+<li>Compatibilidad: tu <code>.enc</code> de hoy se sigue abriendo. Al guardar con el cifrado nuevo se escribe un archivo <b>aparte</b> y el viejo no se pisa (D2).</li>
+<li>Tests del cifrado con vectores fijos: un archivo hecho como hoy se abre, uno nuevo se abre, una contraseña mala falla y un archivo alterado se rechaza. Ninguna contraseña real en el repo.</li>
+<li>Marco común (FEAT-013), ícono de título de 56 px con el brillo gris de Cuentas (#8E96A3) por <code>gn-shell</code>, y la guarda de contraste en los 19 themes.</li>
+<li>Vuelta atrás simple en cada paso: si saco el archivo nuevo de <code>js/modules.json</code>, el módulo queda como hoy.</li>
+</ul>
+
+<h2>4. Plan paso por paso (cada uno con tu validación)</h2>
+<table>
+<thead><tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr></thead>
+<tbody>
+<tr><td>CTA-1</td><td>Modelo de Mis cuentas: lectura por Key con los endpoints de arriba, cómo nombra la API a Visions of Eternity y el cálculo de puntos de logro. Con sus tests.</td><td>Nada en pantalla todavía. Te paso el informe de lo verificado, y vos lo confirmás con tus cuentas reales en CTA-2.</td></tr>
+<tr><td>CTA-2</td><td>Vista nueva: cabecera, 4 indicadores, la línea de Shiruvana, la pestaña Mis cuentas y «Usar esta». Cuentas entra en <code>gn-shell</code>. La pestaña Llavero muestra el panel de hoy sin cambios.</td><td>Tus cuentas en vivo, con expansiones y números reales.</td></tr>
+<tr><td>CTA-3</td><td>Llavero, parte 1: cifrado nuevo (archivo aparte), lectura del <code>.enc</code> de hoy, abrir y cerrar, bloqueo a los 5 minutos y la lista enmascarada con Ver y Copiar.</td><td>El Llavero nuevo, solo lectura.</td></tr>
+<tr><td>CTA-4</td><td>Llavero, parte 2: agregar, editar y borrar cuentas desde la app, Guardar e importar desde Excel cifrando en el navegador. Se va el asistente de 4 archivos.</td><td>Editás sin pasar por Excel.</td></tr>
+<tr><td>CTA-5</td><td>Retiro de lo viejo con el orden de LES-039 y revisión final: 19 themes, teclado, lector, celular y movimiento reducido. FEAT-017.</td><td>Lo mismo, más liviano.</td></tr>
+</tbody>
+</table>
+
+<h2>5. Lo que necesito que decidas</h2>
+<table>
+<thead><tr><th></th><th>Decisión</th><th>Lo que recomiendo</th></tr></thead>
+<tbody>
+<tr><td><b>D1</b></td><td>¿Separamos «Mis cuentas» (en vivo, sin contraseña) y «Llavero» (cifrado)?</td><td><b>Sí.</b> La mayoría de las veces querés ver tus cuentas, no tus contraseñas, y para eso no tiene sentido descifrar nada. Además, lo secreto queda abierto el menor tiempo posible.</td></tr>
+<tr><td><b>D2</b></td><td>¿Cifrado nuevo (PBKDF2-SHA256 con 600.000 iteraciones + AES-GCM)?</td><td><b>Sí, guardando en un archivo aparte</b> (<code>…-v2.enc</code>). Tu <code>.enc</code> de hoy se sigue abriendo y no lo piso. Ojo: la versión de producción no abre el archivo nuevo hasta que vos decidas promover; mientras tanto, el viejo te sigue sirviendo allá.</td></tr>
+<tr><td><b>D3</b></td><td>¿Mantener la copia cifrada en el navegador para no elegir el archivo cada vez?</td><td><b>Sí, pero solo con el cifrado nuevo.</b> Es cómodo y, con 600.000 iteraciones, adivinar la contraseña deja de ser barato. La copia del formato viejo la borro cuando guardes el primer <code>-v2</code>.</td></tr>
+<tr><td><b>D4</b></td><td>¿Bloqueo automático a los 5 minutos, «Ver» por 20 segundos y vaciar el portapapeles a los 30?</td><td><b>Sí.</b> Son los tiempos de los gestores de contraseñas conocidos y no molestan en el uso normal.</td></tr>
+<tr><td><b>D5</b></td><td>¿Editar desde la app y dejar Excel solo como importación?</td><td><b>Sí.</b> Saca los 4 archivos del medio, y con ellos el <code>.json</code> en claro que hoy queda en Descargas.</td></tr>
+<tr><td><b>D6</b></td><td>Los puntos de logro piden leer todos tus logros. Con 4 cuentas son 4 lecturas grandes. ¿Automático o a pedido?</td><td><b>Automático con caché de 6 horas.</b> Así lo ves al entrar sin gastar la API cada vez, y «Actualizar» lo fuerza.</td></tr>
+<tr><td><b>D7</b></td><td>¿Mis cuentas muestra también cuentas que están en el Llavero pero no tienen Key en la Bóveda?</td><td><b>Sí, como tarjeta gris</b> con nombre y etiquetas y el aviso «Sin Key: cargala para ver sus datos». Solo aparecen con el Llavero abierto.</td></tr>
+</tbody>
+</table>
+
+<p class="note">Fuentes: <code>js/accounts-panel.js</code> 2.0.2 leído completo; la página «API:2/account» de la wiki oficial (campos de <code>/v2/account</code> y valores de <code>access</code>); el OWASP Password Storage Cheat Sheet (PBKDF2-HMAC-SHA256, 600.000 iteraciones o más); y el issue #534 de crypto-js (con una contraseña, CryptoJS genera la clave con EVP_BytesToKey, MD5 y 1 iteración, y cifra en CBC sin autenticación). Todo consultado el 2026-10-25.</p>
+
+</main>
+</body>
+</html>
