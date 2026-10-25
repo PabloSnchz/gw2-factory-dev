@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-120",
+ "summary": "Docs PUL-1 (BL-070): paso 3 validado, pulido transversal pedido por Pablo, la Armería con un solo contenedor y las 3 decisiones del pulido.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "d7bb83624fca40e9a06a9430f5907227c0826341",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 21:12Z",
+     "text": "Última actualización: 2026-10-25 22:01Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-7c HECHO (2026-10-25 21:12Z)",
+     "text": "Último hecho: PUL-1 HECHO (2026-10-25 22:01Z): la Armería Legendaria con un solo contenedor. Pablo validó el paso 3 completo (21:55Z) y, antes del paso 4, pidió un pulido transversal en 4 puntos: (1) los íconos de título de panel iguales en todos los módulos, 56 × 56 y con el brillo de la Cartera en el color de la barra lateral; (2) la Armería sin el contenedor único; (3) el orden de la barra lateral; (4) un ícono nuevo para Inicio, porque la Heredad usa el que era de Inicio. Lo que medí de los íconos (código publicado): Cartera, placa de 48 px con el ícono a 30 px, fondo --bg-0, borde de 1 px y un brillo dorado fijo (rgba(242,185,75,.18), que coincide con su color); Metas, placa de 56 px con el ícono a 34 px y sombra negra, sin color; Logros, la Cámara y la Armería, el ícono a 56 px más 6 px de relleno (68 px en total) sobre gris (--bg-2), sin anillo; Raids, Inventario, Actividades y la Heredad, placa de 56 px con el ícono a 44 px sobre gris y un anillo sólido de 2 px del color del módulo. Además, js/gn-shell.js pinta el degradado de Logros en ámbar (#E8A33D) y el de la Cámara en #4FC3D9, pero la barra lateral los pinta #6EA3FF y #15C3B7. PATCH-119 (aplicado, suite verde antes y después): js/gn-shell.js 1.1.0 (ecdb202) suma la Armería: su cabecera la dibuja js/render-catologo.js dentro de #legendaryArmoryBody > #legendaryModeContent y el panel no lleva clase, así que la regla se activa con #legendaryArmoryPanel:has(.arm-hero) (si el navegador no soporta :has, el panel queda como estaba); degradado #E545CA, el de la barra lateral; tests/gn-shell.test.cjs (489b106) con 6 módulos y un test de la Armería; js/modules.json (349d70b). Sin tocar render-catologo.js ni legendary-tracker.js (congelados). Antes, ACT-7c HECHO (2026-10-25 21:12Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: el paso 3 completo, Actividades y la Heredad (FEAT-016). Recorré https://pablosnchz.github.io/gw2-factory-dev/#/activities (Hoy: fabricación, fractales y PSNA; Semana: la llave con la guía de la comunidad y las piedras, marcá una y cambiá de cuenta) y https://pablosnchz.github.io/gw2-factory-dev/#/account/homestead (Nodos y gatos, Glifos y Decoraciones), también con el teclado y en el celular. Lo único que cambió en ACT-7c no se ve: act-week ya no busca el −/+ de la pantalla vieja. Con tu ok cierro el paso 3 y arranco el paso 4, Cuentas, con la propuesta visual.\n",
+     "text": "- [BL-070] Validación: PUL-1, la Armería Legendaria con un solo contenedor (https://pablosnchz.github.io/gw2-factory-dev/#/account/legendary-armory): el degradado magenta en todo el panel, la cabecera a todo el ancho sin caja propia y el contenido con aire a los costados, como en los otros módulos.\n- [BL-070] Decisión: pulido antes del paso 4. D1, el color de cada módulo es el de la barra lateral también en el degradado y las pestañas (Logros pasa de ámbar a azul y la Cámara de #4FC3D9 a #15C3B7); recomiendo sí. D2, el orden de la barra lateral: recomiendo Cartera, Metas y Eventos, Cámara del Brujo, Actividades, Heredad, Raids, Logros, Inventario y Personajes, Armería Legendaria (lo diario junto, después lo semanal y al final el progreso de la cuenta). D3, el ícono de Inicio: la brújula del mapa del mundo, si consigo la imagen oficial; si no, el punto de ruta de la API.\n- [BL-070] Info: el paso 3 (Actividades y la Heredad, FEAT-016) VALIDADO por Pablo (21:55Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "80a14d8310ffeb38d450cfb04c7bbbabf97ba567",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "El paso 3 completo espera la validación de Pablo; sigue el paso 4, Cuentas, con la propuesta visual primero. SHIRUVANA-ART-001",
+     "text": "Paso 3 VALIDADO por Pablo (21:55Z). Pulido transversal antes del paso 4, pedido por Pablo (21:55Z): PUL-1 la Armería con un solo contenedor HECHO (22:01Z, PATCH-119, gn-shell 1.1.0); siguen PUL-2 los íconos de cabecera iguales (56 × 56, brillo de la Cartera en el color de la barra lateral), PUL-3 el orden de la barra lateral y PUL-4 el ícono de Inicio. Después, el paso 4, Cuentas, con la propuesta visual primero. SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
