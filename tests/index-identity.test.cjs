@@ -55,9 +55,7 @@ test('index.html pide la versión del selector que trae el theme oficial', () =>
 
 test('FP-4 (DEC-035): zona segura, characters-theme una sola vez y el cargador de módulos al final', () => {
   assert.match(HTML, /<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"\/>/);
-  assert.equal((HTML.match(/js\/characters-theme\.js/g) || []).length, 1, 'characters-theme.js se carga una sola vez (BL-005)');
-  assert.match(HTML, /<script defer src="js\/characters\.js\?v=[\d.]+"><\/script>\s*<script defer src="js\/characters-theme\.js\?v=[\d.]+"><\/script>/,
-    'la que queda va con defer, después de characters.js');
+  assert.equal((HTML.match(/js\/characters(-theme)?\.js/g) || []).length, 0, 'Personajes viejo y su tema ya no se cargan (BL-070 INV-7)');
   const boot = HTML.match(/<script defer src="js\/boot\.js\?v=([\d.]+)"><\/script>/);
   assert.ok(boot, 'index.html carga el cargador');
   const defers = [...HTML.matchAll(/<script defer src="([^"]+)"/g)];

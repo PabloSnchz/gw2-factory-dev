@@ -150,7 +150,7 @@ console.log('\n[7] Cache-busting: index.html apunta a la version nueva');
   const apiVer = (apiSrc.match(/Versi\u00f3n:\s*([\d.]+)/) || [])[1];
   ok('api-gw2.js?v= alineado con su header (' + apiVer + ')',
      !!apiVer && new RegExp('js/api-gw2\\.js\\?v=' + apiVer.replace(/\./g, '\\.')).test(html));
-  ok('inventory-hub.js?v=1.4.0', /js\/inventory-hub\.js\?v=1\.4\.0/.test(html));
+  ok('index.html ya no carga inventory-hub.js (BL-070 INV-7)', !/js\/inventory-hub\.js/.test(html));
   ok('no queda api-gw2 en 2.17.x', !/api-gw2\.js\?v=2\.17/.test(html));
 }
 

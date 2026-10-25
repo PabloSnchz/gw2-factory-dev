@@ -1,6 +1,13 @@
 /*!
  * Router y Vistas (WV Objetivos + Tienda unificada)
- * v2.18.2 (2026-10-25) — sin restos de StrikeTracker (BL-070 RAI-6)
+ * v2.19.0 (2026-10-25) — Inventario y Personajes sin las pantallas viejas (BL-070 INV-7a)
+ *
+ * Cambios v2.19.0:
+ *  - #/account/characters ya no activa InventoryHub: la vista nueva (js/inv-*.js) se activa sola.
+ *  - #/inventory/dashboard abre la pestaña Multicuenta de #/account/characters.
+ *  - Cambiar de cuenta ya no refresca InventoryHub, Characters ni InventoryDashboard.
+ *
+ * Antes, v2.18.2 — sin restos de StrikeTracker (BL-070 RAI-6)
  *
  * Cambios v2.18.2:
  *  - StrikeTracker sale de MODULOS_CON_LATCH, de showPanel y de updateSidebarFor: el módulo ya no existe.
@@ -41,7 +48,7 @@
 (function () {
   'use strict';
 
-  console.info('[WV] router-wv.js v2.18.2 — Fases 1-3 completas + fixes');
+  console.info('[WV] router-wv.js v2.19.0 — Fases 1-3 completas + fixes');
 
   var $  = function (sel, root) { return (root || document).querySelector(sel); };
   var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
@@ -1100,18 +1107,12 @@
         }
 
         if (h === '#/inventory/dashboard') {
+          // BL-070 INV-7: el Dashboard multicuenta es la pestaña Multicuenta de Inventario y Personajes.
           try {
-            showPanel('inventoryDashboardPanel');
-            if (typeof Analytics !== 'undefined') Analytics.viewModule('inventory_dashboard');
-            if (window.InventoryDashboard && typeof window.InventoryDashboard.activate === 'function') {
-              window.InventoryDashboard.activate();
-            }
-          } catch (e) {
-            console.warn('[router] show inventory dashboard error', e);
-          } finally {
-            updateSidebarFor('inventoryDashboard');
-            setActiveNav(h);
-          }
+            if (window.InvView && typeof window.InvView.go === 'function') window.InvView.go('multi');
+            else if (window.Storage && typeof window.Storage.set === 'function') window.Storage.set('gn:inventory:tab', 'multi');
+          } catch (_) {}
+          location.replace('#/account/characters');
           return;
         }
 
@@ -1253,11 +1254,8 @@
           try {
             showPanel('inventoryPanel');
             if (typeof Analytics !== 'undefined') Analytics.viewModule('inventory');
-            if (window.InventoryHub && typeof window.InventoryHub.activate === 'function') {
-              window.InventoryHub.activate();
-            }
           } catch (e) {
-            console.warn('[router] InventoryHub.activate error', e);
+            console.warn('[router] show inventory error', e);
           } finally {
             updateSidebarFor('inventory');
             setActiveNav(h);
@@ -1348,19 +1346,7 @@
         }
 
       } else if (h === '#/account/characters') {
-        // Activar el InventoryHub
-        if (window.InventoryHub && typeof window.InventoryHub.refresh === 'function') {
-          window.InventoryHub.refresh(true);
-        }
-        // Si Characters está visible como subvista, también actualizarlo
-        var pChar = document.getElementById('charactersPanel');
-        if (pChar && !pChar.hasAttribute('hidden')) {
-          try {
-            window.Characters?.activate?.();
-          } catch (e) {
-            console.warn('[router] Characters.activate error', e);
-          }
-        }
+        // BL-070 INV-7: la vista nueva escucha gn:tokenchange y relee sola.
       } else if (h === '#/account/accounts') {
         var pAccounts = document.getElementById('accountsPanel');
         if (pAccounts && !pAccounts.hasAttribute('hidden')) {
@@ -1382,10 +1368,6 @@
       } else if (h === '#/wallet/dashboard') {
         if (window.WalletDashboard && typeof window.WalletDashboard.activate === 'function') {
           window.WalletDashboard.activate();
-        }
-      } else if (h === '#/inventory/dashboard') {
-        if (window.InventoryDashboard && typeof window.InventoryDashboard.activate === 'function') {
-          window.InventoryDashboard.activate();
         }
       } else if (h === '#/account/raids') {
         if (window.RaidTracker && typeof window.RaidTracker.refresh === 'function') {

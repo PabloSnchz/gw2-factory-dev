@@ -90,8 +90,8 @@ ok(/var url = withToken\(CFG\.API_BASE \+ '\/v2\/account\/achievements', token\)
 const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 const iApi = html.indexOf('js/api-gw2.js');
 const iChar = html.indexOf('js/characters.js');
-ok(iApi !== -1 && iChar !== -1 && iApi < iChar,
-   'index.html carga api-gw2.js ANTES que characters.js (root.GW2Api existe al evaluar)');
+ok(iApi !== -1 && iChar === -1,
+   'index.html carga api-gw2.js y ya no carga characters.js (BL-070 INV-7: lo reemplaza js/inv-chars.js)');
 
 // ── 3. El contrato de error: un fallo NO puede abortar loadAccountData ─────
 console.log('\n[3] El fallo de logros no se come el resto de loadAccountData()');
@@ -126,9 +126,7 @@ ok(/catch \(e\) \{\s*console\.warn\(LOG, 'Error loading account data', e\);/.tes
 console.log('\n[4] El buster subio en el MISMO commit (ALERT-24, REGLA 2)');
 
 const mChar = html.match(/js\/characters\.js\?v=([\d.]+)/);
-ok(!!mChar, 'index.html sigue cargando characters.js con buster de version');
-ok(mChar && mChar[1] === '2.4.1',
-   'el buster es 2.4.1, la version vigente  (encontrado: ' + (mChar ? mChar[1] : '?') + ')');
+ok(!mChar, 'index.html ya no carga characters.js (BL-070 INV-7)');
 ok(/js\/characters\.js — Panel de Personajes y Localización\s*\n \* v2\.4\.1/.test(src),
    'la cabecera del archivo declara v2.4.1');
 ok(/CAMBIOS v2\.4\.0 \(Idea 55 Tramo 1\)/.test(src),
