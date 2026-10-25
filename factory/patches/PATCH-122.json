@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-122",
+ "summary": "Docs PUL-2 (BL-070): íconos de cabecera iguales en los 9 módulos y colores de la barra lateral; D1 a D3 aprobadas por Pablo.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "2e150057b1d017d7f4b48d38c4dceb65f33d4bf9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 22:01Z",
+     "text": "Última actualización: 2026-10-25 22:17Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: PUL-1 HECHO (2026-10-25 22:01Z)",
+     "text": "Último hecho: PUL-2 HECHO (2026-10-25 22:17Z): el ícono de la cabecera igual en los 9 módulos. Pablo aprobó todo (22:13Z): la placa de 56 × 56 con el ícono a 44 px, D1 (el color de la barra lateral también en el degradado y las pestañas), D2 (el orden que recomendé para la barra lateral) y D3 (la brújula del mapa para Inicio o, si no consigo la imagen oficial, el punto de ruta de la API). PATCH-121 (aplicado, suite verde antes y después, con el contraste de las cabeceras en los 19 themes): js/gn-shell.js 1.2.0 (315815d) con una lista de los 9 íconos (ICONS) y su CSS: placa de 56 px, el ícono a 44 px, el fondo del theme (--bg-0), un borde de 1 px y el brillo de la Cartera (0 0 18px al 18 %) en el color del botón de cada módulo en la barra lateral; en el celular, placa de 40 px con el ícono a 32. Reemplaza el anillo sólido de Raids, Inventario, Actividades y la Heredad, el fondo gris de Logros, la Cámara y la Armería y la sombra negra de Metas. D1: el degradado de Logros pasa de #E8A33D a #6EA3FF y el de la Cámara de #4FC3D9 a #15C3B7, y sus pestañas también. El color de las cifras de AA de la Cámara (#4FC3D9) no cambia: es el de esa moneda, no el del módulo. tests/gn-shell.test.cjs (7a2dd0e) compara cada color con el de la barra lateral; js/modules.json (1a2925a). Sin tocar las vistas. Antes, PUL-1 HECHO (2026-10-25 22:01Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: PUL-1, la Armería Legendaria con un solo contenedor (https://pablosnchz.github.io/gw2-factory-dev/#/account/legendary-armory): el degradado magenta en todo el panel, la cabecera a todo el ancho sin caja propia y el contenido con aire a los costados, como en los otros módulos.\n- [BL-070] Decisión: pulido antes del paso 4. D1, el color de cada módulo es el de la barra lateral también en el degradado y las pestañas (Logros pasa de ámbar a azul y la Cámara de #4FC3D9 a #15C3B7); recomiendo sí. D2, el orden de la barra lateral: recomiendo Cartera, Metas y Eventos, Cámara del Brujo, Actividades, Heredad, Raids, Logros, Inventario y Personajes, Armería Legendaria (lo diario junto, después lo semanal y al final el progreso de la cuenta). D3, el ícono de Inicio: la brújula del mapa del mundo, si consigo la imagen oficial; si no, el punto de ruta de la API.\n",
+     "text": "- [BL-070] Validación: PUL-1 y PUL-2. La Armería con un solo contenedor (https://pablosnchz.github.io/gw2-factory-dev/#/account/legendary-armory) y el ícono de la cabecera igual en los 9 módulos: placa de 56 px, fondo oscuro y el brillo de su color de la barra lateral; Logros ahora en azul y la Cámara en su turquesa. Recorré los 9 módulos con Ctrl+F5, también en el celular (placa de 40 px).\n- [BL-070] Info: Pablo aprobó D1, D2 y D3 del pulido (22:13Z). Siguen PUL-3, el orden de la barra lateral, y PUL-4, el ícono de Inicio.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "bc1c14a965bac4132d47951973dbd3c107fecaed",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "PUL-1 la Armería con un solo contenedor HECHO (22:01Z, PATCH-119, gn-shell 1.1.0); siguen PUL-2 los íconos de cabecera iguales (56 × 56, brillo de la Cartera en el color de la barra lateral), PUL-3 el orden de la barra lateral y PUL-4 el ícono de Inicio.",
+     "text": "PUL-1 la Armería con un solo contenedor HECHO (22:01Z, PATCH-119, gn-shell 1.1.0); PUL-2 los íconos de cabecera iguales y Logros y la Cámara en su color de la barra lateral HECHO (22:17Z, PATCH-121, gn-shell 1.2.0); Pablo aprobó D1 a D3 (22:13Z); siguen PUL-3 el orden de la barra lateral y PUL-4 el ícono de Inicio."
+    }
+   ]
+  }
+ ]
+}
