@@ -128,10 +128,10 @@ const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.2.5', () => {
+test('versión 2.2.6', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.2\.5/);
-  assert.equal(x.S().version, '2.2.5');
+  assert.match(SRC, /Versión: 2\.2\.6/);
+  assert.equal(x.S().version, '2.2.6');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
@@ -175,6 +175,11 @@ test('accesibilidad: íconos decorativos (alt vacío), nombre visible en texto y
   assert.equal(a.children[1].textContent, 'Metas y Eventos');
   assert.equal(a.getAttribute('style'), '--x:#A896FF');
   assert.equal(x.document.getElementById('navHome').getAttribute('style'), '--x:var(--acc-1)');
+  // PUL-4: Inicio con el punto de ruta oficial (/v2/files, map_waypoint); el ícono de la casa es solo de la Heredad.
+  assert.equal(x.document.getElementById('navHome').children[0].getAttribute('src'), 'https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png');
+  assert.equal(x.document.getElementById('navHS').children[0].getAttribute('src'), 'assets/icons/Welcome/3380755.png');
+  const icons = x.document.querySelectorAll('#sbrNav a').map((n) => n.children[0].getAttribute('src'));
+  assert.equal(new Set(icons).size, icons.length, 'cada enlace con su propio ícono');
 });
 
 test('el activo: uno solo, con aria-current, también en rutas internas y alias', () => {

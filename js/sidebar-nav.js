@@ -1,6 +1,6 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.2.5 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
+ * Versión: 2.2.6 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
  * Arma su lista desde la de la Bienvenida (Welcome._pure.MODULES): mismo orden, nombre, ícono y color.
@@ -40,10 +40,12 @@
  * 2.2.4 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio, después de Actividades.
  * 2.2.5 (BL-070, PUL-3): el orden que eligió Pablo: Cartera; lo diario (Metas, Cámara, Actividades, Heredad);
  *   lo semanal (Raids); el progreso de la cuenta (Logros, Inventario y Personajes, Armería). La barra del celular no cambia.
+ * 2.2.6 (BL-070, PUL-4): Inicio con el ícono oficial del punto de ruta (/v2/files, map_waypoint): el de la casa
+ *   es de la Heredad. La brújula del mapa del mundo no está en la API ni en el servicio de imágenes con su firma.
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.2.5';
+  var VERSION = '2.2.6';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -59,7 +61,7 @@
     { id: 'armory', name: 'Armería Legendaria', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },
     { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3' }
   ];
-  var HOME = { id: 'home', name: 'Inicio', href: '#/welcome', icon: 'assets/icons/Welcome/3380755.png', color: 'var(--acc-1)' };
+  var HOME = { id: 'home', name: 'Inicio', href: '#/welcome', icon: 'https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png', color: 'var(--acc-1)' };
   // Ids y data-view que ya usaban el router y otros módulos.
   var LINK_ID = { home: 'navHome', cards: 'navCards', meta: 'navMeta', armory: 'navLegendaryArmory', achievements: 'navAch',
     wv: 'navWV', activities: 'navAC', homestead: 'navHS', raids: 'navRaids', characters: 'navChars', accounts: 'navAccounts' };
