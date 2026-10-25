@@ -1,0 +1,99 @@
+{
+ "id": "PATCH-119",
+ "summary": "BL-070 PUL-1: la Armería Legendaria con un solo contenedor (gn-shell 1.1.0, pedido de Pablo del 2026-10-25 21:55Z); test y manifiesto.",
+ "files": [
+  {
+   "path": "js/gn-shell.js",
+   "base_sha": "269bebae2a75c30050c45e3ead1978a100d0efc2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-25)\n",
+     "text": " * Versión: 1.1.0 (2026-10-25) · PUL-1: la Armería Legendaria también tiene un solo contenedor\n *          1.0.0 (2026-10-25)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';",
+     "text": "  var VERSION = '1.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { id: 'wv', panel: '#wvPanel', head: '#wvxHead', hero: '.wvx-hero', mod: '#4FC3D9', hex: '#4FC3D9' }\n  ];",
+     "text": "    { id: 'wv', panel: '#wvPanel', head: '#wvxHead', hero: '.wvx-hero', mod: '#4FC3D9', hex: '#4FC3D9' },\n    // La Armería (PUL-1): js/render-catologo.js dibuja su cabecera dentro de #legendaryArmoryBody >\n    // #legendaryModeContent (body) y el panel no lleva clase al montarse: la marca es :has(.arm-hero).\n    { id: 'armory', panel: '#legendaryArmoryPanel:has(.arm-hero)', head: '#legendaryArmoryBody', body: '#legendaryModeContent', hero: '.arm-hero', mod: '#E545CA', hex: '#E545CA' }\n  ];"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var P = s.panel, H = P + ' ' + s.head;\n    return [\n",
+     "text": "    var P = s.panel, H = P + ' ' + s.head, B = s.body ? H + ' ' + s.body : H;\n    return [\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      H + '{margin:0 0 12px}',\n      // el resto, con aire a los costados\n      P + '>:not(' + s.head + '),' + H + '>:not(' + s.hero + '){margin-left:' + SIDE + 'px;margin-right:' + SIDE + 'px}'",
+     "text": "      // con body (la Armería) la cabecera vive adentro: sin relleno, para que vaya a todo el ancho\n      s.body ? H + '{padding:0;margin:0}' : H + '{margin:0 0 12px}',\n      // el resto, con aire a los costados\n      P + '>:not(' + s.head + '),' + B + '>:not(' + s.hero + '){margin-left:' + SIDE + 'px;margin-right:' + SIDE + 'px}'"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var P = s.panel, H = P + ' ' + s.head;\n    return P + ' ' + s.hero",
+     "text": "    var P = s.panel, H = P + ' ' + s.head, B = s.body ? H + ' ' + s.body : H;\n    return P + ' ' + s.hero"
+    },
+    {
+     "op": "replace",
+     "anchor": "' + H + '>:not(' + s.hero + '){margin-left:' + SIDE_M",
+     "text": "' + B + '>:not(' + s.hero + '){margin-left:' + SIDE_M"
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-shell.test.cjs",
+   "base_sha": "f8944fb822d143fbece29cf4cd4a507ba7b003a1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /Versión: 1\\.0\\.0/);",
+     "text": "assert.match(SRC, /Versión: 1\\.1\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "const VIEWS = { raids: 'js/raids-view.js', inventory: 'js/inv-view.js', activities: 'js/act-view.js', achievements: 'js/ach-view.js', wv: 'js/wv-view.js' };",
+     "text": "const VIEWS = { raids: 'js/raids-view.js', inventory: 'js/inv-view.js', activities: 'js/act-view.js', achievements: 'js/ach-view.js', wv: 'js/wv-view.js',\n  armory: ['js/render-catologo.js', 'js/legendary-tracker.js'] };\nconst viewSrc = (id) => [].concat(VIEWS[id]).map(read).join('\\n');\nconst inner = (s) => s.panel + ' ' + s.head + (s.body ? ' ' + s.body : '');"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('los 5 módulos renovados, cada uno con lo que su vista monta de verdad (si cambia, este test avisa)', () => {",
+     "text": "test('los 6 módulos renovados, cada uno con lo que su vista monta de verdad (si cambia, este test avisa)', () => {"
+    },
+    {
+     "op": "replace",
+     "anchor": "    const v = read(VIEWS[s.id]);",
+     "text": "    const v = viewSrc(s.id);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    assert.ok(v.includes(\"'\" + s.head.slice(1) + \"'\"), s.id + ': la vista crea ' + s.head);",
+     "text": "    assert.ok(v.includes(\"'\" + s.head.slice(1) + \"'\") || v.includes(\"'\" + s.head + \"'\"), s.id + ': la vista crea ' + s.head);\n    if (s.body) assert.ok(v.includes('id=\"' + s.body.slice(1) + '\"'), s.id + ': la vista crea ' + s.body);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    assert.ok(css.includes(s.panel + '>:not(' + s.head + '),' + s.panel + ' ' + s.head + '>:not(' + s.hero + '){margin-left:24px;margin-right:24px}'), s.id + ': aire a los costados');",
+     "text": "    assert.ok(css.includes(s.panel + '>:not(' + s.head + '),' + inner(s) + '>:not(' + s.hero + '){margin-left:24px;margin-right:24px}'), s.id + ': aire a los costados');\n    if (s.body) assert.ok(css.includes(s.panel + ' ' + s.head + '{padding:0;margin:0}'), s.id + ': el cuerpo sin relleno, la cabecera a todo el ancho');"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('la cabecera de cada vista gana: las reglas pesan más que las de la vista', () => {",
+     "text": "test('PUL-1: la Armería con un solo contenedor, en su color de la barra lateral y solo cuando su cabecera está montada', () => {\n  const a = P.SHELLS.filter((s) => s.id === 'armory')[0];\n  assert.equal(a.panel, '#legendaryArmoryPanel:has(.arm-hero)');\n  assert.match(read('js/render-catologo.js'), /var ARM_COLOR = '#E545CA';/);\n  assert.match(read('js/welcome-panel.js'), /id: 'armory'[^}]*color: '#E545CA'/);\n  assert.equal(a.hex, '#E545CA');\n  assert.ok(P.CSS.includes('#legendaryArmoryPanel:has(.arm-hero) #legendaryArmoryBody #legendaryModeContent>:not(.arm-hero){margin-left:12px;margin-right:12px}'), 'en el celular');\n});\n\ntest('la cabecera de cada vista gana: las reglas pesan más que las de la vista', () => {"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "faa5bc438bb645e2db6c8d9ea3807bd2c7e2cbdc",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/gn-shell.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/gn-shell.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  }
+ ]
+}
