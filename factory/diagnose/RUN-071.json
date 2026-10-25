@@ -1,0 +1,1 @@
+{"id":"RUN-071","tests":["tests/idea49.activities-cache-wipe.test.js","tests/idea49.quotavisible.test.js","tests/idea61-claves-congeladas.test.js","tests/size-budget.test.cjs","tests/hb106-censo-latch.test.js","tests/hb106-t13-invariante.test.js","tests/t19c-lectores-legacy.test.js","tests/act-view.test.cjs","tests/act-psna.test.cjs","tests/index-versions.test.cjs"]}
