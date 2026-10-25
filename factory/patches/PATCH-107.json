@@ -1,0 +1,84 @@
+{
+ "id": "PATCH-107",
+ "summary": "ACT-5 (BL-070, BL-055), parte 2: js/home-view.js 1.0.0 por el manifiesto y act-view 1.3.0: los nodos de casa salen de Actividades y la pestaña Semana dice adónde se mudaron. Test de Actividades al día.",
+ "files": [
+  {
+   "path": "js/modules.json",
+   "base_sha": "136c86806700a47232c75c322300f6bce16519f8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/act-view.js\", \"v\": \"1.2.0\" },\n    { \"src\": \"js/act-week.js\", \"v\": \"1.0.0\" }\n",
+     "text": "    { \"src\": \"js/act-view.js\", \"v\": \"1.3.0\" },\n    { \"src\": \"js/act-week.js\", \"v\": \"1.0.0\" },\n    { \"src\": \"js/home-view.js\", \"v\": \"1.0.0\" }\n"
+    }
+   ]
+  },
+  {
+   "path": "js/act-view.js",
+   "base_sha": "aa4ff0026c7c369e4d15f133b4a5318cb346ed29",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-25) — ACT-4:",
+     "text": " * Versión: 1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)\n *          1.2.0 (2026-10-25) — ACT-4:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.2.0';",
+     "text": "  var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "      (m.old.nodes ? '<section class=\"av-card\" aria-labelledby=\"avNodesT\"><div class=\"av-card-h\"><h3 id=\"avNodesT\">Nodos de casa</h3></div><div id=\"avNodesSlot\" class=\"av-slot\"></div></section>' : '');",
+     "text": "      '<section class=\"av-card\" aria-labelledby=\"avNodesT\"><div class=\"av-card-h\"><h3 id=\"avNodesT\">Nodos de casa</h3></div>' +\n      '<p class=\"av-txt\">Se mudaron a su propio módulo, <a class=\"av-link\" href=\"#/account/homestead\">la Heredad</a>, con tus marcas de siempre.</p></section>';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}',",
+     "text": "    '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}.av-link{color:var(--tx-1);font-weight:700;text-decoration:underline}',"
+    },
+    {
+     "op": "replace",
+     "anchor": "    place('avNodesSlot', st.old.nodes);\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Los nodos de casa se cargan con la pestaña de siempre (js/activities.js), que los pide solo la primera vez.\n  function askNodes() { var b = byId('actTabWeekly'); if (b && typeof b.click === 'function') b.click(); }\n\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (tab === 'semana') askNodes();\n",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "path": "tests/act-view.test.cjs",
+   "base_sha": "fa293853facb2084f7788d1f894c1681e6128ed3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /id=\"avNodesSlot\"/);",
+     "text": "  assert.match(h, /href=\"#\\/account\\/homestead\">la Heredad<\\/a>/, 'ACT-5: los nodos de casa están en la Heredad');\n  assert.doesNotMatch(h, /avNodesSlot/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "const DRAWN = ['avVoice', 'avStats', 'avPsnaSlot', 'avStonesSlot', 'avNodesSlot', 'avClkD', 'avClkP', 'avClkW'];",
+     "text": "const DRAWN = ['avVoice', 'avStats', 'avPsnaSlot', 'avStonesSlot', 'avClkD', 'avClkP', 'avClkW'];"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(D.els.avNodesSlot.children[0], D.els.homeNodesContainer);\n",
+     "text": "  assert.equal(D.els.homeNodesContainer.parentNode.id, null, 'los nodos de casa de siempre ya no se reubican (ACT-5)');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(D.els.actTabWeekly.clicks, 1, 'Semana pide los nodos de casa a la pantalla de siempre');",
+     "text": "  assert.equal(D.els.actTabWeekly.clicks, 0, 'Semana ya no pide los nodos de casa a la pantalla de siempre');"
+    }
+   ]
+  }
+ ]
+}
