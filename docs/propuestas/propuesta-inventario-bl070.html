@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>INV-0 · Propuesta: Inventario y Personajes renovado (BL-070)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--green:#3CC48A;--red:#F47C7C;--blue:#6EA3FF;--acc:#A896FF;--mod:#7EC3FF}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}small,.mut{color:var(--muted)}
+a{color:#B9A8FF}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(126,195,255,.10),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2)}
+.tag--wait{border-color:var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+td.n{text-align:right;font-variant-numeric:tabular-nums}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+.hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,rgba(126,195,255,.12),var(--bg-1) 70%);padding:16px 18px}
+.row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px rgba(126,195,255,.7)}
+.ttl h3{margin:0;font-size:1.3rem}.ttl p{margin:2px 0 0;font-size:.86rem}
+.pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+.pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}
+.pill b{color:var(--tx-1)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px}
+.st small{display:block;font-size:.7rem;text-transform:uppercase;letter-spacing:.06em}
+.st b{font-size:1.25rem}.st b span{font-size:.8rem;color:var(--muted);font-weight:500}.st em{display:block;font-style:normal;font-size:.74rem;color:var(--muted)}
+.bar{height:6px;border-radius:6px;background:var(--bg-2);overflow:hidden;margin-top:6px}.bar i{display:block;height:100%;background:var(--mod)}
+.voice{display:flex;gap:10px;align-items:center;margin-top:12px;border:1px solid var(--bd-1);border-radius:12px;padding:8px 12px;background:var(--bg-0)}
+.voice .av{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2C9398,#442283);flex-shrink:0}
+.voice small{display:block;font-size:.72rem;color:var(--acc);font-weight:700}
+.tabs{display:flex;gap:4px;margin:16px 0 10px;border-bottom:1px solid var(--bd-1);flex-wrap:wrap}
+.tabs span{padding:8px 14px;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-1px}
+.tabs .on{color:var(--tx-1);font-weight:700;border-bottom-color:var(--mod)}
+.search{display:flex;align-items:center;gap:10px;border:1px solid var(--bd-2);border-radius:12px;background:var(--bg-0);padding:10px 14px;font-size:.95rem;color:var(--tx-1)}
+.search i{width:14px;height:14px;border:2px solid var(--muted);border-radius:50%;display:inline-block}
+.card{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);padding:14px 16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.hit{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center}
+.ico{width:44px;height:44px;border-radius:9px;background:var(--bg-2);box-shadow:inset 0 0 0 2px var(--rar,#3A4358)}
+.ico--asc{--rar:#FB3E8D}.ico--exo{--rar:#FFA405}.ico--fine{--rar:#62A4DA}.ico--leg{--rar:#974EFF}.ico--rare{--rar:#FCD00B}.ico--basic{--rar:#8E96A3}
+.rar{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;color:var(--tx-2);border:1px solid var(--bd-1);border-radius:999px;padding:0 8px;background:var(--bg-0)}
+.rar::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--rar,#8E96A3)}
+.where{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.wh{font-size:.78rem;border:1px solid var(--bd-1);border-radius:8px;padding:2px 8px;background:var(--bg-0);color:var(--tx-2)}
+.wh b{color:var(--tx-1)}
+.tot{font-size:1.2rem;font-weight:800;text-align:right}.tot small{display:block;font-size:.72rem;font-weight:500}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.cat{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px}
+.cat b{display:block}.cat small{font-size:.76rem}
+.mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:8px}
+.mt{display:flex;gap:8px;align-items:center;border:1px solid var(--bd-1);border-radius:10px;padding:6px 8px;background:var(--bg-0);font-size:.8rem}
+.mt .ico{width:30px;height:30px;border-radius:7px}
+.mt b{margin-left:auto}
+.chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.ch{border:1px solid var(--bd-1);border-left:3px solid var(--pc);border-radius:14px;background:var(--bg-1);padding:12px 14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 18px rgba(0,0,0,.28)}
+.ch-h{display:flex;gap:12px;align-items:center}
+.prof{width:56px;height:56px;border-radius:12px;background:var(--bg-2);box-shadow:0 0 0 2px var(--pc);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--tx-1)}
+.ch-h .nm{flex:1;min-width:0}.ch-h .nm b{font-size:1.05rem}.ch-h .nm small{display:block;font-size:.78rem}
+.spec{font-size:.72rem;border:1px solid var(--bd-2);border-radius:999px;padding:1px 8px;color:var(--tx-2)}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.fc{border:1px solid var(--bd-1);border-radius:9px;padding:6px 8px;background:var(--bg-0);font-size:.76rem;color:var(--muted)}
+.fc b{display:block;color:var(--tx-1);font-size:.9rem}
+.crafts{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.cr{font-size:.72rem;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px;color:var(--tx-2);background:var(--bg-0)}
+.bday{margin-top:8px;font-size:.8rem;color:var(--amber)}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.phone{width:360px;max-width:100%;border:10px solid #050608;border-radius:34px;padding:12px;background:var(--bg-0);margin:0 auto}
+.phone .tabs span{padding:8px 9px;font-size:.84rem}
+@media (max-width:900px){.stats{grid-template-columns:1fr 1fr}.cols{grid-template-columns:1fr}.pills{margin-left:0}.facts{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main>
+
+<div class="doc-head">
+  <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/358409.png" alt="">
+  <div style="flex:1;min-width:260px">
+    <h1>Inventario y Personajes renovado — propuesta visual</h1>
+    <p>BL-070, paso 2 · INV-0 · Shiruvana · 2026-10-25</p>
+  </div>
+  <span class="tag tag--wait">ESPERA TU APROBACIÓN</span>
+</div>
+
+<p class="note">Mismo proceso que en Raids: primero te muestro lo que medí y cómo lo veo, decidís, y después voy paso por paso con tu validación en cada uno. No toco código hasta que apruebes. Las maquetas usan cuadrados de color donde van los íconos oficiales del juego: en la Bóveda salen de la API.</p>
+
+<h2>1. Lo que medí en el módulo de hoy</h2>
+<p>Leí los tres archivos (<code>inventory-hub.js</code> 1.4.0, 70 KB; <code>characters.js</code> 2.4.1, 62 KB; <code>inventory-dashboard.js</code> 1.2.0, 53 KB) y medí contra la API oficial desde CI (RUN-041, sonda ya borrada) y contra la documentación de la API en la wiki oficial.</p>
+<table>
+<thead><tr><th>Gravedad</th><th>Qué pasa</th><th>Lo que medí</th></tr></thead>
+<tbody>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Los materiales están en categorías equivocadas.</b> El módulo usa listas fijas de ítems por categoría, armadas a mano.</td><td>De 199 ítems en esas listas, solo 37 caen en su categoría real; 28 no existen y 63 no son materiales. «Gemas y joyas» trae lingotes de bronce, cobre, aceroscuro y oro; «Materiales de recetas» y «Materiales festivos» son inscripciones. La API ya dice la categoría de cada material de tu depósito, y las categorías oficiales son 9.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Mapa y Punto de interés de Personajes nunca funcionan.</b></td><td>La API de personajes no informa dónde está un personaje: trae nombre, raza, género, profesión, nivel, gremio, tiempo jugado, creación, muertes y título. Por eso cada tarjeta dice «No disponible (API no devuelve ubicación)» y el selector de punto de interés está siempre desactivado.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>La búsqueda no encuentra lo que llevás encima.</b></td><td>Busca solo en Banco, Materiales y la Armería legendaria. No mira las bolsas de tus personajes ni las ranuras compartidas, así que «¿dónde tengo esto?» queda sin respuesta. En la portada muestra 5 ítems por sección.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>La especialización de élite no aparece nunca.</b></td><td>El código la busca como una lista de tres; la API la entrega separada por modo (PvE, PvP y WvW). El ícono de élite queda vacío en todas las tarjetas.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>«Personajes: 0» si no entraste antes a Personajes.</b></td><td>El indicador lee la lista del otro módulo; si todavía no se cargó, muestra 0 como si no tuvieras personajes.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Personajes tarda y pide de más.</b></td><td>Baja la ficha completa de cada personaje (bolsas y equipo incluidos) de a 3, con medio segundo entre tandas, para mostrar nombre, raza y nivel. La API permite pedirlos todos juntos.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>La rareza se pinta como color de letra.</b></td><td>Básico es blanco y Raro es amarillo: en los themes claros (macOS, Notion) el nombre del ítem casi no se lee. Lo mismo el título de la ficha del ítem.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>4 nombres cruzados en los sets del Dashboard multicuenta.</b></td><td>De 72 ítems, 4 tienen el nombre de otro: el vial de sangre de Tier 4 y Tier 5 están invertidos, y dos tótems llevan el nombre del tier vecino.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>El Dashboard multicuenta toma un personaje cualquiera.</b></td><td>Llama «personaje activo» al primero de la lista, y lee las cuentas desde la clave vieja <code>gw2_keys</code> (como DEBT-CAM-1).</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Herencia visual.</b></td><td>Entre los tres archivos: 17 emojis, 24 colores fijos, unos 190 estilos en línea y 2 atributos de accesibilidad; 46 mensajes de depuración en la consola (uno por tarjeta en cada pintada).</td></tr>
+</tbody>
+</table>
+
+<h3>Las 9 categorías oficiales del depósito de materiales</h3>
+<p class="mut">Las que trae la API en español, en el orden del juego, con cuántos materiales tiene cada una.</p>
+<table>
+<thead><tr><th>Orden</th><th>Categoría</th><th style="text-align:right">Materiales</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Materiales de artesanía básicos</td><td class="n">79</td></tr>
+<tr><td>2</td><td>Materiales de artesanía intermedios</td><td class="n">65</td></tr>
+<tr><td>3</td><td>Materiales de artesanía avanzados</td><td class="n">158</td></tr>
+<tr><td>4</td><td>Materiales ascendidos</td><td class="n">58</td></tr>
+<tr><td>5</td><td>Gemas y joyas</td><td class="n">60</td></tr>
+<tr><td>6</td><td>Materiales de cocina</td><td class="n">135</td></tr>
+<tr><td>7</td><td>Ingredientes de cocina</td><td class="n">38</td></tr>
+<tr><td>9</td><td>Materiales de escribanía</td><td class="n">69</td></tr>
+<tr><td>10</td><td>Materiales festivos</td><td class="n">19</td></tr>
+</tbody>
+</table>
+
+<h2>2. Un módulo que contesta «¿dónde está?»</h2>
+<p>Hoy hay tres pantallas sueltas (Inventario, Personajes y el Dashboard multicuenta) que se llaman entre sí con botones de «Volver». Propongo un solo módulo con cabecera común y cinco pestañas: <b>Buscar</b>, <b>Materiales</b>, <b>Banco</b>, <b>Armería legendaria</b> y <b>Personajes</b>. El Dashboard multicuenta sigue como botón en la cabecera y se renueva al final del paso.</p>
+
+<div class="frame">
+<p class="frame-label">Maqueta · computadora · pestaña Buscar</p>
+<div class="hero">
+  <div class="row">
+    <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/358409.png" alt="">
+    <div class="ttl"><h3>Inventario y Personajes</h3><p class="mut">Cuenta: Gato Negro.1234 · leído hace 2 min</p></div>
+    <div class="pills"><span class="pill">Multicuenta</span><span class="pill">Actualizar</span></div>
+  </div>
+  <div class="stats">
+    <div class="st"><small>Banco</small><b>214 <span>/ 300</span></b><div class="bar"><i style="width:71%"></i></div><em>86 espacios libres</em></div>
+    <div class="st"><small>Materiales</small><b>412 <span>tipos</span></b><em>en 9 categorías</em></div>
+    <div class="st"><small>Armería legendaria</small><b>23</b><em>legendarias desbloqueadas</em></div>
+    <div class="st"><small>Personajes</small><b>12</b><em>leídos de tu cuenta</em></div>
+  </div>
+  <div class="voice"><span class="av"></span><div><small>Shiruvana</small>Tenés 1.234 pegotes de ectoplasma repartidos en 3 lugares. Si buscás algo, escribilo acá: miro el banco, el depósito, las ranuras compartidas y las bolsas de cada personaje.</div></div>
+</div>
+<div class="tabs"><span class="on">Buscar</span><span>Materiales</span><span>Banco</span><span>Armería legendaria</span><span>Personajes</span></div>
+<div class="search"><i></i>ectoplasma</div>
+<div style="display:grid;gap:10px;margin-top:12px">
+  <div class="card hit"><div class="ico ico--exo"></div>
+    <div><b>Pegote de ectoplasma</b> <span class="rar ico--exo">Exótico</span>
+      <div class="where"><span class="wh">Depósito de materiales <b>1.200</b></span><span class="wh">Banco, pestaña 3 <b>30</b></span><span class="wh">Lyra, bolsa 2 <b>4</b></span></div></div>
+    <div class="tot">1.234<small>en total</small></div></div>
+</div>
+<p class="mut" style="margin-top:10px">Cada resultado abre la ficha del ítem. La rareza va como etiqueta con su color en el cuadradito; el nombre siempre en el color de texto del theme, para que se lea en los 19.</p>
+</div>
+
+<h3>Materiales: las categorías del juego</h3>
+<div class="frame">
+<p class="frame-label">Maqueta · pestaña Materiales</p>
+<div class="cats">
+  <div class="cat"><b>Materiales de artesanía básicos</b><small>46 de 79 con algo guardado</small><div class="bar"><i style="width:58%"></i></div></div>
+  <div class="cat"><b>Materiales de artesanía avanzados</b><small>101 de 158</small><div class="bar"><i style="width:64%"></i></div></div>
+  <div class="cat"><b>Materiales ascendidos</b><small>31 de 58</small><div class="bar"><i style="width:53%"></i></div></div>
+</div>
+<div class="mats">
+  <div class="mt"><span class="ico ico--basic"></span>Mineral de cobre<b>1.250</b></div>
+  <div class="mt"><span class="ico ico--basic"></span>Haz de yute<b>873</b></div>
+  <div class="mt"><span class="ico ico--fine"></span>Lingote de bronce<b>40</b></div>
+</div>
+<p class="mut" style="margin-top:10px">Agrupado por la categoría que trae la API para cada material, no por una lista fija. Filtros: Todos / Con algo guardado, y búsqueda dentro de la pestaña.</p>
+</div>
+
+<h2>3. Personajes: lo que la API sí da</h2>
+<p>Saco lo que no puede funcionar (Mapa y Punto de interés) y muestro lo que sí está en la API: profesión con su ícono oficial grande, la especialización de élite que tenés puesta, nivel, tiempo jugado, muertes, oficios con su nivel y el cumpleaños del personaje, que en el juego trae regalo.</p>
+<div class="frame">
+<p class="frame-label">Maqueta · pestaña Personajes</p>
+<div class="chars">
+  <div class="ch" style="--pc:#73b9ff">
+    <div class="ch-h"><div class="prof">G</div><div class="nm"><b>Lyra Noctámbula</b><small>Humana · Guardiana · nivel 80 · [GATO]</small></div><span class="spec">ícono de élite</span></div>
+    <div class="facts"><div class="fc"><b>1.204 h</b>jugadas</div><div class="fc"><b>3.811</b>muertes</div><div class="fc"><b>2013-04-27</b>creada</div></div>
+    <div class="crafts"><span class="cr">Armero 500</span><span class="cr">Joyero 400</span></div>
+    <div class="bday">Cumple en 3 días: 13 años</div>
+  </div>
+  <div class="ch" style="--pc:#c45ec4">
+    <div class="ch-h"><div class="prof">H</div><div class="nm"><b>Sombra de Pablo</b><small>Sylvari · Hipnotizador · nivel 80</small></div><span class="spec">ícono de élite</span></div>
+    <div class="facts"><div class="fc"><b>512 h</b>jugadas</div><div class="fc"><b>940</b>muertes</div><div class="fc"><b>2022-02-28</b>creado</div></div>
+    <div class="crafts"><span class="cr">Sastre 500</span><span class="cr">Cocinero 400</span></div>
+  </div>
+</div>
+<p class="mut" style="margin-top:10px">Nombres y números de ejemplo. La élite va con su ícono y su nombre oficial de la API. El color de profesión va en el borde y en el anillo del ícono, nunca como color de letra. Filtros: profesión y búsqueda por nombre. Cada tarjeta abre las bolsas de ese personaje en la pestaña Buscar.</p>
+</div>
+
+<h3>En el celular</h3>
+<div class="cols">
+<div class="phone">
+  <div class="hero" style="padding:12px"><div class="row"><img class="hero-ico" style="width:44px;height:44px" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/358409.png" alt=""><div class="ttl"><h3 style="font-size:1.05rem">Inventario y Personajes</h3></div></div>
+  <div class="stats" style="grid-template-columns:1fr 1fr"><div class="st"><small>Banco</small><b>214 <span>/ 300</span></b></div><div class="st"><small>Personajes</small><b>12</b></div></div></div>
+  <div class="tabs"><span class="on">Buscar</span><span>Materiales</span><span>Más</span></div>
+  <div class="search"><i></i>ectoplasma</div>
+  <div class="card hit" style="margin-top:10px;grid-template-columns:36px 1fr auto"><div class="ico ico--exo" style="width:36px;height:36px"></div><div><b>Pegote de ectoplasma</b><div class="where"><span class="wh">Depósito <b>1.200</b></span><span class="wh">Banco <b>30</b></span></div></div><div class="tot">1.234</div></div>
+</div>
+<div>
+<p>En el celular las pestañas se reducen a Buscar, Materiales y «Más» (Banco, Armería legendaria y Personajes), con objetivos de 44 px. Las búsquedas y filtros se quedan donde los dejaste al volver de una ficha.</p>
+<p>Teclado y lector de pantalla: las pestañas con el patrón completo (flechas, Inicio y Fin), cada resultado es un botón que dice cuánto tenés y dónde, y la rareza se lee como texto, no solo como color.</p>
+</div>
+</div>
+
+<h2>4. Cómo lo construyo</h2>
+<ul>
+<li>Archivos nuevos y chicos (presupuesto de 40 KB, DEC-035), cargados por <code>js/modules.json</code>, como hice con Raids: <code>inv-view.js</code> (cabecera, pestañas, Materiales, Banco, Armería), <code>inv-search.js</code> (¿dónde está?) y <code>char-view.js</code> (Personajes). Los tres archivos viejos no se tocan hasta el retiro final.</li>
+<li>Datos por la capa <code>GW2Api</code> con caché, nunca <code>fetch</code> crudo. Personajes con un solo pedido para todos en lugar de uno por personaje.</li>
+<li>Estados honestos: «Sin datos» si una lectura falla, y si la Key no tiene el permiso de inventarios lo digo en vez de mostrar bolsas vacías.</li>
+<li>Marco común (FEAT-013) y la guarda de contraste en los 19 themes desde el primer paso, con su test, como <code>raids-a11y</code>.</li>
+<li>Vuelta atrás simple en cada paso: sacar el archivo nuevo de <code>js/modules.json</code> deja el módulo como hoy.</li>
+</ul>
+
+<h2>5. Plan, paso por paso (cada uno con tu validación)</h2>
+<table>
+<thead><tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr></thead>
+<tbody>
+<tr><td>INV-1</td><td>Datos verificados: categorías oficiales de materiales, los 4 nombres de los sets corregidos y el modelo del módulo con sus tests.</td><td>Los sets del Dashboard multicuenta con los nombres bien.</td></tr>
+<tr><td>INV-2</td><td>Vista nueva: cabecera, 4 indicadores y pestañas Materiales, Banco y Armería legendaria.</td><td>El módulo nuevo, con los materiales en su categoría real.</td></tr>
+<tr><td>INV-3</td><td>Buscar: «¿dónde está?» con banco, depósito, ranuras compartidas y bolsas de cada personaje.</td><td>Una búsqueda que dice cuánto tenés y dónde.</td></tr>
+<tr><td>INV-4</td><td>Personajes renovado: sin Mapa ni Punto de interés, con élite, oficios, tiempo jugado y cumpleaños.</td><td>La pestaña Personajes; <code>#/account/characters</code> sigue andando.</td></tr>
+<tr><td>INV-5</td><td>Ficha del ítem renovada: rareza legible, dónde está, enlace a la wiki y, si decidís que sí (D3), el precio del Bazar.</td><td>La ficha nueva al tocar cualquier ítem.</td></tr>
+<tr><td>INV-6</td><td>Multicuenta renovado: cuentas desde la clave nueva y sin el «personaje activo» inventado.</td><td>El Dashboard multicuenta con la cara del resto.</td></tr>
+<tr><td>INV-7</td><td>Retiro de lo viejo (<code>characters-theme.js</code> y lo que deje de usarse) y revisión final: 19 themes, teclado, lector, celular, movimiento reducido. FEAT-015.</td><td>Lo mismo, más liviano.</td></tr>
+</tbody>
+</table>
+
+<h2>6. Lo que necesito que decidas</h2>
+<table>
+<thead><tr><th></th><th>Decisión</th><th>Lo que recomiendo</th></tr></thead>
+<tbody>
+<tr><td><b>D1</b></td><td>¿Buscar también en las bolsas de los personajes? Es un pedido por personaje (de a 3, con caché de 5 minutos) y la Key necesita el permiso de inventarios.</td><td><b>Sí.</b> Es la pregunta que más se hace: «¿quién tiene esto?». Solo se pide al buscar o al abrir Personajes.</td></tr>
+<tr><td><b>D2</b></td><td>¿Saco Mapa y Punto de interés de Personajes? La API no da la ubicación.</td><td><b>Sí.</b> Hoy no funcionan para nadie. Las asignaciones que tengas guardadas no se borran.</td></tr>
+<tr><td><b>D3</b></td><td>¿Precio del Bazar en la ficha del ítem?</td><td><b>Sí, solo en la ficha</b> (compra y venta). El valor total del inventario lo dejo afuera: es otra funcionalidad.</td></tr>
+<tr><td><b>D4</b></td><td>¿Personajes como pestaña dentro del módulo, en lugar de pantalla aparte?</td><td><b>Sí.</b> Una sola puerta y menos «Volver»; los marcadores viejos siguen funcionando.</td></tr>
+</tbody>
+</table>
+
+<p class="note">Fuentes: la API oficial (<code>/v2/materials</code>, <code>/v2/items</code>, <code>/v2/professions</code>, <code>/v2/races</code> y <code>/v2/specializations</code>, leídas desde CI en RUN-041 el 2026-10-25) y las páginas «API:2/characters» y «API:2/account/materials» de la wiki oficial, consultadas el 2026-10-25.</p>
+
+</main>
+</body>
+</html>
