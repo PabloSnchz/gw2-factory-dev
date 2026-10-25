@@ -1,0 +1,59 @@
+{
+ "id": "PATCH-125",
+ "summary": "BL-070 PUL-4: Inicio con el ícono oficial del punto de ruta (map_waypoint de /v2/files); el de la casa queda solo para la Heredad. sidebar-nav 2.2.6, index.html y test.",
+ "files": [
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "c5fd0767d061de1da43a16605a47a0ab9d3776d8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.2.5 (2026-10-25)",
+     "text": " * Versión: 2.2.6 (2026-10-25)"
+    },
+    {
+     "op": "replace",
+     "anchor": " *   lo semanal (Raids); el progreso de la cuenta (Logros, Inventario y Personajes, Armería). La barra del celular no cambia.\n",
+     "text": " *   lo semanal (Raids); el progreso de la cuenta (Logros, Inventario y Personajes, Armería). La barra del celular no cambia.\n * 2.2.6 (BL-070, PUL-4): Inicio con el ícono oficial del punto de ruta (/v2/files, map_waypoint): el de la casa\n *   es de la Heredad. La brújula del mapa del mundo no está en la API ni en el servicio de imágenes con su firma.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '2.2.5';",
+     "text": "  var VERSION = '2.2.6';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var HOME = { id: 'home', name: 'Inicio', href: '#/welcome', icon: 'assets/icons/Welcome/3380755.png', color: 'var(--acc-1)' };",
+     "text": "  var HOME = { id: 'home', name: 'Inicio', href: '#/welcome', icon: 'https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png', color: 'var(--acc-1)' };"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "1a19688e67e5cb451c111e395015a419fbfd4977",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/sidebar-nav.js?v=2.2.5",
+     "text": "js/sidebar-nav.js?v=2.2.6"
+    }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "af885b20c4666b46e9340993be295860100f9d1d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.2.5', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.5/);\n  assert.equal(x.S().version, '2.2.5');",
+     "text": "test('versión 2.2.6', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.6/);\n  assert.equal(x.S().version, '2.2.6');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(x.document.getElementById('navHome').getAttribute('style'), '--x:var(--acc-1)');\n",
+     "text": "  assert.equal(x.document.getElementById('navHome').getAttribute('style'), '--x:var(--acc-1)');\n  // PUL-4: Inicio con el punto de ruta oficial (/v2/files, map_waypoint); el ícono de la casa es solo de la Heredad.\n  assert.equal(x.document.getElementById('navHome').children[0].getAttribute('src'), 'https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png');\n  assert.equal(x.document.getElementById('navHS').children[0].getAttribute('src'), 'assets/icons/Welcome/3380755.png');\n  const icons = x.document.querySelectorAll('#sbrNav a').map((n) => n.children[0].getAttribute('src'));\n  assert.equal(new Set(icons).size, icons.length, 'cada enlace con su propio ícono');\n"
+    }
+   ]
+  }
+ ]
+}
