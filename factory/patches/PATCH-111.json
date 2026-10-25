@@ -1,0 +1,169 @@
+{
+ "id": "PATCH-111",
+ "summary": "ACT-7a (BL-070): el PSNA pasa a la vista nueva. js/act-psna.js 1.0.0 (ya publicado) entra al manifiesto antes de act-view; act-view 1.4.0 lo pone en Hoy y deja de reubicar el PSNA, las piedras y los nodos de js/activities.js y de leer su −/+; test de Actividades al día. activities.js sigue cargado hasta ACT-7b.",
+ "files": [
+  {
+   "path": "js/act-view.js",
+   "base_sha": "6682f84dc825a8ea00d7b31eedff3f099ae6f2d2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)\n",
+     "text": " * Versión: 1.4.0 (2026-10-25) — ACT-7: el PSNA lo dibuja js/act-psna.js; ya no reubico nada de js/activities.js\n *          1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Toma el panel #activitiesPanel (#/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario:\n",
+     "text": " * Toma el panel #activitiesPanel (#/activities); lo que traiga adentro de antes queda oculto:\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " *  - Hoy (abre siempre acá, D6): la fabricación diaria con su ícono oficial y el PSNA de siempre (BL-048), que\n *    sigue siendo el de js/activities.js con sus funciones probadas: acá solo cambia de lugar.\n *  - Semana: la llave con la regla verificada; las piedras y los nodos de casa siguen con su pantalla de\n *    siempre hasta ACT-4 y ACT-5, dentro de la pestaña.\n",
+     "text": " *  - Hoy (abre siempre acá, D6): la fabricación diaria con su ícono oficial, los fractales del día y el PSNA\n *    (js/act-psna.js, con las mismas funciones puras de siempre).\n *  - Semana: la dibuja js/act-week.js (llave, guía y piedras por moneda); los nodos de casa están en la Heredad.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.3.0';\n",
+     "text": "  var VERSION = '1.4.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // ui: { tab, old: {psna, stones, nodes} } — qué partes de la pantalla de siempre están para reubicar.\n",
+     "text": "  // ui: { tab }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      items: d.items || {}, old: ui.old || {}, clocks: clocks(now), crafting: null, fr: null, frProg: null,\n",
+     "text": "      items: d.items || {}, clocks: clocks(now), crafting: null, fr: null, frProg: null,\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return craftingHTML(m) + fractalsHTML(m) + (m.old.psna ? '<div id=\"avPsnaSlot\" class=\"av-slot\"></div>' : '');\n",
+     "text": "    var S = root.ActPsna;\n    return craftingHTML(m) + fractalsHTML(m) + (S && typeof S.html === 'function' ? S.html() : '');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m) + (m.old.stones ? '<div id=\"avStonesSlot\" class=\"av-slot\"></div>' : '')) +\n",
+     "text": "    return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m)) +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.av-slot{margin-bottom:12px}.av-slot>.card,.av-slot>section{margin-top:0}',\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { cat: null, catP: null, data: null, ui: { tab: 'hoy' }, voiceKey: null, seq: 0, cache: {}, shown: false, tick: null, day: null, old: {} };\n",
+     "text": "  var st = { cat: null, catP: null, data: null, ui: { tab: 'hoy' }, voiceKey: null, seq: 0, cache: {}, shown: false, tick: null, day: null };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Lo que marcaste con el −/+ de siempre (js/activities.js), solo si esa pantalla ya leyó tu cuenta.\n  function readStones() {\n    try {\n      var a = root.Activities, d = a && typeof a._debug === 'function' ? a._debug() : null;\n      if (d && d.token && typeof d.weeklyStones === 'number') return d.weeklyStones;\n    } catch (e) {}\n    return null;\n  }\n\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "  function sectionOf(n) {\n    for (var i = 0; n && i < 6; n = n.parentNode, i++) if (n.tagName && String(n.tagName).toUpperCase() === 'SECTION') return n;\n    return null;\n  }\n  // Las partes de la pantalla de siempre que se reubican (la misma pieza, con sus eventos y funciones).\n  function grabOld() {\n    var o = st.old, pill = byId('pillLeivas');\n    o.psna = byId('psnaPanel') || o.psna || null;\n    o.stones = (pill && sectionOf(pill)) || o.stones || null;\n    o.nodes = byId('homeNodesContainer') || o.nodes || null;\n    return { psna: !!o.psna, stones: !!o.stones, nodes: !!o.nodes };\n  }\n  function place(slotId, node) { var s = byId(slotId); if (s && node && s.appendChild) s.appendChild(node); }\n\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    var d = Object.assign({}, st.data || {}, { stones: wk ? wk.bought : readStones(), keyMark: wk ? wk.keyMark : undefined });\n    return buildModel(d, st.cat, { tab: st.ui.tab, old: st.ui.old }, now());\n",
+     "text": "    var d = Object.assign({}, st.data || {}, { stones: wk ? wk.bought : null, keyMark: wk ? wk.keyMark : undefined });\n    return buildModel(d, st.cat, { tab: st.ui.tab }, now());\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var ks = ['data-av', 'data-aw-key', 'data-aw-stone', 'data-aw-wp'];\n",
+     "text": "    var ks = ['data-av', 'data-aw-key', 'data-aw-stone', 'data-aw-wp', 'data-ap-copy', 'data-ap-all'];\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    st.ui.old = grabOld();\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    place('avPsnaSlot', st.old.psna);\n    place('avStonesSlot', st.old.stones);\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "\n  // Solo los indicadores (al usar el −/+ de las piedras: el foco se queda en el botón).\n  function renderStats() { var b = byId('avStats'); if (b && st.cat) b.innerHTML = statsHTML(model()); }\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    set('avClkD', 'en ' + c.daily); set('avClkP', 'en ' + c.psna); set('avClkW', c.weekly);\n    if (st.day && st.day !== c.day) { st.day = c.day; load(true); }\n",
+     "text": "    set('avClkD', 'en ' + c.daily); set('avClkP', 'en ' + c.psna); set('avClkW', c.weekly);\n    if (root.ActPsna && typeof root.ActPsna.tick === 'function' && root.ActPsna.tick(now())) render(); // 08:00 UTC: lugares nuevos\n    if (st.day && st.day !== c.day) { st.day = c.day; load(true); }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      var a = { act: n.getAttribute('data-av'), tab: n.getAttribute('data-av-tab'), id: n.id || null };\n      if (a.act || a.tab || a.id === 'assMinus' || a.id === 'assPlus') return a;\n",
+     "text": "      var a = { act: n.getAttribute('data-av'), tab: n.getAttribute('data-av-tab') };\n      if (a.act || a.tab) return a;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      if (root.ActWeek && typeof root.ActWeek.onClick === 'function' && root.ActWeek.onClick(e)) return;\n      var a = attrOf(e.target);\n",
+     "text": "      if (root.ActWeek && typeof root.ActWeek.onClick === 'function' && root.ActWeek.onClick(e)) return;\n      if (root.ActPsna && typeof root.ActPsna.onClick === 'function' && root.ActPsna.onClick(e)) return;\n      var a = attrOf(e.target);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "        if (root.ActWeek && typeof root.ActWeek.refresh === 'function') root.ActWeek.refresh();\n      } else if (a.tab) go(a.tab);\n",
+     "text": "        if (root.ActWeek && typeof root.ActWeek.refresh === 'function') root.ActWeek.refresh();\n        if (root.ActPsna && typeof root.ActPsna.refresh === 'function') root.ActPsna.refresh();\n      } else if (a.tab) go(a.tab);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      else if (a.id === 'assMinus' || a.id === 'assPlus') setTimeout(renderStats, 0);\n",
+     "text": ""
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "9bbfc96bee55a1ced99bc376808a8242ad700f50",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/act-view.js\", \"v\": \"1.3.0\" },\n",
+     "text": "    { \"src\": \"js/act-psna.js\", \"v\": \"1.0.0\" },\n    { \"src\": \"js/act-view.js\", \"v\": \"1.4.0\" },\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/act-view.test.cjs",
+   "base_sha": "e5a85f781cc1c1164d57164ecb6884cf81edc416",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "// 1.1.0 (ACT-3): los fractales del día por rango y escala, con tu progreso y los de mañana.\n",
+     "text": "// 1.1.0 (ACT-3): los fractales del día por rango y escala, con tu progreso y los de mañana.\n// 1.4.0 (ACT-7): el PSNA lo dibuja js/act-psna.js (su test lo prueba); ya no se reubica ni se lee nada de js/activities.js.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const h = P.viewHTML(P.buildModel(sample(), CAT, { old: { psna: true, stones: true, nodes: true } }, NOW));\n",
+     "text": "  const h = P.viewHTML(P.buildModel(sample(), CAT, {}, NOW));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /id=\"avPsnaSlot\"/, 'el PSNA de siempre va en Hoy');\n  assert.match(h, /id=\"avStonesSlot\"/);\n",
+     "text": "  assert.doesNotMatch(h, /avPsnaSlot|avStonesSlot/, 'ACT-7: ya no se reubica nada de la pantalla vieja');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /<small>Piedras vetustas<\\/small><b>2 <span>\\/ 5<\\/span>/, 'lo que marcaste con el −/+ de siempre');\n",
+     "text": "  assert.match(h, /<small>Piedras vetustas<\\/small><b>—<\\/b>/, 'ACT-7: el −/+ de activities.js ya no se lee (las piedras son de act-week)');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(D.els.avPsnaSlot.children[0], D.els.psnaPanel, 'el PSNA de siempre, en Hoy');\n",
+     "text": "  assert.notEqual(D.els.psnaPanel.parentNode && D.els.psnaPanel.parentNode.id, 'avPsnaSlot', 'ACT-7: el PSNA viejo no se reubica');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(D.els.avStonesSlot.children[0].tagName, 'SECTION', 'la tarjeta de las piedras, entera');\n",
+     "text": "  assert.equal(D.els.avStonesSlot, undefined, 'ACT-7: la tarjeta vieja de las piedras tampoco');\n"
+    }
+   ]
+  }
+ ]
+}
