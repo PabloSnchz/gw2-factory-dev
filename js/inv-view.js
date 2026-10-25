@@ -1,7 +1,8 @@
 /*!
  * js/inv-view.js — Inventario y Personajes renovado: cabecera, pestañas Materiales, Banco y Armería legendaria (BL-070, INV-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-25) — INV-4: una pestaña sumada puede traer su propio campo (tools) y recibe lo que se escribe; la segunda, Buscar
+ * Versión: 1.3.0 (2026-10-25) — INV-5: las pestañas sumadas con order de 100 o más van después de las propias (Personajes)
+ *          1.2.0 (2026-10-25) — INV-4: una pestaña sumada puede traer su propio campo (tools) y recibe lo que se escribe; la segunda, Buscar
  *          1.1.0 (2026-10-25) — INV-3: pestañas que suman otros archivos (InvView.register); la primera, Multicuenta
  *          1.0.0 (2026-10-25) — INV-2: la vista nueva sobre el modelo de js/inv-model.js
  *
@@ -20,7 +21,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[InvView]';
   var PANEL = 'inventoryPanel';
   var ICON = 'assets/icons/Welcome/358409.png';
@@ -35,9 +36,15 @@
   var BANK_TIGHT = 0.1; // con menos del 10 % libre, aviso
   // Pestañas que suman otros archivos con InvView.register: {id, label, order, isDefault, html, tools, onEvent, onShow, refresh}.
   var PLUGINS = [];
+  // Las sumadas con order menor que 100 van antes de las propias; las de 100 o más, después.
   function tabsAll() {
-    return PLUGINS.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })
-      .map(function (p) { return [p.id, p.label]; }).concat(TABS);
+    var all = PLUGINS.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+    var pick = function (late) { return all.filter(function (p) { return ((p.order || 0) >= 100) === late; }).map(function (p) { return [p.id, p.label]; }); };
+    return pick(false).concat(TABS, pick(true));
+  }
+  function legacyNote() {
+    var a = !pluginOf('multi'), b = !pluginOf('chars');
+    return a && b ? ' El Multicuenta y Personajes abren por ahora su pantalla de siempre.' : a ? ' El Multicuenta abre por ahora su pantalla de siempre.' : b ? ' Personajes abre por ahora su pantalla de siempre.' : '';
   }
   function pluginOf(id) { for (var i = 0; i < PLUGINS.length; i++) if (PLUGINS[i].id === id) return PLUGINS[i]; return null; }
   function defaultTab() { for (var i = 0; i < PLUGINS.length; i++) if (PLUGINS[i].isDefault) return PLUGINS[i].id; return 'mat'; }
@@ -216,7 +223,7 @@
     h.push('<div class="iv-hero"><div class="iv-row"><img class="iv-ico" src="' + ICON + '" alt="" width="56" height="56">');
     h.push('<div class="iv-title"><h2 id="ivTitle">Inventario y Personajes</h2><p>' + esc(subtitle(m)) + '</p></div>');
     h.push('<div class="iv-acts">' + (pluginOf('multi') ? '' : '<button type="button" class="iv-btn" data-iv="multi">Multicuenta</button>') +
-      '<button type="button" class="iv-btn" data-iv="chars">Personajes</button>' +
+      (pluginOf('chars') ? '' : '<button type="button" class="iv-btn" data-iv="chars">Personajes</button>') +
       '<button type="button" class="iv-btn" data-iv="refresh">↻ Actualizar</button></div></div>');
     h.push('<div class="iv-stats">' + statsHTML(m) + '</div>');
     if (err) h.push('<p class="iv-err" role="status">' + esc(err) + '</p>');
@@ -228,7 +235,7 @@
     });
     h.push('</div><div id="ivPanel" role="tabpanel" aria-labelledby="ivTab-' + m.tab + '">' + toolsHTML(m));
     h.push('<div id="ivList">' + listHTML(m) + '</div>');
-    h.push('<p class="iv-src">Nombres, íconos y rarezas: API oficial del juego, en español. ' + (pluginOf('multi') ? 'Personajes abre' : 'El Multicuenta y Personajes abren') + ' por ahora su pantalla de siempre.</p></div>');
+    h.push('<p class="iv-src">Nombres, íconos y rarezas: API oficial del juego, en español.' + legacyNote() + '</p></div>');
     return h.join('');
   }
 
