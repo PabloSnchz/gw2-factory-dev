@@ -1,6 +1,6 @@
 # FEAT-014 — Raids renovado
 
-- **Estado:** HECHO EN DEV (2026-10-25 00:15Z), espera la validación de Pablo.
+- **Estado:** VALIDADO por Pablo (2026-10-25 00:41Z). Hecho en DEV el 2026-10-25 00:15Z.
 - **Fecha:** 2026-10-24 15:49Z (RAI-0) → 2026-10-25 00:15Z (RAI-6).
 - **Backlog:** BL-070, paso 1 (Raids y Strikes).
 - **Propuesta:** `docs/propuestas/propuesta-raids-bl070.html` (366801f), aprobada con D1 a D4 (2026-10-24 15:57Z).

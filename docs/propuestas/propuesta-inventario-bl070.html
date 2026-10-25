@@ -87,7 +87,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
   <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/358409.png" alt="">
   <div style="flex:1;min-width:260px">
     <h1>Inventario y Personajes renovado — propuesta visual</h1>
-    <p>BL-070, paso 2 · INV-0 · Shiruvana · 2026-10-25</p>
+    <p>BL-070, paso 2 · INV-0 · Shiruvana · 2026-10-25 · versión 2: el Multicuenta, explicado (sección 3)</p>
   </div>
   <span class="tag tag--wait">ESPERA TU APROBACIÓN</span>
 </div>
@@ -130,7 +130,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 </table>
 
 <h2>2. Un módulo que contesta «¿dónde está?»</h2>
-<p>Hoy hay tres pantallas sueltas (Inventario, Personajes y el Dashboard multicuenta) que se llaman entre sí con botones de «Volver». Propongo un solo módulo con cabecera común y cinco pestañas: <b>Buscar</b>, <b>Materiales</b>, <b>Banco</b>, <b>Armería legendaria</b> y <b>Personajes</b>. El Dashboard multicuenta sigue como botón en la cabecera y se renueva al final del paso.</p>
+<p>Hoy hay tres pantallas sueltas (Inventario, Personajes y el Dashboard multicuenta) que se llaman entre sí con botones de «Volver». Propongo un solo módulo con cabecera común y seis pestañas: <b>Buscar</b>, <b>Multicuenta</b>, <b>Materiales</b>, <b>Banco</b>, <b>Armería legendaria</b> y <b>Personajes</b>. El Dashboard multicuenta no se va ni se esconde: es una pestaña propia, con todo lo que hace hoy (sección 3).</p>
 
 <div class="frame">
 <p class="frame-label">Maqueta · computadora · pestaña Buscar</p>
@@ -138,7 +138,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
   <div class="row">
     <img class="hero-ico" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/358409.png" alt="">
     <div class="ttl"><h3>Inventario y Personajes</h3><p class="mut">Cuenta: Gato Negro.1234 · leído hace 2 min</p></div>
-    <div class="pills"><span class="pill">Multicuenta</span><span class="pill">Actualizar</span></div>
+    <div class="pills"><span class="pill">Actualizar</span></div>
   </div>
   <div class="stats">
     <div class="st"><small>Banco</small><b>214 <span>/ 300</span></b><div class="bar"><i style="width:71%"></i></div><em>86 espacios libres</em></div>
@@ -148,7 +148,7 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
   </div>
   <div class="voice"><span class="av"></span><div><small>Shiruvana</small>Tenés 1.234 pegotes de ectoplasma repartidos en 3 lugares. Si buscás algo, escribilo acá: miro el banco, el depósito, las ranuras compartidas y las bolsas de cada personaje.</div></div>
 </div>
-<div class="tabs"><span class="on">Buscar</span><span>Materiales</span><span>Banco</span><span>Armería legendaria</span><span>Personajes</span></div>
+<div class="tabs"><span class="on">Buscar</span><span>Multicuenta</span><span>Materiales</span><span>Banco</span><span>Armería legendaria</span><span>Personajes</span></div>
 <div class="search"><i></i>ectoplasma</div>
 <div style="display:grid;gap:10px;margin-top:12px">
   <div class="card hit"><div class="ico ico--exo"></div>
@@ -175,7 +175,53 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 <p class="mut" style="margin-top:10px">Agrupado por la categoría que trae la API para cada material, no por una lista fija. Filtros: Todos / Con algo guardado, y búsqueda dentro de la pestaña.</p>
 </div>
 
-<h2>3. Personajes: lo que la API sí da</h2>
+<h2>3. Multicuenta: tu tablero de valor se queda, y mejora</h2>
+<p>Sé que es la pantalla que más usás: con los sets predefinidos ves lo que vale en cada cuenta sin buscar. <b>No se pierde nada de lo que hace hoy.</b> Pasa a ser la segunda pestaña del módulo (o la primera, si lo preferís: D6) y la renuevo en el paso INV-3, apenas después de la vista base, no al final.</p>
+
+<h3>Lo que se queda tal cual</h3>
+<table>
+<thead><tr><th>Hoy</th><th>En la versión nueva</th></tr></thead>
+<tbody>
+<tr><td>Los 3 sets predefinidos: <b>Alto Valor</b> (8 ítems), <b>Materiales de artesanía</b> (Tier 3 a Tier 6, 8 ítems por tier, con los tiers que elijas) y <b>Símbolos y demás</b> (32 ítems: símbolos, talismanes, piedras imán, orbes, doblones y más)</td><td>Iguales, con los mismos ítems. Corrijo solo los 4 nombres cruzados de los tiers (el vial de sangre de Tier 4 y Tier 5, y dos tótems). Los 32 de «Símbolos y demás» y los 8 de «Alto Valor» coinciden con la API.</td></tr>
+<tr><td>Tabla de cuentas por ítem, con la fila TOTAL</td><td>Igual, con el ícono oficial de cada ítem arriba de su columna y su nombre al pasar el mouse o al enfocarla.</td></tr>
+<tr><td>Agregar o quitar ítems del set con el selector</td><td>Igual. Tus selecciones guardadas se respetan.</td></tr>
+<tr><td>Ordenar por cualquier ítem</td><td>Igual, y ahora también con teclado.</td></tr>
+<tr><td>Ocultar filas en cero, columnas en cero y las cuentas principales</td><td>Igual, con tus preferencias guardadas.</td></tr>
+<tr><td>Valor en oro del set con el precio de venta del Bazar</td><td>Igual, y además el valor por cuenta en su fila.</td></tr>
+<tr><td>Carga de a 3 cuentas, aviso por cuenta si algo no se pudo leer, hora de la última lectura</td><td>Igual: «Sin datos» en esa cuenta, nunca un 0 falso.</td></tr>
+</tbody>
+</table>
+
+<h3>Lo que mejora</h3>
+<table>
+<thead><tr><th>Hoy</th><th>Lo que propongo</th></tr></thead>
+<tbody>
+<tr><td>Cuenta banco y depósito de materiales, más las bolsas de <b>un solo personaje</b>: el primero de la lista, que el módulo llama «personaje activo» aunque no sea el que estás jugando.</td><td>Contar <b>todas las bolsas de todos los personajes y las ranuras compartidas</b> (D5). La API trae todos los personajes de una cuenta, con sus bolsas, en un solo pedido: la misma cantidad de pedidos por cuenta que hoy, con más datos en cada uno. Al tocar un número, el desglose: depósito, banco, ranuras compartidas y cada personaje.</td></tr>
+<tr><td>Lee la lista de cuentas de la clave vieja <code>gw2_keys</code>.</td><td>Desde la lista de cuentas actual, la misma que usa el resto de la Bóveda.</td></tr>
+<tr><td>Pantalla aparte con «Volver al Inventario».</td><td>Pestaña del módulo, con la cabecera común y en los 19 themes.</td></tr>
+</tbody>
+</table>
+
+<div class="frame">
+<p class="frame-label">Maqueta · pestaña Multicuenta · set Alto Valor</p>
+<div class="tabs"><span>Buscar</span><span class="on">Multicuenta</span><span>Materiales</span><span>Banco</span><span>Armería legendaria</span><span>Personajes</span></div>
+<div class="row" style="gap:8px;margin-bottom:10px"><span class="pill"><b>Alto Valor</b></span><span class="pill">Materiales de artesanía</span><span class="pill">Símbolos y demás</span><span class="pill" style="margin-left:auto">Valor del set: <b>4.812 g</b></span></div>
+<div class="card" style="padding:0;overflow-x:auto">
+<table style="margin:0;min-width:560px">
+<thead><tr><th>Cuenta</th><th style="text-align:right">Moneda mística</th><th style="text-align:right">Pegote de ectoplasma</th><th style="text-align:right">Trébol místico</th><th style="text-align:right">Valor</th></tr></thead>
+<tbody>
+<tr><td><b>Principal</b></td><td class="n">1.204</td><td class="n">1.234</td><td class="n">88</td><td class="n">3.110 g</td></tr>
+<tr><td><b>Alt 1</b></td><td class="n">312</td><td class="n">402</td><td class="n">12</td><td class="n">1.034 g</td></tr>
+<tr><td><b>Alt 2</b></td><td class="n">96</td><td class="n">250</td><td class="n">0</td><td class="n">668 g</td></tr>
+<tr><td><b>TOTAL</b></td><td class="n"><b>1.612</b></td><td class="n"><b>1.886</b></td><td class="n"><b>100</b></td><td class="n"><b>4.812 g</b></td></tr>
+</tbody>
+</table>
+</div>
+<div class="where" style="margin-top:10px"><span class="mut" style="font-size:.8rem">Tocaste «Pegote de ectoplasma · Principal»:</span><span class="wh">Depósito <b>1.200</b></span><span class="wh">Banco <b>30</b></span><span class="wh">Lyra <b>4</b></span></div>
+<p class="mut" style="margin-top:10px">Cuentas, números y valores de ejemplo. La maqueta muestra 3 columnas para que entre; en la Bóveda van todos los ítems del set, como hoy.</p>
+</div>
+
+<h2>4. Personajes: lo que la API sí da</h2>
 <p>Saco lo que no puede funcionar (Mapa y Punto de interés) y muestro lo que sí está en la API: profesión con su ícono oficial grande, la especialización de élite que tenés puesta, nivel, tiempo jugado, muertes, oficios con su nivel y el cumpleaños del personaje, que en el juego trae regalo.</p>
 <div class="frame">
 <p class="frame-label">Maqueta · pestaña Personajes</p>
@@ -200,47 +246,49 @@ td.n{text-align:right;font-variant-numeric:tabular-nums}
 <div class="phone">
   <div class="hero" style="padding:12px"><div class="row"><img class="hero-ico" style="width:44px;height:44px" src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/358409.png" alt=""><div class="ttl"><h3 style="font-size:1.05rem">Inventario y Personajes</h3></div></div>
   <div class="stats" style="grid-template-columns:1fr 1fr"><div class="st"><small>Banco</small><b>214 <span>/ 300</span></b></div><div class="st"><small>Personajes</small><b>12</b></div></div></div>
-  <div class="tabs"><span class="on">Buscar</span><span>Materiales</span><span>Más</span></div>
+  <div class="tabs"><span class="on">Buscar</span><span>Multicuenta</span><span>Más</span></div>
   <div class="search"><i></i>ectoplasma</div>
   <div class="card hit" style="margin-top:10px;grid-template-columns:36px 1fr auto"><div class="ico ico--exo" style="width:36px;height:36px"></div><div><b>Pegote de ectoplasma</b><div class="where"><span class="wh">Depósito <b>1.200</b></span><span class="wh">Banco <b>30</b></span></div></div><div class="tot">1.234</div></div>
 </div>
 <div>
-<p>En el celular las pestañas se reducen a Buscar, Materiales y «Más» (Banco, Armería legendaria y Personajes), con objetivos de 44 px. Las búsquedas y filtros se quedan donde los dejaste al volver de una ficha.</p>
+<p>En el celular las pestañas se reducen a Buscar, Multicuenta y «Más» (Materiales, Banco, Armería legendaria y Personajes), con objetivos de 44 px. La tabla del Multicuenta deja fija la columna de cuentas y se desliza de costado. Las búsquedas y filtros se quedan donde los dejaste al volver de una ficha.</p>
 <p>Teclado y lector de pantalla: las pestañas con el patrón completo (flechas, Inicio y Fin), cada resultado es un botón que dice cuánto tenés y dónde, y la rareza se lee como texto, no solo como color.</p>
 </div>
 </div>
 
-<h2>4. Cómo lo construyo</h2>
+<h2>5. Cómo lo construyo</h2>
 <ul>
-<li>Archivos nuevos y chicos (presupuesto de 40 KB, DEC-035), cargados por <code>js/modules.json</code>, como hice con Raids: <code>inv-view.js</code> (cabecera, pestañas, Materiales, Banco, Armería), <code>inv-search.js</code> (¿dónde está?) y <code>char-view.js</code> (Personajes). Los tres archivos viejos no se tocan hasta el retiro final.</li>
+<li>Archivos nuevos y chicos (presupuesto de 40 KB, DEC-035), cargados por <code>js/modules.json</code>, como hice con Raids: <code>inv-view.js</code> (cabecera, pestañas, Materiales, Banco, Armería), <code>inv-search.js</code> (¿dónde está?), <code>inv-multi.js</code> (Multicuenta) y <code>char-view.js</code> (Personajes). Los tres archivos viejos no se tocan hasta el retiro final, y el Multicuenta de hoy sigue funcionando en cada paso hasta que el nuevo lo reemplace con tu validación.</li>
 <li>Datos por la capa <code>GW2Api</code> con caché, nunca <code>fetch</code> crudo. Personajes con un solo pedido para todos en lugar de uno por personaje.</li>
 <li>Estados honestos: «Sin datos» si una lectura falla, y si la Key no tiene el permiso de inventarios lo digo en vez de mostrar bolsas vacías.</li>
 <li>Marco común (FEAT-013) y la guarda de contraste en los 19 themes desde el primer paso, con su test, como <code>raids-a11y</code>.</li>
 <li>Vuelta atrás simple en cada paso: sacar el archivo nuevo de <code>js/modules.json</code> deja el módulo como hoy.</li>
 </ul>
 
-<h2>5. Plan, paso por paso (cada uno con tu validación)</h2>
+<h2>6. Plan, paso por paso (cada uno con tu validación)</h2>
 <table>
 <thead><tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr></thead>
 <tbody>
-<tr><td>INV-1</td><td>Datos verificados: categorías oficiales de materiales, los 4 nombres de los sets corregidos y el modelo del módulo con sus tests.</td><td>Los sets del Dashboard multicuenta con los nombres bien.</td></tr>
+<tr><td>INV-1</td><td>Datos verificados: categorías oficiales de materiales, los 4 nombres de los sets corregidos y el modelo del módulo con sus tests.</td><td>Los sets del Multicuenta con los 4 nombres bien.</td></tr>
 <tr><td>INV-2</td><td>Vista nueva: cabecera, 4 indicadores y pestañas Materiales, Banco y Armería legendaria.</td><td>El módulo nuevo, con los materiales en su categoría real.</td></tr>
-<tr><td>INV-3</td><td>Buscar: «¿dónde está?» con banco, depósito, ranuras compartidas y bolsas de cada personaje.</td><td>Una búsqueda que dice cuánto tenés y dónde.</td></tr>
-<tr><td>INV-4</td><td>Personajes renovado: sin Mapa ni Punto de interés, con élite, oficios, tiempo jugado y cumpleaños.</td><td>La pestaña Personajes; <code>#/account/characters</code> sigue andando.</td></tr>
-<tr><td>INV-5</td><td>Ficha del ítem renovada: rareza legible, dónde está, enlace a la wiki y, si decidís que sí (D3), el precio del Bazar.</td><td>La ficha nueva al tocar cualquier ítem.</td></tr>
-<tr><td>INV-6</td><td>Multicuenta renovado: cuentas desde la clave nueva y sin el «personaje activo» inventado.</td><td>El Dashboard multicuenta con la cara del resto.</td></tr>
+<tr><td>INV-3</td><td>Multicuenta: los 3 sets, la tabla, el valor en oro y tus preferencias, como hoy; con todas las bolsas y ranuras compartidas (D5), el desglose y la lista de cuentas actual.</td><td>Tu tablero de valor, con la cara del resto y contando todo lo que tenés.</td></tr>
+<tr><td>INV-4</td><td>Buscar: «¿dónde está?» con banco, depósito, ranuras compartidas y bolsas de cada personaje.</td><td>Una búsqueda que dice cuánto tenés y dónde.</td></tr>
+<tr><td>INV-5</td><td>Personajes renovado: sin Mapa ni Punto de interés, con élite, oficios, tiempo jugado y cumpleaños.</td><td>La pestaña Personajes; <code>#/account/characters</code> sigue andando.</td></tr>
+<tr><td>INV-6</td><td>Ficha del ítem renovada: rareza legible, dónde está, enlace a la wiki y, si decidís que sí (D3), el precio del Bazar.</td><td>La ficha nueva al tocar cualquier ítem, también desde el Multicuenta.</td></tr>
 <tr><td>INV-7</td><td>Retiro de lo viejo (<code>characters-theme.js</code> y lo que deje de usarse) y revisión final: 19 themes, teclado, lector, celular, movimiento reducido. FEAT-015.</td><td>Lo mismo, más liviano.</td></tr>
 </tbody>
 </table>
 
-<h2>6. Lo que necesito que decidas</h2>
+<h2>7. Lo que necesito que decidas</h2>
 <table>
 <thead><tr><th></th><th>Decisión</th><th>Lo que recomiendo</th></tr></thead>
 <tbody>
-<tr><td><b>D1</b></td><td>¿Buscar también en las bolsas de los personajes? Es un pedido por personaje (de a 3, con caché de 5 minutos) y la Key necesita el permiso de inventarios.</td><td><b>Sí.</b> Es la pregunta que más se hace: «¿quién tiene esto?». Solo se pide al buscar o al abrir Personajes.</td></tr>
+<tr><td><b>D1</b></td><td>¿Buscar también en las bolsas de los personajes? La API trae todos los personajes de la cuenta en un solo pedido (con caché de 5 minutos); la Key necesita el permiso de inventarios.</td><td><b>Sí.</b> Es la pregunta que más se hace: «¿quién tiene esto?». Solo se pide al buscar o al abrir Personajes.</td></tr>
 <tr><td><b>D2</b></td><td>¿Saco Mapa y Punto de interés de Personajes? La API no da la ubicación.</td><td><b>Sí.</b> Hoy no funcionan para nadie. Las asignaciones que tengas guardadas no se borran.</td></tr>
 <tr><td><b>D3</b></td><td>¿Precio del Bazar en la ficha del ítem?</td><td><b>Sí, solo en la ficha</b> (compra y venta). El valor total del inventario lo dejo afuera: es otra funcionalidad.</td></tr>
 <tr><td><b>D4</b></td><td>¿Personajes como pestaña dentro del módulo, en lugar de pantalla aparte?</td><td><b>Sí.</b> Una sola puerta y menos «Volver»; los marcadores viejos siguen funcionando.</td></tr>
+<tr><td><b>D5</b></td><td>¿El Multicuenta cuenta todas las bolsas de todos los personajes y las ranuras compartidas, en lugar de un solo personaje?</td><td><b>Sí.</b> Hoy un ítem que lleva un alt no aparece y el total queda corto. La misma cantidad de pedidos por cuenta que hoy, de a 3 cuentas.</td></tr>
+<tr><td><b>D6</b></td><td>¿Con qué pestaña abre el módulo: Buscar o Multicuenta?</td><td><b>Que recuerde la última que usaste</b>, y la primera vez abre en Multicuenta, que es la que más usás.</td></tr>
 </tbody>
 </table>
 
