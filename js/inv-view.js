@@ -1,7 +1,8 @@
 /*!
  * js/inv-view.js — Inventario y Personajes renovado: cabecera, pestañas Materiales, Banco y Armería legendaria (BL-070, INV-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-25) — INV-3: pestañas que suman otros archivos (InvView.register); la primera, Multicuenta
+ * Versión: 1.2.0 (2026-10-25) — INV-4: una pestaña sumada puede traer su propio campo (tools) y recibe lo que se escribe; la segunda, Buscar
+ *          1.1.0 (2026-10-25) — INV-3: pestañas que suman otros archivos (InvView.register); la primera, Multicuenta
  *          1.0.0 (2026-10-25) — INV-2: la vista nueva sobre el modelo de js/inv-model.js
  *
  * Toma el panel #inventoryPanel (#/account/characters) y oculta lo viejo sin borrarlo, como Raids:
@@ -19,7 +20,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[InvView]';
   var PANEL = 'inventoryPanel';
   var ICON = 'assets/icons/Welcome/358409.png';
@@ -32,7 +33,7 @@
   };
   var ARMORY_GROUPS = [['Weapon', 'Armas'], ['Armor', 'Armaduras'], ['Back', 'Espaldares'], ['Trinket', 'Abalorios'], ['UpgradeComponent', 'Mejoras'], ['', 'Otros']];
   var BANK_TIGHT = 0.1; // con menos del 10 % libre, aviso
-  // Pestañas que suman otros archivos con InvView.register: {id, label, order, isDefault, html, onEvent, onShow, refresh}.
+  // Pestañas que suman otros archivos con InvView.register: {id, label, order, isDefault, html, tools, onEvent, onShow, refresh}.
   var PLUGINS = [];
   function tabsAll() {
     return PLUGINS.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })
@@ -198,7 +199,8 @@
   }
 
   function toolsHTML(m) {
-    if (pluginOf(m.tab)) return '';
+    var tp = pluginOf(m.tab);
+    if (tp) return tp.tools ? '<div class="iv-tools">' + tp.tools(m) + '</div>' : '';
     var h = '<div class="iv-tools"><label class="iv-search"><span class="iv-sr">Filtrar por nombre</span>' +
       '<input type="search" id="ivQ" placeholder="Filtrar por nombre…" value="' + esc(m.q) + '" autocomplete="off"></label>';
     if (m.tab === 'mat' && m.matGroups.length) {
@@ -466,6 +468,8 @@
       else if (a.tab) go(a.tab);
     });
     host.addEventListener('input', function (e) {
+      var pl = pluginOf(st.ui.tab);
+      if (pl && pl.onEvent && pl.onEvent(e)) return;
       var t = e.target;
       if (t && t.id === 'ivQ') { st.ui.q = String(t.value || ''); renderList(); }
     });

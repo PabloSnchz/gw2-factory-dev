@@ -53,7 +53,7 @@ test('el archivo entra en el presupuesto, va por el manifiesto después de inv-v
   const man = JSON.parse(read('js/modules.json')).modules;
   const src = man.map((m) => m.src);
   assert.ok(src.indexOf('js/inv-multi.js') > src.indexOf('js/inv-view.js') && src.indexOf('js/inv-view.js') >= 0, 'después de la vista');
-  assert.equal(man.find((m) => m.src === 'js/inv-view.js').v, '1.1.0');
+  assert.ok(man.find((m) => m.src === 'js/inv-view.js').v >= '1.1.0', 'la vista con el registro de pestañas');
   assert.doesNotMatch(read('index.html'), /inv-multi\.js/, 'no se carga también desde index.html');
   // Desvío conocido (GW2Api congelado): solo estas dos lecturas van por fetch propio.
   const raw = SRC.match(/readJSON\('([^']+)'/g).map((s) => s.slice(10, -1)).sort();

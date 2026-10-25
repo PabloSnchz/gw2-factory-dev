@@ -14,7 +14,8 @@
     { "src": "js/raids-view.js", "v": "1.2.0" },
     { "src": "js/raids-sheet.js", "v": "1.2.0" },
     { "src": "js/inv-model.js", "v": "1.0.0" },
-    { "src": "js/inv-view.js", "v": "1.1.0" },
-    { "src": "js/inv-multi.js", "v": "1.0.0" }
+    { "src": "js/inv-view.js", "v": "1.2.0" },
+    { "src": "js/inv-multi.js", "v": "1.0.1" },
+    { "src": "js/inv-search.js", "v": "1.0.0" }
   ]
 }

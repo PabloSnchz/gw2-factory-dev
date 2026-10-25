@@ -1,7 +1,8 @@
 /*!
  * js/inv-multi.js — Multicuenta: lo de valor de cada cuenta, set por set (BL-070, INV-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25) — INV-3: el Dashboard multicuenta como pestaña de Inventario y Personajes
+ * Versión: 1.0.1 (2026-10-25) — INV-4: presta su lector (InvMulti.read) a Buscar, con la misma caché
+ *          1.0.0 (2026-10-25) — INV-3: el Dashboard multicuenta como pestaña de Inventario y Personajes
  *
  * Todo lo que hacía el Dashboard multicuenta (js/inventory-dashboard.js), en una pestaña del módulo:
  *  - los 3 sets de assets/data/inventory-sets.json (Alto Valor, Materiales de artesanía con sus tiers y
@@ -20,7 +21,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var LOG = '[InvMulti]';
   var SETS_URL = 'assets/data/inventory-sets.json';
   var API = 'https://api.guildwars2.com';
@@ -471,6 +472,8 @@
 
   root.InvMulti = {
     version: VERSION, tab: TAB, refresh: TAB.refresh,
+    // Solo las dos lecturas que GW2Api no trae; la Key queda en memoria, nunca se guarda.
+    read: function (path, tk, nocache) { return readJSON(path, String(tk || ''), !!nocache); },
     getSnapshot: snapshot,
     _pure: { esc: esc, fmtInt: fmtInt, coins: coins, readPrefs: readPrefs, activeSet: activeSet, tiersOf: tiersOf, allItems: allItems,
       activeIds: activeIds, accIndex: accIndex, tableModel: tableModel, rowNote: rowNote, whereText: whereText, html: html, KEY: KEY, CSS: CSS }
