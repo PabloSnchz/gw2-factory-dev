@@ -1,0 +1,119 @@
+{
+ "id": "PATCH-117",
+ "summary": "BL-070 ACT-7c: js/act-week.js 1.1.0 sin el paso del −/+ de la pantalla vieja de Actividades (D3, código muerto desde ACT-7b); manifiesto y test.",
+ "files": [
+  {
+   "path": "js/act-week.js",
+   "base_sha": "6ef747cab0729483bba4a7d9e79fb47b182eeead",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-25) — ACT-4\n",
+     "text": " * Versión: 1.1.0 (2026-10-25) — ACT-7c: sin el paso del −/+ de la pantalla vieja (retirada en ACT-7b)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " *  - Piedras de invocación vetustas: una casilla por moneda (D3), con lo que tenés de cada una en la cartera, y lo\n *    que marcaste con el −/+ de antes pasa a las primeras casillas de esta semana.\n",
+     "text": " *  - Piedras de invocación vetustas: una casilla por moneda (D3), con lo que tenés de cada una en la cartera.\n *    El paso del −/+ de la pantalla vieja se fue con ella en ACT-7c: esa pantalla ya no existe desde ACT-7b.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';\n",
+     "text": "  var VERSION = '1.1.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // s: { data, hasToken, loaded, key: keyModel, mark, weekly, since, stones, migrated, walletState }\n",
+     "text": "  // s: { data, hasToken, loaded, key: keyModel, mark, weekly, since, stones, walletState }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (s.migrated) note += ' Lo que marcaste con el −/+ de antes pasó a las primeras casillas.';\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { data: null, dataP: null, wallet: {}, walletState: {}, migrated: {} };\n",
+     "text": "  var st = { data: null, dataP: null, wallet: {}, walletState: {} };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Lo que marcaste esta semana para la cuenta. D3: si esta semana todavía no marcaste nada acá y el −/+ de antes\n  // tiene un número, pasa a las primeras casillas (una sola vez por semana y cuenta).\n",
+     "text": "  // Lo que marcaste esta semana para la cuenta (por huella, nunca la Key).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var store = S.get(STORE) || {}, m = P.marksFor(store, f, now);\n    if (!store[f] || store[f].week !== m.week) {\n      var old = oldCount();\n      if (old > 0) {\n        var seeded = P.stonesFromCount(offers(), old), next = store;\n        Object.keys(seeded).forEach(function (cur) { next = P.setMark(next, f, now, 'stone', { currency: Number(cur), on: true }); });\n        S.set(STORE, next);\n        st.migrated[f] = m.week;\n        m = P.marksFor(next, f, now);\n      }\n    }\n    return m;\n  }\n  function oldCount() {\n    try { var a = root.Activities, d = a && typeof a._debug === 'function' ? a._debug() : null; return d && d.token ? Number(d.weeklyStones) || 0 : 0; } catch (e) { return 0; }\n",
+     "text": "    return P.marksFor(S.get(STORE) || {}, f, now);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      migrated: !!(mk && st.migrated[fp()] === mk.week), walletState: tk ? st.walletState[tk] : null };\n",
+     "text": "      walletState: tk ? st.walletState[tk] : null };\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "15a875d14890c860628e787b55e510e68523524a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/act-week.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/act-week.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/act-week.test.cjs",
+   "base_sha": "f4a1373a05845b17529ed2943183e2a3a8f68536",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "// moneda con la cartera, las marcas por cuenta y semana, el paso del −/+ de antes (D3) y el contraste en los 19 themes.\n",
+     "text": "// moneda con la cartera, las marcas por cuenta y semana (sin leer la pantalla vieja, ACT-7c) y el contraste en los 19 themes.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.0\\.0/);\n",
+     "text": "  assert.match(SRC, /Versión: 1\\.1\\.0/);\n  assert.doesNotMatch(SRC, /\\bActivities\\b|oldCount|migrated/, 'ACT-7c: no lee la pantalla vieja de Actividades');\n  assert.equal(JSON.parse(read('js/modules.json')).modules.filter((m) => m.src === 'js/act-week.js')[0].v, '1.1.0');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(W.stonesHTML({ data: DATA, hasToken: true, migrated: true, walletState: 'error', stones: s }), /pasó a las primeras casillas\\. No pude leer tu cartera/);\n",
+     "text": "  const err = W.stonesHTML({ data: DATA, hasToken: true, migrated: true, walletState: 'error', stones: s });\n  assert.match(err, /Marcá las que compraste: valen hasta el reset del lunes\\. No pude leer tu cartera/);\n  assert.doesNotMatch(err, /primeras casillas/, 'ACT-7c: el −/+ de antes ya no pasa');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  let old = opts.old || 0, tk = opts.tk === undefined ? 'TOKEN-DE-PRUEBA' : opts.tk;\n",
+     "text": "  const tk = opts.tk === undefined ? 'TOKEN-DE-PRUEBA' : opts.tk;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    Activities: { _debug: () => ({ token: 'x', weeklyStones: old }) },\n",
+     "text": "    Activities: opts.legacy ? { _debug: () => ({ token: 'x', weeklyStones: 4 }) } : undefined,\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  return { sb, store, renders, voices, setOld: (n) => { old = n; } };\n",
+     "text": "  return { sb, store, renders, voices };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('humo: el −/+ de antes pasa una vez (D3), marcar y desmarcar por cuenta y semana, sin guardar la Key', async () => {\n  const { sb, store, renders, setOld } = boot({ old: 2 });\n  const A = sb.ActWeek, now = Date.now();\n  assert.deepEqual(J(A.state(now)), { bought: 2 }, 'oro y karma, en el orden de Leivas');\n",
+     "text": "test('humo: marcar y desmarcar por cuenta y semana, sin guardar la Key y sin leer la pantalla vieja (ACT-7c)', async () => {\n  const { sb, store, renders } = boot({ legacy: true });\n  const A = sb.ActWeek, now = Date.now();\n  assert.deepEqual(J(A.state(now)), { bought: 0 }, 'un Activities viejo con 4 piedras no se lee');\n  assert.equal(A.onClick(click({ 'data-aw-stone': '1' })), true);\n  assert.equal(A.onClick(click({ 'data-aw-stone': '2' })), true);\n  assert.deepEqual(J(A.state(now)), { bought: 2 }, 'oro y karma');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  setOld(4);\n  assert.equal(A.state(now).bought, 1, 'el −/+ de antes no vuelve a pisar lo que marcaste');\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "  setOld(0);\n",
+     "text": ""
+    }
+   ]
+  }
+ ]
+}
