@@ -1,0 +1,133 @@
+{
+ "id": "PATCH-087",
+ "summary": "BL-070 INV-7b, revisión final de Inventario y Personajes. inv-view.js 1.5.0: sin los botones, la nota «por ahora su pantalla de siempre» ni openChars, que llevaban a las pantallas viejas ya retiradas. inv-multi.js 1.1.1: al tocar un número el foco va al detalle «dónde está» para que el lector de pantalla lo lea, y al cerrarlo vuelve al número. Manifiesto al día; tests de inv-view e inv-multi.",
+ "files": [
+  {
+   "path": "js/inv-view.js",
+   "base_sha": "824f4e233f8cc212ab971682c644a53bf73d0f3d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-25) — INV-6:",
+     "text": " * Versión: 1.5.0 (2026-10-25) — INV-7b: sin los caminos a las pantallas viejas (se retiraron)\n *          1.4.0 (2026-10-25) — INV-6:"
+    },
+    {
+     "op": "replace",
+     "anchor": " *  - Personajes abre por ahora su pantalla de siempre; se renueva en INV-5. El Multicuenta es una pestaña\n *    (js/inv-multi.js, INV-3): la primera vez abre ahí y después recuerda la última pestaña (D6).\n",
+     "text": " *  - Multicuenta (js/inv-multi.js), Buscar (js/inv-search.js) y Personajes (js/inv-chars.js) son pestañas\n *    que suman otros archivos: la primera vez abre en Multicuenta y después recuerda la última (D6).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.4.0';",
+     "text": "  var VERSION = '1.5.0';"
+    },
+    {
+     "op": "delete",
+     "anchor": "  function legacyNote() {\n    var a = !pluginOf('multi'), b = !pluginOf('chars');\n    return a && b ? ' El Multicuenta y Personajes abren por ahora su pantalla de siempre.' : a ? ' El Multicuenta abre por ahora su pantalla de siempre.' : b ? ' Personajes abre por ahora su pantalla de siempre.' : '';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "en español.' + legacyNote() + '</p></div>');",
+     "text": "en español.</p></div>');"
+    },
+    {
+     "op": "replace",
+     "anchor": "'<div class=\"iv-acts\">' + (pluginOf('multi') ? '' : '<button type=\"button\" class=\"iv-btn\" data-iv=\"multi\">Multicuenta</button>') +\n      (pluginOf('chars') ? '' : '<button type=\"button\" class=\"iv-btn\" data-iv=\"chars\">Personajes</button>') +\n      '<button type=\"button\" class=\"iv-btn\" data-iv=\"refresh\">",
+     "text": "'<div class=\"iv-acts\">' +\n      '<button type=\"button\" class=\"iv-btn\" data-iv=\"refresh\">"
+    },
+    {
+     "op": "delete",
+     "anchor": "  function openChars() {\n    var p = byId(PANEL);\n    if (root.Characters && typeof root.Characters.activate === 'function') {\n      if (p && p.setAttribute) p.setAttribute('hidden', '');\n      root.Characters.activate();\n    }\n  }\n\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "      else if (a.act === 'multi') { if (root.location) root.location.hash = '#/inventory/dashboard'; }\n      else if (a.act === 'chars') openChars();\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/inv-view.test.cjs",
+   "base_sha": "0fe5c3b9d86c4f7b457cfca3b22ac3b6c41436be",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(mat, /data-iv=\"multi\"/);\n  assert.match(mat, /data-iv=\"chars\"/);\n",
+     "text": "  // BL-070 INV-7b: sin botones a las pantallas viejas ni la nota «por ahora», aunque falte una pestaña sumada\n  assert.doesNotMatch(mat, /data-iv=\"(multi|chars)\"/);\n  assert.doesNotMatch(mat, /pantalla de siempre/);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Personajes y Multicuenta abren su pantalla de siempre\n  click({ 'data-iv': 'chars' });\n  assert.ok(calls.some((c) => c[0] === 'charsScreen'));\n  assert.equal(D.panel.getAttribute('hidden'), '');\n  click({ 'data-iv': 'multi' });\n  assert.equal(sb.location.hash, '#/inventory/dashboard');\n",
+     "text": "  // BL-070 INV-7b: las acciones viejas ya no abren nada ni esconden el panel\n  click({ 'data-iv': 'chars' });\n  assert.ok(!calls.some((c) => c[0] === 'charsScreen'));\n  assert.notEqual(D.panel.getAttribute('hidden'), '');\n  click({ 'data-iv': 'multi' });\n  assert.notEqual(sb.location.hash, '#/inventory/dashboard');\n"
+    }
+   ]
+  },
+  {
+   "path": "js/inv-multi.js",
+   "base_sha": "289155328fe06b278c436765f9a8c632f7355349",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-25) — INV-7b:",
+     "text": " * Versión: 1.1.1 (2026-10-25) — INV-7b: el lector oye dónde está (el foco va al detalle y vuelve al número)\n *          1.1.0 (2026-10-25) — INV-7b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.1.1';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (wi) h.push('<p>' + esc(whereText(",
+     "text": "    if (wi) h.push('<p id=\"imWhereText\" tabindex=\"-1\">' + esc(whereText("
+    },
+    {
+     "op": "replace",
+     "anchor": "      if (root.InvView && typeof root.InvView.renderTab === 'function') root.InvView.renderTab('multi');\n",
+     "text": "      if (root.InvView && typeof root.InvView.renderTab === 'function') root.InvView.renderTab('multi');\n      // Lector de pantalla: el detalle recién dibujado no se anuncia solo; el foco va a él y, al cerrar, vuelve al número.\n      var f = st.focus && doc && doc.getElementById ? doc.getElementById(st.focus) : null;\n      st.focus = null;\n      if (f && typeof f.focus === 'function') f.focus();\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "st.where = { i: Number(x[0]), id: Number(x[1]) }; paint(); return true; }",
+     "text": "st.where = { i: Number(x[0]), id: Number(x[1]) }; st.focus = 'imWhereText'; paint(); return true; }"
+    },
+    {
+     "op": "replace",
+     "anchor": "      if (attr(t, 'data-im-close') != null) { st.where = null; paint(); return true; }",
+     "text": "      if (attr(t, 'data-im-close') != null) { st.focus = st.where ? 'imC-' + st.where.i + '-' + st.where.id : null; st.where = null; paint(); return true; }"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '#ivRoot .im :is(input,summary,button):focus-visible{",
+     "text": "    '#ivRoot #imWhereText:focus{outline:2px solid var(--acc-1);outline-offset:2px}',\n    '#ivRoot .im :is(input,summary,button):focus-visible{"
+    }
+   ]
+  },
+  {
+   "path": "tests/inv-multi.test.cjs",
+   "base_sha": "8ab5d7b821a5fdd9a5c4853f269299cdfd303069",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  ev('click', { 'data-im-cell': '0:19721' });\n  assert.match(list(D), /Pegote de ectoplasma en Alt Uno: 108 — Depósito 100 · Banco, pestaña 2 5 · Lyra 3\\./);\n",
+     "text": "  const focused = [], gid = D.document.getElementById;\n  D.document.getElementById = (id) => (/^im(WhereText|C-)/.test(id) && list(D).includes('id=\"' + id + '\"') ? { focus: () => focused.push(id) } : gid(id));\n  ev('click', { 'data-im-cell': '0:19721' });\n  assert.match(list(D), /Pegote de ectoplasma en Alt Uno: 108 — Depósito 100 · Banco, pestaña 2 5 · Lyra 3\\./);\n  assert.match(list(D), /<p id=\"imWhereText\" tabindex=\"-1\">/);\n  assert.deepEqual(focused, ['imWhereText'], 'el lector oye el detalle: el foco va a él');\n  ev('click', { 'data-im-close': '1' });\n  assert.deepEqual(focused, ['imWhereText', 'imC-0-19721'], 'al cerrar, el foco vuelve al número');\n  assert.doesNotMatch(list(D), /imWhereText/);\n  ev('click', { 'data-im-cell': '0:19721' });\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "31f55f244b86019406909b6d22e657ebff9e8374",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/inv-view.js\", \"v\": \"1.4.0\" }",
+     "text": "{ \"src\": \"js/inv-view.js\", \"v\": \"1.5.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/inv-multi.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/inv-multi.js\", \"v\": \"1.1.1\" }"
+    }
+   ]
+  }
+ ]
+}
