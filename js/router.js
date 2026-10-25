@@ -1,8 +1,10 @@
 /*!
  * Router y Vistas (WV Objetivos + Tienda unificada)
- * v2.20.0 (2026-10-25) — BL-070 ACT-5: la Heredad (#/account/homestead) es un módulo propio
+ * v2.21.0 (2026-10-25) — BL-070 ACT-7b: Actividades ya no usa js/activities.js
  *
  * Cambios de BL-070 (el detalle de cada paso está en ai-memory/status.md):
+ *  - 2.21.0 (ACT-7b): js/activities.js se retiró: el módulo viejo no se precarga, activa ni desactiva;
+ *    #activitiesPanel vive en index.html y lo dibuja js/act-view.js (escucha gn:tokenchange solo).
  *  - 2.20.0 (ACT-5): ruta #/account/homestead y #homesteadPanel (js/home-view.js, BL-055).
  *  - 2.19.1 (INV-7b): MODULOS_CON_LATCH y showPanel ya no nombran a InventoryHub ni a sus 2 paneles.
  *  - 2.19.0 (INV-7a): #/account/characters es la vista nueva (js/inv-*.js); #/inventory/dashboard
@@ -977,22 +979,6 @@
   // ----------------------------- ROUTER ------------------------------------
   var _routeT = null;
 
-  var _actInflight = null;
-  var _actAbort = null;
-  function prefetchActivitiesOnce(token) {
-    if (_actInflight) return _actInflight;
-    try { if (_actAbort) _actAbort.abort(); } catch(_) {}
-    _actAbort = new AbortController();
-    _actInflight = Promise.resolve().then(function(){
-      return window.Activities?.prefetch?.({ token: token || getSelectedToken(), signal: _actAbort.signal });
-    }).catch(function(e){
-      console.debug('[router] activities prefetch skipped/failed', e?.message || e);
-    }).finally(function(){
-      _actInflight = null;
-    });
-    return _actInflight;
-  }
-
   function hideBothNavButtons(){
     var dashBtn = document.getElementById('wvTabBtnObjDashboard');
     var pdBtn = document.getElementById('wvTabBtnPurchaseDetail');
@@ -1058,10 +1044,6 @@
 
         if (h !== '#/account/wizards-vault' && WV && typeof WV.deactivate === 'function') {
           try { WV.deactivate(); } catch (_) {}
-        }
-        try { if (h !== '#/activities' && _actAbort) { _actAbort.abort(); } } catch(_) {}
-        if (h !== '#/activities' && window.Activities && typeof window.Activities.deactivate === 'function') {
-          try { window.Activities.deactivate(); } catch (_) {}
         }
 
         if (h === '#/wallet/dashboard') {
@@ -1211,12 +1193,10 @@
 
         if (h === '#/activities') {
           try {
-            prefetchActivitiesOnce(getSelectedToken());
-            showPanel('activitiesPanel');
+            showPanel('activitiesPanel'); // la vista nueva (js/act-view.js) se dibuja sola al verse
             if (typeof Analytics !== 'undefined') Analytics.viewModule('activities');
-            window.Activities?.activate?.();
           } catch (e) {
-            console.warn('[router] Activities.activate error', e);
+            console.warn('[router] activities', e);
           } finally {
             updateSidebarFor('activities');
             setActiveNav(h);
@@ -1323,14 +1303,7 @@
         hydrateWVModePills(el('wvPanel'));
 
       } else if (h === '#/activities') {
-        var p = document.getElementById('activitiesPanel');
-        if (p && !p.hasAttribute('hidden')) {
-          try {
-            window.Activities?.activate?.();
-          } catch (e) {
-            console.warn('[router] Activities.activate error', e);
-          }
-        }
+        // BL-070 ACT-7: js/act-view.js y js/act-week.js escuchan gn:tokenchange y releen solas.
 
       } else if (h === '#/account/characters') {
         // BL-070 INV-7: la vista nueva escucha gn:tokenchange y relee sola.

@@ -424,8 +424,8 @@ section('6. el espejo, en comportamiento, para los 4 pares de MIRROR_MAP');
    * puede expresar que las dos son conocidas por separado.
    */
   const LECTORES_LEGACY_ESPERADOS = new Set([
-    'activities-theme.js[gn_home_nodes_marked]',
-    'activities.js[gn_activities_toggles]',
+    // BL-070 ACT-7b: activities.js y activities-theme.js se retiraron con sus dos lecturas crudas
+    // (gn_activities_toggles y gn_home_nodes_marked); la Heredad lee sus marcas por Storage.
     'wv-objectives-dashboard.js[gw2_keys]',
     // T19-c (HB#118): `inventory-hub.js`, `raid-tracker.js` y
     // `strike-tracker.js` SALEN de la lista: su unico raw era

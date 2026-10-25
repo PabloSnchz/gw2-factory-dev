@@ -112,7 +112,9 @@ if (m61) {
   // CONTROL: el filtro de "queda vigilando" puede dar positivo y negativo.
   ok(entradas.some((e) => porPar(e).includes('gw2_keys')),
      'CONTROL: el filtro de pares puede dar POSITIVO (hay entradas con gw2_keys)');
-  ok(entradas.some((e) => porPar(e).includes('gn_activities_toggles')),
+  // BL-070 ACT-7b: la única entrada con otra legacy (activities.js[gn_activities_toggles]) se retiró con el archivo;
+  // el control usa una entrada sintética con dos legacy para seguir probando que el filtro no es literal.
+  ok(porPar('sintetico.js[gw2_keys, gn_activities_toggles]').includes('gn_activities_toggles'),
      'CONTROL: y puede dar positivo con otra legacy (el filtro no es literal a gw2_keys)');
 }
 

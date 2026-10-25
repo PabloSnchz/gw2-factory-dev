@@ -156,7 +156,8 @@ function construir(t13a, t13b) {
   // router: el bloque deactivate REAL (router.js:1490-1496) + T13-a opcional
   const L = routerSrc.split(/\r?\n/);
   const di = L.findIndex(l => /h !== '#\/account\/wizards-vault' && WV && typeof WV\.deactivate/.test(l));
-  let deact = L.slice(di, di + 7).join('\n');
+  // BL-070 ACT-7b: el bloque de Activities (4 líneas) se fue con js/activities.js; queda el de WV (3 líneas).
+  let deact = L.slice(di, di + 3).join('\n');
   if (t13a) {
     deact += '\n' + [
       '        var MODULOS_CON_LATCH = [',

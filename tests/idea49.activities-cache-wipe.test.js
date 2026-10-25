@@ -61,20 +61,14 @@ ok(!wipePredicate(KEYS.tokeninfo), 'tokeninfo sobrevive');
 ok(!wipePredicate(KEYS.items),     'items_cache_v1:es sobrevive');
 
 // ── 2. Verificar en el archivo real que activate() NO llama al wipe ajeno ────
-console.log('\n[2] El archivo real activities.js: activate() no borra cache de otro modulo');
+console.log('\n[2] js/activities.js se retiró (BL-070 ACT-7b): ya no hay activate() que borre cache ajena');
 
-const activitiesSrc = fs.readFileSync(path.join(ROOT, 'js', 'activities.js'), 'utf8');
-const activateBody = activitiesSrc.slice(activitiesSrc.indexOf('async function activate()'));
-// recorte estable: los primeros 4000 chars de la función bastan y no dependen
-// de dónde se cierre
-const activateWindow = activateBody.slice(0, 4000);
-
-ok(!/^\s*cleanAchievementsCache\(\);/m.test(activateWindow),
-   'activate() YA NO llama a cleanAchievementsCache()  <-- el fix');
-ok(/^\s*cleanActivitiesCache\(\);/m.test(activateWindow),
-   'activate() CONSERVA cleanActivitiesCache() (prefijo psna:, datos propios)');
-ok(/function cleanAchievementsCache\(\)/.test(activitiesSrc),
-   'cleanAchievementsCache() sigue DEFINIDA para llamadas explicitas (no se borro la funcion)');
+// El hallazgo no puede volver por ahí: el archivo no existe y la vista nueva de Actividades no toca localStorage.
+ok(!fs.existsSync(path.join(ROOT, 'js', 'activities.js')),
+   'js/activities.js ya no existe: su activate() no puede borrar la cache de logros');
+const actViewSrc = fs.readFileSync(path.join(ROOT, 'js', 'act-view.js'), 'utf8');
+ok(!/cleanAchievementsCache|localStorage/.test(actViewSrc),
+   'la vista nueva de Actividades (js/act-view.js) no borra ni toca localStorage');
 
 // ── 3. Verificar que api-gw2.js realmente escribe esas claves ───────────────
 console.log('\n[3] api-gw2.js escribe esas claves (Ls + prefijo)');
@@ -98,11 +92,11 @@ ok(/var cached = getCache\(key, TTL\.ACH_META, null, false\);/.test(apiSrc),
    'el bag se lee SIEMPRE para poder mergear, incluso con nocache');
 
 // ── 4. Router: cuantas veces se llega a activate() por navegacion ───────────
-console.log('\n[4] router.js llama Activities.activate() al entrar a #/activities');
+console.log('\n[4] router.js ya no llama Activities.activate() al entrar a #/activities (BL-070 ACT-7b)');
 
 const routerSrc = fs.readFileSync(path.join(ROOT, 'js', 'router.js'), 'utf8');
 const nCalls = (routerSrc.match(/Activities\?\.activate\?\.\(\)/g) || []).length;
-ok(nCalls >= 1, 'router.js invoca Activities.activate() (' + nCalls + ' sitio(s))');
+ok(nCalls === 0, 'router.js ya no invoca Activities.activate() (' + nCalls + ' sitio(s))');
 
 // ── 5. El coste real: cuantas clavesychunk puede escribir una cuenta ────────
 console.log('\n[5] Coste medido del borrado (por que NO es cosmético)');

@@ -139,15 +139,12 @@ setTimeout(() => {
        'sin cuota llena, no se avisa');
 
     // ── 3. El archivo real ya no borra la cache de otro modulo ───────────────
-    console.log('\n[3] activities.js:activate() no borra la cache de logros');
-    const act = fs.readFileSync(path.join(ROOT, 'js', 'activities.js'), 'utf8');
-    const body = act.slice(act.indexOf('async function activate()'), act.indexOf('async function activate()') + 4000);
-    const callIdx = body.search(/^\s*clean\w+Cache\(\);/m);
-    const callLine = callIdx === -1 ? '' : body.slice(callIdx, body.indexOf('\n', callIdx));
-    ok(!/cleanAchievementsCache/.test(callLine),
-       'la unica llamada de limpieza que sobrevive es cleanActivitiesCache (datos propios)');
-    ok(/cleanActivitiesCache/.test(body),
-       'cleanActivitiesCache() se sigue llamando: sus prefijos psna: son de este modulo');
+    console.log('\n[3] js/activities.js se retiró (BL-070 ACT-7b): nadie borra la cache de logros al abrir Actividades');
+    ok(!fs.existsSync(path.join(ROOT, 'js', 'activities.js')),
+       'js/activities.js ya no existe: su activate() no puede volver a borrar cache ajena');
+    const view = fs.readFileSync(path.join(ROOT, 'js', 'act-view.js'), 'utf8');
+    ok(!/cleanAchievementsCache|localStorage/.test(view),
+       'la vista nueva de Actividades no borra ni toca localStorage');
 
     console.log('\n────────────────────────────────────────');
     console.log('  %d pass / %d fail', pass, fail);
