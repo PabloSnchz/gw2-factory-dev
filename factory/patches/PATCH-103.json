@@ -1,0 +1,88 @@
+{
+ "id": "PATCH-103",
+ "summary": "ACT-4 (BL-070): act-view 1.2.0 cede la pestaña Semana a js/act-week.js 1.0.0 (llave como señal con humano, «Plebeyo» y profesión; guía de la comunidad; piedras por moneda con la cartera; clave gn:activities:week) y el manifiesto la carga después de act-view.",
+ "files": [
+  {
+   "path": "js/act-view.js",
+   "base_sha": "acfa84a73a922f8ed87d511731fc47c3c9f75ac5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)",
+     "text": " * Versión: 1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)\n * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (ok) m.key = P.weeklyKey(d.chars, now, (c.weeklyKey && c.weeklyKey.storyLevel) || 10);",
+     "text": "    if (ok) m.key = P.weeklyKey(d.chars, now, (c.weeklyKey && c.weeklyKey.storyLevel) || 10, d.keyMark);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    } else if (ok && k.state === 'none') h += stat('Llave semanal', 'Sin señal', 'ningún personaje nuevo de nivel 10');",
+     "text": "    } else if (ok && k.state === 'claimed') h += stat('Llave semanal', 'Ya la sacaste', 'lo confirmaste vos');\n    else if (ok && k.state === 'pending') h += stat('Llave semanal', 'Todavía no', 'lo confirmaste vos');\n    else if (ok && k.state === 'none') h += stat('Llave semanal', 'Sin señal', 'ningún personaje nuevo de nivel 10');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function semanaHTML(m) {\n    return keyHTML(m) + (m.old.stones ? '<div id=\"avStonesSlot\" class=\"av-slot\"></div>' : '') +",
+     "text": "  function semanaHTML(m) {\n    var W = root.ActWeek;\n    return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m) + (m.old.stones ? '<div id=\"avStonesSlot\" class=\"av-slot\"></div>' : '')) +"
+    },
+    {
+     "op": "replace",
+     "anchor": "        chars: chars ? chars.map(function (c) { return { name: c && c.name, level: c && c.level, created: c && c.created }; }) : null,",
+     "text": "        chars: chars ? chars.map(function (c) { return { name: c && c.name, level: c && c.level, created: c && c.created, race: c && c.race, profession: c && c.profession, backstory: c && c.backstory }; }) : null,"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function model() {\n    var d = Object.assign({}, st.data || {}, { stones: readStones() });",
+     "text": "  function model() {\n    var W = root.ActWeek, wk = W && typeof W.state === 'function' ? W.state(Date.now()) : null;\n    var d = Object.assign({}, st.data || {}, { stones: wk ? wk.bought : readStones(), keyMark: wk ? wk.keyMark : undefined });"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : a.getAttribute('data-av') ? '[data-av=\"' + a.getAttribute('data-av') + '\"]' : null) : null;",
+     "text": "    var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : focusSel(a)) : null;"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function render() {\n    var panel = byId(PANEL);",
+     "text": "  // Para volver el foco al mismo botón después de redibujar (también los de la pestaña Semana).\n  function focusSel(a) {\n    var ks = ['data-av', 'data-aw-key', 'data-aw-stone', 'data-aw-wp'];\n    for (var i = 0; i < ks.length; i++) { var v = a.getAttribute(ks[i]); if (v) return '[' + ks[i] + '=\"' + v + '\"]'; }\n    return null;\n  }\n  function render() {\n    var panel = byId(PANEL);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    st.voiceKey = null;\n    renderVoice(m.voice);\n",
+     "text": "    st.voiceKey = null;\n    renderVoice(m.voice);\n    if (root.ActWeek && typeof root.ActWeek.afterRender === 'function') root.ActWeek.afterRender(m);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    host.addEventListener('click', function (e) {\n      var a = attrOf(e.target);",
+     "text": "    host.addEventListener('click', function (e) {\n      if (root.ActWeek && typeof root.ActWeek.onClick === 'function' && root.ActWeek.onClick(e)) return;\n      var a = attrOf(e.target);"
+    },
+    {
+     "op": "replace",
+     "anchor": "        load(true);\n      } else if (a.tab) go(a.tab);",
+     "text": "        load(true);\n        if (root.ActWeek && typeof root.ActWeek.refresh === 'function') root.ActWeek.refresh();\n      } else if (a.tab) go(a.tab);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    getSnapshot: function () { return { data: st.data, ui: { tab: st.ui.tab } }; },",
+     "text": "    getSnapshot: function () { return { data: st.data, ui: { tab: st.ui.tab } }; },\n    _cat: function () { return st.cat; },"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "6ec8e115eb887012da457def656b576bd8b8a044",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/act-view.js\", \"v\": \"1.1.0\" }\n",
+     "text": "    { \"src\": \"js/act-view.js\", \"v\": \"1.2.0\" },\n    { \"src\": \"js/act-week.js\", \"v\": \"1.0.0\" }\n"
+    }
+   ]
+  }
+ ]
+}
