@@ -76,7 +76,7 @@ test('sin API Key: tres pasos, «Agregar API Key» con su id y los módulos marc
   assert.match(html, /href="https:\/\/account\.arena\.net\/applications"/);
   assert.match(html, /API Key <b>sin cargar<\/b>/);
   assert.match(html, /data-mod="meta"[^]*?wl-tag--free">Sin Key/);
-  assert.equal((html.match(/wl-tag--key">Con Key/g) || []).length, 7, 'Cuentas no necesita Key');
+  assert.equal((html.match(/wl-tag--key">Con Key/g) || []).length, 8, 'Cuentas no necesita Key');
 });
 
 test('con API Key: saludo con la cuenta activa, botones de Keys y Cuentas, sin los tres pasos', () => {
@@ -93,11 +93,11 @@ test('con API Key: saludo con la cuenta activa, botones de Keys y Cuentas, sin l
   assert.equal(P.buildModel({ keys: [{ value: 'X', label: '  ' }] }).activeLabel, 'sin nombre');
 });
 
-test('los 9 módulos de la barra lateral, en orden y con su ruta real', () => {
+test('los 10 módulos de la barra lateral, en orden y con su ruta real', () => {
   const html = P.bodyHTML(P.buildModel({ keys: [{ value: 'k', label: 'a' }] }), []);
   const hrefs = [...html.matchAll(/class="wl-mod" href="([^"]+)"/g)].map((x) => x[1]);
   assert.deepEqual(hrefs, ['#/cards', '#/meta', '#/account/legendary-armory', '#/account/achievements',
-    '#/account/wizards-vault', '#/activities', '#/account/raids', '#/account/characters', '#/account/accounts']);
+    '#/account/wizards-vault', '#/activities', '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);
   const sidebar = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
   for (const h of hrefs) assert.ok(sidebar.includes('class="side-nav__link" href="' + h + '"'), h + ' existe en la barra lateral');
   for (const m of P.MODULES) assert.ok(fs.existsSync(path.join(ROOT, m.icon)), m.icon);

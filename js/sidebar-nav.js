@@ -1,6 +1,6 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.2.3 (2026-10-24) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
+ * Versión: 2.2.4 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
  * Arma su lista desde la de la Bienvenida (Welcome._pure.MODULES): mismo orden, nombre, ícono y color.
@@ -37,10 +37,11 @@
  *   visible queda oculta para el lector y se lee «(nuevo)» aparte, como «(falta permiso)».
  * 2.2.3 (BL-070, RAI-5a): el módulo de raids se llama «Raids» (sin Strikes). El juego unificó strikes y raids el
  *   2026-02-03 y el módulo ya es uno solo (Alas y Encuentros); #/account/strikes sigue marcando Raids.
+ * 2.2.4 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio, después de Actividades.
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.2.3';
+  var VERSION = '2.2.4';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -51,6 +52,7 @@
     { id: 'achievements', name: 'Logros', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },
     { id: 'wv', name: 'Cámara del Brujo', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },
     { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },
+    { id: 'homestead', name: 'Heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },
     { id: 'raids', name: 'Raids', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },
     { id: 'characters', name: 'Inventario y Personajes', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },
     { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3' }
@@ -58,9 +60,9 @@
   var HOME = { id: 'home', name: 'Inicio', href: '#/welcome', icon: 'assets/icons/Welcome/3380755.png', color: 'var(--acc-1)' };
   // Ids y data-view que ya usaban el router y otros módulos.
   var LINK_ID = { home: 'navHome', cards: 'navCards', meta: 'navMeta', armory: 'navLegendaryArmory', achievements: 'navAch',
-    wv: 'navWV', activities: 'navAC', raids: 'navRaids', characters: 'navChars', accounts: 'navAccounts' };
+    wv: 'navWV', activities: 'navAC', homestead: 'navHS', raids: 'navRaids', characters: 'navChars', accounts: 'navAccounts' };
   var VIEW = { home: 'welcome', cards: 'cards', meta: 'meta', armory: 'legendaryArmory', achievements: 'achievements',
-    wv: 'wv', activities: 'activities', raids: 'raids', characters: 'inventory', accounts: 'accounts' };
+    wv: 'wv', activities: 'activities', homestead: 'homestead', raids: 'raids', characters: 'inventory', accounts: 'accounts' };
   // Pantallas que viven dentro de un módulo de la lista.
   var ALIAS = { '#/wallet/dashboard': '#/cards', '#/account/strikes': '#/account/raids', '#/inventory/dashboard': '#/account/characters' };
   var DEFAULT_HASH = '#/cards'; // lo que muestra el router cuando no hay hash

@@ -128,10 +128,10 @@ const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.2.3', () => {
+test('versión 2.2.4', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.2\.3/);
-  assert.equal(x.S().version, '2.2.3');
+  assert.match(SRC, /Versión: 2\.2\.4/);
+  assert.equal(x.S().version, '2.2.4');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
@@ -140,10 +140,10 @@ test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (
   same(x.S()._pure.MODULES_FALLBACK, JSON.parse(JSON.stringify(W)));
 });
 
-test('arma la Sidebar: Inicio, los 8 módulos en el orden de la Bienvenida y Cuentas aparte', () => {
+test('arma la Sidebar: Inicio, los 9 módulos en el orden de la Bienvenida y Cuentas aparte', () => {
   const x = ready(setup());
   same(hrefs(x), ['#/welcome', '#/cards', '#/meta', '#/account/legendary-armory', '#/account/achievements',
-    '#/account/wizards-vault', '#/activities', '#/account/raids', '#/account/characters', '#/account/accounts']);
+    '#/account/wizards-vault', '#/activities', '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);
   const nav = x.document.getElementById('sbrNav');
   assert.equal(nav.tag, 'nav');
   assert.equal(nav.getAttribute('aria-label'), 'Navegación de la Bóveda');
@@ -162,7 +162,7 @@ test('mismos ids y data-view que antes: el router y los demás módulos no cambi
   const x = ready(setup());
   const ids = x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('id') + ':' + a.getAttribute('data-view'));
   same(ids, ['navHome:welcome', 'navCards:cards', 'navMeta:meta', 'navLegendaryArmory:legendaryArmory', 'navAch:achievements',
-    'navWV:wv', 'navAC:activities', 'navRaids:raids', 'navChars:inventory', 'navAccounts:accounts']);
+    'navWV:wv', 'navAC:activities', 'navHS:homestead', 'navRaids:raids', 'navChars:inventory', 'navAccounts:accounts']);
 });
 
 test('accesibilidad: íconos decorativos (alt vacío), nombre visible en texto y color del módulo para la barra del activo', () => {
@@ -212,7 +212,7 @@ test('armar dos veces deja una sola Sidebar y un solo bloque de estilos', () => 
   const x = ready(setup());
   x.S().build();
   assert.equal(x.navPanel.children.length, 1);
-  assert.equal(x.document.querySelectorAll('#sbrNav a').length, 10);
+  assert.equal(x.document.querySelectorAll('#sbrNav a').length, 11);
   assert.equal(x.document.head.children.filter((c) => c.attrs.id === 'sbr-css').length, 1);
 });
 
@@ -229,7 +229,7 @@ test('si la Bienvenida cambia su lista, la Sidebar la sigue', () => {
 
 test('sin la Bienvenida uso el respaldo y no rompo nada', () => {
   const x = ready(setup({ welcome: 'none' }));
-  assert.equal(hrefs(x).length, 10);
+  assert.equal(hrefs(x).length, 11);
   same(x.S().applyContrast(), {});
 });
 
@@ -405,7 +405,7 @@ test('celular: barra con Inicio, Cartera, Metas y Armería y el botón «Más»'
   assert.equal(x.document.querySelectorAll('#sbrNav a').filter((a) => a.getAttribute('id') === 'navCards').length, 1);
 });
 
-test('celular: la hoja «Más» es un diálogo con la cuenta activa y los otros 6 destinos', async () => {
+test('celular: la hoja «Más» es un diálogo con la cuenta activa y los otros 7 destinos', async () => {
   const x = ready(setup({ token: 'KEY-1', keys: [{ label: 'Main', value: 'KEY-1', perms: ALL }] }));
   const sh = byId(x, 'sbrSheet');
   assert.equal(sh.getAttribute('role'), 'dialog');
@@ -415,8 +415,8 @@ test('celular: la hoja «Más» es un diálogo con la cuenta activa y los otros 
   assert.equal(isOpen(x), false, 'cerrada al cargar');
   assert.equal(byId(x, 'sbrScrim').getAttribute('hidden'), '');
   same(sheetLinks(x).map((a) => a.getAttribute('href')), ['#/account/achievements', '#/account/wizards-vault', '#/activities',
-    '#/account/raids', '#/account/characters', '#/account/accounts']);
-  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Logros', 'Cámara del Brujo', 'Actividades', 'Raids', 'Inventario y Personajes', 'Cuentas']);
+    '#/account/homestead', '#/account/raids', '#/account/characters', '#/account/accounts']);
+  same(sheetLinks(x).map((a) => a.children[1].textContent), ['Logros', 'Cámara del Brujo', 'Actividades', 'Heredad', 'Raids', 'Inventario y Personajes', 'Cuentas']);
   // RAI-5a: el módulo es uno solo desde la unificación del juego; el nombre viejo no vuelve.
   assert.doesNotMatch(SRC + WELCOME, /Raids y Strikes/);
   sheetLinks(x).forEach((a) => assert.equal(a.getAttribute('id'), null));

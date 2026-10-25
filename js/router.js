@@ -1,8 +1,9 @@
 /*!
  * Router y Vistas (WV Objetivos + Tienda unificada)
- * v2.19.1 (2026-10-25) — BL-070: sin las pantallas viejas de Inventario y Personajes ni de Strikes
+ * v2.20.0 (2026-10-25) — BL-070 ACT-5: la Heredad (#/account/homestead) es un módulo propio
  *
  * Cambios de BL-070 (el detalle de cada paso está en ai-memory/status.md):
+ *  - 2.20.0 (ACT-5): ruta #/account/homestead y #homesteadPanel (js/home-view.js, BL-055).
  *  - 2.19.1 (INV-7b): MODULOS_CON_LATCH y showPanel ya no nombran a InventoryHub ni a sus 2 paneles.
  *  - 2.19.0 (INV-7a): #/account/characters es la vista nueva (js/inv-*.js); #/inventory/dashboard
  *    abre la pestaña Multicuenta; cambiar de cuenta ya no refresca los módulos viejos.
@@ -16,23 +17,7 @@
  *    ensureShopToolbar, syncShopToggleLabel y renderShopArea quedan como pasamanos.
  *
  * Cambios v2.17.0: Soporte Strike Tracker + F5 fix + skeleton ampliado
- *
- * Cambios v2.16.0:
- *  - Eliminada referencia a asideConvSection en updateSidebarFor
- *  - Sidebar liberada (~80 líneas menos en index.html)
- *  - Soporte para InventoryHub como pantalla principal de #/account/characters
- *
- * Cambios v2.15.0:
- *  - FASE 2: __getShopState expone estado de tienda a wv-shop-ui.js
- *  - FASE 2: ensureLoadTab('shop') y onTokenChanged delegan a WVShopUI con fallback
- *  - FASE 3: __getObjState/__setObjState exponen estado de objetivos
- *  - FASE 3: renderObjectivesTab y renderObjectivesZero delegan a WVObjectivesUI con fallback
- *
- * Cambios v2.14.0:
- *  - Agregada ruta '#/account/raids' para el seguimiento semanal de raids
- *
- * Cambios v2.13.0:
- *  - Agregada ruta '#/wallet/dashboard' para el dashboard multi-cuenta de wallet
+ * Antes: v2.13.0 a v2.16.0 (historia en git).
  */
 
 (function () {
@@ -130,6 +115,7 @@
           '#/account/achievements':'achievements',
           '#/account/wizards-vault':'wv',
           '#/activities':'activities',
+          '#/account/homestead':'homestead',
           '#/account/characters':'inventory',
           '#/account/accounts':'accounts',
           '#/welcome':'welcome',
@@ -164,7 +150,7 @@
   }
 
   function showPanel(idToShow) {
-    ['walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','inventoryPanel','accountsPanel','welcomePanel','walletDashboardPanel','wvObjectivesDashboardPanel','raidTrackerPanel','legendaryArmoryPanel'].forEach(function(id){
+    ['walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','homesteadPanel','inventoryPanel','accountsPanel','welcomePanel','walletDashboardPanel','wvObjectivesDashboardPanel','raidTrackerPanel','legendaryArmoryPanel'].forEach(function(id){
       var node=el(id); if (!node) return;
       if (id===idToShow) node.removeAttribute('hidden'); else node.setAttribute('hidden','hidden');
     });
@@ -1233,6 +1219,19 @@
             console.warn('[router] Activities.activate error', e);
           } finally {
             updateSidebarFor('activities');
+            setActiveNav(h);
+          }
+          return;
+        }
+
+        if (h === '#/account/homestead') {
+          try {
+            showPanel('homesteadPanel');
+            if (typeof Analytics !== 'undefined') Analytics.viewModule('homestead');
+          } catch (e) {
+            console.warn('[router] show homestead error', e);
+          } finally {
+            updateSidebarFor('homestead');
             setActiveNav(h);
           }
           return;
