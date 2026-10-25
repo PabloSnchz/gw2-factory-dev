@@ -1,7 +1,8 @@
 /*!
  * js/inv-chars.js — Personajes: la pestaña de tus personajes en Inventario y Personajes (BL-070, INV-5)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25) — INV-5: Personajes renovado, como pestaña del módulo
+ * Versión: 1.0.1 (2026-10-25) — INV-6: cada ítem de «Qué lleva» abre la ficha del ítem
+ *          1.0.0 (2026-10-25) — INV-5: Personajes renovado, como pestaña del módulo
  *
  * Una tarjeta por personaje con lo que la API sí informa:
  *  - nombre, nivel, profesión y especialización de élite (la de su build de JcE) con el ícono oficial;
@@ -18,7 +19,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var LOG = '[InvChars]';
   var DATA_URL = 'assets/data/inventory/professions.json';
 
@@ -149,8 +150,8 @@
     if (open && n) {
       h += '<ul class="ic-items">' + c.carried.map(function (s) {
         var meta = items[s.id] || {};
-        return '<li>' + (meta.icon ? '<img src="' + esc(meta.icon) + '" alt="" width="24" height="24" loading="lazy" referrerpolicy="no-referrer">' : '') +
-          '<span>' + esc(meta.name || 'Ítem ' + s.id) + '</span><b>' + fmtInt(s.count) + '</b></li>';
+        return '<li><button type="button" class="iv-open" data-inv-item="' + s.id + '" aria-haspopup="dialog">' + (meta.icon ? '<img src="' + esc(meta.icon) + '" alt="" width="24" height="24" loading="lazy" referrerpolicy="no-referrer">' : '') +
+          '<span>' + esc(meta.name || 'Ítem ' + s.id) + '</span><b>' + fmtInt(s.count) + '</b></button></li>';
       }).join('') + '</ul>';
     }
     return h + '</li>';

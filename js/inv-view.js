@@ -1,7 +1,8 @@
 /*!
  * js/inv-view.js — Inventario y Personajes renovado: cabecera, pestañas Materiales, Banco y Armería legendaria (BL-070, INV-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.3.0 (2026-10-25) — INV-5: las pestañas sumadas con order de 100 o más van después de las propias (Personajes)
+ * Versión: 1.4.0 (2026-10-25) — INV-6: cada ítem es un botón (data-inv-item) que abre su ficha (js/inv-sheet.js)
+ *          1.3.0 (2026-10-25) — INV-5: las pestañas sumadas con order de 100 o más van después de las propias (Personajes)
  *          1.2.0 (2026-10-25) — INV-4: una pestaña sumada puede traer su propio campo (tools) y recibe lo que se escribe; la segunda, Buscar
  *          1.1.0 (2026-10-25) — INV-3: pestañas que suman otros archivos (InvView.register); la primera, Multicuenta
  *          1.0.0 (2026-10-25) — INV-2: la vista nueva sobre el modelo de js/inv-model.js
@@ -21,7 +22,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var LOG = '[InvView]';
   var PANEL = 'inventoryPanel';
   var ICON = 'assets/icons/Welcome/358409.png';
@@ -135,9 +136,9 @@
   }
   function tile(id, count, meta, extra) {
     var r = rarityOf(meta), name = nameOf(meta, id);
-    return '<li class="iv-tile" title="' + esc(name + ' · ' + r[0]) + '">' + icon(meta, id, 32) +
+    return '<li class="iv-tile" title="' + esc(name + ' · ' + r[0]) + '"><button type="button" class="iv-open" data-inv-item="' + id + '" aria-haspopup="dialog">' + icon(meta, id, 32) +
       '<span class="iv-tn">' + esc(name) + '<span class="iv-sr">, ' + esc(r[0]) + '</span>' + (extra ? '<small>' + esc(extra) + '</small>' : '') + '</span>' +
-      '<b class="iv-tc">' + fmtInt(count) + '</b></li>';
+      '<b class="iv-tc">' + fmtInt(count) + '</b></button></li>';
   }
   function matches(m, meta, id) { return !m.q || fold(nameOf(meta, id)).indexOf(fold(m.q).trim()) >= 0; }
 
@@ -173,8 +174,8 @@
       part.forEach(function (s) {
         if (!s || !s.id) { h += '<li class="iv-slot iv-slot--empty"><span class="iv-sr">vacío</span></li>'; return; }
         var meta = m.items[s.id], r = rarityOf(meta), n = s.count || 1, name = nameOf(meta, s.id);
-        h += '<li class="iv-slot" title="' + esc(name + (n > 1 ? ' ×' + n : '') + ' · ' + r[0]) + '">' + icon(meta, s.id, 40) +
-          (n > 1 ? '<b class="iv-sc" aria-hidden="true">' + fmtInt(n) + '</b>' : '') + '<span class="iv-sr">' + esc(name) + ', ' + fmtInt(n) + ', ' + esc(r[0]) + '</span></li>';
+        h += '<li class="iv-slot" title="' + esc(name + (n > 1 ? ' ×' + n : '') + ' · ' + r[0]) + '"><button type="button" class="iv-open" data-inv-item="' + s.id + '" aria-haspopup="dialog">' + icon(meta, s.id, 40) +
+          (n > 1 ? '<b class="iv-sc" aria-hidden="true">' + fmtInt(n) + '</b>' : '') + '<span class="iv-sr">' + esc(name) + ', ' + fmtInt(n) + ', ' + esc(r[0]) + '</span></button></li>';
       });
       h += '</ul></section>';
     }
@@ -272,6 +273,8 @@
     '.iv-tile{display:flex;gap:8px;align-items:center;border:1px solid var(--bd-1);border-radius:10px;padding:6px 8px;background:var(--bg-0);min-width:0}',
     '.iv-tn{flex:1;min-width:0;font-size:.82rem;color:var(--tx-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.iv-tn small{display:block;font-size:.72rem;color:var(--tx-2)}',
     '.iv-tc{font-size:.86rem;color:var(--tx-1)}',
+    '.iv-open{display:flex;gap:8px;align-items:center;flex:1;min-width:0;background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer;border-radius:8px}',
+    '.iv-slot>.iv-open{display:block;width:100%;height:100%}',
     '.iv-ic{position:relative;display:inline-block;flex-shrink:0;border-radius:8px;background:var(--bg-2);box-shadow:inset 0 0 0 2px var(--iv-r),0 0 0 1px var(--bd-1);line-height:0}',
     '.iv-ic img{display:block;border-radius:8px;padding:2px;box-sizing:border-box}.iv-tile .iv-ic{width:32px;height:32px}.iv-tile .iv-ic img{width:32px;height:32px}',
     '.iv-slots{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(0,44px));gap:4px}',

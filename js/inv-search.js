@@ -1,7 +1,8 @@
 /*!
  * js/inv-search.js — Buscar: «¿dónde está?» en tu cuenta (BL-070, INV-4)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25) — INV-4: la pestaña Buscar de Inventario y Personajes
+ * Versión: 1.0.1 (2026-10-25) — INV-6: el nombre de cada resultado abre la ficha del ítem
+ *          1.0.0 (2026-10-25) — INV-4: la pestaña Buscar de Inventario y Personajes
  *
  * Escribís el nombre de un ítem y te digo cuánto tenés y dónde: el depósito de materiales, el banco
  * (con su pestaña), las ranuras compartidas y las bolsas de cada personaje.
@@ -16,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var LOG = '[InvSearch]';
   var LIMIT = 50;
   var UNREAD = { materials: 'el depósito de materiales', bank: 'el banco', shared: 'las ranuras compartidas', characters: 'las bolsas de tus personajes' };
@@ -78,7 +79,7 @@
     var said = places.map(function (p) { return p.where + ' ' + fmtInt(p.count); }).join(', ');
     return '<li class="is-it"><span class="iv-ic" style="--iv-r:' + rr[1] + '">' + (meta.icon ? '<img src="' + esc(meta.icon) +
       '" alt="" width="40" height="40" loading="lazy" referrerpolicy="no-referrer">' : '') + '</span>' +
-      '<div class="is-b"><p class="is-n">' + esc(name) + '<span class="iv-sr">, ' + esc(rr[0]) + '. ' + fmtInt(r.total) + ' en total: ' + esc(said) + '.</span></p>' +
+      '<div class="is-b"><p class="is-n"><button type="button" class="iv-open" data-inv-item="' + r.id + '" aria-haspopup="dialog">' + esc(name) + '<span class="iv-sr">, ' + esc(rr[0]) + '. ' + fmtInt(r.total) + ' en total: ' + esc(said) + '.</span></button></p>' +
       '<ul class="is-pl" aria-hidden="true">' + places.map(function (p) {
         return '<li><span>' + esc(p.where) + '</span><b>' + fmtInt(p.count) + '</b></li>';
       }).join('') + '</ul></div><p class="is-t" aria-hidden="true"><b>' + fmtInt(r.total) + '</b><small>en total</small></p></li>';

@@ -108,7 +108,7 @@ test('vista: tarjeta con élite y profesión, oficios, cumpleaños, bolsas con a
   assert.match(h, /<dd>1\.234 horas<\/dd>/);
   assert.match(h, /Hoy cumple 12 años\. <small>Creado el 25\/10\/2014\.<\/small>/);
   assert.match(h, /Joyero 400 · Armero 500 <small>\(inactivo\)<\/small>/);
-  assert.match(h, /data-ic-bags="Lyra" aria-expanded="true">Qué lleva \(2 ítems\)<\/button><ul class="ic-items"><li><img src="https:\/\/render\.guildwars2\.com\/e\.png"[^>]*><span>Pegote de ectoplasma<\/span><b>6<\/b>/);
+  assert.match(h, /data-ic-bags="Lyra" aria-expanded="true">Qué lleva \(2 ítems\)<\/button><ul class="ic-items"><li><button type="button" class="iv-open" data-inv-item="19721" aria-haspopup="dialog"><img src="https:\/\/render\.guildwars2\.com\/e\.png"[^>]*><span>Pegote de ectoplasma<\/span><b>6<\/b>/);
   assert.match(h, /data-ic-bags="Brann" aria-expanded="false">Sus bolsas están vacías/);
   assert.match(h, /ya no muestro mapa ni punto de interés/);
   assert.match(P.html({ hasToken: true, state: 'loading' }), /Leyendo tus personajes…/);
