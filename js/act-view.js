@@ -1,9 +1,10 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25) — ACT-2: la vista nueva sobre el modelo de js/act-model.js
+ * Versión: 1.0.1 (2026-10-25) — ACT-2: la ruta real del módulo es #/activities (la de js/router.js), no #/account/activities
+ *          1.0.0 (2026-10-25) — ACT-2: la vista nueva sobre el modelo de js/act-model.js
  *
- * Toma el panel #activitiesPanel (#/account/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario:
+ * Toma el panel #activitiesPanel (#/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario:
  *  - Cabecera con el ícono del módulo y los 3 relojes en tu hora local: reset diario (00:00 UTC), cambio del
  *    PSNA (08:00 UTC) y reset semanal (lunes 07:30 UTC). Mi línea solo si hay algo que te falta hoy.
  *  - 4 indicadores leídos de la cuenta: fabricación diaria (las 5 de la API, con el cristal de cuarzo cargado),
@@ -22,10 +23,10 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
-  var ROUTE = '#/account/activities';
+  var ROUTE = '#/activities'; // la misma que usa js/router.js
   var ICON = 'assets/icons/1302773.png';
   var CAT_URL = 'assets/data/activities/catalog.json';
   var API = 'https://api.guildwars2.com';

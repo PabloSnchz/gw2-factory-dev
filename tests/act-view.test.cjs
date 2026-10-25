@@ -1,6 +1,7 @@
 // Actividades renovado (BL-070, ACT-2): js/act-view.js. Corre con: node --test tests/*.test.cjs
 // Lógica pura con el catálogo real y una prueba de humo con un DOM mínimo: la ruta #/account/activities,
 // la API simulada, los relojes, los 4 indicadores, las pestañas, el PSNA reubicado y lo que no se pudo leer.
+// 1.0.1: la ruta es #/activities, la de js/router.js (1.0.0 escuchaba #/account/activities y no se veía).
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -52,6 +53,14 @@ test('el archivo entra en el presupuesto, va por el manifiesto después del mode
   assert.ok(man.indexOf('js/act-view.js') > man.indexOf('js/gn-frame.js'), 'después del marco común');
   assert.doesNotMatch(read('index.html'), /act-view\.js|act-model\.js/, 'no se cargan también desde index.html');
   Object.values(P.RARITY).forEach((r) => assert.ok(!new RegExp('color:' + r[1]).test(P.CSS), 'la rareza no es color de letra: ' + r[0]));
+});
+
+test('ruta: la vista escucha la misma ruta con la que js/router.js muestra #activitiesPanel', () => {
+  const route = (SRC.match(/var ROUTE = '([^']+)'/) || [])[1];
+  assert.equal(route, '#/activities');
+  const R = read('js/router.js');
+  assert.ok(R.includes("if (h === '" + route + "')") && R.includes("showPanel('activitiesPanel')"), 'el router muestra el panel en esa ruta');
+  assert.ok(R.includes("'" + route + "':'activities'"), 'y la tiene en su tabla');
 });
 
 test('relojes: reset diario, cambio del PSNA y semanal, con los bordes', () => {
@@ -257,8 +266,8 @@ function boot(opts) {
 }
 const flush = () => new Promise((r) => setTimeout(r, 30));
 
-test('humo: en #/account/activities toma el panel, lee la cuenta una vez por fuente y reubica el PSNA de siempre', async () => {
-  const { sb, D, store, calls, winL } = boot({ hash: '#/account/activities', token: 'TOKEN-DE-PRUEBA', withOld: true });
+test('humo: en #/activities toma el panel, lee la cuenta una vez por fuente y reubica el PSNA de siempre', async () => {
+  const { sb, D, store, calls, winL } = boot({ hash: '#/activities', token: 'TOKEN-DE-PRUEBA', withOld: true });
   await flush();
   const host = D.els.avRoot;
   assert.ok(host, 'crea #avRoot dentro del panel');
@@ -292,7 +301,7 @@ test('humo: en #/account/activities toma el panel, lee la cuenta una vez por fue
   assert.deepEqual(Object.keys(store), [], 'D6: no guarda la pestaña ni nada');
   // D6: al salir y volver, abre otra vez en Hoy
   sb.location.hash = '#/account/raids'; winL.hashchange.forEach((f) => f());
-  sb.location.hash = '#/account/activities'; winL.hashchange.forEach((f) => f());
+  sb.location.hash = '#/activities'; winL.hashchange.forEach((f) => f());
   await flush();
   assert.equal(sb.ActView.getSnapshot().ui.tab, 'hoy');
 
@@ -303,7 +312,7 @@ test('humo: en #/account/activities toma el panel, lee la cuenta una vez por fue
 });
 
 test('humo: si una lectura falla, lo demás se ve y el error se dice; sin progreso de fractales no es un error', async () => {
-  const a = boot({ hash: '#/account/activities', token: 'T', fail: ['/v2/characters'], none404: true });
+  const a = boot({ hash: '#/activities', token: 'T', fail: ['/v2/characters'], none404: true });
   await flush();
   const h = a.D.els.avRoot.innerHTML;
   assert.match(h, /No pude leer tus personajes\. Revisá que la API Key tenga los permisos de progreso y de personajes\./);
@@ -312,11 +321,14 @@ test('humo: si una lectura falla, lo demás se ve y el error se dice; sin progre
 });
 
 test('humo: sin Key no pide nada a la cuenta y lo dice; fuera de su ruta no dibuja', async () => {
-  const a = boot({ hash: '#/account/activities', token: null });
+  const a = boot({ hash: '#/activities', token: null });
   await flush();
   assert.match(a.D.els.avRoot.innerHTML, /Cargá tu API Key/);
   assert.equal(a.calls.filter((u) => u.includes('access_token')).length, 0, 'sin Key no hay pedidos a la cuenta');
   const b = boot({ hash: '#/account/raids', token: 'T' });
   await flush();
   assert.equal(b.D.els.avRoot, undefined);
+  const c = boot({ hash: '#/account/activities', token: 'T' });
+  await flush();
+  assert.equal(c.D.els.avRoot, undefined, 'la ruta vieja de 1.0.0 no existe en el router');
 });
