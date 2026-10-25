@@ -1,14 +1,16 @@
 /*!
  * js/inv-view.js — Inventario y Personajes renovado: cabecera, pestañas Materiales, Banco y Armería legendaria (BL-070, INV-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-25) — INV-2: la vista nueva sobre el modelo de js/inv-model.js
+ * Versión: 1.1.0 (2026-10-25) — INV-3: pestañas que suman otros archivos (InvView.register); la primera, Multicuenta
+ *          1.0.0 (2026-10-25) — INV-2: la vista nueva sobre el modelo de js/inv-model.js
  *
  * Toma el panel #inventoryPanel (#/account/characters) y oculta lo viejo sin borrarlo, como Raids:
  *  - Cabecera con el ícono del módulo, 4 indicadores (banco, materiales, armería legendaria y
  *    personajes, leídos de la cuenta y no de otra pantalla) y mi línea si el banco está por llenarse.
  *  - Pestañas Materiales (las 9 categorías del juego, por la categoría que trae la API de cada
  *    material), Banco (por pestaña de 30, como en el juego) y Armería legendaria (por tipo).
- *  - Multicuenta y Personajes abren por ahora su pantalla de siempre; se renuevan en INV-3 e INV-5.
+ *  - Personajes abre por ahora su pantalla de siempre; se renueva en INV-5. El Multicuenta es una pestaña
+ *    (js/inv-multi.js, INV-3): la primera vez abre ahí y después recuerda la última pestaña (D6).
  * Íconos y nombres en español de /v2/items (GW2Api.getItemsMany, con su caché). La rareza va en un
  * anillo alrededor del ícono y en texto para el lector, nunca como color de letra. Estados honestos:
  * lo que no se pudo leer dice «Sin datos», nunca 0. Recuerda la última pestaña (gn:inventory:tab).
@@ -17,7 +19,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[InvView]';
   var PANEL = 'inventoryPanel';
   var ICON = 'assets/icons/Welcome/358409.png';
@@ -30,6 +32,15 @@
   };
   var ARMORY_GROUPS = [['Weapon', 'Armas'], ['Armor', 'Armaduras'], ['Back', 'Espaldares'], ['Trinket', 'Abalorios'], ['UpgradeComponent', 'Mejoras'], ['', 'Otros']];
   var BANK_TIGHT = 0.1; // con menos del 10 % libre, aviso
+  // Pestañas que suman otros archivos con InvView.register: {id, label, order, isDefault, html, onEvent, onShow, refresh}.
+  var PLUGINS = [];
+  function tabsAll() {
+    return PLUGINS.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); })
+      .map(function (p) { return [p.id, p.label]; }).concat(TABS);
+  }
+  function pluginOf(id) { for (var i = 0; i < PLUGINS.length; i++) if (PLUGINS[i].id === id) return PLUGINS[i]; return null; }
+  function defaultTab() { for (var i = 0; i < PLUGINS.length; i++) if (PLUGINS[i].isDefault) return PLUGINS[i].id; return 'mat'; }
+  function isTab(id) { return tabsAll().some(function (t) { return t[0] === id; }); }
 
   // ------------------------------------------------------------------ puro
   function esc(s) {
@@ -52,7 +63,7 @@
   function buildModel(data, cats, ui) {
     ui = ui || {};
     var P = M(), d = data || {};
-    var tab = TABS.some(function (t) { return t[0] === ui.tab; }) ? ui.tab : 'mat';
+    var tab = isTab(ui.tab) ? ui.tab : defaultTab();
     var m = { tab: tab, q: ui.q || '', cat: ui.cat || 'all', loaded: !!d.loaded, hasToken: !!d.hasToken,
       items: d.items || {}, unread: d.unread || [], voice: null,
       bank: P ? P.bankSummary(d.bank) : { used: null, total: null, free: null, tabs: null },
@@ -180,11 +191,14 @@
   }
 
   function listHTML(m) {
+    var pl = pluginOf(m.tab);
+    if (pl) return pl.html(m);
     if (!m.hasToken) return '<p class="iv-note">Sin API Key no puedo leer tu inventario.</p>';
     return m.tab === 'bank' ? bankHTML(m) : m.tab === 'armory' ? armoryHTML(m) : materialsHTML(m);
   }
 
   function toolsHTML(m) {
+    if (pluginOf(m.tab)) return '';
     var h = '<div class="iv-tools"><label class="iv-search"><span class="iv-sr">Filtrar por nombre</span>' +
       '<input type="search" id="ivQ" placeholder="Filtrar por nombre…" value="' + esc(m.q) + '" autocomplete="off"></label>';
     if (m.tab === 'mat' && m.matGroups.length) {
@@ -199,20 +213,20 @@
     var h = [], err = errorText(m);
     h.push('<div class="iv-hero"><div class="iv-row"><img class="iv-ico" src="' + ICON + '" alt="" width="56" height="56">');
     h.push('<div class="iv-title"><h2 id="ivTitle">Inventario y Personajes</h2><p>' + esc(subtitle(m)) + '</p></div>');
-    h.push('<div class="iv-acts"><button type="button" class="iv-btn" data-iv="multi">Multicuenta</button>' +
+    h.push('<div class="iv-acts">' + (pluginOf('multi') ? '' : '<button type="button" class="iv-btn" data-iv="multi">Multicuenta</button>') +
       '<button type="button" class="iv-btn" data-iv="chars">Personajes</button>' +
       '<button type="button" class="iv-btn" data-iv="refresh">↻ Actualizar</button></div></div>');
     h.push('<div class="iv-stats">' + statsHTML(m) + '</div>');
     if (err) h.push('<p class="iv-err" role="status">' + esc(err) + '</p>');
     h.push('<div id="ivVoice" class="iv-voice" aria-live="polite"></div></div>');
     h.push('<div class="iv-tabs" role="tablist" aria-label="Secciones del inventario">');
-    TABS.forEach(function (t) {
+    tabsAll().forEach(function (t) {
       var on = m.tab === t[0];
       h.push('<button type="button" role="tab" id="ivTab-' + t[0] + '" data-iv-tab="' + t[0] + '" aria-selected="' + on + '" aria-controls="ivPanel" tabindex="' + (on ? '0' : '-1') + '">' + t[1] + '</button>');
     });
     h.push('</div><div id="ivPanel" role="tabpanel" aria-labelledby="ivTab-' + m.tab + '">' + toolsHTML(m));
     h.push('<div id="ivList">' + listHTML(m) + '</div>');
-    h.push('<p class="iv-src">Nombres, íconos y rarezas: API oficial del juego, en español. El Multicuenta y Personajes abren por ahora su pantalla de siempre.</p></div>');
+    h.push('<p class="iv-src">Nombres, íconos y rarezas: API oficial del juego, en español. ' + (pluginOf('multi') ? 'Personajes abre' : 'El Multicuenta y Personajes abren') + ' por ahora su pantalla de siempre.</p></div>');
     return h.join('');
   }
 
@@ -286,7 +300,7 @@
 
   function savedTab() {
     var S = storage(), t = S ? S.get(TAB_KEY) : null;
-    return TABS.some(function (x) { return x[0] === t; }) ? t : 'mat';
+    return isTab(t) ? t : defaultTab();
   }
 
   function loadCats() {
@@ -369,6 +383,8 @@
     st.voiceKey = null;
     renderVoice(m.voice);
     if (fk && host.querySelector) { var b = host.querySelector(fk); if (b && b.focus) b.focus(); }
+    var pl = pluginOf(m.tab);
+    if (pl && pl.onShow) pl.onShow();
     return m;
   }
 
@@ -376,9 +392,26 @@
   function renderList() {
     var box = byId('ivList');
     if (!box) return render();
-    var m = model();
+    var m = model(), a = doc.activeElement, fk = a && box.contains && box.contains(a) && a.id ? a.id : null;
     box.innerHTML = listHTML(m);
+    if (fk) { var b = byId(fk); if (b && b.focus) b.focus(); }
     return m;
+  }
+
+  // Una pestaña sumada pide redibujar su lista cuando le llegan datos (solo si es la que se ve).
+  function renderTab(id) {
+    var panel = byId(PANEL);
+    if (!panel || isHidden(panel) || !byId('ivRoot') || !st.ui.tab || st.ui.tab !== id) return null;
+    return renderList();
+  }
+
+  function register(p) {
+    if (!p || !p.id || typeof p.html !== 'function' || pluginOf(p.id)) return false;
+    PLUGINS.push(p);
+    if (!st.ui.chosen) st.ui.tab = null;
+    var panel = byId(PANEL);
+    if (panel && !isHidden(panel) && byId('ivRoot')) render();
+    return true;
   }
 
   function renderVoice(msg) {
@@ -392,7 +425,8 @@
   }
 
   function go(tab) {
-    if (!TABS.some(function (t) { return t[0] === tab; })) return null;
+    if (!isTab(tab)) return null;
+    st.ui.chosen = true;
     st.ui.tab = tab; st.ui.q = ''; st.ui.cat = 'all';
     var S = storage();
     if (S) S.set(TAB_KEY, tab);
@@ -418,9 +452,15 @@
 
   function wire(host) {
     host.addEventListener('click', function (e) {
+      var pl = pluginOf(st.ui.tab);
+      if (pl && pl.onEvent && pl.onEvent(e)) return;
       var a = actOf(e.target);
       if (!a) return;
-      if (a.act === 'refresh') { if (root.toast) root.toast('info', 'Actualizando tu inventario…', { ttl: 1500 }); load(true); }
+      if (a.act === 'refresh') {
+        if (root.toast) root.toast('info', 'Actualizando tu inventario…', { ttl: 1500 });
+        load(true);
+        if (pl && pl.refresh) pl.refresh(true);
+      }
       else if (a.act === 'multi') { if (root.location) root.location.hash = '#/inventory/dashboard'; }
       else if (a.act === 'chars') openChars();
       else if (a.tab) go(a.tab);
@@ -430,6 +470,8 @@
       if (t && t.id === 'ivQ') { st.ui.q = String(t.value || ''); renderList(); }
     });
     host.addEventListener('change', function (e) {
+      var pl = pluginOf(st.ui.tab);
+      if (pl && pl.onEvent && pl.onEvent(e)) return;
       var t = e.target;
       if (t && t.id === 'ivCat') { st.ui.cat = String(t.value || 'all'); renderList(); }
     });
@@ -437,7 +479,7 @@
     host.addEventListener('keydown', function (e) {
       var a = actOf(e.target);
       if (!a || !a.tab) return;
-      var ids = TABS.map(function (t) { return t[0]; }), i = ids.indexOf(a.tab), to = null;
+      var ids = tabsAll().map(function (t) { return t[0]; }), i = ids.indexOf(a.tab), to = null;
       if (e.key === 'ArrowRight') to = ids[(i + 1) % ids.length];
       else if (e.key === 'ArrowLeft') to = ids[(i + ids.length - 1) % ids.length];
       else if (e.key === 'Home') to = ids[0];
@@ -467,10 +509,10 @@
   }
 
   root.InvView = {
-    version: VERSION, render: render, go: go, refresh: function () { return load(true); },
+    version: VERSION, render: render, go: go, refresh: function () { return load(true); }, register: register, renderTab: renderTab,
     getSnapshot: function () { return { data: st.data, ui: { tab: st.ui.tab, q: st.ui.q, cat: st.ui.cat } }; },
     _pure: { esc: esc, fmtInt: fmtInt, buildModel: buildModel, pickVoice: pickVoice, errorText: errorText, subtitle: subtitle,
-      viewHTML: viewHTML, listHTML: listHTML, RARITY: RARITY, TABS: TABS, CSS: CSS }
+      viewHTML: viewHTML, listHTML: listHTML, RARITY: RARITY, TABS: TABS, tabsAll: tabsAll, CSS: CSS }
   };
 
   if (doc && doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', init);
