@@ -1,6 +1,6 @@
 /*!
  * js/welcome-panel.js — Pantalla de Bienvenida: la puerta de entrada a La Bóveda
- * Versión: 2.3.0 (2026-10-25) · BL-058, propuesta WEL-0b aprobada por Pablo
+ * Versión: 2.4.0 (2026-10-25) · BL-058, propuesta WEL-0b aprobada por Pablo
  *
  * Contesta: qué puedo hacer en la Bóveda, qué módulos tengo, qué configuré, qué me falta
  * y dónde me conviene seguir. Dos estados: sin API Key (tres pasos) y con API Key.
@@ -24,10 +24,11 @@
  *   mirar, que va a usar mi voz (WEL-3).
  * 2.2.0 (WEL-4): guarda de contraste AA en los 19 themes, solo dentro de #welcomePanel, y accesibilidad.
  * 2.3.0 (BL-070, ACT-5): la Heredad (#/account/homestead) es un módulo propio: 10 módulos.
+ * 2.4.0 (PUL-3): nuevo orden de los módulos.
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.3.0';
+  var VERSION = '2.4.0';
   var LOG = '[Welcome]';
 
   var LINKS = {
@@ -51,13 +52,13 @@
   var MODULES = [
     { id: 'cards', name: 'Cartera', desc: 'Divisas, conversor y todas tus cuentas', href: '#/cards', icon: 'assets/icons/733322.png', color: '#F2B94B', tag: 'Renovada' },
     { id: 'meta', name: 'Metas y Eventos', desc: 'Horarios de metas y world bosses', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF', tag: 'Renovada', free: true },
-    { id: 'armory', name: 'Armería Legendaria', desc: 'Las 206 legendarias, recetas y lo que te falta', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },
-    { id: 'achievements', name: 'Logros', desc: 'Los que tenés cerca de completar', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },
     { id: 'wv', name: 'Cámara del Brujo', desc: 'Objetivos diarios, semanales y tienda', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },
     { id: 'activities', name: 'Actividades', desc: 'Lo de hoy y la semana: fractales, llave y PSNA', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },
     { id: 'homestead', name: 'Heredad', desc: 'Nodos de casa, gatos y tu heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },
     { id: 'raids', name: 'Raids', desc: 'Alas y encuentros de la semana', href: '#/account/raids', icon: 'assets/icons/raids/raid-icon.png', color: '#F47C7C' },
+    { id: 'achievements', name: 'Logros', desc: 'Los que tenés cerca de completar', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },
     { id: 'characters', name: 'Inventario y Personajes', desc: 'Buscá un objeto en toda la cuenta', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },
+    { id: 'armory', name: 'Armería Legendaria', desc: 'Las 206 legendarias, recetas y lo que te falta', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },
     { id: 'accounts', name: 'Cuentas', desc: 'Tus cuentas y Keys, cifradas en tu PC', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3', local: true }
   ];
   // Los 7 permisos que pide la puerta de app.js (KeyManager.REQUIRED_PERMISSIONS, que no está en
