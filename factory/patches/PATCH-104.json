@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-104",
+ "summary": "Docs ACT-4 (BL-070): status y backlog con la pestaña Semana hecha; ACT-3 validado.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "62e61fb6d6c10e5fa179cd3e226946c2983d95b4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "ACT-2 vista nueva con la pestaña Hoy HECHO (15:47Z), esperan tu validación; sigue ACT-3, los fractales del día.",
+     "text": "ACT-2 vista nueva con la pestaña Hoy VALIDADO (16:08Z); contenedor único VALIDADO (17:53Z); ACT-3 fractales del día VALIDADO; ACT-4 la pestaña Semana (llave como señal, guía de la comunidad y piedras por moneda) HECHO (18:18Z), espera tu validación; sigue ACT-5, la Heredad como módulo propio."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-3 HECHO (2026-10-25 17:57Z)",
+     "text": "Último hecho: ACT-4 HECHO (2026-10-25 18:18Z): la pestaña Semana de Actividades, con la llave como señal y las piedras por moneda. js/act-week.js 1.0.0 (6ef747c, 22,6 KB) y assets/data/activities/key-farm.json (c58c13b, 4,4 KB); PATCH-103: js/act-view.js 1.2.0 (aa4ff00, 38,3 KB) y js/modules.json 136c868 (act-week después de act-view); tests/act-week.test.cjs (f4a1373, 11 tests, 12/12 mutaciones). RUN-061 verde: act-week 11, act-view 13, act-model 10 y gn-shell 6, con el contraste en los 19 themes. Llave del León Negro con su ícono oficial: «Probable» con cualquier profesión de nivel 10 o más creada desde el reset; como decidió Pablo, raza humana, clase social «Plebeyo» (respuesta 21-105 de la biografía, verificada en RUN-060) y profesión suben la confianza, no filtran: un humano «Plebeyo» es «Muy probable» y va primero, con el ícono de su profesión y chips en texto (Humano, Plebeyo, Ladrón, Combinación de farmeo; sin biografía, «sin datos»). Mi voz explica que la API no confirma el capítulo de nivel 10 pero la experiencia de la comunidad sí. «Ya la saqué» / «Todavía no» / «Que lo detecte solo» (D2) y el indicador de arriba dice «Ya la sacaste» o «Todavía no» con «lo confirmaste vos». Tarjeta «Cómo la saca la comunidad»: raza Humano y clase social Plebeyo, las 5 profesiones más usadas con su ícono oficial (elementalista, guardián, guerrero y retornado de la wiki; ladrón, de la comunidad) y 5 pasos (wiki oficial, «Key farming»). Piedras de invocación vetustas: una casilla por moneda con su ícono, el costo y lo que tenés en la cartera (te faltan X), «Copiar el punto de ruta de Piedra Arbórea»; lo que marcaste con el −/+ de antes pasa una vez a las primeras casillas (D3). Clave nueva gn:activities:week (por cuenta con una huella, nunca la Key; vale hasta el reset del lunes). Los nodos de casa siguen como hasta ahora hasta ACT-5. ACT-3 VALIDADO por Pablo con el dale a ACT-4. Antes, ACT-3 HECHO (2026-10-25 17:57Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: ACT-3, los fractales del día en Actividades (https://pablosnchz.github.io/gw2-factory-dev/#/activities, pestaña Hoy): los 3 de hoy con sus 4 rangos y su escala, los recomendados, tu progreso en verde o ámbar y la línea «Mañana:». Con tu dale sigo con ACT-4, la pestaña Semana con la llave nueva.",
+     "text": "- [BL-070] Validación: ACT-4, la pestaña Semana de Actividades (https://pablosnchz.github.io/gw2-factory-dev/#/activities, pestaña Semana): la llave con su ícono, cada personaje nuevo con el ícono de su profesión y la señal (Humano, Plebeyo, profesión), mi voz explicando lo que la API no confirma, «Ya la saqué» / «Todavía no»; la guía «Cómo la saca la comunidad» con las profesiones y los pasos; y las 5 piedras por moneda con lo que tenés en la cartera. Clave nueva: gn:activities:week. Con tu dale sigo con ACT-5, la Heredad como módulo propio.\n- [BL-070] Info: ACT-3 VALIDADO por Pablo (los fractales del día en Hoy)."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "9f7db07147a837216858163d9b0c92695abb6166",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "tests/act-view.test.cjs 13 tests; suite verde. SHIRUVANA-ART-001",
+     "text": "tests/act-view.test.cjs 13 tests; suite verde; VALIDADO por Pablo. ACT-4 HECHO (2026-10-25 18:18Z, PATCH-103): js/act-week.js 1.0.0 dibuja la pestaña Semana: la llave como señal (humano, «Plebeyo» 21-105 y profesión suben la confianza, no filtran; mi voz; «Ya la saqué» / «Todavía no»), la guía «Cómo la saca la comunidad» con íconos oficiales y las 5 piedras por moneda con la cartera (D3); key-farm.json; act-view 1.2.0; tests/act-week.test.cjs 11 tests, 12/12 mutaciones; RUN-061 verde; clave nueva gn:activities:week. Espera la validación de Pablo; sigue ACT-5 (la Heredad). SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
