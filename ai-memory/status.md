@@ -6,11 +6,19 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-25 00:55Z
-Próxima acción: Pablo pidió seguir de corrido con Heart of Thorns, Path of Fire y los encuentros. Tandas 2, 3, 4a y 4b publicadas: 44 de los 46 encuentros tienen «Cómo se pelea». Faltan los 2 de Visions of Eternity: el Nexo de la Eternidad no tiene todavía página de recorrido en la wiki oficial ni guía en MetaBattle (solo guías de terceros), y no publico contenido provisorio (LES-030); el Claro del Guardián ya está investigado y sale junto con el Nexo. Pablo puede validar las tandas 2 a 4b y RAI-5a en DEV cuando quiera. RAI-5 está hecho: el módulo se llama «Raids» y `strike-tracker.js` se retiró del repo. RAI-6 está hecho (2026-10-25 00:15Z): revisión final con los 19 themes, teclado, lector de pantalla, celular y movimiento reducido; FEAT-014. El paso 1 de BL-070 (Raids) está VALIDADO por Pablo (2026-10-25 00:41Z). Paso 2, Inventario y Personajes: INV-0, la propuesta visual, está entregada en su versión 2 (`docs/propuestas/propuesta-inventario-bl070.html`, con el Multicuenta explicado) y espera tu aprobación y tus decisiones D1 a D6. RECOVERY 20:22Z: el chat se cortó por quinta vez; reconstruí el estado desde los commits (último punto seguro `ed23814`, PATCH-047) y no había trabajo a medias.
+Última actualización: 2026-10-25 00:58Z
+Próxima acción: Pablo pidió seguir de corrido con Heart of Thorns, Path of Fire y los encuentros. Tandas 2, 3, 4a y 4b publicadas: 44 de los 46 encuentros tienen «Cómo se pelea». Faltan los 2 de Visions of Eternity: el Nexo de la Eternidad no tiene todavía página de recorrido en la wiki oficial ni guía en MetaBattle (solo guías de terceros), y no publico contenido provisorio (LES-030); el Claro del Guardián ya está investigado y sale junto con el Nexo. Pablo puede validar las tandas 2 a 4b y RAI-5a en DEV cuando quiera. RAI-5 está hecho: el módulo se llama «Raids» y `strike-tracker.js` se retiró del repo. RAI-6 está hecho (2026-10-25 00:15Z): revisión final con los 19 themes, teclado, lector de pantalla, celular y movimiento reducido; FEAT-014. El paso 1 de BL-070 (Raids) está VALIDADO por Pablo (2026-10-25 00:41Z). Paso 2, Inventario y Personajes: INV-0, la propuesta visual, está APROBADA por Pablo (2026-10-25 00:55Z) con D1 a D6 como recomendé. INV-1 (datos verificados y modelo del módulo) en curso. RECOVERY 20:22Z: el chat se cortó por quinta vez; reconstruí el estado desde los commits (último punto seguro `ed23814`, PATCH-047) y no había trabajo a medias.
 
 Micro-ciclo:
-BL-070 INV-0 v2 — el Multicuenta en la propuesta de Inventario y Personajes. ENTREGADA.
+BL-070 INV-1 — datos verificados y modelo de Inventario y Personajes. EN CURSO.
+Archivos:
+- assets/data/inventory-sets.json
+- assets/data/inventory/material-categories.json
+- js/inv-model.js
+
+Además: tests/inv-model.test.cjs, RUN-042 (sonda) y PATCH-070 (este punto de control).
+
+Antes: BL-070 INV-0 v2 — el Multicuenta en la propuesta de Inventario y Personajes. APROBADA (2026-10-25 00:55Z, D1 a D6 sí).
 Archivos:
 - docs/propuestas/propuesta-inventario-bl070.html
 
@@ -83,7 +91,7 @@ BL-067 (validada por Pablo el 2026-10-24 13:10Z; en producción con BL-069):
 
 BL-070 (en curso desde 2026-10-24 15:39Z; propuesta primero y cada paso validado por Pablo):
 9. Raids y Strikes: RAI-0 propuesta aprobada; RAI-1 catálogo verificado HECHO; RAI-2 hub unificado VALIDADO; RAI-3 ficha a pantalla completa VALIDADO; RAI-4 mecánicas por tandas EN CURSO (tanda 1 Monte Balrior VALIDADA; tandas 2 Heart of Thorns, 3 Path of Fire, 4a Icebrood Saga y Vieja Corte del León y 4b End of Dragons y Secrets of the Obscure HECHAS; Visions of Eternity espera fuente verificada); RAI-5a nombre «Raids» HECHO; RAI-5b `strike-tracker.js` retirado HECHO; RAI-6 revisión final HECHO (FEAT-014). Paso 1 VALIDADO por Pablo (2026-10-25 00:41Z).
-10. Inventario y Personajes: INV-0 propuesta ENTREGADA (2026-10-25 00:28Z) y versión 2 con el Multicuenta (00:55Z), espera aprobación; 11. Actividades (con BL-055), 12. Cuentas, 13. barra de arriba, modales, avisos y pie.
+10. Inventario y Personajes: INV-0 propuesta ENTREGADA (2026-10-25 00:28Z) y versión 2 con el Multicuenta, APROBADA (2026-10-25 00:55Z, D1 a D6 sí); INV-1 en curso; 11. Actividades (con BL-055), 12. Cuentas, 13. barra de arriba, modales, avisos y pie.
 
 Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR, CAM, LOG): en el backlog y en git (`ai-memory/status.md` hasta `27a4dd6`).
 
@@ -99,7 +107,6 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-070] Decisión: propuesta INV-0 de Inventario y Personajes, versión 2 (`docs/propuestas/propuesta-inventario-bl070.html`; la sección 3 explica el Multicuenta). Aprobala o pedime cambios, y decidí D1 (buscar en las bolsas de los personajes), D2 (sacar Mapa y Punto de interés), D3 (precio del Bazar en la ficha), D4 (Personajes como pestaña), D5 (el Multicuenta cuenta todas las bolsas y las ranuras compartidas) y D6 (con qué pestaña abre). Recomiendo sí en D1 a D5, y en D6 que recuerde la última y la primera vez abra en Multicuenta.
 - [BL-069] Validación: abrí producción con recarga completa (Ctrl+F5) y recorré Logros (cabecera, tres pestañas, tarjetas con el ícono oficial grande y anillo dorado en los que están a un paso; la barra lateral ya sin el panel viejo de Logros), la Cámara del Brujo y Actividades, Raids, Strikes, Inventario, Personajes y Cuentas con la cabecera común. Probá también un theme claro (Notion o macOS). Si algo no va, la vuelta atrás es la rama `rollback/pre-restyle-ciclo`; para quitar solo el marco común, sacar `js/gn-frame.js` de `js/modules.json`.
 - [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
 - [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas.
