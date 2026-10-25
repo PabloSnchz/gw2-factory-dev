@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-116",
+ "summary": "Docs ACT-7b (BL-070): status y backlog con la pantalla vieja de Actividades retirada; ACT-7a validado; PATCH-114 rechazado y por qué.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "f5420c8c7cb95c3f337e9b366155ca0fb96abddc",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "ACT-7a el PSNA en la vista nueva HECHO (20:05Z), espera tu validación; sigue ACT-7b, dejar de cargar y borrar js/activities.js y js/activities-theme.js.",
+     "text": "ACT-7a el PSNA en la vista nueva VALIDADO; ACT-7b la pantalla vieja de Actividades retirada HECHO (20:36Z), espera tu validación; sigue ACT-7c, la revisión final del paso 3 y FEAT-016."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-7a HECHO (2026-10-25 20:05Z)",
+     "text": "Último hecho: ACT-7b HECHO (2026-10-25 20:36Z): la pantalla vieja de Actividades ya no existe. Pablo validó ACT-7a (20:16Z). Lo encontré al prepararlo: #activitiesPanel no estaba en index.html, lo creaba js/activities.js, y un script en línea de index.html volvía a meter la grilla vieja de 6 nodos de casa en el panel cada vez que cambiaba (MutationObserver). Orden de LES-039 en tres partes. Parte 1, PATCH-113 (aplicado, suite verde antes y después): index.html (d5aecdd, 54.923 bytes, 7.914 menos) deja de cargar js/activities.js 3.23.0, js/activities-theme.js 2.6.1 y js/fractal-tracker-theme.js 1.0.1 (solo pintaba #fractalsBody de la pantalla vieja), saca el CSS de #activitiesPanel y #homeNodesGrid y el script en línea de la grilla vieja, y trae <section id=\"activitiesPanel\">; tools/size-budget.json baja el techo de index.html a 54.923. Parte 2, borrados en serie: tests/psna-day.test.cjs (83b6852; medía el PSNA dentro de activities.js y lo cubre tests/act-psna.test.cjs con las mismas funciones), js/fractal-tracker-theme.js (1f3f361, 4.575 bytes), js/activities-theme.js (ee21d32, 47.274 bytes) y js/activities.js (b722336, 64.918 bytes). Parte 3: PATCH-114 RECHAZADO por el canal: además de los 4 tests que esperaba, hb106-t13-invariante copiaba 7 líneas fijas del router (el bloque de desactivar de WV y de Activities) y t19c usaba el lector crudo de activities.js como control. PATCH-115 (aplicado): js/router.js 2.21.0 (09b30dc, 63.255 bytes) sin precargar, activar ni desactivar Activities (la vista nueva se dibuja sola y escucha gn:tokenchange); index.html (5285796) con ?v=2.21.0; size-budget (a766656) sin activities.js ni activities-theme.js y con el techo del router en 63.255; idea49.activities-cache-wipe e idea49.quotavisible exigen ahora que activities.js no exista y que act-view no toque localStorage (el hallazgo de la cache de logros no puede volver por ahí); idea61 saca los dos lectores crudos de la pantalla vieja; el censo del latch baja su piso a 1 (quedan raid-tracker y legendary-tracker); hb106-t13 copia solo el bloque de WV (3 líneas); t19c prueba su control con una entrada sintética. RUN-071 verde: 10 archivos (idea49 x2, idea61, size-budget, hb106-censo, hb106-t13, t19c, act-view, act-psna e index-versions). Entre la parte 2 y PATCH-115 la suite estuvo en rojo unos 7 minutos (20:21Z a 20:28Z), como en RAI-5b e INV-7b. Lo que se ve distinto: nada en la pantalla; cada carga pide 116.767 bytes menos de JavaScript (los tres archivos) e index.html pesa 7.914 bytes menos. Lo que queda para ACT-7c (BAJO): act-week.js todavía intenta leer el −/+ de la pantalla vieja (D3) y ya no encuentra nada, código muerto; reglas .fractal-card muertas en css/theme-polish.css (paso 8); las claves gn:activities:toggles y gn:activities:stones ya no las escribe nadie (los datos guardados no se tocan). Antes, ACT-7a HECHO (2026-10-25 20:05Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: ACT-7a, el PSNA en la vista nueva (https://pablosnchz.github.io/gw2-factory-dev/#/activities, pestaña Hoy, abajo de los fractales): los 6 lugares de hoy con el día, cuánto falta para el cambio en tu hora, «Copiar» por punto de ruta y «Copiar los 6». Ya no es la pantalla vieja reubicada. Sin claves nuevas. Con tu dale sigo con ACT-7b: dejar de cargar y borrar js/activities.js y js/activities-theme.js.\n",
+     "text": "- [BL-070] Validación: ACT-7b, la pantalla vieja de Actividades retirada (https://pablosnchz.github.io/gw2-factory-dev/#/activities y #/account/homestead): todo tiene que verse y funcionar igual que en ACT-7a (Hoy con fabricación, fractales y PSNA; Semana con llave y piedras; la Heredad con sus 3 pestañas), entrando también desde la barra lateral y cambiando de cuenta. Ya no se cargan js/activities.js, js/activities-theme.js ni js/fractal-tracker-theme.js. Con tu dale sigo con ACT-7c, la revisión final del paso 3.\n- [BL-070] Info: ACT-7a VALIDADO por Pablo (20:16Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "c7493a56423491c363f0afa15a21c04e38b9c6cf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera la validación de Pablo; siguen ACT-7b (dejar de cargar y borrar activities.js y activities-theme.js, con router, index.html, tests heredados y presupuesto) y ACT-7c (revisión final y FEAT-016). SHIRUVANA-ART-001",
+     "text": "VALIDADO por Pablo (20:16Z). ACT-7b HECHO (2026-10-25 20:36Z, PATCH-113 y PATCH-115; PATCH-114 rechazado por dos tests heredados más): index.html trae #activitiesPanel y deja de cargar activities.js, activities-theme.js y fractal-tracker-theme.js (borrados, junto con tests/psna-day.test.cjs); router 2.21.0 sin Activities; presupuesto y 8 tests heredados al día; RUN-071 verde. Espera la validación de Pablo; sigue ACT-7c (revisión final y FEAT-016). SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
