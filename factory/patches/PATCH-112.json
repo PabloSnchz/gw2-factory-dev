@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-112",
+ "summary": "Docs ACT-7a (BL-070): status y backlog con el PSNA en la vista nueva; ACT-6 validado; ACT-7 partido en 7a, 7b y 7c.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "4d40503a7a7b0dd79457b9f8d59cb627d2729710",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "ACT-6 glifos y decoraciones de la Heredad HECHO (19:40Z), espera tu validación; sigue ACT-7, retirar lo viejo de Actividades y la revisión final.",
+     "text": "ACT-6 glifos y decoraciones de la Heredad VALIDADO; ACT-7a el PSNA en la vista nueva HECHO (20:05Z), espera tu validación; sigue ACT-7b, dejar de cargar y borrar js/activities.js y js/activities-theme.js."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-6 HECHO (2026-10-25 19:40Z)",
+     "text": "Último hecho: ACT-7a HECHO (2026-10-25 20:05Z): el PSNA pasa a la vista nueva de Actividades. Pablo validó ACT-6 (19:46Z). Medido en CI (RUN-068 y RUN-069, sonda ya borrada en 129ad3d) qué depende todavía de lo viejo: act-view reubicaba el PSNA (#psnaPanel), la tarjeta de piedras y leía el −/+ de js/activities.js; act-week lee ese −/+ una vez por semana (D3); router.js llama a Activities.prefetch, activate y deactivate; index.html carga activities.js 3.23.0 y activities-theme.js 2.6.1 y trae CSS de #activitiesPanel y #homeNodesGrid y un script que arma la grilla vieja de nodos; tests que leen lo viejo: psna-day, idea49 (dos), idea50 (comentario), idea61, hb106-censo y hb119 (texto). Partí ACT-7 en tres: 7a el PSNA, 7b dejar de cargar y borrar, 7c revisión final y FEAT-016. js/act-psna.js 1.0.0 (c15cf90, 14,2 KB): la tarjeta «PSNA · Agentes de la Red de Suministros del Pacto» en Hoy, después de los fractales, con las mismas funciones puras de siempre (bloque PSNA-DAY copiado sin cambios: rotación por día de la semana, cambio a las 08:00 UTC, fecha exacta y mismo día como respaldo, nunca un día equivocado); de qué día son, cuánto falta en tu hora, los 6 puntos de ruta con el ícono local, el agente y la región, «Copiar» por punto y «Copiar los 6» con aviso para el lector; la cuenta regresiva corre con el reloj de la vista y a las 08:00 UTC se redibuja sola; si assets/data/psna-schedule.json no se lee dice «sin datos» y «Actualizar» lo vuelve a pedir. No guarda nada. PATCH-111 (aplicado, suite verde antes y después): js/act-view.js 1.4.0 (45f2eba, 36,9 KB) pone la tarjeta y deja de reubicar el PSNA, la tarjeta de piedras y los nodos de la pantalla vieja y de leer su −/+ (las piedras salen solo de act-week); js/modules.json (15a875d) carga act-psna antes de act-view; tests/act-view.test.cjs (c0168c1) al día. tests/act-psna.test.cjs (b9fefc5, 11 tests con contraste en los 19 themes y humo con act-model, act-view y act-psna; 11/12 mutaciones, la que sobrevive no cambia nada sin Key). RUN-070 verde: 10 archivos (act-psna, act-view, act-week, act-model, psna-day, gn-shell, size-budget, index-versions, home-view y home-extra). activities.js sigue cargado y oculto hasta ACT-7b. Antes, ACT-6 HECHO (2026-10-25 19:40Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: ACT-6, Glifos y Decoraciones de la Heredad (https://pablosnchz.github.io/gw2-factory-dev/#/account/homestead, pestañas «Glifos» y «Decoraciones», se recorren también con las flechas): los 12 glifos con ícono y efecto y cuál tenés en cada caja (cosecha, tala, minería); las decoraciones del juego con cuántas tenés de cada una sobre 250, por categoría, «Las tengo», «Me faltan» y búsqueda. Necesita los permisos account y unlocks; si no hay heredad desbloqueada la lista viene vacía y lo digo. Sin claves nuevas en el navegador. Con tu dale sigo con ACT-7: retirar lo viejo de Actividades y la revisión final del paso 3.\n",
+     "text": "- [BL-070] Validación: ACT-7a, el PSNA en la vista nueva (https://pablosnchz.github.io/gw2-factory-dev/#/activities, pestaña Hoy, abajo de los fractales): los 6 lugares de hoy con el día, cuánto falta para el cambio en tu hora, «Copiar» por punto de ruta y «Copiar los 6». Ya no es la pantalla vieja reubicada. Sin claves nuevas. Con tu dale sigo con ACT-7b: dejar de cargar y borrar js/activities.js y js/activities-theme.js.\n- [BL-070] Info: ACT-6 VALIDADO por Pablo (19:46Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "937c920d8e7773a528a3529e2acfc2f80229d017",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera la validación de Pablo; sigue ACT-7 (retirar activities.js y activities-theme.js viejos y revisión final). SHIRUVANA-ART-001",
+     "text": "VALIDADO por Pablo (19:46Z). ACT-7 partido en 7a, 7b y 7c (RUN-068 y RUN-069). ACT-7a HECHO (2026-10-25 20:05Z, PATCH-111): el PSNA pasa a js/act-psna.js 1.0.0 en la pestaña Hoy y act-view 1.4.0 ya no reubica ni lee nada de js/activities.js; tests/act-psna.test.cjs 11 tests; RUN-070 verde. Espera la validación de Pablo; siguen ACT-7b (dejar de cargar y borrar activities.js y activities-theme.js, con router, index.html, tests heredados y presupuesto) y ACT-7c (revisión final y FEAT-016). SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
