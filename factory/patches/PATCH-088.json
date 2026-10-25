@@ -1,0 +1,69 @@
+{
+ "id": "PATCH-088",
+ "summary": "BL-070 INV-7b documentado: paso 2 (Inventario y Personajes) HECHO EN DEV con FEAT-015; validación del paso 2 para Pablo; FEAT-013 a FEAT-015 en el índice. Solo documentación.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "25e7a7ef820f012ee3e308be7b848370c0d7effb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 03:27Z",
+     "text": "Última actualización: 2026-10-25 05:00Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "INV-6 (la ficha del ítem con el precio del Bazar) VALIDADO (03:17Z); INV-7a (las pantallas viejas dejan de cargarse) HECHO (03:27Z): espera tu validación; sigue INV-7b, borrar los archivos viejos, la revisión final y FEAT-015.",
+     "text": "INV-7b HECHO (05:00Z): las pantallas viejas se borraron, revisión final hecha y FEAT-015 escrita; el paso 2 de BL-070, Inventario y Personajes, queda HECHO EN DEV y espera tu validación. Después sigue Actividades (con BL-055)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-070 INV-7a — las pantallas viejas de Inventario y Personajes dejan de cargarse. HECHO.",
+     "text": "Micro-ciclo:\nBL-070 INV-7b — retiro de las pantallas viejas de Inventario y Personajes, revisión final y FEAT-015. HECHO.\nArchivos:\n- js/router.js (`aa85ed6`, 2.19.1)\n- js/inv-multi.js (`540dbf2`, 1.1.1)\n- ai-memory/features/FEAT-015-inventario-renovado.md (`9a6407d`)\n\nAdemás: PATCH-085 (gn-frame.js 1.0.2 `f8ed6bd`, inv-multi.js 1.1.0, js/modules.json y 7 tests heredados sin leer los archivos viejos; suite verde antes y después), borrados en commits aparte: tests/inventory-dashboard.abort.test.js, tests/idea78-puntos-logros-nan.test.js, tests/idea55.characters-ach-layer.test.js, js/inventory-hub.js, js/inventory-dashboard.js, js/characters.js y js/characters-theme.js; PATCH-086 (router 2.19.1, index.html `d1d8b6d` sin #inventoryDashboardPanel, censo de hb106 a 2, idea61 sin inventory-dashboard.js, tools/size-budget.json `5b13b3f` sin los 3 congelados; la suite pasó del rojo esperado tras el borrado a verde); PATCH-087 (inv-view.js 1.5.0 `bd55c7d`, inv-multi.js 1.1.1, js/modules.json `915bbfc`; suite verde antes y después); PATCH-088 (esta documentación). RUN-053 fue rechazado sin correr: un RUN acepta hasta 10 tests; la verificación completa la dio RESULT-087.\n\nAntes: BL-070 INV-7a — las pantallas viejas de Inventario y Personajes dejan de cargarse. HECHO."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: INV-7a HECHO (2026-10-25 03:27Z): ",
+     "text": "Último hecho: INV-7b HECHO (2026-10-25 05:00Z): las pantallas viejas de Inventario y Personajes se borraron y el paso 2 de BL-070 quedó HECHO EN DEV (FEAT-015). Con el dale de Pablo (2026-10-25 04:39Z), que además decidió: el resumen de cuenta de la pantalla vieja de Personajes (puntos de logro, rango JcJ y McM, clan) va al paso Cuentas, y en el Multicuenta tocar el nombre de un ítem abre su ficha mientras tocar un número sigue mostrando dónde está. Orden de LES-039: PATCH-085 soltó las dependencias con los archivos presentes (gn-frame.js 1.0.2 sin charactersPanel ni inventoryDashboardPanel; 7 tests heredados conservan lo que miden de achievements.js, accounts-panel.js, app.js, raid-tracker.js, api-gw2.js y la Armería), después se borraron 3 tests que solo medían lo viejo y los 4 archivos (inventory-hub.js 70.258 bytes, inventory-dashboard.js 53.460, characters.js 62.006 y characters-theme.js), y PATCH-086 cerró router 2.19.1, index.html, el censo de hb106 (quedan 2 módulos con latch), idea61 (umbral 3: la 49D sigue bloqueada) y el presupuesto. Revisión final (PATCH-087): MEDIO lector de pantalla, el detalle «dónde está» del Multicuenta no se anunciaba (ahora el foco va a él y vuelve al número al cerrar); BAJO restos, inv-view.js conservaba botones y la nota «por ahora su pantalla de siempre» (1.5.0 sin ese camino). 19 themes, teclado, celular y movimiento reducido: correctos. Quedan BAJO: unas 34 reglas muertas de #inventoryDashboardPanel en css/theme-polish.css (se limpian en el paso 8). Antes, INV-7a HECHO (2026-10-25 03:27Z): "
+    },
+    {
+     "op": "replace",
+     "anchor": "INV-6 ficha del ítem VALIDADO (03:17Z); INV-7a pantallas viejas sin cargar HECHO (03:27Z); espera validación;",
+     "text": "INV-6 ficha del ítem VALIDADO (03:17Z); INV-7a pantallas viejas sin cargar HECHO (03:27Z); INV-7b retiro, revisión final y FEAT-015 HECHO (05:00Z): paso 2 HECHO EN DEV, espera validación;"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: INV-7a. En DEV con Ctrl+F5: Inventario y Personajes tiene que verse y andar igual que antes (las 6 pestañas, la ficha del ítem, cambiar de cuenta). Abrí un marcador viejo del Dashboard (#/inventory/dashboard): te tiene que llevar a la pestaña Multicuenta. Si usás algo de la app que dependía de las pantallas viejas y dejó de andar, avisame: los archivos siguen en el repo. Con tu dale sigo con INV-7b: borrar los archivos viejos, retirar sus tests heredados, la revisión final y FEAT-015.\n",
+     "text": "- [BL-070] Validación: paso 2, Inventario y Personajes (FEAT-015). En DEV con Ctrl+F5: recorré las 6 pestañas (Multicuenta, Buscar, Materiales, Banco, Armería legendaria y Personajes). En Multicuenta, tocá el nombre de un ítem arriba de la tabla: abre su ficha con el precio del Bazar; tocá un número: muestra dónde está, con «Ver la ficha» y «Cerrar». Abrí un marcador viejo (#/inventory/dashboard): lleva a Multicuenta. Si lo das por bueno, sigo con el paso 3, Actividades (con BL-055).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] INV-7a: `MODULOS_CON_LATCH` del router conserva InventoryHub (inerte: el módulo ya no se carga) porque el censo de hb106 cuenta un mínimo; se limpia en INV-7b con el censo. Las preferencias del Dashboard viejo (`inv_dashboard_*`) siguen en uso por la pestaña Multicuenta; las claves de la pantalla vieja de Personajes (POIs, ubicaciones, caché de personajes) quedan en el navegador sin uso y siguen saliendo en el respaldo de Configuración. Vuelta atrás de INV-7a: revertir PATCH-083.\n",
+     "text": "- [BL-070] INV-7b: las pantallas viejas de Inventario y Personajes ya no están en el repo. Las preferencias del Dashboard viejo (`inv_dashboard_*`) siguen en uso por la pestaña Multicuenta; las claves de la pantalla vieja de Personajes (POIs, ubicaciones, caché de personajes) quedan en el navegador sin uso y siguen saliendo en el respaldo de Configuración. Vuelta atrás: revertir PATCH-087, PATCH-086, los 7 borrados y PATCH-085, en ese orden.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "0282a9e41eca91593ea46da779599d644d296062",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue INV-7b: borrarlos, retirar o reescribir esos tests, gn-frame sin los 2 paneles viejos, revisión final y FEAT-015. SHIRUVANA-ART-001",
+     "text": "Pablo dio el dale a INV-7b (2026-10-25 04:39Z) y decidió que el resumen de cuenta de la pantalla vieja de Personajes va al paso Cuentas y que en el Multicuenta el nombre del ítem abre su ficha. INV-7b hecho (2026-10-25 05:00Z): PATCH-085 soltó las dependencias (gn-frame.js 1.0.2, inv-multi.js 1.1.0 con el nombre que abre la ficha, 7 tests heredados), se borraron inventory-hub.js, inventory-dashboard.js, characters.js, characters-theme.js y 3 tests que solo los medían, PATCH-086 cerró router 2.19.1, index.html, el censo de hb106, idea61 y el presupuesto, y PATCH-087 (revisión final) dejó inv-view.js 1.5.0 sin caminos a lo viejo e inv-multi.js 1.1.1 con el detalle «dónde está» audible para el lector de pantalla. FEAT-015 (ai-memory/features/FEAT-015-inventario-renovado.md, 9a6407d). Paso 2 HECHO EN DEV, espera validación de Pablo. Sigue el paso 3, Actividades (con BL-055). SHIRUVANA-ART-001"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "0470af8e75cd4e764b3f18bbb3726c2c557174e2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "(BL-067, LOG-0 a LOG-5). En DEV, en curso.\n",
+     "text": "(BL-067, LOG-0 a LOG-5). En DEV, en curso.\n- [FEAT-013](features/FEAT-013-superficies-y-marco-comun.md) — Superficies y marco común (gn-surface.js y gn-frame.js) para los módulos heredados: cabecera, profundidad, guarda de contraste AA en los 19 themes y accesibilidad (BL-067).\n- [FEAT-014](features/FEAT-014-raids-renovado.md) — Raids renovado: un solo módulo con Alas y Encuentros, ficha de cada encuentro con recompensas y «Cómo se pelea» verificados (BL-070, paso 1). Validado por Pablo.\n- [FEAT-015](features/FEAT-015-inventario-renovado.md) — Inventario y Personajes renovado: 6 pestañas (Multicuenta, Buscar, Materiales, Banco, Armería legendaria, Personajes), ficha del ítem con el Bazar y las pantallas viejas retiradas (BL-070, paso 2). En DEV, espera validación.\n"
+    }
+   ]
+  }
+ ]
+}
