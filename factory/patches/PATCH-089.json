@@ -1,0 +1,75 @@
+{
+ "id": "PATCH-089",
+ "summary": "BL-070: paso 2 (Inventario y Personajes, FEAT-015) VALIDADO por Pablo; paso 3 ACT-0 propuesta de Actividades renovado y la Heredad (BL-055) ENTREGADA, con la decisión pendiente para Pablo. Solo documentación.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "ae01d0fc0ea76604d85785503951bca95823c217",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 05:00Z",
+     "text": "Última actualización: 2026-10-25 05:25Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "INV-7b HECHO (05:00Z): las pantallas viejas se borraron, revisión final hecha y FEAT-015 escrita; el paso 2 de BL-070, Inventario y Personajes, queda HECHO EN DEV y espera tu validación. Después sigue Actividades (con BL-055).",
+     "text": "Paso 2, Inventario y Personajes, VALIDADO (05:14Z). Paso 3, Actividades con la Heredad (BL-055): ACT-0 propuesta ENTREGADA (05:25Z), espera tu aprobación y las decisiones D1 a D6."
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-070 INV-7b — retiro de las pantallas viejas de Inventario y Personajes, revisión final y FEAT-015. HECHO.",
+     "text": "Micro-ciclo:\nBL-070 ACT-0 — propuesta visual de Actividades renovado y la Heredad (BL-055). ENTREGADA.\nArchivos:\n- docs/propuestas/propuesta-actividades-bl070.html (`bfc81db`)\n\nAdemás: RUN-054 (sonda tests/zz-probe-act0.test.cjs, ya borrada) y PATCH-089 (esta documentación).\n\nAntes: BL-070 INV-7b — retiro de las pantallas viejas de Inventario y Personajes, revisión final y FEAT-015. HECHO."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: INV-7b HECHO (2026-10-25 05:00Z): ",
+     "text": "Último hecho: ACT-0 ENTREGADA (2026-10-25 05:25Z): propuesta de Actividades renovado y la Heredad, `docs/propuestas/propuesta-actividades-bl070.html` (bfc81db). Pablo validó el paso 2 (Inventario y Personajes, FEAT-015) a las 05:14Z y dio el dale al paso 3. Lo que medí (RUN-054 desde CI, sonda ya borrada, y la wiki oficial): ALTO, el panel dice que la rotación de fractales no está en la API y está, en la categoría de logros 88 «Fractales del día» (15 logros: 3 fractales en rango 1 a 4 y 3 escalas recomendadas, y los de mañana); ALTO, la llave semanal del León Negro solo cuenta ladrones y sale con cualquier profesión (capítulo de nivel 10, una por cuenta por semana, reset lunes 07:30 UTC), y la API no informa el capítulo terminado; ALTO, la detección de la llave pide la ficha de cada personaje por separado al entrar, al cambiar de cuenta y al actualizar; MEDIO, la fabricación diaria muestra 4 de 5 (falta el cristal de cuarzo cargado) y se llama «Refinamiento de Ecto»; MEDIO, los Home Nodes no coinciden con los 57 de /v2/home/nodes (2 inexistentes, 1 nuevo que falta, 6 de Janthir con ids inventados) y faltan los 35 gatos; MEDIO, las piedras de invocación vetustas son un −/+ y Leivas vende 5 por semana, una por moneda; MEDIO, el tracker «Solitary Throne CM» no tiene fuente. Propuesta: Actividades con pestañas Hoy y Semana y 3 relojes; la Heredad como módulo propio (nombre oficial en español, BL-055) con Nodos y gatos, 36 glifos y 1.210 decoraciones en 27 categorías. Plan ACT-1 a ACT-7, decisiones D1 a D6. Antes, INV-7b HECHO (2026-10-25 05:00Z): "
+    },
+    {
+     "op": "replace",
+     "anchor": "INV-7b retiro, revisión final y FEAT-015 HECHO (05:00Z): paso 2 HECHO EN DEV, espera validación;",
+     "text": "INV-7b retiro, revisión final y FEAT-015 HECHO (05:00Z): paso 2 VALIDADO (05:14Z); paso 3 Actividades + Heredad: ACT-0 propuesta ENTREGADA (05:25Z), espera aprobación;"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: paso 2, Inventario y Personajes (FEAT-015). En DEV con Ctrl+F5: recorré las 6 pestañas (Multicuenta, Buscar, Materiales, Banco, Armería legendaria y Personajes). En Multicuenta, tocá el nombre de un ítem arriba de la tabla: abre su ficha con el precio del Bazar; tocá un número: muestra dónde está, con «Ver la ficha» y «Cerrar». Abrí un marcador viejo (#/inventory/dashboard): lleva a Multicuenta. Si lo das por bueno, sigo con el paso 3, Actividades (con BL-055).\n",
+     "text": "- [BL-070] Decisión: ACT-0, Actividades renovado y la Heredad. Abrí docs/propuestas/propuesta-actividades-bl070.html: lo que medí, las maquetas de Hoy, Semana y la Heredad, el plan ACT-1 a ACT-7 y 6 decisiones con mi recomendación (D1 la Heredad como módulo propio; D2 la llave como «Probable» más tu confirmación; D3 una casilla por moneda para las piedras vetustas; D4 los fractales de mañana en una línea; D5 marca a mano para los nodos que la API no informa; D6 Actividades abre en Hoy). Con tu aprobación arranco ACT-1.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "7c66b7ad92914893264a4ce31e6c1edde1e22237",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Paso 2 HECHO EN DEV, espera validación de Pablo. Sigue el paso 3, Actividades (con BL-055). SHIRUVANA-ART-001",
+     "text": "Paso 2 VALIDADO por Pablo (2026-10-25 05:14Z, FEAT-015). Paso 3, Actividades con la Heredad (BL-055): ACT-0 propuesta ENTREGADA (2026-10-25 05:25Z, `docs/propuestas/propuesta-actividades-bl070.html`, bfc81db). Lo que medí (RUN-054, sonda ya borrada): la rotación de fractales sí está en la API (categoría 88, con los de mañana) y el panel dice que no; la llave semanal solo cuenta ladrones y pide un personaje por vez; la fabricación diaria muestra 4 de 5 (falta el cristal de cuarzo cargado); los Home Nodes no coinciden con los 57 de la API y faltan los 35 gatos; las piedras vetustas son un −/+ cuando Leivas vende una por moneda; el tracker de CM no tiene fuente. Propuesta: Actividades con Hoy y Semana; la Heredad como módulo propio con Nodos y gatos, Glifos (36) y Decoraciones (1.210 en 27 categorías). Plan ACT-1 a ACT-7, D1 a D6. SHIRUVANA-ART-001"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/features/FEAT-015-inventario-renovado.md",
+   "base_sha": "9a6407d95cf6fa19fbaf1636c1a1709366994430",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- **Estado:** HECHO EN DEV (2026-10-25 05:00Z). Espera la validación de Pablo.",
+     "text": "- **Estado:** VALIDADO por Pablo (2026-10-25 05:14Z). Hecho en DEV el 2026-10-25 05:00Z."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "202cda97e1789dc20d625b422824cda8d77d664b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "ficha del ítem con el Bazar y las pantallas viejas retiradas (BL-070, paso 2). En DEV, espera validación.",
+     "text": "ficha del ítem con el Bazar y las pantallas viejas retiradas (BL-070, paso 2). Validado por Pablo."
+    }
+   ]
+  }
+ ]
+}
