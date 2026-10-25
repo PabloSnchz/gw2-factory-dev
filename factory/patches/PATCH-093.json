@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-093",
+ "summary": "BL-070 ACT-2 hecho: Actividades nuevo en DEV (relojes, 4 indicadores, Hoy y Semana); validación para Pablo. Solo documentación.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "048ecc1a3227d739c6c253e80e7d163210a5c9e5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 05:45Z",
+     "text": "Última actualización: 2026-10-25 15:50Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Paso 3, Actividades con la Heredad (BL-055): ACT-0 APROBADA (05:35Z, D1 a D6 como recomendé); ACT-1 datos y modelo HECHO (05:45Z), espera tu validación; sigue ACT-2, la vista nueva con la pestaña Hoy.",
+     "text": "Paso 3, Actividades con la Heredad (BL-055): ACT-0 APROBADA (05:35Z, D1 a D6 como recomendé); ACT-1 datos y modelo HECHO (05:45Z) y ACT-2 vista nueva con la pestaña Hoy HECHO (15:47Z), esperan tu validación; sigue ACT-3, los fractales del día."
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-070 ACT-1 — datos verificados y modelo de Actividades. HECHO.",
+     "text": "Micro-ciclo:\nBL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.\nArchivos:\n- js/act-view.js (`22e51b8`, 1.0.0)\n- tests/act-view.test.cjs (`c44aed1`)\n- js/modules.json (`3ccc98c`, PATCH-091)\n\nAdemás: PATCH-092 (contraste de «Hecho»), RUN-057 (encontró el 4.10:1), RUN-058 (verde, 83 tests) y PATCH-093 (esta documentación).\n\nAntes: BL-070 ACT-1 — datos verificados y modelo de Actividades. HECHO."
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: ACT-1 HECHO (2026-10-25 05:45Z): ",
+     "text": "Último hecho: ACT-2 HECHO (2026-10-25 15:47Z): la vista nueva de Actividades en DEV. `js/act-view.js` 1.0.0 (94c2d83; contraste corregido en 22e51b8, PATCH-092) y `js/act-model.js` 1.0.0 se cargan por el manifiesto (js/modules.json 3ccc98c, PATCH-091); sin tocar activities.js, activities-theme.js ni index.html. Toma #activitiesPanel (#/account/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario. Cabecera con los 3 relojes en tu hora local (reset diario en X, cambio del PSNA en X, semanal lunes y hora) que corren solos y vuelven a leer la cuenta al pasar el reset diario; 4 indicadores: fabricación diaria (las 5, con el cristal de cuarzo cargado que faltaba), fractales del día (los 3 de hoy por nombre, de la categoría 88, y tu progreso), llave semanal («Probable» con un personaje de nivel 10 o más creado desde el reset, de cualquier profesión; «Sin señal» si no hay) y piedras vetustas (lo que marcaste con el −/+ de siempre). Mi línea solo si te falta una fabricación, y suma el PSNA si cambia en menos de 3 h. Pestañas Hoy (la fabricación diaria con su ícono oficial y la rareza en texto, y el PSNA de siempre, la misma pieza de BL-048 reubicada) y Semana (la llave con la regla verificada; las piedras y los nodos de casa siguen con su pantalla de siempre dentro de la pestaña hasta ACT-4 y ACT-5). D6: abre siempre en Hoy y no guarda nada. Una lectura por fuente: los personajes en un pedido (/v2/characters?ids=all) en lugar de uno por personaje; un 404 de /v2/account/achievements es «nada hecho hoy», no un error. Estados honestos: «sin datos» y el error nombrado, nunca «Te falta» ni 0. Se dejan de ver el «Refinamiento de Ecto» de 4, el «no disponible» de los fractales, la llave solo con ladrones y el tracker de CM. `tests/act-view.test.cjs` (12cafa0, ajustado en c44aed1: 11 tests con contraste en los 19 themes y humo con DOM; 11/12 mutaciones, la que sobrevive es equivalente). RUN-057 encontró que el tinte verde detrás de «Hecho» dejaba el texto en 4.10:1 en one-dark: PATCH-092 lo sacó y el test lo vigila. RUN-058 verde (9 archivos, 83 tests). Aprendizaje: el test que exige el manifiesto se publica después del parche que lo carga (PATCH-091 encontró la suite en rojo por el orden). Antes, ACT-1 HECHO (2026-10-25 05:45Z): "
+    },
+    {
+     "op": "replace",
+     "anchor": "paso 3 Actividades + Heredad: ACT-0 APROBADA (05:35Z); ACT-1 datos y modelo HECHO (05:45Z), espera validación;",
+     "text": "paso 3 Actividades + Heredad: ACT-0 APROBADA (05:35Z); ACT-1 datos y modelo HECHO (05:45Z); ACT-2 vista nueva HECHO (15:47Z); ACT-1 y ACT-2 esperan validación;"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: ACT-1, datos verificados de Actividades (todavía sin pantalla).",
+     "text": "- [BL-070] Validación: ACT-2, Actividades nuevo en DEV (#/account/activities). Mirá la cabecera con los 3 relojes y los 4 indicadores, y la pestaña Hoy con las 5 fabricaciones diarias (el cristal de cuarzo cargado ya aparece) y el PSNA de siempre; en Semana, la llave como «Probable» con cualquier profesión, y las piedras y los nodos de casa como hasta ahora. Con tu dale sigo con ACT-3, los fractales del día por rango.\n- [BL-070] Validación: ACT-1, datos verificados de Actividades (todavía sin pantalla)."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "1c7811a3324c37dd9c6a728f7040207e5b620d29",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "la verificación de la API ya está hecha (RUN-054). SHIRUVANA-ART-001",
+     "text": "la verificación de la API ya está hecha (RUN-054). ACT-2 HECHO (2026-10-25 15:47Z): la vista nueva de Actividades en DEV. `js/act-view.js` 1.0.0 (94c2d83; contraste corregido en 22e51b8, PATCH-092) y `js/act-model.js` 1.0.0 se cargan por el manifiesto (js/modules.json 3ccc98c, PATCH-091); sin tocar activities.js, activities-theme.js ni index.html. Toma #activitiesPanel (#/account/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario. Cabecera con los 3 relojes en tu hora local (reset diario en X, cambio del PSNA en X, semanal lunes y hora) que corren solos y vuelven a leer la cuenta al pasar el reset diario; 4 indicadores: fabricación diaria (las 5, con el cristal de cuarzo cargado que faltaba), fractales del día (los 3 de hoy por nombre, de la categoría 88, y tu progreso), llave semanal («Probable» con un personaje de nivel 10 o más creado desde el reset, de cualquier profesión; «Sin señal» si no hay) y piedras vetustas (lo que marcaste con el −/+ de siempre). Mi línea solo si te falta una fabricación, y suma el PSNA si cambia en menos de 3 h. Pestañas Hoy (la fabricación diaria con su ícono oficial y la rareza en texto, y el PSNA de siempre, la misma pieza de BL-048 reubicada) y Semana (la llave con la regla verificada; las piedras y los nodos de casa siguen con su pantalla de siempre dentro de la pestaña hasta ACT-4 y ACT-5). D6: abre siempre en Hoy y no guarda nada. Una lectura por fuente: los personajes en un pedido (/v2/characters?ids=all) en lugar de uno por personaje; un 404 de /v2/account/achievements es «nada hecho hoy», no un error. Estados honestos: «sin datos» y el error nombrado, nunca «Te falta» ni 0. Se dejan de ver el «Refinamiento de Ecto» de 4, el «no disponible» de los fractales, la llave solo con ladrones y el tracker de CM. `tests/act-view.test.cjs` (12cafa0, ajustado en c44aed1: 11 tests con contraste en los 19 themes y humo con DOM; 11/12 mutaciones, la que sobrevive es equivalente). RUN-057 encontró que el tinte verde detrás de «Hecho» dejaba el texto en 4.10:1 en one-dark: PATCH-092 lo sacó y el test lo vigila. RUN-058 verde (9 archivos, 83 tests). Aprendizaje: el test que exige el manifiesto se publica después del parche que lo carga (PATCH-091 encontró la suite en rojo por el orden). SHIRUVANA-ART-001"
+    }
+   ]
+  }
+ ]
+}
