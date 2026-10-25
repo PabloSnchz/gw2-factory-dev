@@ -1,6 +1,8 @@
 /*!
  * js/home-view.js — La Heredad: tu casa y tu heredad de Janthir, módulo propio (BL-070 ACT-5, BL-055)
  * Proyecto: Bóveda del Gato Negro
+ * Versión: 1.1.0 (2026-10-25) — ACT-6: pestañas Glifos y Decoraciones (las dibuja js/home-extra.js); las
+ *          pestañas se recorren con las flechas, Inicio y Fin
  * Versión: 1.0.0 (2026-10-25) — ACT-5: módulo, ruta, barra lateral y la pestaña Nodos y gatos
  *
  * Los nodos de casa salen de Actividades y pasan a su módulo (D1, decidido por Pablo en BL-055):
@@ -18,12 +20,13 @@
  *    por cuenta con una huella, nunca la Key (gn:homestead:owned). Los contratos llegan por correo: no
  *    llevan «recolectado». Los 35 gatos con su pista de la API, traducida.
  * Estados honestos: lo que no se pudo leer dice «sin datos» y se nombra el permiso, nunca «no lo tenés».
- * Glifos y Decoraciones llegan en ACT-6. Se carga por js/modules.json (DEC-035).
+ * Glifos y Decoraciones: si js/home-extra.js está cargado, sus pestañas aparecen y yo le paso los clics,
+ * la búsqueda y el selector. Se carga por js/modules.json (DEC-035).
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[HomeView]';
   var PANEL = 'homesteadPanel';
   var ROUTE = '#/account/homestead'; // la misma que usa js/router.js
@@ -186,14 +189,26 @@
     return h + '</ul><p class="hs-note">La API solo trae una pista por gato, en inglés: la traduje yo.</p></section>';
   }
 
-  function viewHTML(m) {
+  /** Pestañas: Nodos y gatos siempre; las de HomeExtra si está cargado. ext = { tabs, tab, html }. */
+  function tabsHTML(tabs, cur) {
+    var h = '<div class="hs-tabs" role="tablist" aria-label="Secciones de la Heredad">';
+    tabs.forEach(function (t) {
+      var on = t[0] === cur;
+      h += '<button type="button" role="tab" id="hsTab-' + t[0] + '" data-hs-tab="' + t[0] + '" aria-selected="' + on + '" aria-controls="hsPanel-' + t[0] + '" tabindex="' + (on ? 0 : -1) + '">' + esc(t[1]) + '</button>';
+    });
+    return h + '</div>';
+  }
+
+  function viewHTML(m, ext) {
+    var tabs = [['nodes', 'Nodos y gatos']].concat((ext && ext.tabs) || []), tab = ext && ext.tab;
+    if (!tabs.some(function (t) { return t[0] === tab; })) tab = 'nodes';
     var err = errorText(m), h = '<div class="hs-hero"><div class="hs-row"><img class="hs-ico" src="' + ICON + '" alt="" width="56" height="56">' +
       '<div class="hs-title"><h2 id="hsTitle">Heredad</h2><p>Tu casa y tu heredad de Janthir: nodos, gatos, glifos y decoraciones</p></div>' +
       '<div class="hs-top"><span class="hs-pillr">Reset diario <b id="hsClk">en ' + esc(m.reset) + '</b></span><button type="button" class="hs-btn" data-hs="refresh">Actualizar</button></div></div>' +
       '<div class="hs-stats" id="hsStats">' + statsHTML(m) + '</div>' + (err ? '<p class="hs-err" role="status">' + esc(err) + '</p>' : '') +
       '<div id="hsVoice" class="hs-voice" aria-live="polite"></div></div>';
-    h += '<div class="hs-tabs" role="tablist" aria-label="Secciones de la Heredad"><button type="button" role="tab" id="hsTab-nodes" aria-selected="true" aria-controls="hsPanel-nodes" tabindex="0">Nodos y gatos</button></div>';
-    h += '<div id="hsPanel-nodes" role="tabpanel" aria-labelledby="hsTab-nodes">' + nodesHTML(m) + catsHTML(m) + '</div>';
+    h += tabsHTML(tabs, tab);
+    h += '<div id="hsPanel-' + tab + '" role="tabpanel" aria-labelledby="hsTab-' + tab + '">' + (tab === 'nodes' ? nodesHTML(m) + catsHTML(m) : (ext.html || '')) + '</div>';
     return h + '<p class="hs-src">Nodos, gatos, ítems e íconos: API oficial del juego, en español. Lo que la API no informa: wiki oficial, «Home instance».</p>';
   }
 
@@ -221,7 +236,8 @@
     '.hs-voice{margin-top:12px}.hs-voice:empty{display:none}.hs-voice .shv-voice{margin:0;padding:8px 12px;background:var(--bg-0)}',
     '.hs-voice .shv-voice__avatar{width:36px;height:36px}.hs-voice .shv-voice__label{font-size:.78rem}.hs-voice .shv-voice__body p{font-size:.86rem}',
     '.hs-tabs{display:flex;gap:4px;margin:16px 0 10px;border-bottom:1px solid var(--bd-1)}',
-    '.hs-tabs [role=tab]{font:inherit;font-size:.92rem;background:none;border:0;border-bottom:2px solid var(--hs-mod);margin-bottom:-1px;padding:8px 14px;color:var(--tx-1);font-weight:700;min-height:40px}',
+    '.hs-tabs{overflow-x:auto}.hs-tabs [role=tab]{font:inherit;font-size:.92rem;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;padding:8px 14px;color:var(--tx-2);min-height:40px;cursor:pointer;white-space:nowrap}',
+    '.hs-tabs [role=tab]:hover{color:var(--tx-1)}.hs-tabs [aria-selected=true]{border-bottom-color:var(--hs-mod);color:var(--tx-1);font-weight:700}',
     '.hs-card{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);box-shadow:var(--gn-elev,0 6px 18px rgba(0,0,0,.28));padding:12px 16px;margin-bottom:12px}',
     '.hs-card-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}.hs-card-h h3{margin:0;font-size:1rem;color:var(--tx-1)}.hs-card-h small{font-size:.78rem;color:var(--tx-2)}',
     '.hs-filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}.hs-pills{display:flex;gap:6px;flex-wrap:wrap}',
@@ -249,7 +265,7 @@
 
   // ------------------------------------------------------------------ estado y DOM
   var doc = root.document;
-  var st = { cat: null, catP: null, data: null, ui: { group: 'all', only: 'all', q: '' }, cache: {}, shown: false, seq: 0, voiceKey: null, tick: null, day: null };
+  var st = { cat: null, catP: null, data: null, ui: { group: 'all', only: 'all', q: '', tab: 'nodes' }, cache: {}, shown: false, seq: 0, voiceKey: null, tick: null, day: null };
 
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
   function isHidden(n) { return !n || n.hidden || (n.getAttribute && n.getAttribute('hidden') != null); }
@@ -350,7 +366,7 @@
   }
 
   function focusSel(a) {
-    var ks = ['data-hs', 'data-hs-group', 'data-hs-only', 'data-hs-done', 'data-hs-own'];
+    var ks = ['data-hs', 'data-hs-tab', 'data-hs-group', 'data-hs-only', 'data-hs-done', 'data-hs-own', 'data-hx-only', 'data-hx-more'];
     for (var i = 0; i < ks.length; i++) { var v = a.getAttribute(ks[i]); if (v) return '[' + ks[i] + '="' + v + '"]'; }
     return null;
   }
@@ -360,8 +376,8 @@
     if (!panel || !st.cat || !st.shown) return null;
     var host = ensureHost(panel), m = model();
     var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : focusSel(a)) : null;
-    var caret = a && a.id === 'hsQ' ? a.selectionStart : null;
-    host.innerHTML = viewHTML(m);
+    var caret = a && (a.id === 'hsQ' || a.id === 'hxQ') ? a.selectionStart : null;
+    host.innerHTML = viewHTML(m, extFor(st.ui.tab));
     st.voiceKey = null;
     renderVoice(pickVoice(m));
     if (fk && host.querySelector) {
@@ -370,6 +386,22 @@
       if (b && caret != null && b.setSelectionRange) b.setSelectionRange(caret, caret);
     }
     return m;
+  }
+
+  function extra() { var X = root.HomeExtra; return X && typeof X.html === 'function' && Array.isArray(X.tabs) ? X : null; }
+  function extFor(tab) {
+    var X = extra();
+    if (!X) return null;
+    var ok = X.tabs.some(function (t) { return t[0] === tab; }), html = '';
+    if (ok) { try { html = X.html(tab, { token: token() }); } catch (e) { html = '<p class="hs-txt">Sin datos: no pude dibujar esta pestaña.</p>'; } }
+    return { tabs: X.tabs, tab: ok ? tab : 'nodes', html: html };
+  }
+  function tabIds() { var X = extra(); return ['nodes'].concat(X ? X.tabs.map(function (t) { return t[0]; }) : []); }
+  function goTab(id, focus) {
+    st.ui.tab = id;
+    render();
+    var b = focus && byId('hsTab-' + id);
+    if (b && b.focus) b.focus();
   }
 
   function renderVoice(msg) {
@@ -409,17 +441,37 @@
 
   function wire(host) {
     host.addEventListener('click', function (e) {
+      var X = extra(), tb = null;
+      for (var n = e.target, i = 0; n && i < 4 && !tb; n = n.parentNode, i++) tb = n.getAttribute ? n.getAttribute('data-hs-tab') : null;
+      if (tb) { goTab(tb, false); return; }
+      if (X && typeof X.onClick === 'function' && X.onClick(e)) return;
       var a = attrOf(e.target);
       if (!a) return;
-      if (a.act === 'refresh') { if (root.toast) root.toast('info', 'Actualizando tu heredad…', { ttl: 1500 }); load(true); return; }
+      if (a.act === 'refresh') {
+        if (root.toast) root.toast('info', 'Actualizando tu heredad…', { ttl: 1500 });
+        if (X && typeof X.refresh === 'function') X.refresh();
+        load(true); return;
+      }
       if (a.group) st.ui.group = a.group;
       else if (a.only) st.ui.only = a.only;
       else if (a.done) toggleDone(a.done);
       else if (a.own) toggleOwned(a.own);
       render();
     });
+    host.addEventListener('keydown', function (e) {
+      var t = e && e.target, id = t && t.getAttribute && t.getAttribute('data-hs-tab');
+      if (!id) return;
+      var ids = tabIds(), i = ids.indexOf(id), n = ids.length, k = e.key, j = -1;
+      if (k === 'ArrowRight') j = (i + 1) % n; else if (k === 'ArrowLeft') j = (i - 1 + n) % n;
+      else if (k === 'Home') j = 0; else if (k === 'End') j = n - 1;
+      if (j < 0) return;
+      if (e.preventDefault) e.preventDefault();
+      goTab(ids[j], true);
+    });
+    host.addEventListener('change', function (e) { var X = extra(); if (X && typeof X.onChange === 'function') X.onChange(e); });
     host.addEventListener('input', function (e) {
-      var t = e && e.target;
+      var t = e && e.target, X = extra();
+      if (X && typeof X.onInput === 'function' && X.onInput(e)) return;
       if (!t || t.id !== 'hsQ') return;
       st.ui.q = String(t.value || '');
       render();
@@ -464,7 +516,7 @@
     getSnapshot: function () { return { data: st.data, ui: Object.assign({}, st.ui) }; },
     _pure: { esc: esc, fold: fold, dayKey: dayKey, untilReset: untilReset, fingerprint: fingerprint, doneToday: doneToday, setDone: setDone,
       ownedFor: ownedFor, setOwned: setOwned, buildModel: buildModel, pickVoice: pickVoice, errorText: errorText, statsHTML: statsHTML,
-      nodesHTML: nodesHTML, catsHTML: catsHTML, viewHTML: viewHTML, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL, DONE_KEY: DONE_KEY, OWNED_KEY: OWNED_KEY }
+      nodesHTML: nodesHTML, catsHTML: catsHTML, tabsHTML: tabsHTML, viewHTML: viewHTML, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL, DONE_KEY: DONE_KEY, OWNED_KEY: OWNED_KEY }
   };
 
   if (doc && doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', init);

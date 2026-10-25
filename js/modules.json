@@ -23,6 +23,7 @@
     { "src": "js/act-model.js", "v": "1.0.0" },
     { "src": "js/act-view.js", "v": "1.3.0" },
     { "src": "js/act-week.js", "v": "1.0.0" },
-    { "src": "js/home-view.js", "v": "1.0.0" }
+    { "src": "js/home-view.js", "v": "1.1.0" },
+    { "src": "js/home-extra.js", "v": "1.0.0" }
   ]
 }
