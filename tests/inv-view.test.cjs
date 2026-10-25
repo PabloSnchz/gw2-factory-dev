@@ -102,8 +102,9 @@ test('vista: pestañas accesibles, íconos oficiales con la rareza en texto, ban
   assert.match(mat, /render\.guildwars2\.com\/file\/ecto\.png/);
   assert.match(mat, /Pegote de ectoplasma<span class="iv-sr">, Exótico<\/span>/);
   assert.match(mat, /<option value="37">Materiales de artesanía avanzados<\/option>/);
-  assert.match(mat, /data-iv="multi"/);
-  assert.match(mat, /data-iv="chars"/);
+  // BL-070 INV-7b: sin botones a las pantallas viejas ni la nota «por ahora», aunque falte una pestaña sumada
+  assert.doesNotMatch(mat, /data-iv="(multi|chars)"/);
+  assert.doesNotMatch(mat, /pantalla de siempre/);
   const bank = P.viewHTML(P.buildModel(sample(), CATS, { tab: 'bank' }));
   assert.match(bank, /<h3 id="ivB-1">Pestaña 1<\/h3><small>1 de 30 ocupados/);
   assert.match(bank, /<h3 id="ivB-2">Pestaña 2<\/h3><small>1 de 30 ocupados/);
@@ -260,12 +261,12 @@ test('humo: en #/account/characters toma el panel, lee la cuenta y muestra la vi
   host.listeners.input[0]({ target: { id: 'ivQ', value: 'cobre' } });
   assert.equal(sb.InvView.getSnapshot().ui.q, 'cobre');
 
-  // Personajes y Multicuenta abren su pantalla de siempre
+  // BL-070 INV-7b: las acciones viejas ya no abren nada ni esconden el panel
   click({ 'data-iv': 'chars' });
-  assert.ok(calls.some((c) => c[0] === 'charsScreen'));
-  assert.equal(D.panel.getAttribute('hidden'), '');
+  assert.ok(!calls.some((c) => c[0] === 'charsScreen'));
+  assert.notEqual(D.panel.getAttribute('hidden'), '');
   click({ 'data-iv': 'multi' });
-  assert.equal(sb.location.hash, '#/inventory/dashboard');
+  assert.notEqual(sb.location.hash, '#/inventory/dashboard');
 
   // Actualizar pide sin caché
   calls.length = 0;

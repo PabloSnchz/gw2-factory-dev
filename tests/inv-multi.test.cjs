@@ -300,8 +300,16 @@ test('humo: la primera vez abre en Multicuenta, lee todas las cuentas con sus bo
     const target = Object.assign({ getAttribute: (k) => (k in attrs ? attrs[k] : null), parentNode: null }, extra || {});
     (host.listeners[type] || []).forEach((f) => f({ type, target }));
   };
+  const focused = [], gid = D.document.getElementById;
+  D.document.getElementById = (id) => (/^im(WhereText|C-)/.test(id) && list(D).includes('id="' + id + '"') ? { focus: () => focused.push(id) } : gid(id));
   ev('click', { 'data-im-cell': '0:19721' });
   assert.match(list(D), /Pegote de ectoplasma en Alt Uno: 108 — Depósito 100 · Banco, pestaña 2 5 · Lyra 3\./);
+  assert.match(list(D), /<p id="imWhereText" tabindex="-1">/);
+  assert.deepEqual(focused, ['imWhereText'], 'el lector oye el detalle: el foco va a él');
+  ev('click', { 'data-im-close': '1' });
+  assert.deepEqual(focused, ['imWhereText', 'imC-0-19721'], 'al cerrar, el foco vuelve al número');
+  assert.doesNotMatch(list(D), /imWhereText/);
+  ev('click', { 'data-im-cell': '0:19721' });
   ev('click', { 'data-im-sort': '19976' });
   assert.deepEqual(JSON.parse(store.inv_dashboard_sort), { column: 19976, direction: 'desc' });
   ev('change', { 'data-im-hide': 'main' }, { checked: true });

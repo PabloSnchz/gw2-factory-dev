@@ -1,7 +1,8 @@
 /*!
  * js/inv-multi.js — Multicuenta: lo de valor de cada cuenta, set por set (BL-070, INV-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-25) — INV-7b: el nombre de cada ítem abre su ficha (precio del Bazar y dónde está)
+ * Versión: 1.1.1 (2026-10-25) — INV-7b: el lector oye dónde está (el foco va al detalle y vuelve al número)
+ *          1.1.0 (2026-10-25) — INV-7b: el nombre de cada ítem abre su ficha (precio del Bazar y dónde está)
  *          1.0.1 (2026-10-25) — INV-4: presta su lector (InvMulti.read) a Buscar, con la misma caché
  *          1.0.0 (2026-10-25) — INV-3: el Dashboard multicuenta como pestaña de Inventario y Personajes
  *
@@ -23,7 +24,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.1.1';
   var LOG = '[InvMulti]';
   var SETS_URL = 'assets/data/inventory-sets.json';
   var API = 'https://api.guildwars2.com';
@@ -226,7 +227,7 @@
     h.push('<td class="im-v">' + coins(T.value) + '</td></tr></tbody></table></div>');
     h.push('<div class="im-where" aria-live="polite">');
     var w = s.where, wa = w && list(s.accounts)[w.i], wi = wa ? accIndex(wa) : null;
-    if (wi) h.push('<p>' + esc(whereText(wi, w.id, nameOf(w.id, meta, s.sets), wa.label)) + '</p><button type="button" class="iv-btn" id="imWhereSheet" data-inv-item="' + w.id + '" aria-haspopup="dialog">Ver la ficha</button>' +
+    if (wi) h.push('<p id="imWhereText" tabindex="-1">' + esc(whereText(wi, w.id, nameOf(w.id, meta, s.sets), wa.label)) + '</p><button type="button" class="iv-btn" id="imWhereSheet" data-inv-item="' + w.id + '" aria-haspopup="dialog">Ver la ficha</button>' +
       '<button type="button" class="iv-btn" id="imWhereClose" data-im-close="1">Cerrar</button>');
     h.push('</div><p class="iv-src">Cuenta el depósito de materiales, el banco, las ranuras compartidas y las bolsas de todos tus personajes. Valor con el precio de venta del Bazar.</p></div>');
     return h.join('');
@@ -265,6 +266,7 @@
     '.im-tot th,.im-tot td{font-weight:800;border-top:2px solid var(--bd-2);border-bottom:0}',
     '.im-where{margin-top:10px}.im-where:empty{display:none}',
     '.im-where p{display:inline;margin:0 10px 0 0;font-size:.86rem;color:var(--tx-1)}',
+    '#ivRoot #imWhereText:focus{outline:2px solid var(--acc-1);outline-offset:2px}',
     '#ivRoot .im :is(input,summary,button):focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
     '@media (max-width:900px){.im-set,.im-opts label,.im-pick summary,.im-pick label,.im-sort,.im-n{min-height:44px}.im-val{margin-left:0;width:100%}}'
   ].join('\n');
@@ -333,6 +335,10 @@
     st.timer = setTimeout(function () {
       st.timer = null;
       if (root.InvView && typeof root.InvView.renderTab === 'function') root.InvView.renderTab('multi');
+      // Lector de pantalla: el detalle recién dibujado no se anuncia solo; el foco va a él y, al cerrar, vuelve al número.
+      var f = st.focus && doc && doc.getElementById ? doc.getElementById(st.focus) : null;
+      st.focus = null;
+      if (f && typeof f.focus === 'function') f.focus();
     }, 120);
   }
 
@@ -417,8 +423,8 @@
         p.sort = p.sort && p.sort.column === id ? { column: id, direction: p.sort.direction === 'desc' ? 'asc' : 'desc' } : { column: id, direction: 'desc' };
         put(KEY.sort, p.sort); paint(); return true;
       }
-      if ((v = attr(t, 'data-im-cell')) != null) { var x = v.split(':'); st.where = { i: Number(x[0]), id: Number(x[1]) }; paint(); return true; }
-      if (attr(t, 'data-im-close') != null) { st.where = null; paint(); return true; }
+      if ((v = attr(t, 'data-im-cell')) != null) { var x = v.split(':'); st.where = { i: Number(x[0]), id: Number(x[1]) }; st.focus = 'imWhereText'; paint(); return true; }
+      if (attr(t, 'data-im-close') != null) { st.focus = st.where ? 'imC-' + st.where.i + '-' + st.where.id : null; st.where = null; paint(); return true; }
       if (attr(t, 'data-im-item') != null || attr(t, 'data-im-tier') != null || attr(t, 'data-im-hide') != null) return true;
       return false;
     }

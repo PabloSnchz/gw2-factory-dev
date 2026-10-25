@@ -1,7 +1,8 @@
 /*!
  * js/inv-view.js — Inventario y Personajes renovado: cabecera, pestañas Materiales, Banco y Armería legendaria (BL-070, INV-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.4.0 (2026-10-25) — INV-6: cada ítem es un botón (data-inv-item) que abre su ficha (js/inv-sheet.js)
+ * Versión: 1.5.0 (2026-10-25) — INV-7b: sin los caminos a las pantallas viejas (se retiraron)
+ *          1.4.0 (2026-10-25) — INV-6: cada ítem es un botón (data-inv-item) que abre su ficha (js/inv-sheet.js)
  *          1.3.0 (2026-10-25) — INV-5: las pestañas sumadas con order de 100 o más van después de las propias (Personajes)
  *          1.2.0 (2026-10-25) — INV-4: una pestaña sumada puede traer su propio campo (tools) y recibe lo que se escribe; la segunda, Buscar
  *          1.1.0 (2026-10-25) — INV-3: pestañas que suman otros archivos (InvView.register); la primera, Multicuenta
@@ -12,8 +13,8 @@
  *    personajes, leídos de la cuenta y no de otra pantalla) y mi línea si el banco está por llenarse.
  *  - Pestañas Materiales (las 9 categorías del juego, por la categoría que trae la API de cada
  *    material), Banco (por pestaña de 30, como en el juego) y Armería legendaria (por tipo).
- *  - Personajes abre por ahora su pantalla de siempre; se renueva en INV-5. El Multicuenta es una pestaña
- *    (js/inv-multi.js, INV-3): la primera vez abre ahí y después recuerda la última pestaña (D6).
+ *  - Multicuenta (js/inv-multi.js), Buscar (js/inv-search.js) y Personajes (js/inv-chars.js) son pestañas
+ *    que suman otros archivos: la primera vez abre en Multicuenta y después recuerda la última (D6).
  * Íconos y nombres en español de /v2/items (GW2Api.getItemsMany, con su caché). La rareza va en un
  * anillo alrededor del ícono y en texto para el lector, nunca como color de letra. Estados honestos:
  * lo que no se pudo leer dice «Sin datos», nunca 0. Recuerda la última pestaña (gn:inventory:tab).
@@ -22,7 +23,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.4.0';
+  var VERSION = '1.5.0';
   var LOG = '[InvView]';
   var PANEL = 'inventoryPanel';
   var ICON = 'assets/icons/Welcome/358409.png';
@@ -42,10 +43,6 @@
     var all = PLUGINS.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
     var pick = function (late) { return all.filter(function (p) { return ((p.order || 0) >= 100) === late; }).map(function (p) { return [p.id, p.label]; }); };
     return pick(false).concat(TABS, pick(true));
-  }
-  function legacyNote() {
-    var a = !pluginOf('multi'), b = !pluginOf('chars');
-    return a && b ? ' El Multicuenta y Personajes abren por ahora su pantalla de siempre.' : a ? ' El Multicuenta abre por ahora su pantalla de siempre.' : b ? ' Personajes abre por ahora su pantalla de siempre.' : '';
   }
   function pluginOf(id) { for (var i = 0; i < PLUGINS.length; i++) if (PLUGINS[i].id === id) return PLUGINS[i]; return null; }
   function defaultTab() { for (var i = 0; i < PLUGINS.length; i++) if (PLUGINS[i].isDefault) return PLUGINS[i].id; return 'mat'; }
@@ -223,8 +220,7 @@
     var h = [], err = errorText(m);
     h.push('<div class="iv-hero"><div class="iv-row"><img class="iv-ico" src="' + ICON + '" alt="" width="56" height="56">');
     h.push('<div class="iv-title"><h2 id="ivTitle">Inventario y Personajes</h2><p>' + esc(subtitle(m)) + '</p></div>');
-    h.push('<div class="iv-acts">' + (pluginOf('multi') ? '' : '<button type="button" class="iv-btn" data-iv="multi">Multicuenta</button>') +
-      (pluginOf('chars') ? '' : '<button type="button" class="iv-btn" data-iv="chars">Personajes</button>') +
+    h.push('<div class="iv-acts">' +
       '<button type="button" class="iv-btn" data-iv="refresh">↻ Actualizar</button></div></div>');
     h.push('<div class="iv-stats">' + statsHTML(m) + '</div>');
     if (err) h.push('<p class="iv-err" role="status">' + esc(err) + '</p>');
@@ -236,7 +232,7 @@
     });
     h.push('</div><div id="ivPanel" role="tabpanel" aria-labelledby="ivTab-' + m.tab + '">' + toolsHTML(m));
     h.push('<div id="ivList">' + listHTML(m) + '</div>');
-    h.push('<p class="iv-src">Nombres, íconos y rarezas: API oficial del juego, en español.' + legacyNote() + '</p></div>');
+    h.push('<p class="iv-src">Nombres, íconos y rarezas: API oficial del juego, en español.</p></div>');
     return h.join('');
   }
 
@@ -445,14 +441,6 @@
     return render();
   }
 
-  function openChars() {
-    var p = byId(PANEL);
-    if (root.Characters && typeof root.Characters.activate === 'function') {
-      if (p && p.setAttribute) p.setAttribute('hidden', '');
-      root.Characters.activate();
-    }
-  }
-
   function actOf(t) {
     for (var n = t, i = 0; n && i < 6; n = n.parentNode, i++) {
       if (!n.getAttribute) continue;
@@ -473,8 +461,6 @@
         load(true);
         if (pl && pl.refresh) pl.refresh(true);
       }
-      else if (a.act === 'multi') { if (root.location) root.location.hash = '#/inventory/dashboard'; }
-      else if (a.act === 'chars') openChars();
       else if (a.tab) go(a.tab);
     });
     host.addEventListener('input', function (e) {
