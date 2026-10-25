@@ -1,7 +1,8 @@
 /*!
  * js/gn-shell.js — Un solo contenedor por módulo renovado (BL-070, pedido de Pablo del 2026-10-25)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-25) · PUL-1: la Armería Legendaria también tiene un solo contenedor
+ * Versión: 1.2.0 (2026-10-25) · PUL-2: el ícono de la cabecera igual en los 9 módulos y cada módulo en el color de su botón de la barra lateral
+ *          1.1.0 (2026-10-25) · PUL-1: la Armería Legendaria también tiene un solo contenedor
  *          1.0.0 (2026-10-25)
  *
  * Por qué existe: en Raids, Inventario y Personajes, Actividades, Logros y la Cámara del Brujo la
@@ -21,7 +22,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[GNShell]';
   var SIDE = 24, SIDE_M = 12, TINT = 12, FADE = 300;
   // panel: selector del panel con la vista montada · head: lo que la vista inserta arriba ·
@@ -30,8 +31,8 @@
     { id: 'raids', panel: '#raidTrackerPanel.rv-on', head: '#rvRoot', hero: '.rv-hero', mod: 'var(--gn-mod,#F47C7C)', hex: '#F47C7C' },
     { id: 'inventory', panel: '#inventoryPanel.iv-on', head: '#ivRoot', hero: '.iv-hero', mod: 'var(--gn-mod,#7EC3FF)', hex: '#7EC3FF' },
     { id: 'activities', panel: '#activitiesPanel.av-on', head: '#avRoot', hero: '.av-hero', mod: 'var(--gn-mod,#3CC48A)', hex: '#3CC48A' },
-    { id: 'achievements', panel: '#achievementsPanel.achx-on', head: '#achxHead', hero: '.achx-hero', mod: '#E8A33D', hex: '#E8A33D' },
-    { id: 'wv', panel: '#wvPanel', head: '#wvxHead', hero: '.wvx-hero', mod: '#4FC3D9', hex: '#4FC3D9' },
+    { id: 'achievements', panel: '#achievementsPanel.achx-on', head: '#achxHead', hero: '.achx-hero', mod: '#6EA3FF', hex: '#6EA3FF' },
+    { id: 'wv', panel: '#wvPanel', head: '#wvxHead', hero: '.wvx-hero', mod: '#15C3B7', hex: '#15C3B7' },
     // La Armería (PUL-1): js/render-catologo.js dibuja su cabecera dentro de #legendaryArmoryBody >
     // #legendaryModeContent (body) y el panel no lleva clase al montarse: la marca es :has(.arm-hero).
     { id: 'armory', panel: '#legendaryArmoryPanel:has(.arm-hero)', head: '#legendaryArmoryBody', body: '#legendaryModeContent', hero: '.arm-hero', mod: '#E545CA', hex: '#E545CA' }
@@ -58,6 +59,44 @@
       P + '>:not(' + s.head + '),' + B + '>:not(' + s.hero + '){margin-left:' + SIDE_M + 'px;margin-right:' + SIDE_M + 'px}';
   }
 
+  // PUL-2 (pedido de Pablo, 2026-10-25): el ícono de la cabecera igual en los 9 módulos, como el de la Cartera:
+  // placa de 56 px con el ícono a 44 px, el fondo del theme (--bg-0), un borde fino y el brillo del color del
+  // módulo en la barra lateral (el de la Bienvenida). En el celular, placa de 40 px con el ícono a 32 px.
+  // wrap: la vista dibuja una placa con el <img> adentro; si no, el <img> es la placa (con su relleno).
+  var ICONS = [
+    { id: 'cards', sel: '#walletPanel .wn-hico,#walletDashboardPanel .wn-hico', wrap: true, color: '#F2B94B' },
+    { id: 'meta', sel: '#metaPanel .mh-hico', wrap: true, color: '#A896FF' },
+    { id: 'wv', sel: '#wvxHead .wvx-row>img', color: '#15C3B7' },
+    { id: 'achievements', sel: '#achxHead .achx-row>img', color: '#6EA3FF' },
+    { id: 'raids', sel: '#rvRoot .rv-ico', color: '#F47C7C' },
+    { id: 'activities', sel: '#avRoot .av-ico', color: '#3CC48A' },
+    { id: 'characters', sel: '#ivRoot .iv-ico', color: '#7EC3FF' },
+    { id: 'armory', sel: '#legendaryArmoryPanel .arm-hrow>img', color: '#E545CA' },
+    { id: 'homestead', sel: '#hsRoot .hs-ico', color: '#D9A55B' }
+  ];
+  var PLATE = 56, ICO = 44, PLATE_M = 40, ICO_M = 32;
+  // D1: las pestañas de Logros y la Cámara también en el color de su botón de la barra lateral.
+  var TAB_FIX = '#achievementsPanel .achx-tabs [role=tab][aria-selected=true]{border-bottom-color:#6EA3FF}' +
+    '#wvPanel .wvx-tabs [role=tab][aria-selected=true]{border-bottom-color:#15C3B7}';
+
+  function each(sel, suffix) { return sel.split(',').map(function (x) { return x + suffix; }).join(','); }
+
+  function iconCSS(list) {
+    var out = [], mob = [];
+    (list || ICONS).forEach(function (i) {
+      var pad = i.wrap ? 0 : (PLATE - ICO) / 2, padM = i.wrap ? 0 : (PLATE_M - ICO_M) / 2;
+      out.push(i.sel + '{width:' + PLATE + 'px;height:' + PLATE + 'px;padding:' + pad + 'px;box-sizing:border-box;border-radius:12px;' +
+        'background:var(--bg-0);box-shadow:0 0 0 1px var(--bd-2),0 0 18px color-mix(in srgb,' + i.color + ' 18%,transparent);' +
+        'flex-shrink:0;object-fit:contain' + (i.wrap ? ';display:grid;place-items:center' : '') + '}');
+      if (i.wrap) out.push(each(i.sel, '>img') + '{width:' + ICO + 'px;height:' + ICO + 'px;object-fit:contain}');
+      mob.push(i.sel + '{width:' + PLATE_M + 'px;height:' + PLATE_M + 'px;padding:' + padM + 'px}');
+      if (i.wrap) mob.push(each(i.sel, '>img') + '{width:' + ICO_M + 'px;height:' + ICO_M + 'px}');
+    });
+    out.push(TAB_FIX);
+    out.push('@media (max-width:900px){' + mob.join('') + '}');
+    return out.join('\n');
+  }
+
   function buildCSS(list) {
     var out = [];
     (list || SHELLS).forEach(function (s) { out = out.concat(shellCSS(s)); });
@@ -65,7 +104,7 @@
     return out.join('\n');
   }
 
-  var CSS = buildCSS(SHELLS);
+  var CSS = buildCSS(SHELLS) + '\n' + iconCSS(ICONS);
 
   // ------------------------------------------------------------------ DOM
   var doc = root.document;
@@ -81,7 +120,7 @@
 
   root.GNShell = {
     version: VERSION,
-    _pure: { SHELLS: SHELLS, SIDE: SIDE, SIDE_M: SIDE_M, TINT: TINT, FADE: FADE, shellCSS: shellCSS, buildCSS: buildCSS, CSS: CSS }
+    _pure: { SHELLS: SHELLS, ICONS: ICONS, iconCSS: iconCSS, TAB_FIX: TAB_FIX, SIDE: SIDE, SIDE_M: SIDE_M, TINT: TINT, FADE: FADE, shellCSS: shellCSS, buildCSS: buildCSS, CSS: CSS }
   };
 
   if (doc && doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', inject);

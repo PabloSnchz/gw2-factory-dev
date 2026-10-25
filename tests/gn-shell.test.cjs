@@ -27,7 +27,7 @@ const viewSrc = (id) => [].concat(VIEWS[id]).map(read).join('\n');
 const inner = (s) => s.panel + ' ' + s.head + (s.body ? ' ' + s.body : '');
 
 test('versión, presupuesto y manifiesto: después de gn-frame.js, fuera de index.html, sin pedidos ni almacenamiento', () => {
-  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.match(SRC, /Versión: 1\.2\.0/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
   assert.doesNotMatch(SRC, /fetch\(|localStorage|sessionStorage|Storage\.set/);
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}]/u, 'sin emojis');
@@ -71,6 +71,33 @@ test('PUL-1: la Armería con un solo contenedor, en su color de la barra lateral
   assert.match(read('js/welcome-panel.js'), /id: 'armory'[^}]*color: '#E545CA'/);
   assert.equal(a.hex, '#E545CA');
   assert.ok(P.CSS.includes('#legendaryArmoryPanel:has(.arm-hero) #legendaryArmoryBody #legendaryModeContent>:not(.arm-hero){margin-left:12px;margin-right:12px}'), 'en el celular');
+});
+
+test('PUL-2: el ícono de la cabecera igual en los 9 módulos, en el color de su botón de la barra lateral', () => {
+  const W = read('js/welcome-panel.js');
+  const SRCS = { cards: 'js/wallet-theme.js', meta: 'js/meta-theme.js', wv: 'js/wv-view.js', achievements: 'js/ach-view.js', raids: 'js/raids-view.js',
+    activities: 'js/act-view.js', characters: 'js/inv-view.js', armory: 'js/render-catologo.js', homestead: 'js/home-view.js' };
+  assert.deepEqual(JSON.parse(JSON.stringify(P.ICONS.map((i) => i.id))).sort(), Object.keys(SRCS).sort());
+  P.ICONS.forEach((i) => {
+    const m = W.match(new RegExp("id: '" + i.id + "'[^}]*color: '(#[0-9A-Fa-f]{6})'"));
+    assert.ok(m, i.id + ': está en la barra lateral');
+    assert.equal(i.color, m[1], i.id + ': el color de su botón');
+    assert.ok(P.CSS.includes(i.sel + '{width:56px;height:56px;'), i.id + ': placa de 56 px');
+    assert.ok(P.CSS.includes('background:var(--bg-0);box-shadow:0 0 0 1px var(--bd-2),0 0 18px color-mix(in srgb,' + i.color + ' 18%,transparent)'), i.id + ': el brillo de la Cartera en su color');
+    const cls = i.sel.split(',')[0].split(' ').pop().split('>')[0].slice(1);
+    assert.ok(read(SRCS[i.id]).includes(cls), i.id + ': la vista dibuja .' + cls);
+  });
+  assert.ok(P.CSS.includes('#metaPanel .mh-hico>img{width:44px;height:44px'), 'el ícono a 44 px dentro de la placa');
+  assert.ok(P.CSS.includes('#rvRoot .rv-ico{width:56px;height:56px;padding:6px;box-sizing:border-box'), 'el ícono a 44 px con el relleno');
+  assert.ok(P.CSS.includes('#hsRoot .hs-ico{width:40px;height:40px;padding:4px}'), 'en el celular, 40 px');
+  // D1: el degradado y las pestañas en el color de la barra lateral.
+  P.SHELLS.forEach((s) => {
+    const i = P.ICONS.filter((x) => x.id === (s.id === 'inventory' ? 'characters' : s.id))[0];
+    assert.ok(i, s.id);
+    assert.equal(s.hex, i.color, s.id + ': el degradado en el color de la barra lateral');
+  });
+  assert.ok(P.CSS.includes('#achievementsPanel .achx-tabs [role=tab][aria-selected=true]{border-bottom-color:#6EA3FF}'));
+  assert.ok(P.CSS.includes('#wvPanel .wvx-tabs [role=tab][aria-selected=true]{border-bottom-color:#15C3B7}'));
 });
 
 test('la cabecera de cada vista gana: las reglas pesan más que las de la vista', () => {
