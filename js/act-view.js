@@ -1,6 +1,7 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
+ * Versión: 1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)
  * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)
  *          1.0.1 (2026-10-25) — ACT-2: la ruta real del módulo es #/activities (la de js/router.js), no #/account/activities
  *          1.0.0 (2026-10-25) — ACT-2: la vista nueva sobre el modelo de js/act-model.js
@@ -24,7 +25,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
   var ROUTE = '#/activities'; // la misma que usa js/router.js
@@ -79,7 +80,7 @@
       m.frProg = P.fractalProgress(m.fr, ok ? d.progress : null);
     }
     m.frTomorrow = c.fractals && Array.isArray(d.tomorrow) ? P.fractals(d.tomorrow, c.fractals.patterns, c.fractals.tierMinScale) : null;
-    if (ok) m.key = P.weeklyKey(d.chars, now, (c.weeklyKey && c.weeklyKey.storyLevel) || 10);
+    if (ok) m.key = P.weeklyKey(d.chars, now, (c.weeklyKey && c.weeklyKey.storyLevel) || 10, d.keyMark);
     m.lastWeekly = P.lastWeekly(now);
     if (ok && typeof d.stones === 'number') m.stones = Math.max(0, Math.min(m.stonesTotal, d.stones));
     m.voice = pickVoice(m);
@@ -126,7 +127,9 @@
     if (ok && k.state === 'probable') {
       var ch = k.chars[0];
       h += stat('Llave semanal', 'Probable', esc(ch.name) + ', nivel ' + ch.level + ', creado el ' + esc(dayText(Date.parse(ch.created))));
-    } else if (ok && k.state === 'none') h += stat('Llave semanal', 'Sin señal', 'ningún personaje nuevo de nivel 10');
+    } else if (ok && k.state === 'claimed') h += stat('Llave semanal', 'Ya la sacaste', 'lo confirmaste vos');
+    else if (ok && k.state === 'pending') h += stat('Llave semanal', 'Todavía no', 'lo confirmaste vos');
+    else if (ok && k.state === 'none') h += stat('Llave semanal', 'Sin señal', 'ningún personaje nuevo de nivel 10');
     else h += stat('Llave semanal', '—', nd);
     if (m.stones != null) h += stat('Piedras vetustas', frac(m.stones, m.stonesTotal), m.stones >= m.stonesTotal ? 'las ' + m.stonesTotal + ' de la semana' : 'compradas esta semana', pct(m.stones, m.stonesTotal));
     else h += stat('Piedras vetustas', '—', nd);
@@ -211,7 +214,8 @@
     return craftingHTML(m) + fractalsHTML(m) + (m.old.psna ? '<div id="avPsnaSlot" class="av-slot"></div>' : '');
   }
   function semanaHTML(m) {
-    return keyHTML(m) + (m.old.stones ? '<div id="avStonesSlot" class="av-slot"></div>' : '') +
+    var W = root.ActWeek;
+    return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m) + (m.old.stones ? '<div id="avStonesSlot" class="av-slot"></div>' : '')) +
       (m.old.nodes ? '<section class="av-card" aria-labelledby="avNodesT"><div class="av-card-h"><h3 id="avNodesT">Nodos de casa</h3></div><div id="avNodesSlot" class="av-slot"></div></section>' : '');
   }
 
@@ -392,7 +396,7 @@
       var arr = function (x) { return x.ok && Array.isArray(x.v) ? x.v : null; };
       var chars = arr(r[1]);
       var d = { loaded: true, hasToken: true, tk: tk, items: items, unread: [], crafting: arr(r[0]), progress: null,
-        chars: chars ? chars.map(function (c) { return { name: c && c.name, level: c && c.level, created: c && c.created }; }) : null,
+        chars: chars ? chars.map(function (c) { return { name: c && c.name, level: c && c.level, created: c && c.created, race: c && c.race, profession: c && c.profession, backstory: c && c.backstory }; }) : null,
         fractals: r[2].ok && r[2].v ? r[2].v.today : null, tomorrow: r[2].ok && r[2].v ? r[2].v.tomorrow : null };
       if (!d.crafting) d.unread.push('crafting');
       if (!d.chars) d.unread.push('chars');
@@ -453,22 +457,30 @@
   }
 
   function model() {
-    var d = Object.assign({}, st.data || {}, { stones: readStones() });
+    var W = root.ActWeek, wk = W && typeof W.state === 'function' ? W.state(Date.now()) : null;
+    var d = Object.assign({}, st.data || {}, { stones: wk ? wk.bought : readStones(), keyMark: wk ? wk.keyMark : undefined });
     return buildModel(d, st.cat, { tab: st.ui.tab, old: st.ui.old }, now());
   }
 
+  // Para volver el foco al mismo botón después de redibujar (también los de la pestaña Semana).
+  function focusSel(a) {
+    var ks = ['data-av', 'data-aw-key', 'data-aw-stone', 'data-aw-wp'];
+    for (var i = 0; i < ks.length; i++) { var v = a.getAttribute(ks[i]); if (v) return '[' + ks[i] + '="' + v + '"]'; }
+    return null;
+  }
   function render() {
     var panel = byId(PANEL);
     if (!panel || !st.cat || !st.shown) return null;
     st.ui.old = grabOld();
     var host = ensureHost(panel), m = model();
-    var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : a.getAttribute('data-av') ? '[data-av="' + a.getAttribute('data-av') + '"]' : null) : null;
+    var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : focusSel(a)) : null;
     host.innerHTML = viewHTML(m);
     place('avPsnaSlot', st.old.psna);
     place('avStonesSlot', st.old.stones);
     place('avNodesSlot', st.old.nodes);
     st.voiceKey = null;
     renderVoice(m.voice);
+    if (root.ActWeek && typeof root.ActWeek.afterRender === 'function') root.ActWeek.afterRender(m);
     if (fk && host.querySelector) { var b = host.querySelector(fk); if (b && b.focus) b.focus(); }
     return m;
   }
@@ -521,11 +533,13 @@
 
   function wire(host) {
     host.addEventListener('click', function (e) {
+      if (root.ActWeek && typeof root.ActWeek.onClick === 'function' && root.ActWeek.onClick(e)) return;
       var a = attrOf(e.target);
       if (!a) return;
       if (a.act === 'refresh') {
         if (root.toast) root.toast('info', 'Actualizando tus actividades…', { ttl: 1500 });
         load(true);
+        if (root.ActWeek && typeof root.ActWeek.refresh === 'function') root.ActWeek.refresh();
       } else if (a.tab) go(a.tab);
       else if (a.id === 'assMinus' || a.id === 'assPlus') setTimeout(renderStats, 0);
     });
@@ -570,6 +584,7 @@
   root.ActView = {
     version: VERSION, render: render, go: go, refresh: function () { return load(true); },
     getSnapshot: function () { return { data: st.data, ui: { tab: st.ui.tab } }; },
+    _cat: function () { return st.cat; },
     _pure: { esc: esc, clocks: clocks, buildModel: buildModel, pickVoice: pickVoice, errorText: errorText, subtitle: subtitle,
       statsHTML: statsHTML, viewHTML: viewHTML, RARITY: RARITY, TABS: TABS, CSS: CSS }
   };

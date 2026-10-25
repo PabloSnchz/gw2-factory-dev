@@ -21,6 +21,7 @@
     { "src": "js/inv-chars.js", "v": "1.0.1" },
     { "src": "js/inv-sheet.js", "v": "1.0.0" },
     { "src": "js/act-model.js", "v": "1.0.0" },
-    { "src": "js/act-view.js", "v": "1.1.0" }
+    { "src": "js/act-view.js", "v": "1.2.0" },
+    { "src": "js/act-week.js", "v": "1.0.0" }
   ]
 }
