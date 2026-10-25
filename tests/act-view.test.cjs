@@ -145,6 +145,8 @@ test('CSS: solo oculta lo viejo con la vista activa; foco visible, movimiento re
   assert.match(P.CSS, /\.av-chk li\{[^}]*min-height:44px/);
   assert.match(P.CSS, /focus-visible\{outline:2px solid var\(--acc-1\)/);
   assert.doesNotMatch(P.CSS, /(^|[;{])\s*color:var\(--(acc-1|av-mod|gn-mod|color-[\w-]+)\)/m, 'ni el acento, ni el color del módulo, ni el de estado como texto');
+  // RUN-057: un tinte verde detrás de «Hecho» dejaba el texto en 4.10:1 en one-dark; el estado va en el texto y el borde.
+  assert.doesNotMatch(P.CSS, /\.av-badge[^{]*\{[^}]*background/, 'las marcas de estado no tiñen el fondo del texto');
 });
 
 // ------------------------------------------------------------------ contraste en los 19 themes
@@ -169,8 +171,7 @@ test('en los 19 themes cada texto de la vista llega a 4.5:1 sobre las superficie
     const tray = G.parse(sf['--gn-tray']), card = G.parse(sf['--bg-1']);
     const bg0 = G.over(G.parse(t['--bg-0']), [255, 255, 255, 1]);
     const hero = G.over([0x3C, 0xC4, 0x8A, 0.12], tray);
-    const okBadge = G.over([0x3C, 0xC4, 0x8A, 0.14], card);
-    [...keys].forEach((k) => [['bg-0', bg0], ['bandeja', tray], ['tarjeta', card], ['cabecera', hero], ['«Hecho»', okBadge]].forEach(([n, s]) => {
+    [...keys].forEach((k) => [['bg-0', bg0], ['bandeja', tray], ['tarjeta', card], ['cabecera', hero]].forEach(([n, s]) => {
       const r = G.contrast(G.over(G.parse(eff[k]), s), s);
       if (r < 4.5) fails.push(f + ' ' + k + ' sobre ' + n + ' ' + r.toFixed(2));
     }));

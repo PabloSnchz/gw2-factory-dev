@@ -235,7 +235,7 @@
     '.av-ic{display:inline-block;width:32px;height:32px;flex-shrink:0;border-radius:7px;background:var(--bg-2);box-shadow:inset 0 0 0 2px var(--av-r),0 0 0 1px var(--bd-1);line-height:0}',
     '.av-ic img{display:block;width:32px;height:32px;border-radius:7px;padding:2px;box-sizing:border-box}',
     '.av-badge{font-size:.74rem;font-weight:700;border:1px solid var(--bd-2);border-radius:999px;padding:1px 9px;color:var(--tx-1);white-space:nowrap}',
-    '.av-badge--ok{border-color:var(--color-green,#3CC48A);background:color-mix(in srgb,var(--color-green,#3CC48A) 14%,transparent)}',
+    '.av-badge--ok{border-color:var(--color-green,#3CC48A)}',
     '.av-badge--pend{border-color:var(--color-amber,#F2B94B)}.av-badge--nd{color:var(--tx-2)}',
     '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}',
     '.av-note,.av-src{margin:8px 0 0;color:var(--tx-2);font-size:.8rem}.av-src{font-size:.74rem;margin-top:12px}',
