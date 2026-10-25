@@ -1,23 +1,23 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)
+ * Versión: 1.4.0 (2026-10-25) — ACT-7: el PSNA lo dibuja js/act-psna.js; ya no reubico nada de js/activities.js
+ *          1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)
  *          1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)
  * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)
  *          1.0.1 (2026-10-25) — ACT-2: la ruta real del módulo es #/activities (la de js/router.js), no #/account/activities
  *          1.0.0 (2026-10-25) — ACT-2: la vista nueva sobre el modelo de js/act-model.js
  *
- * Toma el panel #activitiesPanel (#/activities) y oculta lo viejo sin borrarlo, como Raids e Inventario:
+ * Toma el panel #activitiesPanel (#/activities); lo que traiga adentro de antes queda oculto:
  *  - Cabecera con el ícono del módulo y los 3 relojes en tu hora local: reset diario (00:00 UTC), cambio del
  *    PSNA (08:00 UTC) y reset semanal (lunes 07:30 UTC). Mi línea solo si hay algo que te falta hoy.
  *  - 4 indicadores leídos de la cuenta: fabricación diaria (las 5 de la API, con el cristal de cuarzo cargado),
  *    fractales del día (categoría de logros 88 y tu progreso), llave semanal («Probable» con un personaje de
  *    nivel 10 o más creado desde el reset, de cualquier profesión: la API no informa el capítulo terminado) y
  *    piedras vetustas (lo que marcaste esta semana).
- *  - Hoy (abre siempre acá, D6): la fabricación diaria con su ícono oficial y el PSNA de siempre (BL-048), que
- *    sigue siendo el de js/activities.js con sus funciones probadas: acá solo cambia de lugar.
- *  - Semana: la llave con la regla verificada; las piedras y los nodos de casa siguen con su pantalla de
- *    siempre hasta ACT-4 y ACT-5, dentro de la pestaña.
+ *  - Hoy (abre siempre acá, D6): la fabricación diaria con su ícono oficial, los fractales del día y el PSNA
+ *    (js/act-psna.js, con las mismas funciones puras de siempre).
+ *  - Semana: la dibuja js/act-week.js (llave, guía y piedras por moneda); los nodos de casa están en la Heredad.
  * Una lectura por fuente: los personajes en un pedido (/v2/characters?ids=all, no uno por uno), con un
  * reintento ante 429 y caché en memoria de 5 minutos. Estados honestos: lo que no se pudo leer dice «sin
  * datos» y se nombra, nunca «te falta» ni 0. La Key queda en memoria, nunca se guarda.
@@ -26,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
   var ROUTE = '#/activities'; // la misma que usa js/router.js
@@ -67,12 +67,12 @@
 
   // Todo lo que muestra la pantalla, sin tocar el DOM.
   // data: { loaded, hasToken, crafting, chars, fractals: [{id, name}], progress, stones, items, unread }
-  // ui: { tab, old: {psna, stones, nodes} } — qué partes de la pantalla de siempre están para reubicar.
+  // ui: { tab }
   function buildModel(data, cat, ui, now) {
     ui = ui || {};
     var P = A(), d = data || {}, c = cat || {}, ok = !!d.loaded && !!d.hasToken;
     var m = { tab: ui.tab === 'semana' ? 'semana' : 'hoy', loaded: !!d.loaded, hasToken: !!d.hasToken, unread: d.unread || [],
-      items: d.items || {}, old: ui.old || {}, clocks: clocks(now), crafting: null, fr: null, frProg: null,
+      items: d.items || {}, clocks: clocks(now), crafting: null, fr: null, frProg: null,
       key: { state: 'unknown', chars: [] }, stones: null, stonesTotal: (c.leivas && c.leivas.perWeek) || 5, voice: null };
     if (!P) return m;
     if (c.dailyCrafting) m.crafting = P.dailyCrafting(c.dailyCrafting.items, ok ? d.crafting : null);
@@ -212,11 +212,12 @@
   }
 
   function hoyHTML(m) {
-    return craftingHTML(m) + fractalsHTML(m) + (m.old.psna ? '<div id="avPsnaSlot" class="av-slot"></div>' : '');
+    var S = root.ActPsna;
+    return craftingHTML(m) + fractalsHTML(m) + (S && typeof S.html === 'function' ? S.html() : '');
   }
   function semanaHTML(m) {
     var W = root.ActWeek;
-    return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m) + (m.old.stones ? '<div id="avStonesSlot" class="av-slot"></div>' : '')) +
+    return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m)) +
       '<section class="av-card" aria-labelledby="avNodesT"><div class="av-card-h"><h3 id="avNodesT">Nodos de casa</h3></div>' +
       '<p class="av-txt">Se mudaron a su propio módulo, <a class="av-link" href="#/account/homestead">la Heredad</a>, con tus marcas de siempre.</p></section>';
   }
@@ -286,7 +287,6 @@
     '.av-badge--pend{border-color:var(--color-amber,#F2B94B)}.av-badge--nd{color:var(--tx-2)}',
     '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}.av-link{color:var(--tx-1);font-weight:700;text-decoration:underline}',
     '.av-note,.av-src{margin:8px 0 0;color:var(--tx-2);font-size:.8rem}.av-src{font-size:.74rem;margin-top:12px}',
-    '.av-slot{margin-bottom:12px}.av-slot>.card,.av-slot>section{margin-top:0}',
     '.av-frs{list-style:none;margin:0;padding:0}',
     '.av-fr{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--bd-1);padding:8px 0}.av-fr:last-child{border-bottom:0}',
     '.av-frn{min-width:150px;font-size:.9rem;color:var(--tx-1)}',
@@ -306,7 +306,7 @@
 
   // ------------------------------------------------------------------ DOM
   var doc = root.document;
-  var st = { cat: null, catP: null, data: null, ui: { tab: 'hoy' }, voiceKey: null, seq: 0, cache: {}, shown: false, tick: null, day: null, old: {} };
+  var st = { cat: null, catP: null, data: null, ui: { tab: 'hoy' }, voiceKey: null, seq: 0, cache: {}, shown: false, tick: null, day: null };
 
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
   function isHidden(n) { return !n || n.hidden || (n.getAttribute && n.getAttribute('hidden') != null); }
@@ -374,15 +374,6 @@
     });
   }
 
-  // Lo que marcaste con el −/+ de siempre (js/activities.js), solo si esa pantalla ya leyó tu cuenta.
-  function readStones() {
-    try {
-      var a = root.Activities, d = a && typeof a._debug === 'function' ? a._debug() : null;
-      if (d && d.token && typeof d.weeklyStones === 'number') return d.weeklyStones;
-    } catch (e) {}
-    return null;
-  }
-
   // Cada lectura falla por su lado: lo que llegó se muestra, lo que no se dice.
   function load(nocache) {
     var mySeq = ++st.seq, tk = token(), G = root.GW2Api;
@@ -425,20 +416,6 @@
     });
   }
 
-  function sectionOf(n) {
-    for (var i = 0; n && i < 6; n = n.parentNode, i++) if (n.tagName && String(n.tagName).toUpperCase() === 'SECTION') return n;
-    return null;
-  }
-  // Las partes de la pantalla de siempre que se reubican (la misma pieza, con sus eventos y funciones).
-  function grabOld() {
-    var o = st.old, pill = byId('pillLeivas');
-    o.psna = byId('psnaPanel') || o.psna || null;
-    o.stones = (pill && sectionOf(pill)) || o.stones || null;
-    o.nodes = byId('homeNodesContainer') || o.nodes || null;
-    return { psna: !!o.psna, stones: !!o.stones, nodes: !!o.nodes };
-  }
-  function place(slotId, node) { var s = byId(slotId); if (s && node && s.appendChild) s.appendChild(node); }
-
   function ensureHost(panel) {
     if (!byId('act-view-css') && doc.createElement && doc.head) {
       var s = doc.createElement('style');
@@ -460,34 +437,28 @@
 
   function model() {
     var W = root.ActWeek, wk = W && typeof W.state === 'function' ? W.state(Date.now()) : null;
-    var d = Object.assign({}, st.data || {}, { stones: wk ? wk.bought : readStones(), keyMark: wk ? wk.keyMark : undefined });
-    return buildModel(d, st.cat, { tab: st.ui.tab, old: st.ui.old }, now());
+    var d = Object.assign({}, st.data || {}, { stones: wk ? wk.bought : null, keyMark: wk ? wk.keyMark : undefined });
+    return buildModel(d, st.cat, { tab: st.ui.tab }, now());
   }
 
   // Para volver el foco al mismo botón después de redibujar (también los de la pestaña Semana).
   function focusSel(a) {
-    var ks = ['data-av', 'data-aw-key', 'data-aw-stone', 'data-aw-wp'];
+    var ks = ['data-av', 'data-aw-key', 'data-aw-stone', 'data-aw-wp', 'data-ap-copy', 'data-ap-all'];
     for (var i = 0; i < ks.length; i++) { var v = a.getAttribute(ks[i]); if (v) return '[' + ks[i] + '="' + v + '"]'; }
     return null;
   }
   function render() {
     var panel = byId(PANEL);
     if (!panel || !st.cat || !st.shown) return null;
-    st.ui.old = grabOld();
     var host = ensureHost(panel), m = model();
     var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : focusSel(a)) : null;
     host.innerHTML = viewHTML(m);
-    place('avPsnaSlot', st.old.psna);
-    place('avStonesSlot', st.old.stones);
     st.voiceKey = null;
     renderVoice(m.voice);
     if (root.ActWeek && typeof root.ActWeek.afterRender === 'function') root.ActWeek.afterRender(m);
     if (fk && host.querySelector) { var b = host.querySelector(fk); if (b && b.focus) b.focus(); }
     return m;
   }
-
-  // Solo los indicadores (al usar el −/+ de las piedras: el foco se queda en el botón).
-  function renderStats() { var b = byId('avStats'); if (b && st.cat) b.innerHTML = statsHTML(model()); }
 
   function renderVoice(msg) {
     var box = byId('avVoice');
@@ -513,6 +484,7 @@
     if (!c) return;
     var set = function (id, txt) { var n = byId(id); if (n) n.textContent = txt; };
     set('avClkD', 'en ' + c.daily); set('avClkP', 'en ' + c.psna); set('avClkW', c.weekly);
+    if (root.ActPsna && typeof root.ActPsna.tick === 'function' && root.ActPsna.tick(now())) render(); // 08:00 UTC: lugares nuevos
     if (st.day && st.day !== c.day) { st.day = c.day; load(true); }
     st.day = c.day;
   }
@@ -522,8 +494,8 @@
   function attrOf(t) {
     for (var n = t, i = 0; n && i < 6; n = n.parentNode, i++) {
       if (!n.getAttribute) continue;
-      var a = { act: n.getAttribute('data-av'), tab: n.getAttribute('data-av-tab'), id: n.id || null };
-      if (a.act || a.tab || a.id === 'assMinus' || a.id === 'assPlus') return a;
+      var a = { act: n.getAttribute('data-av'), tab: n.getAttribute('data-av-tab') };
+      if (a.act || a.tab) return a;
     }
     return null;
   }
@@ -531,14 +503,15 @@
   function wire(host) {
     host.addEventListener('click', function (e) {
       if (root.ActWeek && typeof root.ActWeek.onClick === 'function' && root.ActWeek.onClick(e)) return;
+      if (root.ActPsna && typeof root.ActPsna.onClick === 'function' && root.ActPsna.onClick(e)) return;
       var a = attrOf(e.target);
       if (!a) return;
       if (a.act === 'refresh') {
         if (root.toast) root.toast('info', 'Actualizando tus actividades…', { ttl: 1500 });
         load(true);
         if (root.ActWeek && typeof root.ActWeek.refresh === 'function') root.ActWeek.refresh();
+        if (root.ActPsna && typeof root.ActPsna.refresh === 'function') root.ActPsna.refresh();
       } else if (a.tab) go(a.tab);
-      else if (a.id === 'assMinus' || a.id === 'assPlus') setTimeout(renderStats, 0);
     });
     // Flechas, Inicio y Fin entre las pestañas (patrón tablist).
     host.addEventListener('keydown', function (e) {

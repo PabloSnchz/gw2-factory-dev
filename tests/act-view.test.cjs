@@ -3,6 +3,7 @@
 // la API simulada, los relojes, los 4 indicadores, las pestañas, el PSNA reubicado y lo que no se pudo leer.
 // 1.0.1: la ruta es #/activities, la de js/router.js (1.0.0 escuchaba #/account/activities y no se veía).
 // 1.1.0 (ACT-3): los fractales del día por rango y escala, con tu progreso y los de mañana.
+// 1.4.0 (ACT-7): el PSNA lo dibuja js/act-psna.js (su test lo prueba); ya no se reubica ni se lee nada de js/activities.js.
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -122,7 +123,7 @@ test('estados honestos: lo que no se leyó dice «sin datos» y se nombra; nunca
 });
 
 test('vista: cabecera con los 3 relojes, 4 indicadores y pestañas accesibles con sus dos paneles', () => {
-  const h = P.viewHTML(P.buildModel(sample(), CAT, { old: { psna: true, stones: true, nodes: true } }, NOW));
+  const h = P.viewHTML(P.buildModel(sample(), CAT, {}, NOW));
   assert.match(h, /<h2 id="avTitle">Actividades<\/h2>/);
   assert.match(h, /Reset diario <b id="avClkD">en 18 h 42 min<\/b>/);
   assert.match(h, /PSNA cambia <b id="avClkP">en 2 h 42 min<\/b>/);
@@ -138,8 +139,7 @@ test('vista: cabecera con los 3 relojes, 4 indicadores y pestañas accesibles co
   assert.match(h, /id="avPanel-semana" role="tabpanel" aria-labelledby="avTab-semana" hidden>/);
   assert.match(h, /Cristal de cuarzo cargado<span class="av-sr">, Raro<\/span><\/span><span class="av-badge av-badge--pend">Te falta/);
   assert.match(h, /Trozo de mithrilio<span class="av-sr">, Ascendido<\/span><\/span><span class="av-badge av-badge--ok">Hecho/);
-  assert.match(h, /id="avPsnaSlot"/, 'el PSNA de siempre va en Hoy');
-  assert.match(h, /id="avStonesSlot"/);
+  assert.doesNotMatch(h, /avPsnaSlot|avStonesSlot/, 'ACT-7: ya no se reubica nada de la pantalla vieja');
   assert.match(h, /href="#\/account\/homestead">la Heredad<\/a>/, 'ACT-5: los nodos de casa están en la Heredad');
   assert.doesNotMatch(h, /avNodesSlot/);
   assert.match(h, /con cualquier profesión/);
@@ -303,7 +303,7 @@ test('humo: en #/activities toma el panel, lee la cuenta una vez por fuente y re
   assert.match(h, /<small>Fabricación diaria<\/small><b>1 <span>\/ 5<\/span>/);
   assert.match(h, /<small>Fractales del día<\/small><b>1 <span>\/ 6<\/span>/);
   assert.match(h, /<b>Probable<\/b><em>Lyra, nivel 14/);
-  assert.match(h, /<small>Piedras vetustas<\/small><b>2 <span>\/ 5<\/span>/, 'lo que marcaste con el −/+ de siempre');
+  assert.match(h, /<small>Piedras vetustas<\/small><b>—<\/b>/, 'ACT-7: el −/+ de activities.js ya no se lee (las piedras son de act-week)');
   assert.match(h, /render\.guildwars2\.com\/file\/43772\.png/, 'íconos oficiales de /v2/items');
   const api = calls.filter((u) => u.startsWith('https://'));
   assert.equal(api.filter((u) => u.includes('/v2/characters')).length, 1, 'los personajes en un solo pedido');
@@ -313,9 +313,9 @@ test('humo: en #/activities toma el panel, lee la cuenta una vez por fuente y re
   assert.match(h, /<b>Mañana:<\/b> Cantera<\/p>/);
   assert.match(h, /<b class="av-frn">Rocahonda<\/b>/);
   assert.ok(api.some((u) => u.includes('/v2/account/achievements?ids=4210,')));
-  assert.equal(D.els.avPsnaSlot.children[0], D.els.psnaPanel, 'el PSNA de siempre, en Hoy');
+  assert.notEqual(D.els.psnaPanel.parentNode && D.els.psnaPanel.parentNode.id, 'avPsnaSlot', 'ACT-7: el PSNA viejo no se reubica');
   assert.equal(D.els.homeNodesContainer.parentNode.id, null, 'los nodos de casa de siempre ya no se reubican (ACT-5)');
-  assert.equal(D.els.avStonesSlot.children[0].tagName, 'SECTION', 'la tarjeta de las piedras, entera');
+  assert.equal(D.els.avStonesSlot, undefined, 'ACT-7: la tarjeta vieja de las piedras tampoco');
 
   const click = (attrs) => host.listeners.click[0]({ target: { getAttribute: (k) => attrs[k] || null, parentNode: null } });
   click({ 'data-av-tab': 'semana' });
