@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-127",
+ "summary": "Docs CTA-0 (BL-070 paso 4): propuesta visual de Cuentas entregada; PUL-4 validado.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "37a1f347569d1e754a946f049f10c1f442a77a12",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 22:58Z",
+     "text": "Última actualización: 2026-10-25 23:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: PUL-4 HECHO (2026-10-25 22:58Z)",
+     "text": "Último hecho: CTA-0 propuesta de Cuentas ENTREGADA (2026-10-25 23:40Z): docs/propuestas/propuesta-cuentas-bl070.html (61a17a4, commit 2391751, 26,5 KB). Pablo validó PUL-4 (23:15Z) y pidió la propuesta del paso 4. Leí js/accounts-panel.js 2.0.2 completo. Lo que medí: (ALTO) los puntos de logro, espacios de personaje, bolsas, banco y materiales nunca se completan, porque el código lee campos que /v2/account no devuelve (achievement_points, slots, bag_slots, bank_slots, material_storage); (ALTO) las expansiones se adivinan por los nombres de los nodos de la casa, cuando la API las da en access (GuildWars2, HeartOfThorns, PathOfFire, EndOfDragons, SecretsOfTheObscure, JanthirWilds), y Visions of Eternity nunca se marca; (ALTO) los pasos 2 y 3 del asistente bajan un JSON en claro con todas las contraseñas; (ALTO) CryptoJS con frase deriva la clave con EVP_BytesToKey (MD5, 1 iteración) y cifra en CBC sin autenticación, mientras OWASP pide PBKDF2-HMAC-SHA256 con 600.000 iteraciones o más, y queda una copia en accounts:lastFile; (MEDIO) los datos de la API son una foto vieja guardada en el archivo, no se puede editar desde la app, las contraseñas quedan a la vista sin bloqueo y las legendarias siempre dan 0; (BAJO) el ícono al azar (Math.random), falta el resumen heredado de FEAT-015, 193 estilos en línea, 29 emojis y 1 atributo aria. Propuesta: dos pestañas, «Mis cuentas» (en vivo con las Keys de la Bóveda, sin contraseña: expansiones, edad, logros, maestría, legendarias, fractales, WvW, PvP, clanes y estado de la Key, con «Sin permiso» o «Sin datos» y nunca un 0 falso) y «Llavero» (credenciales cifradas: enmascaradas, Ver 20 s, portapapeles 30 s, bloqueo a los 5 min, edición en la app, cifrado nuevo PBKDF2 600.000 + AES-GCM en archivo aparte). Plan CTA-1 a CTA-5 y decisiones D1 a D7. Espera la aprobación de Pablo. Antes, PUL-4 HECHO (2026-10-25 22:58Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: PUL-4, Inicio con el ícono oficial del punto de ruta en la barra lateral y en la barra del celular (Ctrl+F5); la Heredad conserva el de la casa. La brújula del mapa no está disponible en la API. Con tu ok arranco el paso 4, Cuentas, con la propuesta visual.\n- [BL-070] Info: PUL-1, PUL-2 y PUL-3 VALIDADOS por Pablo (22:38Z y 22:55Z).\n",
+     "text": "- [BL-070] Aprobación: CTA-0, la propuesta visual de Cuentas (https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-cuentas-bl070.html), con las decisiones D1 a D7. No toco código hasta tu ok.\n- [BL-070] Info: PUL-1 a PUL-4 VALIDADOS por Pablo (22:38Z, 22:55Z y 23:15Z). Pulido transversal completo.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "de2ed54a50a90cdf81011c85f967d1f10cafa9fb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Pulido completo; sigue el paso 4, Cuentas, con la propuesta visual primero.",
+     "text": "Pulido completo y VALIDADO (PUL-4 23:15Z). Paso 4, Cuentas: CTA-0 propuesta ENTREGADA (2026-10-25 23:40Z, docs/propuestas/propuesta-cuentas-bl070.html, 2391751). Encontré 4 hallazgos ALTOS (datos que nunca se completan, expansiones mal detectadas, JSON con contraseñas en claro y cifrado débil). Propongo «Mis cuentas» en vivo + «Llavero» cifrado con PBKDF2 600.000 + AES-GCM, en 5 pasos (CTA-1 a CTA-5) y con D1 a D7. Espera la aprobación de Pablo."
+    }
+   ]
+  }
+ ]
+}
