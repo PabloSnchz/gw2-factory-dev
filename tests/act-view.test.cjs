@@ -140,7 +140,8 @@ test('vista: cabecera con los 3 relojes, 4 indicadores y pestañas accesibles co
   assert.match(h, /Trozo de mithrilio<span class="av-sr">, Ascendido<\/span><\/span><span class="av-badge av-badge--ok">Hecho/);
   assert.match(h, /id="avPsnaSlot"/, 'el PSNA de siempre va en Hoy');
   assert.match(h, /id="avStonesSlot"/);
-  assert.match(h, /id="avNodesSlot"/);
+  assert.match(h, /href="#\/account\/homestead">la Heredad<\/a>/, 'ACT-5: los nodos de casa están en la Heredad');
+  assert.doesNotMatch(h, /avNodesSlot/);
   assert.match(h, /con cualquier profesión/);
   assert.doesNotMatch(h, /Thief|Ladr[oó]n|Reclamada/, 'la llave ya no depende de la profesión ni se afirma sola');
   assert.doesNotMatch(h, /Solitary Throne|Refinamiento de Ecto|no disponible/i);
@@ -213,7 +214,7 @@ test('en los 19 themes cada texto de la vista llega a 4.5:1 sobre las superficie
 });
 
 // ------------------------------------------------------------------ humo con DOM mínimo
-const DRAWN = ['avVoice', 'avStats', 'avPsnaSlot', 'avStonesSlot', 'avNodesSlot', 'avClkD', 'avClkP', 'avClkW'];
+const DRAWN = ['avVoice', 'avStats', 'avPsnaSlot', 'avStonesSlot', 'avClkD', 'avClkP', 'avClkW'];
 function fakeDom(withOld) {
   const els = {};
   function el(id, tag) {
@@ -313,14 +314,14 @@ test('humo: en #/activities toma el panel, lee la cuenta una vez por fuente y re
   assert.match(h, /<b class="av-frn">Rocahonda<\/b>/);
   assert.ok(api.some((u) => u.includes('/v2/account/achievements?ids=4210,')));
   assert.equal(D.els.avPsnaSlot.children[0], D.els.psnaPanel, 'el PSNA de siempre, en Hoy');
-  assert.equal(D.els.avNodesSlot.children[0], D.els.homeNodesContainer);
+  assert.equal(D.els.homeNodesContainer.parentNode.id, null, 'los nodos de casa de siempre ya no se reubican (ACT-5)');
   assert.equal(D.els.avStonesSlot.children[0].tagName, 'SECTION', 'la tarjeta de las piedras, entera');
 
   const click = (attrs) => host.listeners.click[0]({ target: { getAttribute: (k) => attrs[k] || null, parentNode: null } });
   click({ 'data-av-tab': 'semana' });
   assert.match(host.innerHTML, /id="avTab-semana"[^>]*aria-selected="true"/);
   assert.match(host.innerHTML, /id="avPanel-hoy" role="tabpanel" aria-labelledby="avTab-hoy" hidden>/);
-  assert.equal(D.els.actTabWeekly.clicks, 1, 'Semana pide los nodos de casa a la pantalla de siempre');
+  assert.equal(D.els.actTabWeekly.clicks, 0, 'Semana ya no pide los nodos de casa a la pantalla de siempre');
   host.listeners.keydown[0]({ key: 'ArrowLeft', target: { getAttribute: (k) => (k === 'data-av-tab' ? 'semana' : null), parentNode: null }, preventDefault() {} });
   assert.equal(sb.ActView.getSnapshot().ui.tab, 'hoy');
   host.listeners.keydown[0]({ key: 'End', target: { getAttribute: (k) => (k === 'data-av-tab' ? 'hoy' : null), parentNode: null }, preventDefault() {} });

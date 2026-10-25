@@ -1,7 +1,8 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)
+ * Versión: 1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)
+ *          1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)
  * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)
  *          1.0.1 (2026-10-25) — ACT-2: la ruta real del módulo es #/activities (la de js/router.js), no #/account/activities
  *          1.0.0 (2026-10-25) — ACT-2: la vista nueva sobre el modelo de js/act-model.js
@@ -25,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
   var ROUTE = '#/activities'; // la misma que usa js/router.js
@@ -216,7 +217,8 @@
   function semanaHTML(m) {
     var W = root.ActWeek;
     return (W && typeof W.html === 'function' ? W.html(m) : keyHTML(m) + (m.old.stones ? '<div id="avStonesSlot" class="av-slot"></div>' : '')) +
-      (m.old.nodes ? '<section class="av-card" aria-labelledby="avNodesT"><div class="av-card-h"><h3 id="avNodesT">Nodos de casa</h3></div><div id="avNodesSlot" class="av-slot"></div></section>' : '');
+      '<section class="av-card" aria-labelledby="avNodesT"><div class="av-card-h"><h3 id="avNodesT">Nodos de casa</h3></div>' +
+      '<p class="av-txt">Se mudaron a su propio módulo, <a class="av-link" href="#/account/homestead">la Heredad</a>, con tus marcas de siempre.</p></section>';
   }
 
   function viewHTML(m) {
@@ -282,7 +284,7 @@
     '.av-badge{font-size:.74rem;font-weight:700;border:1px solid var(--bd-2);border-radius:999px;padding:1px 9px;color:var(--tx-1);white-space:nowrap}',
     '.av-badge--ok{border-color:var(--color-green,#3CC48A)}',
     '.av-badge--pend{border-color:var(--color-amber,#F2B94B)}.av-badge--nd{color:var(--tx-2)}',
-    '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}',
+    '.av-txt{margin:4px 0 8px;font-size:.88rem;color:var(--tx-1)}.av-link{color:var(--tx-1);font-weight:700;text-decoration:underline}',
     '.av-note,.av-src{margin:8px 0 0;color:var(--tx-2);font-size:.8rem}.av-src{font-size:.74rem;margin-top:12px}',
     '.av-slot{margin-bottom:12px}.av-slot>.card,.av-slot>section{margin-top:0}',
     '.av-frs{list-style:none;margin:0;padding:0}',
@@ -477,7 +479,6 @@
     host.innerHTML = viewHTML(m);
     place('avPsnaSlot', st.old.psna);
     place('avStonesSlot', st.old.stones);
-    place('avNodesSlot', st.old.nodes);
     st.voiceKey = null;
     renderVoice(m.voice);
     if (root.ActWeek && typeof root.ActWeek.afterRender === 'function') root.ActWeek.afterRender(m);
@@ -498,14 +499,10 @@
     if (msg && root.Shiruvana && typeof root.Shiruvana.voice === 'function') box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text }));
   }
 
-  // Los nodos de casa se cargan con la pestaña de siempre (js/activities.js), que los pide solo la primera vez.
-  function askNodes() { var b = byId('actTabWeekly'); if (b && typeof b.click === 'function') b.click(); }
-
   function go(tab) {
     if (tab !== 'hoy' && tab !== 'semana') return null;
     st.ui.tab = tab;
     var m = render();
-    if (tab === 'semana') askNodes();
     return m;
   }
 
