@@ -12,6 +12,8 @@
     { "src": "js/ach-cards.js", "v": "1.2.0" },
     { "src": "js/ach-categories.js", "v": "1.0.0" },
     { "src": "js/raids-view.js", "v": "1.2.0" },
-    { "src": "js/raids-sheet.js", "v": "1.2.0" }
+    { "src": "js/raids-sheet.js", "v": "1.2.0" },
+    { "src": "js/inv-model.js", "v": "1.0.0" },
+    { "src": "js/inv-view.js", "v": "1.0.0" }
   ]
 }
