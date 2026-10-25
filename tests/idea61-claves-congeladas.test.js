@@ -253,7 +253,8 @@ section('5. 49D — el barrido de huerfanas no puede borrar gw2_keys');
   // puerta, no una fotografia.
   const sinComentarios = c => c.replace(/\/\*[\s\S]*?\*\//g, ' ')
                                  .replace(/\/\/[^\n]*/g, ' ');
-  const lectores = ['app.js', 'accounts-panel.js', 'inventory-dashboard.js',
+  // BL-070 INV-7b: inventory-dashboard.js se retiró (su lector de gw2_keys se fue con él).
+  const lectores = ['app.js', 'accounts-panel.js',
                     'wv-objectives-dashboard.js', 'wv-purchase-detail.js',
                     'wv-shop-ui.js'];
   const RE_LECTOR = /getItem\(\s*(LS_KEYS|'gw2_keys')/;
@@ -261,10 +262,10 @@ section('5. 49D — el barrido de huerfanas no puede borrar gw2_keys');
     RE_LECTOR.test(sinComentarios(fs.readFileSync(path.join(JS, f), 'utf8'))));
   const porTexto = lectores.filter(f =>
     RE_LECTOR.test(fs.readFileSync(path.join(JS, f), 'utf8')));
-  ok(porCodigo.length >= 4,
-     'al menos 4 modulos la LEEN a pelo (por codigo): ' + porCodigo.join(', '),
+  ok(porCodigo.length >= 3,
+     'al menos 3 modulos la LEEN a pelo (por codigo): ' + porCodigo.join(', '),
      'quedan ' + porCodigo.length + ': ' + porCodigo.join(', ') +
-     ' — si esto baja de 4, la 49D tiene que reevaluarse antes de borrar nada');
+     ' — si esto baja de 3, la 49D tiene que reevaluarse antes de borrar nada');
   nota('por texto daba ' + porTexto.length + ' (' + porTexto.join(', ') +
        '); la diferencia es prosa que nombra el patron, no codigo que lo tiene');
   nota('=> borrarla no es "limpiar una huerfana": es borrar la lista. ' +
@@ -425,7 +426,6 @@ section('6. el espejo, en comportamiento, para los 4 pares de MIRROR_MAP');
   const LECTORES_LEGACY_ESPERADOS = new Set([
     'activities-theme.js[gn_home_nodes_marked]',
     'activities.js[gn_activities_toggles]',
-    'inventory-dashboard.js[gw2_keys]',
     'wv-objectives-dashboard.js[gw2_keys]',
     // T19-c (HB#118): `inventory-hub.js`, `raid-tracker.js` y
     // `strike-tracker.js` SALEN de la lista: su unico raw era

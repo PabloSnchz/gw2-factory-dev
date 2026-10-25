@@ -1,22 +1,12 @@
 /*!
  * Router y Vistas (WV Objetivos + Tienda unificada)
- * v2.19.0 (2026-10-25) — Inventario y Personajes sin las pantallas viejas (BL-070 INV-7a)
+ * v2.19.1 (2026-10-25) — BL-070: sin las pantallas viejas de Inventario y Personajes ni de Strikes
  *
- * Cambios v2.19.0:
- *  - #/account/characters ya no activa InventoryHub: la vista nueva (js/inv-*.js) se activa sola.
- *  - #/inventory/dashboard abre la pestaña Multicuenta de #/account/characters.
- *  - Cambiar de cuenta ya no refresca InventoryHub, Characters ni InventoryDashboard.
- *
- * Antes, v2.18.2 — sin restos de StrikeTracker (BL-070 RAI-6)
- *
- * Cambios v2.18.2:
- *  - StrikeTracker sale de MODULOS_CON_LATCH, de showPanel y de updateSidebarFor: el módulo ya no existe.
- *
- * Antes, v2.18.1 — #/account/strikes muestra Raids; sin strike-tracker.js (BL-070 RAI-5b)
- *
- * Cambios v2.18.1:
- *  - La ruta vieja de Strikes muestra el panel de Raids y raids-view.js la lleva a Encuentros.
- *  - Se fue el refresco de StrikeTracker: el módulo ya no se carga.
+ * Cambios de BL-070 (el detalle de cada paso está en ai-memory/status.md):
+ *  - 2.19.1 (INV-7b): MODULOS_CON_LATCH y showPanel ya no nombran a InventoryHub ni a sus 2 paneles.
+ *  - 2.19.0 (INV-7a): #/account/characters es la vista nueva (js/inv-*.js); #/inventory/dashboard
+ *    abre la pestaña Multicuenta; cambiar de cuenta ya no refresca los módulos viejos.
+ *  - 2.18.2 (RAI-6) y 2.18.1 (RAI-5b): sin StrikeTracker; #/account/strikes muestra Raids.
  *
  * Antes, v2.18.0 — Sin la copia vieja de la Tienda (BL-064 CAM-6)
  *
@@ -174,7 +164,7 @@
   }
 
   function showPanel(idToShow) {
-    ['walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','inventoryPanel','charactersPanel','accountsPanel','welcomePanel','walletDashboardPanel','inventoryDashboardPanel','wvObjectivesDashboardPanel','raidTrackerPanel','legendaryArmoryPanel'].forEach(function(id){
+    ['walletPanel','metaPanel','achievementsPanel','wvPanel','activitiesPanel','inventoryPanel','accountsPanel','welcomePanel','walletDashboardPanel','wvObjectivesDashboardPanel','raidTrackerPanel','legendaryArmoryPanel'].forEach(function(id){
       var node=el(id); if (!node) return;
       if (id===idToShow) node.removeAttribute('hidden'); else node.setAttribute('hidden','hidden');
     });
@@ -1039,8 +1029,7 @@
   // deactivate() keyed en la pref apagaría el módulo que Pablo está mirando.
   //
   // Por eso la condición es "mi panel NO quedó visible", y no "desactivo todo".
-  // Es lo que protege a InventoryHub, cuyo deactivate() además resetea la
-  // subvista (inventory-hub.js:1455): si su panel quedó visible, no se toca.
+  // Si el panel de un módulo quedó visible, ese módulo es el dueño de la pantalla y no se toca.
   //
   // HomesteadTracker NO entra, y es una decisión explícita, no una omisión:
   // su deactivate() (homestead-tracker.js:403) solo hace abortLastFetch() y no
@@ -1050,8 +1039,7 @@
   // latch es inerte por partida doble, y sin panel no hay predicado posible.
   var MODULOS_CON_LATCH = [
     { mod: 'RaidTracker',     panel: 'raidTrackerPanel' },
-    { mod: 'LegendaryTracker', panel: 'legendaryArmoryPanel' },
-    { mod: 'InventoryHub',    panel: 'inventoryPanel' }
+    { mod: 'LegendaryTracker', panel: 'legendaryArmoryPanel' }
   ];
 
   function barridoLatch(){
