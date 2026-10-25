@@ -35,7 +35,7 @@ test('versión, presupuesto y manifiesto: después de gn-frame.js, fuera de inde
 });
 
 test('los 5 módulos renovados, cada uno con lo que su vista monta de verdad (si cambia, este test avisa)', () => {
-  assert.deepEqual(P.SHELLS.map((s) => s.id), Object.keys(VIEWS));
+  assert.deepEqual(JSON.parse(JSON.stringify(P.SHELLS.map((s) => s.id))), Object.keys(VIEWS));
   P.SHELLS.forEach((s) => {
     const v = read(VIEWS[s.id]);
     const panelId = s.panel.match(/^#(\w+)/)[1], cls = (s.panel.match(/\.([\w-]+)$/) || [])[1];
