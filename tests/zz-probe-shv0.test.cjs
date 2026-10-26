@@ -1,27 +1,24 @@
 'use strict';
-// Sonda SHV-0 (BL-059): dónde hablo hoy y qué datos con historia existen. Se borra después.
+// Sonda SHV-0b (BL-059): quién escribe y lee las fotos del saldo. Se borra después.
 const { test } = require('node:test');
 const fs = require('fs');
 const path = require('path');
 const ROOT = path.join(__dirname, '..');
-test('sonda SHV-0', () => {
+const one = (s) => s.replace(/\s+/g, ' ');
+test('sonda SHV-0b', () => {
+  const st = fs.readFileSync(path.join(ROOT, 'js/storage.js'), 'utf8');
+  let i = -1; let n = 0;
+  while ((i = st.indexOf('snapshot', i + 1)) >= 0 && n < 6) { console.log('ST ' + one(st.slice(Math.max(0, i - 160), i + 260))); i += 400; n++; }
   const dir = path.join(ROOT, 'js');
   for (const f of fs.readdirSync(dir).filter((x) => x.endsWith('.js')).sort()) {
+    if (f === 'storage.js') continue;
     const s = fs.readFileSync(path.join(dir, f), 'utf8');
-    const v = (s.match(/Shiruvana\.voice\(/g) || []).length;
-    const p = (s.match(/ShiruvanaPlaces\.\w+/g) || []);
-    const kinds = [...new Set((s.match(/kind:\s*'(\w+)'/g) || []).map((k) => k.replace(/kind:\s*'/, '').replace("'", '')))];
-    const hist = [...new Set((s.match(/['"`](gn:[\w:.-]*(?:hist|snap|history|log|series|daily)[\w:.-]*)['"`]/gi) || []))];
-    if (v || p.length || hist.length) console.log(f + ' voice=' + v + ' places=' + [...new Set(p)].join('|') + ' kinds=' + kinds.join('|') + ' hist=' + hist.join('|'));
+    const re = /\w*[Ss]napshot\w*\s*\(/g; let m; const hits = new Set();
+    while ((m = re.exec(s))) hits.add(m[0]);
+    if (hits.size) {
+      console.log('USE ' + f + ' ' + [...hits].join(' '));
+      const k = s.search(/[Ss]napshot\w*\s*\(/);
+      console.log('  ctx ' + one(s.slice(Math.max(0, k - 200), k + 300)));
+    }
   }
-  const sp = fs.readFileSync(path.join(dir, 'shiruvana-places.js'), 'utf8');
-  const ex = sp.match(/root\.ShiruvanaPlaces\s*=\s*\{[^}]*\}/);
-  console.log('PLACES API ' + (ex ? ex[0].replace(/\s+/g, ' ') : 'n/a'));
-  const ids = [...new Set((sp.match(/\bid:\s*'([\w-]+)'/g) || []).map((m) => m.slice(5, -1)))];
-  console.log('PLACES ids ' + ids.join(','));
-  const wd = fs.readFileSync(path.join(dir, 'wallet-dashboard.js'), 'utf8') + fs.readFileSync(path.join(dir, 'wallet-theme.js'), 'utf8');
-  const wk = [...new Set((wd.match(/['"`]gn:wallet[\w:.-]*['"`]/g) || []))];
-  console.log('WALLET keys ' + wk.join(' '));
-  const i = wd.search(/snapshot|historial|history/i);
-  console.log('WALLET ctx ' + wd.slice(Math.max(0, i - 200), i + 500).replace(/\s+/g, ' '));
 });
