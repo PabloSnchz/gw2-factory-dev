@@ -1,7 +1,9 @@
 /*!
  * js/acc-view.js — Cuentas renovado: «Mis cuentas» en vivo y la puerta al Llavero (BL-070, paso 4, CTA-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-26)
+ * Versión: 1.1.0 (2026-10-26) · CTA-3: la pestaña Llavero la dibuja js/acc-vault-view.js; con el Llavero abierto, las
+ *          tarjetas suman sus etiquetas y aparecen en gris las cuentas sin Key (D7)
+ *          1.0.0 (2026-10-26)
  *
  * Toma #accountsPanel en su ruta (#/account/accounts, la de js/router.js) con dos pestañas:
  *  - Mis cuentas: cada cuenta con Key en la Bóveda (gn:account:keys), en vivo, sin archivo ni contraseña.
@@ -19,7 +21,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[AccView]';
   var PANEL = 'accountsPanel';
   var ROUTE = '#/account/accounts'; // la misma que usa js/router.js
@@ -173,9 +175,10 @@
       '<div class="cv-nm"><b id="cvN-' + esc(c.fp) + '">' + esc(c.name || c.label || 'Cuenta') + '</b>' +
       (c.created ? '<small>Creada el ' + date(c.created) + (c.age ? ' · ' + (c.age.years === 1 ? '1 año' : c.age.years + ' años') : '') + '</small>' : '') +
       (c.label && c.name && c.label !== c.name ? '<small>Key: ' + esc(c.label) + '</small>' : '') + '</div>' +
-      (isAct ? '<span class="cv-act">Activa</span>' : c.state !== 'bad' ? '<button type="button" class="cv-btn" data-cv-use="' + esc(c.fp) + '">Usar esta<span class="cv-sr"> cuenta, ' + esc(c.name || c.label) + '</span></button>' : '') + '</div>';
+      (isAct ? '<span class="cv-act">Activa</span>' : c.state === 'ok' || c.state === 'loading' ? '<button type="button" class="cv-btn" data-cv-use="' + esc(c.fp) + '">Usar esta<span class="cv-sr"> cuenta, ' + esc(c.name || c.label) + '</span></button>' : '') + '</div>';
     if (c.state === 'bad') return h + '<p class="cv-warn">Esta Key no responde: puede estar borrada o vencida.</p></article>';
     if (c.state === 'loading') return h + '<p class="cv-wait">Leyendo la cuenta…</p></article>';
+    if (c.state === 'nokey') return h + (c.tags.length ? '<div class="cv-chips">' + c.tags.map(function (x) { return '<span class="cv-chip cv-tag" style="--cc:' + esc(x.color) + '">' + (x.icon ? '<img src="' + esc(x.icon) + '" alt="" width="16" height="16">' : '<i aria-hidden="true"></i>') + esc(x.name) + '</span>'; }).join('') + '</div>' : '') + '<p class="cv-wait">Está en tu Llavero, pero no tiene API Key en la Bóveda: cargala para ver sus datos.</p></article>';
     h += '<div class="cv-exps">' + (c.exps.length ? c.exps.map(function (e) {
       var tip = e.name + (e.source === 'mastery' ? ' (por tu maestría: la API todavía no la informa)' : e.source === 'manual' ? ' (la marcaste vos)' : '');
       return '<img src="' + esc(e.icon) + '" alt="' + esc(tip) + '" title="' + esc(tip) + '" width="30" height="30">';
@@ -206,7 +209,7 @@
 
   // m: { cat, M, cards, keys, active, activeName, ui, loading, readAt, now }
   function viewHTML(m) {
-    var total = m.cards.length, sum = m.M.summary(m.cards);
+    var real = m.cards.filter(function (c) { return c.state !== 'nokey'; }), total = real.length, sum = m.M.summary(real);
     var sub = !total ? 'Todavía no cargaste ninguna API Key' : total + (total === 1 ? ' cuenta con Key' : ' cuentas con Key') + (m.loading ? ' · leyendo…' : m.readAt ? ' · leído ' + ago(m.readAt, m.now) : '');
     var h = '<div class="cv-hero"><div class="cv-row"><img class="cv-ico" src="' + ICON + '" alt="" width="56" height="56">' +
       '<div class="cv-title"><h2 id="cvTitle">Cuentas</h2><p>' + esc(sub) + '</p></div><div class="cv-top">' +
@@ -216,15 +219,16 @@
     if (total) h += '<div class="cv-stats">' + statsHTML(sum, total, m.loading) + '</div>';
     h += '<div id="cvVoice" class="cv-voice" aria-live="polite"></div></div>';
     h += tabsHTML(m.ui.tab);
+    if (m.ui.tab === 'vault' && m.vault) return h + '<div id="cvPanel-vault" role="tabpanel" aria-labelledby="cvTab-vault">' + m.vault + '</div>';
     if (m.ui.tab === 'vault') return h + '<div id="cvPanel-vault" role="tabpanel" aria-labelledby="cvTab-vault"><p class="cv-note">Tus contraseñas, Twitch, GeForce NOW, notas y etiquetas, cifradas en tu archivo. Este es el Llavero de siempre: el renovado llega en el próximo paso, sin perder ningún dato.</p></div>';
     h += '<div id="cvPanel-mine" role="tabpanel" aria-labelledby="cvTab-mine">';
-    if (!total) return h + '<section class="cv-empty"><p>Cargá la API Key de cada cuenta y te muestro todas juntas: expansiones, logros, legendarias, fractales, McM, JcJ y clanes. Sin archivo ni contraseña.</p><button type="button" class="cv-btn" data-cv="keys">Agregar API Key</button></section></div>';
+    if (!m.cards.length) return h + '<section class="cv-empty"><p>Cargá la API Key de cada cuenta y te muestro todas juntas: expansiones, logros, legendarias, fractales, McM, JcJ y clanes. Sin archivo ni contraseña.</p><button type="button" class="cv-btn" data-cv="keys">Agregar API Key</button></section></div>';
     var shown = filterCards(sortCards(m.cards), m.ui);
     h += '<div class="cv-filters"><div class="cv-pills" role="group" aria-label="Por tipo">' + TYPES.map(function (t) {
       return '<button type="button" class="cv-btn" data-cv-type="' + t[0] + '" aria-pressed="' + (m.ui.type === t[0]) + '">' + t[1] + '</button>';
     }).join('') + '</div><label class="cv-q"><span class="cv-sr">Buscar una cuenta</span><input type="search" id="cvQ" placeholder="Buscar una cuenta" value="' + esc(m.ui.q) + '" autocomplete="off"></label></div>';
     h += shown.length ? '<div class="cv-grid">' + shown.map(function (c) { return cardHTML(c, m.cat, m.M, m.active); }).join('') + '</div>' : '<p class="cv-note">No hay cuentas con estos filtros.</p>';
-    return h + '<p class="cv-src">Datos en vivo de la API oficial con tus Keys; lo leído se guarda 6 horas en tu navegador, nunca la Key. Las etiquetas farming, llaves, semanal y taxi viven en tu Llavero y se suman acá cuando lo abrís (próximo paso).</p></div>';
+    return h + '<p class="cv-src">Datos en vivo de la API oficial con tus Keys; lo leído se guarda 6 horas en tu navegador, nunca la Key. Las etiquetas farming, llaves, semanal y taxi viven en tu Llavero: se suman acá mientras lo tenés abierto.</p></div>';
   }
 
   var P = '#' + PANEL, R = '#cvRoot', MOD = '#8E96A3';
@@ -286,6 +290,7 @@
   function hash() { return String((root.location && root.location.hash) || '').split('?')[0]; }
   function storage() { var S = root.Storage; return S && typeof S.get === 'function' && typeof S.set === 'function' ? S : null; }
   function model() { var M = root.AccModel; return M && M._pure ? M._pure : null; }
+  function vault() { var X = root.AccVaultView; return X && typeof X.html === 'function' ? X : null; }
   function keys() {
     var S = storage(), list = S && S.STORAGE_KEYS ? S.get(S.STORAGE_KEYS.ACCOUNT_KEYS) : null;
     return (Array.isArray(list) ? list : []).filter(function (k) { return k && k.value; });
@@ -433,11 +438,12 @@
   function render() {
     var panel = byId(PANEL), M = model();
     if (!panel || !st.cat || !M || !st.shown) return null;
-    var host = ensureHost(panel), cards = list(), act = fingerprint(active()), now = Date.now();
-    if (panel.classList) { if (st.ui.tab === 'mine') panel.classList.add('cv-mine'); else if (panel.classList.remove) panel.classList.remove('cv-mine'); }
-    var ac = st.cards[act], m = { cat: st.cat, M: M, cards: cards, active: act, activeName: ac ? ac.name || ac.label : '', ui: st.ui, loading: st.loading, readAt: st.readAt, now: now };
+    var X = vault(), host = ensureHost(panel), cards = X && X.decorate ? X.decorate(list(), st.cat, M) : list(), act = fingerprint(active()), now = Date.now();
+    var legacy = st.ui.tab === 'vault' && (!X || X.showLegacy());
+    if (panel.classList) { if (!legacy) panel.classList.add('cv-mine'); else if (panel.classList.remove) panel.classList.remove('cv-mine'); }
+    var ac = st.cards[act], m = { cat: st.cat, M: M, cards: cards, active: act, activeName: ac ? ac.name || ac.label : '', ui: st.ui, loading: st.loading, readAt: st.readAt, now: now, vault: X && st.ui.tab === 'vault' ? X.html(st.cat, M) : '' };
     var a = doc.activeElement, fk = a && host.contains && host.contains(a) && a.getAttribute ? (a.id ? '#' + a.id : focusSel(a)) : null;
-    var caret = a && a.id === 'cvQ' ? a.selectionStart : null;
+    var caret = a && (a.id === 'cvQ' || a.id === 'vkQ') ? a.selectionStart : null;
     host.innerHTML = viewHTML(m);
     st.voiceKey = null;
     renderVoice(st.ui.tab === 'mine' ? pickVoice(cards, st.loading) : null);
@@ -449,7 +455,7 @@
     return m;
   }
   function focusSel(a) {
-    var ks = ['data-cv', 'data-cv-tab', 'data-cv-type', 'data-cv-use'];
+    var ks = ['data-cv', 'data-cv-tab', 'data-cv-type', 'data-cv-use', 'data-vk', 'data-vk-show', 'data-vk-copy'];
     for (var i = 0; i < ks.length; i++) { var v = a.getAttribute(ks[i]); if (v) return '[' + ks[i] + '="' + v + '"]'; }
     return null;
   }
@@ -492,6 +498,8 @@
 
   function wire(host) {
     host.addEventListener('click', function (e) {
+      var X = vault();
+      if (X && st.ui.tab === 'vault' && X.onClick(e)) return;
       var a = attrOf(e.target);
       if (!a) return;
       if (a.tab) { goTab(a.tab, false); return; }
@@ -501,6 +509,8 @@
       if (a.type) { st.ui.type = a.type; render(); }
     });
     host.addEventListener('keydown', function (e) {
+      var X = vault();
+      if (X && st.ui.tab === 'vault' && X.onKeydown(e)) return;
       var t = e && e.target, id = t && t.getAttribute && t.getAttribute('data-cv-tab');
       if (!id) return;
       var k = e.key, next = null;
@@ -510,8 +520,10 @@
       if (e.preventDefault) e.preventDefault();
       goTab(next, true);
     });
+    host.addEventListener('change', function (e) { var X = vault(); if (X && st.ui.tab === 'vault') X.onChange(e); });
     host.addEventListener('input', function (e) {
-      var t = e && e.target;
+      var t = e && e.target, X = vault();
+      if (X && st.ui.tab === 'vault' && X.onInput(e)) return;
       if (!t || t.id !== 'cvQ') return;
       st.ui.q = String(t.value || '');
       render();

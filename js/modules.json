@@ -27,6 +27,8 @@
     { "src": "js/home-view.js", "v": "1.1.0" },
     { "src": "js/home-extra.js", "v": "1.0.0" },
     { "src": "js/acc-model.js", "v": "1.0.0" },
-    { "src": "js/acc-view.js", "v": "1.0.0" }
+    { "src": "js/acc-vault.js", "v": "1.0.0" },
+    { "src": "js/acc-vault-view.js", "v": "1.0.0" },
+    { "src": "js/acc-view.js", "v": "1.1.0" }
   ]
 }
