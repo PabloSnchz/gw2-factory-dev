@@ -13,7 +13,8 @@
  *    Las cuentas que ya leí se guardan 6 horas (D6, gn:accounts:cards, por huella, nunca la Key) y
  *    «Actualizar» las vuelve a leer. Las definiciones de logros que hacen falta para sumar los puntos se
  *    guardan compactas 7 días (gn:accounts:achmeta).
- *  - Llavero: por ahora el panel de siempre de js/accounts-panel.js, sin cambios (llega en CTA-3).
+ *  - Llavero: lo dibuja js/acc-vault-view.js (abrir, editar, importar y guardar con el cifrado nuevo).
+ *    El panel viejo (js/accounts-panel.js) se retiró en CTA-5.
  * Tarjetas con íconos (pedido de Pablo): solo las expansiones que la cuenta tiene, en color; el ícono de cada
  * dato; la etiqueta de tipo con su color. Estados honestos: «Sin permiso» o «Sin datos», nunca un 0 falso.
  * Los cálculos son de js/acc-model.js. Se carga por js/modules.json (DEC-035), después de acc-model.js.

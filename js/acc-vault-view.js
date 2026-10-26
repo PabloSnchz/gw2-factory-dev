@@ -1,14 +1,14 @@
 /*!
  * js/acc-vault-view.js — La pestaña Llavero de Cuentas (BL-070, paso 4, CTA-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-26) · CTA-4b: «Importar desde Excel» y «Descargar plantilla» (js/acc-vault-import.js); se
+ * Versión: 1.2.0 (2026-10-26) · CTA-4b: «Importar desde Excel» y «Descargar plantilla» (window.AccVaultImport, dentro de js/acc-vault-edit.js); se
  *          va «Mostrar el panel anterior»: el panel viejo y su asistente de 4 archivos ya no se ven
  *          1.1.0 (2026-10-26) · CTA-4a: editar, agregar, borrar y guardar con el cifrado nuevo (js/acc-vault-edit.js),
  *          «Crear Llavero nuevo», la copia nueva del navegador primero (D3) y, con cambios sin guardar, no se
  *          cierra a los 5 minutos ni al salir de Cuentas: a los 15 sin uso, y el navegador avisa si cerrás
  *          1.0.0 (2026-10-26) · CTA-3, solo lectura
  *
- * Abre tu archivo cifrado de siempre (o la copia que el panel anterior guardó en este navegador) con
+ * Abre tu archivo cifrado de siempre (o la copia cifrada que quedó en este navegador) con
  * js/acc-vault.js y lo muestra sin perder nada, en modo lectura:
  *  - todo enmascarado; «Ver» muestra un dato y lo vuelve a ocultar a los 20 segundos (D4);
  *  - «Copiar» lo copia y vacía el portapapeles a los 30 segundos, si seguís en la pestaña (D4);
@@ -16,8 +16,8 @@
  *    la memoria. La contraseña nunca se guarda y los secretos solo llegan a la página cuando tocás «Ver».
  * Mientras está abierto, Mis cuentas suma las etiquetas del archivo (farming, llaves, semanal, taxi y las
  * tuyas) y muestra en gris las cuentas que no tienen Key en la Bóveda (D7).
- * Editar, guardar con el cifrado nuevo e importar desde Excel llegan en CTA-4; hasta entonces el panel
- * anterior queda a mano con «Mostrar el panel anterior». Lo dibuja y le pasa los eventos js/acc-view.js.
+ * Editar, guardar con el cifrado nuevo e importar desde Excel son de js/acc-vault-edit.js; el panel anterior
+ * (js/accounts-panel.js) y su asistente se retiraron en CTA-5. Lo dibuja y le pasa los eventos js/acc-view.js.
  * Se carga por js/modules.json (DEC-035), después de acc-vault.js y antes de acc-view.js.
  */
 (function (root) {
@@ -25,7 +25,7 @@
 
   var VERSION = '1.2.0';
   var ROUTE = '#/account/accounts';
-  var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada que guarda js/accounts-panel.js
+  var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada del formato viejo (la usa producción hasta promover)
   var V2_KEY = 'accounts:vault2';       // la copia con el cifrado nuevo (D3), la escribe js/acc-vault-edit.js
   var IDLE = 5 * 60000, IDLE_DIRTY = 15 * 60000, REVEAL = 20000, CLIP = 30000;
   var LOCK_ICON = 'assets/icons/Cuentas/733265.png';
