@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TOP-0 · Propuesta: barra de arriba, ventanas, avisos y pie (BL-070, paso 5)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--green:#3CC48A;--red:#F47C7C;--blue:#6EA3FF;--acc:#A896FF;--gold:#E8C77A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1180px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}small,.mut{color:var(--muted)}
+a{color:#B9A8FF}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(168,150,255,.14),var(--bg-1) 70%)}
+.doc-head img{width:56px;height:56px}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--bd-2);color:var(--tx-2)}
+.tag--wait{border-color:var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+/* barra */
+.tb{display:flex;align-items:center;gap:14px;padding:10px 16px;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:12px;box-shadow:0 1px 0 rgba(232,199,122,.18)}
+.tb-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+.tb-brand img{width:34px;height:34px}
+.tb-name{font-family:"Cinzel Decorative",Georgia,serif;font-weight:700;color:var(--gold);line-height:1.1}
+.tb-name small{display:block;font-family:system-ui,sans-serif;font-weight:500;font-size:.7rem;color:var(--muted);letter-spacing:.02em}
+.chip-dev{font-size:.68rem;font-weight:800;letter-spacing:.08em;color:#1b1406;background:var(--amber);border-radius:6px;padding:2px 7px}
+.tb-acc{margin-left:auto;display:flex;align-items:center;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:8px;min-height:40px;border:1px solid var(--bd-2);border-radius:999px;padding:4px 14px 4px 6px;background:var(--bg-1);color:var(--tx-1);font-size:.88rem}
+.pill i{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#2C9398,#442283);display:inline-block}
+.pill b{font-weight:700}.pill span{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;border:1px solid var(--bd-2);border-radius:10px;padding:0 12px;background:var(--bg-1);color:var(--tx-2);font-size:.85rem}
+.btn img{width:20px;height:20px}
+.btn--ico{width:40px;justify-content:center;padding:0}
+.tb-tools{display:flex;gap:6px}
+.menu{position:relative;margin:10px 0 0 auto;width:250px;border:1px solid var(--bd-2);border-radius:12px;background:var(--bg-1);padding:6px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.menu div{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 10px;border-radius:8px;color:var(--tx-2);font-size:.88rem}
+.menu div:first-child{background:var(--bg-2);color:var(--tx-1)}
+.menu small{display:block;font-size:.72rem}
+.menu hr{border:0;border-top:1px solid var(--bd-1);margin:4px 0}
+.ext::after{content:"↗";color:var(--muted);margin-left:auto;font-size:.8rem}
+.tb-m{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:12px;max-width:390px}
+/* diálogo */
+.dlg{max-width:440px;border:1px solid var(--bd-2);border-radius:16px;background:var(--bg-1);box-shadow:0 20px 50px rgba(0,0,0,.55);overflow:hidden}
+.dlg-h{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--bd-1);background:linear-gradient(180deg,rgba(244,124,124,.12),transparent)}
+.plate{width:40px;height:40px;border-radius:10px;background:var(--bg-0);border:1px solid var(--bd-2);display:flex;align-items:center;justify-content:center;box-shadow:0 0 12px rgba(244,124,124,.45)}
+.plate img{width:30px;height:30px}
+.dlg-h b{flex:1}.x{width:36px;height:36px;border-radius:8px;border:1px solid var(--bd-1);display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.dlg-b{padding:14px 16px;color:var(--tx-2);font-size:.92rem}
+.dlg-f{display:flex;justify-content:flex-end;gap:8px;padding:12px 16px;border-top:1px solid var(--bd-1)}
+.b2{min-height:44px;border-radius:10px;padding:0 16px;display:inline-flex;align-items:center;font-weight:600;font-size:.88rem;border:1px solid var(--bd-2);color:var(--tx-1);background:var(--bg-2)}
+.b2--danger{background:#5b2324;border-color:var(--red);color:#ffdede}
+/* avisos */
+.toasts{display:grid;gap:8px;max-width:380px}
+.t{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--bd-1);border-left:4px solid var(--tc);border-radius:10px;background:var(--bg-1);padding:10px 10px 10px 12px;box-shadow:0 8px 20px rgba(0,0,0,.35);font-size:.88rem}
+.t svg{flex-shrink:0;margin-top:2px}
+.t b{display:block;font-size:.8rem;color:var(--tc)}
+.t .tx{flex:1;color:var(--tx-2)}
+.t .x{width:32px;height:32px}
+.t--i{--tc:var(--blue)}.t--s{--tc:var(--green)}.t--w{--tc:var(--amber)}.t--e{--tc:var(--red)}
+/* pie */
+.ft{border-top:1px solid var(--bd-1);padding:18px 16px 14px;background:var(--bg-0);border-radius:0 0 12px 12px;display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px;font-size:.84rem;color:var(--muted)}
+.ft h4{margin:0 0 6px;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-2)}
+.ft .br{display:flex;gap:10px;align-items:center}.ft .br img{width:28px;height:28px}
+.ft a{display:block;color:var(--tx-2);text-decoration:none;min-height:28px}
+.legal{grid-column:1/-1;border-top:1px solid var(--bd-1);padding-top:10px;font-size:.74rem;line-height:1.45}
+.bio{display:inline-flex;height:26px;border-radius:4px;overflow:hidden;font-size:10px;margin-top:8px}
+.bio span:first-child{background:#232A3A;color:#F4F6FA;padding:0 10px;display:flex;align-items:center;font-weight:600}
+.bio span:last-child{background:#5A3DDB;color:#fff;padding:0 12px;display:flex;align-items:center;font-weight:700}
+@media(max-width:820px){.cols{grid-template-columns:1fr}.ft{grid-template-columns:1fr}.tb{flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<main>
+
+<div class="doc-head">
+  <img src="../../assets/brand/gato-negro.svg" alt="">
+  <div>
+    <h1>Barra de arriba, ventanas, avisos y pie — propuesta visual</h1>
+    <p>BL-070, paso 5 · TOP-0 · 2026-10-26 · <span class="tag tag--wait">Espera tu aprobación</span></p>
+  </div>
+</div>
+
+<p>Los módulos ya están renovados, pero el marco que los rodea sigue siendo el de antes. Ese marco es la barra de arriba, las ventanas que se abren encima, los avisos de abajo a la derecha y el pie. Primero medí todo en el repo (RUN-089, 090 y 091, sondas ya borradas) y después armé esta propuesta.</p>
+
+<h2>1. Lo que medí</h2>
+<table>
+<thead><tr><th>Severidad</th><th>Qué</th><th>Medido</th></tr></thead>
+<tbody>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Falta lo que ArenaNet pide a los sitios de fans.</b></td><td>Las condiciones de uso de contenido de ArenaNet piden tres cosas. Primero, incluir sus avisos de copyright y de marcas. Segundo, que la cabecera diga que es un sitio de fans, no oficial o de la comunidad. Tercero, que el título de la pestaña del navegador lo diga también. Hoy la Bóveda no cumple ninguna: el pie solo dice «© Comunidad Gato Negro — Herramientas para GW2» y la pestaña dice «Bóveda del Gato Negro — v6.6.2», con una versión que ya no significa nada.</td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>Gist: código muerto que pide un token de GitHub.</b></td><td>El botón «Sincronizar» está oculto (<code>display:none</code>) desde DEC-030, pero cada carga sigue trayendo varias piezas: la ventana <code>#gistSyncModal</code>, un script en línea de unas 150 líneas en <code>index.html</code> y <code>js/gist-sync.js</code> (22.800 caracteres). <code>index.html</code> nombra «gist» 55 veces. Nadie puede llegar a esa pantalla, y todo ese código maneja una credencial.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>7 ventanas del navegador en lugar de la Bóveda.</b></td><td>Son 5 <code>confirm()</code>, 1 <code>alert()</code> y 1 <code>prompt()</code>:
+<ul>
+<li><code>app.js</code>: renombrar una Key (prompt, línea 1115) y borrarla (línea 1123).</li>
+<li><code>settings-manager.js</code>: líneas 286, 671, 767 y el <code>alert</code> de error de la 806.</li>
+<li><code>gist-sync.js</code>: línea 558.</li>
+</ul>
+Estas ventanas no siguen el theme, cortan la página y en el celular parecen un error del navegador.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>8 ventanas, 4 formas de comportarse.</b></td><td>En <code>index.html</code> hay 3:
+<ul>
+<li>Keys: atrapa el foco (<code>app.js</code>).</li>
+<li>Gist: no cierra con Escape.</li>
+<li>Guías: cierra con Escape desde un script en línea y cambia el borde con 4 <code>onmouseover</code> con color fijo <code>#5276ff</code>.</li>
+</ul>
+Las otras 5 las crea el JS: el conversor, el selector de themes, el modal de <code>raid-tracker.js</code>, el menú del celular de la barra lateral y la ficha del ítem. Las dos últimas son las buenas: atrapan el foco, cierran con Escape y lo devuelven al cerrar. Cada ventana tiene su propio ancho, encabezado y botones.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Barra de arriba: 14 controles en una fila.</b></td><td>Son 8 enlaces, 5 botones y 1 selector. La navegación, los 5 enlaces externos (Wiki, Foros, Ayuda, Sitio oficial y ANet Keys) y el mantenimiento (Backup, Restaurar y Limpiar caché) están mezclados al mismo nivel. El ícono de Inicio es <code>Welcome/3380755.png</code>, que desde PUL-4 es el de la Heredad, mientras que la barra lateral ya usa el punto de ruta. «Limpiar caché» usa el carácter «⛁». Debajo de 900 px la barra se apila en columna (regla de <code>index.html</code>), así que en el celular ocupa varias filas antes del contenido.</td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>El cargador está lleno.</b></td><td><code>js/boot.js</code> tiene <code>var MAX = 30</code> y el manifiesto ya tiene 30 módulos. Cualquier módulo nuevo de este paso pide subir ese tope.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Avisos: emojis y reglas repetidas.</b></td><td>Hay un solo sistema, <code>window.toast</code> en <code>app.js</code>, con 71 llamadas en 22 archivos, y funciona bien. Pero sus íconos son emojis (✅, ⚠️ e ℹ️), así que error y advertencia muestran el mismo ⚠️. Además, <code>.toast</code>, <code>.toasts</code> y <code>.toast--error</code> están definidos dos veces, en <code>main.css</code> y en <code>theme-polish.css</code>. Un error dura lo mismo que un «Key guardada» (2,5 s) y se anuncia con la misma prioridad.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Pie mínimo.</b></td><td>Tiene un logo de 18 px y una línea de texto: no hay enlaces, ni aviso legal, ni indicación de en qué entorno estás.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Las guías quedaron viejas.</b></td><td><code>docs/user-guide-avanzado.html</code> nombra «Strike» 24 veces y «Gist» 8, y nunca menciona el Llavero. Es contenido, no marco: lo propongo como tarea aparte (D6).</td></tr>
+</tbody>
+</table>
+
+<h2>2. La barra de arriba: tres zonas</h2>
+<p>A la izquierda, quién sos y dónde estás. En el medio, con qué cuenta mirás. A la derecha, las herramientas. El logo lleva a Inicio, como en cualquier sitio, así que sale el ícono que hoy choca con la Heredad.</p>
+<div class="frame"><p class="frame-label">Escritorio</p>
+<div class="tb">
+  <a class="tb-brand"><img src="../../assets/brand/gato-negro.svg" alt=""><span class="tb-name">Bóveda del Gato Negro<small>Sitio de la comunidad · no oficial</small></span></a>
+  <span class="chip-dev">DEV</span>
+  <div class="tb-acc"><span class="pill"><i></i><b>Pablo Schez</b><span>main ▾</span></span><span class="btn">Keys</span></div>
+  <div class="tb-tools"><span class="btn btn--ico" title="Guías"><img src="../../assets/icons/Welcome/102353.png" alt=""></span><span class="btn">Enlaces ▾</span><span class="btn">Ajustes ▾</span></div>
+</div>
+<div class="cols" style="margin-top:4px">
+  <div class="menu"><div class="ext">Wiki de GW2 en español</div><div class="ext">Foros oficiales</div><div class="ext">Ayuda de ArenaNet</div><div class="ext">Sitio oficial</div><hr><div class="ext">Crear una API Key<small>&nbsp;</small></div></div>
+  <div class="menu"><div><img src="../../assets/icons/155034.png" width="20" height="20" alt="">Guardar copia de ajustes</div><div><img src="../../assets/icons/155033.png" width="20" height="20" alt="">Restaurar una copia</div><hr><div>Liberar la caché de la API<small>&nbsp;</small></div></div>
+</div>
+</div>
+<ul>
+<li><b>«Sitio de la comunidad · no oficial»</b> va debajo del nombre, como pide ArenaNet, y también en el título de la pestaña: «Bóveda del Gato Negro · sitio de la comunidad de Guild Wars 2 (no oficial)».</li>
+<li><b>DEV</b>: una etiqueta ámbar que solo aparece cuando la Bóveda corre desde <code>gw2-factory-dev</code>. En producción no se ve, así nunca confundís un entorno con el otro.</li>
+<li><b>La cuenta</b> pasa a ser una pastilla con el nombre de la Key y su tipo. Por dentro sigue siendo el mismo <code>#keySelectGlobal</code>, del que dependen 16 archivos, así que nadie se entera del cambio. «Keys» abre la gestión de Keys de siempre.</li>
+<li><b>Enlaces</b> y <b>Ajustes</b> son menús con teclado (flechas, Escape) y opciones de 44 px. El conteo de bytes de «Liberar la caché» queda igual que hoy.</li>
+</ul>
+<div class="frame"><p class="frame-label">Celular (una sola fila de 56 px)</p>
+<div class="tb-m"><img src="../../assets/brand/gato-negro.svg" width="30" height="30" alt=""><span class="pill" style="flex:1"><i></i><b>Pablo Schez</b><span>▾</span></span><span class="btn btn--ico">☰</span></div>
+<p class="mut" style="font-size:.8rem;margin-top:8px">El ☰ abre una hoja con Guías, Enlaces y Ajustes, con la misma conducta que el menú del celular de la barra lateral.</p>
+</div>
+
+<h2>3. Una sola ventana para toda la Bóveda</h2>
+<p>Propongo un módulo común, <code>js/gn-ui.js</code>, con una ventana que se comporta igual en todos lados. El foco entra al abrirla y Tab no se escapa. Escape la cierra y el foco vuelve al botón que la abrió. Los botones miden 44 px, se respeta «movimiento reducido» y los colores salen del theme. El encabezado lleva el ícono en su placa, con el mismo brillo que los títulos de panel (PUL-2).</p>
+<div class="cols">
+<div class="frame"><p class="frame-label">Reemplazo de <code>confirm()</code>: borrar una Key</p>
+<div class="dlg"><div class="dlg-h"><span class="plate"><img src="../../assets/icons/Welcome/156107.png" alt=""></span><b>¿Borrar la Key «alter 2»?</b><span class="x">✕</span></div>
+<div class="dlg-b">Se borra solo de este navegador. En tu cuenta de ArenaNet sigue existiendo hasta que la borres allá.</div>
+<div class="dlg-f"><span class="b2">Cancelar</span><span class="b2 b2--danger">Borrar</span></div></div>
+</div>
+<div class="frame"><p class="frame-label">Avisos nuevos (misma API: <code>toast(tipo, texto)</code>)</p>
+<div class="toasts">
+<div class="t t--s"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="#3CC48A" stroke-width="2"/><path d="M5 9.5l2.5 2.5L13 6.5" fill="none" stroke="#3CC48A" stroke-width="2"/></svg><div class="tx"><b>Listo</b>Key guardada</div><span class="x">✕</span></div>
+<div class="t t--i"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="#6EA3FF" stroke-width="2"/><path d="M9 8v5M9 5v.5" stroke="#6EA3FF" stroke-width="2"/></svg><div class="tx"><b>Leyendo</b>Cargando la cuenta alter 2…</div><span class="x">✕</span></div>
+<div class="t t--w"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 2l8 14H1z" fill="none" stroke="#F2B94B" stroke-width="2"/><path d="M9 7v4M9 13v.5" stroke="#F2B94B" stroke-width="2"/></svg><div class="tx"><b>Ojo</b>La Key no tiene el permiso «wallet»</div><span class="x">✕</span></div>
+<div class="t t--e"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="none" stroke="#F47C7C" stroke-width="2"/><path d="M6 6l6 6M12 6l-6 6" stroke="#F47C7C" stroke-width="2"/></svg><div class="tx"><b>No se pudo</b>La API no respondió. Probá de nuevo en un minuto.</div><span class="x">✕</span></div>
+</div></div>
+</div>
+<ul>
+<li><b>Avisos:</b> cada tipo tiene su color y su ícono dibujado, sin emojis. Los errores duran al menos 6 s y se anuncian como alerta. Se ven como máximo 3 a la vez. En el celular salen centrados y por encima de la barra del sistema. Las 71 llamadas de hoy no cambian: <code>gn-ui.js</code> respeta <code>window.toast(tipo, texto, {ttl})</code> y su <code>close()</code>.</li>
+<li><b>Ventanas existentes:</b> Keys, Guías, conversor y selector de themes toman la misma piel y la misma conducta. Las Guías pierden los <code>onmouseover</code> y el color fijo. El texto técnico de Keys («…para evitar preflight CORS») pasa a castellano llano, y los 7 permisos pasan a fichas.</li>
+<li><b>Los 7 diálogos del navegador</b> pasan a esta ventana. Para renombrar una Key, la ventana trae su propio campo de texto.</li>
+</ul>
+
+<h2>4. El pie</h2>
+<div class="frame"><p class="frame-label">Pie nuevo</p>
+<div class="ft">
+  <div><div class="br"><img src="../../assets/brand/gato-negro.svg" alt=""><div><b style="color:var(--tx-1)">Bóveda del Gato Negro</b><br>Herramientas de la comunidad Gato Negro para Guild Wars 2.</div></div>
+  <span class="bio"><span>Link in Bio</span><span>Pablin Schez</span></span></div>
+  <div><h4>La Bóveda</h4><a>Inicio</a><a>Guías de uso</a><a>Gestión de Keys</a></div>
+  <div><h4>Guild Wars 2</h4><a>Wiki en español ↗</a><a>Sitio oficial ↗</a><a>Crear una API Key ↗</a></div>
+  <div class="legal">Sitio de la comunidad, no oficial; no está afiliado a ArenaNet ni a NCSOFT. Las imágenes y los datos del juego son de sus dueños y se leen de la API pública.<br>
+  © 2014 ArenaNet, LLC. All rights reserved. NCSOFT, the interlocking NC logo, ArenaNet, Guild Wars, Guild Wars Factions, Guild Wars Nightfall, Guild Wars: Eye of the North, Guild Wars 2, and all associated logos and designs are trademarks or registered trademarks of NCSOFT Corporation. All other trademarks are the property of their respective owners.</div>
+</div></div>
+<ul>
+<li>El aviso de ArenaNet va <b>tal cual lo publica</b> en sus condiciones, en inglés y con su año, porque es el texto que piden.</li>
+<li>El distintivo «Link in Bio / Pablin Schez» baja de la barra al pie con sus colores fijos de siempre (DEC-025), y su foto se sirve desde la Bóveda (<code>assets/brand/</code>) en lugar de pedirse a <code>raw.githubusercontent.com</code> en cada carga.</li>
+</ul>
+
+<h2>5. Cómo lo construyo</h2>
+<ul>
+<li><b>Dos módulos nuevos por el manifiesto:</b> <code>js/gn-ui.js</code> (ventana común y avisos) y <code>js/gn-topbar.js</code> (barra y pie). Cada uno queda por debajo de 40 KB (DEC-035).</li>
+<li><b>Tope del cargador de 30 a 40 módulos</b> (D5), con su test. Juntar módulos para entrar en 30 iría contra DEC-035, que los quiere chicos. Con este paso quedamos en 32 de 40.</li>
+<li><code>index.html</code> no crece: los módulos toman la barra y el pie que ya existen. Al final, <code>index.html</code> pierde la ventana de Gist, sus dos scripts en línea, la de Guías y los estilos en línea de la barra.</li>
+<li>Los retiros siguen LES-039: primero suelto las dependencias y los tests, después borro los archivos y por último ajusto el presupuesto de tamaños.</li>
+</ul>
+
+<h2>6. Plan paso por paso (cada uno con tu validación)</h2>
+<table>
+<thead><tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr></thead>
+<tbody>
+<tr><td><b>TOP-1</b></td><td>Tope del cargador a 40 y <code>js/gn-ui.js</code>: ventana común y avisos nuevos.</td><td>Los avisos nuevos en toda la Bóveda, sin tocar las 71 llamadas.</td></tr>
+<tr><td><b>TOP-2</b></td><td>Los diálogos del navegador pasan a la ventana común (<code>app.js</code> y <code>settings-manager.js</code>).</td><td>Renombrar o borrar una Key, restaurar una copia y liberar la caché, con la ventana de la Bóveda.</td></tr>
+<tr><td><b>TOP-3</b></td><td>Keys, Guías, conversor y selector de themes con la misma piel y conducta.</td><td>Las 4 ventanas iguales, con Escape y teclado.</td></tr>
+<tr><td><b>TOP-4</b></td><td>Retiro de Gist: ventana, script en línea, <code>gist-sync.js</code>, el botón oculto y sus tests.</td><td>Nada visible (ya estaba oculto); la página carga menos código.</td></tr>
+<tr><td><b>TOP-5</b></td><td>Barra de arriba nueva (<code>js/gn-topbar.js</code>) y título de la pestaña.</td><td>La barra de 3 zonas, la marca DEV y la fila única del celular.</td></tr>
+<tr><td><b>TOP-6</b></td><td>Pie nuevo con aviso legal, revisión final (19 themes, teclado, lector, celular) y FEAT-018.</td><td>El pie y el cierre del paso 5.</td></tr>
+</tbody>
+</table>
+
+<h2>7. Lo que necesito que decidas</h2>
+<table>
+<thead><tr><th></th><th>Pregunta</th><th>Lo que recomiendo</th></tr></thead>
+<tbody>
+<tr><td><b>D1</b></td><td>¿Barra en 3 zonas, con el logo como Inicio y los enlaces externos y el mantenimiento en menús?</td><td><b>Sí.</b> Pasamos de 14 controles a la vista a 6, y el celular pasa a una fila.</td></tr>
+<tr><td><b>D2</b></td><td>¿Leyenda «Sitio de la comunidad · no oficial» en la barra y en la pestaña, y el aviso de ArenaNet en el pie?</td><td><b>Sí.</b> Es lo que ArenaNet pide a los sitios que usan su contenido, y la Bóveda usa sus íconos y su API en cada pantalla.</td></tr>
+<tr><td><b>D3</b></td><td>¿Retirar Gist por completo (DEC-030)?</td><td><b>Sí.</b> Nadie puede llegar a esa pantalla y es código que guarda un token de GitHub. Backup y Restaurar quedan en Ajustes.</td></tr>
+<tr><td><b>D4</b></td><td>¿Reemplazar los 7 diálogos del navegador por la ventana de la Bóveda?</td><td><b>Sí.</b> Las preguntas siguen siendo las mismas; lo que cambia es que ahora hablan como la app.</td></tr>
+<tr><td><b>D5</b></td><td>¿Subir el tope del cargador de 30 a 40 módulos?</td><td><b>Sí.</b> Es una línea y su test. La alternativa, juntar módulos, los vuelve a hacer grandes.</td></tr>
+<tr><td><b>D6</b></td><td>¿Las guías de uso (desactualizadas) como tarea aparte?</td><td><b>Sí, BL-071 después de BL-070.</b> Reescribirlas es contenido, no marco, y conviene hacerlo con todos los módulos ya cerrados.</td></tr>
+<tr><td><b>D7</b></td><td>¿El distintivo «Link in Bio» al pie y su foto servida desde la Bóveda?</td><td><b>Sí.</b> Libera la barra y la carga no depende de otro sitio. Los colores no cambian (DEC-025).</td></tr>
+<tr><td><b>D8</b></td><td>¿Marca «DEV» en la barra cuando la Bóveda corre desde el repo de desarrollo?</td><td><b>Sí.</b> Tenés las dos abiertas seguido; así se ve al instante en cuál estás. En producción no aparece.</td></tr>
+</tbody>
+</table>
+
+<p class="note">Fuentes: <code>index.html</code>, <code>css/main.css</code>, <code>css/theme-polish.css</code>, <code>js/app.js</code>, <code>js/settings-manager.js</code>, <code>js/gist-sync.js</code> y <code>js/boot.js</code> de DEV, medidos con las sondas RUN-089, 090 y 091. Las «Guild Wars and Guild Wars 2 Content Terms of Use» de ArenaNet (legal.guildwars.com) son la fuente de los avisos de copyright y marcas, de la leyenda de sitio de fans o no oficial en la cabecera y del título de la pestaña. Todo consultado el 2026-10-26.</p>
+
+</main>
+</body>
+</html>
