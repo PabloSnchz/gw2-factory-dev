@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BLS-0 · Propuesta: almacenamiento sin sustos (BL-074)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--acc:#A896FF}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.6rem;margin:0}h2{font-size:1.2rem;margin:36px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}
+p,li{color:var(--tx-2)}.mut{color:var(--muted)}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.head{border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(168,150,255,.14),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 9px;border:1px solid var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.a{background:#5a3b14;color:#ffd38a}.m{background:#24324d;color:#b9d0ff}.b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+</style>
+</head>
+<body>
+<main>
+<div class="head">
+  <span class="tag">BLS-0 · PROPUESTA · BL-074</span>
+  <h1>Almacenamiento sin sustos</h1>
+  <p class="mut">2026-10-26. Paso previo a la memoria de la Cartera (SHV-2). Nada construido todavía.</p>
+</div>
+
+<h2>1. Lo que medí</h2>
+<p>Tu navegador (18:31Z) y el código de DEV (sonda RUN-136, ya borrada).</p>
+<table>
+<tr><th>Hallazgo</th><th>Nivel</th></tr>
+<tr><td><code>localStorage</code> está al <b>74 %</b> (~3,7 M de ~5 M caracteres), compartido por producción, DEV y los dashboards. Las 10 claves más grandes son cachés que se pueden volver a pedir (~3,4 MB).</td><td><span class="sev a">ALTO</span></td></tr>
+<tr><td>Todos los cachés de <code>api-gw2.js</code> pasan por 4 funciones chicas (<code>lsGet</code>, <code>lsSet</code>, <code>lsDel</code>, <code>lsHas</code>). Ahí está el 85 % del peso: ítems de la Armería (1.386 KB), ítems (399), logros por cuenta (399 + 281), Bazar (319), datos de logros (146).</td><td><span class="sev b">a favor</span></td></tr>
+<tr><td>Dos cachés propios fuera de esa capa: el conversor (<code>gw2_conv_cache_v3</code>, 222 KB) y los puntos de logro de Cuentas (<code>gn:accounts:achmeta</code>, 192 KB).</td><td><span class="sev m">MEDIO</span></td></tr>
+<tr><td><code>accounts:lastFile</code> no es un caché: es la copia de tu archivo cifrado viejo del Llavero. Si todavía no guardaste la copia nueva (<code>accounts:vault2</code>), borrarla te haría perder el acceso rápido a tus cuentas.</td><td><span class="sev a">ALTO</span></td></tr>
+<tr><td><code>api-gw2.js</code> pesa 129 KB y está congelado: no puede crecer. Cualquier cambio ahí tiene que compensar bytes.</td><td><span class="sev m">MEDIO</span></td></tr>
+</table>
+
+<h2>2. La propuesta</h2>
+<p>Un módulo nuevo y chico, <code>js/gn-idb.js</code>, que guarda los cachés en <b>IndexedDB</b> (cientos de MB, no compite con tus datos) y los tiene también en memoria para que la lectura siga siendo instantánea, como hoy.</p>
+<ul>
+<li><b>Cómo engancha:</b> las 4 funciones de <code>api-gw2.js</code> le preguntan primero a <code>gn-idb.js</code> si la clave es un caché. Si lo es, va a IndexedDB; si no (tus Keys, ajustes, fijados), sigue en <code>localStorage</code> como siempre.</li>
+<li><b>Si IndexedDB no está</b> (modo privado de algunos navegadores): todo sigue como hoy, en <code>localStorage</code>. Nunca rompe.</li>
+<li><b>Mudanza:</b> la primera vez copia los cachés de <code>localStorage</code> a IndexedDB y recién después los borra. Lo peor que puede pasar es que un caché se vuelva a pedir a la API.</li>
+<li><b>«Vaciar caché»</b> (Ajustes) borra también lo de IndexedDB.</li>
+</ul>
+<div class="note">Resultado esperado: <code>localStorage</code> baja de ~74 % a ~35 % o menos (solo las 10 más grandes ya liberan más de la mitad, y entre las 368 chicas hay más cachés de la misma capa). Lo medimos juntos al final. La Bóveda no se ve distinta; solo deja de estar al borde.</div>
+
+<h2>3. Plan paso por paso (cada uno con tu validación)</h2>
+<table>
+<tr><th>Paso</th><th>Qué hago</th></tr>
+<tr><td><b>BLS-1</b></td><td><code>js/gn-idb.js</code> 1.0.0 con sus tests. Inerte: nadie lo usa todavía.</td></tr>
+<tr><td><b>BLS-2</b></td><td>Enganche en <code>api-gw2.js</code> (sin crecer), <code>gn-idb.js</code> cargado antes que él en <code>index.html</code>, mudanza de los cachés y «Vaciar caché» al día.</td></tr>
+<tr><td><b>BLS-3</b></td><td>El conversor y los puntos de logro de Cuentas pasan a la misma capa.</td></tr>
+<tr><td><b>BLS-4</b></td><td>Limpieza: restos viejos (<code>items_cache_v1</code> sin idioma y otros que encuentre) y <code>accounts:lastFile</code> <b>solo si ya existe la copia nueva</b>. Te paso el mismo comando de consola para medir el antes y el después.</td></tr>
+</table>
+
+<h2>4. Lo que necesito que decidas</h2>
+<table>
+<tr><th>#</th><th>Decisión</th><th>Te recomiendo</th></tr>
+<tr><td>D1</td><td>Dónde van los cachés</td><td><b>IndexedDB con copia en memoria</b> (<code>gn-idb.js</code>). Alternativas peores: comprimir (ahorra ~60 % pero sigue en el mismo cajón) o achicar topes (más pedidos a la API).</td></tr>
+<tr><td>D2</td><td>Qué se muda</td><td>Todo lo que hoy es caché: los de <code>api-gw2.js</code> (BLS-2) y los dos propios (BLS-3). Tus datos se quedan en <code>localStorage</code>.</td></tr>
+<tr><td>D3</td><td><code>accounts:lastFile</code></td><td>Borrarla <b>solo</b> si existe <code>accounts:vault2</code>. Si no existe, te aviso en el Llavero para que guardes la copia nueva primero.</td></tr>
+<tr><td>D4</td><td>Producción</td><td>Como producción y DEV comparten el mismo almacenamiento, mientras producción tenga el código viejo vuelve a llenar sus cachés cada vez que la abrís. No rompe nada, pero el alivio real llega cuando BL-074 pase a producción (por el canal que elijas, DEC-036) después de validarlo en DEV.</td></tr>
+</table>
+<div class="note"><b>Riesgo:</b> MEDIO. Toca la capa de caché de toda la Bóveda. Lo cubro con: copia antes de borrar, respaldo a <code>localStorage</code> si no hay IndexedDB, tests de la capa y de la mudanza, y validación tuya en cada paso.</div>
+</main>
+</body>
+</html>
