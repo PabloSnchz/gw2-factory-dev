@@ -1,7 +1,8 @@
 /*!
  * js/gn-shell.js — Un solo contenedor por módulo renovado (BL-070, pedido de Pablo del 2026-10-25)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-25) · PUL-2: el ícono de la cabecera igual en los 9 módulos y cada módulo en el color de su botón de la barra lateral
+ * Versión: 1.3.0 (2026-10-26) · BL-070 CTA-2: Cuentas renovado con el mismo ícono de cabecera (#cvRoot .cv-ico)
+ *          1.2.0 (2026-10-25) · PUL-2: el ícono de la cabecera igual en los 9 módulos y cada módulo en el color de su botón de la barra lateral
  *          1.1.0 (2026-10-25) · PUL-1: la Armería Legendaria también tiene un solo contenedor
  *          1.0.0 (2026-10-25)
  *
@@ -22,7 +23,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[GNShell]';
   var SIDE = 24, SIDE_M = 12, TINT = 12, FADE = 300;
   // panel: selector del panel con la vista montada · head: lo que la vista inserta arriba ·
@@ -72,7 +73,8 @@
     { id: 'activities', sel: '#avRoot .av-ico', color: '#3CC48A' },
     { id: 'characters', sel: '#ivRoot .iv-ico', color: '#7EC3FF' },
     { id: 'armory', sel: '#legendaryArmoryPanel .arm-hrow>img', color: '#E545CA' },
-    { id: 'homestead', sel: '#hsRoot .hs-ico', color: '#D9A55B' }
+    { id: 'homestead', sel: '#hsRoot .hs-ico', color: '#D9A55B' },
+    { id: 'accounts', sel: '#cvRoot .cv-ico', color: '#8E96A3' }
   ];
   var PLATE = 56, ICO = 44, PLATE_M = 40, ICO_M = 32;
   // D1: las pestañas de Logros y la Cámara también en el color de su botón de la barra lateral.

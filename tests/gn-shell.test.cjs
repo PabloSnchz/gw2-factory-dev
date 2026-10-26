@@ -27,7 +27,7 @@ const viewSrc = (id) => [].concat(VIEWS[id]).map(read).join('\n');
 const inner = (s) => s.panel + ' ' + s.head + (s.body ? ' ' + s.body : '');
 
 test('versión, presupuesto y manifiesto: después de gn-frame.js, fuera de index.html, sin pedidos ni almacenamiento', () => {
-  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.match(SRC, /Versión: 1\.3\.0/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
   assert.doesNotMatch(SRC, /fetch\(|localStorage|sessionStorage|Storage\.set/);
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}]/u, 'sin emojis');
@@ -73,10 +73,10 @@ test('PUL-1: la Armería con un solo contenedor, en su color de la barra lateral
   assert.ok(P.CSS.includes('#legendaryArmoryPanel:has(.arm-hero) #legendaryArmoryBody #legendaryModeContent>:not(.arm-hero){margin-left:12px;margin-right:12px}'), 'en el celular');
 });
 
-test('PUL-2: el ícono de la cabecera igual en los 9 módulos, en el color de su botón de la barra lateral', () => {
+test('PUL-2: el ícono de la cabecera igual en los 10 módulos, en el color de su botón de la barra lateral', () => {
   const W = read('js/welcome-panel.js');
   const SRCS = { cards: 'js/wallet-theme.js', meta: 'js/meta-theme.js', wv: 'js/wv-view.js', achievements: 'js/ach-view.js', raids: 'js/raids-view.js',
-    activities: 'js/act-view.js', characters: 'js/inv-view.js', armory: 'js/render-catologo.js', homestead: 'js/home-view.js' };
+    activities: 'js/act-view.js', characters: 'js/inv-view.js', armory: 'js/render-catologo.js', homestead: 'js/home-view.js', accounts: 'js/acc-view.js' };
   assert.deepEqual(JSON.parse(JSON.stringify(P.ICONS.map((i) => i.id))).sort(), Object.keys(SRCS).sort());
   P.ICONS.forEach((i) => {
     const m = W.match(new RegExp("id: '" + i.id + "'[^}]*color: '(#[0-9A-Fa-f]{6})'"));
