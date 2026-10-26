@@ -77,16 +77,16 @@ const tick = () => new Promise((r) => setImmediate(r));
 // ------------------------------------------------------------------ archivo
 test('archivo: presupuesto, versión, manifiesto con los gn-*, fuera de index.html, sin emojis ni almacenamiento', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /\* Versión: 1\.0\.1\n/);
+  assert.match(SRC, /\* Versión: 1\.1\.0\n/);
   const { sb } = box();
-  assert.equal(sb.GNUI.version, '1.0.1');
+  assert.equal(sb.GNUI.version, '1.1.0');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/u, 'sin emojis');
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|Storage\.|fetch\(/);
   const code = SRC.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   assert.doesNotMatch(code, /(^|[^\w.])(window\.)?(alert|confirm|prompt)\s*\(\s*['"]/, 'no usa los diálogos del navegador');
   const man = JSON.parse(read('js/modules.json')).modules;
   const i = man.findIndex((m) => m.src === 'js/gn-ui.js');
-  assert.ok(i >= 0 && man[i].v === '1.0.1', 'en el manifiesto con su versión');
+  assert.ok(i >= 0 && man[i].v === '1.1.0', 'en el manifiesto con su versión');
   assert.ok(i === man.findIndex((m) => m.src === 'js/gn-shell.js') + 1, 'junto a los gn-*, antes de los módulos');
   assert.doesNotMatch(read('index.html'), /gn-ui\.js/);
   const MAX = Number((read('js/boot.js').match(/var MAX = (\d+);/) || [])[1]);
@@ -308,6 +308,87 @@ test('TOP-2: renombrar, eliminar, restaurar y liberar la caché preguntan con es
   assert.deepEqual(strip(SM).filter((l) => nat.test(l)).map((l) => l.trim()), ['var yes = confirm(msg);'], 'en settings-manager, el navegador solo como respaldo de ask()');
   assert.equal((SM.match(/(await|return) ask\(/g) || []).length, 3, 'las 3 preguntas van por ask()');
   assert.match(SM, /window\.GNUI\.alert\(\{ title: 'No se pudo restaurar'/);
+});
+
+test('TOP-3: la piel común de las ventanas de siempre (.modal): textos del theme, cierre de 44 px, hoja en el celular, movimiento reducido', () => {
+  const C = box().sb.GNUI._pure.MODAL_CSS;
+  const colors = [...C.matchAll(/(?:^|[;{])color:([^;}]+)/g)].map((m) => m[1].trim());
+  assert.ok(colors.length >= 8);
+  colors.forEach((c) => assert.ok(/^var\(--(tx-1|tx-2)\)$/.test(c), 'color de texto del theme: ' + c));
+  assert.match(C, /\.modal \.modal__dialog\{background:var\(--bg-1\)/, 'la caja sobre la superficie que mide el contraste');
+  assert.match(C, /\.modal \.modal__close\{flex:0 0 44px;width:44px;height:44px/);
+  assert.match(C, /@media \(max-width:640px\)\{\.modal \.modal__dialog\{left:0;right:0;top:auto;bottom:0;transform:none;width:100%/);
+  assert.match(C, /@media \(prefers-reduced-motion:reduce\)\{\.modal:not\(\[hidden\]\)\{animation:none\}/);
+  assert.match(C, /\.gn-guide:hover\{border-color:var\(--acc-1/, 'el borde de las Guías, sin JS ni color fijo');
+  assert.doesNotMatch(C, /#5276ff/i);
+});
+
+test('TOP-3: Keys y Guías en index.html sin estilos con JS ni texto técnico; los permisos son los de app.js', () => {
+  const I = read('index.html');
+  const g = I.slice(I.indexOf('<div id="guideModal"'), I.indexOf('</div>\n</div>', I.indexOf('<div id="guideModal"')));
+  assert.doesNotMatch(g, /onmouseover|onmouseout|#5276ff/i);
+  assert.equal((g.match(/<a class="gn-guide" href="docs\/user-guide(-avanzado)?\.html" target="_blank" rel="noopener">/g) || []).length, 2);
+  const k = I.slice(I.indexOf('<div id="keysModal"'), I.indexOf('<!-- Modal: Sincronización'));
+  assert.doesNotMatch(k, /preflight|CORS|access_token|403/);
+  const perms = [...k.matchAll(/<li><code>(\w+)<\/code><\/li>/g)].map((m) => m[1]);
+  const need = [...read('js/app.js').matchAll(/\{ scope: '(\w+)',/g)].map((m) => m[1]);
+  assert.equal(need.length, 7);
+  assert.deepEqual(perms, need, 'las fichas son los permisos que app.js exige');
+  assert.match(k, /<h3 id="keysModalTitle"><img src="assets\/icons\/Cuentas\/155048\.png" width="24" height="24" alt="">/);
+});
+
+test('TOP-3: conducta común: el foco entra, Escape cierra con su propio botón, Tab no se escapa y el foco vuelve', () => {
+  const { sb, D, advance } = box();
+  const P = sb.GNUI._pure;
+  const mk = (tag, cls) => { const n = D.node(tag); if (cls) n.setAttribute('class', cls); n.getClientRects = () => [1]; n.contains = function (x) { for (let p = x; p; p = p.parentNode) if (p === this) return true; return false; }; return n; };
+  const modal = mk('div', 'modal'), dlg = mk('div', 'modal__dialog'), close = mk('button', 'modal__close'), body = mk('div', 'modal__body');
+  const a = mk('button'), b = mk('button'), gone = mk('button');
+  gone.getClientRects = () => [];
+  close.setAttribute('data-close', '1');
+  modal.appendChild(dlg); dlg.appendChild(close); dlg.appendChild(body); body.appendChild(a); body.appendChild(b); body.appendChild(gone);
+  modal.querySelectorAll = () => [close, a, b, gone];
+  modal.querySelector = (s) => (s === '.modal__dialog' ? dlg : /modal__close|data-close/.test(s) ? close : null);
+  dlg.hasAttribute = (k) => k in dlg.attrs;
+  let closed = 0;
+  close.click = () => { closed++; modal.hidden = true; };
+  const opener = mk('button'); D.doc.body.appendChild(opener); D.doc.body.appendChild(modal); opener.focus();
+  P.modalShown(modal);
+  advance(0);
+  assert.equal(D.activeElement, dlg, 'el foco entra a la ventana');
+  assert.equal(dlg.getAttribute('tabindex'), '-1');
+  assert.ok(D.doc.documentElement.classList.contains('gn-mod-open'));
+  const keys = modal.listeners.keydown;
+  assert.equal(keys.length, 1, 'un solo manejador aunque se abra de nuevo');
+  P.modalShown(modal);
+  assert.equal(modal.listeners.keydown.length, 1);
+  b.focus();
+  const t = fire(b, 'keydown', { key: 'Tab', currentTarget: modal });
+  assert.ok(t.defaultPrevented && t.stopped);
+  assert.equal(D.activeElement, close, 'Tab desde el último (salteando lo oculto) vuelve al primero');
+  fire(close, 'keydown', { key: 'Tab', shiftKey: true, currentTarget: modal });
+  assert.equal(D.activeElement, b, 'Mayús+Tab desde el primero va al último visible');
+  const esc = fire(b, 'keydown', { key: 'Escape', currentTarget: modal });
+  assert.ok(esc.stopped, 'Escape no sigue hasta document (no cierra dos veces)');
+  assert.equal(closed, 1, 'Escape cierra con el botón «Cerrar» de la ventana');
+  P.modalHidden(modal);
+  assert.equal(D.activeElement, opener, 'el foco vuelve al que la abrió');
+  P.modalShown(modal);
+  assert.equal(modal.listeners.keydown.length, 1, 'al volver a abrirla no suma otro manejador');
+  P.modalHidden(modal);
+  D.doc.querySelectorAll = () => [modal];
+  P.scanModals();
+  assert.ok(!D.doc.documentElement.classList.contains('gn-mod-open'), 'sin ventanas abiertas, la página vuelve a desplazarse');
+  const k2 = mk('div', 'modal'); const d2 = mk('div', 'modal__dialog'); const in2 = mk('input'); k2.appendChild(d2); d2.appendChild(in2);
+  k2.querySelectorAll = () => [in2]; k2.querySelector = (s) => (s === '.modal__dialog' ? d2 : null); d2.hasAttribute = () => true;
+  D.doc.body.appendChild(k2); in2.focus();
+  P.modalShown(k2); advance(0);
+  assert.equal(D.activeElement, in2, 'si la ventana ya puso el foco adentro (Keys), se respeta');
+  P.modalHidden(k2);
+  const k3 = mk('div', 'modal'); const d3 = mk('div', 'modal__dialog'); const in3 = mk('input'); k3.appendChild(d3); d3.appendChild(in3);
+  k3.querySelectorAll = () => [in3]; k3.querySelector = (s) => (s === '.modal__dialog' ? d3 : null); d3.hasAttribute = () => true;
+  D.doc.body.appendChild(k3); D.doc.body.focus();
+  P.modalShown(k3); in3.focus(); P.modalHidden(k3);
+  assert.equal(D.activeElement, in3, 'si se abrió sin foco en ningún botón, no se inventa a quién devolverlo');
 });
 
 test('ventanas una sobre otra: Escape cierra solo la de arriba', async () => {

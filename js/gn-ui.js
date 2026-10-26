@@ -1,6 +1,6 @@
 /*!
  * js/gn-ui.js — Ventana común y avisos de la Bóveda (BL-070 paso 5, TOP-1)
- * Versión: 1.0.1
+ * Versión: 1.1.0
  *
  * Avisos: reemplaza a window.toast con la MISMA forma de llamarlo, así ninguna de las llamadas
  * de hoy cambia: toast(tipo, texto, { ttl }) devuelve { close, el }, y toast.legacy(texto, tipo, ms).
@@ -18,11 +18,14 @@
  *  - Botones de 44 px, textos solo con los colores de texto del theme, «movimiento reducido».
  * No guarda nada. No toca index.html: toma el #toasts que ya existe (o lo crea).
  * 1.0.1 (TOP-2): el Tab no sale de la ventana: la trampa de foco de la ventana de Keys escucha en document.
+ * 1.1.0 (TOP-3): las ventanas de siempre (.modal: Keys, Guías, conversor, selector de themes) toman la
+ *   misma piel y la misma conducta: Escape cierra con su propio botón «Cerrar», Tab no se escapa, el foco
+ *   entra al abrir y vuelve al que la abrió, cierre de 44 px y hoja desde abajo en el celular.
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.1';
+  var VERSION = '1.1.0';
   var DEFAULT_TTL = 3500, MIN_ERROR_TTL = 6000, MAX_TOASTS = 3, OUT_MS = 180;
   var LABEL = { info: 'Aviso', success: 'Listo', warn: 'Ojo', error: 'No se pudo' };
   var SVG = {
@@ -293,14 +296,112 @@
     }).then(function () {});
   }
 
+  // ------------------------------------------------------------------ ventanas de siempre (.modal)
+  // TOP-3: Keys (index.html + app.js), Guías (index.html), conversor (converter-modal.js) y selector de
+  // themes (theme-selector.js) ya comparten el marcado .modal > .modal__backdrop + .modal__dialog >
+  // .modal__header (h3 + .modal__close) + .modal__body. No se reescriben: se les pone la misma piel y la
+  // misma conducta desde acá. Cerrar siempre pasa por su propio botón, así cada una cierra como sabe.
+  var MODAL_CSS = [
+    'html.gn-mod-open{overflow:hidden}',
+    '.modal .modal__backdrop{background:rgba(5,7,12,.62);backdrop-filter:blur(2px)}',
+    '.modal .modal__dialog{background:var(--bg-1);color:var(--tx-1);border:1px solid var(--bd-1);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.55)}',
+    '.modal .modal__dialog:focus{outline:none}',
+    '.modal .modal__header{gap:12px;padding:12px 10px 12px 16px;border-bottom:1px solid var(--bd-1)}',
+    '.modal .modal__header h3{display:flex;align-items:center;gap:8px;margin:0;font-size:1.02rem;font-weight:700;line-height:1.3;color:var(--tx-1)}',
+    '.modal .modal__close{flex:0 0 44px;width:44px;height:44px;border:0;border-radius:10px;background:transparent;color:var(--tx-2);font-size:20px;line-height:1;box-shadow:none;transform:none}',
+    '.modal .modal__close:hover{background:var(--bg-2);color:var(--tx-1);box-shadow:none;transform:none}',
+    '.modal .modal__close:focus-visible,.modal .gn-guide:focus-visible{outline:2px solid var(--acc-1,#A896FF);outline-offset:2px}',
+    '.modal .modal__body{padding:14px 16px 16px}',
+    '.gn-guide{display:flex;align-items:center;gap:14px;min-height:44px;padding:14px 16px;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:12px;text-decoration:none;color:var(--tx-1);transition:border-color .15s ease,box-shadow .15s ease}',
+    '.gn-guide:hover{border-color:var(--acc-1,#A896FF);box-shadow:0 0 12px rgba(168,150,255,.2)}',
+    '.gn-guide img{flex:0 0 32px}.gn-guide b{display:block;font-size:.95rem;font-weight:600;color:var(--tx-1)}.gn-guide span{display:block;font-size:.78rem;color:var(--tx-2)}',
+    '.gn-keys-note{margin:10px 0 0;font-size:.84rem;line-height:1.5;color:var(--tx-2)}',
+    '.gn-perms{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:8px 0 0;padding:0}',
+    '.gn-perms li{font:600 .76rem/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--tx-1);background:var(--bg-0);border:1px solid var(--bd-1);border-radius:999px;padding:0 10px}',
+    '.gn-perms code{background:none;border:0;padding:0;font:inherit;color:var(--tx-1)}',
+    '@media (max-width:640px){.modal .modal__dialog{left:0;right:0;top:auto;bottom:0;transform:none;width:100%;max-width:none!important;max-height:92vh;border-radius:16px 16px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}',
+    '.modal .modal__body :is(button,.btn,select,input:not([type=checkbox]):not([type=radio])){min-height:44px}}',
+    '@media (prefers-reduced-motion:reduce){.modal:not([hidden]){animation:none}.gn-guide{transition:none}}'
+  ].join('\n');
+  var FOCUSABLE = 'a[href],button:not([disabled]),input:not([disabled]):not([type="hidden"]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+
+  function focusables(m) {
+    var list = m && m.querySelectorAll ? m.querySelectorAll(FOCUSABLE) : [];
+    return Array.prototype.filter.call(list, function (n) { return !(n.getClientRects && !n.getClientRects().length); });
+  }
+  function closer(m) { return m.querySelector('.modal__close') || m.querySelector('[data-close="1"]'); }
+  function inside(m, n) { return !!(n && m.contains && m.contains(n)); }
+  // Escape y Tab se resuelven acá y no siguen: así las ventanas que ya escuchaban en document no lo hacen dos veces.
+  function modalKey(e) {
+    var m = e.currentTarget || this;
+    if (e.key === 'Escape' || e.key === 'Esc') {
+      var x = closer(m);
+      if (!x) return;
+      e.preventDefault(); e.stopPropagation();
+      x.click();
+      return;
+    }
+    if (e.key !== 'Tab') return;
+    var list = focusables(m);
+    if (!list.length) return;
+    e.stopPropagation();
+    var at = list.indexOf(doc.activeElement);
+    if (e.shiftKey && at <= 0) { e.preventDefault(); list[list.length - 1].focus(); }
+    else if (!e.shiftKey && (at === list.length - 1 || at < 0)) { e.preventDefault(); list[0].focus(); }
+  }
+  function modalShown(m) {
+    if (m.__gnOpen) return;
+    m.__gnOpen = true;
+    var a = doc.activeElement;
+    m.__gnOpener = a && a !== doc.body && !inside(m, a) ? a : null;
+    if (!m.__gnKeys) { m.__gnKeys = true; m.addEventListener('keydown', modalKey); }
+    if (doc.documentElement) doc.documentElement.classList.add('gn-mod-open');
+    // Después de que la ventana haga lo suyo: si ya puso el foco adentro, se respeta.
+    root.setTimeout(function () {
+      if (m.hidden || inside(m, doc.activeElement)) return;
+      var dlg = m.querySelector('.modal__dialog');
+      if (!dlg) return;
+      if (!dlg.hasAttribute('tabindex')) dlg.setAttribute('tabindex', '-1');
+      dlg.focus();
+    }, 0);
+  }
+  function modalHidden(m) {
+    if (!m.__gnOpen) return;
+    m.__gnOpen = false;
+    var op = m.__gnOpener, cur = doc.activeElement;
+    m.__gnOpener = null;
+    if (op && op.focus && (!cur || cur === doc.body || inside(m, cur))) { try { op.focus(); } catch (_) {} }
+  }
+  function scanModals() {
+    if (!doc || !doc.querySelectorAll) return;
+    var any = false;
+    Array.prototype.forEach.call(doc.querySelectorAll('.modal'), function (m) {
+      if (m.hidden) modalHidden(m); else { modalShown(m); any = true; }
+    });
+    if (!any && doc.documentElement) doc.documentElement.classList.remove('gn-mod-open');
+  }
+  function watchModals() {
+    if (!doc || !doc.body) return;
+    if (!doc.getElementById('gnUiModalCss')) {
+      var s = h('style', { id: 'gnUiModalCss' });
+      s.textContent = MODAL_CSS;
+      (doc.head || doc.body).appendChild(s);
+    }
+    if (root.MutationObserver && !watchModals.on) {
+      watchModals.on = true;
+      new root.MutationObserver(scanModals).observe(doc.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['hidden'] });
+    }
+    scanModals();
+  }
+
   root.GNUI = {
     version: VERSION, toast: toast, dialog: dialog, confirm: confirm, prompt: prompt, alert: alert,
-    _pure: { kindOf: kindOf, ttlOf: ttlOf, paragraphs: paragraphs, CSS: CSS, LABEL: LABEL, SVG: SVG, DEFAULT_TTL: DEFAULT_TTL, MIN_ERROR_TTL: MIN_ERROR_TTL, MAX_TOASTS: MAX_TOASTS }
+    _pure: { kindOf: kindOf, ttlOf: ttlOf, paragraphs: paragraphs, CSS: CSS, MODAL_CSS: MODAL_CSS, FOCUSABLE: FOCUSABLE, modalKey: modalKey, modalShown: modalShown, modalHidden: modalHidden, scanModals: scanModals, LABEL: LABEL, SVG: SVG, DEFAULT_TTL: DEFAULT_TTL, MIN_ERROR_TTL: MIN_ERROR_TTL, MAX_TOASTS: MAX_TOASTS }
   };
   // Mismo nombre, misma forma: las llamadas de hoy (window.toast?.(…)) usan los avisos nuevos.
   root.toast = toast;
   if (doc) {
-    if (doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', ensureCss);
-    else ensureCss();
+    if (doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', function () { ensureCss(); watchModals(); });
+    else { ensureCss(); watchModals(); }
   }
 })(typeof window !== 'undefined' ? window : this);

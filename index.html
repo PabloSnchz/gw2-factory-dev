@@ -679,7 +679,7 @@
     <div class="modal__backdrop" data-close="1"></div>
     <div class="modal__dialog" role="document" aria-describedby="keysModalDesc" tabindex="-1">
       <header class="modal__header">
-        <h3 id="keysModalTitle">Gestión de API Keys</h3>
+        <h3 id="keysModalTitle"><img src="assets/icons/Cuentas/155048.png" width="24" height="24" alt="">Gestión de API Keys</h3>
         <button type="button" class="modal__close" aria-label="Cerrar" data-close="1">✕</button>
       </header>
 
@@ -707,9 +707,8 @@
             Limpiar
           </button>
           </div>
-          <p class="muted" style="margin:8px 0 0">
-            Requiere los 7 permisos que usa la app: <code>account</code>, <code>wallet</code>, <code>progression</code>, <code>unlocks</code>, <code>inventories</code>, <code>tradingpost</code> y <code>characters</code>. Marcá los 7 al crearla en <code>account.arena.net/applications</code>; con menos, la API responde 403 y la app muestra ceros en vez de un error. Se usa <code>?access_token=</code> para evitar preflight CORS.
-          </p>
+          <p class="gn-keys-note">La Key necesita estos 7 permisos. Marcalos al crearla en <a href="https://account.arena.net/applications" target="_blank" rel="noopener">account.arena.net/applications</a>; si falta alguno, la Bóveda no la guarda y te dice cuál.</p>
+          <ul class="gn-perms" aria-label="Permisos que necesita la Key"><li><code>account</code></li><li><code>wallet</code></li><li><code>progression</code></li><li><code>unlocks</code></li><li><code>inventories</code></li><li><code>tradingpost</code></li><li><code>characters</code></li></ul>
         </form>
       </div>
     </div>
@@ -1123,26 +1122,20 @@
   <div class="modal__backdrop" data-close="1"></div>
   <div class="modal__dialog" style="max-width:500px;">
     <header class="modal__header">
-      <h3 id="guideModalTitle" style="display:flex;align-items:center;gap:8px;">
+      <h3 id="guideModalTitle">
         <img src="assets/icons/Welcome/102353.png" width="24" height="24" alt="">Guías de usuario
       </h3>
       <button type="button" class="modal__close" aria-label="Cerrar" data-close="1">✕</button>
     </header>
-    <div class="modal__body" style="display:flex;flex-direction:column;gap:16px;">
-      <p class="muted" style="margin:0;">Elegí la guía que mejor se adapte a lo que necesitás:</p>
-      <a href="docs/user-guide.html" target="_blank" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:12px;text-decoration:none;transition:all 0.15s ease;" onmouseover="this.style.borderColor='#5276ff';this.style.boxShadow='0 0 12px rgba(82,118,255,0.15)'" onmouseout="this.style.borderColor='var(--bd-1)';this.style.boxShadow='none'">
-        <img src="assets/icons/Welcome/102367.png" width="32" height="32" alt="" style="flex-shrink:0;">
-        <div>
-          <div style="font-weight:600;color:var(--tx-1);font-size:0.95rem;">Guía básica</div>
-          <div class="muted" style="font-size:0.75rem;">Primeros pasos, cómo empezar, funcionalidades principales</div>
-        </div>
+    <div class="modal__body" style="display:flex;flex-direction:column;gap:12px;">
+      <p style="margin:0;color:var(--tx-2);">Elegí la guía que mejor se adapte a lo que necesitás:</p>
+      <a class="gn-guide" href="docs/user-guide.html" target="_blank" rel="noopener">
+        <img src="assets/icons/Welcome/102367.png" width="32" height="32" alt="">
+        <div><b>Guía básica</b><span>Primeros pasos, cómo empezar, funcionalidades principales</span></div>
       </a>
-      <a href="docs/user-guide-avanzado.html" target="_blank" style="display:flex;align-items:center;gap:14px;padding:16px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:12px;text-decoration:none;transition:all 0.15s ease;" onmouseover="this.style.borderColor='#5276ff';this.style.boxShadow='0 0 12px rgba(82,118,255,0.15)'" onmouseout="this.style.borderColor='var(--bd-1)';this.style.boxShadow='none'">
-        <img src="assets/icons/Welcome/102361.png" width="32" height="32" alt="" style="flex-shrink:0;">
-        <div>
-          <div style="font-weight:600;color:var(--tx-1);font-size:0.95rem;">Guía avanzada</div>
-          <div class="muted" style="font-size:0.75rem;">Qué es, cómo se usa y para qué sirve cada módulo en detalle</div>
-        </div>
+      <a class="gn-guide" href="docs/user-guide-avanzado.html" target="_blank" rel="noopener">
+        <img src="assets/icons/Welcome/102361.png" width="32" height="32" alt="">
+        <div><b>Guía avanzada</b><span>Qué es, cómo se usa y para qué sirve cada módulo en detalle</span></div>
       </a>
     </div>
   </div>
