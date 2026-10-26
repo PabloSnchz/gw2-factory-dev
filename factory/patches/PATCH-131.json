@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-131",
+ "summary": "Docs CTA-2 (BL-070 paso 4): Mis cuentas en pantalla; CTA-1 validado.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "98af02030fc22e901e9be73e9a45be69ed558738",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-26 00:08Z",
+     "text": "Última actualización: 2026-10-26 00:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: CTA-1 HECHO (2026-10-26 00:08Z)",
+     "text": "Último hecho: CTA-2 HECHO (2026-10-26 00:40Z), «Mis cuentas» en pantalla. Pablo validó CTA-1 (00:21Z). js/acc-view.js 1.0.0 (fd9624c, 37,3 KB) toma #accountsPanel en #/account/accounts con dos pestañas. Mis cuentas: una tarjeta por cada Key de la Bóveda, leída en vivo (/v2/tokeninfo, /v2/account y, según los permisos, logros, puntos de maestría, armería legendaria y JcJ; la etiqueta de cada clan de /v2/guild/:id), de a una cuenta para cuidar el límite de la API. Cada tarjeta: el ícono de su tipo con el brillo de su color y el borde en ese color, nombre, fecha de creación y antigüedad, solo las expansiones que tiene con su ícono en color (Visions of Eternity por maestría, con la aclaración), cinco datos con su ícono (logros, legendarias, fractales, McM y JcJ con el ícono de su tramo), la etiqueta de tipo con su color, comandante y clanes. «Sin permiso» o «Sin datos», nunca un 0 falso. Cabecera: cuentas por tipo, puntos de logro sumados (dice de cuántas cuentas), legendarias y Keys completas; mi voz avisa Keys muertas o con permisos de menos; filtros por tipo y búsqueda; «Usar esta» cambia la cuenta activa por el selector de arriba; «Administrar Keys» abre el de siempre. Lo leído se guarda 6 horas (D6, gn:accounts:cards, por huella, nunca la Key) y las definiciones de logros compactas 7 días (gn:accounts:achmeta). La pestaña Llavero muestra el panel de siempre sin cambios hasta CTA-3; las etiquetas farming, llaves, semanal y taxi viven en el archivo cifrado y se suman con el Llavero. PATCH-130 (aplicado, suite verde): js/modules.json (25af03f) con acc-model y acc-view, js/gn-shell.js 1.3.0 (7ba8470) con el ícono de cabecera de Cuentas y su test (907153f). tests/acc-view.test.cjs (32e23a6, 13 tests con humo de DOM y contraste en los 19 themes, 15/15 mutaciones); RUN-076 verde (7 archivos). Antes, CTA-1 HECHO (2026-10-26 00:08Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Validación: CTA-1, el informe de lo verificado (íconos de cada dato, Visions of Eternity que la API no informa y el cálculo real de puntos de logro). Con tu ok sigo con CTA-2, Mis cuentas en pantalla con tus cuentas reales.\n- [BL-070] Info: CTA-0 APROBADA por Pablo (2026-10-25 23:47Z) con sus tres pedidos: ningún dato perdido, tarjetas con íconos y etiquetas con color.\n",
+     "text": "- [BL-070] Validación: CTA-2, Mis cuentas con tus cuentas reales (https://pablosnchz.github.io/gw2-factory-dev/#/account/accounts, Ctrl+F5): las expansiones que tenés en color, el ícono de cada dato, los puntos de logro contra los del juego y «Usar esta». Con tu ok sigo con CTA-3, el Llavero.\n- [BL-070] Info: CTA-0 APROBADA (2026-10-25 23:47Z) y CTA-1 VALIDADO (2026-10-26 00:21Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "0bf792a9de4076347e2283ff6d9013f556023552",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "VoE no está en la API (issue #118): se toma por maestría o por tu marca. Sigue CTA-2.",
+     "text": "VoE no está en la API (issue #118): se toma por maestría o por tu marca. CTA-1 VALIDADO (00:21Z). CTA-2 HECHO (2026-10-26 00:40Z): Mis cuentas en vivo (js/acc-view.js 1.0.0, PATCH-130, gn-shell 1.3.0, 13 tests, RUN-076 verde); el Llavero sigue siendo el de siempre hasta CTA-3. Espera la validación de Pablo."
+    }
+   ]
+  }
+ ]
+}
