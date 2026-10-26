@@ -1,6 +1,6 @@
 # FEAT-018 — El marco de la Bóveda: barra de arriba, ventanas, avisos y pie
 
-- **Estado:** HECHO en DEV (2026-10-26 05:31Z). Espera la validación de Pablo del paso 5 completo.
+- **Estado:** VALIDADO por Pablo (2026-10-26 05:43Z), en DEV. Cierra BL-070.
 - **Fecha:** 2026-10-26 02:44Z (TOP-0 entregada) → 2026-10-26 05:31Z (TOP-6).
 - **Backlog:** BL-070, paso 5 (el marco: barra de arriba, ventanas, avisos y pie).
 - **Propuesta:** `docs/propuestas/propuesta-barra-bl070.html` (031efd9), aprobada con D1 a D8 (2026-10-26 02:54Z).
@@ -29,7 +29,7 @@
 | TOP-3 | Piel y conducta comunes en las 4 ventanas | 04:08Z | 04:14Z | `js/gn-ui.js` 1.1.0, PATCH-149, RUN-098 y 099 |
 | TOP-4 | Retiro de Gist | 04:27Z | 04:45Z | PATCH-151, RUN-100 a 103 |
 | TOP-5 | Barra de arriba nueva | 05:05Z | 05:21Z | `js/gn-topbar.js` 1.0.0, PATCH-153, RUN-104 a 106 |
-| TOP-6 | Pie nuevo, revisión final y esta ficha | 05:31Z | — | `js/gn-topbar.js` 1.1.0, `assets/brand/pablo-bio.svg`, PATCH-155 |
+| TOP-6 | Pie nuevo, revisión final y esta ficha | 05:31Z | 05:43Z | `js/gn-topbar.js` 1.1.0, `assets/brand/pablo-bio.svg`, PATCH-155 |
 
 ## TOP-6 en detalle
 
