@@ -1,0 +1,174 @@
+{
+ "id": "PATCH-183",
+ "summary": "BL-074 BLS-3: el conversor (converter-modal 2.1.0, además tira lo vencido) y los logros de Cuentas (acc-view 1.2.0) pasan a IndexedDB por gn-idb 1.1.0",
+ "files": [
+  {
+   "path": "js/converter-modal.js",
+   "base_sha": "e311da4c9816d77ca61cd612a7ec7d465f2b67be",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.0.0 (2026-10-22)\n *\n * v2.0.0 (BL-056, CAR-2A): el conversor deja de ser un modal de 580 px con\n *         cuatro pestañas y pasa a ser una vista con aire, la que se aprobó\n *         en la propuesta CAR-0:\n *           - izquierda: calculadora en espejo (oro → gemas, gemas → oro), el\n *             precio de 400 gemas en grande, la conveniencia y mi recomendación;\n *           - derecha: tu Trading Post, primero lo que tenés para recoger y\n *             después tus órdenes; «Populares» queda plegado abajo.\n *         La pestaña «Historial» se va: decía «Próximamente» y no se muestra\n *         lo que no existe.\n *         API: mount(host) dibuja la vista donde se le pida (la Cartera la\n *         monta en su pestaña). open() pide esa pestaña a la Cartera y, si no\n *         está, muestra la misma vista dentro de un modal.\n *         Arreglos: el Escape se borraba después del primer cierre; el ícono\n *         155048 no existe; renderSkeletonOfertas() no estaba definida, así\n *         que «Populares» quedaba colgado en «cargando» para siempre.\n *         Estilos: clases con las variables del theme (antes, inline).\n",
+     "text": " * Versión: 2.1.0 (2026-10-26)\n *\n * v2.1.0 (BL-074, BLS-3): el caché de precios (gw2_conv_cache_v3) va a IndexedDB por js/gn-idb.js\n *         si está (si no, sigue en localStorage) y al guardar tira lo vencido: antes crecía sin tope.\n * v2.0.0 (BL-056, CAR-2A): de modal a vista (calculadora en espejo, tu Trading Post, Populares\n *         plegado); mount(host) y open(). Sin la pestaña que decía «Próximamente»; arreglos del\n *         Escape, de un ícono inexistente y de una función sin definir. Estilos con el theme.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '2.0.0';",
+     "text": "  var VERSION = '2.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function convGet() {\n    try { return JSON.parse(localStorage.getItem(LS_CONV) || '{}'); } catch (_) { return {}; }\n  }\n  function convPut(k, v) {\n    try {\n      var m = convGet();\n      m[k] = { v: v, ts: Date.now() };\n      localStorage.setItem(LS_CONV, JSON.stringify(m));\n    } catch (_) {}\n  }\n",
+     "text": "  // BL-074: si GNIdb (js/gn-idb.js) toma la clave, el caché vive en IndexedDB; si no, en localStorage.\n  function convIdb() { var G = root.GNIdb; return G && G.handles && G.handles(LS_CONV) ? G : null; }\n  function convGet() {\n    var G = convIdb(); if (G) return G.get(LS_CONV) || {};\n    try { return JSON.parse(localStorage.getItem(LS_CONV) || '{}'); } catch (_) { return {}; }\n  }\n  function convPut(k, v) {\n    try {\n      var m = convGet(), now = Date.now(), G = convIdb();\n      Object.keys(m).forEach(function (x) { if (!m[x] || !(now - m[x].ts <= CONV_TTL)) delete m[x]; });\n      m[k] = { v: v, ts: now };\n      if (G) G.set(LS_CONV, m); else localStorage.setItem(LS_CONV, JSON.stringify(m));\n    } catch (_) {}\n  }\n"
+    }
+   ]
+  },
+  {
+   "path": "js/gn-idb.js",
+   "base_sha": "e67b34f311dea6ad8c4e62a6e745068ba6a3c915",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0\n",
+     "text": " * Versión: 1.1.0 (2026-10-26) · BLS-3: también el conversor (gw2_conv_cache_v3) y los logros de Cuentas\n *          (gn:accounts:achmeta); ready() para esperar a que termine de abrir.\n *          1.0.0 (2026-10-26)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';",
+     "text": "  var VERSION = '1.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    'commerce_prices:', 'currencies_all:'];",
+     "text": "    'commerce_prices:', 'currencies_all:', 'gw2_conv_cache_v3', 'gn:accounts:achmeta'];"
+    },
+    {
+     "op": "replace",
+     "anchor": "    version: VERSION, init: init, handles: handles,",
+     "text": "    ready: function () { return st.ready || Promise.resolve(false); },\n    version: VERSION, init: init, handles: handles,"
+    }
+   ]
+  },
+  {
+   "path": "js/acc-view.js",
+   "base_sha": "96434e228eeb16ee0408fb6b6235c04dc6f655af",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-26) · CTA-3:",
+     "text": " * Versión: 1.2.0 (2026-10-26) · BL-074 BLS-3: las definiciones de logros (gn:accounts:achmeta) van a IndexedDB\n *          por js/gn-idb.js si está, y espero a que abra antes de leerlas.\n *          1.1.0 (2026-10-26) · CTA-3:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function metaStore() {\n    if (st.meta) return st.meta;\n    var S = storage(), m = S ? S.get(META_KEY) : null;",
+     "text": "  function metaIdb() { var G = root.GNIdb; return G && G.handles && G.handles(META_KEY) ? G : null; }\n  function metaStore() {\n    if (st.meta) return st.meta;\n    var G = metaIdb(), S = storage(), m = G ? G.get(META_KEY) : S ? S.get(META_KEY) : null;"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function ensureMeta(ids) {\n    var store = metaStore(), miss",
+     "text": "  function ensureMeta(ids) {\n    var G = root.GNIdb;\n    return Promise.resolve(G && G.ready ? G.ready() : null).then(function () { return fillMeta(ids); });\n  }\n  function fillMeta(ids) {\n    var store = metaStore(), miss"
+    },
+    {
+     "op": "replace",
+     "anchor": "      var S = storage();\n      if (chunks.length && S) S.set(META_KEY, store);",
+     "text": "      var G = metaIdb(), S = storage();\n      if (chunks.length) { if (G) G.set(META_KEY, store); else if (S) S.set(META_KEY, store); }"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "222e61d87ed2d38f1035bcf205e3a179108b17c2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/converter-modal.js?v=2.0.0",
+     "text": "js/converter-modal.js?v=2.1.0"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/gn-idb.js?v=1.0.0",
+     "text": "js/gn-idb.js?v=1.1.0"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "6e648cc143dafdff00e0869b97c4f739ccaa165e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/acc-view.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/acc-view.js\", \"v\": \"1.2.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-idb.test.cjs",
+   "base_sha": "2422b6e6db3212519642dcc1970940aa763c026d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "'commerce_prices:24', 'currencies_all:es']) {",
+     "text": "'commerce_prices:24', 'currencies_all:es', 'gw2_conv_cache_v3', 'gn:accounts:achmeta']) {"
+    },
+    {
+     "op": "replace",
+     "anchor": "'gn:shv:wallet', 'gn:copia:items_cache_v1']) {",
+     "text": "'gn:shv:wallet', 'gn:copia:items_cache_v1', 'gn:accounts:cards', 'gn:converter:state']) {"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(G.version, '1.0.0');\n  assert.match(SRC, /Versión: 1\\.0\\.0/);",
+     "text": "  assert.equal(G.version, '1.1.0');\n  assert.match(SRC, /Versión: 1\\.1\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('clear() vacía todos los cachés",
+     "text": "test('BLS-3: ready() espera a que abra; los cachés del conversor y de Cuentas se mudan solos', async () => {\n  const G = load();\n  assert.equal(await G.ready(), false, 'antes de init, ready() no cuelga');\n  const ls = fakeLS({ gw2_conv_cache_v3: '{\"a\":{\"v\":1,\"ts\":5}}', 'gn:accounts:achmeta': '{\"t\":1,\"m\":{}}', 'gn:accounts:cards': '{}' });\n  G.init({ indexedDB: fakeIDB(), localStorage: ls });\n  assert.equal(await G.ready(), true);\n  assert.equal(G.stats().hydrated, true);\n  assert.equal(ls.getItem('gw2_conv_cache_v3'), null);\n  assert.equal(ls.getItem('gn:accounts:achmeta'), null);\n  assert.equal(ls.getItem('gn:accounts:cards'), '{}', 'lo leído de cada cuenta se queda');\n  assert.deepEqual(JSON.parse(JSON.stringify(G.get('gw2_conv_cache_v3'))), { a: { v: 1, ts: 5 } });\n});\n\ntest('clear() vacía todos los cachés"
+    }
+   ]
+  },
+  {
+   "path": "tests/acc-view.test.cjs",
+   "base_sha": "62a57a4af2bf65c44e03fde3771f7fc9f6d1954c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.1\\.0/);\n  assert.equal(B.AccView.version, '1.1.0');",
+     "text": "  assert.match(SRC, /Versión: 1\\.2\\.0/);\n  assert.equal(B.AccView.version, '1.2.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man[i].v, '1.1.0');",
+     "text": "  assert.equal(man[i].v, '1.2.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.ok(!o.D.els.cvRoot);\n});\n",
+     "text": "  assert.ok(!o.D.els.cvRoot);\n});\n\ntest('BL-074: con GNIdb las definiciones de logros van a IndexedDB (no al localStorage) y espero a que abra', async () => {\n  const mem = {}, waits = [];\n  const G = { handles: (k) => k === 'gn:accounts:achmeta', get: (k) => (k in mem ? JSON.parse(mem[k]) : null),\n    set: (k, v) => { mem[k] = JSON.stringify(v); return true; }, ready: () => { waits.push(1); return Promise.resolve(true); } };\n  const x = boot({});\n  x.sb.GNIdb = G;\n  await flush();\n  assert.ok(mem['gn:accounts:achmeta'] && !mem['gn:accounts:achmeta'].includes('SECRETA'), 'quedaron en GNIdb, sin la Key');\n  assert.ok(!('gn:accounts:achmeta' in x.store), 'y no en el localStorage');\n  assert.ok(waits.length >= 1, 'esperé a que GNIdb abra');\n  assert.ok(x.store['gn:accounts:cards'], 'lo leído de cada cuenta sigue donde estaba');\n  assert.match(x.D.els.cvRoot.innerHTML, /<small>Logros<\\/small><b>175<\\/b>/);\n  const y = boot({});\n  y.sb.GNIdb = G;\n  await flush();\n  assert.equal(api(y.calls).filter((u) => u.includes('/v2/achievements?')).length, 0, 'las definiciones salen de GNIdb');\n  assert.match(y.D.els.cvRoot.innerHTML, /<small>Logros<\\/small><b>175<\\/b>/);\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/converter-view.test.cjs",
+   "base_sha": "7692e3ba63c44f268ac261417b4ca375de1ea365",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.0.0, el header la declara y la API pública está completa', () => {\n  assert.equal(CM.version, '2.0.0');\n  assert.match(SRC, /Versión: 2\\.0\\.0/);",
+     "text": "test('versión 2.1.0, el header la declara y la API pública está completa', () => {\n  assert.equal(CM.version, '2.1.0');\n  assert.match(SRC, /Versión: 2\\.1\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('la vista usa las variables del theme y respeta el foco y el movimiento reducido', () => {",
+     "text": "// BL-074 BLS-3: el caché de precios (convGet/convPut/convVal) corre aparte, con un localStorage falso.\nfunction convBox(G) {\n  const a = SRC.indexOf('  function convIdb()'), b = SRC.indexOf('  function apiExchange(');\n  const m = new Map(), ls = { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => { m.set(k, String(v)); } };\n  const f = new Function('root', 'localStorage', \"var LS_CONV = 'gw2_conv_cache_v3', CONV_TTL = 1800000;\\n\" + SRC.slice(a, b) +\n    '\\nreturn { convGet: convGet, convPut: convPut, convVal: convVal };');\n  return { c: f({ GNIdb: G }, ls), m };\n}\n\ntest('BL-074: el caché de precios va a GNIdb si la toma; si no, a localStorage; y al guardar tira lo vencido', () => {\n  assert.ok(SRC.indexOf('  function convIdb()') > 0 && SRC.indexOf('  function apiExchange(') > SRC.indexOf('  function convIdb()'));\n  const L = convBox(null);\n  L.m.set('gw2_conv_cache_v3', JSON.stringify({ viejo: { v: 1, ts: Date.now() - 3600000 }, roto: null, nuevo: { v: 2, ts: Date.now() - 1000 } }));\n  L.c.convPut('coins:100', 42);\n  assert.deepEqual(Object.keys(JSON.parse(L.m.get('gw2_conv_cache_v3'))).sort(), ['coins:100', 'nuevo'], 'lo vencido se va');\n  assert.equal(L.c.convVal('coins:100'), 42);\n  assert.equal(L.c.convVal('viejo'), null);\n  const mem = {};\n  const G = { handles: (k) => k === 'gw2_conv_cache_v3', get: (k) => (k in mem ? JSON.parse(mem[k]) : null), set: (k, v) => { mem[k] = JSON.stringify(v); return true; } };\n  const I = convBox(G);\n  I.c.convPut('gems:400', 7);\n  assert.equal(I.m.size, 0, 'con GNIdb no toca localStorage');\n  assert.equal(JSON.parse(mem.gw2_conv_cache_v3)['gems:400'].v, 7);\n  assert.equal(I.c.convVal('gems:400'), 7);\n  const N = convBox({ handles: () => false, get() { throw new Error('no'); }, set() { throw new Error('no'); } });\n  N.c.convPut('x', 1);\n  assert.equal(N.c.convVal('x'), 1, 'si GNIdb no la toma, sigue en localStorage');\n});\n\ntest('la vista usa las variables del theme y respeta el foco y el movimiento reducido', () => {"
+    }
+   ]
+  }
+ ]
+}
