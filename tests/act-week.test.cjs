@@ -193,7 +193,7 @@ function boot(opts) {
     Shiruvana: { voice: (m) => { voices.push(m.text); return { text: m.text }; } },
     navigator: { clipboard: { writeText: (t) => { renders.push('copy:' + t); return Promise.resolve(); } } },
   });
-  sb.ActView = { getSnapshot: () => ({ data: tk ? { hasToken: true, tk, chars: [LYRA] } : { hasToken: false } }), render: () => renders.push('render'), _cat: () => CAT };
+  sb.ActView = { getSnapshot: () => ({ data: tk ? { hasToken: true, tk, chars: opts.chars || [LYRA] } : { hasToken: false } }), render: () => renders.push('render'), _cat: () => CAT };
   return { sb, store, renders, voices };
 }
 const click = (attrs) => ({ target: { getAttribute: (k) => (k in attrs ? attrs[k] : null), parentNode: null } });
@@ -224,8 +224,12 @@ test('humo: marcar y desmarcar por cuenta y semana, sin guardar la Key y sin lee
 });
 
 test('humo: en Semana pide la cartera una vez, pone mi voz en la llave y sin Key no marca nada', async () => {
-  const { sb, voices, renders } = boot({});
-  const A = sb.ActWeek, m = { tab: 'semana', hasToken: true, loaded: true, key: sb.ActModel._pure.weeklyKey([LYRA], Date.now(), 10), clocks: { weekly: 'lunes 07:30' }, lastWeekly: sb.ActModel._pure.lastWeekly(Date.now()) };
+  // Lyra se crea entre el último reset semanal y ahora, así el humo no depende del día en que corre. Con la fecha fija
+  // (2026-10-20) falló desde el reset del lunes 2026-10-26 07:30 UTC: Lyra ya era de la semana anterior.
+  const now = Date.now(), since = Number(box().ActModel._pure.lastWeekly(now));
+  const lyra = Object.assign({}, LYRA, { created: new Date(Math.floor((since + now) / 2)).toISOString() });
+  const { sb, voices, renders } = boot({ chars: [lyra] });
+  const A = sb.ActWeek, m = { tab: 'semana', hasToken: true, loaded: true, key: sb.ActModel._pure.weeklyKey([lyra], now, 10), clocks: { weekly: 'lunes 07:30' }, lastWeekly: sb.ActModel._pure.lastWeekly(Date.now()) };
   A.afterRender(Object.assign({}, m, { tab: 'hoy' }));
   assert.deepEqual(voices.concat(renders), [], 'fuera de Semana no hace nada');
   A.afterRender(m);
