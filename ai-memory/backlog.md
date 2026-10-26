@@ -7,7 +7,6 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## READY
 
-- [BL-071] [MEDIO] Guías de uso al día — `docs/user-guide-avanzado.html` y las guías que abre «Guías» nombran «Strike» 24 veces y «Gist» 8, y nunca mencionan el Llavero, la barra nueva, la Heredad ni Raids unificado. Es contenido, no marco: se acordó hacerlo después de BL-070 (D6 de TOP-0, 2026-10-26 02:54Z). Camino: censo de lo viejo, propuesta de índice y texto primero, después reescritura por módulo. · FEAT-014 a FEAT-018, BL-070
 - [BL-060] [MEDIO] Contraste AA de los 19 themes en el resto de la Bóveda — la revisión de BL-058 midió que el texto tenue (`--tx-3`) no llega a 4.5:1 en 9 themes (Catppuccin, Everforest, Gruvbox, Nord, Notion, One Dark, Solarized Dark, Steam y Tokyo Night), que el acento falla como texto en Discord, Fluent, Solarized Dark, macOS y Notion, y que macOS y Notion usan colores de estado de tema oscuro (`--color-green` #a0ffc8 sobre blanco: 1.1:1). La Bienvenida ya lo corrige dentro de su panel (`welcome-panel.js` 2.2.0) y la Sidebar con la misma guarda (`sidebar-nav.js`, FEAT-009); los demás módulos no. Camino: corregir los tokens en `css/themes/*.css` con un test sobre los 19 (como `tests/welcome-contrast.test.cjs`) y revisar el efecto en cada módulo. · FEAT-008, FEAT-009, LES-013, DEC-010
 
 ## BLOCKED
@@ -19,6 +18,8 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 - [BL-007] [BAJO] Dependencias CDN sin Subresource Integrity — `crypto-js@4.2.0` (jsdelivr) y `xlsx-0.20.2` (sheetjs). · FEAT-000, DEC-017 — Bloqueado por entorno: las CDN responden 403 desde el entorno de la Factory (probado 2026-10-20) y un hash sin verificar rompería la carga de `crypto-js`.
 
 ## IN_PROGRESS
+
+- [BL-071] [MEDIO] Guías de uso al día — `docs/user-guide-avanzado.html` y las guías que abre «Guías» nombran «Strike» 14 veces y «Gist» 5 (medido en RUN-107; en TOP-0 dije 24 y 8), y nunca mencionan el Llavero, la barra nueva, la Heredad ni Raids unificado. Es contenido, no marco: se acordó hacerlo después de BL-070 (D6 de TOP-0, 2026-10-26 02:54Z). Camino: censo de lo viejo, propuesta de índice y texto primero, después reescritura por módulo. GUI-0 propuesta ENTREGADA (2026-10-26 05:59Z, docs/propuestas/propuesta-guias-bl071.html b71dc58; censo RUN-107): también privacy.html y docs/PRIVACIDAD.md (ALTO: Gist, claves inexistentes y un interruptor de Analytics que no existe), así que la privacidad va primero; dos guías en las mismas direcciones y test guardián; plan GUI-1 a GUI-5; espera D1 a D6 de Pablo. · FEAT-014 a FEAT-018, BL-070
 
 ## DONE
 
