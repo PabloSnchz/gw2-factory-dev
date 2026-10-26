@@ -1,0 +1,83 @@
+# BL-073: promoción de BL-070 y BL-071 a producción (gw2-wallet-ligero)
+# Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
+# Base de producción esperada: 0b60eee. No se tocan: js/analytics.js, assets/meta-drops.json (versión PROD), css/, assets/icons,
+# assets/gifanim, README/CHANGELOG, docs internos, tests/, tools/, factory/, ai-memory/, assets/previews (D4).
+# index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006).
+# Totales: 22 JS nuevos + 10 JS modificados + 19 datos + 4 páginas = 55 copias; 12 bajas; 67 movimientos.
+
+# JS nuevos (22)
+C js/acc-model.js
+C js/acc-vault-edit.js
+C js/acc-vault-view.js
+C js/acc-vault.js
+C js/acc-view.js
+C js/act-model.js
+C js/act-psna.js
+C js/act-view.js
+C js/act-week.js
+C js/gn-shell.js
+C js/gn-topbar.js
+C js/gn-ui.js
+C js/home-extra.js
+C js/home-view.js
+C js/inv-chars.js
+C js/inv-model.js
+C js/inv-multi.js
+C js/inv-search.js
+C js/inv-sheet.js
+C js/inv-view.js
+C js/raids-sheet.js
+C js/raids-view.js
+
+# JS modificados (10)
+C js/app.js
+C js/boot.js
+C js/gn-frame.js
+C js/modules.json
+C js/router.js
+C js/settings-manager.js
+C js/shiruvana-places.js
+C js/sidebar-nav.js
+C js/wallet-theme.js
+C js/welcome-panel.js
+
+# Datos (19)
+C assets/data/accounts/catalog.json
+C assets/data/activities/catalog.json
+C assets/data/activities/key-farm.json
+C assets/data/homestead/glyphs.json
+C assets/data/homestead/nodes.json
+C assets/data/inventory/material-categories.json
+C assets/data/inventory/professions.json
+C assets/data/raids/catalog.json
+C assets/data/raids/rewards.json
+C assets/data/raids/mechanics/core.json
+C assets/data/raids/mechanics/eod.json
+C assets/data/raids/mechanics/hot.json
+C assets/data/raids/mechanics/ibs.json
+C assets/data/raids/mechanics/index.json
+C assets/data/raids/mechanics/jw.json
+C assets/data/raids/mechanics/pof.json
+C assets/data/raids/mechanics/soto.json
+C assets/data/inventory-sets.json
+C assets/brand/pablo-bio.svg
+
+# Páginas (4)
+C index.html
+C privacy.html
+C docs/user-guide.html
+C docs/user-guide-avanzado.html
+
+# Bajas (12)
+D js/accounts-panel.js
+D js/activities.js
+D js/activities-theme.js
+D js/characters.js
+D js/characters-theme.js
+D js/fractal-tracker-theme.js
+D js/gist-sync.js
+D js/inventory-dashboard.js
+D js/inventory-hub.js
+D js/strike-tracker.js
+D docs/PRIVACIDAD.md
+D docs/user-guide-avanzado.md
