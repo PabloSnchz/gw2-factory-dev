@@ -43,14 +43,14 @@ function raw(o) {
 
 test('archivo: presupuesto, versión, manifiesto después de acc-model, fuera de index.html, sin emojis ni localStorage', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /Versión: 1\.1\.0/);
-  assert.equal(B.AccView.version, '1.1.0');
+  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.equal(B.AccView.version, '1.2.0');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage/);
   const man = JSON.parse(read('js/modules.json')).modules;
   const i = man.findIndex((m) => m.src === 'js/acc-view.js'), j = man.findIndex((m) => m.src === 'js/acc-model.js');
   assert.ok(j >= 0 && i > j, 'el modelo antes que la vista');
-  assert.equal(man[i].v, '1.1.0');
+  assert.equal(man[i].v, '1.2.0');
   assert.doesNotMatch(read('index.html'), /acc-view\.js|acc-model\.js/);
 });
 
@@ -335,4 +335,23 @@ test('humo: «Usar esta» cambia la cuenta por el selector de arriba; Llavero mu
   await flush();
   assert.equal(o.calls.length, 0, 'fuera de su ruta no pide nada');
   assert.ok(!o.D.els.cvRoot);
+});
+
+test('BL-074: con GNIdb las definiciones de logros van a IndexedDB (no al localStorage) y espero a que abra', async () => {
+  const mem = {}, waits = [];
+  const G = { handles: (k) => k === 'gn:accounts:achmeta', get: (k) => (k in mem ? JSON.parse(mem[k]) : null),
+    set: (k, v) => { mem[k] = JSON.stringify(v); return true; }, ready: () => { waits.push(1); return Promise.resolve(true); } };
+  const x = boot({});
+  x.sb.GNIdb = G;
+  await flush();
+  assert.ok(mem['gn:accounts:achmeta'] && !mem['gn:accounts:achmeta'].includes('SECRETA'), 'quedaron en GNIdb, sin la Key');
+  assert.ok(!('gn:accounts:achmeta' in x.store), 'y no en el localStorage');
+  assert.ok(waits.length >= 1, 'esperé a que GNIdb abra');
+  assert.ok(x.store['gn:accounts:cards'], 'lo leído de cada cuenta sigue donde estaba');
+  assert.match(x.D.els.cvRoot.innerHTML, /<small>Logros<\/small><b>175<\/b>/);
+  const y = boot({});
+  y.sb.GNIdb = G;
+  await flush();
+  assert.equal(api(y.calls).filter((u) => u.includes('/v2/achievements?')).length, 0, 'las definiciones salen de GNIdb');
+  assert.match(y.D.els.cvRoot.innerHTML, /<small>Logros<\/small><b>175<\/b>/);
 });

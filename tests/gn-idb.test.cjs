@@ -75,10 +75,10 @@ function load() {
 test('solo guardo cachés: tus datos (Keys, ajustes, fijados) nunca pasan por acá', async () => {
   const G = load();
   await G.init({ indexedDB: fakeIDB(), localStorage: fakeLS() });
-  for (const k of ['items_cache_v1:es', 'items_cache_armory_v1:es', 'ach_meta_v3:es:21', 'ach_acc:abcd', 'commerce_listings', 'commerce_prices:24', 'currencies_all:es']) {
+  for (const k of ['items_cache_v1:es', 'items_cache_armory_v1:es', 'ach_meta_v3:es:21', 'ach_acc:abcd', 'commerce_listings', 'commerce_prices:24', 'currencies_all:es', 'gw2_conv_cache_v3', 'gn:accounts:achmeta']) {
     assert.equal(G.handles(k), true, k);
   }
-  for (const k of ['gn:account:keys', 'gn:account:selected', 'gn:wallet:pins', 'gn:theme', 'accounts:vault2', 'accounts:lastFile', 'gn:shv:wallet', 'gn:copia:items_cache_v1']) {
+  for (const k of ['gn:account:keys', 'gn:account:selected', 'gn:wallet:pins', 'gn:theme', 'accounts:vault2', 'accounts:lastFile', 'gn:shv:wallet', 'gn:copia:items_cache_v1', 'gn:accounts:cards', 'gn:converter:state']) {
     assert.equal(G.handles(k), false, k);
   }
 });
@@ -165,6 +165,19 @@ test('mientras abre, leo lo viejo de localStorage; lo nuevo le gana a lo guardad
   assert.deepEqual(JSON.parse(JSON.stringify(G.get('ach_acc:z'))), { v: 'nuevo' });
 });
 
+test('BLS-3: ready() espera a que abra; los cachés del conversor y de Cuentas se mudan solos', async () => {
+  const G = load();
+  assert.equal(await G.ready(), false, 'antes de init, ready() no cuelga');
+  const ls = fakeLS({ gw2_conv_cache_v3: '{"a":{"v":1,"ts":5}}', 'gn:accounts:achmeta': '{"t":1,"m":{}}', 'gn:accounts:cards': '{}' });
+  G.init({ indexedDB: fakeIDB(), localStorage: ls });
+  assert.equal(await G.ready(), true);
+  assert.equal(G.stats().hydrated, true);
+  assert.equal(ls.getItem('gw2_conv_cache_v3'), null);
+  assert.equal(ls.getItem('gn:accounts:achmeta'), null);
+  assert.equal(ls.getItem('gn:accounts:cards'), '{}', 'lo leído de cada cuenta se queda');
+  assert.deepEqual(JSON.parse(JSON.stringify(G.get('gw2_conv_cache_v3'))), { a: { v: 1, ts: 5 } });
+});
+
 test('clear() vacía todos los cachés (memoria, IndexedDB y restos en localStorage) y nada más', async () => {
   const idb = fakeIDB();
   const ls = fakeLS({ 'gn:theme': 'gato' });
@@ -188,8 +201,8 @@ test('stats cuenta claves y caracteres; versión y presupuesto de tamaño', asyn
   const s = G.stats();
   assert.equal(s.keys, 1);
   assert.equal(s.chars, 'ach_acc:k'.length + '"ab"'.length);
-  assert.equal(G.version, '1.0.0');
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.equal(G.version, '1.1.0');
+  assert.match(SRC, /Versión: 1\.1\.0/);
   assert.ok(SRC.length < 40 * 1024, 'zona saludable (DEC-035)');
   assert.ok(!/innerHTML|fetch\(/.test(SRC));
 });

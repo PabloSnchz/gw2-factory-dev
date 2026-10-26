@@ -1,7 +1,9 @@
 /*!
  * js/acc-view.js — Cuentas renovado: «Mis cuentas» en vivo y la puerta al Llavero (BL-070, paso 4, CTA-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-26) · CTA-3: la pestaña Llavero la dibuja js/acc-vault-view.js; con el Llavero abierto, las
+ * Versión: 1.2.0 (2026-10-26) · BL-074 BLS-3: las definiciones de logros (gn:accounts:achmeta) van a IndexedDB
+ *          por js/gn-idb.js si está, y espero a que abra antes de leerlas.
+ *          1.1.0 (2026-10-26) · CTA-3: la pestaña Llavero la dibuja js/acc-vault-view.js; con el Llavero abierto, las
  *          tarjetas suman sus etiquetas y aparecen en gris las cuentas sin Key (D7)
  *          1.0.0 (2026-10-26)
  *
@@ -22,7 +24,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var LOG = '[AccView]';
   var PANEL = 'accountsPanel';
   var ROUTE = '#/account/accounts'; // la misma que usa js/router.js
@@ -330,13 +332,18 @@
   function settle(fn) { return Promise.resolve().then(fn).then(function (v) { return { ok: true, v: v }; }, function (e) { return { ok: false, e: e }; }); }
   function val(x) { return x && x.ok ? x.v : null; }
 
+  function metaIdb() { var G = root.GNIdb; return G && G.handles && G.handles(META_KEY) ? G : null; }
   function metaStore() {
     if (st.meta) return st.meta;
-    var S = storage(), m = S ? S.get(META_KEY) : null;
+    var G = metaIdb(), S = storage(), m = G ? G.get(META_KEY) : S ? S.get(META_KEY) : null;
     st.meta = m && m.m && Date.now() - (m.t || 0) < META_TTL ? m : { t: Date.now(), m: {} };
     return st.meta;
   }
   function ensureMeta(ids) {
+    var G = root.GNIdb;
+    return Promise.resolve(G && G.ready ? G.ready() : null).then(function () { return fillMeta(ids); });
+  }
+  function fillMeta(ids) {
     var store = metaStore(), miss = ids.filter(function (id) { return !(id in store.m); });
     var chunks = [];
     for (var i = 0; i < miss.length; i += CHUNK) chunks.push(miss.slice(i, i + CHUNK));
@@ -347,8 +354,8 @@
         });
       });
     }, Promise.resolve()).then(function () {
-      var S = storage();
-      if (chunks.length && S) S.set(META_KEY, store);
+      var G = metaIdb(), S = storage();
+      if (chunks.length) { if (G) G.set(META_KEY, store); else if (S) S.set(META_KEY, store); }
       return expandMeta(store.m);
     });
   }

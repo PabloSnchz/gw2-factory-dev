@@ -22,9 +22,9 @@ function load() {
 const CM = load();
 const P = CM._pure;
 
-test('versión 2.0.0, el header la declara y la API pública está completa', () => {
-  assert.equal(CM.version, '2.0.0');
-  assert.match(SRC, /Versión: 2\.0\.0/);
+test('versión 2.1.0, el header la declara y la API pública está completa', () => {
+  assert.equal(CM.version, '2.1.0');
+  assert.match(SRC, /Versión: 2\.1\.0/);
   for (const k of ['initOnce', 'mount', 'open', 'close']) assert.equal(typeof CM[k], 'function', k);
 });
 
@@ -132,6 +132,35 @@ test('contrato con la Cartera: el botón de app.js llama a open() y open() pide 
   assert.match(open, /showTab\('cambio'\)/);
   assert.ok(open.indexOf("showTab('cambio')") < open.indexOf('ensureModal()'), 'primero la pestaña, después el modal');
   assert.match(SRC, /function mount\(host\)/);
+});
+
+// BL-074 BLS-3: el caché de precios (convGet/convPut/convVal) corre aparte, con un localStorage falso.
+function convBox(G) {
+  const a = SRC.indexOf('  function convIdb()'), b = SRC.indexOf('  function apiExchange(');
+  const m = new Map(), ls = { getItem: (k) => (m.has(k) ? m.get(k) : null), setItem: (k, v) => { m.set(k, String(v)); } };
+  const f = new Function('root', 'localStorage', "var LS_CONV = 'gw2_conv_cache_v3', CONV_TTL = 1800000;\n" + SRC.slice(a, b) +
+    '\nreturn { convGet: convGet, convPut: convPut, convVal: convVal };');
+  return { c: f({ GNIdb: G }, ls), m };
+}
+
+test('BL-074: el caché de precios va a GNIdb si la toma; si no, a localStorage; y al guardar tira lo vencido', () => {
+  assert.ok(SRC.indexOf('  function convIdb()') > 0 && SRC.indexOf('  function apiExchange(') > SRC.indexOf('  function convIdb()'));
+  const L = convBox(null);
+  L.m.set('gw2_conv_cache_v3', JSON.stringify({ viejo: { v: 1, ts: Date.now() - 3600000 }, roto: null, nuevo: { v: 2, ts: Date.now() - 1000 } }));
+  L.c.convPut('coins:100', 42);
+  assert.deepEqual(Object.keys(JSON.parse(L.m.get('gw2_conv_cache_v3'))).sort(), ['coins:100', 'nuevo'], 'lo vencido se va');
+  assert.equal(L.c.convVal('coins:100'), 42);
+  assert.equal(L.c.convVal('viejo'), null);
+  const mem = {};
+  const G = { handles: (k) => k === 'gw2_conv_cache_v3', get: (k) => (k in mem ? JSON.parse(mem[k]) : null), set: (k, v) => { mem[k] = JSON.stringify(v); return true; } };
+  const I = convBox(G);
+  I.c.convPut('gems:400', 7);
+  assert.equal(I.m.size, 0, 'con GNIdb no toca localStorage');
+  assert.equal(JSON.parse(mem.gw2_conv_cache_v3)['gems:400'].v, 7);
+  assert.equal(I.c.convVal('gems:400'), 7);
+  const N = convBox({ handles: () => false, get() { throw new Error('no'); }, set() { throw new Error('no'); } });
+  N.c.convPut('x', 1);
+  assert.equal(N.c.convVal('x'), 1, 'si GNIdb no la toma, sigue en localStorage');
 });
 
 test('la vista usa las variables del theme y respeta el foco y el movimiento reducido', () => {

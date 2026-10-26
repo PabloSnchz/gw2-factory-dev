@@ -32,7 +32,7 @@
     { "src": "js/acc-vault.js", "v": "1.0.0" },
     { "src": "js/acc-vault-view.js", "v": "1.2.1" },
     { "src": "js/acc-vault-edit.js", "v": "1.1.0" },
-    { "src": "js/acc-view.js", "v": "1.1.0" },
+    { "src": "js/acc-view.js", "v": "1.2.0" },
     { "src": "js/shv-core.js", "v": "1.0.0" },
     { "src": "js/shv-wallet.js", "v": "1.0.0" }
   ]

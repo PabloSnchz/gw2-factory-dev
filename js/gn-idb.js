@@ -1,6 +1,8 @@
 /*!
  * js/gn-idb.js — Cachés de la Bóveda en IndexedDB (BL-074 BLS-1)
- * Versión: 1.0.0
+ * Versión: 1.1.0 (2026-10-26) · BLS-3: también el conversor (gw2_conv_cache_v3) y los logros de Cuentas
+ *          (gn:accounts:achmeta); ready() para esperar a que termine de abrir.
+ *          1.0.0 (2026-10-26)
  *
  * localStorage tiene ~5 M de caracteres por sitio y lo comparten tus datos (Keys, ajustes, fijados)
  * con los cachés que se pueden volver a pedir a la API. Este módulo saca los cachés de ahí:
@@ -17,11 +19,11 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var DB_NAME = 'gn-cache', STORE = 'kv', DB_VERSION = 1;
   var DEL = {}; // marca de borrado en la cola de escritura
   var DEFAULT_PREFIXES = ['items_cache_v1', 'items_cache_armory_v1', 'ach_meta_v3:', 'ach_acc', 'commerce_listings',
-    'commerce_prices:', 'currencies_all:'];
+    'commerce_prices:', 'currencies_all:', 'gw2_conv_cache_v3', 'gn:accounts:achmeta'];
 
   var st = {
     prefixes: DEFAULT_PREFIXES.slice(), enabled: false, hydrated: false, db: null, idb: null, ls: null,
@@ -181,6 +183,7 @@
   }
 
   root.GNIdb = {
+    ready: function () { return st.ready || Promise.resolve(false); },
     version: VERSION, init: init, handles: handles, get: get, set: set, has: has, del: del, clear: clear,
     flush: flush, stats: stats, keys: function () { return Array.from(st.mem.keys()); },
     prefixes: function () { return st.prefixes.slice(); }, DEFAULT_PREFIXES: DEFAULT_PREFIXES.slice()
