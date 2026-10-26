@@ -272,10 +272,10 @@ test('lector de pantalla: «Siguiente» y «Preguntame» anuncian el mensaje nue
   assert.equal(focused.el && focused.el.getAttribute('data-ask'), 'safe', 'el foco no se mueve');
 });
 
-test('versión 1.3.1 en el encabezado y en la API; las guías con sus nombres de hoy', () => {
+test('versión 1.4.0 en el encabezado y en la API; las guías con sus nombres de hoy', () => {
   const { P } = setup();
-  assert.match(SRC, /Versión: 1\.3\.1/);
-  assert.equal(P.version, '1.3.1');
+  assert.match(SRC, /Versión: 1\.4\.0/);
+  assert.equal(P.version, '1.4.0');
   const all = Object.values(P.TEXTS).flat().concat(P.TIPS, ...P.ASK.map((a) => a.text || [])).join(' ');
   assert.doesNotMatch(all, /Backup|guía básica|guía avanzada|Gestión de API Keys/i, 'nombres que ya no existen en la Bóveda');
   assert.match(P.TEXTS.guide.join(' '), /«Primeros pasos»[^]*«Guía por módulo»/);

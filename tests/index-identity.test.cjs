@@ -34,12 +34,14 @@ test('el enlace a la bio usa los colores oficiales de Gato Negro, fijos y legibl
 test('index.html carga mi voz después de la bienvenida, con la versión de cada archivo', () => {
   const at = (re) => { const m = HTML.match(re); assert.ok(m, String(re)); return m.index; };
   const welcome = at(/<script defer src="js\/welcome-panel\.js\?v=[\d.]+"><\/script>/);
-  const voice = at(/<script defer src="js\/shiruvana\.js\?v=1\.0\.0"><\/script>/);
+  const voiceTag = HTML.match(/<script defer src="js\/shiruvana\.js\?v=([\d.]+)"><\/script>/);
+  assert.ok(voiceTag, 'falta el script de mi voz');
+  const voice = voiceTag.index;
   const placesTag = HTML.match(/<script defer src="js\/shiruvana-places\.js\?v=(\d+)\.[\d.]+"><\/script>/);
   assert.ok(placesTag, 'falta el script de los lugares');
   assert.ok(welcome < voice && voice < placesTag.index, 'orden: bienvenida, componente, lugares');
   const src = (f) => fs.readFileSync(path.join(ROOT, 'js', f), 'utf8');
-  assert.match(src('shiruvana.js'), /Versión: 1\.0\.0/, 'shiruvana.js: la versión del archivo coincide con la de index.html (caché)');
+  assert.equal((src('shiruvana.js').match(/Versión: ([\d.]+)/) || [])[1], voiceTag[1], 'shiruvana.js: la versión del archivo coincide con la de index.html (caché)');
   // shiruvana-places.js crece por micro-ciclos (1.1.0 en WEL-3) pero index.html (69 KB) no entra en
   // una publicación de la Factory (LES-028): su ?v= queda atrás y se acepta como RSK-020 (Ctrl+F5).
   // Lo que no puede pasar es un cambio de versión mayor sin que index.html lo pida.
