@@ -1,27 +1,33 @@
 'use strict';
-// Sonda temporal TOP-2 v2 (BL-070 paso 5). Solo lee el repo. Se borra después de leer OUT-095.
+// Sonda temporal TOP-2 v3 (BL-070 paso 5). Copia el repo a una carpeta temporal, le aplica
+// PATCH-146 (rechazado) y corre hb104 e idea50 para ver la falla. No escribe en el repo.
+// Se borra después de leer OUT-096.
 const test = require('node:test');
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
+const cp = require('child_process');
 const R = path.join(__dirname, '..');
-const rd = (p) => { try { return fs.readFileSync(path.join(R, p), 'utf8'); } catch (_) { return ''; } };
 
-test('sonda TOP-2 v2: tests que miran confirm/alert/prompt de app.js o settings-manager.js', () => {
-  const t = fs.readdirSync(path.join(R, 'tests')).filter(f => /\.c?js$/.test(f) && !f.startsWith('zz-'));
-  for (const f of t) {
-    const s = rd('tests/' + f);
-    if (!/settings-manager|app\.js/.test(s)) continue;
-    const hits = s.split('\n').map((l, i) => [i + 1, l]).filter(([, l]) => /confirm|alert\s*\(|prompt|restoreSafetySnapshot|clearApiCache|__settingsWired/.test(l));
-    if (!hits.length) continue;
-    console.log('F|' + f + '|' + hits.length);
-    hits.slice(0, 14).forEach(([n, l]) => console.log('  ' + n + '|' + l.trim().slice(0, 150)));
+test('sonda TOP-2 v3: hb104 e idea50 con PATCH-146 aplicado en una copia', () => {
+  const T = fs.mkdtempSync(path.join(os.tmpdir(), 'top2-'));
+  fs.cpSync(R, T, { recursive: true, filter: (s) => !/[\\/]\.git([\\/]|$)/.test(s) && !/zz-probe/.test(s) });
+  const P = JSON.parse(fs.readFileSync(path.join(R, 'factory/patches/PATCH-146.json'), 'utf8'));
+  for (const f of P.files) {
+    const p = path.join(T, f.path);
+    let s = fs.readFileSync(p, 'utf8');
+    for (const o of f.ops) {
+      const n = s.split(o.anchor).length - 1;
+      if (n !== 1) console.log('ANCLA ' + f.path + ' x' + n + ' | ' + o.anchor.slice(0, 80));
+      s = s.replace(o.anchor, o.text);
+    }
+    fs.writeFileSync(p, s);
   }
-  const sm = rd('js/settings-manager.js');
-  console.log('SM-EXPORTS', (sm.match(/window\.\w+\s*=|root\.\w+\s*=|SettingsManager\s*=\s*\{[^}]*\}/g) || []).join(' || ').slice(0, 600));
-  console.log('SM-FUNCS', (sm.match(/(async\s+)?function\s+\w+/g) || []).join(', '));
-  console.log('SM-VERSION', (sm.match(/v\d+\.\d+\.\d+|Versi[oó]n:\s*[\d.]+/g) || []).slice(0, 4).join(' '));
-  const ix = rd('index.html');
-  console.log('IX-SM', (ix.match(/settings-manager\.js\?v=[\d.]+/) || [''])[0], 'IX-APP', (ix.match(/app\.js\?v=[\d.]+/) || [''])[0]);
-  const users = fs.readdirSync(path.join(R, 'js')).filter(f => f.endsWith('.js') && /restoreSafetySnapshot/.test(rd('js/' + f)));
-  console.log('USERS-restoreSafetySnapshot', users.join(','));
+  for (const t of ['tests/hb104-confirm-antes-de-escribir.test.js', 'tests/idea50-boton-cache.test.js']) {
+    const r = cp.spawnSync(process.execPath, [t], { cwd: T, encoding: 'utf8', timeout: 60000 });
+    const out = (r.stdout || '') + '\n' + (r.stderr || '');
+    const lines = out.split('\n').filter((l) => /FAIL|fail|Error|error|assert|expected|actual|✗|not ok|  at /i.test(l));
+    console.log('==== ' + t + ' exit ' + r.status);
+    console.log(lines.slice(0, 40).join('\n').slice(0, 5000));
+  }
 });
