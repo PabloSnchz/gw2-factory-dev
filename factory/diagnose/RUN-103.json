@@ -1,0 +1,1 @@
+{"id":"RUN-103","tests":["tests/gn-ui.test.cjs","tests/size-budget.test.cjs","tests/index-versions.test.cjs","tests/index-identity.test.cjs","tests/legacy-census.test.cjs","tests/hb104-confirm-antes-de-escribir.test.js","tests/idea61-claves-congeladas.test.js","tests/hb75-permisos.test.js","tests/t19c-lectores-legacy.test.js","tests/boot.test.cjs"]}
