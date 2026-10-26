@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-129",
+ "summary": "Docs CTA-1 (BL-070 paso 4): CTA-0 aprobada con los pedidos de Pablo; modelo de Mis cuentas hecho.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "0b1a7c80e178a54fd6a4bfc8e488619307f96e3e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-25 23:22Z",
+     "text": "Última actualización: 2026-10-26 00:08Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Último hecho: CTA-0 propuesta de Cuentas ENTREGADA (2026-10-25 23:22Z)",
+     "text": "Último hecho: CTA-1 HECHO (2026-10-26 00:08Z), el modelo de «Mis cuentas», sin nada en pantalla todavía. Pablo APROBÓ CTA-0 (2026-10-25 23:47Z) con tres pedidos: 1) no perder ningún dato de hoy (contraseñas de la cuenta y de Gmail, usuario, email y contraseña de Twitch, GeForce NOW, notas, etiquetas y API Key): el Llavero los conserva todos, incluso campos que no conozca; 2) tarjetas con íconos: solo las expansiones que la cuenta tiene, en color (nada si no la tiene), e ícono para logros, JcJ, McM y lo demás; 3) mantener las etiquetas, cada una con su color. Lo que medí (RUN-073 y RUN-074, sondas ya borradas): /v2/files no trae íconos de logros, maestría ni comandante; los tomé de las categorías de logros (McM 338457, JcJ 42676, Fractales 602779), del Compendio del comandante (ítem 70314, 64964), del registrador de clanes de /v2/files (102498) y de los íconos de módulo (Logros 155059, Armería 157085); los 9 tramos de rango JcJ con su ícono oficial; /v2/guild/:id da nombre y etiqueta sin Key; la armería tiene 206 legendarias. Visions of Eternity NO aparece en access (gw2-api issue #118, abierto): cuenta como tenida si ganaste maestría de su región (Magic) o si la marcás en el Llavero, y se dice de dónde sale. Maestría queda fuera de la tarjeta: no hay ícono oficial verificable. Puntos de logro: el viejo characters.js sumaba el progreso (current) de los logros completos, no sus puntos; el cálculo nuevo suma los tiers alcanzados, los repetibles hasta su tope (point_cap, que la caché común poda: se pide aparte) y los diarios y mensuales de /v2/account. Publicado: assets/data/accounts/catalog.json (325f406), js/acc-model.js 1.0.0 (9863119, 9,9 KB, sin cargar todavía) y tests/acc-model.test.cjs (4e9a860, 16 tests, 19/19 mutaciones); RUN-075 verde. Antes, CTA-0 propuesta de Cuentas ENTREGADA (2026-10-25 23:22Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-070] Decisión: CTA-0, la propuesta visual de Cuentas (https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-cuentas-bl070.html), con las decisiones D1 a D7. No toco código hasta tu ok.\n- [BL-070] Info: PUL-1 a PUL-4 VALIDADOS por Pablo (22:38Z, 22:55Z y 23:15Z). Pulido transversal completo.\n",
+     "text": "- [BL-070] Validación: CTA-1, el informe de lo verificado (íconos de cada dato, Visions of Eternity que la API no informa y el cálculo real de puntos de logro). Con tu ok sigo con CTA-2, Mis cuentas en pantalla con tus cuentas reales.\n- [BL-070] Info: CTA-0 APROBADA por Pablo (2026-10-25 23:47Z) con sus tres pedidos: ningún dato perdido, tarjetas con íconos y etiquetas con color.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "561aee21fb0218fb9f5c5021e65c49b20ab61f65",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "con D1 a D7. Espera la aprobación de Pablo.",
+     "text": "con D1 a D7. APROBADA por Pablo (2026-10-25 23:47Z) con tres pedidos: no perder ningún dato de hoy (contraseñas, Twitch, GeForce, notas, etiquetas, Key), tarjetas con íconos (solo las expansiones que tenés, en color) y etiquetas con color. CTA-1 HECHO (2026-10-26 00:08Z): catálogo con íconos verificados, js/acc-model.js 1.0.0 y su test (16 tests, 19/19 mutaciones). VoE no está en la API (issue #118): se toma por maestría o por tu marca. Sigue CTA-2."
+    }
+   ]
+  }
+ ]
+}
