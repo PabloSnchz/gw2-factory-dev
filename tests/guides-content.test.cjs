@@ -1,6 +1,6 @@
 // Contenido de las guías (BL-071, D3): las guías no pueden separarse de la app.
-// GUI-2: «Primeros pasos» (docs/user-guide.html). GUI-3: «Guía por módulo» (docs/user-guide-avanzado.html), parte 1;
-// GUI-4 suma la parte 2 y pide los 10 módulos.
+// GUI-2: «Primeros pasos» (docs/user-guide.html). GUI-3 y GUI-4: «Guía por módulo» (docs/user-guide-avanzado.html),
+// con los 10 módulos de la Bienvenida, Keys y Ajustes.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -77,56 +77,69 @@ test('Primeros pasos: estilos accesibles (foco visible, 44 px en el celular)', (
   assert.ok(inline.every((s) => /^--x:#[0-9A-F]{6}$/.test(s)), 'el único estilo en línea es el color del módulo: ' + inline.find((s) => !/^--x:#[0-9A-F]{6}$/.test(s)));
 });
 
+test('Primeros pasos: los 7 permisos son obligatorios y el correo es el de la Bienvenida', () => {
+  assert.match(G, /Tienen que estar los 7: si falta alguno, la Bóveda no guarda la Key y te dice cuál\./);
+  assert.doesNotMatch(G, /igual anda/, 'la puerta de app.js rechaza la Key si falta un permiso');
+  const email = read('js/welcome-panel.js').match(/email: '([^']+)'/)[1];
+  assert.ok(G.includes('<a href="mailto:' + email + '">' + email + '</a>'), 'el correo de la Bienvenida (decisión de Pablo)');
+  assert.doesNotMatch(G, /contacto@/);
+});
+
 // ---------------------------------------------------------------------------------------------
-// GUI-3: «Guía por módulo» (docs/user-guide-avanzado.html). Cada sección es la del módulo real.
+// GUI-3 y GUI-4: «Guía por módulo» (docs/user-guide-avanzado.html). Cada sección es la del módulo real.
 const A = read('docs/user-guide-avanzado.html');
 const JS = fs.readdirSync(path.join(ROOT, 'js')).filter((f) => /\.js$/.test(f)).map((f) => read('js/' + f)).join('\n');
-// Las que ya están escritas. GUI-4 suma el resto y pide los 10.
-const WRITTEN = ['cards', 'meta', 'wv', 'activities', 'homestead'];
+const EXTRA = ['keys', 'settings']; // Keys y Ajustes no son módulos de la barra lateral: van al final
 const sections = () => [...A.matchAll(/<section class="modsec" id="mod-(\w+)"([^>]*)>([\s\S]*?)<\/section>/g)]
   .map((m) => ({ id: m[1], attrs: m[2], body: m[3] }));
 
-test('Guía por módulo: Inicio primero y después los módulos en el orden de la barra lateral', () => {
+test('Guía por módulo: Inicio, los 10 módulos en el orden de la barra lateral, Keys y Ajustes', () => {
   const ids = sections().map((s) => s.id);
-  assert.equal(ids[0], 'home', 'Inicio va primero');
-  const order = MODULES.map((m) => m.id);
-  const mods = ids.slice(1);
-  WRITTEN.forEach((id) => assert.ok(mods.includes(id), 'falta la sección de ' + id));
-  mods.forEach((id) => assert.ok(order.includes(id), id + ' no es un módulo de la Bienvenida'));
-  assert.deepEqual(mods, order.filter((id) => mods.includes(id)), 'mismo orden que la barra lateral');
+  assert.deepEqual(ids, ['home'].concat(MODULES.map((m) => m.id), EXTRA));
   const toc = [...A.matchAll(/<li><a href="#mod-(\w+)">/g)].map((m) => m[1]);
   assert.deepEqual(toc, ids, 'el índice lleva a cada sección');
+  assert.doesNotMatch(A, /próximamente|class="soon"/, 'ya no queda nada por escribir');
 });
 
-test('Guía por módulo: cada sección tiene el nombre, la ruta, el ícono y el color reales', () => {
-  for (const s of sections().slice(1)) {
+test('Guía por módulo: cada módulo tiene el nombre, la ruta, el ícono y el color reales', () => {
+  for (const s of sections().filter((x) => MODULES.some((m) => m.id === x.id))) {
     const m = MODULES.find((x) => x.id === s.id);
     assert.equal(s.attrs, ' style="--x:' + m.color + '"', s.id + ': color');
     assert.ok(s.body.includes('<h2>' + m.name + '</h2>'), s.id + ': nombre');
     assert.ok(s.body.includes('href="../index.html' + m.href + '"'), s.id + ': ruta');
     assert.ok(s.body.includes('<img src="../' + m.icon + '"'), s.id + ': ícono');
     assert.ok(fs.existsSync(path.join(ROOT, m.icon)), m.icon);
+    const tag = m.free ? 'Sin Key' : (m.local ? 'En tu PC' : 'Con Key');
+    assert.ok(s.body.includes('<i class="tag">' + tag + '</i>'), s.id + ': ' + tag);
   }
-  const home = sections()[0];
-  assert.ok(home.body.includes('href="../index.html#/welcome"'), 'Inicio lleva a la Bienvenida');
+  assert.ok(sections()[0].body.includes('href="../index.html#/welcome"'), 'Inicio lleva a la Bienvenida');
 });
 
-test('Guía por módulo: las cuatro preguntas y los permisos de cada módulo son los de SCOPES', () => {
+test('Guía por módulo: las cuatro preguntas y los permisos de cada sección son los de SCOPES', () => {
   for (const s of sections()) {
     ['Para qué sirve', 'Cómo se usa', 'Qué permisos pide', 'Qué guarda en tu navegador']
       .forEach((h) => assert.ok(s.body.includes('<h3>' + h + '</h3>'), s.id + ': ' + h));
     const chips = [...s.body.matchAll(/<ul class="chips">([\s\S]*?)<\/ul>/g)].flatMap((u) => [...u[1].matchAll(/<code>(\w+)<\/code>/g)].map((c) => c[1]));
-    const want = s.id === 'home' ? [] : SCOPES.filter((x) => x.mods.includes(s.id)).map((x) => x.scope);
+    const want = s.id === 'keys' ? SCOPES.map((x) => x.scope)
+      : (s.id === 'home' || s.id === 'settings') ? [] : SCOPES.filter((x) => x.mods.includes(s.id)).map((x) => x.scope);
     assert.deepEqual(chips, want, s.id + ': permisos');
   }
 });
 
-test('Guía por módulo: toda clave que nombra existe en js/ y ninguna es la API Key', () => {
+test('Guía por módulo: toda clave que nombra existe en js/ y la API Key solo aparece en Keys', () => {
   const keys = [...A.matchAll(/<code>((?:gn:|accounts:|gw2_)[a-zA-Z0-9:_.-]*)<\/code>/g)].map((m) => m[1]);
-  assert.ok(keys.length >= 10, 'nombra las claves de cada módulo');
+  assert.ok(keys.length >= 20, 'nombra las claves de cada módulo');
   keys.forEach((k) => assert.ok(JS.includes("'" + k) || JS.includes('"' + k) || JS.includes('`' + k), k + ' no existe en js/'));
-  for (const s of sections()) assert.ok(/<ul class="keys">\s*<li><code>/.test(s.body), s.id + ': dice qué guarda');
-  assert.ok(!keys.includes('gn:account:keys') || /id="mod-keys"/.test(A), 'la Key solo aparece en la sección de Keys');
+  for (const s of sections()) {
+    assert.ok(/<ul class="keys">\s*<li><code>/.test(s.body) || /<p class="none">Nada propio/.test(s.body), s.id + ': dice qué guarda');
+    if (s.id !== 'keys') assert.doesNotMatch(s.body, /<code>(gn:account:keys|gw2_keys)<\/code>/, s.id + ': la Key es de la sección Keys');
+  }
+  const k = sections().find((s) => s.id === 'keys').body;
+  assert.match(k, /<code>gn:account:keys<\/code>.*<strong>sin cifrar<\/strong>/, 'Keys dice que se guardan sin cifrar');
+  assert.match(k, /si falta alguno, no la guarda y te dice cuál/);
+  const a = sections().find((s) => s.id === 'accounts').body;
+  assert.match(a, /<code>accounts:vault2<\/code>.*contraseña no se guarda nunca/, 'el Llavero va cifrado y la contraseña no se guarda');
+  assert.match(sections().find((s) => s.id === 'settings').body, /Lleva tus API Keys sin cifrar/);
 });
 
 test('Guía por módulo: nada de la Bóveda vieja, sin emojis, aviso legal y estilos accesibles', () => {
@@ -145,5 +158,7 @@ test('Guía por módulo: nada de la Bóveda vieja, sin emojis, aviso legal y est
   assert.match(style, /\.toc a \{[^}]*min-height: 44px/);
   const inline = [...A.matchAll(/style="([^"]*)"/g)].map((m) => m[1]);
   assert.ok(inline.every((s) => /^--x:#[0-9A-F]{6}$/.test(s)), 'el único estilo en línea es el color del módulo');
-  (A.match(/<a [^>]*href="https:\/\/[^"]+"[^>]*>/g) || []).forEach((a) => assert.match(a, /target="_blank" rel="noopener"/, a));
+  const ext = A.match(/<a [^>]*href="https:\/\/[^"]+"[^>]*>/g) || [];
+  ext.forEach((x) => assert.match(x, /target="_blank" rel="noopener"/, x));
+  assert.equal((A.match(/\(se abre en otra pestaña\)/g) || []).length, ext.length);
 });

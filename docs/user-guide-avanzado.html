@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Guía por módulo · Bóveda del Gato Negro · sitio de la comunidad de Guild Wars 2 (no oficial)</title>
-  <!-- BL-071 GUI-3: «Guía por módulo». Nombre, ícono, color, ruta y permisos de cada módulo salen de MODULES y SCOPES de
+  <!-- BL-071 GUI-3 y GUI-4: «Guía por módulo». Nombre, ícono, color, ruta y permisos de cada módulo salen de MODULES y SCOPES de
        js/welcome-panel.js; las claves son las reales de js/. Lo vigila tests/guides-content.test.cjs.
        Identidad Gato Negro (DEC-025): favicon oficial y el theme que eligió el jugador. -->
   <link rel="icon" type="image/svg+xml" href="../assets/brand/gato-negro.svg"/>
@@ -44,8 +44,6 @@
     .toc { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 2px 18px; }
     .toc li { margin: 0; }
     .toc a { display: flex; align-items: center; min-height: 44px; }
-    .toc .soon { display: flex; align-items: center; min-height: 44px; opacity: .75; }
-    .toc .soon::after { content: '· próximamente'; margin-left: 6px; font-size: .8rem; }
     .modsec { --x: var(--acc-1, #A896FF); margin: 28px 0; padding: 18px 20px; background: var(--bg-1, #171B26); border: 1px solid var(--bd-1, #2A3142);
       border-top: 3px solid var(--x); border-radius: 14px; scroll-margin-top: 12px; }
     .modhead { display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--bd-1, #2A3142); }
@@ -92,13 +90,13 @@
       <li><a href="#mod-wv">Cámara del Brujo</a></li>
       <li><a href="#mod-activities">Actividades</a></li>
       <li><a href="#mod-homestead">Heredad</a></li>
-      <li class="soon">Raids</li>
-      <li class="soon">Logros</li>
-      <li class="soon">Inventario y Personajes</li>
-      <li class="soon">Armería Legendaria</li>
-      <li class="soon">Cuentas y Llavero</li>
-      <li class="soon">Keys y permisos</li>
-      <li class="soon">Ajustes: tema, copia y caché</li>
+      <li><a href="#mod-raids">Raids</a></li>
+      <li><a href="#mod-achievements">Logros</a></li>
+      <li><a href="#mod-characters">Inventario y Personajes</a></li>
+      <li><a href="#mod-armory">Armería Legendaria</a></li>
+      <li><a href="#mod-accounts">Cuentas</a></li>
+      <li><a href="#mod-keys">Keys y permisos</a></li>
+      <li><a href="#mod-settings">Ajustes: tema, copia y caché</a></li>
     </ul>
   </nav>
 
@@ -160,7 +158,7 @@
       <dt>Hoy en tu cuenta</dt><dd>Con tu Key, la Bóveda te dice cuáles de las 19 metas que informa la API ya hiciste hoy. «¿Por qué 19?» explica por qué no son todas.</dd>
     </dl>
     <h3>Qué permisos pide</h3>
-    <p class="none">Ninguno.</p>
+    <p class="none">Ninguno propio.</p>
     <p>Los horarios andan sin Key. Solo «Hoy en tu cuenta» la usa: si le falta un permiso, te lo dice ahí mismo.</p>
     <h3>Qué guarda en tu navegador</h3>
     <ul class="keys">
@@ -230,6 +228,156 @@
     <ul class="keys">
       <li><code>gn:activities:home:nodes</code> Los nodos que marcaste como recolectados hoy.</li>
       <li><code>gn:homestead:owned</code> Los nodos de Janthir y los contratos que marcaste con «Lo tengo», por cuenta.</li>
+    </ul>
+  </section>
+
+  <section class="modsec" id="mod-raids" style="--x:#F47C7C">
+    <header class="modhead"><span class="plate"><img src="../assets/icons/raids/raid-icon.png" alt="" width="40" height="40"></span>
+      <div><h2>Raids</h2><p>Alas y encuentros de la semana · <a href="../index.html#/account/raids">Abrir</a> · <i class="tag">Con Key</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Saber qué te falta de raids antes del reset semanal, qué te da cada encuentro y cómo se pelea.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>La cabecera</dt><dd>Tu hora, la del servidor y el reset semanal (lunes 07:30 UTC) con su cuenta regresiva. Cuatro indicadores: alas, conocimiento legendario, fragmentos por cobrar y encuentros. Debajo, mi línea si hay algo para hacer.</dd>
+      <dt>Alas</dt><dd>Las 8 alas, con lo que ya hiciste esta semana según la API.</dd>
+      <dt>Encuentros</dt><dd>Los 16 encuentros, que la Bóveda marca con los objetivos del logro semanal. Forjando acero y Nexo de la Eternidad no están en la API: los marcás vos y valen hasta el reset.</dd>
+      <dt>Las tarjetas</dt><dd>Cada encuentro con la miniatura oficial del jefe, lo que da (conocimiento legendario, fragmentos o cristales, y el modo desafío) y la dificultad del 1 al 5.</dd>
+      <dt>La ficha</dt><dd>Tocá cualquier fila. A la izquierda, lo que te llevás esa semana, el cofre con lo garantizado y lo que te puede tocar por rareza, y lo que suma el modo desafío. A la derecha, «Cómo se pelea»: fases, mecánicas que importan, qué cambia en modo desafío y las fuentes. «← Volver a Raids» o Escape te dejan en la misma fila. En el celular son dos pestañas: Recompensas y Cómo se pelea.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <ul class="chips"><li><code>account</code></li><li><code>progression</code></li></ul>
+    <h3>Qué guarda en tu navegador</h3>
+    <ul class="keys">
+      <li><code>gn:raids:marks</code> Los encuentros que marcaste a mano esta semana.</li>
+      <li><code>gn:raids:strike:view</code> La última pestaña que abriste.</li>
+    </ul>
+  </section>
+
+  <section class="modsec" id="mod-achievements" style="--x:#6EA3FF">
+    <header class="modhead"><span class="plate"><img src="../assets/icons/155059.png" alt="" width="40" height="40"></span>
+      <div><h2>Logros</h2><p>Los que tenés cerca de completar · <a href="../index.html#/account/achievements">Abrir</a> · <i class="tag">Con Key</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Encontrar los logros que tenés cerca de terminar, qué te dan y, si son de una legendaria, ir directo a la Armería.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>La cabecera</dt><dd>Cuatro indicadores: tus puntos de logro, cuántos tenés al alcance, cuántos a un paso y cuántos dan recompensa. Mi línea aparece solo si hay algo cerca.</dd>
+      <dt>Casi listos</dt><dd>Una tarjeta por logro con su ícono oficial, lo que te falta en grande, la barra de avance (verde, y dorada desde el 95 %), las recompensas con su ícono y los puntos que da. Filtrás por nombre, qué tan cerca, recompensa y categoría; en el celular, en «Filtros». Cada tarjeta tiene «Wiki ↗».</dd>
+      <dt>Por categoría</dt><dd>Las categorías agrupadas por expansión o modo, en el orden del juego, con «N de M» terminados y cuántos tenés cerca. Buscás por nombre y elegís «Con pendientes» o «Todas». Tocar una categoría abre sus logros en Casi listos.</dd>
+      <dt>Colecciones legendarias</dt><dd>Las colecciones de las legendarias, empezando por la más avanzada. Si lo que da un logro es una legendaria o una pieza de una sola, la tarjeta suma «Ver en la Armería →» y te abre su ficha.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <ul class="chips"><li><code>account</code></li><li><code>progression</code></li></ul>
+    <h3>Qué guarda en tu navegador</h3>
+    <p class="none">Nada propio. Lo que lee de la API queda un rato en la caché, como en toda la Bóveda.</p>
+  </section>
+
+  <section class="modsec" id="mod-characters" style="--x:#7EC3FF">
+    <header class="modhead"><span class="plate"><img src="../assets/icons/Welcome/358409.png" alt="" width="40" height="40"></span>
+      <div><h2>Inventario y Personajes</h2><p>Buscá un objeto en toda la cuenta · <a href="../index.html#/account/characters">Abrir</a> · <i class="tag">Con Key</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Saber qué tenés y dónde, en esta cuenta y en todas: materiales, banco, legendarias, personajes y lo que valen.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>La cabecera</dt><dd>Cuatro indicadores: banco, materiales, armería legendaria y personajes. Si el banco está por llenarse, te aviso.</dd>
+      <dt>Materiales, Banco y Armería legendaria</dt><dd>El depósito de materiales en las 9 categorías del juego, el banco por pestaña de 30 como en el juego y tus legendarias por tipo. Arriba, un filtro por nombre.</dd>
+      <dt>Multicuenta</dt><dd>Lo de valor de cada cuenta, en 3 sets: Alto Valor, Materiales de artesanía (por tier) y Símbolos y demás. Elegís los ítems, ordenás por cualquiera, ocultás cuentas e ítems en cero o las cuentas principales, y ves el total y el valor con el precio de venta del Bazar. Tocar un número te dice dónde está.</dd>
+      <dt>Buscar</dt><dd>Escribís un ítem y te digo cuánto tenés y dónde: depósito, banco y su pestaña, ranuras compartidas y las bolsas de cada personaje. No importan tildes ni mayúsculas.</dd>
+      <dt>Personajes</dt><dd>Una tarjeta por personaje: nivel, profesión y especialización de élite, raza, oficios, tiempo jugado, cumpleaños y «Qué lleva» en las bolsas. Filtrás por profesión o nombre.</dd>
+      <dt>La ficha del ítem</dt><dd>Tocá cualquier ítem: rareza, nivel y descripción, dónde está en tu cuenta, el Bazar (la venta más barata y la compra más alta), lo que paga el mercader, el código para el chat con «Copiar» y la búsqueda en la wiki en español.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <ul class="chips"><li><code>account</code></li><li><code>inventories</code></li><li><code>characters</code></li></ul>
+    <h3>Qué guarda en tu navegador</h3>
+    <ul class="keys">
+      <li><code>gn:inventory:tab</code> La última pestaña que abriste.</li>
+      <li><code>inv_dashboard_active_set</code> En Multicuenta, el set elegido; junto con <code>inv_dashboard_selected_items</code>, <code>inv_dashboard_active_tiers</code>, <code>inv_dashboard_sort</code> e <code>inv_dashboard_hide_zero</code>: los ítems, los tiers, el orden y qué ocultás.</li>
+    </ul>
+  </section>
+
+  <section class="modsec" id="mod-armory" style="--x:#E545CA">
+    <header class="modhead"><span class="plate"><img src="../assets/icons/Cuentas/157085.png" alt="" width="40" height="40"></span>
+      <div><h2>Armería Legendaria</h2><p>Las 206 legendarias, recetas y lo que te falta · <a href="../index.html#/account/legendary-armory">Abrir</a> · <i class="tag">Con Key</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Ver las 206 legendarias del juego, qué lleva cada una y cuánto te falta para hacerla con lo que ya tenés.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>Catálogo y Mi progreso</dt><dd>El catálogo completo de armas, armaduras y accesorios legendarios, y lo que ya tenés desbloqueado.</dd>
+      <dt>La ficha de la legendaria</dt><dd>Se abre a pantalla completa, con «Volver» y Escape. Arriba, su ícono, tipo, expansión y generación, y un resumen: piezas, materiales, completos y unidades que faltan. Abajo, lado a lado, la Receta como árbol (cada pieza dice si es material, se compra o lleva su propia receta) y los Materiales totales con Tengo, Necesito y Falta, leídos de tu banco y tu depósito de materiales.</dd>
+      <dt>Cola de crafteo</dt><dd>Sumá hasta 5 legendarias para juntar lo que te falta de todas.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <ul class="chips"><li><code>account</code></li><li><code>unlocks</code></li><li><code>inventories</code></li></ul>
+    <h3>Qué guarda en tu navegador</h3>
+    <ul class="keys">
+      <li><code>gn:legendary:</code> Las claves que empiezan así guardan tu cola de crafteo.</li>
+    </ul>
+  </section>
+
+  <section class="modsec" id="mod-accounts" style="--x:#8E96A3">
+    <header class="modhead"><span class="plate"><img src="../assets/icons/3601748.png" alt="" width="40" height="40"></span>
+      <div><h2>Cuentas</h2><p>Tus cuentas y Keys, cifradas en tu PC · <a href="../index.html#/account/accounts">Abrir</a> · <i class="tag">En tu PC</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Ver todas tus cuentas de un vistazo y guardar sus datos de acceso en un Llavero cifrado que solo abrís vos.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>Mis cuentas</dt><dd>Una tarjeta por cada cuenta con Key, leída en vivo: las expansiones que tiene (solo esas, en color), antigüedad, comandante, puntos de logro, maestría, legendarias, fractales, McM, JcJ y clanes. Filtrás por tipo o buscás. «Usar esta» la deja activa en toda la Bóveda; «Actualizar» la vuelve a leer y «Administrar Keys» abre Keys.</dd>
+      <dt>Llavero: abrir</dt><dd>Abrís tu archivo cifrado de siempre (o la copia cifrada que quedó en este navegador) con tu contraseña. Todo se ve enmascarado: «Ver» muestra un dato 20 segundos y «Copiar» vacía el portapapeles a los 30. Se cierra solo a los 5 minutos sin uso, o a los 15 si tenés cambios sin guardar.</dd>
+      <dt>Llavero: editar y guardar</dt><dd>«Agregar cuenta», «Editar» y «Borrar» (con confirmación). «Guardar con el cifrado nuevo» pide la contraseña dos veces (mínimo 8), cifra con PBKDF2 de 600.000 iteraciones y AES-256-GCM, comprueba que se abre igual y recién ahí descarga «…-v2.enc». Tu archivo de antes no se toca.</dd>
+      <dt>Llavero: Excel y uno nuevo</dt><dd>«Importar desde Excel» lee la plantilla de siempre y «Descargar plantilla» te da una vacía. «Crear Llavero nuevo» arranca uno de cero. Con el Llavero abierto, Mis cuentas suma sus etiquetas y muestra en gris las cuentas que no tienen Key.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <p class="none">Ninguno propio.</p>
+    <p>Mis cuentas usa lo que permita cada Key: con <code>progression</code> suma logros y maestría, con <code>unlocks</code> e <code>inventories</code> las legendarias. El Llavero no usa la API.</p>
+    <h3>Qué guarda en tu navegador</h3>
+    <ul class="keys">
+      <li><code>gn:accounts:cards</code> Lo leído de cada cuenta, durante 6 horas. Nunca la Key.</li>
+      <li><code>gn:accounts:achmeta</code> Los datos de los logros que hacen falta para sumar los puntos, durante 7 días.</li>
+      <li><code>accounts:vault2</code> La copia del Llavero, cifrada igual que tu archivo. Tu contraseña no se guarda nunca: si la perdés, no hay forma de abrirlo.</li>
+      <li><code>accounts:lastFile</code> La copia del formato viejo, también cifrada. Queda por compatibilidad.</li>
+    </ul>
+  </section>
+
+  <section class="modsec" id="mod-keys">
+    <header class="modhead"><span class="plate"><img src="../assets/brand/gato-negro.svg" alt="" width="40" height="40"></span>
+      <div><h2>Keys y permisos</h2><p>Arriba, en la barra · <i class="tag">En tu navegador</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Darle a la Bóveda permiso para leer tus cuentas y elegir cuál mirás.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>Agregar una Key</dt><dd>Arriba, «Keys» abre «Gestión de API Keys». Ponele un nombre, pegá la Key y «Guardar». La Bóveda la revisa con ArenaNet: tienen que estar los 7 permisos; si falta alguno, no la guarda y te dice cuál.</dd>
+      <dt>Administrarlas</dt><dd>En la misma ventana renombrás, eliminás o copiás cada Key; «Actualizar» vuelve a leer sus permisos y «Limpiar» vacía los campos.</dd>
+      <dt>Cambiar de cuenta</dt><dd>El selector que está al lado de Keys elige la cuenta activa: todos los módulos pasan a mostrarla. En Cuentas, «Usar esta» hace lo mismo.</dd>
+      <dt>Crear la Key</dt><dd>Se crea en <a href="https://account.arena.net/applications" target="_blank" rel="noopener">account.arena.net/applications<span class="visually-hidden"> (se abre en otra pestaña)</span></a>. Los pasos están en <a href="user-guide.html#api-key">Primeros pasos</a>.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <ul class="chips"><li><code>account</code></li><li><code>wallet</code></li><li><code>progression</code></li><li><code>unlocks</code></li><li><code>inventories</code></li><li><code>tradingpost</code></li><li><code>characters</code></li></ul>
+    <p>Los 7, siempre. La tabla de qué deja leer cada uno está en <a href="user-guide.html#api-key">Primeros pasos</a>.</p>
+    <h3>Qué guarda en tu navegador</h3>
+    <ul class="keys">
+      <li><code>gn:account:keys</code> Tus Keys con su nombre y sus permisos, <strong>sin cifrar</strong>: la Bóveda las necesita para leer. Solo viajan a ArenaNet.</li>
+      <li><code>gn:account:selected</code> Cuál es la cuenta activa.</li>
+      <li><code>gw2_keys</code> Una copia con el nombre viejo, por compatibilidad.</li>
+    </ul>
+  </section>
+
+  <section class="modsec" id="mod-settings">
+    <header class="modhead"><span class="plate"><img src="../assets/brand/gato-negro.svg" alt="" width="40" height="40"></span>
+      <div><h2>Ajustes: tema, copia y caché</h2><p>Arriba, en la barra: Ajustes · <i class="tag">En tu navegador</i></p></div></header>
+    <h3>Para qué sirve</h3>
+    <p>Cambiar el aspecto de la Bóveda, llevar tus ajustes a otro navegador y refrescar los datos.</p>
+    <h3>Cómo se usa</h3>
+    <dl class="uso">
+      <dt>Cambiar el tema</dt><dd>Ajustes → «Cambiar el tema». Hay 19, más «Aleatorio» y «Sorprendeme». Estas guías y la página de privacidad usan el que elijas.</dd>
+      <dt>Guardar copia de ajustes</dt><dd>Descarga un archivo <code>gw2-backup-</code> con la fecha, con tus Keys, lo que fijaste y marcaste en la Cámara, la Cartera, Actividades y Metas, y tus preferencias. <strong>Lleva tus API Keys sin cifrar:</strong> guardalo como una contraseña. Inicio te recuerda hacer una copia cada 14 días.</dd>
+      <dt>Restaurar una copia</dt><dd>Elegís el archivo, la Bóveda te pregunta antes de escribir nada y después recarga la página.</dd>
+      <dt>Liberar la caché de la API</dt><dd>Si algo se ve viejo. Te dice cuántas claves borra y cuánto ocupan antes de hacerlo. Tus Keys, marcas y preferencias quedan.</dd>
+    </dl>
+    <h3>Qué permisos pide</h3>
+    <p class="none">Ninguno: no le pide nada a la API.</p>
+    <h3>Qué guarda en tu navegador</h3>
+    <ul class="keys">
+      <li><code>gn:theme</code> El tema que elegiste.</li>
+      <li><code>gn:theme:official</code> Una marca de que ya se aplicó el tema Gato Negro por defecto.</li>
     </ul>
   </section>
 
