@@ -1,7 +1,10 @@
 /*!
  * js/acc-vault-view.js — La pestaña Llavero de Cuentas (BL-070, paso 4, CTA-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-26)
+ * Versión: 1.1.0 (2026-10-26) · CTA-4a: editar, agregar, borrar y guardar con el cifrado nuevo (js/acc-vault-edit.js),
+ *          «Crear Llavero nuevo», la copia nueva del navegador primero (D3) y, con cambios sin guardar, no se
+ *          cierra a los 5 minutos ni al salir de Cuentas: a los 15 sin uso, y el navegador avisa si cerrás
+ *          1.0.0 (2026-10-26) · CTA-3, solo lectura
  *
  * Abre tu archivo cifrado de siempre (o la copia que el panel anterior guardó en este navegador) con
  * js/acc-vault.js y lo muestra sin perder nada, en modo lectura:
@@ -18,10 +21,11 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var ROUTE = '#/account/accounts';
   var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada que guarda js/accounts-panel.js
-  var IDLE = 5 * 60000, REVEAL = 20000, CLIP = 30000;
+  var V2_KEY = 'accounts:vault2';       // la copia con el cifrado nuevo (D3), la escribe js/acc-vault-edit.js
+  var IDLE = 5 * 60000, IDLE_DIRTY = 15 * 60000, REVEAL = 20000, CLIP = 30000;
   var LOCK_ICON = 'assets/icons/Cuentas/733265.png';
 
   function esc(s) {
@@ -33,15 +37,18 @@
   function clock(ms) { var s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
 
   var doc = root.document;
-  var st = { data: null, format: null, name: '', list: [], reveal: {}, timers: {}, last: 0, tick: null, clip: null, fileText: null, fileName: '', err: '', busy: false, q: '', legacy: false };
+  var st = { data: null, format: null, name: '', list: [], reveal: {}, timers: {}, last: 0, tick: null, clip: null, fileText: null, fileName: '', err: '', busy: false, q: '', legacy: false, dirty: false };
 
   function V() { return root.AccVault || null; }
+  function E() { var x = root.AccVaultEdit; return x && typeof x.panelHTML === 'function' ? x : null; }
+  function limit() { return st.dirty ? IDLE_DIRTY : IDLE; }
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
   function now() { return Date.now(); }
   function rerender() { if (root.AccView && typeof root.AccView.render === 'function') root.AccView.render(); }
   function toast(kind, text) { if (typeof root.toast === 'function') root.toast(kind, text, { ttl: 2200 }); }
   function stored() {
-    var S = root.Storage, c = S && typeof S.get === 'function' ? S.get(LEGACY_KEY) : null;
+    var S = root.Storage, ok = S && typeof S.get === 'function', c = ok ? S.get(V2_KEY) : null;
+    if (!(c && typeof c === 'object' && c.data)) c = ok ? S.get(LEGACY_KEY) : null;
     return c && typeof c === 'object' && typeof c.data === 'string' && c.data ? { name: String(c.name || 'archivo guardado'), data: c.data } : null;
   }
   function isOpen() { return !!st.data; }
@@ -56,9 +63,10 @@
     h += '<div class="vk-form"><label class="cv-btn vk-pick"><input type="file" id="vkFile" accept=".enc,.json,.txt" class="vk-file-in">' + (sv && !st.fileText ? 'Elegir otro archivo' : 'Elegir archivo') + '</label>' +
       '<span class="vk-chosen">' + (st.fileText ? esc(st.fileName) : sv ? '' : 'Ningún archivo elegido') + '</span>' +
       '<label class="vk-pass"><span>Contraseña</span><input type="password" id="vkPass" autocomplete="off" spellcheck="false"></label>' +
-      '<button type="button" class="cv-btn vk-go" data-vk="open"' + (st.busy ? ' disabled' : '') + '>' + (st.busy ? 'Abriendo…' : 'Abrir') + '</button></div>';
+      '<button type="button" class="cv-btn vk-go" data-vk="open"' + (st.busy ? ' disabled' : '') + '>' + (st.busy ? 'Abriendo…' : 'Abrir') + '</button>' +
+      (E() ? '<button type="button" class="cv-btn" data-vk="new">Crear Llavero nuevo</button>' : '') + '</div>';
     if (st.err) h += '<p class="cv-warn" role="alert">' + esc(st.err) + '</p>';
-    return h + legacyHTML('¿Todavía no tenés archivo o querés cambiar algo? Hasta el próximo paso se hace con el panel anterior.') + '</section>';
+    return h + legacyHTML(E() ? '¿Todavía no tenés archivo? Creá un Llavero nuevo. Importar desde Excel llega en el próximo paso; mientras, está el panel anterior.' : '¿Todavía no tenés archivo o querés cambiar algo? Hasta el próximo paso se hace con el panel anterior.') + '</section>';
   }
 
   function legacyHTML(text) {
@@ -80,7 +88,7 @@
     var tags = M ? M.tags(e.tags, cat.tags, cat.otherTagColor) : [], t = tags.filter(function (x) { return x.type; })[0];
     var color = t ? t.color : (cat && cat.otherTagColor) || '#8E96A3';
     var h = '<article class="vk-card" style="--tc:' + esc(color) + '" aria-labelledby="vkN-' + e.i + '"><div class="cv-ch"><span class="cv-av"><img src="' + esc(t ? t.icon : LOCK_ICON) + '" alt="" width="34" height="34"></span>' +
-      '<div class="cv-nm"><b id="vkN-' + e.i + '">' + esc(e.name) + '</b>' + (e.accountName ? '<small>' + esc(e.accountName) + '</small>' : '') + '</div></div>';
+      '<div class="cv-nm"><b id="vkN-' + e.i + '">' + esc(e.name) + '</b>' + (e.accountName ? '<small>' + esc(e.accountName) + '</small>' : '') + '</div>' + (E() ? E().cardActions(e.i, e.name) : '') + '</div>';
     if (tags.length) h += '<div class="cv-chips">' + tags.map(function (x) {
       return '<span class="cv-chip cv-tag" style="--cc:' + esc(x.color) + '">' + (x.icon ? '<img src="' + esc(x.icon) + '" alt="" width="16" height="16">' : '<i aria-hidden="true"></i>') + esc(x.name) + '</span>';
     }).join('') + '</div>';
@@ -92,11 +100,13 @@
   function openHTML(cat, M) {
     var q = fold(st.q), shown = st.list.filter(function (e) { return !q || fold(e.name + ' ' + e.accountName + ' ' + e.tags.join(' ')).indexOf(q) >= 0; });
     var h = '<div class="vk-bar"><img src="' + LOCK_ICON + '" alt="" width="22" height="22"><span>Llavero abierto · <b>' + esc(st.name) + '</b> · ' + st.list.length + (st.list.length === 1 ? ' cuenta' : ' cuentas') +
-      ' · se cierra solo en <b id="vkClock">' + clock(IDLE - (now() - st.last)) + '</b></span><button type="button" class="cv-btn" data-vk="lock">Cerrar ya</button></div>';
-    if (st.format === 'legacy') h += '<p class="cv-warn">Este archivo usa el cifrado anterior, que se rompe fácil por fuerza bruta. En el próximo paso vas a poder guardarlo con el cifrado nuevo, en un archivo aparte: este no se toca.</p>';
+      ' · se cierra solo en <b id="vkClock">' + clock(limit() - (now() - st.last)) + '</b></span><button type="button" class="cv-btn" data-vk="lock">Cerrar ya</button></div>';
+    if (st.format === 'legacy') h += '<p class="cv-warn">Este archivo usa el cifrado anterior, que se rompe fácil por fuerza bruta. ' + (E() ? 'Guardalo con «Guardar con el cifrado nuevo»: queda en un archivo aparte (-v2.enc) y este no se toca.' : 'En el próximo paso vas a poder guardarlo con el cifrado nuevo, en un archivo aparte: este no se toca.') + '</p>';
+    var X = E();
+    if (X) { h += X.panelHTML(cat); if (X.busyForm()) return h; }
     h += '<div class="cv-filters"><label class="cv-q"><span class="cv-sr">Buscar en el Llavero</span><input type="search" id="vkQ" placeholder="Buscar en el Llavero" value="' + esc(st.q) + '" autocomplete="off"></label></div>';
     h += shown.length ? '<div class="vk-grid">' + shown.map(function (e) { return cardHTML(e, cat, M); }).join('') + '</div>' : '<p class="cv-note">No hay cuentas con esa búsqueda.</p>';
-    return h + legacyHTML('Para agregar, editar o borrar, hasta el próximo paso, está el panel anterior.') + '<p class="cv-src">Solo lectura. «Ver» oculta el dato de nuevo a los 20 segundos y «Copiar» vacía el portapapeles a los 30. Tu contraseña no se guarda.</p>';
+    return h + legacyHTML(X ? 'El panel anterior sigue a mano hasta el próximo paso.' : 'Para agregar, editar o borrar, hasta el próximo paso, está el panel anterior.') + '<p class="cv-src">' + (X ? 'Lo que cambiás queda en esta pestaña hasta que tocás «Guardar con el cifrado nuevo». ' : 'Solo lectura. ') + '«Ver» oculta el dato de nuevo a los 20 segundos y «Copiar» vacía el portapapeles a los 30. Tu contraseña no se guarda.</p>';
   }
 
   function html(cat, M) {
@@ -136,8 +146,9 @@
   function lock(reason) {
     if (!isOpen()) return false;
     stopTimers();
-    st.data = null; st.list = []; st.reveal = {}; st.format = null; st.q = '';
-    if (reason === 'idle') toast('info', 'Cerré tu Llavero: pasaron 5 minutos sin uso.');
+    st.data = null; st.list = []; st.reveal = {}; st.format = null; st.q = ''; st.dirty = false;
+    if (E()) E().reset();
+    if (reason === 'idle') toast('info', 'Cerré tu Llavero: pasaron ' + (reason === 'idle' && st.idleWas ? 15 : 5) + ' minutos sin uso.');
     else if (reason === 'leave') toast('info', 'Cerré tu Llavero al salir de Cuentas.');
     rerender();
     return true;
@@ -145,8 +156,8 @@
 
   function tickOnce() {
     if (!isOpen()) { stopTimers(); return; }
-    var left = IDLE - (now() - st.last);
-    if (left <= 0) { lock('idle'); return; }
+    var left = limit() - (now() - st.last);
+    if (left <= 0) { st.idleWas = st.dirty; lock('idle'); st.idleWas = false; return; }
     var c = byId('vkClock');
     if (c) c.textContent = clock(left);
   }
@@ -159,8 +170,8 @@
     st.busy = true; st.err = ''; rerender();
     return V().open(text, p).then(function (r) {
       st.busy = false; st.data = r.data; st.format = r.format; st.name = name; st.list = V().entries(r.data);
-      st.fileText = null; st.last = now(); st.reveal = {};
-      if (!st.tick && typeof root.setInterval === 'function') st.tick = root.setInterval(tickOnce, 1000);
+      st.fileText = null; st.last = now(); st.reveal = {}; st.dirty = false;
+      startTick();
       toast('success', 'Llavero abierto: ' + st.list.length + (st.list.length === 1 ? ' cuenta' : ' cuentas'));
       rerender();
     }, function (e) {
@@ -169,6 +180,18 @@
       rerender();
     });
   }
+
+  function startTick() { if (!st.tick && typeof root.setInterval === 'function') st.tick = root.setInterval(tickOnce, 1000); }
+  // Un Llavero vacío, para quien todavía no tiene archivo: se guarda con el cifrado nuevo.
+  function openNew() {
+    st.data = { version: 2, lastUpdated: new Date(now()).toISOString().slice(0, 10), accounts: [] }; st.format = 'new'; st.name = 'llavero';
+    st.list = []; st.reveal = {}; st.q = ''; st.err = ''; st.fileText = null; st.dirty = false; st.last = now();
+    startTick();
+    rerender();
+  }
+  // Lo llama js/acc-vault-edit.js: los datos cambiaron y todavía no se guardaron.
+  function commit(d) { if (!isOpen()) return; st.data = d; st.list = V().entries(d); st.dirty = true; st.last = now(); rerender(); }
+  function saved(d, name) { if (!isOpen()) return; st.data = d; st.list = V().entries(d); st.dirty = false; st.format = 'v2'; st.name = name; st.last = now(); }
 
   function reveal(id) {
     if (st.timers[id]) { root.clearTimeout(st.timers[id]); delete st.timers[id]; }
@@ -198,9 +221,11 @@
 
   function onClick(e) {
     var t = e && e.target, act = attr(t, 'data-vk'), show = attr(t, 'data-vk-show'), cp = attr(t, 'data-vk-copy');
+    if (isOpen() && E() && E().onClick(e)) { st.last = now(); return true; }
     if (!act && !show && !cp) return false;
     st.last = now();
     if (act === 'open') openVault();
+    else if (act === 'new') openNew();
     else if (act === 'lock') { lock('manual'); toast('info', 'Llavero cerrado.'); }
     else if (act === 'legacy') { st.legacy = !st.legacy; rerender(); }
     else if (show) reveal(show);
@@ -209,7 +234,7 @@
   }
   function onInput(e) {
     var t = e && e.target;
-    if (!t || (t.id !== 'vkQ' && t.id !== 'vkPass')) return false;
+    if (!t || !/^vk/.test(String(t.id || ''))) return false;
     st.last = now();
     if (t.id === 'vkQ') { st.q = String(t.value || ''); rerender(); }
     return true;
@@ -218,6 +243,7 @@
     var t = e && e.target;
     if (!t || !t.id || String(t.id).indexOf('vk') !== 0) return false;
     st.last = now();
+    if (E() && E().onKeydown(e)) return true;
     if (t.id === 'vkPass' && e.key === 'Enter') { if (e.preventDefault) e.preventDefault(); openVault(); }
     return true;
   }
@@ -231,7 +257,14 @@
 
   if (root.addEventListener) root.addEventListener('hashchange', function () {
     var h = String((root.location && root.location.hash) || '').split('?')[0];
-    if (h !== ROUTE) lock('leave');
+    if (h === ROUTE || !isOpen()) return;
+    if (st.dirty) { toast('info', 'Dejé tu Llavero abierto: tenés cambios sin guardar.'); return; }
+    lock('leave');
+  });
+  if (root.addEventListener) root.addEventListener('beforeunload', function (e) {
+    if (!st.dirty) return;
+    if (e && e.preventDefault) e.preventDefault();
+    if (e) e.returnValue = '';
   });
 
   var CSS = [
@@ -260,7 +293,8 @@
   root.AccVaultView = {
     version: VERSION, html: html, decorate: decorate, onClick: onClick, onInput: onInput, onKeydown: onKeydown, onChange: onChange,
     isOpen: isOpen, lock: lock, showLegacy: function () { return st.legacy; },
-    _pure: { esc: esc, fold: fold, clock: clock, CSS: CSS, IDLE: IDLE, REVEAL: REVEAL, CLIP: CLIP, LEGACY_KEY: LEGACY_KEY, state: function () { return st; } }
+    data: function () { return st.data; }, name: function () { return st.name; }, isDirty: function () { return st.dirty; }, commit: commit, saved: saved, openNew: openNew,
+    _pure: { esc: esc, fold: fold, clock: clock, CSS: CSS, IDLE: IDLE, IDLE_DIRTY: IDLE_DIRTY, REVEAL: REVEAL, CLIP: CLIP, LEGACY_KEY: LEGACY_KEY, V2_KEY: V2_KEY, state: function () { return st; } }
   };
   if (root.console && root.console.info) root.console.info('[AccVaultView] ready v' + VERSION);
 })(typeof window !== 'undefined' ? window : this);

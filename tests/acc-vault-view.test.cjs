@@ -111,7 +111,7 @@ async function openWith(x, text, pass) {
 
 test('archivo: presupuesto, versión, manifiesto entre acc-vault y acc-view, fuera de index.html, sin storage propio ni emojis', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.match(SRC, /Versión: 1\.1\.0/);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|indexedDB|fetch\(/, 'no guarda ni manda nada');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
