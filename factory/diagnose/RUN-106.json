@@ -1,0 +1,1 @@
+{"id":"RUN-106","tests":["tests/gn-topbar.test.cjs","tests/gn-ui.test.cjs","tests/index-identity.test.cjs","tests/idea50-boton-cache.test.js","tests/acc-view.test.cjs","tests/size-budget.test.cjs","tests/index-versions.test.cjs","tests/boot.test.cjs","tests/theme-selector.test.cjs","tests/hb75-permisos.test.js"]}
