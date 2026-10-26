@@ -1,6 +1,6 @@
 // Contenido de las guías (BL-071, D3): las guías no pueden separarse de la app.
 // GUI-2: «Primeros pasos» (docs/user-guide.html). GUI-3 y GUI-4: «Guía por módulo» (docs/user-guide-avanzado.html),
-// con los 10 módulos de la Bienvenida, Keys y Ajustes.
+// con los 10 módulos de la Bienvenida, Keys y Ajustes. GUI-5: las tres páginas se leen en los 19 themes.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -127,7 +127,7 @@ test('Guía por módulo: las cuatro preguntas y los permisos de cada sección so
 });
 
 test('Guía por módulo: toda clave que nombra existe en js/ y la API Key solo aparece en Keys', () => {
-  const keys = [...A.matchAll(/<code>((?:gn:|accounts:|gw2_)[a-zA-Z0-9:_.-]*)<\/code>/g)].map((m) => m[1]);
+  const keys = [...A.matchAll(/<code>((?:gn:|accounts:|gw2_|wv:season:|inv_dashboard_)[a-zA-Z0-9:_.-]*)<\/code>/g)].map((m) => m[1]);
   assert.ok(keys.length >= 20, 'nombra las claves de cada módulo');
   keys.forEach((k) => assert.ok(JS.includes("'" + k) || JS.includes('"' + k) || JS.includes('`' + k), k + ' no existe en js/'));
   for (const s of sections()) {
@@ -161,4 +161,47 @@ test('Guía por módulo: nada de la Bóveda vieja, sin emojis, aviso legal y est
   const ext = A.match(/<a [^>]*href="https:\/\/[^"]+"[^>]*>/g) || [];
   ext.forEach((x) => assert.match(x, /target="_blank" rel="noopener"/, x));
   assert.equal((A.match(/\(se abre en otra pestaña\)/g) || []).length, ext.length);
+});
+
+// ---------------------------------------------------------------------------------------------
+// GUI-5: las dos guías y la privacidad se leen en los 19 themes (texto 4.5:1, foco 3:1). Usan los tokens del theme
+// tal cual (sin la guarda de la app), así que se miden sobre los tres fondos: página, tarjeta y código.
+test('Guías y privacidad: en los 19 themes el texto llega a 4.5:1 y el foco a 3:1', () => {
+  const TD = path.join(ROOT, 'css', 'themes');
+  const themes = fs.readdirSync(TD).filter((f) => f.endsWith('.css'));
+  assert.equal(themes.length, 19);
+  const rgb = (v) => {
+    v = String(v || '').trim();
+    let m = v.match(/^#([0-9a-f]{3}|[0-9a-f]{6})$/i);
+    if (m) { const h = m[1].length === 3 ? m[1].replace(/./g, (c) => c + c) : m[1]; return [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16)).concat(1); }
+    m = v.match(/^rgba?\(([^)]+)\)$/i);
+    if (m) { const p = m[1].split(',').map((x) => parseFloat(x)); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
+    return null;
+  };
+  const over = (c, bg) => [0, 1, 2].map((i) => c[i] * c[3] + bg[i] * (1 - c[3])).concat(1);
+  const lum = (c) => { const a = c.slice(0, 3).map((x) => { x /= 255; return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }); return 0.2126 * a[0] + 0.7152 * a[1] + 0.0722 * a[2]; };
+  const cr = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  const fails = [];
+  themes.forEach((f) => {
+    const css = fs.readFileSync(path.join(TD, f), 'utf8'), t = {};
+    css.slice(css.indexOf('{') + 1, css.indexOf('}')).replace(/(--[\w-]+)\s*:\s*([^;]+);/g, (_, k, v) => { t[k] = v.trim(); return ''; });
+    ['--bg-0', '--bg-1', '--bg-2', '--tx-1', '--tx-2', '--acc-1'].forEach((k) => assert.ok(rgb(t[k]), f + ': ' + k + ' sin un color que se pueda medir'));
+    const page = over(rgb(t['--bg-0']), [255, 255, 255, 1]);
+    const card = over(rgb(t['--bg-1']), page);
+    const bgs = { 'página': page, tarjeta: card, 'código': over(rgb(t['--bg-2']), card) };
+    ['--tx-1', '--tx-2'].forEach((k) => Object.keys(bgs).forEach((n) => {
+      const r = cr(over(rgb(t[k]), bgs[n]), bgs[n]);
+      if (r < 4.5) fails.push(f + ' ' + k + ' sobre ' + n + ' ' + r.toFixed(2));
+    }));
+    const r = cr(over(rgb(t['--acc-1']), page), page);
+    if (r < 3) fails.push(f + ' foco (--acc-1) ' + r.toFixed(2));
+  });
+  assert.deepEqual(fails, []);
+  for (const f of ['docs/user-guide.html', 'docs/user-guide-avanzado.html', 'privacy.html']) {
+    const s = read(f);
+    assert.match(s, /<meta name="viewport" content="width=device-width, initial-scale=1\.0">/, f + ': se adapta al celular');
+    const style = s.slice(s.indexOf('<style>'), s.indexOf('</style>'));
+    assert.match(style, /@media \(max-width: 600px\)/, f + ': tiene su diseño de celular');
+    assert.match(style, /color: var\(--tx-2/, f + ': el texto sale del theme');
+  }
 });

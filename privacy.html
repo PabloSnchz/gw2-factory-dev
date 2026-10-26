@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Privacidad · Bóveda del Gato Negro · sitio de la comunidad de Guild Wars 2 (no oficial)</title>
-  <!-- BL-071 GUI-1: lo que la Bóveda hace de verdad con tus datos. Las claves que nombra esta página las vigila tests/privacy.test.cjs. -->
+  <!-- BL-071 GUI-1 y GUI-5: lo que la Bóveda hace de verdad con tus datos. Las claves que nombra esta página las vigila tests/privacy.test.cjs. -->
   <link rel="icon" type="image/svg+xml" href="assets/brand/gato-negro.svg"/>
   <link rel="stylesheet" href="css/themes/gato.css?v=1.0.0" id="themeStylesheet">
   <script>
@@ -80,22 +80,26 @@
   <p>Los enlaces a otros sitios (la wiki, los foros, Discord, YouTube…) solo se abren si los tocás.</p>
 
   <h2>Qué guarda la Bóveda en tu navegador</h2>
-  <p>Todo con el prefijo <code>gn:</code>, salvo el Llavero (<code>accounts:</code>). Ninguno sale de tu navegador.</p>
+  <p>Casi todo empieza con <code>gn:</code>. El Llavero usa <code>accounts:</code>, la Cámara del Brujo <code>wv:season:</code> y el Multicuenta <code>inv_dashboard_</code>; tus Keys tienen además una copia con el nombre viejo. Nada de esto sale de tu navegador. Aparte, lo que la Bóveda lee de la API queda un rato guardado para no volver a pedirlo (la caché): se borra con <strong>Ajustes → Liberar la caché de la API</strong>.</p>
   <div class="table"><table>
     <thead><tr><th>Dónde lo usás</th><th>Qué guarda</th><th>Claves</th></tr></thead>
     <tbody>
       <tr><td>Keys</td><td>Tus API Keys, con su nombre y sus permisos, y cuál está activa. <strong>Sin cifrar</strong>: la Bóveda las necesita para funcionar. Por compatibilidad también existe una copia con el nombre viejo.</td><td><code>gn:account:keys</code>, <code>gn:account:selected</code>, <code>gw2_keys</code></td></tr>
       <tr><td>Cuentas: Llavero</td><td>Las contraseñas y los datos de tus cuentas, <strong>cifrados</strong> con tu contraseña (PBKDF2 con 600.000 iteraciones y AES-GCM). La contraseña no se guarda: si la perdés, no hay forma de abrirlo. También puede quedar la copia del formato viejo, igual de cifrada.</td><td><code>accounts:vault2</code>, <code>accounts:lastFile</code></td></tr>
       <tr><td>Cuentas: Mis cuentas</td><td>Lo leído de cada cuenta durante 6 horas y los datos de los logros durante 7 días. Nunca la Key.</td><td><code>gn:accounts:cards</code>, <code>gn:accounts:achmeta</code></td></tr>
-      <tr><td>Cartera</td><td>Divisas fijadas, orden, vista, fotos de saldos y lo elegido en el panel de todas las cuentas y el conversor.</td><td><code>gn:wallet:pins</code>, <code>gn:wallet:snapshots</code>, <code>gn:wallet:state</code>, <code>gn:wallet:dashboard:selected_currencies</code>, <code>gn:converter:state</code></td></tr>
-      <tr><td>Metas y Eventos</td><td>Tus favoritas y lo que marcaste como hecho hoy.</td><td><code>gn:meta:favs</code>, <code>gn:meta:hecho_hoy</code></td></tr>
-      <tr><td>Cámara del Brujo</td><td>La temporada con lo que fijaste y marcaste, la vista de la tienda y la última pestaña.</td><td><code>gn:wv:season</code>, <code>gn:wv:shop:view</code>, <code>gn:wv:last_tab</code></td></tr>
-      <tr><td>Actividades y Heredad</td><td>Lo que marcaste esta semana, las piedras de Leivas, los nodos y gatos que tenés.</td><td><code>gn:activities:week</code>, <code>gn:activities:stones</code>, <code>gn:activities:home:nodes</code>, <code>gn:homestead:owned</code></td></tr>
-      <tr><td>Raids</td><td>Los encuentros que marcaste.</td><td><code>gn:raids:marks</code></td></tr>
-      <tr><td>Logros, Inventario y Armería</td><td>Lo que Logros y la Armería guardan para no volver a pedirlo a la API, y tus preferencias de Inventario (pestaña y objetos elegidos en Multicuenta).</td><td><code>gn:achievements</code>, <code>gn:inventory:tab</code>, <code>gn:inventory:selected_items</code>, <code>gn:legendary:</code></td></tr>
-      <tr><td>Toda la Bóveda</td><td>El tema que elegiste y si ya viste la bienvenida.</td><td><code>gn:theme</code>, <code>gn:global:welcome_seen</code></td></tr>
+      <tr><td>Inicio</td><td>El último módulo que abriste, cuántas veces abriste cada uno, la fecha de tu última copia y si ya viste la bienvenida. Solo nombres de módulo y fechas.</td><td><code>gn:global:welcome</code>, <code>gn:global:welcome_seen</code></td></tr>
+      <tr><td>Cartera</td><td>Las divisas que fijaste, si ocultás las que están en 0 y las columnas y el orden de «Todas las cuentas».</td><td><code>gn:wallet:pins</code>, <code>gn:wallet:hidezero</code>, <code>gn:wallet:dashboard:selected_currencies</code>, <code>gn:wallet:dashboard:sort</code></td></tr>
+      <tr><td>Metas y Eventos</td><td>Las metas que fijaste.</td><td><code>gn:meta:favs</code></td></tr>
+      <tr><td>Cámara del Brujo</td><td>Lo que fijaste y marcaste en la Tienda, solo de la temporada actual, por cuenta: cada cuenta se reconoce por los 4 primeros y los 4 últimos caracteres de su Key, que no alcanzan para usarla. También la vista de la Tienda y la última pestaña.</td><td><code>wv:season:current</code>, <code>wv:season:index</code>, <code>gn:wv:shop:view</code>, <code>gn:wv:last_tab</code></td></tr>
+      <tr><td>Actividades</td><td>La llave y las piedras de Leivas que marcaste esta semana, por cuenta, con una huella que no es la Key.</td><td><code>gn:activities:week</code></td></tr>
+      <tr><td>Heredad</td><td>Los nodos que recolectaste hoy y los nodos de Janthir y contratos que marcaste con «Lo tengo».</td><td><code>gn:activities:home:nodes</code>, <code>gn:homestead:owned</code></td></tr>
+      <tr><td>Raids</td><td>Los encuentros que marcaste a mano esta semana y la última pestaña.</td><td><code>gn:raids:marks</code>, <code>gn:raids:strike:view</code></td></tr>
+      <tr><td>Inventario y Personajes</td><td>La última pestaña y lo que elegiste en Multicuenta: set, ítems, tiers, orden y qué ocultás.</td><td><code>gn:inventory:tab</code>, <code>inv_dashboard_active_set</code>, <code>inv_dashboard_selected_items</code>, <code>inv_dashboard_active_tiers</code>, <code>inv_dashboard_sort</code>, <code>inv_dashboard_hide_zero</code></td></tr>
+      <tr><td>Armería Legendaria</td><td>Tu cola de crafteo.</td><td><code>gn:legendary:</code></td></tr>
+      <tr><td>Toda la Bóveda</td><td>El tema que elegiste.</td><td><code>gn:theme</code>, <code>gn:theme:official</code></td></tr>
     </tbody>
   </table></div>
+  <p>Logros no guarda nada propio: lo que lee de la API va a la caché.</p>
   <p>Si usaste la sincronización con GitHub Gist antes de que se retirara, puede quedar su rastro (<code>gn:github:token</code> y las demás <code>gn:github:</code>). La Bóveda ya no las usa ni las manda a ningún lado; se borran con el último paso de abajo.</p>
 
   <h2>Tus datos, en tus manos</h2>
@@ -109,7 +113,7 @@
   <p>En tu navegador, abrí la configuración del sitio (el candado o el ícono que aparece al lado de la dirección) y elegí <strong>borrar los datos del sitio</strong>. Se borra todo lo de la tabla, incluido el Llavero que quedó en el navegador. Tus archivos del Llavero en tu computadora no se tocan.</p>
 
   <h2>¿Dudas o un error?</h2>
-  <p>Escribinos en <a href="https://discord.gg/ZGNsfsqyKe" target="_blank" rel="noopener">Discord<span class="visually-hidden"> (se abre en otra pestaña)</span></a>, que es donde respondemos primero. También podés abrir un reporte en <a href="https://github.com/PabloSnchz/gw2-wallet-ligero/issues" target="_blank" rel="noopener">GitHub<span class="visually-hidden"> (se abre en otra pestaña)</span></a>.</p>
+  <p>Escribinos en <a href="https://discord.gg/ZGNsfsqyKe" target="_blank" rel="noopener">Discord<span class="visually-hidden"> (se abre en otra pestaña)</span></a>, que es donde respondemos primero. También podés abrir un reporte en <a href="https://github.com/PabloSnchz/gw2-wallet-ligero/issues" target="_blank" rel="noopener">GitHub<span class="visually-hidden"> (se abre en otra pestaña)</span></a>, o escribir a <a href="mailto:pablinnn@gmail.com">pablinnn@gmail.com</a>.</p>
 
   <footer>
     <p>Sitio de la comunidad, no oficial: no está afiliado a ArenaNet ni a NCSOFT. Las imágenes y los datos del juego son de sus dueños y se leen de la API pública.</p>
