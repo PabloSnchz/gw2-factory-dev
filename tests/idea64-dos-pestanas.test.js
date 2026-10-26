@@ -488,7 +488,7 @@ section('6. cuantos escritores tiene la clave de la lista de cuentas');
 {
   const Writers = [
     ['js/app.js', 'KeyManager.save()'],
-    ['js/accounts-panel.js', 'syncAccountTagsToKeys()'],
+    // BL-070 CTA-5: js/accounts-panel.js (syncAccountTagsToKeys) se retiró.
     ['js/settings-manager.js', 'importApiKeys()'],
   ];
   for (const [f, quien] of Writers) {
@@ -538,37 +538,15 @@ section('6. cuantos escritores tiene la clave de la lista de cuentas');
    * archivos de `js/` con ese caso. Ver el docblock de `cuerpoSinComentarios`
    * y la ALERT-91.
    */
-  const ap = fs.readFileSync(path.join(ROOT, 'js/accounts-panel.js'), 'utf8');
-  const iSync = ap.indexOf('function syncAccountTagsToKeys');
-  const cuerpoRAW = iSync >= 0 ? cuerpoDeMetodo(ap, iSync) : '';
-  const cuerpoSync = cuerpoSinComentarios(cuerpoRAW);
-
-  // Las DOS guardas del helper, y van PRIMERO y sobre el texto CRUDO, porque
-  // lo que vigilan es al assert de abajo: sin ellas un punto ciego del stripper
-  // no pone rojo nada, solo hace que el assert de abajo deje de servir. Y el
-  // orden importa: ceguera primero, porque un signo correcto sobre un texto
-  // que matchea su propia documentacion sigue mintiendo.
-  const peligroso = lineasConSlashesEnLiteral(cuerpoRAW);
-  ok(peligroso === 0,
-     'la region vigilada no tiene `//` dentro de un literal de una linea con codigo despues: aca el stripper es exacto',
-     peligroso + ' linea(s) donde el stripper borraria CODIGO REAL: el assert negativo de abajo pasaria con el bug puesto');
-  ok(llavesCrudasIgualesAStrippeadas(cuerpoRAW, cuerpoSync),
-     'cuerpoDeMetodo no esta contando llaves a traves de la prosa: los conteos crudo y strippeado coinciden',
-     'hay una llave dentro de un comentario: el extractor puede comerse la funcion siguiente y el assert de abajo miraria otra funcion');
-
-  ok(cuerpoSync.length > 0,
-     'se encontro el cuerpo de syncAccountTagsToKeys() para poder acotar el assert',
-     'el helper no devolvio nada: el assert de abajo no estaria probando nada');
-  ok(!/localStorage\.getItem\(\s*'gw2_keys'/.test(cuerpoSync),
-     'syncAccountTagsToKeys() NO lee la legacy a pelo: el LECTOR CRUDO esta prohibido (Idea 61 §6)',
-     'vuelve a leer la legacy por localStorage: es el LECTOR CRUDO, el unico que se saltaria el espejo');
-
-  // Y la mitad de la Idea 64 que el fix habilita: escribe por la API, que
-  // escribe la gn: Y su legacy. Sin esto, el "arreglo" del LECTOR CRUDO
-  // dejaria la gn: con la foto del primer arranque, que es el bug de la 61.
-  ok(/Storage\.set\(\s*Storage\.STORAGE_KEYS\.ACCOUNT_KEYS/.test(cuerpoSync),
-     'syncAccountTagsToKeys() ESCRIBE por Storage (que espeja gn: <- legacy)',
-     'escribe por localStorage: la gn: se queda con la foto del primer arranque (Idea 61)');
+  // BL-070 CTA-5: js/accounts-panel.js se retiró con syncAccountTagsToKeys(); los asserts de esta
+  // región se fueron con él. El invariante sigue: Cuentas renovada (acc-*.js) no lee la legacy a pelo
+  // ni escribe ACCOUNT_KEYS.
+  for (const f of ['js/acc-view.js', 'js/acc-vault-view.js', 'js/acc-vault-edit.js']) {
+    const c = cuerpoSinComentarios(fs.readFileSync(path.join(ROOT, f), 'utf8'));
+    ok(!/localStorage\.getItem\(\s*'gw2_keys'/.test(c) && !/Storage\.set\(\s*Storage\.STORAGE_KEYS\.ACCOUNT_KEYS/.test(c),
+       f + ' no lee la legacy a pelo ni escribe ACCOUNT_KEYS',
+       f + ' toca la lista de cuentas por afuera de KeyManager');
+  }
 }
 
 console.log('\n' + pass + ' pass / ' + fail + ' FAIL');

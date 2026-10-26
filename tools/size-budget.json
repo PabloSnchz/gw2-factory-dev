@@ -5,10 +5,10 @@
   "limite": 49152,
   "holgura": 1024,
   "congelados": {
-    "index.html": { "base": 69606, "techo": 54923, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
+    "index.html": { "base": 69606, "techo": 54909, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
     "js/api-gw2.js": { "base": 132261, "techo": 132261 },
     "js/raid-tracker.js": { "base": 100052, "techo": 100052 },
-    "js/router.js": { "base": 90495, "techo": 63255 },
+    "js/router.js": { "base": 90495, "techo": 63097 },
     "js/accounts-panel.js": { "base": 67648, "techo": 67648 },
     "js/app.js": { "base": 66869, "techo": 66869 },
     "css/main.css": { "base": 64637, "techo": 64637 },

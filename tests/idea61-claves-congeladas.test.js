@@ -212,7 +212,6 @@ section('5. 49D — el barrido de huerfanas no puede borrar gw2_keys');
 
 {
   const appSrc = fs.readFileSync(path.join(JS, 'app.js'), 'utf8');
-  const panelSrc = fs.readFileSync(path.join(JS, 'accounts-panel.js'), 'utf8');
   const storageSrc = fs.readFileSync(path.join(JS, 'storage.js'), 'utf8');
 
   // El PO propuso dos caminos para el Tramo 1: (a) que la copia se actualice
@@ -228,8 +227,7 @@ section('5. 49D — el barrido de huerfanas no puede borrar gw2_keys');
   // escritor sea el que la app usa.
   ok(!/const\s+LS_KEYS\s*=\s*'gw2_keys'/.test(appSrc),
      'app.js ya no declara la legacy: escribe por Storage (STORAGE_KEYS.ACCOUNT_KEYS)');
-  ok(!/localStorage\.setItem\(\s*'gw2_keys'/.test(panelSrc),
-     'accounts-panel.js ya no escribe la legacy a pelo: escribe por Storage');
+  // BL-070 CTA-5: accounts-panel.js se retiró; ya no hay un segundo módulo que vigilar acá.
   ok(/'gn:account:keys':\s*'gw2_keys'/.test(storageSrc),
      'storage.js declara el par espejo: gn:account:keys <-> gw2_keys');
 
@@ -254,7 +252,8 @@ section('5. 49D — el barrido de huerfanas no puede borrar gw2_keys');
   const sinComentarios = c => c.replace(/\/\*[\s\S]*?\*\//g, ' ')
                                  .replace(/\/\/[^\n]*/g, ' ');
   // BL-070 INV-7b: inventory-dashboard.js se retiró (su lector de gw2_keys se fue con él).
-  const lectores = ['app.js', 'accounts-panel.js',
+  // BL-070 CTA-5: accounts-panel.js se retiró (su único match era un comentario).
+  const lectores = ['app.js',
                     'wv-objectives-dashboard.js', 'wv-purchase-detail.js',
                     'wv-shop-ui.js'];
   const RE_LECTOR = /getItem\(\s*(LS_KEYS|'gw2_keys')/;

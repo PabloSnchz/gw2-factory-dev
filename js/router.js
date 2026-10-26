@@ -1234,9 +1234,9 @@
           try {
             showPanel('accountsPanel');
             if (typeof Analytics !== 'undefined') Analytics.viewModule('accounts');
-            window.Accounts?.activate?.();
+            // BL-070 CTA-5: Cuentas es js/acc-view.js (por js/modules.json) y se dibuja sola al ver su ruta.
           } catch (e) {
-            console.warn('[router] Accounts.activate error', e);
+            console.warn('[router] accounts show error', e);
           } finally {
             updateSidebarFor('accounts');
             setActiveNav(h);
@@ -1308,14 +1308,7 @@
       } else if (h === '#/account/characters') {
         // BL-070 INV-7: la vista nueva escucha gn:tokenchange y relee sola.
       } else if (h === '#/account/accounts') {
-        var pAccounts = document.getElementById('accountsPanel');
-        if (pAccounts && !pAccounts.hasAttribute('hidden')) {
-          try {
-            window.Accounts?.activate?.();
-          } catch (e) {
-            console.warn('[router] Accounts.activate error', e);
-          }
-        }
+        // BL-070 CTA-5: js/acc-view.js escucha gn:tokenchange y relee sola.
       } else if (h === '#/welcome') {
         var pWelcome = document.getElementById('welcomePanel');
         if (pWelcome && !pWelcome.hasAttribute('hidden')) {

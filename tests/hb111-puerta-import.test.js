@@ -203,7 +203,8 @@ console.log('\n=== 7. KeyManager ausente: degrada, no pierde el restore ===');
 
 console.log('\n=== 8. CENSO DE ESCRITORES de ACCOUNT_KEYS (lo que pidio el Reviewer) ===');
 {
-  const ALVOS = ['js/app.js', 'js/accounts-panel.js', 'js/settings-manager.js', 'js/wallet-dashboard.js'];
+  // BL-070 CTA-5: js/accounts-panel.js se retiró; el Llavero nuevo no escribe ACCOUNT_KEYS.
+  const ALVOS = ['js/app.js', 'js/settings-manager.js', 'js/wallet-dashboard.js', 'js/acc-view.js', 'js/acc-vault-view.js', 'js/acc-vault-edit.js'];
   // Escrituras REALES: `Storage.set(...ACCOUNT_KEYS`. Un `Storage.get` NO cuenta.
   const escritores = [];
   for (const f of ALVOS) {
@@ -222,15 +223,14 @@ console.log('\n=== 8. CENSO DE ESCRITORES de ACCOUNT_KEYS (lo que pidio el Revie
   // ese caso no hay puerta posible. Contarlo sin decirlo deja el assert en un
   // numero que no significa nada.
   chk('ningun archivo NUEVO escribe ACCOUNT_KEYS a pelo (el 4o escritor que pidio el Reviewer)',
-      escritores.every(e => /app\.js|accounts-panel\.js|settings-manager\.js/.test(e)),
+      escritores.every(e => /app\.js|settings-manager\.js/.test(e)),
       escritores.join(', '));
 
   // El por que de cada uno, para que el numero sea defendible y no decorativo.
   chk('app.js escribe a TRAVES de KeyManager.save (es la puerta, no una puerta de atras)',
       /save\(mutate\)/.test(rd('js/app.js')) && /this\.save\(/.test(rd('js/app.js')));
-  chk('accounts-panel.js solo muta `tag` de keys ya presentes (no agrega ni quita cuentas)',
-      /\.tag\s*=\s*tipo/.test(sinComent(rd('js/accounts-panel.js'))) &&
-      !/keys\.push|keys\.splice|keys\s*=\s*\[/.test(sinComent(rd('js/accounts-panel.js'))));
+  chk('Cuentas renovada (acc-*.js) no escribe ACCOUNT_KEYS: solo la lee',
+      ['js/acc-view.js', 'js/acc-vault-view.js', 'js/acc-vault-edit.js'].every(f => !/Storage\.set\s*\(\s*Storage\.STORAGE_KEYS\.ACCOUNT_KEYS/.test(sinComent(rd(f)))));
 
   // Y la asercion que de verdad importa: la escritura a pelo de settings-manager
   // SOLO es alcanzable cuando KeyManager no existe.

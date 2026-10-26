@@ -118,7 +118,7 @@ test('archivo: presupuesto, versión, manifiesto entre acc-vault y acc-view, fue
   const a = man.indexOf('js/acc-vault.js'), b = man.indexOf('js/acc-vault-view.js'), c = man.indexOf('js/acc-view.js');
   assert.ok(a >= 0 && a < b && b < c, 'acc-vault, después la pestaña, después acc-view');
   assert.doesNotMatch(read('index.html'), /acc-vault/);
-  assert.equal(read('js/accounts-panel.js').includes("'accounts:lastFile'"), true, 'la copia que lee es la del panel anterior');
+  assert.doesNotMatch(read('index.html'), /accounts-panel\.js/, 'CTA-5: el panel viejo ya no se carga; su copia cifrada (accounts:lastFile) se sigue leyendo');
 });
 
 test('tiempos D4: «Ver» 20 s, portapapeles 30 s, cierre a los 5 minutos', () => {

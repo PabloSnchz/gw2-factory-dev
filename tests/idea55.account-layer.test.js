@@ -8,6 +8,8 @@
  *   characters.js    loadAccountData()   -> necesita wvw_rank
  *   achievements.js  fetchAccountAP()     -> necesita daily_ap / monthly_ap
  *   accounts-panel.js enrichWithGW2API()  -> necesita name, slots, AP...
+ *   (BL-070: characters.js se retiró en INV-7b y accounts-panel.js en CTA-5, con su asistente;
+ *    queda achievements.js y el wrapper de la capa)
  *
  * El mismo payload ya lo piden por la capa wallet-dashboard.js:445,
  * wv-purchase-detail.js:1025/1118 e inventory-dashboard.js:333. O sea: la app
@@ -42,7 +44,6 @@ function read(f) { return fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'); }
 
 // BL-070 INV-7b: characters.js se retiró; su resumen de cuenta vuelve en el paso Cuentas.
 const achs  = read('achievements.js');
-const panel = read('accounts-panel.js');
 const api   = read('api-gw2.js');
 
 // --- 1. Ningun fetch crudo de /v2/account sobrevive ------------------------
@@ -53,7 +54,7 @@ console.log('\n[1] /v2/account ya no se baja con fetch crudo en los 3 modulos');
 // a mano con access_token pegado.
 const RAW = /api\.guildwars2\.com\/v2\/account\?access_token=/g;
 
-for (const [name, src] of [['achievements.js', achs], ['accounts-panel.js', panel]]) {
+for (const [name, src] of [['achievements.js', achs]]) {
   const hits = (src.match(RAW) || []).length;
   ok(hits === 0, name + ': 0 fetch crudo(s) de /v2/account  <-- el fix (encontrados: ' + hits + ')');
 }
@@ -64,16 +65,12 @@ for (const [name, src] of [['achievements.js', achs], ['accounts-panel.js', pane
 // proposito, y su regex tiene que distinguir uno del otro.
 ok(!/api\.guildwars2\.com\/v2\/account\?/.test(achs),
    'achievements.js: ya no arma ninguna URL de /v2/account a mano');
-ok(!/api\.guildwars2\.com\/v2\/account\?access_token=/.test(panel),
-   'accounts-panel.js: /v2/account ya no se pide crudo (home/nodes queda crudo a proposito)');
 
 // --- 2. Los 3 usan el wrapper ---------------------------------------------
 console.log('\n[2] los 3 sitios usan root.GW2Api.getAccountInfo');
 
 ok(/root\.GW2Api\.getAccountInfo\(token,\s*\{\s*nocache:\s*true\s*\}\)/.test(achs),
    'achievements.js: fetchAccountAP() usa getAccountInfo con nocache:true');
-ok(/root\.GW2Api\.getAccountInfo\(apiKey\)/.test(panel),
-   'accounts-panel.js: enrichWithGW2API() usa getAccountInfo(apiKey)');
 
 // El `nocache:true` de achievements NO es opcional: antes el fetch crudo
 // llevaba `cache:'no-store'`, o sea que el AP se releia SIEMPRE. Migrar sin
@@ -124,35 +121,14 @@ ok(/daily_ap/.test(aBlock) && /monthly_ap/.test(aBlock),
 ok(/throw new Error\('account HTTP/.test(achs) === false,
    'achievements.js: el throw manual de `account HTTP` ya no hace falta (el wrapper rechaza)');
 
-// accounts-panel.js: el try/catch por cuenta ya existia y es lo que preserva
-// el "una cuenta rota no corta el enriquecimiento de las otras".
-const pStart = panel.indexOf('async function enrichWithGW2API');
-ok(pStart !== -1, 'accounts-panel.js: enrichWithGW2API sigue existiendo');
-const pBlock = pStart === -1 ? '' : panel.slice(pStart, pStart + 2200);
-ok(/try\s*\{[\s\S]*getAccountInfo\(apiKey\)[\s\S]*catch\s*\(e\)\s*\{\s*\}/.test(pBlock),
-   'accounts-panel.js: la llamada sigue dentro del try/catch por cuenta');
-
-// Los 7 campos que el panel lee tienen que seguir leyendose igual: si el
-// wrapper devolviera otra forma, el panel guardaria `undefined` en el .json
-// que se descarga y nadie lo veria hasta abrir el archivo.
-for (const f of ['info.name', 'info.created', 'info.achievement_points', 'info.slots',
-                 'info.bag_slots', 'info.bank_slots', 'info.material_storage']) {
-  ok(pBlock.indexOf(f) !== -1, 'accounts-panel.js: sigue leyendo ' + f);
-}
+// accounts-panel.js (enrichWithGW2API y su asistente) se retiró en BL-070 CTA-5: el Llavero nuevo no
+// descarga ningún .json y Mis cuentas lee la cuenta en vivo (tests/acc-view.test.cjs).
 
 // --- 5. Lo que este commit NO toca, fijado --------------------------------
 console.log('\n[5] regresiones que el test impide');
 
-// /v2/account/home/nodes NO tiene wrapper en la capa. Migrarlo seria inventar
-// un endpoint nuevo; queda crudo y anotado.
-ok(/v2\/account\/home\/nodes\?access_token=/.test(panel),
-   'accounts-panel.js: home/nodes sigue crudo (no tiene wrapper; decision de alcance)');
-
-
-// Un modulo no debe meter su propio estrangulador. El defecto de la Idea 46
-// fue un MAX local de 3 DENTRO del pool global = 9 requests reales.
-ok(!/Promise\.all\(\s*state\.accounts\.map/.test(panel),
-   'accounts-panel.js: no se metio un pool local sobre el pool global');
+// Las dos regresiones de esta seccion eran de accounts-panel.js (home/nodes crudo y pool local):
+// se fueron con el archivo en BL-070 CTA-5.
 
 // --- 6. Evaluacion real: el wrapper deduplica de verdad -------------------
 console.log('\n[6] el wrapper evaluado deduplica 2 llamadas concurrentes (no solo el texto)');
