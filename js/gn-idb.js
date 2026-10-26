@@ -1,6 +1,9 @@
 /*!
  * js/gn-idb.js — Cachés de la Bóveda en IndexedDB (BL-074 BLS-1)
- * Versión: 1.1.0 (2026-10-26) · BLS-3: también el conversor (gw2_conv_cache_v3) y los logros de Cuentas
+ * Versión: 1.2.0 (2026-10-26) · BLS-4: al cargar borra restos viejos que ya no lee ningún módulo (sweep) y la copia
+ *          vieja del Llavero (accounts:lastFile) solo si ya está la nueva (accounts:vault2); items_cache_v1 sin idioma
+ *          deja de ser caché (nadie lo lee).
+ *          1.1.0 (2026-10-26) · BLS-3: también el conversor (gw2_conv_cache_v3) y los logros de Cuentas
  *          (gn:accounts:achmeta); ready() para esperar a que termine de abrir.
  *          1.0.0 (2026-10-26)
  *
@@ -19,15 +22,20 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var DB_NAME = 'gn-cache', STORE = 'kv', DB_VERSION = 1;
   var DEL = {}; // marca de borrado en la cola de escritura
-  var DEFAULT_PREFIXES = ['items_cache_v1', 'items_cache_armory_v1', 'ach_meta_v3:', 'ach_acc', 'commerce_listings',
+  var DEFAULT_PREFIXES = ['items_cache_v1:', 'items_cache_armory_v1', 'ach_meta_v3:', 'ach_acc', 'commerce_listings',
     'commerce_prices:', 'currencies_all:', 'gw2_conv_cache_v3', 'gn:accounts:achmeta'];
+  // BLS-4: restos de versiones viejas que ya no lee ningún módulo (sondas RUN-146 a 148). Se borran al cargar.
+  var DEAD = ['items_cache_v1', 'gw2_conv_cache_v1', 'gw2_conv_cache_v2', 'gh_token_encrypted', 'gh_gist_id',
+    'gn:github:token', 'gn:github:gist_id', 'gn:github:last_upload'];
+  var DEAD_PREFIXES = ['psna:', 'characters:cached', 'gn:characters:cached', 'gn:activities:psna:', 'gn:achievements:cache:', 'ach_meta_v1:'];
+  var VAULT_OLD = 'accounts:lastFile', VAULT_NEW = 'accounts:vault2'; // la copia vieja del Llavero sobra cuando está la nueva (D3)
 
   var st = {
     prefixes: DEFAULT_PREFIXES.slice(), enabled: false, hydrated: false, db: null, idb: null, ls: null,
-    mem: new Map(), queue: new Map(), timer: null, ready: null, migrated: 0, error: null
+    mem: new Map(), queue: new Map(), timer: null, ready: null, migrated: 0, swept: 0, error: null
   };
 
   function lsGet(k) { try { return st.ls ? st.ls.getItem(k) : null; } catch (_) { return null; } }
@@ -45,6 +53,21 @@
   }
   /** ¿Esta clave la guardo yo? Solo si es un caché y hay IndexedDB. */
   function handles(key) { return st.enabled && matches(key); }
+
+  function isDead(key) {
+    key = String(key);
+    if (DEAD.indexOf(key) >= 0) return true;
+    for (var i = 0; i < DEAD_PREFIXES.length; i++) if (key.indexOf(DEAD_PREFIXES[i]) === 0) return true;
+    return false;
+  }
+  /** Borra de localStorage los restos viejos y, si ya está el Llavero nuevo, la copia vieja. Devuelve lo borrado. */
+  function sweep() {
+    var gone = lsKeys().filter(isDead);
+    if (lsGet(VAULT_NEW) != null && lsGet(VAULT_OLD) != null) gone.push(VAULT_OLD);
+    gone.forEach(lsDel);
+    st.swept += gone.length;
+    return gone;
+  }
 
   function raw(key) {
     key = String(key);
@@ -138,6 +161,7 @@
     st.idb = opts.indexedDB || root.indexedDB || null;
     st.ls = opts.localStorage || root.localStorage || null;
     if (Array.isArray(opts.prefixes)) st.prefixes = opts.prefixes.slice();
+    sweep();
     if (!st.idb || typeof st.idb.open !== 'function') { st.hydrated = true; st.ready = Promise.resolve(false); return st.ready; }
     st.enabled = true;
     st.ready = open().then(function (db) {
@@ -146,6 +170,7 @@
     }).then(function (all) {
       all.keys.forEach(function (k, i) {
         // Lo que se escribió o borró mientras abría es más nuevo que lo guardado.
+        if (isDead(k)) { st.queue.set(k, DEL); return; } // lo que una versión anterior mudó y ya nadie lee
         if (!st.mem.has(k) && !st.queue.has(k) && typeof all.vals[i] === 'string') st.mem.set(k, all.vals[i]);
       });
       return migrate();
@@ -179,11 +204,12 @@
   function stats() {
     var chars = 0;
     st.mem.forEach(function (s, k) { chars += k.length + s.length; });
-    return { enabled: st.enabled, hydrated: st.hydrated, keys: st.mem.size, chars: chars, pending: st.queue.size, migrated: st.migrated, error: st.error };
+    return { enabled: st.enabled, hydrated: st.hydrated, keys: st.mem.size, chars: chars, pending: st.queue.size, migrated: st.migrated, swept: st.swept, error: st.error };
   }
 
   root.GNIdb = {
     ready: function () { return st.ready || Promise.resolve(false); },
+    sweep: sweep, isDead: isDead,
     version: VERSION, init: init, handles: handles, get: get, set: set, has: has, del: del, clear: clear,
     flush: flush, stats: stats, keys: function () { return Array.from(st.mem.keys()); },
     prefixes: function () { return st.prefixes.slice(); }, DEFAULT_PREFIXES: DEFAULT_PREFIXES.slice()

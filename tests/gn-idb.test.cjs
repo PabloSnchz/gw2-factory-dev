@@ -178,6 +178,34 @@ test('BLS-3: ready() espera a que abra; los cachés del conversor y de Cuentas s
   assert.deepEqual(JSON.parse(JSON.stringify(G.get('gw2_conv_cache_v3'))), { a: { v: 1, ts: 5 } });
 });
 
+test('BLS-4: al cargar borro los restos viejos que nadie lee; la copia vieja del Llavero solo si ya está la nueva', async () => {
+  const idb = fakeIDB();
+  const G0 = load();
+  await G0.init({ indexedDB: idb, localStorage: fakeLS() });
+  idb.dbs['gn-cache'].stores.kv.set('items_cache_v1', '{"de":"1.1.0"}'); // lo que la 1.1.0 había mudado
+  const ls = fakeLS({ 'psna:schedule': '{}', 'psna:lastUpdate': '1', 'characters:cached:ab': '{}', 'gn:characters:cached:ab': '{}',
+    'gn:github:token': 'x', gh_token_encrypted: 'x', gw2_conv_cache_v1: '{}', items_cache_v1: '{}', 'accounts:lastFile': 'viejo', 'accounts:vault2': '{"data":"nuevo"}',
+    'gn:characters:assignments:k': '{}', 'gn:github:gist_snapshot': '{}', 'gn:theme': 'gato', 'items_cache_v1:es': '{}', gw2_keys: '[]', 'wv:season:current': '{}' });
+  const G = load();
+  await G.init({ indexedDB: idb, localStorage: ls });
+  for (const k of ['psna:schedule', 'psna:lastUpdate', 'characters:cached:ab', 'gn:characters:cached:ab', 'gn:github:token', 'gh_token_encrypted', 'gw2_conv_cache_v1', 'items_cache_v1', 'accounts:lastFile']) {
+    assert.equal(ls.getItem(k), null, k);
+  }
+  for (const k of ['gn:characters:assignments:k', 'gn:github:gist_snapshot', 'gn:theme', 'accounts:vault2', 'gw2_keys', 'wv:season:current']) {
+    assert.notEqual(ls.getItem(k), null, 'tus datos no se tocan: ' + k);
+  }
+  assert.equal(G.has('items_cache_v1'), false, 'lo que la 1.1.0 había mudado también se va');
+  assert.equal(G.handles('items_cache_v1'), false);
+  assert.equal(G.has('items_cache_v1:es'), true, 'el caché con idioma se muda como siempre');
+  await G.flush(); await tick(60);
+  assert.equal(idb.dbs['gn-cache'].stores.kv.has('items_cache_v1'), false);
+  assert.equal(G.stats().swept, 9);
+  const H = load(), ls2 = fakeLS({ 'accounts:lastFile': 'viejo', 'psna:schedule': '{}' });
+  assert.equal(await H.init({ localStorage: ls2 }), false);
+  assert.equal(ls2.getItem('accounts:lastFile'), 'viejo', 'sin la copia nueva, la vieja no se toca (D3)');
+  assert.equal(ls2.getItem('psna:schedule'), null, 'sin IndexedDB también limpio');
+});
+
 test('clear() vacía todos los cachés (memoria, IndexedDB y restos en localStorage) y nada más', async () => {
   const idb = fakeIDB();
   const ls = fakeLS({ 'gn:theme': 'gato' });
@@ -201,8 +229,8 @@ test('stats cuenta claves y caracteres; versión y presupuesto de tamaño', asyn
   const s = G.stats();
   assert.equal(s.keys, 1);
   assert.equal(s.chars, 'ach_acc:k'.length + '"ab"'.length);
-  assert.equal(G.version, '1.1.0');
-  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.equal(G.version, '1.2.0');
+  assert.match(SRC, /Versión: 1\.2\.0/);
   assert.ok(SRC.length < 40 * 1024, 'zona saludable (DEC-035)');
   assert.ok(!/innerHTML|fetch\(/.test(SRC));
 });
