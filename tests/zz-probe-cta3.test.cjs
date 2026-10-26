@@ -11,7 +11,7 @@ test('sonda: CryptoJS real contra AccVault', async () => {
   const r = await fetch('https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.js');
   console.log('CDN', r.status);
   const cj = await r.text();
-  const box = { console: { info() {} } };
+  const box = { console: { info() {} }, crypto: globalThis.crypto };
   box.window = box; box.self = box;
   vm.createContext(box);
   vm.runInContext('var module = undefined, exports = undefined, define = undefined;\n' + cj + '\nthis.CryptoJS = CryptoJS;', box);
