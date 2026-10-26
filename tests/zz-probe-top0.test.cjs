@@ -1,5 +1,5 @@
 'use strict';
-// Sonda temporal TOP-0 (BL-070 paso 5). Solo lee el repo. Se borra después de leer OUT-089.
+// Sonda temporal TOP-0 (BL-070 paso 5). Solo lee el repo. Se borra después de leer OUT-090 (v2: sin el censo js, ya leído en OUT-089).
 const test = require('node:test');
 const fs = require('fs');
 const path = require('path');
@@ -26,7 +26,7 @@ test('sonda: censo de diálogos, avisos y bloqueos por archivo js', () => {
       hexColor: cnt(s, /#[0-9a-fA-F]{6}\b/g)
     };
     const any = Object.values(row).some(v => v > 0);
-    if (any) console.log('JS|' + f + '|' + s.length + '|' + JSON.stringify(row));
+    if (any && (process.env.P5ALL || f >= 'wv-objectives-ui')) console.log('JS|' + f + '|' + s.length + '|' + JSON.stringify(row));
   }
 });
 
@@ -51,7 +51,7 @@ test('sonda: CSS de cabecera, modales, avisos y pie', () => {
     if (!s) continue;
     const re = /([^{}]*\b(modal|toast|site-footer|footer-|an-header|an-util|an-sep|brand-)[^{}]*)\{([^{}]*)\}/g;
     let m, n = 0, out = [];
-    while ((m = re.exec(s))) { n++; if (out.join('').length < 3500) out.push(m[1].trim().replace(/\s+/g, ' ') + '{' + m[3].trim().replace(/\s+/g, ' ').slice(0, 220) + '}'); }
+    while ((m = re.exec(s))) { n++; if (out.join('').length < 2400) out.push(m[1].trim().replace(/\s+/g, ' ') + '{' + m[3].trim().replace(/\s+/g, ' ').slice(0, 220) + '}'); }
     console.log('CSS|' + c + '|' + s.length + '|reglas ' + n);
     out.forEach(x => console.log('  ' + x));
   }
@@ -82,5 +82,5 @@ test('sonda: cargador, guías, gist y ajustes', () => {
   console.log('CONVERTER', cm.length, JSON.stringify((cm.match(/id[=:]\s*['"][^'"]+['"]/g) || []).slice(0, 12)));
   const tr = rd('js/app.js');
   const i = tr.indexOf('// Toasts global');
-  console.log('APP-TOAST', tr.slice(i, i + 2600).replace(/\s+/g, ' '));
+  if (process.env.P5ALL) console.log('APP-TOAST', tr.slice(i, i + 2600).replace(/\s+/g, ' '));
 });
