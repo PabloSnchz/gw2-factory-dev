@@ -1,6 +1,6 @@
 # FEAT-019 — Guías de uso y privacidad al día
 
-- **Estado:** HECHO en DEV (2026-10-26 13:50Z). Espera la validación de Pablo para cerrar BL-071.
+- **Estado:** VALIDADO por Pablo (2026-10-26 14:49Z), en DEV. Cierra BL-071.
 - **Fecha:** 2026-10-26 05:59Z (GUI-0 entregada) → 2026-10-26 13:50Z (GUI-5).
 - **Backlog:** BL-071 (guías de uso y privacidad al día).
 - **Propuesta:** `docs/propuestas/propuesta-guias-bl071.html` (b71dc58), aprobada con D1 a D6 (2026-10-26 06:33Z).
@@ -39,7 +39,7 @@
 | GUI-2 | «Primeros pasos» | 07:07Z | 07:20Z | `docs/user-guide.html` d6c9680, `tests/guides-content.test.cjs`, RUN-110 |
 | GUI-3 | «Guía por módulo», parte 1 | 07:30Z | 12:24Z | `docs/user-guide-avanzado.html` a30e215, RUN-111 a 113 |
 | GUI-4 | Parte 2, el correo y los 7 permisos obligatorios | 12:36Z | 13:34Z | 9d345f6, PATCH-165, RUN-116 a 118 |
-| GUI-5 | Claves reales, nombres en la app, limpieza, 19 themes y esta ficha | 13:50Z | — | PATCH-168 (167 rechazado) y 169, RUN-119 a 122 |
+| GUI-5 | Claves reales, nombres en la app, limpieza, 19 themes y esta ficha | 13:50Z | 14:49Z | PATCH-168 (167 rechazado) y 169, RUN-119 a 122 |
 
 ## GUI-5 en detalle
 
