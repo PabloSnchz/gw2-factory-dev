@@ -1,0 +1,74 @@
+{
+ "id": "PATCH-181",
+ "summary": "BL-074 BLS-2: api-gw2.js 2.34.0 delega sus cachés en GNIdb (IndexedDB); index.html carga gn-idb.js; cacheClear cuenta y vacía GNIdb",
+ "files": [
+  {
+   "path": "js/api-gw2.js",
+   "base_sha": "9f4df70d0452698ba28c5947ea132b194d5f1ae7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.33.0 (2026-10-03)",
+     "text": " * Versión: 2.34.0 (2026-10-26) — BL-074: los cachés grandes van a IndexedDB (js/gn-idb.js).\n * Versión: 2.33.0 (2026-10-03)"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function lsGet(key) {\n    try { var j = localStorage.getItem(key);",
+     "text": "  function idb(k) { var G = root.GNIdb; return G && G.handles(k) ? G : null; }\n  function lsGet(key) {\n    var G = idb(key); if (G) return G.get(key);\n    try { var j = localStorage.getItem(key);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Idea 49 Tramo A: antes esto era `catch (_) {}`, o sea tragaba CUALQUIER\n  // error sin dejar rastro. El que importa es el de cuota: la cuota de\n  // localStorage (~4.98 MB medidos en navegador real) es COMPARTIDA por todas\n  // las claves cacheadas de la pagina, no por modulo. Cuando se llena, cada\n  // escritura posterior falla y la app vuelve a arrancar en frio en cada\n  // recarga, sin que nada lo diga: se presenta como \"la Boveda anda lenta\".\n  //\n  // Esto estaba enmascarado porque activities.js borraba la familia 'ach_*' en\n  // cada navegacion a #/activities (wipe accidental = alivio de cuota). Al\n  // quitar ese wipe (mismo heartbeat), la cuota se llena de verdad, asi que el\n  // fallo deja de seripotetico y hay que poder nombrarlo.\n  //\n",
+     "text": "  // Idea 49 Tramo A: el error de cuota de localStorage (~4.98 MB, COMPARTIDA por toda la pagina)\n  // ya no se traga: se cuenta y se avisa. Desde BL-074 los caches grandes van a IndexedDB.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function lsSet(key, val) {\n    try { localStorage.setItem(key, JSON.stringify(val)); return true; }",
+     "text": "  function lsSet(key, val) {\n    var G = idb(key); if (G) return G.set(key, val);\n    try { localStorage.setItem(key, JSON.stringify(val)); return true; }"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function lsDel(key) { try { localStorage.removeItem(key); } catch (_) {} }",
+     "text": "  function lsDel(key) { var G = idb(key); if (G) return G.del(key); try { localStorage.removeItem(key); } catch (_) {} }"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function lsHas(key) { try { return localStorage.getItem(key) !== null; } catch (_) { return false; } }",
+     "text": "  function lsHas(key) { var G = idb(key); if (G) return G.has(key); try { return localStorage.getItem(key) !== null; } catch (_) { return false; } }"
+    },
+    {
+     "op": "replace",
+     "anchor": "    } catch (_) { /* localStorage puede no existir (modo privado): no es un error */ }\n    return { removed: removed, kept: kept, bytes: bytes, keptBytes: keptBytes,",
+     "text": "    } catch (_) { /* localStorage puede no existir (modo privado): no es un error */ }\n    var G = root.GNIdb, gs = G && G.stats && G.stats(); // BL-074: los cachés que ya están en IndexedDB\n    if (gs && gs.keys) { removed += gs.keys; bytes += gs.chars; if (!dryRun) G.clear(); }\n    return { removed: removed, kept: kept, bytes: bytes, keptBytes: keptBytes,"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "2ad62834784e42ffb966b721102b54b248e12950",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "<script src=\"js/wallet-theme.js?v=2.1.1\"></script>",
+     "text": "<script src=\"js/wallet-theme.js?v=2.1.1\"></script>\n  <!-- BL-074: cachés en IndexedDB; corre antes que los defer, que son los que piden a la API. -->\n  <script src=\"js/gn-idb.js?v=1.0.0\"></script>"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/api-gw2.js?v=2.33.0",
+     "text": "js/api-gw2.js?v=2.34.0"
+    }
+   ]
+  },
+  {
+   "path": "js/gn-idb.js",
+   "base_sha": "08a71de809a7dd3317ff4ea853f182f136ec5854",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * BLS-1: inerte, nadie lo carga todavía. BLS-2 lo conecta a js/api-gw2.js.",
+     "text": " * BLS-2: index.html lo carga (sin defer) y js/api-gw2.js le delega sus cachés (lsGet/lsSet/lsDel/lsHas)."
+    }
+   ]
+  }
+ ]
+}
