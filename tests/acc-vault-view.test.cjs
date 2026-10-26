@@ -111,7 +111,7 @@ async function openWith(x, text, pass) {
 
 test('archivo: presupuesto, versión, manifiesto entre acc-vault y acc-view, fuera de index.html, sin storage propio ni emojis', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.match(SRC, /Versión: 1\.2\.0/);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|indexedDB|fetch\(/, 'no guarda ni manda nada');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
@@ -139,18 +139,16 @@ test('CSS: solo los textos y superficies del theme que ya mide Cuentas (4.5:1 en
   assert.match(css, /@media \(max-width:900px\)\{\.vk-grid\{grid-template-columns:1fr\}/);
 });
 
-test('cerrado: pide archivo y contraseña, sin secretos; el panel anterior queda a mano', async () => {
+test('cerrado: pide archivo y contraseña, sin secretos; el panel anterior ya no se ve', async () => {
   const x = await boot();
   x.ev('click', x.btn({ 'data-cv-tab': 'vault' }));
   const h = x.host.innerHTML;
   assert.match(h, /<h3 id="vkT">Tu Llavero está cerrado<\/h3>/);
   assert.match(h, /<input type="file" id="vkFile" accept="\.enc,\.json,\.txt"/);
   assert.match(h, /<input type="password" id="vkPass" autocomplete="off"/);
-  assert.match(h, /data-vk="legacy" aria-pressed="false">Mostrar el panel anterior/);
+  assert.doesNotMatch(h, /panel anterior|data-vk="legacy"/, 'CTA-4b: el panel viejo y su asistente ya no se ofrecen');
   assert.ok(x.D.panel.classList.contains('cv-mine'), 'el panel viejo escondido');
-  x.ev('click', x.btn({ 'data-vk': 'legacy' }));
-  assert.ok(!x.D.panel.classList.contains('cv-mine'), 'a pedido, se ve el panel viejo');
-  assert.match(x.host.innerHTML, /aria-pressed="true">Ocultar el panel anterior/);
+  assert.equal(x.sb.AccVaultView.showLegacy(), false);
   x.D.els.vkPass = { id: 'vkPass', value: 'x' };
   x.ev('click', x.btn({ 'data-vk': 'open' }));
   assert.match(x.host.innerHTML, /role="alert">Elegí tu archivo \.enc\./);
@@ -213,7 +211,7 @@ test('se cierra solo a los 5 minutos sin uso, al salir de Cuentas y con «Cerrar
   x.ev('keydown', { id: 'vkQ' }, { key: 'a' });
   await x.advance(240000);
   assert.ok(x.sb.AccVaultView.isOpen(), 'escribir reinicia la cuenta');
-  x.ev('click', x.btn({ 'data-vk': 'legacy' }));
+  x.ev('input', { id: 'vkQ', value: '' });
   await x.advance(240000);
   assert.ok(x.sb.AccVaultView.isOpen(), 'tocar un botón también');
   await x.advance(61000);

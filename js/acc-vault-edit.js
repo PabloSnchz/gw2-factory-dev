@@ -1,7 +1,9 @@
 /*!
- * js/acc-vault-edit.js — Editar el Llavero y guardarlo con el cifrado nuevo (BL-070, paso 4, CTA-4a)
+ * js/acc-vault-edit.js — Editar el Llavero, importarlo desde Excel y guardarlo con el cifrado nuevo (BL-070, paso 4)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-26)
+ * Versión: 1.1.0 (2026-10-26) · CTA-4b: «Importar desde Excel» y «Descargar plantilla» (window.AccVaultImport), en este
+ *          mismo archivo porque el manifiesto llegó a su tope de 30 módulos (js/boot.js)
+ *          1.0.0 (2026-10-26) · CTA-4a: editar, agregar, borrar y guardar
  *
  * Con el Llavero abierto (js/acc-vault-view.js):
  *  - «Agregar cuenta», «Editar» y «Borrar» (con confirmación). Editar cambia solo los campos que se ven;
@@ -12,13 +14,15 @@
  *  - Deja una copia cifrada en este navegador para no elegir el archivo cada vez (D3), en accounts:vault2,
  *    fuera de gn: para que el respaldo del Gist no la suba. La copia del formato viejo queda hasta promover:
  *    DEV y producción comparten el almacenamiento del navegador y producción todavía la usa.
+ *  - «Importar desde Excel» lee la plantilla de siempre (id, nombre, email, password, gmailPassword, apiKey,
+ *    twitch_user, twitch_email, twitch_password, geforce_linked, notas, tags) y abre el Llavero sin guardar.
  * Nunca escribe nada en claro: ni archivo, ni almacenamiento. Lo dibuja y le pasa los eventos acc-vault-view.
  * Se carga por js/modules.json (DEC-035), antes de acc-view.js.
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var V2_KEY = 'accounts:vault2';      // copia cifrada nueva (D3)
   var OLD_KEY = 'accounts:lastFile';   // copia del formato viejo: queda hasta promover (la usa producción)
   var MIN_PASS = 8;
@@ -251,6 +255,98 @@
     return true;
   }
 
+  // ================================================================== Importar desde Excel (CTA-4b)
+  // Reemplaza el asistente de 4 pasos del panel anterior (Excel → JSON en claro → JSON enriquecido en claro → .enc):
+  // el Excel se lee en el navegador con SheetJS (window.XLSX, lo carga index.html), las cuentas quedan en el Llavero
+  // abierto sin guardar y se guardan con «Guardar con el cifrado nuevo». Nunca se descarga ni se guarda nada en claro.
+  var COLUMNS = ['id', 'nombre', 'email', 'password', 'gmailPassword', 'apiKey', 'twitch_user', 'twitch_email', 'twitch_password', 'geforce_linked', 'notas', 'tags'];
+  var EXAMPLE = ['mi_cuenta_1', 'Mi cuenta principal', 'usuario@ejemplo.com', '', '', '', 'miusuario', 'miusuario@ejemplo.com', '', 'TRUE', 'Cuenta principal', 'main,farming'];
+  var MAX_BYTES = 5 * 1024 * 1024;
+
+  var ist = { busy: false };
+  function X() { return root.XLSX || null; }
+
+  // Encabezados sin importar mayúsculas, espacios ni guiones: «Twitch User», «twitch-user» y «twitch_user» son lo mismo.
+  function norm(k) { return String(k == null ? '' : k).trim().toLowerCase().replace(/[\s-]+/g, '_'); }
+  var ALIAS = { name: 'nombre', notes: 'notas', geforce: 'geforce_linked', geforce_now: 'geforce_linked' };
+  function cell(row, key) {
+    var want = norm(key);
+    for (var k in row) {
+      if (!Object.prototype.hasOwnProperty.call(row, k)) continue;
+      var n = norm(k);
+      if (n === want || ALIAS[n] === want) return row[k] == null ? '' : String(row[k]);
+    }
+    return '';
+  }
+  function yes(v) { var s = String(v || '').trim().toLowerCase(); return s === 'true' || s === 'verdadero' || s === 'si' || s === 'sí' || s === '1' || s === 'x'; }
+  // Las contraseñas tal cual (un espacio puede ser parte de una); el resto, sin espacios en los bordes.
+  function rowToAccount(row, i) {
+    var t = function (k) { return cell(row, k).trim(); }, raw = function (k) { return cell(row, k); };
+    var name = t('nombre'), email = t('email');
+    if (!name && !email && !t('apiKey') && !raw('password')) return null; // fila vacía
+    var tu = t('twitch_user'), te = t('twitch_email'), tp = raw('twitch_password'), key = t('apiKey');
+    var tags = t('tags').split(',').map(function (x) { return x.trim(); }).filter(Boolean);
+    return {
+      id: t('id') || 'cuenta_' + (i + 1), name: name || email || 'Cuenta ' + (i + 1),
+      login: { email: email, password: raw('password'), gmailPassword: raw('gmailPassword') },
+      services: { twitch: { linked: !!(tu || te || tp), username: tu || null, email: te || null, password: tp || null }, geforceNow: { linked: yes(t('geforce_linked')) } },
+      apiKey: key ? { value: key } : null, notes: raw('notas'), tags: tags
+    };
+  }
+  function rowsToData(rows, today) {
+    var list = [];
+    (rows || []).forEach(function (r, i) { var a = rowToAccount(r || {}, i); if (a) list.push(a); });
+    return { version: 2, lastUpdated: today, accounts: list };
+  }
+
+  // HTML del Llavero cerrado
+  function xlLockedHTML() {
+    var ok = !!X();
+    return '<div class="vki"><label class="cv-btn vk-pick' + (ok ? '' : ' vki-off') + '"><input type="file" id="vkXlsx" accept=".xlsx,.xls,.csv" class="vk-file-in"' + (ok && !ist.busy ? '' : ' disabled') + '>' + (ist.busy ? 'Leyendo el Excel…' : 'Importar desde Excel') + '</label>' +
+      '<button type="button" class="cv-btn" data-vk="tpl"' + (ok ? '' : ' disabled') + '>Descargar plantilla</button>' +
+      '<span class="vki-note">' + (ok ? 'El Excel se lee acá y las cuentas quedan en el Llavero sin guardar: después tocás «Guardar con el cifrado nuevo». No se baja nada en claro.' : 'No pude cargar el lector de Excel. Recargá la página (Ctrl+F5).') + '</span></div>';
+  }
+
+  function readFile(file) {
+    if (typeof file.arrayBuffer === 'function') return file.arrayBuffer();
+    return new Promise(function (ok, ko) { var r = new root.FileReader(); r.onload = function () { ok(r.result); }; r.onerror = ko; r.readAsArrayBuffer(file); });
+  }
+  function importFile(file) {
+    var XL = X(), V = VV();
+    if (!XL || !V || !file) return null;
+    if (file.size > MAX_BYTES) { toast('error', 'Ese archivo es muy grande para ser tu planilla de cuentas.'); return null; }
+    ist.busy = true;
+    return readFile(file).then(function (buf) {
+      var wb = XL.read(new Uint8Array(buf), { type: 'array' }), ws = wb.Sheets[wb.SheetNames[0]];
+      var rows = ws ? XL.utils.sheet_to_json(ws, { raw: false, defval: '' }) : [];
+      var d = rowsToData(rows, new Date(Date.now()).toISOString().slice(0, 10));
+      ist.busy = false;
+      if (!d.accounts.length) { toast('error', 'No encontré cuentas en ese Excel. ¿Usaste la plantilla?'); V.rerender(); return; }
+      V.openData(d, String(file.name || 'llavero').replace(/\.(xlsx|xls|csv)$/i, ''), true);
+      toast('success', 'Importé ' + d.accounts.length + (d.accounts.length === 1 ? ' cuenta' : ' cuentas') + '. Falta guardar con el cifrado nuevo; después borrá el Excel: tiene tus contraseñas en claro.');
+    }, function () { ist.busy = false; toast('error', 'No pude leer ese archivo.'); V.rerender(); }).catch(function (e) {
+      ist.busy = false; toast('error', 'No pude leer ese Excel: ' + ((e && e.message) || 'error')); V.rerender();
+    });
+  }
+  function template() {
+    var XL = X();
+    if (!XL) return false;
+    var ws = XL.utils.aoa_to_sheet([COLUMNS, EXAMPLE]), wb = XL.utils.book_new();
+    XL.utils.book_append_sheet(wb, ws, 'Cuentas');
+    XL.writeFile(wb, 'plantilla_cuentas.xlsx');
+    return true;
+  }
+  function xlChange(e) {
+    var t = e && e.target;
+    if (!t || t.id !== 'vkXlsx') return false;
+    var f = t.files && t.files[0];
+    if (f) importFile(f);
+    try { t.value = ''; } catch (_) {}
+    return true;
+  }
+
+  // ================================================================== fin de Importar desde Excel
+
   var CSS = [
     '.vke-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px}.vke-dirty{font-size:.85rem;font-weight:700;color:var(--tx-1)}',
     '.vke-go{font-weight:700;border-color:var(--cv-mod)}.vke-del{display:flex;gap:8px;align-items:center;flex-wrap:wrap}',
@@ -274,5 +370,9 @@
     version: VERSION, panelHTML: panelHTML, cardActions: cardActions, busyForm: busyForm, onClick: onClick, onKeydown: onKeydown, reset: reset,
     _pure: { apply: apply, tagList: tagList, outName: outName, esc: esc, CSS: CSS, V2_KEY: V2_KEY, OLD_KEY: OLD_KEY, MIN_PASS: MIN_PASS, state: function () { return st; } }
   };
-  if (root.console && root.console.info) root.console.info('[AccVaultEdit] ready v' + VERSION);
+  root.AccVaultImport = {
+    version: VERSION, lockedHTML: xlLockedHTML, onChange: xlChange, template: template, importFile: importFile,
+    _pure: { rowsToData: rowsToData, rowToAccount: rowToAccount, norm: norm, yes: yes, COLUMNS: COLUMNS, EXAMPLE: EXAMPLE, MAX_BYTES: MAX_BYTES, state: function () { return ist; } }
+  };
+  if (root.console && root.console.info) root.console.info('[AccVaultEdit] ready v' + VERSION + ' (con AccVaultImport)');
 })(typeof window !== 'undefined' ? window : this);

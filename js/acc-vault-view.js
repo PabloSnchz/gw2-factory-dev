@@ -1,7 +1,9 @@
 /*!
  * js/acc-vault-view.js — La pestaña Llavero de Cuentas (BL-070, paso 4, CTA-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-26) · CTA-4a: editar, agregar, borrar y guardar con el cifrado nuevo (js/acc-vault-edit.js),
+ * Versión: 1.2.0 (2026-10-26) · CTA-4b: «Importar desde Excel» y «Descargar plantilla» (js/acc-vault-import.js); se
+ *          va «Mostrar el panel anterior»: el panel viejo y su asistente de 4 archivos ya no se ven
+ *          1.1.0 (2026-10-26) · CTA-4a: editar, agregar, borrar y guardar con el cifrado nuevo (js/acc-vault-edit.js),
  *          «Crear Llavero nuevo», la copia nueva del navegador primero (D3) y, con cambios sin guardar, no se
  *          cierra a los 5 minutos ni al salir de Cuentas: a los 15 sin uso, y el navegador avisa si cerrás
  *          1.0.0 (2026-10-26) · CTA-3, solo lectura
@@ -21,7 +23,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var ROUTE = '#/account/accounts';
   var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada que guarda js/accounts-panel.js
   var V2_KEY = 'accounts:vault2';       // la copia con el cifrado nuevo (D3), la escribe js/acc-vault-edit.js
@@ -37,10 +39,11 @@
   function clock(ms) { var s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
 
   var doc = root.document;
-  var st = { data: null, format: null, name: '', list: [], reveal: {}, timers: {}, last: 0, tick: null, clip: null, fileText: null, fileName: '', err: '', busy: false, q: '', legacy: false, dirty: false };
+  var st = { data: null, format: null, name: '', list: [], reveal: {}, timers: {}, last: 0, tick: null, clip: null, fileText: null, fileName: '', err: '', busy: false, q: '', dirty: false };
 
   function V() { return root.AccVault || null; }
   function E() { var x = root.AccVaultEdit; return x && typeof x.panelHTML === 'function' ? x : null; }
+  function I() { var x = root.AccVaultImport; return x && typeof x.lockedHTML === 'function' ? x : null; }
   function limit() { return st.dirty ? IDLE_DIRTY : IDLE; }
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
   function now() { return Date.now(); }
@@ -64,13 +67,9 @@
       '<span class="vk-chosen">' + (st.fileText ? esc(st.fileName) : sv ? '' : 'Ningún archivo elegido') + '</span>' +
       '<label class="vk-pass"><span>Contraseña</span><input type="password" id="vkPass" autocomplete="off" spellcheck="false"></label>' +
       '<button type="button" class="cv-btn vk-go" data-vk="open"' + (st.busy ? ' disabled' : '') + '>' + (st.busy ? 'Abriendo…' : 'Abrir') + '</button>' +
-      (E() ? '<button type="button" class="cv-btn" data-vk="new">Crear Llavero nuevo</button>' : '') + '</div>';
+      (E() ? '<button type="button" class="cv-btn" data-vk="new">Crear Llavero nuevo</button>' : '') + '</div>' + (I() ? I().lockedHTML() : '');
     if (st.err) h += '<p class="cv-warn" role="alert">' + esc(st.err) + '</p>';
-    return h + legacyHTML(E() ? '¿Todavía no tenés archivo? Creá un Llavero nuevo. Importar desde Excel llega en el próximo paso; mientras, está el panel anterior.' : '¿Todavía no tenés archivo o querés cambiar algo? Hasta el próximo paso se hace con el panel anterior.') + '</section>';
-  }
-
-  function legacyHTML(text) {
-    return '<p class="cv-note vk-legacy">' + text + ' <button type="button" class="cv-btn" data-vk="legacy" aria-pressed="' + st.legacy + '">' + (st.legacy ? 'Ocultar el panel anterior' : 'Mostrar el panel anterior') + '</button></p>';
+    return h + '</section>';
   }
 
   function rowHTML(e, f) {
@@ -102,11 +101,12 @@
     var h = '<div class="vk-bar"><img src="' + LOCK_ICON + '" alt="" width="22" height="22"><span>Llavero abierto · <b>' + esc(st.name) + '</b> · ' + st.list.length + (st.list.length === 1 ? ' cuenta' : ' cuentas') +
       ' · se cierra solo en <b id="vkClock">' + clock(limit() - (now() - st.last)) + '</b></span><button type="button" class="cv-btn" data-vk="lock">Cerrar ya</button></div>';
     if (st.format === 'legacy') h += '<p class="cv-warn">Este archivo usa el cifrado anterior, que se rompe fácil por fuerza bruta. ' + (E() ? 'Guardalo con «Guardar con el cifrado nuevo»: queda en un archivo aparte (-v2.enc) y este no se toca.' : 'En el próximo paso vas a poder guardarlo con el cifrado nuevo, en un archivo aparte: este no se toca.') + '</p>';
+    if (st.format === 'import') h += '<p class="cv-warn">Esto vino de tu Excel y todavía no está guardado: tocá «Guardar con el cifrado nuevo». Después borrá el Excel, que tiene tus contraseñas en claro.</p>';
     var X = E();
     if (X) { h += X.panelHTML(cat); if (X.busyForm()) return h; }
     h += '<div class="cv-filters"><label class="cv-q"><span class="cv-sr">Buscar en el Llavero</span><input type="search" id="vkQ" placeholder="Buscar en el Llavero" value="' + esc(st.q) + '" autocomplete="off"></label></div>';
     h += shown.length ? '<div class="vk-grid">' + shown.map(function (e) { return cardHTML(e, cat, M); }).join('') + '</div>' : '<p class="cv-note">No hay cuentas con esa búsqueda.</p>';
-    return h + legacyHTML(X ? 'El panel anterior sigue a mano hasta el próximo paso.' : 'Para agregar, editar o borrar, hasta el próximo paso, está el panel anterior.') + '<p class="cv-src">' + (X ? 'Lo que cambiás queda en esta pestaña hasta que tocás «Guardar con el cifrado nuevo». ' : 'Solo lectura. ') + '«Ver» oculta el dato de nuevo a los 20 segundos y «Copiar» vacía el portapapeles a los 30. Tu contraseña no se guarda.</p>';
+    return h + '<p class="cv-src">' + (X ? 'Lo que cambiás queda en esta pestaña hasta que tocás «Guardar con el cifrado nuevo». ' : 'Solo lectura. ') + '«Ver» oculta el dato de nuevo a los 20 segundos y «Copiar» vacía el portapapeles a los 30. Tu contraseña no se guarda.</p>';
   }
 
   function html(cat, M) {
@@ -182,13 +182,14 @@
   }
 
   function startTick() { if (!st.tick && typeof root.setInterval === 'function') st.tick = root.setInterval(tickOnce, 1000); }
-  // Un Llavero vacío, para quien todavía no tiene archivo: se guarda con el cifrado nuevo.
-  function openNew() {
-    st.data = { version: 2, lastUpdated: new Date(now()).toISOString().slice(0, 10), accounts: [] }; st.format = 'new'; st.name = 'llavero';
-    st.list = []; st.reveal = {}; st.q = ''; st.err = ''; st.fileText = null; st.dirty = false; st.last = now();
+  // Abre datos que no vienen de un archivo cifrado (Llavero nuevo o importado de Excel): se guardan con el cifrado nuevo.
+  function openData(d, name, dirty) {
+    st.data = d; st.format = dirty ? 'import' : 'new'; st.name = name || 'llavero';
+    st.list = V().entries(d); st.reveal = {}; st.q = ''; st.err = ''; st.fileText = null; st.dirty = !!dirty; st.last = now();
     startTick();
     rerender();
   }
+  function openNew() { openData({ version: 2, lastUpdated: new Date(now()).toISOString().slice(0, 10), accounts: [] }, 'llavero', false); }
   // Lo llama js/acc-vault-edit.js: los datos cambiaron y todavía no se guardaron.
   function commit(d) { if (!isOpen()) return; st.data = d; st.list = V().entries(d); st.dirty = true; st.last = now(); rerender(); }
   function saved(d, name) { if (!isOpen()) return; st.data = d; st.list = V().entries(d); st.dirty = false; st.format = 'v2'; st.name = name; st.last = now(); }
@@ -227,7 +228,7 @@
     if (act === 'open') openVault();
     else if (act === 'new') openNew();
     else if (act === 'lock') { lock('manual'); toast('info', 'Llavero cerrado.'); }
-    else if (act === 'legacy') { st.legacy = !st.legacy; rerender(); }
+    else if (act === 'tpl') { if (!(I() && I().template())) toast('error', 'No pude armar la plantilla. Recargá la página (Ctrl+F5).'); }
     else if (show) reveal(show);
     else if (cp) copy(cp);
     return true;
@@ -248,6 +249,7 @@
     return true;
   }
   function onChange(e) {
+    if (I() && I().onChange(e)) { st.last = now(); return true; }
     var t = e && e.target, file = t && t.id === 'vkFile' && t.files ? t.files[0] : null;
     if (!file) return false;
     var name = String(file.name || 'archivo');
@@ -281,7 +283,7 @@
     '.vk-rows{margin-top:8px}.vk-row{display:grid;grid-template-columns:20px 130px minmax(0,1fr) auto;gap:8px;align-items:center;border-top:1px solid var(--bd-1);padding:6px 0;font-size:.85rem}',
     '.vk-row img{width:20px;height:20px}.vk-k{color:var(--tx-2)}.vk-v{color:var(--tx-1);overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.vk-masked{letter-spacing:.06em}',
     '.vk-row--note{grid-template-columns:20px 130px minmax(0,1fr)}.vk-note{font-family:inherit;white-space:pre-wrap}',
-    '.vk-acts{display:flex;gap:6px}.vk-legacy{display:flex;gap:8px;align-items:center;flex-wrap:wrap}',
+    '.vk-acts{display:flex;gap:6px}.vki{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--bd-1);padding-top:12px}.vki-note{font-size:.8rem;color:var(--tx-2);flex:1 1 260px}.vki-off{opacity:.6}',
     '@media (max-width:900px){.vk-grid{grid-template-columns:1fr}.vk-row{grid-template-columns:20px minmax(0,1fr) auto}.vk-k{display:none}.vk-row--note{grid-template-columns:20px minmax(0,1fr)}.vk-pass,.vk-pass input{width:100%}.vk-acts{flex-wrap:wrap}}'
   ].join('\n');
   function ensureCss() {
@@ -292,7 +294,7 @@
 
   root.AccVaultView = {
     version: VERSION, html: html, decorate: decorate, onClick: onClick, onInput: onInput, onKeydown: onKeydown, onChange: onChange,
-    isOpen: isOpen, lock: lock, showLegacy: function () { return st.legacy; },
+    isOpen: isOpen, lock: lock, showLegacy: function () { return false; }, rerender: rerender, openData: openData,
     data: function () { return st.data; }, name: function () { return st.name; }, isDirty: function () { return st.dirty; }, commit: commit, saved: saved, openNew: openNew,
     _pure: { esc: esc, fold: fold, clock: clock, CSS: CSS, IDLE: IDLE, IDLE_DIRTY: IDLE_DIRTY, REVEAL: REVEAL, CLIP: CLIP, LEGACY_KEY: LEGACY_KEY, V2_KEY: V2_KEY, state: function () { return st; } }
   };

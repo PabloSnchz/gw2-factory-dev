@@ -148,7 +148,7 @@ async function save(x, p1, p2) {
 
 test('archivo: presupuesto, versión, manifiesto entre la vista del Llavero y acc-view, nada en claro, sin CryptoJS', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.match(SRC, /Versión: 1\.1\.0/);
   const code = SRC.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   assert.doesNotMatch(code, /localStorage|sessionStorage|CryptoJS|fetch\(/);
   assert.equal((code.match(/S\.set\(/g) || []).length, 1, 'escribe una sola cosa en el navegador');
