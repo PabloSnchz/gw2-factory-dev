@@ -1,0 +1,147 @@
+{
+ "id": "PATCH-185",
+ "summary": "BL-074 BLS-4: gn-idb 1.2.0 borra al cargar los restos viejos que nadie lee y accounts:lastFile solo si existe accounts:vault2; privacidad al día (caché en IndexedDB)",
+ "files": [
+  {
+   "path": "js/gn-idb.js",
+   "base_sha": "8ec56a4f710df20beff20941484e37ac12bbad21",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-26) · BLS-3:",
+     "text": " * Versión: 1.2.0 (2026-10-26) · BLS-4: al cargar borra restos viejos que ya no lee ningún módulo (sweep) y la copia\n *          vieja del Llavero (accounts:lastFile) solo si ya está la nueva (accounts:vault2); items_cache_v1 sin idioma\n *          deja de ser caché (nadie lo lee).\n *          1.1.0 (2026-10-26) · BLS-3:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var DEFAULT_PREFIXES = ['items_cache_v1', 'items_cache_armory_v1',",
+     "text": "  var DEFAULT_PREFIXES = ['items_cache_v1:', 'items_cache_armory_v1',"
+    },
+    {
+     "op": "replace",
+     "anchor": "    'commerce_prices:', 'currencies_all:', 'gw2_conv_cache_v3', 'gn:accounts:achmeta'];\n",
+     "text": "    'commerce_prices:', 'currencies_all:', 'gw2_conv_cache_v3', 'gn:accounts:achmeta'];\n  // BLS-4: restos de versiones viejas que ya no lee ningún módulo (sondas RUN-146 a 148). Se borran al cargar.\n  var DEAD = ['items_cache_v1', 'gw2_conv_cache_v1', 'gw2_conv_cache_v2', 'gh_token_encrypted', 'gh_gist_id',\n    'gn:github:token', 'gn:github:gist_id', 'gn:github:last_upload'];\n  var DEAD_PREFIXES = ['psna:', 'characters:cached', 'gn:characters:cached', 'gn:activities:psna:', 'gn:achievements:cache:', 'ach_meta_v1:'];\n  var VAULT_OLD = 'accounts:lastFile', VAULT_NEW = 'accounts:vault2'; // la copia vieja del Llavero sobra cuando está la nueva (D3)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "mem: new Map(), queue: new Map(), timer: null, ready: null, migrated: 0, error: null",
+     "text": "mem: new Map(), queue: new Map(), timer: null, ready: null, migrated: 0, swept: 0, error: null"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function handles(key) { return st.enabled && matches(key); }\n",
+     "text": "  function handles(key) { return st.enabled && matches(key); }\n\n  function isDead(key) {\n    key = String(key);\n    if (DEAD.indexOf(key) >= 0) return true;\n    for (var i = 0; i < DEAD_PREFIXES.length; i++) if (key.indexOf(DEAD_PREFIXES[i]) === 0) return true;\n    return false;\n  }\n  /** Borra de localStorage los restos viejos y, si ya está el Llavero nuevo, la copia vieja. Devuelve lo borrado. */\n  function sweep() {\n    var gone = lsKeys().filter(isDead);\n    if (lsGet(VAULT_NEW) != null && lsGet(VAULT_OLD) != null) gone.push(VAULT_OLD);\n    gone.forEach(lsDel);\n    st.swept += gone.length;\n    return gone;\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (Array.isArray(opts.prefixes)) st.prefixes = opts.prefixes.slice();\n",
+     "text": "    if (Array.isArray(opts.prefixes)) st.prefixes = opts.prefixes.slice();\n    sweep();\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "        if (!st.mem.has(k) && !st.queue.has(k) && typeof all.vals[i] === 'string') st.mem.set(k, all.vals[i]);",
+     "text": "        if (isDead(k)) { st.queue.set(k, DEL); return; } // lo que una versión anterior mudó y ya nadie lee\n        if (!st.mem.has(k) && !st.queue.has(k) && typeof all.vals[i] === 'string') st.mem.set(k, all.vals[i]);"
+    },
+    {
+     "op": "replace",
+     "anchor": "pending: st.queue.size, migrated: st.migrated, error: st.error };",
+     "text": "pending: st.queue.size, migrated: st.migrated, swept: st.swept, error: st.error };"
+    },
+    {
+     "op": "replace",
+     "anchor": "    version: VERSION, init: init, handles: handles,",
+     "text": "    sweep: sweep, isDead: isDead,\n    version: VERSION, init: init, handles: handles,"
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-idb.test.cjs",
+   "base_sha": "ecf129f37d197c3c809595be489de94f5bbb756b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(G.version, '1.1.0');\n  assert.match(SRC, /Versión: 1\\.1\\.0/);",
+     "text": "  assert.equal(G.version, '1.2.0');\n  assert.match(SRC, /Versión: 1\\.2\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('clear() vacía todos los cachés",
+     "text": "test('BLS-4: al cargar borro los restos viejos que nadie lee; la copia vieja del Llavero solo si ya está la nueva', async () => {\n  const idb = fakeIDB();\n  const G0 = load();\n  await G0.init({ indexedDB: idb, localStorage: fakeLS() });\n  idb.dbs['gn-cache'].stores.kv.set('items_cache_v1', '{\"de\":\"1.1.0\"}'); // lo que la 1.1.0 había mudado\n  const ls = fakeLS({ 'psna:schedule': '{}', 'psna:lastUpdate': '1', 'characters:cached:ab': '{}', 'gn:characters:cached:ab': '{}',\n    'gn:github:token': 'x', gh_token_encrypted: 'x', gw2_conv_cache_v1: '{}', items_cache_v1: '{}', 'accounts:lastFile': 'viejo', 'accounts:vault2': '{\"data\":\"nuevo\"}',\n    'gn:characters:assignments:k': '{}', 'gn:github:gist_snapshot': '{}', 'gn:theme': 'gato', 'items_cache_v1:es': '{}', gw2_keys: '[]', 'wv:season:current': '{}' });\n  const G = load();\n  await G.init({ indexedDB: idb, localStorage: ls });\n  for (const k of ['psna:schedule', 'psna:lastUpdate', 'characters:cached:ab', 'gn:characters:cached:ab', 'gn:github:token', 'gh_token_encrypted', 'gw2_conv_cache_v1', 'items_cache_v1', 'accounts:lastFile']) {\n    assert.equal(ls.getItem(k), null, k);\n  }\n  for (const k of ['gn:characters:assignments:k', 'gn:github:gist_snapshot', 'gn:theme', 'accounts:vault2', 'gw2_keys', 'wv:season:current']) {\n    assert.notEqual(ls.getItem(k), null, 'tus datos no se tocan: ' + k);\n  }\n  assert.equal(G.has('items_cache_v1'), false, 'lo que la 1.1.0 había mudado también se va');\n  assert.equal(G.handles('items_cache_v1'), false);\n  assert.equal(G.has('items_cache_v1:es'), true, 'el caché con idioma se muda como siempre');\n  await G.flush(); await tick(60);\n  assert.equal(idb.dbs['gn-cache'].stores.kv.has('items_cache_v1'), false);\n  assert.equal(G.stats().swept, 9);\n  const H = load(), ls2 = fakeLS({ 'accounts:lastFile': 'viejo', 'psna:schedule': '{}' });\n  assert.equal(await H.init({ localStorage: ls2 }), false);\n  assert.equal(ls2.getItem('accounts:lastFile'), 'viejo', 'sin la copia nueva, la vieja no se toca (D3)');\n  assert.equal(ls2.getItem('psna:schedule'), null, 'sin IndexedDB también limpio');\n});\n\ntest('clear() vacía todos los cachés"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "238c2dc6de953f44ec56fc9c593cf06f91078fc7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/gn-idb.js?v=1.1.0",
+     "text": "js/gn-idb.js?v=1.2.0"
+    }
+   ]
+  },
+  {
+   "path": "js/acc-vault-edit.js",
+   "base_sha": "c9a16d01500914c988b5f63d7b431ce05ead6919",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "var OLD_KEY = 'accounts:lastFile';   // copia del formato viejo: queda hasta promover (la usa producción)",
+     "text": "var OLD_KEY = 'accounts:lastFile';   // copia del formato viejo: js/gn-idb.js la borra al cargar si ya está V2_KEY (BL-074)"
+    },
+    {
+     "op": "replace",
+     "anchor": "      // La copia vieja (OLD_KEY) NO se borra todavía: DEV y producción comparten el almacenamiento del navegador\n      // (mismo origen, DEC-026) y producción la sigue usando. Se borra al promover (CTA-5).\n",
+     "text": "      // La copia vieja (OLD_KEY) no se borra acá: la borra js/gn-idb.js en la próxima carga, cuando ya existe V2_KEY\n      // (BL-074, D3). Así un error al guardar nunca deja sin ninguna de las dos.\n"
+    }
+   ]
+  },
+  {
+   "path": "js/acc-vault-view.js",
+   "base_sha": "ab89a1213af4f73ac287dec35ebce38e7d7fd8f8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada del formato viejo (la usa producción hasta promover)",
+     "text": "var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada del formato viejo; js/gn-idb.js la borra cuando ya está V2_KEY"
+    }
+   ]
+  },
+  {
+   "path": "privacy.html",
+   "base_sha": "a29d210dcd37d8a868ce4b4ce38d518274f55356",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "(el almacenamiento local del sitio). No se manda a ningún lado.",
+     "text": "(el almacenamiento del sitio: tus datos en localStorage y la caché de la API en IndexedDB). No se manda a ningún lado."
+    },
+    {
+     "op": "replace",
+     "anchor": "queda un rato guardado para no volver a pedirlo (la caché): se borra con",
+     "text": "queda un rato guardado para no volver a pedirlo (la caché, en IndexedDB, aparte de tus datos para no llenar su espacio): se borra con"
+    },
+    {
+     "op": "replace",
+     "anchor": "También puede quedar la copia del formato viejo, igual de cifrada.",
+     "text": "La copia del formato viejo, igual de cifrada, se borra sola cuando ya guardaste la nueva."
+    },
+    {
+     "op": "replace",
+     "anchor": "Lo leído de cada cuenta durante 6 horas y los datos de los logros durante 7 días. Nunca la Key.",
+     "text": "Lo leído de cada cuenta durante 6 horas y los datos de los logros durante 7 días (estos, en la caché). Nunca la Key."
+    },
+    {
+     "op": "replace",
+     "anchor": "puede quedar su rastro (<code>gn:github:token</code> y las demás <code>gn:github:</code>). La Bóveda ya no las usa ni las manda a ningún lado; se borran con el último paso de abajo.",
+     "text": "la Bóveda borra sola su rastro al abrirse (<code>gn:github:token</code> y las demás <code>gn:github:</code>), salvo la copia de seguridad que sacaba antes de sincronizar (<code>gn:github:gist_snapshot</code>): esa se borra con el último paso de abajo."
+    }
+   ]
+  }
+ ]
+}
