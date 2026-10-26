@@ -1,0 +1,1 @@
+{"id": "RUN-135", "tests": ["tests/shv-core.test.cjs", "tests/shv-wallet.test.cjs", "tests/shiruvana-voice.test.cjs", "tests/shiruvana-places.test.cjs", "tests/index-identity.test.cjs", "tests/index-versions.test.cjs", "tests/boot.test.cjs", "tests/size-budget.test.cjs", "tests/welcome-view.test.cjs", "tests/wallet-view.test.cjs"]}
