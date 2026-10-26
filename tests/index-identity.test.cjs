@@ -23,7 +23,9 @@ test('la página arranca con el theme oficial Gato Negro (sin parpadeo antes del
 });
 
 test('el enlace a la bio usa los colores oficiales de Gato Negro, fijos y legibles', () => {
-  const badge = HTML.slice(HTML.indexOf('href="https://pablosnchz.github.io/bio/"'));
+  // TOP-6: el distintivo está en el pie y sus estilos en js/gn-topbar.js (index.html no puede pasar 48 KB).
+  assert.match(HTML, /<a class="gn-bio" href="https:\/\/pablosnchz\.github\.io\/bio\/"/);
+  const badge = fs.readFileSync(path.join(ROOT, 'js', 'gn-topbar.js'), 'utf8');
   assert.match(badge, /background-color: #232A3A; color: #F4F6FA;/, 'lado obsidiana');
   assert.match(badge, /background-color: #5A3DDB; color: #FFFFFF;/, 'lado arcano (6,7:1)');
   assert.doesNotMatch(HTML, /#E1306C|#555555/, 'sin los colores anteriores');

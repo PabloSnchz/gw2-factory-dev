@@ -1,4 +1,4 @@
-// Barra de arriba (BL-070 paso 5, TOP-5): js/gn-topbar.js y su marcado en index.html.
+// Barra de arriba y pie (BL-070 paso 5, TOP-5 y TOP-6): js/gn-topbar.js y su marcado en index.html.
 // Tres zonas (quién sos, con qué cuenta mirás, herramientas), leyenda de sitio no oficial en la barra y en la
 // pestaña (ArenaNet), marca DEV solo en el repo de desarrollo, menús con teclado y la hoja del celular.
 // La prueba de conducta arma la barra REAL de index.html en un DOM mínimo.
@@ -227,4 +227,77 @@ test('celular: «Opciones» abre la hoja, el foco entra y no se escapa, Escape c
   fire(D, more, 'click'); fire(D, $('guideLink'), 'click');
   assert.ok(!bar.classList.contains('is-open'), 'elegir Guías cierra la hoja');
   assert.equal(D.active, more, 'y el foco queda en «Opciones», visible');
+});
+
+// ------------------------------------------------------------------ pie (TOP-6)
+const FOOT = I.slice(I.indexOf('<footer'), I.indexOf('</footer>') + 9);
+const ANET = '© 2014 ArenaNet, LLC. All rights reserved. NCSOFT, the interlocking NC logo, ArenaNet, Guild Wars, Guild Wars Factions, ' +
+  'Guild Wars Nightfall, Guild Wars: Eye of the North, Guild Wars 2, and all associated logos and designs are trademarks or registered ' +
+  'trademarks of NCSOFT Corporation. All other trademarks are the property of their respective owners.';
+
+test('pie: el aviso de ArenaNet tal cual, la leyenda de sitio no oficial y nada en línea', () => {
+  assert.match(FOOT, /<footer class="site-footer gn-ft" id="gnFooter" role="contentinfo">/);
+  assert.ok(FOOT.indexOf('<p lang="en">' + ANET + '</p>') > 0, 'el aviso de copyright y marcas, en inglés y sin tocar');
+  assert.match(FOOT, /Sitio de la comunidad, no oficial: no está afiliado a ArenaNet ni a NCSOFT\./);
+  assert.doesNotMatch(FOOT, /style="|onclick=|onmouse/, 'sin estilos ni código en línea');
+  const ext = FOOT.match(/<a [^>]*href="https:\/\/[^"]+"[^>]*>/g) || [];
+  assert.equal(ext.length, 4, 'tres enlaces del juego y el distintivo');
+  ext.forEach((a) => assert.match(a, /target="_blank" rel="noopener"/, a));
+  assert.equal((FOOT.match(/\(se abre en otra pestaña\)/g) || []).length, 4, 'el lector avisa que se abre en otra pestaña');
+});
+
+test('pie: el distintivo con sus colores fijos y legibles, y la foto servida desde la Bóveda', () => {
+  assert.doesNotMatch(I, /raw\.githubusercontent\.com/, 'la foto ya no se pide a otro sitio');
+  assert.match(FOOT, /<a class="gn-bio" href="https:\/\/pablosnchz\.github\.io\/bio\/"[^>]*><span class="gn-bio__a"><img src="assets\/brand\/pablo-bio\.svg" alt="" width="18" height="18">Link in Bio<\/span><span class="gn-bio__b">Pablin Schez<\/span>/);
+  const svg = read('assets/brand/pablo-bio.svg');
+  assert.match(svg, /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg"/);
+  assert.doesNotMatch(svg, /<script|on\w+=|href="(?!data:image\/webp;base64,)/i, 'no ejecuta nada ni pide recursos de afuera');
+  assert.ok(Buffer.byteLength(svg) < 8 * 1024, 'foto chica');
+  assert.match(SRC, /\.gn-bio \.gn-bio__a \{[^}]*background-color: #232A3A; color: #F4F6FA;/);
+  assert.match(SRC, /\.gn-bio \.gn-bio__b \{[^}]*background-color: #5A3DDB; color: #FFFFFF;/);
+  const lum = (h) => [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((v) => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)))
+    .reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0);
+  const ratio = (a, b) => (Math.max(lum(a), lum(b)) + 0.05) / (Math.min(lum(a), lum(b)) + 0.05);
+  assert.ok(ratio('F4F6FA', '232A3A') >= 4.5 && ratio('FFFFFF', '5A3DDB') >= 4.5, 'los dos lados se leen');
+});
+
+test('pie: estilos con los textos del theme, foco visible y 44 px en el celular', () => {
+  const css = SRC.slice(SRC.indexOf('var FOOT_CSS = ['), SRC.indexOf("].join('\\n');"));
+  assert.ok(css.length > 200, 'los estilos del pie viven en el módulo');
+  const colors = [...css.matchAll(/(?:^|[;{\s'])color:\s*([^;}]+)/g)].map((m) => m[1].trim()).filter((c) => !/^#(F4F6FA|FFFFFF)$/.test(c));
+  colors.forEach((c) => assert.ok(/^var\(--tx-[12]\)$/.test(c), 'color ' + c));
+  assert.match(css, /\.gn-ft a:focus-visible, \.gn-ft button:focus-visible \{ outline: 2px solid var\(--acc-1\)/);
+  assert.match(css, /@media \(max-width: 900px\) \{[^']*\.gn-ft__col a, \.gn-ft__col button \{ min-height: 44px; \}/);
+});
+
+function loadFoot() {
+  const D = fakeDom();
+  D.doc.head = D.html.appendChild(D.node('head'));
+  D.doc.createElement = (t) => D.node(t);
+  D.body.appendChild(parse(HDR, D));
+  D.body.appendChild(parse(FOOT, D));
+  const sb = { console: { info() {} }, Array, String, Object, location: { pathname: '/' }, document: D.doc };
+  sb.window = sb;
+  vm.createContext(sb);
+  vm.runInContext(SRC, sb, { filename: 'js/gn-topbar.js' });
+  const $ = (id) => D.doc.getElementById(id);
+  return { D, G: sb.GNTopbar, $ };
+}
+
+test('pie: «Guías de uso» y «Gestión de Keys» tocan los botones de la barra y el foco queda en el pie', () => {
+  const { D, G, $ } = loadFoot();
+  const css = D.doc.head.children.filter((n) => n.attrs.id === 'gn-ft-css');
+  assert.equal(css.length, 1, 'pone sus estilos una vez');
+  assert.match(css[0].textContent, /\.gn-bio \.gn-bio__b/);
+  assert.equal(G.footer(), false, 'no se engancha dos veces');
+  const seen = [];
+  ['guideLink', 'keysMenuBtn'].forEach((id) => { $(id).click = () => seen.push([id, D.active]); });
+  const btns = $('gnFooter').querySelectorAll('button');
+  assert.deepEqual(btns.map((b) => b.getAttribute('data-gn-open')), ['guideLink', 'keysMenuBtn']);
+  btns.forEach((b) => fire(D, b, 'click'));
+  assert.deepEqual(seen.map((s) => s[0]), ['guideLink', 'keysMenuBtn']);
+  assert.ok(seen.every((s, i) => s[1] === btns[i]), 'la ventana se abre con el foco en el botón del pie, que es adonde vuelve');
+  const home = $('gnFooter').querySelectorAll('a')[0];
+  const e = fire(D, home, 'click');
+  assert.ok(!e.defaultPrevented, 'Inicio es un enlace común');
 });

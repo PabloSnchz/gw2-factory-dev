@@ -1,6 +1,6 @@
 /*!
- * js/gn-topbar.js — Barra de arriba de la Bóveda (BL-070 paso 5, TOP-5)
- * Versión: 1.0.0
+ * js/gn-topbar.js — Barra de arriba y pie de la Bóveda (BL-070 paso 5, TOP-5 y TOP-6)
+ * Versión: 1.1.0
  *
  * La barra tiene tres zonas: quién sos y dónde estás (logo, que lleva a Inicio, con la leyenda
  * «Sitio de la comunidad · no oficial» que pide ArenaNet), con qué cuenta mirás (#keySelectGlobal y Keys)
@@ -15,14 +15,40 @@
  *    rayas: son el «Más» de la barra de abajo (sidebar-nav.js), y dos iguales confunden.
  *  - «Cambiar el tema» es el #themeToggleBtn de siempre: theme-selector.js ya no inyecta el suyo.
  * No guarda nada, no pide nada a la API y no cambia ningún id que usen otros módulos.
+ *
+ * 1.1.0 (TOP-6): el pie. El marcado (con el aviso de ArenaNet) vive en index.html; acá van sus estilos,
+ *   porque index.html no puede pasar 48 KB y el pie no se ve en el primer cuadro, y sus atajos: «Guías de uso»
+ *   y «Gestión de Keys» tocan los botones de siempre de la barra (#guideLink y #keysMenuBtn), así cada ventana
+ *   abre igual que desde arriba y, al cerrarse, el foco vuelve al pie. El distintivo «Link in Bio» conserva
+ *   sus colores fijos (DEC-025) y su foto se sirve desde assets/brand/ (D7).
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var DEV_PATH = /^\/gw2-factory-dev(\/|$)/;
   var MENUS = ['gnTbLinksBtn', 'gnTbSetBtn'];
-  var st = { open: null, sheet: false, wired: false };
+  var st = { open: null, sheet: false, wired: false, foot: false };
+  var FOOT_CSS = [
+    '.site-footer.gn-ft { margin: 28px 0 0; padding: 22px 24px 18px; border-top: 1px solid var(--bd-1); background: var(--bg-0); color: var(--tx-2); font-size: .84rem; }',
+    '.gn-ft p { margin: 0; color: var(--tx-2); }',
+    '.gn-ft__grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 20px 28px; max-width: 1200px; margin: 0 auto; }',
+    '.gn-ft__brand { display: flex; gap: 12px; align-items: flex-start; }',
+    '.gn-ft__brand b { color: var(--tx-1); }',
+    '.gn-ft .footer-mark { width: 28px; height: 28px; flex-shrink: 0; }',
+    '.gn-ft__col { display: flex; flex-direction: column; align-items: flex-start; }',
+    '.gn-ft__h { margin-bottom: 4px; font-size: .74rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }',
+    '.gn-ft__col a, .gn-ft__col button { display: inline-flex; align-items: center; min-height: 32px; padding: 0; border: 0; background: none; color: var(--tx-2); font: inherit; text-decoration: none; cursor: pointer; }',
+    '.gn-ft__col a:hover, .gn-ft__col button:hover { color: var(--tx-1); text-decoration: underline; }',
+    '.gn-ft a:focus-visible, .gn-ft button:focus-visible { outline: 2px solid var(--acc-1); outline-offset: 2px; border-radius: 4px; }',
+    '.gn-ft__legal { display: grid; gap: 6px; max-width: 1200px; margin: 18px auto 0; padding-top: 12px; border-top: 1px solid var(--bd-1); font-size: .74rem; line-height: 1.5; }',
+    '.gn-bio { display: inline-flex; height: 26px; margin-top: 12px; border-radius: 4px; overflow: hidden; font: 600 11px/1 system-ui, -apple-system, sans-serif; text-decoration: none; }',
+    '.gn-bio span { display: flex; align-items: center; white-space: nowrap; }',
+    '.gn-bio .gn-bio__a { gap: 6px; padding: 0 10px; background-color: #232A3A; color: #F4F6FA; }',
+    '.gn-bio .gn-bio__b { padding: 0 12px; background-color: #5A3DDB; color: #FFFFFF; font-weight: 700; }',
+    '.gn-bio img { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(255,255,255,.3); }',
+    '@media (max-width: 900px) { .site-footer.gn-ft { padding: 20px 16px 16px; } .gn-ft__grid { grid-template-columns: 1fr 1fr; } .gn-ft__id { grid-column: 1 / -1; } .gn-ft__col a, .gn-ft__col button { min-height: 44px; } }'
+  ].join('\n');
 
   function doc() { return root.document; }
   function byId(id) { return doc().getElementById(id); }
@@ -171,6 +197,40 @@
     if (T && typeof T.openModal === 'function') T.openModal();
   }
 
+  // ---------------------------------------------------------------- pie (TOP-6)
+  function footCss() {
+    var d = doc();
+    if (!d.createElement || d.getElementById('gn-ft-css')) return false;
+    var s = d.createElement('style');
+    s.setAttribute('id', 'gn-ft-css');
+    s.textContent = FOOT_CSS;
+    (d.head || d.documentElement).appendChild(s);
+    return true;
+  }
+
+  // «Guías de uso» y «Gestión de Keys» del pie tocan el botón de siempre de la barra.
+  function onFoot(e) {
+    var box = byId('gnFooter'), n = e && e.target;
+    for (; n && n !== box; n = n.parentNode) {
+      var id = n.getAttribute && n.getAttribute('data-gn-open');
+      if (!id) continue;
+      var t = byId(id);
+      if (e.preventDefault) e.preventDefault();
+      focus(n);
+      if (t && typeof t.click === 'function') t.click();
+      return;
+    }
+  }
+
+  function footer() {
+    var f = byId('gnFooter');
+    if (!f || st.foot) return false;
+    st.foot = true;
+    footCss();
+    f.addEventListener('click', onFoot);
+    return true;
+  }
+
   function wire() {
     if (st.wired || !bar()) return false;
     st.wired = true;
@@ -194,12 +254,13 @@
   function init() {
     markEnv();
     wire();
+    footer();
     if (root.console && root.console.info) root.console.info('[GNTopbar] v' + VERSION);
   }
 
   root.GNTopbar = {
     version: VERSION, init: init, isDev: isDev, markEnv: markEnv,
-    openMenu: openMenu, closeMenu: closeMenu, openSheet: openSheet, closeSheet: closeSheet,
+    openMenu: openMenu, closeMenu: closeMenu, openSheet: openSheet, closeSheet: closeSheet, footer: footer,
     _state: function () { return { open: st.open ? st.open.id : null, sheet: st.sheet }; }
   };
 
