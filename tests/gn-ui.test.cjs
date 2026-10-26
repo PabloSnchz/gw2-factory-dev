@@ -328,7 +328,7 @@ test('TOP-3: Keys y Guías en index.html sin estilos con JS ni texto técnico; l
   const g = I.slice(I.indexOf('<div id="guideModal"'), I.indexOf('</div>\n</div>', I.indexOf('<div id="guideModal"')));
   assert.doesNotMatch(g, /onmouseover|onmouseout|#5276ff/i);
   assert.equal((g.match(/<a class="gn-guide" href="docs\/user-guide(-avanzado)?\.html" target="_blank" rel="noopener">/g) || []).length, 2);
-  const k = I.slice(I.indexOf('<div id="keysModal"'), I.indexOf('<!-- Modal: Sincronización'));
+  const k = I.slice(I.indexOf('<div id="keysModal"'), I.indexOf('</form>', I.indexOf('<div id="keysModal"')));
   assert.doesNotMatch(k, /preflight|CORS|access_token|403/);
   const perms = [...k.matchAll(/<li><code>(\w+)<\/code><\/li>/g)].map((m) => m[1]);
   const need = [...read('js/app.js').matchAll(/\{ scope: '(\w+)',/g)].map((m) => m[1]);
@@ -389,6 +389,12 @@ test('TOP-3: conducta común: el foco entra, Escape cierra con su propio botón,
   D.doc.body.appendChild(k3); D.doc.body.focus();
   P.modalShown(k3); in3.focus(); P.modalHidden(k3);
   assert.equal(D.activeElement, in3, 'si se abrió sin foco en ningún botón, no se inventa a quién devolverlo');
+});
+
+test('TOP-4: sin Gist (DEC-030): ni botón, ni ventana, ni script en index.html ni la carga de js/gist-sync.js', () => {
+  const I = read('index.html');
+  assert.doesNotMatch(I, /gist-sync|GistSync|syncGistBtn|gistSyncModal|ghTokenInput|api\.github\.com/);
+  assert.equal((I.match(/<div id="[^"]+Modal" class="modal"/g) || []).length, 2, 'quedan Keys y Guías');
 });
 
 test('ventanas una sobre otra: Escape cierra solo la de arriba', async () => {

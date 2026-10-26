@@ -5,7 +5,6 @@
   "limite": 49152,
   "holgura": 1024,
   "congelados": {
-    "index.html": { "base": 69606, "techo": 54034, "nota": "Módulos nuevos van a js/modules.json (FP-5); se cambia por el canal de parches." },
     "js/api-gw2.js": { "base": 132261, "techo": 132261 },
     "js/raid-tracker.js": { "base": 100052, "techo": 100052 },
     "js/router.js": { "base": 90495, "techo": 63097 },
@@ -17,6 +16,7 @@
     "js/wallet-dashboard.js": { "base": 52505, "techo": 52505 }
   },
   "advertencia": {
+    "index.html": { "nota": "Salió de congelados en BL-070 TOP-4 (retiro de Gist: de 54034 a 41949 bytes). Módulos nuevos van a js/modules.json (FP-5). No puede volver a pasar 48 KB." },
     "js/welcome-panel.js": { "nota": "Bienvenida; bajó de 48 KB en BL-070 RAI-5a («Raids y Strikes» pasa a «Raids»). No puede volver a pasar 48 KB." },
     "js/converter-modal.js": { "nota": "Cartera (BL-056); se achicó de 68 KB a 48 KB en CAR-2A." },
     "css/theme-polish.css": { "nota": "Capa visual común; se achica en el marco común (BL-064, paso 8)." }
