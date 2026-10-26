@@ -404,8 +404,8 @@
   function guidesHTML() {
     return '<section class="wl-card" aria-label="Guías y ayuda">' +
       '<div class="wl-h"><h3>Guías y ayuda</h3></div><div class="wl-guides">' +
-        '<a class="wl-guide" href="' + LINKS.guide + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/102367.png" alt="" width="30" height="30"><div><b>Guía de usuario</b><small>Lo básico, módulo por módulo</small></div><em aria-hidden="true">↗</em></a>' +
-        '<a class="wl-guide" href="' + LINKS.guideAdv + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/102361.png" alt="" width="30" height="30"><div><b>Guía avanzada</b><small>Cada módulo en detalle, varias cuentas y copias</small></div><em aria-hidden="true">↗</em></a>' +
+        '<a class="wl-guide" href="' + LINKS.guide + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/102367.png" alt="" width="30" height="30"><div><b>Primeros pasos</b><small>Tu API Key y la Bóveda en 5 minutos</small></div><em aria-hidden="true">↗</em></a>' +
+        '<a class="wl-guide" href="' + LINKS.guideAdv + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/102361.png" alt="" width="30" height="30"><div><b>Guía por módulo</b><small>Qué hace y qué guarda cada módulo</small></div><em aria-hidden="true">↗</em></a>' +
         '<a class="wl-guide" href="' + LINKS.discord + '" target="_blank" rel="noopener"><img src="assets/icons/Welcome/discord.png" alt="" width="30" height="30"><div><b>¿Algo no anda?</b><small>Contalo en el Discord de la comunidad</small></div><em aria-hidden="true">↗</em></a>' +
       '</div></section>';
   }

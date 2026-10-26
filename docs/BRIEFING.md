@@ -21,7 +21,7 @@ Una webapp para jugadores de Guild Wars 2: cartera, inventario, metas, actividad
 | Actividades — PSNA | Dice de qué día son los lugares y cuándo cambian (08:00 UTC), cuenta regresiva, ícono del waypoint servido por La Bóveda y botones "Copiar" (`activities.js` 3.23.0, FEAT-003) |
 | Armería Legendaria | Catálogo de 206 legendarias con su expansión real y chips de la comunidad (Abalorio, Espaldar); cola de crafteo de hasta 5. Cada legendaria se abre como **pantalla** dentro de la Armería: receta en árbol a página completa y Materiales totales con lo que tenés en banco y almacén ("Tengo"). Si los íconos no cargan, la pantalla lo dice y ofrece Reintentar (`legendary-tracker.js` 1.3.0, `legendary-tree-ui.js` 2.2.0, `render-catologo.js` 1.1.0) |
 | Raids y Strikes | Estables; navegación cruzada |
-| Inventario y Personajes, Conversor, Cuentas, Gist Sync | Estables |
+| Inventario y Personajes, Conversor, Cuentas | Estables. La sincronización con GitHub se retiró (DEC-030, BL-070 TOP-4) |
 
 La versión real de cada archivo está en su encabezado. El `?v=` de `index.html` es solo para el caché del navegador y puede ir atrasado.
 
@@ -51,8 +51,8 @@ Catálogo, recetas y precursores de la Armería se regeneran con `tools/legendar
 | `DESARROLLADORES.md` | APIs públicas, eventos, storage y depuración |
 | `CHANGELOG-FACTORY.md` | Qué cambió desde 2026-10-19, separado en producción y DEV. Lo anterior, en `../CHANGELOG.md` |
 | `GW2-API-HECHOS.md` | Lo verificado de la API de GW2 (límites, logros, endpoints) |
-| `user-guide.html`, `user-guide-avanzado.html` | Guías para el jugador |
-| `PRIVACIDAD.md` | Qué datos se guardan y dónde |
+| `user-guide.html` («Primeros pasos»), `user-guide-avanzado.html` («Guía por módulo») | Guías para el jugador; las vigila `tests/guides-content.test.cjs` |
+| `../privacy.html` | Qué datos se guardan y dónde; lo vigila `tests/privacy.test.cjs` |
 | `ONBOARDING.md`, `Modulos JS Referencia.md` | **Referencia histórica** de la v6.6.2: sirven para entender el porqué de módulos viejos, no describen la Armería ni lo agregado después. Ante una diferencia, manda el código |
 | `../ai-memory/` | Memoria de la Factory: decisiones (DEC), lecciones (LES), backlog y estado |
 

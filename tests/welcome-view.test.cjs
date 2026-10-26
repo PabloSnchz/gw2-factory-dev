@@ -129,11 +129,11 @@ test('novedades: las 3 más nuevas, con «NUEVO» solo durante 14 días', () => 
   for (const it of NEWS.items) assert.ok(P.MODULES.some((m) => m.id === it.module), 'módulo conocido: ' + it.module);
 });
 
-test('guías y ayuda: guía de usuario, guía avanzada y Discord', () => {
+test('guías y ayuda: Primeros pasos, Guía por módulo y Discord', () => {
   const html = P.bodyHTML(P.buildModel({}), []);
   assert.match(html, /href="docs\/user-guide\.html"/);
   assert.match(html, /href="docs\/user-guide-avanzado\.html"/);
-  assert.match(html, /Guía de usuario[^]*Guía avanzada[^]*¿Algo no anda\?/);
+  assert.match(html, /Primeros pasos[^]*Guía por módulo[^]*¿Algo no anda\?/);
   for (const f of ['docs/user-guide.html', 'docs/user-guide-avanzado.html', 'privacy.html']) assert.ok(fs.existsSync(path.join(ROOT, f)), f);
 });
 
