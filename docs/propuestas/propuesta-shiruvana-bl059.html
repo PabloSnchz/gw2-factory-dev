@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHV-0 · Propuesta: Shiruvana que se da cuenta (BL-059)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--acc:#A896FF;--gold:#E8C77A;--green:#3CC48A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}.mut{color:var(--muted)}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(168,150,255,.14),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+@media (max-width:820px){.cols{grid-template-columns:1fr}}
+.v{display:grid;grid-template-columns:48px 1fr;gap:12px;padding:12px 16px;border-radius:12px;background:var(--bg-1);border:1px solid var(--bd-1);border-left:4px solid var(--acc);margin:0 0 10px}
+.v--rec{border-left-color:var(--green)}.v--adv{border-left-color:var(--amber)}
+.av{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c9b8ff,#5a46b8);box-shadow:0 0 0 2px var(--acc)}
+.v--rec .av{box-shadow:0 0 0 2px var(--green)}.v--adv .av{box-shadow:0 0 0 2px var(--amber)}
+.lb{margin:0;font-weight:700;font-size:.85rem}
+.bd{margin:2px 0 0;font-size:.9rem;color:var(--tx-2)}
+.fd{margin:6px 0 0;font-size:.78rem;color:var(--muted)}
+.fd b{color:var(--tx-2);font-weight:600}
+.act{display:inline-block;margin-top:8px;font-size:.82rem;font-weight:700;border:1px solid var(--bd-2);border-radius:8px;padding:3px 10px;color:var(--tx-1)}
+.card{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:14px;padding:14px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--bd-1);font-size:.9rem}
+.row:last-child{border-bottom:0}
+.up{color:var(--green);font-weight:700}.dn{color:#ff8a8a;font-weight:700}
+ol li,ul li{color:var(--tx-2);margin:4px 0}
+</style>
+</head>
+<body>
+<main>
+<div class="doc-head">
+  <div>
+    <span class="tag">SHV-0 · PROPUESTA · BL-059</span>
+    <h1>Shiruvana que se da cuenta</h1>
+    <p class="mut">Frente estratégico de mi evolución (DEC-033). 2026-10-26. Nada de esto está construido: es para que lo apruebes o lo cambies.</p>
+  </div>
+</div>
+
+<h2>1. Lo que medí</h2>
+<p>Revisé todo <code>js/</code> en DEV (sondas RUN-126 y RUN-127, ya borradas).</p>
+<table>
+<tr><th>Hallazgo</th><th>Nivel</th><th>Qué significa</th></tr>
+<tr><td>Hablo desde <b>12 archivos</b> (Bienvenida, Keys, Guías y mi rincón; conversor, Metas, Cámara, Raids, Inventario, Actividades, Heredad, Logros y Cuentas) y <b>cada uno decide solo</b> qué digo y cuándo. La Cartera, justo la que tiene más datos, no me tiene.</td><td><span class="sev sev--m">MEDIO</span></td><td>No hay una regla común de prioridad ni de fundamento. Si sumo inteligencia así, cada módulo inventa la suya y empiezo a hablar de más.</td></tr>
+<tr><td><b>Nadie guarda historia.</b> <code>gn:wallet:snapshots</code> está declarada en <code>storage.js</code>, pero ningún módulo la escribe. DEC-033 decía que la Cartera ya guardaba fotos del saldo: no es así.</td><td><span class="sev sev--a">ALTO</span></td><td>N3 (Analítica) necesita comparar con el pasado. Sin historia, hoy no puedo decir «subió» o «bajó» nada.</td></tr>
+<tr><td>Raids usa dos tipos de mensaje propios (<code>success</code>, <code>hint</code>) fuera de los 4 de DEC-024.</td><td><span class="sev sev--b">BAJO</span></td><td>Se ordena solo cuando Raids pase al formato común.</td></tr>
+<tr><td>Ya existen piezas para cruzar: estado público de Logros, Inventario (Multicuenta con precios del Bazar), Actividades, Cámara y la Armería (qué falta de cada legendaria).</td><td><span class="sev sev--b">a favor</span></td><td>N4 no necesita pedidos nuevos a la API: puedo leer lo que cada módulo ya publica.</td></tr>
+</table>
+<div class="note">Conclusión: antes de «ser más inteligente» necesito dos cimientos: <b>un formato común</b> para lo que observo (con su fundamento) y <b>una memoria chica</b> de la cuenta en tu navegador.</div>
+
+<h2>2. La propuesta</h2>
+<h3>Cómo me vas a ver (mismo estilo de siempre, con una línea nueva: el fundamento)</h3>
+<div class="frame">
+  <p class="frame-label">Maqueta · Cartera, después de tres semanas de historia</p>
+  <div class="cols">
+    <div>
+      <div class="v"><div class="av" aria-hidden="true"></div><div>
+        <p class="lb">Shiruvana te explica</p>
+        <p class="bd">Esta semana sumaste <b>142 de oro</b> en tus 4 cuentas: 38 más que tu promedio de las 3 semanas anteriores. Lo que más creció fue la cuenta principal.</p>
+        <p class="fd">Lo sé por: <b>tus fotos diarias de la Cartera</b> (21 días guardados en este navegador) · última, hoy 14:10</p>
+        <span class="act">Ver la evolución</span>
+      </div></div>
+      <div class="v v--adv"><div class="av" aria-hidden="true"></div><div>
+        <p class="lb">Shiruvana te avisa</p>
+        <p class="bd">Tus <b>Monedas de Laurel</b> no cambian hace 23 días en ninguna de tus cuentas.</p>
+        <p class="fd">Lo sé por: <b>tus fotos diarias de la Cartera</b> · hoy 14:10</p>
+      </div></div>
+    </div>
+    <div class="card">
+      <p class="lb" style="margin-bottom:6px">Evolución · últimos 30 días</p>
+      <svg viewBox="0 0 300 70" width="100%" height="70" role="img" aria-label="Oro total, últimos 30 días: sube de 1.820 a 2.105">
+        <polyline fill="none" stroke="#E8C77A" stroke-width="2.5" points="0,58 20,55 40,56 60,50 80,51 100,47 120,44 140,46 160,40 180,37 200,35 220,30 240,26 260,22 280,18 300,12"/>
+      </svg>
+      <div class="row"><span>Oro</span><span>2.105 <span class="up">▲ 285</span></span></div>
+      <div class="row"><span>Karma</span><span>4,1 M <span class="up">▲ 0,3 M</span></span></div>
+      <div class="row"><span>Gemas</span><span>400 <span class="mut">=</span></span></div>
+      <div class="row"><span>Monedas de Laurel</span><span>212 <span class="mut">= 23 días</span></span></div>
+      <div class="row"><span>Aclamación astral</span><span>3.950 <span class="dn">▼ 1.200</span></span></div>
+    </div>
+  </div>
+  <p class="mut" style="margin-top:10px">Los números son de ejemplo. La gráfica y la línea «Lo sé por» son lo nuevo; el resto ya existe.</p>
+</div>
+
+<h3>Los principios no cambian (DEC-033)</h3>
+<ul>
+<li><b>Explico, no decido.</b> Siempre con el fundamento a la vista: de dónde sale el dato y cuándo.</li>
+<li><b>Tus datos se quedan en tu navegador.</b> La memoria nueva vive en <code>localStorage</code>; nada sale a terceros.</li>
+<li><b>Hablo de un módulo dentro de ese módulo</b>; la Bienvenida solo resume una línea y te manda al módulo dueño.</li>
+<li><b>Más inteligencia no es más mensajes:</b> uno por lugar, el más importante.</li>
+</ul>
+
+<h2>3. Plan paso por paso (cada uno con tu validación)</h2>
+<table>
+<tr><th>Paso</th><th>Nivel</th><th>Qué hago</th><th>Archivos</th></tr>
+<tr><td><b>SHV-1</b></td><td>N2 consolidado</td><td>Formato común de observación: <code>{módulo, prioridad, tipo, texto, acción, fundamento: {fuente, cuándo}}</code>. Mi voz suma la línea «Lo sé por». Paso <b>Cartera y Bienvenida</b> primero; los demás módulos siguen igual y se suman de a uno cuando se toquen.</td><td><code>js/shv-core.js</code> nuevo (cargado por manifiesto), <code>shiruvana.js</code> 1.1.0, test guardián</td></tr>
+<tr><td><b>SHV-2</b></td><td>N3, primer caso</td><td>Memoria de la Cartera: <b>una foto por día y por cuenta</b> de las divisas principales. Gráfica de 30 días y mis observaciones de tendencia en la Cartera. Clave nueva <code>gn:shv:wallet</code> (te aviso antes, como siempre).</td><td><code>js/shv-memory.js</code>, <code>js/shv-wallet.js</code> nuevos; privacidad y guía al día</td></tr>
+<tr><td><b>SHV-3</b></td><td>N4, primer caso</td><td>La legendaria: en la Armería, «te faltan N materiales, ~X oro al precio de hoy; a tu ritmo de la semana, ~Y días». Cruza Armería + Inventario + Bazar + la memoria de SHV-2.</td><td><code>js/shv-legendary.js</code> nuevo</td></tr>
+<tr><td><b>SHV-4</b></td><td>N5, semilla</td><td>«Lo que recuerdo de vos» en Ajustes: ver, exportar y <b>borrar</b> toda mi memoria con un clic. Va antes de sumar más memoria.</td><td><code>js/shv-memory.js</code> 1.1.0</td></tr>
+</table>
+<p class="mut">Cada paso respeta el presupuesto de 40 KB por archivo y entra por <code>js/modules.json</code>; <code>index.html</code> no se toca. El cargador acepta hasta 40 módulos; SHV-1 a SHV-3 suman 4.</p>
+
+<h2>4. Lo que necesito que decidas</h2>
+<table>
+<tr><th>#</th><th>Decisión</th><th>Te recomiendo</th></tr>
+<tr><td>D1</td><td>Alcance de esta tanda</td><td><b>SHV-1 y SHV-2</b> ahora. SHV-3 y SHV-4 con otra propuesta, cuando la memoria tenga unas semanas de datos reales.</td></tr>
+<tr><td>D2</td><td>Cuánto recuerdo</td><td><b>90 días</b>, una foto por día y por cuenta (la última del día pisa a la anterior). Estimo menos de 60 KB con 5 cuentas.</td></tr>
+<tr><td>D3</td><td>Qué divisas guardo</td><td><b>Oro, karma, gemas, Monedas de Laurel, Aclamación astral</b> y las que tengas fijadas en la Cartera.</td></tr>
+<tr><td>D4</td><td>Cuándo saco la foto</td><td>Cada vez que la Cartera lee la API (sin pedidos extra). Si un día no abrís la Bóveda, ese día queda vacío y lo digo así.</td></tr>
+<tr><td>D5</td><td>Cómo identifico cada cuenta</td><td>Con una huella de la Key que <b>no guarda ningún carácter</b> de ella (la misma de Actividades). Es la misma que propongo después para la Cámara (deuda BAJO).</td></tr>
+<tr><td>D6</td><td>Dónde hablo de tendencias</td><td>En la <b>Cartera</b> (completo) y una línea en la <b>Bienvenida</b> que te lleva a la Cartera.</td></tr>
+</table>
+<div class="note"><b>Riesgo:</b> MEDIO. Clave nueva en el navegador y una voz más presente. Lo cubro con: aviso previo de la clave, tope de 90 días, la línea «Lo sé por» en cada observación, test guardián del formato y, en SHV-4, el botón para borrar todo.</div>
+</main>
+</body>
+</html>
