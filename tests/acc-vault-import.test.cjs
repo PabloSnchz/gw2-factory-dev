@@ -11,7 +11,7 @@ const vm = require('node:vm');
 
 const ROOT = path.join(__dirname, '..');
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
-// Vive dentro de js/acc-vault-edit.js (el manifiesto está en su tope de 30 módulos): se mide su sección.
+// Vive dentro de js/acc-vault-edit.js (cuando se hizo, el manifiesto estaba en el tope de 30 módulos de js/boot.js): se mide su sección.
 const FULL = read('js/acc-vault-edit.js');
 const SRC = FULL.slice(FULL.indexOf('// ===== Importar desde Excel'.replace('=====', '='.repeat(66))), FULL.indexOf('fin de Importar desde Excel'));
 const CAT = JSON.parse(read('assets/data/accounts/catalog.json'));
@@ -184,7 +184,7 @@ test('archivo: la sección de importación dentro de acc-vault-edit.js, nada en 
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
   assert.ok(man.indexOf('js/acc-vault-edit.js') >= 0 && man.indexOf('js/acc-vault-edit.js') < man.indexOf('js/acc-view.js'));
   assert.ok(!man.includes('js/acc-vault-import.js') && !fs.existsSync(path.join(ROOT, 'js', 'acc-vault-import.js')), 'no hay un archivo aparte');
-  assert.ok(man.length <= 30, 'js/boot.js carga hasta 30 módulos');
+  assert.ok(man.length <= Number(read('js/boot.js').match(/var MAX = (\d+);/)[1]), 'no pasa el tope de js/boot.js');
   assert.match(read('index.html'), /xlsx-0\.20\.2\/package\/dist\/xlsx\.full\.min\.js/, 'SheetJS lo carga index.html');
 });
 

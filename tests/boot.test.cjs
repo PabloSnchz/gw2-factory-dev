@@ -32,8 +32,8 @@ const B = load().GNBoot;
 const res = (status, body) => ({ ok: status === 200, status, json: async () => (typeof body === 'string' ? JSON.parse(body) : body) });
 
 test('versión y manifiesto', () => {
-  assert.equal(B.version, '1.0.0');
-  assert.match(SRC, /\* Versión: 1\.0\.0\n/);
+  assert.equal(B.version, '1.1.0');
+  assert.match(SRC, /\* Versión: 1\.1\.0\n/);
   assert.equal(B.manifest, 'js/modules.json');
 });
 
@@ -71,10 +71,10 @@ test('plan: solo js/ propios con versión; malas entradas se saltean con motivo'
   ]);
   assert.deepEqual(B.plan(null).errors, ['el manifiesto no tiene "modules"']);
   assert.deepEqual(B.plan({ modules: {} }).errors, ['el manifiesto no tiene "modules"']);
-  const many = Array.from({ length: 31 }, (_, i) => ({ src: 'js/m' + i + '.js', v: '1.0.0' }));
+  const many = Array.from({ length: 41 }, (_, i) => ({ src: 'js/m' + i + '.js', v: '1.0.0' }));
   const q = B.plan({ modules: many });
-  assert.equal(q.list.length, 30);
-  assert.deepEqual(q.errors, ['modules[30]: más de 30 módulos']);
+  assert.equal(q.list.length, 40);
+  assert.deepEqual(q.errors, ['modules[40]: más de 40 módulos']);
 });
 
 test('inyecta en orden, con versión, async=false, y no repite lo que ya está', () => {
