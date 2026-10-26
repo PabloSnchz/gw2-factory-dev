@@ -185,8 +185,8 @@ ok(/aria-label="Liberar la caché de la API y del WV"/.test(btnHtml),
 const titleDeclaraIntactos = /\(\s*no toca[^)]*\)/i.test(btnHtml);
 ok(titleDeclaraIntactos,
   'el title declara que cuentas, pines y ajustes NO se borran (el registro borra por prefijo)');
-ok(html.indexOf('settings-manager.js?v=1.0.4') !== -1,
-  'el <script> sube a v=1.0.4: sin bump, el navegador sirve el .js viejo desde su cache');
+ok(/settings-manager\.js\?v=\d+\.\d+\.\d+/.test(html),
+  'el <script> pide settings-manager con su versión (en [2] se compara con la del módulo): sin bump, el navegador sirve el .js viejo desde su cache');
 
 const css = fs.readFileSync(path.join(ROOT, 'css', 'main.css'), 'utf8');
 ok(/\.an-util-link--btn\s*\{/.test(css),
@@ -443,12 +443,34 @@ ok(clearApiBody.indexOf('location.reload') === -1,
 ok(clearApiBody.indexOf('__cacheClear({ dryRun: true })') !== -1 ||
    /__cacheClear\(\{\s*dryRun:\s*true\s*\}\)/.test(clearApiBody),
   'el primer llamado es SIEMPRE en dryRun: es lo que hace que cancelar no borre');
-ok(clearApiBody.indexOf('confirm(') !== -1, 'pide confirmacion antes de borrar de verdad');
+// TOP-2 (BL-070): la pregunta va por ask(): la ventana de la Bóveda, o confirm() si no está (la de este arnés).
+ok(clearApiBody.indexOf('ask(msg') !== -1, 'pide confirmacion antes de borrar de verdad');
 const iDry = clearApiBody.indexOf('dryRun: true');
-const iConf = clearApiBody.indexOf('confirm(');
+const iConf = clearApiBody.indexOf('ask(msg');
 const iReal = clearApiBody.lastIndexOf('__cacheClear()');
 ok(iDry < iConf && iConf < iReal,
   'el orden es dryRun -> confirm -> borrado real (posiciones ' + [iDry, iConf, iReal].join(' < ') + ')');
 
-console.log('\n' + (fail === 0 ? 'TODO OK' : 'HAY FALLOS') + ' — ' + pass + ' pass / ' + fail + ' FAIL');
-process.exit(fail === 0 ? 0 : 1);
+// ── 8. TOP-2 (BL-070): con la ventana de la Bóveda, la misma pregunta y el mismo resultado ──
+// El arnés acepta en el confirm del navegador: si el botón lo usara, borraría. Así se ve que no lo usa.
+console.log('\n[8] con la ventana de la Bóveda (GNUI): la misma pregunta; cancelar sigue sin borrar');
+function withGnui(answer) {
+  const m = mount({ accept: true });
+  const asks = [];
+  m.sandbox.GNUI = { confirm(o) { asks.push(o); return Promise.resolve(answer); } };
+  seed(m);
+  return { m: m, asks: asks };
+}
+const g1 = withGnui(false), g2 = withGnui(true);
+press(g1.m, 'GNUI cancelar');
+press(g2.m, 'GNUI aceptar');
+new Promise((r) => setImmediate(r)).then(() => {
+  eq(g1.m.confirmMsgs.length + g2.m.confirmMsgs.length, 0, 'no usa el confirm del navegador');
+  eq(g1.asks.length, 1, 'pregunta una vez en la ventana');
+  ok(g1.asks[0] && /¿Liberar la caché de la API y del WV\?/.test(g1.asks[0].title), 'con el mismo título de siempre');
+  ok(g1.asks[0] && g1.asks[0].text.some((l) => /3 claves/.test(l)), 'y la misma cifra del dryRun');
+  eq(g1.m.store.size, 5, 'cancelar en la ventana no borra nada');
+  eq(g2.m.store.size, 2, 'aceptar en la ventana borra solo la cache');
+  console.log('\n' + (fail === 0 ? 'TODO OK' : 'HAY FALLOS') + ' — ' + pass + ' pass / ' + fail + ' FAIL');
+  process.exit(fail === 0 ? 0 : 1);
+});

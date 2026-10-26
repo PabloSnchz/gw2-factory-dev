@@ -1,6 +1,6 @@
 /*!
  * js/gn-ui.js — Ventana común y avisos de la Bóveda (BL-070 paso 5, TOP-1)
- * Versión: 1.0.0
+ * Versión: 1.0.1
  *
  * Avisos: reemplaza a window.toast con la MISMA forma de llamarlo, así ninguna de las llamadas
  * de hoy cambia: toast(tipo, texto, { ttl }) devuelve { close, el }, y toast.legacy(texto, tipo, ms).
@@ -17,11 +17,12 @@
  *    botón que la abrió. En una pregunta peligrosa el foco arranca en «Cancelar».
  *  - Botones de 44 px, textos solo con los colores de texto del theme, «movimiento reducido».
  * No guarda nada. No toca index.html: toma el #toasts que ya existe (o lo crea).
+ * 1.0.1 (TOP-2): el Tab no sale de la ventana: la trampa de foco de la ventana de Keys escucha en document.
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var DEFAULT_TTL = 3500, MIN_ERROR_TTL = 6000, MAX_TOASTS = 3, OUT_MS = 180;
   var LABEL = { info: 'Aviso', success: 'Listo', warn: 'Ojo', error: 'No se pudo' };
   var SVG = {
@@ -253,6 +254,7 @@
           return;
         }
         if (e.key !== 'Tab') return;
+        e.stopPropagation();
         var list = focusables, at = list.indexOf(doc.activeElement);
         if (e.shiftKey && at <= 0) { e.preventDefault(); list[list.length - 1].focus(); }
         else if (!e.shiftKey && (at === list.length - 1 || at < 0)) { e.preventDefault(); list[0].focus(); }

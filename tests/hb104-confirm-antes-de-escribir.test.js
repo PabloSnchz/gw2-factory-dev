@@ -165,6 +165,7 @@ function montar(src, opts) {
     },
     location: { reload() { sandbox.__reload = true; } },
     Analytics: undefined,
+    GNUI: opts2.gnui,   // TOP-2 (BL-070): la ventana de la Bóveda; sin ella, confirm
     promiseTick: null,
   };
   sandbox.window = sandbox;
@@ -280,17 +281,30 @@ section('1. CONTROL NEGATIVO: el arnes tiene que ver el defecto en el codigo VIE
               'importAll lee con readImportFile (que no escribe)');
             const lineas = cuerpoImportAll.split('\n');
             const lineaApply = lineas.findIndex(l => /^\s*applyImportData\(importData\);/.test(l));
-            const lineaConfirm = lineas.findIndex(l => /if \(confirm\(confirmMsg\)\)/.test(l));
+            const lineaConfirm = lineas.findIndex(l => /if \((await ask|confirm)\(confirmMsg[,)]/.test(l)); // TOP-2: la pregunta va por ask() (ventana de la Bóveda o confirm)
             ok(lineaApply > lineaConfirm && lineaApply >= 0 && lineaConfirm >= 0,
               'applyImportData se llama DESPUES del if (confirm(...)) DENTRO de importAll',
               'apply@' + (lineaApply + 1) + ' confirm@' + (lineaConfirm + 1));
 
-            console.log('\n' + pass + ' aserciones, ' + fail + ' FAIL');
-            if (fallos.length) {
-              console.log('FALLAS:');
-              fallos.forEach(f => console.log('  - ' + f));
-            }
-            process.exitCode = fail ? 1 : 0;
+            section('6. TOP-2 (BL-070): con la ventana de la Bóveda (GNUI) pasa lo mismo');
+            const vistas = [];
+            const mG = montar(srcReal, { gnui: { confirm: function (o) { vistas.push(o); return Promise.resolve(false); } } });
+            return correrImportAll(mG).then(function (r6) {
+              ok(r6.ok === false && mG.escrituras.length === 0, 'con «Cancelar» en la ventana de la Bóveda, CERO escrituras', 'escrituras=' + mG.escrituras.length);
+              ok(vistas.length === 1 && /Restaurar/.test(vistas[0].title || '') && vistas[0].danger === true,
+                'pregunta una vez, con el título de siempre y como acción peligrosa');
+              ok(mG.sandbox.__confirmVisto === undefined, 'y no usa el confirm del navegador');
+              const mG2 = montar(srcReal, { gnui: { confirm: function () { return Promise.resolve(true); } } });
+              return correrImportAll(mG2).then(function (r7) {
+                ok(r7.ok === true && mG2.escrituras.length >= 7, 'con «Restaurar» en la ventana, el restore escribe las 7 familias', 'n=' + mG2.escrituras.length);
+                console.log('\n' + pass + ' aserciones, ' + fail + ' FAIL');
+                if (fallos.length) {
+                  console.log('FALLAS:');
+                  fallos.forEach(f => console.log('  - ' + f));
+                }
+                process.exitCode = fail ? 1 : 0;
+              });
+            });
           })
           .catch(function (e) { console.log('  FAIL  importFromFile lanzo: ' + e.message); process.exitCode = 1; });
       });

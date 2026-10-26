@@ -77,16 +77,16 @@ const tick = () => new Promise((r) => setImmediate(r));
 // ------------------------------------------------------------------ archivo
 test('archivo: presupuesto, versión, manifiesto con los gn-*, fuera de index.html, sin emojis ni almacenamiento', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /\* Versión: 1\.0\.0\n/);
+  assert.match(SRC, /\* Versión: 1\.0\.1\n/);
   const { sb } = box();
-  assert.equal(sb.GNUI.version, '1.0.0');
+  assert.equal(sb.GNUI.version, '1.0.1');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}]/u, 'sin emojis');
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|Storage\.|fetch\(/);
   const code = SRC.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
   assert.doesNotMatch(code, /(^|[^\w.])(window\.)?(alert|confirm|prompt)\s*\(\s*['"]/, 'no usa los diálogos del navegador');
   const man = JSON.parse(read('js/modules.json')).modules;
   const i = man.findIndex((m) => m.src === 'js/gn-ui.js');
-  assert.ok(i >= 0 && man[i].v === '1.0.0', 'en el manifiesto con su versión');
+  assert.ok(i >= 0 && man[i].v === '1.0.1', 'en el manifiesto con su versión');
   assert.ok(i === man.findIndex((m) => m.src === 'js/gn-shell.js') + 1, 'junto a los gn-*, antes de los módulos');
   assert.doesNotMatch(read('index.html'), /gn-ui\.js/);
   const MAX = Number((read('js/boot.js').match(/var MAX = (\d+);/) || [])[1]);
@@ -237,8 +237,11 @@ test('ventana: confirmar peligroso arranca en Cancelar, Tab no se escapa, Escape
   assert.ok(btns[1].classList.contains('gn-dlg__btn--danger'));
   assert.equal(D.activeElement, btns[0], 'en una pregunta peligrosa el foco arranca en Cancelar');
   btns[1].focus();
-  assert.ok(fire(btns[1], 'keydown', { key: 'Tab' }).defaultPrevented);
+  const tab = fire(btns[1], 'keydown', { key: 'Tab' });
+  assert.ok(tab.defaultPrevented);
+  assert.ok(tab.stopped, 'la trampa de foco de otra ventana (Keys escucha en document) no se lleva el Tab');
   assert.equal(D.activeElement, byClass(D, 'gn-dlg__x')[0], 'Tab desde el último vuelve al primero');
+  assert.ok(fire(D.activeElement, 'keydown', { key: 'Tab' }).stopped, 'tampoco en el medio');
   fire(D.activeElement, 'keydown', { key: 'Tab', shiftKey: true });
   assert.equal(D.activeElement, btns[1], 'Mayús+Tab desde el primero va al último');
   fire(btns[1], 'keydown', { key: 'Escape' });
@@ -293,6 +296,18 @@ test('ventana: pedir un texto trae el valor, Enter guarda, vacío no sigue y can
   assert.equal(err.textContent, 'Escribí algo para seguir.');
   fire(in2, 'keydown', { key: 'Escape' });
   assert.equal(await pr, null);
+});
+
+test('TOP-2: renombrar, eliminar, restaurar y liberar la caché preguntan con esta ventana; el navegador queda solo de respaldo', () => {
+  const strip = (s) => s.split('\n').filter((l) => !/^\s*(\/\/|\*|\/\*)/.test(l));
+  const nat = /(^|[^\w.])(alert|confirm|prompt)\s*\(/;
+  const app = strip(read('js/app.js')).filter((l) => nat.test(l));
+  assert.equal(app.length, 2, app.join('\n'));
+  app.forEach((l) => assert.match(l, /window\.GNUI \? await GNUI\.(prompt|confirm)\(/, l.trim()));
+  const SM = read('js/settings-manager.js');
+  assert.deepEqual(strip(SM).filter((l) => nat.test(l)).map((l) => l.trim()), ['var yes = confirm(msg);'], 'en settings-manager, el navegador solo como respaldo de ask()');
+  assert.equal((SM.match(/(await|return) ask\(/g) || []).length, 3, 'las 3 preguntas van por ask()');
+  assert.match(SM, /window\.GNUI\.alert\(\{ title: 'No se pudo restaurar'/);
 });
 
 test('ventanas una sobre otra: Escape cierra solo la de arriba', async () => {
