@@ -13,7 +13,7 @@
  * Si el navegador no tiene IndexedDB (o falla al abrir), handles() devuelve false y quien llama
  * sigue usando localStorage como siempre: nunca rompe.
  * Los valores se guardan como texto JSON: cada get() devuelve un objeto nuevo, igual que hoy.
- * BLS-1: inerte, nadie lo carga todavía. BLS-2 lo conecta a js/api-gw2.js.
+ * BLS-2: index.html lo carga (sin defer) y js/api-gw2.js le delega sus cachés (lsGet/lsSet/lsDel/lsHas).
  */
 (function (root) {
   'use strict';
