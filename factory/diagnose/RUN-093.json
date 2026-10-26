@@ -1,0 +1,1 @@
+{"id":"RUN-093","tests":["tests/gn-ui.test.cjs","tests/boot.test.cjs","tests/acc-vault-import.test.cjs","tests/index-identity.test.cjs","tests/index-versions.test.cjs","tests/size-budget.test.cjs","tests/hb80-toast-permanencia.test.js","tests/hb81-toast-legible.test.js","tests/hb85-ttl-y-fuga.test.js","tests/gn-shell.test.cjs"]}
