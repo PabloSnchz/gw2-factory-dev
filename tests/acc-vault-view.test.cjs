@@ -111,7 +111,7 @@ async function openWith(x, text, pass) {
 
 test('archivo: presupuesto, versión, manifiesto entre acc-vault y acc-view, fuera de index.html, sin storage propio ni emojis', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.match(SRC, /Versión: 1\.2\.1/);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|indexedDB|fetch\(/, 'no guarda ni manda nada');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
@@ -137,6 +137,8 @@ test('CSS: solo los textos y superficies del theme que ya mide Cuentas (4.5:1 en
   colors.forEach((c) => assert.match(c, /^var\(--tx-[12]\)$/, 'texto ' + c));
   [...css.matchAll(/background:([^;}]+)/g)].forEach((m) => assert.match(m[1].trim(), /^var\(--bg-[01]\)$/, 'fondo ' + m[1]));
   assert.match(css, /@media \(max-width:900px\)\{\.vk-grid\{grid-template-columns:1fr\}/);
+  assert.match(css, /\.vk-pick:focus-within\{outline:2px solid var\(--acc-1\);outline-offset:2px\}/, 'el campo de archivo es invisible: el foco se ve en su botón');
+  assert.match(css, /@media \(max-width:900px\)\{[^\n]*\.vk-pass input\{min-height:44px\}/, 'la contraseña llega a 44 px en el celular');
 });
 
 test('cerrado: pide archivo y contraseña, sin secretos; el panel anterior ya no se ve', async () => {

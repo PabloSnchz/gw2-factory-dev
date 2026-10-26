@@ -1,7 +1,10 @@
 /*!
  * js/acc-vault-view.js — La pestaña Llavero de Cuentas (BL-070, paso 4, CTA-3)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-26) · CTA-4b: «Importar desde Excel» y «Descargar plantilla» (window.AccVaultImport, dentro de js/acc-vault-edit.js); se
+ * Versión: 1.2.1 (2026-10-26) · CTA-5, revisión final: «Elegir archivo» e «Importar desde Excel» muestran el foco
+ *          del teclado (el campo de archivo es invisible, así que el anillo va en su botón) y la contraseña
+ *          llega a 44 px en el celular
+ *          1.2.0 (2026-10-26) · CTA-4b: «Importar desde Excel» y «Descargar plantilla» (window.AccVaultImport, dentro de js/acc-vault-edit.js); se
  *          va «Mostrar el panel anterior»: el panel viejo y su asistente de 4 archivos ya no se ven
  *          1.1.0 (2026-10-26) · CTA-4a: editar, agregar, borrar y guardar con el cifrado nuevo (js/acc-vault-edit.js),
  *          «Crear Llavero nuevo», la copia nueva del navegador primero (D3) y, con cambios sin guardar, no se
@@ -23,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.2.1';
   var ROUTE = '#/account/accounts';
   var LEGACY_KEY = 'accounts:lastFile'; // la copia cifrada del formato viejo (la usa producción hasta promover)
   var V2_KEY = 'accounts:vault2';       // la copia con el cifrado nuevo (D3), la escribe js/acc-vault-edit.js
@@ -274,7 +277,7 @@
     '.vk-h{display:flex;gap:12px;align-items:center}.vk-h h3{margin:0;font-size:1.02rem;color:var(--tx-1)}.vk-h p{margin:2px 0 0;font-size:.84rem;color:var(--tx-2)}.vk-av{--tc:#8E96A3}',
     '.vk-file{margin:0;font-size:.85rem;color:var(--tx-2)}.vk-file b{color:var(--tx-1)}',
     '.vk-form{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.vk-chosen{font-size:.8rem;color:var(--tx-2)}',
-    '.vk-pick{position:relative;overflow:hidden}.vk-file-in{position:absolute;inset:0;opacity:0;cursor:pointer}',
+    '.vk-pick{position:relative;overflow:hidden}.vk-file-in{position:absolute;inset:0;opacity:0;cursor:pointer}.vk-pick:focus-within{outline:2px solid var(--acc-1);outline-offset:2px}',
     '.vk-pass{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--tx-2)}.vk-pass input{font:inherit;font-size:.9rem;border:1px solid var(--bd-2);border-radius:10px;padding:6px 10px;background:var(--bg-0);color:var(--tx-1);min-height:32px;min-width:200px}',
     '.vk-go{font-weight:700;border-color:var(--cv-mod)}',
     '.vk-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:8px 12px;font-size:.85rem;color:var(--tx-2);margin-bottom:10px}.vk-bar b{color:var(--tx-1)}.vk-bar .cv-btn{margin-left:auto}',
@@ -284,7 +287,7 @@
     '.vk-row img{width:20px;height:20px}.vk-k{color:var(--tx-2)}.vk-v{color:var(--tx-1);overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.vk-masked{letter-spacing:.06em}',
     '.vk-row--note{grid-template-columns:20px 130px minmax(0,1fr)}.vk-note{font-family:inherit;white-space:pre-wrap}',
     '.vk-acts{display:flex;gap:6px}.vki{display:flex;gap:8px;align-items:center;flex-wrap:wrap;border-top:1px solid var(--bd-1);padding-top:12px}.vki-note{font-size:.8rem;color:var(--tx-2);flex:1 1 260px}.vki-off{opacity:.6}',
-    '@media (max-width:900px){.vk-grid{grid-template-columns:1fr}.vk-row{grid-template-columns:20px minmax(0,1fr) auto}.vk-k{display:none}.vk-row--note{grid-template-columns:20px minmax(0,1fr)}.vk-pass,.vk-pass input{width:100%}.vk-acts{flex-wrap:wrap}}'
+    '@media (max-width:900px){.vk-grid{grid-template-columns:1fr}.vk-row{grid-template-columns:20px minmax(0,1fr) auto}.vk-k{display:none}.vk-row--note{grid-template-columns:20px minmax(0,1fr)}.vk-pass,.vk-pass input{width:100%}.vk-pass input{min-height:44px}.vk-acts{flex-wrap:wrap}}'
   ].join('\n');
   function ensureCss() {
     if (!doc || !doc.createElement || !doc.head || byId('acc-vault-view-css')) return;
