@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GUI-0 · Propuesta: guías de uso y privacidad al día (BL-071)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--acc:#A896FF;--gold:#E8C77A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p{color:var(--tx-2);margin:6px 0}.mut{color:var(--muted)}
+a{color:#B9A8FF}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.doc-head{display:flex;gap:16px;align-items:center;flex-wrap:wrap;border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(168,150,255,.14),var(--bg-1) 70%)}
+.doc-head img{width:56px;height:56px}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.04em;border-radius:999px;padding:2px 9px;border:1px solid var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.sev{font-weight:800;font-size:.72rem;border-radius:6px;padding:1px 6px;white-space:nowrap}
+.sev--a{background:#5a3b14;color:#ffd38a}.sev--m{background:#24324d;color:#b9d0ff}.sev--b{background:#22352c;color:#a9e6c6}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.frame{border:1px dashed var(--bd-2);border-radius:18px;padding:14px;margin:14px 0;background:#0b0d12}
+.frame-label{font-size:.75rem;color:var(--muted);margin:0 0 10px;text-transform:uppercase;letter-spacing:.06em}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.g{background:var(--bg-1);border:1px solid var(--bd-1);border-radius:16px;padding:18px}
+.g-h{display:flex;align-items:center;gap:14px;padding-bottom:12px;margin-bottom:12px;border-bottom:1px solid var(--bd-1);background:linear-gradient(180deg,rgba(60,196,138,.12),transparent);border-radius:12px 12px 0 0;padding:12px}
+.plate{width:56px;height:56px;border-radius:14px;background:var(--bg-0);border:2px solid #3CC48A;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(60,196,138,.35);flex-shrink:0}
+.plate img{width:44px;height:44px}
+.g-h b{font-size:1.15rem}.g-h small{display:block;color:var(--muted)}
+.g h4{margin:12px 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{font-size:.78rem;border:1px solid var(--bd-2);border-radius:999px;padding:2px 9px;color:var(--tx-2)}
+.toc{columns:2;font-size:.9rem;color:var(--tx-2);margin:0;padding-left:18px}
+@media(max-width:820px){.cols{grid-template-columns:1fr}.toc{columns:1}}
+</style>
+</head>
+<body>
+<main>
+
+<div class="doc-head">
+  <img src="../../assets/brand/gato-negro.svg" alt="">
+  <div>
+    <h1>Guías de uso y privacidad al día — propuesta</h1>
+    <p>BL-071 · GUI-0 · 2026-10-26 · <span class="tag">Espera tu aprobación</span></p>
+  </div>
+</div>
+
+<p>La Bóveda cambió entera en BL-070, pero lo que se le explica al jugador sigue describiendo la de antes. Medí las dos guías, la página de privacidad y sus copias con una sonda (RUN-107, ya borrada) y las comparé con la app de hoy.</p>
+
+<h2>1. Lo que medí</h2>
+<table>
+<thead><tr><th>Severidad</th><th>Qué</th><th>Medido</th></tr></thead>
+<tbody>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>La página de privacidad promete cosas que no son ciertas.</b></td><td><code>privacy.html</code> (la enlaza la Bienvenida) y su copia <code>docs/PRIVACIDAD.md</code>:
+<ul>
+<li>Nombran «Gist» 6 y 7 veces: la sincronización con GitHub se retiró en TOP-4.</li>
+<li>Su tabla de datos guardados lista claves que no existen (<code>gn:apiKeys</code>, <code>gn:selectedKey</code>, <code>gn:accountsData</code>…). Las reales son 74, entre ellas <code>gn:account:keys</code>, <code>gn:account:selected</code> y la copia cifrada del Llavero, <code>accounts:vault2</code>.</li>
+<li>Dice que Analytics se apaga en «Configuración → Analytics». Esa opción no existe: Analytics solo se carga en producción (DEC-006) y en DEV no sale nada del navegador.</li>
+<li>No dice nada del Llavero ni de su cifrado (PBKDF2 con 600.000 iteraciones y AES-GCM).</li>
+</ul></td></tr>
+<tr><td><span class="sev sev--a">ALTO</span></td><td><b>La guía básica enseña pantallas que ya no existen.</b></td><td><code>docs/user-guide.html</code> (19.005 B, 10 secciones):
+<ul>
+<li>El asistente de 4 pasos que baja un JSON en claro.</li>
+<li>La sincronización con Gist y su token de GitHub (4 menciones).</li>
+<li>Un botón «Backup» en la barra que hoy es Ajustes → «Guardar copia de ajustes».</li>
+<li>La llave semanal «detectada» por un ladrón de nivel 10. La regla real no es esa, y la API no la confirma.</li>
+<li>La dirección de producción como punto de entrada.</li>
+</ul></td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>La guía avanzada describe 6 pantallas retiradas.</b></td><td><code>docs/user-guide-avanzado.html</code> (28.474 B, 17 secciones):
+<ul>
+<li>Las 6 pantallas retiradas son: Raid Tracker con su cabecera Raids/Strikes, Strike Tracker («Strike» 14 veces), el Dashboard de Inventario en <code>#/inventory/dashboard</code>, el Panel de Cuentas «Profile Card», Gist (5 veces) y los Home Nodes dentro de Actividades.</li>
+<li>No tiene secciones para la Armería Legendaria, la Heredad, el Llavero ni la Bienvenida.</li>
+<li>Corrijo un número: en TOP-0 dije 24 «Strike» y 8 «Gist». La medida exacta es 14 y 5.</li>
+</ul></td></tr>
+<tr><td><span class="sev sev--m">MEDIO</span></td><td><b>Los permisos están viejos.</b></td><td>La tabla de la guía avanzada pide <code>account</code> y <code>progression</code> para un «Strike Tracker» que ya no existe. Además le faltan <code>unlocks</code> y <code>characters</code>. La Bienvenida ya tiene la tabla real de los 7 permisos y los módulos que usa cada uno (<code>SCOPES</code> en <code>welcome-panel.js</code>), y la guía no la usa.</td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Forma.</b></td><td>
+<ul>
+<li>58 emojis en la básica y 34 en la avanzada, cuando la app ya no usa ninguno.</li>
+<li>Versiones «v6.4.0» y «v6.6.2» que no significan nada.</li>
+<li>Sin la leyenda de sitio no oficial ni el aviso de ArenaNet.</li>
+<li><code>docs/user-guide-avanzado.md</code> (v6.5.1) es una copia vieja que no enlaza nadie.</li>
+</ul></td></tr>
+<tr><td><span class="sev sev--b">BAJO</span></td><td><b>Correcto.</b></td><td>
+<ul>
+<li>Las dos guías ya usan el gato oficial y el theme que elegiste (<code>guides-identity.test.cjs</code>).</li>
+<li>Abren desde el mismo lugar: el botón «Guías», el pie y la Bienvenida.</li>
+</ul></td></tr>
+</tbody>
+</table>
+
+<h2>2. La propuesta</h2>
+<h3>Dos guías, las mismas direcciones</h3>
+<p>No cambio los nombres de archivo, así no se rompe ningún enlace (la barra, el pie, la Bienvenida y las respuestas de Shiruvana apuntan a ellas).</p>
+<div class="cols">
+<div class="frame"><p class="frame-label">docs/user-guide.html → «Primeros pasos» (5 minutos)</p>
+<ol class="mut" style="margin:0;padding-left:18px">
+<li>Qué es la Bóveda y qué no es: sitio de la comunidad, no oficial, sin servidor.</li>
+<li>Crear tu API Key con los 7 permisos, y para qué sirve cada uno.</li>
+<li>Cargarla en Keys y cambiar de cuenta arriba.</li>
+<li>Recorrer la Bóveda: barra de arriba, barra lateral y, en el celular, la barra de abajo y «Opciones».</li>
+<li>Tu día y tu semana: qué mirar en Metas, Cámara, Actividades y Raids.</li>
+<li>Tus datos: copia de ajustes, liberar la caché y el Llavero.</li>
+<li>Comunidad y apoyo.</li>
+</ol></div>
+<div class="frame"><p class="frame-label">docs/user-guide-avanzado.html → «Guía por módulo»</p>
+<ul class="toc">
+<li>Inicio (Bienvenida)</li><li>Cartera</li><li>Metas y Eventos</li><li>Cámara del Brujo</li><li>Actividades</li><li>Heredad</li><li>Raids</li><li>Logros</li><li>Inventario y Personajes</li><li>Armería Legendaria</li><li>Cuentas y Llavero</li><li>Keys y permisos</li><li>Ajustes: tema, copia y caché</li>
+</ul>
+<p class="mut" style="font-size:.85rem;margin-top:8px">El mismo orden que la barra lateral.</p></div>
+</div>
+
+<h3>Cada módulo, con la misma forma</h3>
+<p>Cada sección lleva el ícono y el color de su módulo en la placa de 56 px que usan los paneles (PUL-2) y responde cuatro preguntas: para qué sirve, cómo se usa, qué permisos pide y qué guarda en tu navegador. Todo en castellano llano, sin emojis.</p>
+<div class="frame"><p class="frame-label">Ejemplo: Actividades</p>
+<div class="g">
+  <div class="g-h"><span class="plate"><img src="../../assets/icons/1302773.png" alt=""></span><div><b>Actividades</b><small>Lo de hoy y la semana: fractales, llave y PSNA · #/activities</small></div></div>
+  <h4>Para qué sirve</h4><p>Ver en una pantalla lo que se reinicia cada día y cada semana, y qué te falta.</p>
+  <h4>Cómo se usa</h4><p>«Hoy»: los fractales del día con los recomendados y los de mañana, y la ruta del PSNA. «Semana»: la llave del León Negro y las piedras de Leivas por moneda. La llave es una señal y no un dato: la API no dice si ya la sacaste, así que la marcás vos.</p>
+  <h4>Permisos</h4><div class="chips"><span class="chip">account</span><span class="chip">progression</span><span class="chip">unlocks</span></div>
+  <h4>Guarda en tu navegador</h4><p class="mut">Lo que marcaste esta semana (<code>gn:activities:week</code>). Nada sale de tu navegador.</p>
+</div></div>
+
+<h3>Que no vuelvan a quedar viejas</h3>
+<p>Propongo un test que falle cuando la app y la guía se separen. Lo vigila la suite de siempre:</p>
+<ul>
+<li>Cada módulo de la barra lateral (la lista de la Bienvenida) tiene su sección, con el mismo nombre, el mismo ícono y la misma ruta.</li>
+<li>Los permisos de cada sección salen de la tabla <code>SCOPES</code> de la Bienvenida: si un módulo pide un permiso nuevo, la guía tiene que decirlo.</li>
+<li>No pueden aparecer nombres retirados («Strike Tracker», «Gist», «Asistente», «Profile Card», <code>#/inventory/dashboard</code>, «v6.»).</li>
+<li>Toda clave que nombre la privacidad tiene que existir en el código.</li>
+</ul>
+
+<h3>Privacidad primero</h3>
+<p>Es lo único que hoy le dice al jugador algo falso sobre sus datos, así que va primero.</p>
+<ul>
+<li>Reescribo <code>privacy.html</code> con lo real: qué se pide a la API de Guild Wars 2, que Analytics solo existe en producción y qué guarda la Bóveda en tu navegador, agrupado por módulo y con las claves reales.</li>
+<li>Explico que el Llavero se guarda cifrado y que la contraseña no se guarda nunca.</li>
+<li>Explico cómo borrar todo sin abrir las herramientas del navegador.</li>
+<li>Va enlazada desde el pie y las guías.</li>
+<li>Toma la piel de las guías (el theme que elegiste) y lleva el mismo aviso legal que el pie.</li>
+</ul>
+
+<h2>3. Plan paso por paso (cada uno con tu validación)</h2>
+<table>
+<thead><tr><th>Paso</th><th>Qué</th><th>Qué vas a ver</th></tr></thead>
+<tbody>
+<tr><td><b>GUI-1</b></td><td><code>privacy.html</code> verdadera, enlazada desde el pie, y su test (las claves existen, no nombra Gist).</td><td>La página de privacidad nueva.</td></tr>
+<tr><td><b>GUI-2</b></td><td>«Primeros pasos» (<code>user-guide.html</code>) reescrita, con el aviso legal y sin emojis.</td><td>La guía corta.</td></tr>
+<tr><td><b>GUI-3</b></td><td>«Guía por módulo», parte 1: Inicio, Cartera, Metas, Cámara, Actividades y Heredad.</td><td>La primera mitad de la guía larga.</td></tr>
+<tr><td><b>GUI-4</b></td><td>Parte 2: Raids, Logros, Inventario, Armería, Cuentas y Llavero, Keys y Ajustes, más el test guardián completo.</td><td>La guía larga completa.</td></tr>
+<tr><td><b>GUI-5</b></td><td>Limpieza (borro <code>user-guide-avanzado.md</code> y <code>PRIVACIDAD.md</code>; corrijo las menciones a Gist en <code>BRIEFING.md</code>), la ventana «Guías» con los textos nuevos, revisión con los 19 themes y el celular, y FEAT-019.</td><td>El cierre.</td></tr>
+</tbody>
+</table>
+
+<h2>4. Lo que necesito que decidas</h2>
+<table>
+<thead><tr><th></th><th>Pregunta</th><th>Lo que recomiendo</th></tr></thead>
+<tbody>
+<tr><td><b>D1</b></td><td>¿Dos guías, «Primeros pasos» y «Guía por módulo», en las mismas direcciones de hoy?</td><td><b>Sí.</b> La corta para el que llega y la larga para buscar un módulo. No se rompe ningún enlace.</td></tr>
+<tr><td><b>D2</b></td><td>¿La privacidad primero y enlazada desde el pie?</td><td><b>Sí.</b> Es lo único que hoy le dice al jugador algo falso sobre sus datos.</td></tr>
+<tr><td><b>D3</b></td><td>¿El test guardián que ata la guía a la app?</td><td><b>Sí.</b> Es lo que evita que esto vuelva a pasar en el próximo restyle.</td></tr>
+<tr><td><b>D4</b></td><td>¿Sin emojis ni número de versión, con «Actualizada el…» y el aviso legal de ArenaNet?</td><td><b>Sí.</b> Igual que la app.</td></tr>
+<tr><td><b>D5</b></td><td>Comunidad y apoyo: Discord, Instagram, YouTube, Twitch, GitHub, PayPal, Ko-fi y el correo <code>contacto@bovedagatonegro.com</code>. ¿Siguen todos vigentes? ¿Los reportes de errores van a Discord o a los issues de GitHub?</td><td><b>Necesito tu respuesta.</b> No puedo verificar desde acá si el correo y las cuentas siguen activos. Recomiendo Discord como lugar principal para reportar y dejar GitHub como segunda opción.</td></tr>
+<tr><td><b>D6</b></td><td>¿Borrar las copias viejas (<code>user-guide-avanzado.md</code> y <code>docs/PRIVACIDAD.md</code>)?</td><td><b>Sí.</b> Nadie las enlaza y repiten lo que está mal.</td></tr>
+</tbody>
+</table>
+
+<p class="note">Fuentes: <code>docs/user-guide.html</code>, <code>docs/user-guide-avanzado.html</code> y <code>.md</code>, <code>privacy.html</code>, <code>docs/PRIVACIDAD.md</code>, <code>js/storage.js</code>, los 74 nombres de clave que usa <code>js/</code>, <code>js/welcome-panel.js</code> (<code>MODULES</code> y <code>SCOPES</code>), <code>js/settings-manager.js</code> e <code>index.html</code> (carga de Analytics), medidos en DEV con la sonda RUN-107 el 2026-10-26.</p>
+
+</main>
+</body>
+</html>
