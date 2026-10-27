@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta UNI-0 — Una sola Bóveda: relojes, íconos y detalles (BL-078)</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#111;color:#e8e2d4;max-width:980px;margin:2rem auto;padding:0 1rem;line-height:1.55}
+h1,h2{color:#e0b84c}h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:2.2rem;border-bottom:1px solid #333;padding-bottom:.3rem}
+table{border-collapse:collapse;width:100%;margin:.6rem 0}th,td{border:1px solid #333;padding:.4rem .55rem;text-align:left;vertical-align:top}th{background:#1c1c1c}
+code{background:#222;padding:0 .25rem;border-radius:3px}small,.cap{color:#9a937f}.cap{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .3rem}
+a{color:#9fc3ff}.rec{color:#8fd18f}.sev{font-weight:700;font-size:.75rem;border-radius:6px;padding:0 .4rem}.m{background:#24324d;color:#b9d0ff}.l{background:#22352c;color:#a9e6c6}
+.stage{background:#0F131C;border:1px solid #2A3142;border-radius:14px;padding:14px 16px;margin:.4rem 0}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.old-pill{font-size:.78rem;border:1px solid #2A3142;border-radius:999px;padding:4px 10px;color:#A9B1BE;background:#0B0E15;white-space:nowrap}.old-pill b{color:#F4F6FA;font-weight:600}.old-hot{border-color:#F2B94B}.old-hot b{color:#F2B94B}
+.mh-pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid #2A3142;border-radius:10px;background:rgba(255,255,255,.02);color:#A9B1BE;font-size:.9rem;white-space:nowrap}.mh-pill b{color:#F4F6FA}
+.gk{display:inline-flex;align-items:center;gap:7px;padding:5px 11px 5px 6px;border:1px solid #2A3142;border-radius:10px;background:#0B0E15;color:#A9B1BE;font-size:.8rem;white-space:nowrap}
+.gk img{width:20px;height:20px;border-radius:5px}.gk span{display:flex;flex-direction:column;line-height:1.15}.gk small{font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:#8E96A3}.gk b{color:#F4F6FA;font-weight:700;font-variant-numeric:tabular-nums}
+.gk.soon{border-color:#E8B34B;box-shadow:0 0 14px -6px #E8B34B}.gk.soon b{color:#F2C46B}
+.gk.big{padding:8px 14px 8px 8px;font-size:.9rem}.gk.big img{width:24px;height:24px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #2A3142}.tab{display:flex;gap:8px;align-items:center;padding:9px 14px;color:#8E96A3;font-size:.9rem;border-bottom:2px solid transparent;margin-bottom:-1px}.tab.on{color:#F4F6FA;font-weight:700;border-bottom-color:#E8A33D}.tab img{width:18px;height:18px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.st{border:1px solid #2A3142;border-radius:12px;background:#0B0E15;padding:10px 12px;min-width:0}
+.st small{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.06em;color:#8E96A3}.st b{font-size:1.2rem;color:#F4F6FA}.st em{display:block;font-style:normal;font-size:.72rem;color:#8E96A3}
+.st2{display:grid;grid-template-columns:34px 1fr;column-gap:10px;align-items:center}.st2 img{grid-row:1/4;width:34px;height:34px;border-radius:8px;background:#171B26;padding:3px;box-sizing:border-box}
+.wing{border:1px solid #2A3142;border-radius:14px;background:#141925;overflow:hidden;max-width:440px}
+.wh{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid #2A3142}.wh h4{margin:0;font-size:.95rem;color:#F4F6FA}.wh small{font-size:.76rem}
+.wh2{padding:14px;background:linear-gradient(180deg,rgba(244,124,124,.16),rgba(244,124,124,.04));border-bottom:1px solid rgba(244,124,124,.35)}
+.wh2 .t{display:flex;gap:12px;align-items:center}.wh2 h4{margin:0;font-size:1.08rem;color:#F4F6FA}.chip{font-size:.7rem;border:1px solid #3A4256;border-radius:999px;padding:1px 8px;color:#C9D0DA}
+.cnt{margin-left:auto;font-weight:800;color:#F4F6FA;background:#0B0E15;border:1px solid #2A3142;border-radius:10px;padding:4px 10px;font-size:.9rem}
+.bar{height:6px;border-radius:6px;background:#0B0E15;margin-top:10px;overflow:hidden}.bar i{display:block;height:100%;width:50%;background:linear-gradient(90deg,#F47C7C,#F2B94B)}
+.stack img{width:34px;height:34px;border-radius:9px;border:2px solid #141925;margin-left:-10px;background:#171B26}.stack img:first-child{margin-left:0}
+.enc{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:center;padding:9px 14px;border-top:1px solid #1E2433;font-size:.86rem}.enc img{width:40px;height:40px;border-radius:9px;background:#171B26}.enc:first-child{border-top:0}
+.list2{background:#0F131C}
+.menu{list-style:none;margin:0;padding:6px;border:1px solid #2A3142;border-radius:12px;background:#141925;width:260px}.menu li{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:8px;font-size:.88rem;color:#F4F6FA}.menu img{width:20px;height:20px}.menu .x{margin-left:auto;color:#8E96A3}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:760px){.cols{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+.ph{display:inline-grid;place-items:center;padding:2px 6px;border-radius:6px;background:#171B26;border:1px dashed #3A4256;font-size:.7rem;color:#8E96A3}
+</style>
+</head>
+<body>
+<h1>Propuesta UNI-0 — Una sola Bóveda: relojes, íconos y detalles</h1>
+<p><small>BL-078 · sigue a BL-070 (restyle) · DEC-024, DEC-035, DEC-031 · 2026-10-27 · Shiruvana. Nada de esto está construido: es para que lo apruebes o lo cambies. Las imágenes salen de DEV.</small></p>
+
+<h2>1. Product</h2>
+<p><b>Problema.</b> El restyle dejó la misma estructura en todos los módulos, pero no el mismo acabado. La Cartera tiene íconos del juego en sus pestañas y en sus tarjetas, y los demás no. Metas tiene relojes con ícono, y Raids, Actividades, Cámara y Heredad muestran los mismos relojes con otro diseño: hay <b>5 versiones del mismo reloj</b>, cada una con su CSS. Además, en Raids el encabezado del ala se confunde con sus filas y 5 encuentros no tienen miniatura; Enlaces es el único menú de la barra sin íconos; y Chak no tiene vista previa.</p>
+<p><b>Valor.</b> La Bóveda se siente un solo producto y se lee más rápido: el ícono identifica antes que el texto. Y en lo técnico, un reloj en lugar de cinco: cada módulo baja de peso en vez de subir.</p>
+<p><b>Prioridad.</b> Alta en calidad visual, sin funciones nuevas. No agrega pedidos a la API salvo una sonda para las miniaturas que faltan.</p>
+
+<h2>2. Lo que medí</h2>
+<table>
+<tr><th>Hallazgo</th><th>Nivel</th><th>Detalle</th></tr>
+<tr><td>Relojes: 5 diseños para lo mismo</td><td><span class="sev m">MEDIO</span></td><td>Metas <code>.mh-pill</code> (ícono de 22 px, 4 relojes) · Raids <code>.rv-pill</code> (Local, Servidor, Semanal, sin ícono) · Actividades <code>.av-pill</code> (Diario, PSNA, Semanal) · Cámara <code>.wvx-pill</code> (Diario, Semanal) · Heredad <code>.hs-pillr</code> (Diario). Cada uno con su CSS y su «cerca» (dorado, ámbar o nada).</td></tr>
+<tr><td>Pestañas sin ícono</td><td><span class="sev l">BAJO</span></td><td>Solo la Cartera (<code>wallet-theme.js</code>, 18 px). Sin ícono: Logros (3), Inventario (6), Actividades (2), Heredad (3), Raids (2), Cámara (3), Cuentas y la ficha de Raids.</td></tr>
+<tr><td>Indicadores sin ícono</td><td><span class="sev l">BAJO</span></td><td>Las 4 tarjetas de la cabecera de Logros, Inventario, Actividades, Heredad, Raids y Cámara son solo texto. La Cartera muestra el ícono de cada divisa.</td></tr>
+<tr><td>Raids: encabezado del ala débil</td><td><span class="sev l">BAJO</span></td><td>Mismo fondo que las filas, título de 0,95 rem y solo una línea fina abajo.</td></tr>
+<tr><td>Raids: 5 encuentros sin miniatura</td><td><span class="sev m">MEDIO</span></td><td><code>voice_claw</code>, <code>fraenir</code>, <code>xunlai_jade_junkyard</code>, <code>kaineng_overlook</code> y <code>harvest_temple</code> tienen <code>"kind": "generic"</code> en <code>assets/data/raids/catalog.json</code>. Cuando armé el catálogo (RAI-1) no encontré miniatura oficial en <code>/v2/minis</code> y les puse el ícono genérico de Raids. No es un error de carga: el dato nunca estuvo.</td></tr>
+<tr><td>Chak sin vista previa</td><td><span class="sev m">MEDIO</span></td><td>Antes del restyle se cargaba directo desde la wiki (<code>Chak_Animation_8.gif</code>). En BL-057 la wiki dejó de servir imágenes a otros sitios: pasé las vistas previas a <code>assets/previews/</code> y la descarga automática no consiguió 2, Chak y Dragon's End. Lo dejaste como deuda visual en DEC-031, que también prevé agregarlas a mano si aparece el archivo.</td></tr>
+<tr><td>Enlaces sin íconos</td><td><span class="sev l">BAJO</span></td><td>Ajustes ya los tiene (20 px). Enlaces tiene 5 ítems solo con texto.</td></tr>
+<tr><td>Tamaños</td><td><span class="sev m">límite</span></td><td><code>index.html</code> 48.435 B: no puede crecer, así que nada de esto va ahí. <code>acc-view.js</code> 40.158 B, en zona de advertencia. Manifiesto: 38 de 40 módulos.</td></tr>
+</table>
+
+<h2>3. Relojes: elijo la C</h2>
+<p><b>C, un reloj común que nace del de Metas.</b> La A (todos como Metas, tal cual) no entra en las cabeceras: el de Metas lleva 8×14 px de relleno y 0,9 rem, y en Raids o Cámara tres relojes empujarían «Actualizar» a otra línea. La B (Metas como los demás) pierde el ícono, que es justamente lo que pediste para todos. La C conserva el ícono y el dorado de Metas, pone el nombre arriba y el valor abajo para ocupar el mismo ancho que hoy, y tiene una versión grande para Metas.</p>
+<div class="stage">
+<p class="cap">Hoy · Metas</p><div class="row">
+<span class="mh-pill"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/841720.png" width="22" height="22" alt="">Local <b>18:31</b></span><span class="mh-pill"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/460028.png" width="22" height="22" alt="">Servidor <b>21:31 UTC</b></span><span class="mh-pill"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/534745.png" width="22" height="22" alt="">Reset diario <b>en 2 h 29 min</b></span><span class="mh-pill"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/155064.png" width="22" height="22" alt="">Reset semanal <b>en 5 d 10 h</b></span></div>
+<p class="cap">Hoy · Raids, Actividades, Cámara y Heredad</p><div class="row">
+<span class="old-pill">Local <b>18:31</b></span><span class="old-pill">Servidor <b>21:31 UTC</b></span><span class="old-pill old-hot">Reset semanal <b>lun 07:30 UTC · en 5 d 10 h</b></span><span class="old-pill">PSNA cambia <b>en 10 h 29 min</b></span></div>
+<p class="cap">Propuesta · reloj común compacto (cabeceras)</p><div class="row">
+<span class="gk"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/534745.png" width="20" height="20" alt=""><span><small>Reset diario</small><b>en 2 h 29 min</b></span></span><span class="gk"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/1302773.png" width="20" height="20" alt=""><span><small>PSNA</small><b>en 10 h 29 min</b></span></span><span class="gk soon"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/155064.png" width="20" height="20" alt=""><span><small>Reset semanal</small><b>en 5 h 12 min</b></span></span></div>
+<p class="cap">Propuesta · reloj común grande (solo Metas)</p><div class="row">
+<span class="gk big"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/841720.png" width="24" height="24" alt=""><span><small>Local</small><b>18:31</b></span></span><span class="gk big"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/460028.png" width="24" height="24" alt=""><span><small>Servidor</small><b>21:31 UTC</b></span></span><span class="gk big soon"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/534745.png" width="24" height="24" alt=""><span><small>Reset diario</small><b>en 42 min</b></span></span><span class="gk big"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/155064.png" width="24" height="24" alt=""><span><small>Reset semanal</small><b>en 5 d 10 h</b></span></span></div>
+<p><small>Dorado = «está cerca»: menos de 1 h para el diario y el PSNA, menos de 24 h para el semanal (la regla que ya usa Metas). Al pasar el mouse se ve la hora fija, por ejemplo «lunes 07:30 UTC». El ícono del PSNA es de ejemplo.</small></p>
+</div>
+<table>
+<tr><th>Módulo</th><th>Relojes (solo los que le importan)</th><th>Cambio respecto de hoy</th></tr>
+<tr><td>Metas y Eventos</td><td>Local · Servidor · Reset diario · Reset semanal (grandes)</td><td>Mismo contenido y mismos íconos; sigue el dorado.</td></tr>
+<tr><td>Actividades</td><td>Reset diario · PSNA · Reset semanal</td><td>Suman ícono y dorado.</td></tr>
+<tr><td>Raids</td><td>Reset semanal</td><td>Salen Local y Servidor: en Raids solo importa el semanal, y los dos están en Metas.</td></tr>
+<tr><td>Cámara del Brujo</td><td>Reset diario · Reset semanal</td><td>Suman ícono; «cerca» pasa a la regla común.</td></tr>
+<tr><td>Heredad</td><td>Reset diario</td><td>Suma ícono y dorado.</td></tr>
+</table>
+
+<h2>4. Íconos en pestañas e indicadores (como la Cartera)</h2>
+<div class="cols">
+<div><p class="cap">Hoy · Raids</p><div class="stage"><div class="tabs"><span class="tab on">Alas</span><span class="tab">Encuentros</span></div></div></div>
+<div><p class="cap">Propuesta · Raids</p><div class="stage"><div class="tabs"><span class="tab on"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/raid-icon.png" alt="">Alas</span><span class="tab"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/784370.png" width="18" height="18" alt="">Encuentros</span></div></div></div>
+</div>
+<p class="cap">Hoy · indicadores de Logros</p>
+<div class="stage"><div class="stats"><div class="st"><small>Puntos de logro</small><b>31.204</b><em>28.990 permanentes · 2.214 de diarios</em></div><div class="st"><small>Al alcance</small><b>+120 AP</b><em>en 18 logros</em></div><div class="st"><small>A un paso (≥ 95 %)</small><b>3</b><em>te falta muy poco</em></div><div class="st"><small>Con recompensa</small><b>7</b><em>2 títulos · 5 ítems</em></div></div></div>
+<p class="cap">Propuesta · indicadores de Logros</p>
+<div class="stage"><div class="stats">
+<div class="st st2"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/155059.png" width="34" height="34" alt=""><small>Puntos de logro</small><b>31.204</b><em>28.990 permanentes · 2.214 de diarios</em></div>
+<div class="st st2"><img src="https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png" alt=""><small>Al alcance</small><b>+120 AP</b><em>en 18 logros</em></div>
+<div class="st st2"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/155018.png" width="34" height="34" alt=""><small>A un paso (≥ 95 %)</small><b>3</b><em>te falta muy poco</em></div>
+<div class="st st2"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/3601748.png" width="34" height="34" alt=""><small>Con recompensa</small><b>7</b><em>2 títulos · 5 ítems</em></div></div></div>
+<p><small>Los números y los íconos son de ejemplo, tomados de los que ya usa la Bóveda. La lista definitiva (pestaña e indicador de cada módulo) la armo en UNI-1 solo con íconos oficiales de <code>assets/icons/</code> o de <code>render.guildwars2.com</code>, verificados uno por uno, y te la muestro antes de aplicarla. El ícono es decorativo: el lector de pantalla sigue leyendo el texto.</small></p>
+
+<h2>5. Raids: encabezado del ala y miniaturas</h2>
+<div class="cols">
+<div><p class="cap">Hoy</p><div class="wing"><div class="wh"><span class="stack"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/vale_guardian.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/gorseval.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/sabetha.png" alt=""></span><div><h4>Ala 1 · Valle Espiritual</h4><small>Heart of Thorns</small></div><b style="margin-left:auto">2/4</b></div>
+<div class="enc"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/vale_guardian.png" alt=""><span>Guardián del valle</span><small>✓ Hecho</small></div><div class="enc"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/gorseval.png" alt=""><span>Gorseval el Múltiple</span><small>Pendiente</small></div></div></div>
+<div><p class="cap">Propuesta</p><div class="wing"><div class="wh2"><div class="t"><span class="stack"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/vale_guardian.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/gorseval.png" alt=""><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/sabetha.png" alt=""></span><div><small style="color:#F4A3A3;letter-spacing:.08em;text-transform:uppercase;font-size:.68rem">Ala 1</small><h4>Valle Espiritual</h4><span class="chip">Heart of Thorns</span></div><span class="cnt">2/4</span></div><div class="bar"><i></i></div></div>
+<div class="list2"><div class="enc"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/vale_guardian.png" alt=""><span>Guardián del valle</span><small>✓ Hecho</small></div><div class="enc"><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/raids/bosses/gorseval.png" alt=""><span>Gorseval el Múltiple</span><small>Pendiente</small></div></div></div></div>
+</div>
+<p>El encabezado lleva el color del módulo, el número de ala arriba, el nombre más grande, la expansión como chip, el contador en su caja y una barra de avance del ala. Las filas quedan sobre un fondo más oscuro, así se ve dónde termina el encabezado. Igual en la pestaña Encuentros.</p>
+<p><b>Miniaturas que faltan</b>: Voz y Garra de los Caídos, Fraenir de Jormag, Chatarrería de Xunlai Jade, Mirador de Kaineng y Templo de la Cosecha. Hoy muestran el ícono <span class="ph">genérico</span> de Raids. Primero vuelvo a buscar en <code>/v2/minis</code> con una sonda desde Actions, que tiene red. Si no hay miniatura oficial, uso el ícono oficial del logro de ese encuentro en <code>/v2/achievements</code>. Nunca imágenes de la wiki, que no las sirve a otros sitios (DEC-031).</p>
+
+<h2>6. Enlaces con íconos</h2>
+<div class="cols">
+<div><p class="cap">Hoy</p><ul class="menu"><li>Wiki de GW2 en español<span class="x">↗</span></li><li>Foros oficiales<span class="x">↗</span></li><li>Ayuda de ArenaNet<span class="x">↗</span></li><li>Sitio oficial<span class="x">↗</span></li><li>Crear una API Key<span class="x">↗</span></li></ul></div>
+<div><p class="cap">Propuesta (como Ajustes)</p><ul class="menu"><li><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/102353.png" width="20" height="20" alt="">Wiki de GW2 en español<span class="x">↗</span></li><li><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/102361.png" width="20" height="20" alt="">Foros oficiales<span class="x">↗</span></li><li><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/102367.png" width="20" height="20" alt="">Ayuda de ArenaNet<span class="x">↗</span></li><li><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Welcome/156107.png" width="20" height="20" alt="">Sitio oficial<span class="x">↗</span></li><li><img src="https://pablosnchz.github.io/gw2-factory-dev/assets/icons/Cuentas/155048.png" width="20" height="20" alt="">Crear una API Key<span class="x">↗</span></li></ul></div>
+</div>
+<p><small>Íconos de ejemplo; la lista final se verifica en UNI-6. Los pone <code>gn-topbar.js</code> al iniciar: <code>index.html</code> no crece ni un byte. El menú está oculto hasta que lo abrís, así que no hay parpadeo.</small></p>
+
+<h2>7. Chak: necesito una acción tuya</h2>
+<p>La wiki no deja que un servidor descargue sus imágenes, pero tu navegador sí. Si bajás el archivo y lo subís a DEV, yo lo conecto. DEC-031 ya lo prevé («se agrega a mano en <code>assets/previews/</code>»), así que no hay que reabrir esa decisión.</p>
+<ol>
+<li>Abrí <a href="https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif">Chak_Animation_8.gif</a> (la imagen que usaba la Bóveda antes del restyle) y guardala.</li>
+<li>Subila a <code>gw2-factory-dev</code>, carpeta <code>assets/previews/</code>, con el nombre <b><code>chak_gerent.gif</code></b> (GitHub → Add file → Upload files).</li>
+<li>Opcional, por el mismo camino: <a href="https://wiki.guildwars2.com/images/2/29/Echo_of_the_Dragonvoid_infusion.jpg">Echo_of_the_Dragonvoid_infusion.jpg</a> como <b><code>dragons_end.jpg</code></b>, y vuelve también Dragon's End.</li>
+</ol>
+<p><small>Para producción: <code>assets/meta-drops.json</code> tiene una versión propia en PRD (por los GIF de piñata y burbujas). En el próximo pase llevo solo el cambio de Chak sobre esa versión, más el archivo nuevo.</small></p>
+
+<h2>8. Architecture</h2>
+<ul>
+<li><b>Un módulo nuevo, <code>js/gn-kit.js</code></b> (manifiesto 39 de 40): el reloj común (dibujo, regla de «cerca» y un solo temporizador para toda la Bóveda) y el mapa de íconos (<code>GNKit.icon('raids.alas')</code>). Solo dibuja: no pide nada a la API ni guarda nada.</li>
+<li>Cada módulo cambia su CSS y su HTML de relojes por <code>GNKit.clock(...)</code> y suma <code>GNKit.icon(...)</code> en pestañas e indicadores. Sin <code>gn-kit.js</code> se ven como hoy, sin ícono: no se rompe nada.</li>
+<li>Tamaño: cada módulo pierde su CSS de relojes (≈ 300 a 600 B) y gana ≈ 100 a 200 B de íconos, así que casi todos bajan. <code>acc-view.js</code> va al final y solo si queda igual o menor.</li>
+<li>Sin cambios en <code>index.html</code>, en los datos del jugador ni en la API, salvo la sonda de miniaturas y el ícono del logro (de <code>render.guildwars2.com</code>).</li>
+<li><b>Descarto</b> un decorador que agregue íconos «desde afuera» después de que cada módulo dibuja: es lo que hizo parpadear la Cartera en BL-075.</li>
+<li>Test guardián (<code>tests/gn-kit.test.cjs</code>): ningún módulo vuelve a definir su propio reloj y toda pestaña <code>role=tab</code> de un módulo renovado lleva ícono.</li>
+</ul>
+
+<h2>9. Decisiones</h2>
+<table>
+<tr><th>#</th><th>Pregunta</th><th>Mi recomendación</th></tr>
+<tr><td>D1</td><td>¿Relojes?</td><td class="rec">C: reloj común nacido del de Metas, compacto en las cabeceras y grande en Metas; cada módulo con sus relojes (tabla de la sección 3).</td></tr>
+<tr><td>D2</td><td>¿Raids pierde Local y Servidor?</td><td class="rec">Sí: en Raids solo importa el reset semanal, y los dos están en Metas.</td></tr>
+<tr><td>D3</td><td>¿Íconos en pestañas e indicadores?</td><td class="rec">Sí, en todos los módulos renovados, con la lista verificada que te muestro en UNI-1 antes de aplicarla.</td></tr>
+<tr><td>D4</td><td>¿Encabezado del ala en Raids?</td><td class="rec">Como la sección 5, también en Encuentros.</td></tr>
+<tr><td>D5</td><td>¿Miniaturas que faltan?</td><td class="rec">Miniatura oficial si existe; si no, el ícono oficial del logro del encuentro. Nunca de la wiki.</td></tr>
+<tr><td>D6</td><td>¿Orden?</td><td class="rec">UNI-1 a UNI-7 (sección 10): primero la base, después lo más visible.</td></tr>
+</table>
+
+<h2>10. Micro-ciclos</h2>
+<table>
+<tr><th>MC</th><th>Qué</th></tr>
+<tr><td>UNI-1</td><td><code>js/gn-kit.js</code> inerte (reloj e íconos) + tests + la lista de íconos verificada, para que la apruebes.</td></tr>
+<tr><td>UNI-2</td><td>Relojes: Metas y Raids.</td></tr>
+<tr><td>UNI-3</td><td>Relojes: Actividades, Cámara y Heredad.</td></tr>
+<tr><td>UNI-4</td><td>Íconos en pestañas e indicadores, en dos tandas de hasta 3 archivos.</td></tr>
+<tr><td>UNI-5</td><td>Raids: encabezado del ala + sonda de miniaturas y catálogo.</td></tr>
+<tr><td>UNI-6</td><td>Enlaces con íconos.</td></tr>
+<tr><td>UNI-7</td><td>Chak (y Dragon's End) cuando subas el archivo; revisión final en los 19 themes, teclado y celular; FEAT.</td></tr>
+</table>
+<p><b>Riesgo:</b> BAJO-MEDIO. Toco muchos módulos, pero con cambios chicos, la suite antes y después, y cada tanda se ve en DEV antes de seguir. El reloj común es un solo punto de falla: por eso tiene test propio y respaldo (sin <code>gn-kit.js</code>, todo se ve como hoy).</p>
+</body>
+</html>
