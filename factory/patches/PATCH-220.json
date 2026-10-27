@@ -1,0 +1,17 @@
+{
+ "id": "PATCH-220",
+ "summary": "BL-076 revisión de SHV-5: el guardián también mira qué dice «Lo sé por» (D3: sin hora inventada; Cuentas con la hora real; Metas nombra tu día solo si la API respondió).",
+ "files": [
+  {
+   "path": "tests/shv-basis.test.cjs",
+   "base_sha": "bb09efd799c09e88642d8667492ab6b861a9955c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(new Set(PENDIENTES).size, PENDIENTES.length);\n});\n",
+     "text": "  assert.equal(new Set(PENDIENTES).size, PENDIENTES.length);\n});\n\n// D3 de SHV-5: la hora del dato solo si es real; si no, «en este navegador». Nunca una hora inventada.\ntest('D3: las líneas fijas dicen «en este navegador» y no inventan hora; Cuentas y Metas, como corresponde', () => {\n  let fijas = 0;\n  FILES.forEach((f) => {\n    calls(read(f), 'voice').forEach((c) => {\n      const m = c.match(/\\bbasis\\s*:\\s*'([^']*)'/);\n      if (!m) return;\n      fijas++;\n      assert.match(m[1], / · en este navegador$/, f + ': ' + m[1]);\n      assert.doesNotMatch(m[1], /\\d{1,2}:\\d{2}/, f + ': sin hora inventada');\n    });\n  });\n  assert.ok(fijas >= 8, 'leí las líneas fijas (' + fijas + ')');\n  const acc = read('acc-view.js'), mt = read('meta-theme.js');\n  assert.match(acc, /at: st\\.readAt \\|\\| null/, 'Cuentas usa la hora real de su lectura');\n  assert.match(acc, /C\\.basisText\\(b\\)/);\n  assert.match(mt, /todayStats\\(S\\.snap\\)\\.state === 'ok' \\?/, 'Metas nombra tu día solo si la API respondió');\n  assert.match(mt, /insertBefore\\(btn, bs\\)/, 'el waypoint va antes de «Lo sé por»');\n});\n"
+    }
+   ]
+  }
+ ]
+}
