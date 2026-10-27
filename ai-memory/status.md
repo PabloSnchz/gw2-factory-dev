@@ -1,13 +1,13 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). Pablo vio que fuera de la Cartera yo no aparecía y que los íconos de la Cartera parpadeaban; los dos arreglados en PATCH-198 y cerrada por su pedido («corregí eso y si está ok podés cerrar BL-075»). BL-059 SHV-3: propuesta APROBADA por Pablo 2026-10-27 04:00Z (D1 a D5 como recomendé). SHV-3a HECHO 04:05Z: js/shv-legendary.js 1.0.0 inerte (estimate/observe puros), tests/shv-legendary.test.cjs 11/11, 16/16 mutaciones, RUN-163 verde.
+Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). Pablo vio que fuera de la Cartera yo no aparecía y que los íconos de la Cartera parpadeaban; los dos arreglados en PATCH-198 y cerrada por su pedido («corregí eso y si está ok podés cerrar BL-075»). BL-059 SHV-3: propuesta APROBADA por Pablo 2026-10-27 04:00Z (D1 a D5 como recomendé). SHV-3a HECHO 04:05Z: js/shv-legendary.js 1.0.0 inerte (estimate/observe puros), tests/shv-legendary.test.cjs 11/11, 16/16 mutaciones, RUN-163 verde. SHV-3b HECHO 04:22Z (PATCH-203): shv-legendary 1.1.0 en el manifiesto; en «Mi cola» hablo en el globo (o escrito dentro de «Mi cola» si me silenciaste); espera la validación de Pablo.
 Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-27 04:06Z
-Próxima acción: con el OK de Pablo, SHV-3b: Shiruvana habla en «Mi cola» con el globo (shv-legendary en el manifiesto, una consulta de precios al Bazar solo por lo que falta), guía y FEAT.
+Última actualización: 2026-10-27 04:23Z
+Próxima acción: con la validación de Pablo de SHV-3b, FEAT de SHV-3 y SHV-3c queda esperando 7 días de memoria; después, SHV-4 («Lo que recuerdo de vos», necesita su propia propuesta).
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -192,6 +192,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: SHV-2c CERRADO (03:05Z): no hay historia vieja de la Cartera en producción (0 claves).
 - [BL-059] Info: la API Key que imprime app.js 2.9.0 de producción: Pablo decidió no cambiarla (2026-10-27 03:38Z, «no es un riesgo»). DEV ya no la imprime (app.js 2.9.1).
 - [BL-059] Info: propuesta SHV-3 APROBADA (2026-10-27 04:00Z), D1 a D5 como recomendé. SHV-3a HECHO (04:05Z): solo la cuenta, todavía no se ve nada en la app.
+- [BL-059] Validación: SHV-3b en DEV (Firefox, recargá con Ctrl+F5). Armería → «Mi cola» con al menos una legendaria que no tengas: a los pocos segundos aparezco en el globo con «Para X te faltan N materiales…», el oro al precio del Bazar y cuántos no se venden; «Ver qué me falta» abre su ficha. Si abrís antes el árbol de una legendaria, cuento materiales base; si no, la receta directa. Con Ajustes → «Silenciar a Shiruvana», lo mismo aparece escrito debajo de «Tu cola». No guardo nada nuevo en el navegador.
 - [BL-059] Info: hallazgo MEDIO al escribir SHV-3a: la Armería no guarda precios del Bazar de los materiales (el campo prices del tracker nunca se llena; los precios de la cola son los del catálogo, de la fecha en que se generó). La propuesta decía «sin llamadas nuevas»: en SHV-3b hago UNA consulta a /v2/commerce/prices (GW2Api.getCommercePrices, con su caché) solo por los materiales que faltan, al momento de hablar. Lo que no devuelve precio cuenta como «no se vende» (D5). Decisión técnica mía.
 - [BL-075] Info: BL-075 CERRADA (2026-10-27 03:35Z, FEAT-020). Si fuera de la Cartera sigo sin aparecer o algo parpadea, la reabro.
 - [BL-059] Info: la historia vieja de la Cartera (gn:wallet:snapshots:*) se suma a mi memoria si el formato sirve (Pablo, 00:43Z). La mido antes (SHV-2c).
