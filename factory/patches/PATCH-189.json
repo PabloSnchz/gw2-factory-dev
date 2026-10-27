@@ -1,0 +1,130 @@
+{
+ "id": "PATCH-189",
+ "summary": "BL-059 SHV-2b: shv-wallet 1.2.0 dice lo que nota en la memoria (oro de la semana, divisa quieta) y abre la evolución desde la voz; guía de la Cartera al día",
+ "files": [
+  {
+   "path": "js/shv-wallet.js",
+   "base_sha": "88f93bfc610ec638fdeeca34814456f758b3abe0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-27) · SHV-2:",
+     "text": " * Versión: 1.2.0 (2026-10-27) · SHV-2b: mi voz dice lo que noto en la memoria (el oro de la semana, la divisa que no se\n *          mueve) y la evolución se abre desde mi voz con «Ver la evolución»: es parte de lo que digo, no otro bloque.\n *          1.1.0 (2026-10-27) · SHV-2:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { sig: null, memSig: null, timer: null, mo: null };",
+     "text": "  var st = { sig: null, memSig: null, timer: null, mo: null, memOpen: false, hasMem: false, focusMem: false };"
+    },
+    {
+     "op": "replace",
+     "anchor": "  /**\n   * Observaciones de la Cartera (pura).\n",
+     "text": "  // ------------------------------------------------------------------ SHV-2b: lo que noto en mi memoria\n  var CUR = { 2: 'Karma', 4: 'Gemas', 3: 'Monedas de Laurel', 63: 'Aclamación astral' };\n  function namesOf(S) {\n    var out = {};\n    [S && S.models, S && S.tmodels].forEach(function (l) {\n      (Array.isArray(l) ? l : []).forEach(function (x) { if (x && x.id && x.id !== 1 && x.name) out[x.id] = x.name; });\n    });\n    return out;\n  }\n  function memBasis(hist) {\n    return { source: 'tus fotos diarias de la Cartera (' + plural(hist.length, 'día guardado', 'días guardados') + ' en este navegador)', at: hist[hist.length - 1].at };\n  }\n  /**\n   * Tendencias de la cuenta activa (pura). hist: ShvMemory.history(huella), de la foto más vieja a la más nueva.\n   * week: el oro de los últimos 7 días (contra la primera foto de esa ventana) y, si hay fotos, la semana anterior.\n   * stale: la divisa con saldo que más días lleva igual (14 o más).\n   */\n  function trends(hist, names) {\n    var out = { week: null, stale: null };\n    if (!Array.isArray(hist) || hist.length < 2) return out;\n    var last = hist[hist.length - 1], base = null, prev = null, i;\n    for (i = 0; i < hist.length - 1; i++) if (hist[i].day >= last.day - 7) { base = hist[i]; break; }\n    if (base && 1 in base.values && 1 in last.values) {\n      for (i = 0; i < hist.length; i++) if (hist[i].day >= base.day - 7 && hist[i].day <= base.day - 5) { prev = hist[i]; break; }\n      out.week = { days: last.day - base.day, from: base.values[1] / 10000, to: last.values[1] / 10000,\n        prevDelta: prev && 1 in prev.values ? (base.values[1] - prev.values[1]) / 10000 : null };\n    }\n    Object.keys(last.values).forEach(function (k) {\n      var id = Number(k), v = last.values[k];\n      if (id === 1 || !(v > 0)) return;\n      var j = hist.length - 1;\n      while (j > 0 && hist[j - 1].values[k] === v) j--;\n      var days = last.day - hist[j].day;\n      if (days >= 14 && (!out.stale || days > out.stale.days)) {\n        out.stale = { id: id, name: (names && names[id]) || CUR[id] || 'Divisa ' + id, days: days, value: v, sinceStart: j === 0 };\n      }\n    });\n    return out;\n  }\n  function trendObs(hist, names) {\n    var t = trends(hist, names), out = [];\n    if (!t.week && !t.stale) return out;\n    var basis = memBasis(hist), act = { label: 'Ver la evolución', act: 'mem' }, w = t.week, s = t.stale;\n    if (w) {\n      var d = w.to - w.from, txt = 'En ' + (w.days === 1 ? 'el último día' : 'los últimos ' + w.days + ' días') + ' tu oro ';\n      txt += Math.abs(d) < 1 ? 'no cambió en esta cuenta: ' + num(w.to) + ' de oro.' : (d > 0 ? 'subió ' : 'bajó ') + num(Math.abs(d)) + ' en esta cuenta: de ' + num(w.from) + ' a ' + num(w.to) + '.';\n      var lines = [txt];\n      if (w.prevDelta !== null) lines.push(Math.abs(w.prevDelta) < 1 ? 'La semana anterior no se había movido.' : 'La semana anterior había ' + (w.prevDelta > 0 ? 'subido ' : 'bajado ') + num(Math.abs(w.prevDelta)) + '.');\n      out.push({ module: 'cartera', id: 'trend', priority: 'media', kind: 'explica', text: lines, action: act, basis: basis });\n    }\n    if (s) {\n      out.push({ module: 'cartera', id: 'stale', priority: 'media', kind: 'explica',\n        text: ['«' + s.name + '» está igual hace ' + (s.sinceStart ? 'al menos ' : '') + s.days + ' días en esta cuenta (' + num(s.value) + ').'], action: act, basis: basis });\n    }\n    return out;\n  }\n\n  /**\n   * Observaciones de la Cartera (pura).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var models = Array.isArray(input.models) ? input.models : [];\n",
+     "text": "    var hist = Array.isArray(input.history) ? input.history : [], tr = trendObs(hist, input.names);\n    if (tr[0] && tr[0].id === 'trend') out.push(tr.shift()); // lo que noto va antes que la sugerencia de fijar\n    var models = Array.isArray(input.models) ? input.models : [];\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "          text: ['Tenés ' + plural(withBal, 'divisa', 'divisas') + ' con saldo en esta cuenta y ' + plural(pinned, 'fijada', 'fijadas') + ' en Destacadas.'],\n          basis: basis\n        });\n      }\n    }\n",
+     "text": "          text: ['Tenés ' + plural(withBal, 'divisa', 'divisas') + ' con saldo en esta cuenta y ' + plural(pinned, 'fijada', 'fijadas') + ' en Destacadas.'],\n          basis: basis\n        });\n      }\n      if (hist.length === 1) out[out.length - 1].text.push('Desde hoy recuerdo tu Cartera: en unos días te digo cómo evoluciona.');\n    }\n    out.push.apply(out, tr);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      label: k ? String(k.label || '') : ''\n    };",
+     "text": "      label: k ? String(k.label || '') : '',\n      history: M && k && k.value ? M.history(M.fingerprint(k.value)) : null,\n      names: namesOf(S)\n    };"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var W = root.WalletTheme, S = W && W._state, k = activeKey();\n    return {",
+     "text": "    var W = root.WalletTheme, S = W && W._state, k = activeKey(), M = root.ShvMemory;\n    return {"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var now = Date.now(), m = memoryModel(M.summary(M.fingerprint(k.value), 30, now, names), now);\n",
+     "text": "    var now = Date.now(), m = memoryModel(M.summary(M.fingerprint(k.value), 30, now, names), now);\n    if (!st.memOpen || !st.hasMem || (m && m.empty)) m = null; // se abre desde mi voz\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function paint() {\n    st.timer = null;\n    paintMemory();\n    paintVoice();\n  }",
+     "text": "  function paint() {\n    st.timer = null;\n    paintVoice();\n    paintMemory();\n  }"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var sig = obs ? obs.id + '|' + obs.text.join(' ') + '|' + C.basisText(obs.basis) : '';",
+     "text": "    var sig = obs ? obs.id + '|' + obs.text.join(' ') + '|' + C.basisText(obs.basis) + '|' + st.memOpen : '';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    el.id = HOST_ID;\n    body.insertBefore(el, body.firstChild);\n",
+     "text": "    el.id = HOST_ID;\n    var mb = el.querySelector ? el.querySelector('[data-shv-act=\"mem\"]') : null;\n    st.hasMem = !!mb;\n    if (mb) {\n      mb.textContent = st.memOpen ? 'Ocultar la evolución' : 'Ver la evolución';\n      mb.setAttribute('aria-expanded', String(st.memOpen));\n      mb.setAttribute('aria-controls', MEM_ID);\n    }\n    body.insertBefore(el, body.firstChild);\n    if (mb && st.focusMem && mb.focus) mb.focus();\n    st.focusMem = false;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (cur && cur.parentNode) cur.parentNode.removeChild(cur);\n    if (!obs) return;\n",
+     "text": "    if (cur && cur.parentNode) cur.parentNode.removeChild(cur);\n    st.hasMem = false;\n    if (!obs) return;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (b.getAttribute('data-shv-act') === 'keys') { var k = doc.getElementById('keysMenuBtn'); if (k) k.click(); }\n",
+     "text": "    if (b.getAttribute('data-shv-act') === 'keys') { var k = doc.getElementById('keysMenuBtn'); if (k) k.click(); }\n    if (b.getAttribute('data-shv-act') === 'mem') { st.memOpen = !st.memOpen; st.focusMem = true; paint(); }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "memoryModel: memoryModel, refresh: paint,",
+     "text": "memoryModel: memoryModel, trends: trends, refresh: paint,"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-wallet.test.cjs",
+   "base_sha": "e522451daff4fe0cb952a773e3b1891af2a73d99",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.1\\.0/);\n});\n",
+     "text": "  assert.match(SRC, /Versión: 1\\.2\\.0/);\n});\n\n// SHV-2b: una foto por día; day = días desde 1970 como en js/shv-memory.js\nconst H = (rows) => rows.map(([day, gold, extra]) => ({ day, at: AT2 - (100 - day) * 864e5, values: Object.assign({ 1: gold * 10000 }, extra || {}) }));\ntest('SHV-2b: el oro de los últimos 7 días y la semana anterior, con fundamento y «Ver la evolución»', () => {\n  const w = load();\n  const hist = H([[86, 1800], [90, 1900], [93, 1963], [100, 2105]]);\n  const t = JSON.parse(JSON.stringify(w.ShvWallet.trends(hist, {})));\n  assert.deepEqual(t.week, { days: 7, from: 1963, to: 2105, prevDelta: 163 });\n  const top = w.ShvCore.pick(w.ShvWallet.observe({ models: [{ id: 1, amount: 5, pinned: false }], perms: ['wallet'], history: hist }));\n  assert.equal(top.id, 'trend', 'lo que noto le gana a la sugerencia de fijar');\n  assert.deepEqual([...top.text], ['En los últimos 7 días tu oro subió 142 en esta cuenta: de 1.963 a 2.105.', 'La semana anterior había subido 163.']);\n  assert.equal(w.ShvCore.basisText(top.basis, AT2), 'tus fotos diarias de la Cartera (4 días guardados en este navegador) · hoy 14:10');\n  assert.deepEqual(JSON.parse(JSON.stringify(top.action)), { label: 'Ver la evolución', act: 'mem', href: null });\n  const down = w.ShvWallet.observe({ history: H([[99, 300], [100, 250]]) })[0];\n  assert.equal(down.text[0], 'En el último día tu oro bajó 50 en esta cuenta: de 300 a 250.');\n  assert.equal(down.text.length, 1, 'sin fotos de la semana anterior no la invento');\n  assert.equal(w.ShvWallet.observe({ history: H([[99, 300], [100, 300.4]]) })[0].text[0], 'En el último día tu oro no cambió en esta cuenta: 300 de oro.');\n  assert.equal(w.ShvWallet.observe({ history: H([[80, 300], [100, 400]]) }).length, 0, 'sin foto en los últimos 7 días no hay semana');\n  assert.equal(w.ShvCore.pick(w.ShvWallet.observe({ models: [{ id: 1, amount: 5 }], perms: ['account'], history: hist })).id, 'perm', 'sin permiso, eso primero');\n});\n\ntest('SHV-2b: la divisa con saldo que más días lleva igual (14 o más); el primer día lo digo', () => {\n  const w = load();\n  const hist = H([[70, 10, { 3: 212, 63: 50 }], [80, 10, { 3: 212, 63: 60 }], [86, 10, { 3: 212, 63: 60 }], [100, 10, { 3: 212, 63: 60 }]]);\n  const t = JSON.parse(JSON.stringify(w.ShvWallet.trends(hist, { 3: 'Monedas de Laurel (API)' })));\n  assert.deepEqual(t.stale, { id: 3, name: 'Monedas de Laurel (API)', days: 30, value: 212, sinceStart: true });\n  const obs = w.ShvWallet.observe({ models: [{ id: 3, amount: 212, pinned: true }], perms: ['wallet'], history: hist.slice(1) });\n  const st = obs.find((o) => o.id === 'stale');\n  assert.equal(st.text[0], '«Monedas de Laurel» está igual hace al menos 20 días en esta cuenta (212).');\n  assert.equal(w.ShvCore.pick(obs.filter((o) => o.id !== 'trend')).id, 'stale', 'le gana al resumen');\n  const moved = H([[70, 10, { 63: 50 }], [90, 10, { 63: 60 }], [100, 10, { 63: 60 }]]);\n  assert.equal(w.ShvWallet.trends(moved, {}).stale, null, '10 días no alcanzan');\n  assert.equal(w.ShvWallet.trends(H([[70, 10, { 4: 0 }], [100, 10, { 4: 0 }]]), {}).stale, null, 'una divisa en 0 que sigue en 0 no es noticia');\n  const two = w.ShvWallet.observe({ models: [{ id: 2, amount: 5, pinned: true }], perms: ['wallet'], history: H([[99, 10], [100, 10]]) });\n  assert.equal(two.find((o) => o.id === 'summary').text.length, 1, 'desde el segundo día ya no digo que empiezo');\n  const first = w.ShvWallet.observe({ models: [{ id: 2, amount: 5, pinned: true }], perms: ['wallet'], history: H([[100, 10]]) });\n  assert.deepEqual([...first[0].text], ['Tenés 1 divisa con saldo en esta cuenta y 1 fijada en Destacadas.', 'Desde hoy recuerdo tu Cartera: en unos días te digo cómo evoluciona.']);\n  assert.equal(w.ShvWallet.observe({ models: [{ id: 2, amount: 5, pinned: true }], perms: ['wallet'] })[0].text.length, 1, 'sin memoria no lo digo');\n});\n\ntest('SHV-2b: la evolución se abre desde mi voz, con aria-expanded y el foco en el mismo botón', () => {\n  assert.match(SRC, /data-shv-act=\"mem\"/);\n  assert.match(SRC, /setAttribute\\('aria-expanded', String\\(st\\.memOpen\\)\\)/);\n  assert.match(SRC, /setAttribute\\('aria-controls', MEM_ID\\)/);\n  assert.match(SRC, /=== 'mem'\\) \\{ st\\.memOpen = !st\\.memOpen; st\\.focusMem = true; paint\\(\\); \\}/);\n  assert.match(SRC, /if \\(!st\\.memOpen \\|\\| !st\\.hasMem \\|\\| \\(m && m\\.empty\\)\\) m = null;/);\n  assert.ok(SRC.indexOf('paintVoice();\\n    paintMemory();') > 0, 'primero mi voz, después la evolución debajo');\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "8270108e4b32871214536758f9d5f0db4d7650e1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/shv-wallet.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/shv-wallet.js\", \"v\": \"1.2.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "docs/user-guide-avanzado.html",
+   "base_sha": "38252447bd767ee8e5938116b1bd74277d3f4ddd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      <dt>Cambio de divisas</dt>",
+     "text": "      <dt>Mi memoria (Shiruvana)</dt><dd>Una vez por día guardo una foto de tus divisas principales de cada cuenta. Con eso te digo cómo se movió tu oro en la semana o qué divisa no cambia hace días, y «Ver la evolución» abre los últimos 30 días. El primer día solo empiezo a recordar.</dd>\n      <dt>Cambio de divisas</dt>"
+    },
+    {
+     "op": "replace",
+     "anchor": "      <li><code>gn:wallet:dashboard:sort</code> El orden de esa tabla.</li>\n",
+     "text": "      <li><code>gn:wallet:dashboard:sort</code> El orden de esa tabla.</li>\n      <li><code>gn:shv:wallet</code> Mi memoria: una foto por día y por cuenta de tu oro, karma, gemas, Monedas de Laurel, Aclamación astral y las que fijaste, durante 90 días y hasta 64 KB. Cada cuenta va con una huella que no es la Key.</li>\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "La copia del formato viejo, también cifrada. Queda por compatibilidad.",
+     "text": "La copia del formato viejo, también cifrada. Se borra sola cuando ya guardaste la nueva."
+    }
+   ]
+  }
+ ]
+}
