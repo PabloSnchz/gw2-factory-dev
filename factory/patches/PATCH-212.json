@@ -1,0 +1,105 @@
+{
+ "id": "PATCH-212",
+ "summary": "BL-059 SHV-4c: aviso del 85 % en Inicio (js/shv-recall.js 1.1.0, D6 de la propuesta SHV-4), manifiesto, tests y guía.",
+ "files": [
+  {
+   "path": "js/shv-recall.js",
+   "base_sha": "b31251d81f758ac1ee94999c636e214c6b0f7994",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-27)\n *\n",
+     "text": " * Versión: 1.1.0 (2026-10-27)\n *\n * 1.1.0 (SHV-4c, D6 de la propuesta SHV-4): si este navegador pasa el 85 % de su espacio, lo aviso en Inicio con\n *   mi voz escrita (ShvCore.render, no en globo), debajo de «Shiruvana te guía», con «Ver lo que ocupa», que abre\n *   esta ventana. Lo mido al entrar a Inicio, cuando la Bienvenida se redibuja y al cerrar la ventana; debajo del\n *   85 % no digo nada. Solo toco el DOM si cambió lo que digo.\n *\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';\n",
+     "text": "  var VERSION = '1.1.0';\n  var WARN = 85, HOME_ID = 'shvRecallHome'; // SHV-4c: desde cuánto aviso en Inicio\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { ls: null, busy: false };\n",
+     "text": "  var st = { ls: null, busy: false, sig: null, timer: null };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // ------------------------------------------------------------------ Bóveda\n",
+     "text": "  /** SHV-4c: el aviso de Inicio (puro). null debajo del 85 %. */\n  function homeObs(u, now) {\n    if (!u || !(u.pct >= WARN)) return null;\n    return {\n      module: 'inicio', id: 'storage', priority: 'alta', kind: 'advierte',\n      text: ['Este navegador ya usa el ' + nf(u.pct, 0) + ' % del espacio que le da a la Bóveda (' + size(u.total) + ' de ~' + size(u.quota) +\n        '). Si se llena, no puedo guardar nada nuevo: ni Keys, ni marcas, ni ajustes.',\n        'Lo mío ocupa ' + size(u.mine) + '. Antes de borrar algo, guardá una copia desde Ajustes. En «Lo que recuerdo de vos» ves cuánto ocupa todo.'],\n      action: { label: 'Ver lo que ocupa', act: 'recall' },\n      basis: { source: 'lo que ocupa este navegador, medido ahora', at: now }\n    };\n  }\n\n  // ------------------------------------------------------------------ Bóveda\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (u.pct >= 85) bar.setAttribute('data-level', 'alto');\n",
+     "text": "    if (u.pct >= WARN) bar.setAttribute('data-level', 'alto');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      st.busy = false;\n      var a = r && r.action;\n",
+     "text": "      st.busy = false;\n      schedule(); // pudiste haber liberado espacio\n      var a = r && r.action;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  root.ShvRecall = {\n",
+     "text": "  // ------------------------------------------------------------------ Inicio (SHV-4c)\n  function homeBody() {\n    var p = doc && doc.getElementById ? doc.getElementById('welcomePanel') : null;\n    return p && p.querySelector ? p.querySelector('.panel__body') : null;\n  }\n  /** Pongo, actualizo o saco el aviso de Inicio. Solo toco el DOM si cambió lo que digo. */\n  function paintHome() {\n    st.timer = null;\n    var body = homeBody(), C = root.ShvCore, cur = doc && doc.getElementById ? doc.getElementById(HOME_ID) : null;\n    var o = body && C && typeof C.render === 'function' ? homeObs(usage(ls()), Date.now()) : null;\n    var sig = o ? o.text.join(' ') : '';\n    if (o && cur && cur.parentNode === body && sig === st.sig) return cur;\n    if (cur && cur.parentNode) cur.parentNode.removeChild(cur);\n    st.sig = null;\n    if (!o) return null;\n    var el = C.render(o, { doc: doc });\n    if (!el) return null;\n    el.id = HOME_ID;\n    var btn = el.querySelector ? el.querySelector('.shv-obs__btn') : null;\n    if (btn) btn.addEventListener('click', function () { open(); });\n    var kids = body.children || [], guide = null;\n    for (var i = 0; i < kids.length; i++) if (kids[i].getAttribute && kids[i].getAttribute('data-shv-place') === 'welcome') { guide = kids[i]; break; }\n    body.insertBefore(el, guide ? guide.nextSibling : body.firstChild); // debajo de «Shiruvana te guía»\n    st.sig = sig;\n    return el;\n  }\n  function schedule() { if (!st.timer && root.setTimeout) st.timer = root.setTimeout(paintHome, 250); }\n  function onlyMine(recs) {\n    return (recs || []).every(function (r) {\n      var n = [].slice.call(r.addedNodes || []).concat([].slice.call(r.removedNodes || []));\n      return n.length > 0 && n.every(function (x) { return x && x.id === HOME_ID; });\n    });\n  }\n  function initHome() {\n    var p = doc && doc.getElementById ? doc.getElementById('welcomePanel') : null;\n    // La Bienvenida se redibuja entera: vuelvo a mirar. Lo que agrego o saco yo no cuenta (sin bucles).\n    if (p && typeof root.MutationObserver === 'function') new root.MutationObserver(function (recs) { if (!onlyMine(recs)) schedule(); }).observe(p, { childList: true, subtree: true });\n    if (root.addEventListener) { root.addEventListener('hashchange', schedule); root.addEventListener('storage', schedule); }\n    schedule();\n  }\n\n  root.ShvRecall = {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    open: open, download: download, forgetAll: forgetAll, togglePause: togglePause, wire: wire,\n",
+     "text": "    open: open, download: download, forgetAll: forgetAll, togglePause: togglePause, wire: wire,\n    paintHome: paintHome, HOME_ID: HOME_ID, WARN: WARN,\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "fileName: fileName, dm: dm },\n",
+     "text": "fileName: fileName, dm: dm, homeObs: homeObs },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', wire);\n    else wire();\n",
+     "text": "    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', function () { wire(); initHome(); });\n    else { wire(); initHome(); }\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-recall.test.cjs",
+   "base_sha": "f03e36897618c9a438e59e809fd60cd697f23e0a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  vm.runInNewContext(SRC, { window,",
+     "text": "  if (opts.win) Object.assign(window, opts.win(doc, calls));\n  vm.runInNewContext(SRC, { window,"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('reglas de la casa y orden de carga', () => {",
+     "text": "// ------------------------------------------------------------------ SHV-4c: el aviso del 85 % en Inicio\n// Inicio con «Shiruvana te guía» arriba, ShvCore falso (dibuja un botón .shv-obs__btn) y un MutationObserver falso.\nfunction home(ls, extra) {\n  const H = { renders: [], mo: null, win: {} };\n  const t = load(Object.assign({ ls, win: (doc) => {\n    const p = doc.body.appendChild(doc.createElement('section')); p.id = 'welcomePanel';\n    H.body = p.appendChild(doc.createElement('div')); H.body.className = 'panel__body';\n    H.guide = H.body.appendChild(doc.createElement('div')); H.guide.setAttribute('data-shv-place', 'welcome');\n    H.cards = H.body.appendChild(doc.createElement('div'));\n    return {\n      ShvCore: { render(o) { H.renders.push(o); const el = doc.createElement('div'); el.className = 'shv-voice'; const b = el.appendChild(doc.createElement('button')); b.className = 'shv-obs__btn'; b.textContent = o.action.label; return el; } },\n      MutationObserver: class { constructor(f) { H.mo = f; } observe(n, o) { H.obs = [n, o]; } },\n      addEventListener(t, f) { (H.win[t] = H.win[t] || []).push(f); },\n      setTimeout: (f) => { H.timers = (H.timers || 0) + 1; return setTimeout(f, 0); }\n    };\n  } }, extra || {}));\n  return Object.assign(t, { H, tick: () => new Promise((r) => setTimeout(r, 5)) });\n}\nconst BIG = 'z'.repeat(4_600_000); // ~88 % de 5 M\n\ntest('SHV-4c: debajo del 85 % no digo nada en Inicio', async () => {\n  const t = home({ big: 'z'.repeat(4_400_000) }); // ~84 %\n  await t.tick();\n  assert.equal(t.doc.getElementById('shvRecallHome'), null);\n  assert.equal(t.H.renders.length, 0);\n});\n\ntest('SHV-4c: pasando el 85 % aviso en Inicio, escrito y debajo de «Shiruvana te guía»; «Ver lo que ocupa» abre la ventana', async () => {\n  const t = home({ big: BIG });\n  await t.tick();\n  const el = t.doc.getElementById('shvRecallHome');\n  assert.ok(el, 'el aviso está');\n  assert.equal(el.parentNode, t.H.body);\n  assert.equal(t.H.body.children.indexOf(el), t.H.body.children.indexOf(t.H.guide) + 1, 'debajo de mi guía, antes del resto');\n  const o = t.H.renders[0];\n  assert.equal(o.priority, 'alta');\n  assert.equal(o.kind, 'advierte');\n  assert.equal(o.text[0], 'Este navegador ya usa el 88 % del espacio que le da a la Bóveda (4,4 M de ~5,0 M). Si se llena, no puedo guardar nada nuevo: ni Keys, ni marcas, ni ajustes.');\n  assert.match(o.text[1], /^Lo mío ocupa 0 caracteres\\. Antes de borrar algo, guardá una copia desde Ajustes\\./);\n  assert.equal(o.basis.source, 'lo que ocupa este navegador, medido ahora');\n  assert.equal(typeof o.basis.at, 'number');\n  assert.ok(!t.H.obs || t.H.obs[0].id === 'welcomePanel');\n  el.querySelector('.shv-obs__btn').click();\n  await t.tick();\n  assert.equal(t.calls.dialogs.length, 1, 'abre «Lo que recuerdo de vos»');\n  assert.equal(t.calls.dialogs[0].title, 'Lo que recuerdo de vos');\n});\n\ntest('SHV-4c: no me repito ni hago bucles; si la Bienvenida se redibuja vuelvo una vez; bajo el 85 % me voy', async () => {\n  const t = home({ big: BIG });\n  await t.tick();\n  assert.equal(t.H.renders.length, 1);\n  const timers = t.H.timers;\n  t.H.mo([{ addedNodes: [t.doc.getElementById('shvRecallHome')], removedNodes: [] }]); // mi propio dibujo\n  await t.tick();\n  assert.equal(t.H.timers, timers, 'lo mío no cuenta: ni siquiera vuelvo a medir');\n  t.H.mo([{ addedNodes: [], removedNodes: [] }]); // un registro sin nodos no es mío\n  await t.tick();\n  assert.equal(t.H.timers, timers + 1);\n  assert.equal(t.H.renders.length, 1);\n  t.H.mo([{ addedNodes: [t.H.cards], removedNodes: [] }]); // otra cosa cambió, lo que digo no\n  await t.tick();\n  assert.equal(t.H.renders.length, 1, 'mismo texto: no toco el DOM');\n  t.H.body.children.slice().forEach((c) => t.H.body.removeChild(c)); // la Bienvenida se redibuja entera\n  t.H.mo([{ addedNodes: [t.H.cards], removedNodes: [t.H.guide] }]);\n  await t.tick();\n  assert.equal(t.H.renders.length, 2);\n  assert.equal(t.doc.all().filter((n) => n.id === 'shvRecallHome').length, 1, 'una sola vez');\n  t.window.localStorage.removeItem('big');\n  t.H.win.storage.forEach((f) => f({}));\n  await t.tick();\n  assert.equal(t.doc.getElementById('shvRecallHome'), null, 'bajó del 85 %: me voy');\n});\n\ntest('SHV-4c: el aviso es puro y empieza justo en el 85 %; sin Inicio no hago nada', () => {\n  const t = load();\n  const P = t.R._pure;\n  assert.equal(P.homeObs({ pct: 84.9, total: 1, mine: 0, quota: 5242880 }, 1), null);\n  const o = P.homeObs({ pct: 85, total: 4456448, mine: 2048, quota: 5242880 }, 7);\n  assert.equal(o.action.act, 'recall');\n  assert.equal(o.action.label, 'Ver lo que ocupa');\n  assert.equal(o.basis.at, 7);\n  assert.match(o.text[1], /^Lo mío ocupa 2,0 KB\\./);\n  assert.equal(t.R.WARN, 85);\n  assert.equal(t.R.paintHome(), null);\n  assert.equal(t.doc.getElementById('shvRecallHome'), null);\n});\n\ntest('reglas de la casa y orden de carga', () => {"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.0\\.0/);",
+     "text": "  assert.match(SRC, /Versión: 1\\.1\\.0/);"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "9cbdcf8be1ff0d89627bb22b23f1e70fa293884d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/shv-recall.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/shv-recall.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "docs/user-guide-avanzado.html",
+   "base_sha": "e9097288ad681d9c6ec88e01ae21664d69573ffa",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "y si pasa del 85 % la barra se pone roja.",
+     "text": "y si pasa del 85 % la barra se pone roja y te aviso también en Inicio, debajo de «Shiruvana te guía» (con «Ver lo que ocupa»)."
+    }
+   ]
+  }
+ ]
+}
