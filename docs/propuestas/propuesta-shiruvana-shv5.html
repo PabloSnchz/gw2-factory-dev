@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta SHV-5 — «Lo sé por», en toda la Bóveda (BL-076)</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#111;color:#e8e2d4;max-width:900px;margin:2rem auto;padding:0 1rem;line-height:1.55}
+h1,h2{color:#e0b84c}h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:2rem;border-bottom:1px solid #333;padding-bottom:.3rem}
+table{border-collapse:collapse;width:100%;margin:.6rem 0}th,td{border:1px solid #333;padding:.4rem .55rem;text-align:left;vertical-align:top}th{background:#1c1c1c}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.v{background:#171B26;border:1px solid #2A3142;border-left:4px solid #A896FF;border-radius:12px;padding:.7rem 1rem;margin:.4rem 0}
+.v b.l{display:block;color:#F4F6FA;font-size:.85rem}.v p{margin:.2rem 0;color:#C9D0DA;font-size:.9rem}.v .fd{font-size:.78rem;color:#8E96A3}.v .fd b{color:#C9D0DA;font-weight:600}
+.v--old{border-left-color:#555;opacity:.85}.cap{font-size:.75rem;color:#9a937f;text-transform:uppercase;letter-spacing:.05em}
+.rec{color:#8fd18f}.sev{font-weight:700;font-size:.75rem;border-radius:6px;padding:0 .4rem}.a{background:#5a3b14;color:#ffd38a}.m{background:#24324d;color:#b9d0ff}.l{background:#22352c;color:#a9e6c6}
+code{background:#222;padding:0 .25rem;border-radius:3px}small{color:#9a937f}
+</style>
+</head>
+<body>
+<h1>Propuesta SHV-5 — «Lo sé por», en toda la Bóveda</h1>
+<p><small>BL-076 · sigue a BL-059 (cerrado) · DEC-033, DEC-024 · 2026-10-27 · Shiruvana. Nada de esto está construido: es para que lo apruebes o lo cambies.</small></p>
+
+<h2>1. Product</h2>
+<p><b>Problema.</b> El primer principio de DEC-033 es «explico, no decido, siempre con el fundamento a la vista». Hoy lo cumplo solo en 4 lugares: la Cartera, «Shiruvana te guía» en Inicio, «Mi cola» de la Armería y el aviso del 85 %. En los otros 11 archivos donde hablo (Logros, Inventario, Actividades, Heredad, Cuentas, Cámara, Raids, Metas y el Conversor) digo cosas sin decir de dónde las saco. Para el jugador, mi voz vale distinto según la pantalla, y no tiene cómo saber cuándo leí la API y cuándo es un consejo general.</p>
+<p><b>Valor.</b> Confianza pareja en toda la Bóveda. Y es la condición para sumarme más inteligencia después: sin fundamento en todos lados, más inteligencia sería más voz sin respaldo.</p>
+<p><b>Prioridad.</b> Alta dentro de Shiruvana. SHV-0 ya lo había marcado (MEDIO) y SHV-1 lo resolvió solo para Cartera y Bienvenida («los demás se suman cuando se toquen»): no se tocaron. <b>No agrega funciones nuevas</b>: termina lo que quedó a medias.</p>
+
+<h2>2. Lo que medí (RUN-164, sonda ya borrada)</h2>
+<table>
+<tr><th>Hallazgo</th><th>Nivel</th><th>Qué significa</th></tr>
+<tr><td>Hablo sin «Lo sé por» en <b>11 archivos</b>: <code>ach-view</code> (Logros), <code>inv-view</code> (Inventario), <code>act-view</code> y <code>act-week</code> (Actividades), <code>home-view</code> (Heredad), <code>acc-view</code> (Cuentas), <code>wv-view</code> (Cámara), <code>raids-view</code> y <code>raids-sheet</code> (Raids), <code>meta-theme</code> (Metas) y <code>converter-modal</code> (Conversor).</td><td><span class="sev m">MEDIO</span></td><td>El fundamento es opcional en la práctica. Nada impide que el próximo mensaje nazca sin él.</td></tr>
+<tr><td><code>raids-sheet</code> sigue usando dos tipos propios (<code>success</code>, <code>hint</code>) fuera de los 4 de DEC-024.</td><td><span class="sev l">BAJO</span></td><td>Pendiente de SHV-0; se arregla de paso.</td></tr>
+<tr><td>El manifiesto tiene <b>38 de 40</b> módulos.</td><td><span class="sev m">límite</span></td><td>SHV-5 no puede sumar archivos: el cambio va dentro de los que ya existen.</td></tr>
+<tr><td>Tamaños: <code>acc-view</code> 39.502 B (le quedan 1.458 B hasta los 40.960 saludables); <code>converter-modal</code> 48.472 B, en zona de advertencia, a <b>680 B</b> del límite de 49.152; <code>act-view</code> 37.091, <code>wv-view</code> 35.543, <code>raids-view</code> 35.293.</td><td><span class="sev m">MEDIO</span></td><td>Cada cambio tiene que medir decenas de bytes, no cientos.</td></tr>
+<tr><td>7 módulos ya publican su estado (Logros, Multicuenta, Actividades, la semana, Heredad, Cuentas, Metas), y mi voz (<code>shiruvana.js</code> 1.1.0) ya acepta el fundamento.</td><td><span class="sev l">a favor</span></td><td>Puedo decir de dónde y cuándo sin pedir nada nuevo a la API.</td></tr>
+<tr><td>Siguen abiertos de antes: la Cámara reconoce cada cuenta por 4 + 4 caracteres de la Key (8 archivos) y «Guardar copia de ajustes» no lleva mi memoria (D5 de SHV-4).</td><td><span class="sev l">BAJO</span></td><td>Los dejo afuera (ver D5): cada uno toca datos guardados que comparte producción.</td></tr>
+</table>
+
+<h2>3. Cómo se ve</h2>
+<p>Mi voz no cambia de forma: suma la misma línea que ya ves en la Cartera.</p>
+<div class="cols">
+<div><p class="cap">Hoy · Logros</p>
+<div class="v v--old"><b class="l">Shiruvana te recomienda</b><p>Te faltan 3 logros para cerrar «Mundo de los sueños».</p></div></div>
+<div><p class="cap">Con SHV-5 · Logros</p>
+<div class="v"><b class="l">Shiruvana te recomienda</b><p>Te faltan 3 logros para cerrar «Mundo de los sueños».</p><p class="fd">Lo sé por: <b>tus logros, leídos de la API oficial</b> · hoy 14:10</p></div></div>
+<div><p class="cap">Con SHV-5 · Raids</p>
+<div class="v"><b class="l">Shiruvana te explica</b><p>Esta semana hiciste 4 de 46 encuentros.</p><p class="fd">Lo sé por: <b>tus jefes de la semana (API oficial) y tus marcas</b> · hoy 14:12</p></div></div>
+<div><p class="cap">Con SHV-5 · Metas (sin Key)</p>
+<div class="v"><b class="l">Shiruvana te recomienda</b><p>En 12 minutos empieza Tequatl.</p><p class="fd">Lo sé por: <b>el horario oficial de metas</b> · en este navegador</p></div></div>
+</div>
+<p><small>Textos de ejemplo. Cada módulo dice lo que ya dice; lo nuevo es solo la línea de abajo.</small></p>
+
+<h2>4. Architecture</h2>
+<ul>
+<li>Cada uno de los 11 archivos pasa <code>basis</code> a la voz que ya usa (<code>Shiruvana.voice</code>): fuente en palabras + la hora del dato que el módulo ya tiene. Si el módulo no la tiene, digo «en este navegador», nunca una hora inventada.</li>
+<li><b>Test guardián</b> nuevo (<code>tests/shv-basis.test.cjs</code>): toda llamada a mi voz fuera de mis propios archivos lleva fundamento. Arranca con la lista exacta de los 11 pendientes y <b>solo puede achicarse</b> (como <code>tools/size-budget.json</code>): un mensaje nuevo sin «Lo sé por» rompe la suite.</li>
+<li>Raids pasa a los 4 tipos de DEC-024 (<code>success</code> → saluda, <code>hint</code> → explica).</li>
+<li>Sin archivos nuevos en <code>js/</code> (el manifiesto queda en 38 de 40), sin tocar <code>index.html</code>, sin pedidos nuevos a la API y sin claves nuevas en el navegador.</li>
+<li><b>Descarto</b> pasar los 11 al formato completo de <code>shv-core</code> (observación + elegir una): cuesta cientos de bytes por archivo, no entra en Cuentas ni en el Conversor, y cada módulo ya elige un solo mensaje por su cuenta.</li>
+</ul>
+
+<h2>5. Decisiones</h2>
+<table>
+<tr><th>#</th><th>Pregunta</th><th>Mi recomendación</th></tr>
+<tr><td>D1</td><td>¿Alcance?</td><td class="rec">Solo el fundamento en los 11 y los tipos de Raids. Nada de inteligencia nueva en SHV-5.</td></tr>
+<tr><td>D2</td><td>¿Cómo?</td><td class="rec">El fundamento dentro de la voz que cada módulo ya usa, con el test guardián. No la migración completa a <code>shv-core</code>.</td></tr>
+<tr><td>D3</td><td>¿Qué hora digo?</td><td class="rec">La del dato que el módulo ya tiene (su última lectura de la API). Si no la tiene: «en este navegador». Nunca una hora inventada.</td></tr>
+<tr><td>D4</td><td>¿El Conversor (a 680 B del límite)?</td><td class="rec">Va solo si el cambio entra en 200 B o menos. Si no entra, queda registrado como pendiente en el guardián, a la vista, y no se fuerza.</td></tr>
+<tr><td>D5</td><td>¿La huella de la Cámara y mi memoria en la copia de ajustes?</td><td class="rec">Afuera. Cada uno toca datos guardados que comparte producción: van como pendientes aparte, con su propia propuesta.</td></tr>
+<tr><td>D6</td><td>¿Orden?</td><td class="rec">Primero el guardián y Raids (lo más desordenado); después los módulos con más datos (Logros, Inventario, Heredad), luego Actividades y Cuentas, y al final Cámara, Metas y el Conversor.</td></tr>
+</table>
+
+<h2>6. Micro-ciclos (cada uno con tu validación)</h2>
+<table>
+<tr><th>MC</th><th>Qué</th></tr>
+<tr><td>SHV-5a</td><td>Test guardián (lista exacta de 11) + Raids: <code>raids-view</code> y <code>raids-sheet</code> con «Lo sé por» y los 4 tipos de DEC-024.</td></tr>
+<tr><td>SHV-5b</td><td>Logros, Inventario y Heredad (<code>ach-view</code>, <code>inv-view</code>, <code>home-view</code>).</td></tr>
+<tr><td>SHV-5c</td><td>Actividades y Cuentas (<code>act-view</code>, <code>act-week</code>, <code>acc-view</code>).</td></tr>
+<tr><td>SHV-5d</td><td>Cámara, Metas y el Conversor (<code>wv-view</code>, <code>meta-theme</code>, <code>converter-modal</code> según D4); revisión final en los 19 themes, teclado y celular; el guardián queda en cero pendientes (o con el Conversor a la vista) y FEAT-023.</td></tr>
+</table>
+<p><b>Riesgo:</b> BAJO-MEDIO. Toco 11 archivos que ya funcionan, pero con cambios de decenas de bytes, uno a la vez y con la suite antes y después. El margen de tamaño lo vigila <code>tools/size-budget.json</code>; el guardián vigila que no vuelva a pasar.</p>
+</body>
+</html>
