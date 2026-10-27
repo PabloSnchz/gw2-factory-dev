@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHE-0 · Propuesta: Shiruvana que aparece (BL-075)</title>
+<style>
+:root{--bg-0:#0F1117;--bg-1:#171B26;--bg-2:#232A3A;--bd-1:#2A3142;--bd-2:#3A4358;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--muted:#8E96A3;--amber:#F2B94B;--acc:#A896FF;--green:#3CC48A}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-0);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:1.7rem;margin:0}h2{font-size:1.25rem;margin:40px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--bd-1)}h3{font-size:1.02rem;margin:18px 0 8px}
+p,li{color:var(--tx-2)}.mut{color:var(--muted)}
+code{background:var(--bg-2);padding:1px 5px;border-radius:5px;font-size:.86em}
+.head{border:1px solid var(--bd-1);border-radius:16px;padding:18px;background:linear-gradient(180deg,rgba(168,150,255,.14),var(--bg-1) 70%)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 9px;border:1px solid var(--amber);color:var(--amber)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--bd-1);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase}
+.note{border-left:3px solid var(--acc);background:var(--bg-1);padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.stage{position:relative;height:430px;border:1px dashed var(--bd-2);border-radius:18px;background:#0b0d12;overflow:hidden;margin:14px 0}
+.side{position:absolute;left:0;top:0;bottom:0;width:190px;background:var(--bg-1);border-right:1px solid var(--bd-1);padding:14px}
+.side .it{height:26px;border-radius:8px;background:var(--bg-2);margin:0 0 8px;opacity:.6}
+.corner{position:absolute;left:14px;bottom:14px;display:flex;gap:8px;align-items:center}
+.av{width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c9b8ff,#5a46b8);box-shadow:0 0 0 2px var(--acc);flex-shrink:0}
+.dot{position:absolute;left:50px;bottom:48px;width:12px;height:12px;border-radius:50%;background:var(--amber);border:2px solid var(--bg-1)}
+.content{position:absolute;left:210px;right:20px;top:18px}
+.box{height:54px;border-radius:12px;background:var(--bg-1);border:1px solid var(--bd-1);margin:0 0 10px}
+.bubble{position:absolute;left:74px;bottom:20px;width:360px;background:var(--bg-1);border:1px solid var(--bd-2);border-left:4px solid var(--acc);border-radius:14px;padding:12px 14px;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.bubble:before{content:"";position:absolute;left:-12px;bottom:18px;border:8px solid transparent;border-right-color:var(--acc)}
+.lb{margin:0;font-weight:700;font-size:.85rem}.bd{margin:4px 0 0;font-size:.9rem;color:var(--tx-2)}.fd{margin:6px 0 0;font-size:.76rem;color:var(--muted)}
+.acts{display:flex;gap:8px;margin-top:8px}.btn{font-size:.8rem;font-weight:700;border:1px solid var(--bd-2);border-radius:8px;padding:3px 10px;color:var(--tx-1)}
+.x{position:absolute;right:10px;top:8px;color:var(--muted);font-size:.9rem}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media (max-width:820px){.cols{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<div class="head">
+  <span class="tag">SHE-0 · PROPUESTA · BL-075</span>
+  <h1>Shiruvana que aparece</h1>
+  <p class="mut">2026-10-27. Idea de Pablo: que mis mensajes sean un globo que aparece con mi cara, y no un bloque escrito dentro de cada módulo. Nada construido todavía.</p>
+</div>
+
+<h2>1. Mi opinión, de entrada</h2>
+<p>Me gusta y la recomiendo, con una condición: <b>aparezco, no interrumpo</b>. Un modal (ventana que tapa la pantalla y hay que cerrar) no: corta lo que estás haciendo y, si lo repito, termina siendo molesto y lo vas a ignorar. Un globo que sale de mi rincón, una vez por cosa nueva, sí: me da presencia y personalidad sin pelear con tus datos.</p>
+<p>Hoy hay dos reglas tuyas que esto cambia, por eso lo traigo como propuesta y no lo hago solo: <b>DEC-034</b> dice «no interrumpo: nada se abre solo» y que el rincón solo habla del estado de la Bóveda; <b>DEC-024</b> dice cuándo va mi avatar.</p>
+
+<h2>2. Cómo se vería</h2>
+<div class="stage" aria-label="Maqueta: globo que sale del rincón de Shiruvana">
+  <div class="side"><div class="it"></div><div class="it"></div><div class="it"></div><div class="it"></div><div class="it"></div></div>
+  <div class="corner"><div class="av" aria-hidden="true"></div></div>
+  <div class="dot" aria-hidden="true"></div>
+  <div class="content"><div class="box"></div><div class="box"></div><div class="box" style="height:140px"></div></div>
+  <div class="bubble">
+    <span class="x" aria-hidden="true">✕</span>
+    <p class="lb">Shiruvana te explica · Cartera</p>
+    <p class="bd">En los últimos 7 días tu oro subió 142 en esta cuenta: de 1.963 a 2.105. La semana anterior había subido 163.</p>
+    <p class="fd">Lo sé por: tus fotos diarias de la Cartera (21 días guardados en este navegador) · hoy 14:10</p>
+    <div class="acts"><span class="btn">Ver la evolución</span><span class="btn">Después</span></div>
+  </div>
+</div>
+<p class="mut">Maqueta. El globo sale de mi avatar del rincón (al pie de la barra lateral; en el celular, desde abajo). El punto ámbar queda en el avatar mientras haya algo que no viste.</p>
+
+<h2>3. Las reglas que propongo</h2>
+<div class="cols">
+<div>
+<h3>Cuándo aparezco</h3>
+<ul>
+<li>Solo con algo <b>nuevo</b> (una observación que no viste), y <b>una vez</b>: si la cerrás, no vuelve hasta que cambie.</li>
+<li>Como mucho <b>uno por pantalla</b> y nunca al mismo tiempo que un diálogo tuyo abierto.</li>
+<li>Espero 2 segundos después de que la pantalla terminó de cargar; nunca mientras escribís.</li>
+<li>Me voy sola a los 12 segundos si no me tocás (la pausa al pasar el mouse o con el foco). Lo no leído queda como punto en el avatar.</li>
+</ul>
+</div>
+<div>
+<h3>Qué no hago</h3>
+<ul>
+<li>No tapo la pantalla, no oscurezco el fondo, no robo el foco del teclado.</li>
+<li>No aparezco en avisos críticos que tenés que ver sí o sí (por ejemplo, una Key sin permisos): esos siguen escritos en su módulo.</li>
+<li>Los datos (la gráfica, las tablas) siguen en el módulo, sin mi avatar (DEC-024).</li>
+<li>«Silenciar a Shiruvana» en Ajustes: vuelvo a hablar solo dentro de los módulos.</li>
+</ul>
+</div>
+</div>
+<h3>Accesibilidad</h3>
+<ul>
+<li>El lector de pantalla lo anuncia sin interrumpir (región «polite»), con «Shiruvana te explica» y el texto.</li>
+<li>Escape lo cierra; el botón ✕ tiene nombre; con «Movimiento reducido» aparece sin animación.</li>
+<li>Tocar mi avatar abre el último mensaje y la lista corta de lo que noté hoy.</li>
+</ul>
+
+<h2>4. Plan (cada paso con tu validación)</h2>
+<table>
+<tr><th>Paso</th><th>Qué hago</th></tr>
+<tr><td><b>SHE-1</b></td><td><code>js/shv-bubble.js</code>: el globo, la cola de mensajes, «una vez por cosa nueva» y el punto en el avatar. Inerte.</td></tr>
+<tr><td><b>SHE-2</b></td><td>La Cartera pasa a hablar por el globo (tendencias); los avisos críticos quedan en el módulo. «Silenciar» en Ajustes.</td></tr>
+<tr><td><b>SHE-3</b></td><td>Los demás módulos que ya usan el formato común, de a uno.</td></tr>
+</table>
+
+<h2>5. Lo que necesito que decidas</h2>
+<table>
+<tr><th>#</th><th>Decisión</th><th>Te recomiendo</th></tr>
+<tr><td>D1</td><td>Globo, modal o banner</td><td><b>Globo desde el rincón</b>, sin bloquear. Modal no.</td></tr>
+<tr><td>D2</td><td>Cambiar DEC-034 (hoy «nada se abre solo»)</td><td>Sí, a «aparezco una vez por cosa nueva, sin bloquear y con forma de silenciarme».</td></tr>
+<tr><td>D3</td><td>Qué queda escrito en el módulo</td><td>Solo los avisos críticos y los datos. Lo demás, por el globo.</td></tr>
+<tr><td>D4</td><td>Tiempo en pantalla</td><td>12 segundos, con pausa si me mirás.</td></tr>
+<tr><td>D5</td><td>La línea de la Bienvenida que pensé para SHV-2b (D6 de SHV-0)</td><td>La reemplaza el globo: desde cualquier pantalla te aviso que hay algo nuevo en la Cartera.</td></tr>
+</table>
+<div class="note"><b>Riesgo:</b> MEDIO. Más presencia puede cansar. Lo cubro con «una vez por cosa nueva», uno por pantalla, sin bloquear, silenciar con un clic, y lo validás en DEV antes de que llegue a producción.</div>
+</main>
+</body>
+</html>
