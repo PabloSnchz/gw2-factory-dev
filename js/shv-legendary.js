@@ -1,7 +1,9 @@
 /*!
  * js/shv-legendary.js — Lo que noto de tu legendaria (BL-059 SHV-3, nivel N4 de DEC-033)
- * Versión: 1.0.0 (2026-10-27) · SHV-3a: solo la cuenta, sin pantalla. Todavía no está en js/modules.json:
- *          la conecta SHV-3b, en «Mi cola» y con mi globo (js/shv-bubble.js).
+ * Versión: 1.1.0 (2026-10-27) · SHV-3b: hablo en «Mi cola» de la Armería con mi globo (js/shv-bubble.js), una vez por
+ *          visita y por novedad (cambia la legendaria o cuántos materiales te faltan). Si me silenciaste, lo escribo
+ *          dentro de «Mi cola». «Ver qué me falta» abre su ficha. Pido precios al Bazar solo por lo que falta.
+ *          1.0.0 (2026-10-27) · SHV-3a: solo la cuenta, sin pantalla.
  *
  * Propuesta aprobada por Pablo (2026-10-27 04:00Z): docs/propuestas/propuesta-shiruvana-shv3.html.
  *   D1 hablo de la primera legendaria de «Mi cola»; sin cola no digo nada.
@@ -11,12 +13,14 @@
  *   D4 el ritmo («a tu ritmo, ~Y días») queda para SHV-3c, con 7 días de memoria o más.
  *   D5 lo que no se vende va aparte y no suma oro.
  *
- * Todo es puro: recibe lo que ya calcularon la Armería y el Bazar y devuelve números u observaciones con el
- * formato común de js/shv-core.js. No lee el DOM, no guarda nada y no llama a la API.
+ * estimate/observe son puros: reciben lo que ya calcularon la Armería y el Bazar y devuelven números u
+ * observaciones con el formato común de js/shv-core.js. La parte de abajo (SHV-3b) lee el estado público de
+ * LegendaryTracker y LegendaryTree, no guarda nada propio (lo visto lo recuerda shv-bubble) y se carga por
+ * js/modules.json, después de shv-bubble.js.
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
 
   function num(v) { var n = Number(v); return isFinite(n) && n > 0 ? n : 0; }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
@@ -124,5 +128,149 @@
     }];
   }
 
-  root.ShvLegendary = { version: VERSION, estimate: estimate, observe: observe, priceOf: priceOf, goldText: goldText };
+  // ------------------------------------------------------------------ SHV-3b: hablo en «Mi cola»
+  // La Armería no tiene precios de materiales (su caché de precios nunca se llena): pido al Bazar UNA vez por
+  // lo que falta, con la caché de GW2Api. Si el Bazar no responde nada, no hablo de oro (sin precios = null).
+  var VOICE_ID = 'shvLegVoice', WAIT = 300;
+  var doc = root.document;
+  var st = { mo: null, timer: null, busy: false, spoke: false, sig: null, obs: null };
+
+  function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
+  function shown(n) {
+    for (var x = n; x && x !== doc; x = x.parentNode) if (x.hidden) return false;
+    return !!n && (typeof n.getClientRects !== 'function' || n.getClientRects().length > 0);
+  }
+  // Banco + materiales + personajes, sumados (la misma cuenta que stockMap() de la Armería).
+  function stockOf(s) {
+    var m = {};
+    [s.bank, s.materials, s.characterItems].forEach(function (arr) {
+      (Array.isArray(arr) ? arr : []).forEach(function (it) {
+        var id = it && (it.id || it.item_id), c = it ? Number(it.count) : 0;
+        if (id && c > 0) m[id] = (m[id] || 0) + c;
+      });
+    });
+    return m;
+  }
+  function nameOf(id) {
+    var cat = (root.LegendaryCatalog && root.LegendaryCatalog.items) || [];
+    for (var i = 0; i < cat.length; i++) if (cat[i] && cat[i].id === id) return cat[i].nameEs || cat[i].name;
+    return null;
+  }
+  /** Lo que sé de la primera de tu cola que todavía no tenés (D1), sin precios. null si no hay de qué hablar. */
+  function inputNow() {
+    var T = root.LegendaryTracker, LT = root.LegendaryTree;
+    if (!T || typeof T.getState !== 'function' || typeof T.getQueue !== 'function') return null;
+    var s = T.getState() || {};
+    if (s.loading || !s.token || s.error || (s.readErrors && s.readErrors.length)) return null;
+    var owned = s.owned || {}, q = T.getQueue() || [], id = null;
+    for (var i = 0; i < q.length; i++) if (!(owned[q[i]] > 0)) { id = Number(q[i]); break; }
+    if (!id) return null;
+    var tree = null;
+    try { if (LT && typeof LT.hasPrecursors === 'function' && LT.hasPrecursors()) tree = LT.build(id); } catch (e) { tree = null; }
+    var recipe = typeof T.computeMaterials === 'function' ? T.computeMaterials(id) : null;
+    return { item: { id: id, name: nameOf(id) || ('#' + id) }, tree: tree, recipe: recipe, stock: stockOf(s), prices: null, token: s.token };
+  }
+  function missingIds(input) {
+    var src = rowsOf(input), out = [];
+    if (!src) return out;
+    src.rows.forEach(function (r) {
+      var id = Number(r && r.itemId);
+      if (id && out.indexOf(id) < 0 && num(r.need) > num(input.stock[id])) out.push(id);
+    });
+    return out;
+  }
+  function pricesFor(ids) {
+    var A = root.GW2Api;
+    if (!ids.length || !A || typeof A.getCommercePrices !== 'function') return Promise.resolve(null);
+    return Promise.resolve(A.getCommercePrices(ids)).then(function (arr) {
+      if (!Array.isArray(arr) || !arr.length) return null;
+      var m = {};
+      arr.forEach(function (p) { if (p && p.id) m[p.id] = p; });
+      return m;
+    }, function () { return null; });
+  }
+  function quietNow() { var B = root.ShvBubble; return !B || typeof B.offer !== 'function' || (typeof B.quiet === 'function' && !!B.quiet()); }
+
+  // Silenciada (o sin globo): lo escribo dentro de «Mi cola», debajo del título. Solo si cambió (LES: varios
+  // MutationObserver sobre el mismo panel → escribir solo si algo cambió).
+  function paintInline(qv, obs) {
+    var C = root.ShvCore, old = byId(VOICE_ID);
+    var sig = obs ? obs.text.join(' ') : '';
+    if (old && old.parentNode === qv && old.getAttribute('data-sig') === sig) return false;
+    if (old && old.parentNode) old.parentNode.removeChild(old);
+    if (!obs || !C || typeof C.render !== 'function') return !!old;
+    var v = C.render(obs);
+    if (!v) return !!old;
+    var box = doc.createElement('div');
+    box.id = VOICE_ID;
+    box.setAttribute('data-sig', sig);
+    box.appendChild(v);
+    var head = qv.querySelector ? qv.querySelector('.arm-sec') : null;
+    qv.insertBefore(box, head ? head.nextSibling : qv.firstChild);
+    return true;
+  }
+
+  function check() {
+    var body = byId('legendaryArmoryBody');
+    var qv = body && body.querySelector ? body.querySelector('.arm-qview') : null;
+    if (!qv || !shown(qv) || st.busy) return Promise.resolve('none');
+    var input = inputNow();
+    if (!input) { paintInline(qv, null); return Promise.resolve('none'); }
+    var base = estimate(input);
+    if (!base) return Promise.resolve('none');
+    var sig = input.token + '|' + base.itemId + '|' + base.base + '|' + base.missingKinds + '|' + base.missingUnits;
+    if (st.sig === sig && st.obs) return Promise.resolve(tell(qv, st.obs)); // mismo dato: no vuelvo a pedir precios
+    st.busy = true; // una consulta a la vez: la Armería repinta varias veces mientras el Bazar responde
+    return pricesFor(missingIds(input)).then(function (prices) {
+      st.busy = false;
+      input.prices = prices;
+      var obs = observe(input, { at: Date.now() })[0] || null;
+      if (!obs) return 'none';
+      obs.key = base.itemId + '|' + base.base + '|' + base.missingKinds;
+      st.sig = sig; st.obs = obs;
+      var now = body.querySelector('.arm-qview');
+      return now && shown(now) ? tell(now, obs) : 'none';
+    }, function () { st.busy = false; return 'none'; });
+  }
+  // Silenciada: escrito en «Mi cola». Si no, mi globo, uno por visita a la Armería (shv-bubble no repite lo visto).
+  function tell(qv, obs) {
+    if (quietNow()) { paintInline(qv, obs); return 'inline'; }
+    paintInline(qv, null);
+    if (st.spoke) return 'none';
+    st.spoke = true;
+    return root.ShvBubble.offer(obs) ? 'bubble' : 'none';
+  }
+  function later() {
+    if (st.timer) root.clearTimeout(st.timer);
+    st.timer = root.setTimeout(function () { st.timer = null; check(); }, WAIT);
+  }
+  function onAct(e) {
+    var d = e && e.detail, m = d && d.module === 'legendary' && /^legendary-open:(\d+)$/.exec(String(d.act || ''));
+    var T = root.LegendaryTracker;
+    if (m && T && typeof T.openItemModal === 'function') T.openItemModal(Number(m[1]));
+  }
+  // El botón de mi voz escrita (silenciada) hace lo mismo que el del globo.
+  function onClick(e) {
+    var t = e && e.target, b = t && t.closest ? t.closest('#' + VOICE_ID + ' [data-shv-act]') : null;
+    if (b) onAct({ detail: { module: 'legendary', act: b.getAttribute('data-shv-act') } });
+  }
+  function wire() {
+    var body = byId('legendaryArmoryBody');
+    if (!body || st.mo || typeof root.MutationObserver !== 'function') return false;
+    st.mo = new root.MutationObserver(later);
+    st.mo.observe(body, { childList: true, subtree: true });
+    doc.addEventListener('gn:shv-act', onAct);
+    doc.addEventListener('gn:shv-quiet', later);
+    body.addEventListener('click', onClick);
+    if (root.addEventListener) root.addEventListener('hashchange', function () { st.spoke = false; later(); });
+    later();
+    return true;
+  }
+
+  root.ShvLegendary = { version: VERSION, estimate: estimate, observe: observe, priceOf: priceOf, goldText: goldText,
+    check: check, wire: wire, _pure: { stockOf: stockOf, missingIds: missingIds, inputNow: inputNow } };
+  if (doc && doc.addEventListener) {
+    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', wire);
+    else wire();
+  }
 })(typeof window !== 'undefined' ? window : globalThis);
