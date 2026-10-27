@@ -490,8 +490,20 @@ test('SHE-3: lo que esperaba sale una sola vez, y si la pantalla ya habló con l
   assert.equal(t.box(), null, 'la vieja no aparece después');
 });
 
+test('1.2.1: la caja vacía se oculta con :empty (no tiene cajas): miro a su padre para saber si la pantalla se ve', () => {
+  const t = load({ dom: bovedaDom });
+  const { sec, box } = moduleBox(t);
+  box.getClientRects = () => []; // .xx-voice:empty{display:none}
+  sec.getClientRects = () => [{}];
+  assert.equal(t.B.speak(box, MSG('a', 'en el módulo'), { module: 'logros', source: 's' }), 'bubble', 'antes quedaba esperando para siempre');
+  const other = moduleBox(t);
+  other.box.getClientRects = () => [];
+  other.sec.getClientRects = () => []; // la pantalla de otro módulo, con display:none
+  assert.equal(t.B.speak(other.box, MSG('b', 'oculto'), { module: 'raids', source: 's' }), 'later');
+});
+
 test('versión, reglas de la casa y el orden de carga', () => {
-  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.match(SRC, /Versión: 1\.2\.1/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   const css = SRC.match(/var CSS = \[([\s\S]*?)\]\.join/)[1];

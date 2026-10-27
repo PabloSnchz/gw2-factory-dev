@@ -1,6 +1,9 @@
 /*!
  * js/shv-wallet.js — Mi voz en la Cartera (BL-059 SHV-1, nivel N2 de DEC-033)
- * Versión: 1.3.0 (2026-10-27) · BL-075 SHE-2 (DEC-038): lo que noto y lo que te recomiendo sale en mi globo (js/shv-bubble.js),
+ * Versión: 1.3.1 (2026-10-27) · los íconos de la Cartera ya no parpadean: «Ver la evolución de tu Cartera» se reescribía
+ *          en cada pasada, wallet-theme.js redibujaba Destacadas por ese cambio y eso me volvía a llamar (un bucle de
+ *          250 ms). Ahora solo escribo si algo cambió e ignoro lo que wallet-theme.js redibuja solo.
+ *          1.3.0 (2026-10-27) · BL-075 SHE-2 (DEC-038): lo que noto y lo que te recomiendo sale en mi globo (js/shv-bubble.js),
  *          una vez por cosa nueva y uno por visita a la Cartera: el primero que no viste. Acá queda escrito solo lo
  *          crítico (el permiso «billetera») y la evolución, que es un dato: «Ver la evolución de tu Cartera» la abre.
  *          Si me silenciaste en Ajustes, hablo acá como en 1.2.0. «Ver la evolución» del globo abre el panel.
@@ -20,7 +23,7 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.3.0';
+  var VERSION = '1.3.1';
   var HOST_ID = 'shvWalletVoice', MEM_ID = 'shvWalletMemory', BAR_ID = 'shvWalletMemBar';
   var doc = root.document;
   var st = { sig: null, memSig: null, timer: null, mo: null, memOpen: false, hasMem: false, focusMem: false, offered: false };
@@ -193,8 +196,10 @@
     var p = doc && doc.getElementById('walletPanel');
     return p ? p.querySelector('.panel__body') : null;
   }
+  // Lo mío y lo que wallet-theme.js redibuja solo (cabecera, Destacadas, chips) no es un dibujo nuevo de la Cartera.
+  var CHROME = /(^|\s)(wn-head|wn-stars|wn-cats|wn-toolbar)(\s|$)/;
   function inside(n) {
-    while (n) { if (n.id === HOST_ID || n.id === MEM_ID || n.id === BAR_ID) return true; n = n.parentNode; }
+    while (n) { if (n.id === HOST_ID || n.id === MEM_ID || n.id === BAR_ID || CHROME.test(n.className || '')) return true; n = n.parentNode; }
     return false;
   }
 
@@ -327,9 +332,11 @@
       var voice = doc.getElementById(HOST_ID);
       body.insertBefore(bar, voice && voice.parentNode === body ? voice.nextSibling : body.firstChild);
     }
-    var btn = bar.firstChild;
-    btn.textContent = st.memOpen ? 'Ocultar la evolución de tu Cartera' : 'Ver la evolución de tu Cartera';
-    btn.setAttribute('aria-expanded', String(st.memOpen));
+    // Solo escribo si cambia: cada cambio en la Cartera hace que wallet-theme.js redibuje Destacadas (sus íconos
+    // parpadeaban) y eso me volvía a llamar, cada 250 ms (1.3.1).
+    var btn = bar.firstChild, label = st.memOpen ? 'Ocultar la evolución de tu Cartera' : 'Ver la evolución de tu Cartera';
+    if (btn.textContent !== label) btn.textContent = label;
+    if (btn.getAttribute('aria-expanded') !== String(st.memOpen)) btn.setAttribute('aria-expanded', String(st.memOpen));
     if (st.focusMem && btn.focus) btn.focus();
     st.focusMem = false;
   }

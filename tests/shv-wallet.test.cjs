@@ -64,7 +64,7 @@ test('toda observación de la Cartera cumple el formato común (con fundamento)'
 test('no guarda nada, no pide nada a la API y no arma HTML a mano', () => {
   assert.ok(!/localStorage|Storage\.set\(|fetch\(|GW2Api/.test(SRC));
   assert.ok(!/innerHTML/.test(SRC));
-  assert.match(SRC, /Versión: 1\.3\.0/);
+  assert.match(SRC, /Versión: 1\.3\.1/);
 });
 
 // SHV-2b: una foto por día; day = días desde 1970 como en js/shv-memory.js
@@ -190,4 +190,126 @@ test('SHE-2: uno por visita a la Cartera, el primero que no viste; «Ver la evol
   assert.match(SRC, /'Ver la evolución de tu Cartera'/);
   assert.match(SRC, /B && typeof B\.offer === 'function' && !B\.quiet\(\)/);
   assert.equal(load().ShvWallet.BAR_ID, 'shvWalletMemBar');
+});
+
+// ------------------------------------------------------------------ 1.3.1: sin bucle con wallet-theme.js
+// Antes, cada pasada reescribía «Ver la evolución de tu Cartera», wallet-theme.js redibujaba Destacadas por ese
+// cambio (sus íconos parpadeaban) y eso me volvía a llamar.
+// DOM mínimo que avisa cada cambio a los MutationObserver, como el navegador.
+function mini() {
+  const obs = [];
+  const note = (target) => obs.forEach((o) => { if (o.root && o.root.contains(target)) o.queue.push({ target }); });
+  class N {
+    constructor(doc, tag) { this.ownerDocument = doc; this.tagName = String(tag).toUpperCase(); this.children = []; this.attrs = {}; this.parentNode = null; this._t = ''; this.ls = {}; this.hidden = false; }
+    get id() { return this.attrs.id || ''; } set id(v) { this.attrs.id = String(v); }
+    get className() { return this.attrs.class || ''; } set className(v) { this.attrs.class = String(v); }
+    get type() { return this.attrs.type || ''; } set type(v) { this.attrs.type = String(v); }
+    get textContent() { return this._t + this.children.map((c) => c.textContent).join(''); }
+    set textContent(v) { this.children = []; this._t = String(v); note(this); }
+    get firstChild() { return this.children[0] || null; }
+    get nextSibling() { const p = this.parentNode; return p ? p.children[p.children.indexOf(this) + 1] || null : null; }
+    setAttribute(k, v) { this.attrs[k] = String(v); note(this); }
+    getAttribute(k) { return k in this.attrs ? this.attrs[k] : null; }
+    removeAttribute(k) { delete this.attrs[k]; note(this); }
+    appendChild(c) { return this.insertBefore(c, null); }
+    insertBefore(c, ref) {
+      if (c.parentNode) c.parentNode.removeChild(c);
+      const i = ref ? this.children.indexOf(ref) : -1;
+      if (i < 0) this.children.push(c); else this.children.splice(i, 0, c);
+      c.parentNode = this; note(this); return c;
+    }
+    removeChild(c) { this.children = this.children.filter((x) => x !== c); c.parentNode = null; note(this); return c; }
+    contains(n) { for (let x = n; x; x = x.parentNode) if (x === this) return true; return false; }
+    all() { const out = []; const w = (n) => n.children.forEach((c) => { out.push(c); w(c); }); w(this); return out; }
+    querySelector(s) {
+      return this.all().find((n) => {
+        if (s[0] === '.') return n.className.split(' ').includes(s.slice(1));
+        if (s[0] === '#') return n.id === s.slice(1);
+        const m = s.match(/^\[data-shv-act="(\w+)"\]$/);
+        return m ? n.getAttribute('data-shv-act') === m[1] : false;
+      }) || null;
+    }
+    querySelectorAll() { return []; }
+    addEventListener(t, f) { (this.ls[t] = this.ls[t] || []).push(f); }
+    closest() { return null; }
+    focus() {}
+  }
+  class D extends N {
+    constructor() { super(null, '#document'); this.ownerDocument = this; this.head = this.appendChild(new N(this, 'head')); this.body = this.appendChild(new N(this, 'body')); this.readyState = 'complete'; }
+    createElement(t) { return new N(this, t); }
+    createElementNS(_, t) { return new N(this, t); }
+    getElementById(id) { return this.all().find((n) => n.id === id) || null; }
+    get documentElement() { return this; }
+  }
+  const doc = new D();
+  class MO {
+    constructor(cb) { this.cb = cb; this.queue = []; obs.push(this); }
+    observe(r) { this.root = r; }
+    takeRecords() { const q = this.queue; this.queue = []; return q; }
+  }
+  const flush = () => { for (let i = 0; i < 50; i++) { const o = obs.find((x) => x.queue.length); if (!o) return; o.cb(o.takeRecords()); } };
+  return { doc, MO, flush };
+}
+
+function setup(withMemory) {
+  const { doc, MO, flush } = mini();
+  const panel = doc.body.appendChild(doc.createElement('section'));
+  panel.id = 'walletPanel';
+  const body = panel.appendChild(doc.createElement('div'));
+  body.className = 'panel__body';
+  const stars = body.appendChild(doc.createElement('section'));
+  stars.className = 'wn-stars';
+  let clock = 1_800_000_000_000, seq = 0;
+  const st = { redraws: 0 };
+  const timers = new Map();
+  const hist = [{ day: 1, at: clock, values: { 1: 10000 } }, { day: 2, at: clock, values: { 1: 20000 } }];
+  const window = {
+    document: doc, MutationObserver: MO, console: { info() {} }, location: { hash: '#/cards' },
+    setTimeout: (f, ms) => { timers.set(++seq, { at: clock + ms, f }); return seq; },
+    clearTimeout: (id) => timers.delete(id),
+    addEventListener() {},
+    Storage: { get: (k) => (k === 'gn:account:keys' ? [{ value: 'K1', perms: ['wallet', 'account'] }] : k === 'gn:account:selected' ? 'K1' : null) },
+    WalletTheme: { _state: { models: [{ id: 1, name: 'Oro', amount: 5, pinned: true }], tmodels: [], lastAt: clock } },
+    ShvBubble: { offer: () => true, quiet: () => false, seen: () => false },
+    ShvMemory: {
+      fingerprint: () => 'fp', ensureToday() {}, history: () => hist,
+      summary: () => (withMemory ? { days: 2, inWindow: 2, lastAt: clock, gold: [1, 2], rows: [{ id: 1, name: 'Oro', value: 2, delta: 1, gold: true }] } : { days: 0 })
+    }
+  };
+  // wallet-theme.js: ante cualquier cambio en la Cartera redibuja Destacadas y descarta sus propios registros.
+  const wt = new MO(() => { st.redraws++; stars.textContent = 'íconos ' + st.redraws; wt.takeRecords(); });
+  wt.observe(panel);
+  class FD extends Date { static now() { return clock; } }
+  vm.runInNewContext(read('js/shiruvana.js'), { window, globalThis: {} });
+  vm.runInNewContext(read('js/shv-core.js'), { window, globalThis: {} });
+  vm.runInNewContext(read('js/shv-wallet.js'), { window, globalThis: {}, Date: FD });
+  const advance = (ms) => {
+    const end = clock + ms;
+    for (;;) {
+      let nx = null;
+      for (const [id, t] of timers) if (t.at <= end && (!nx || t.at < nx[1].at)) nx = [id, t];
+      if (!nx) break;
+      timers.delete(nx[0]); clock = nx[1].at; nx[1].f(); flush();
+    }
+    clock = end;
+  };
+  flush();
+  return { doc, st, advance };
+}
+
+test('con mi globo y «Ver la evolución de tu Cartera», Destacadas no se redibuja en bucle', () => {
+  const t = setup(true);
+  t.advance(1000);
+  assert.ok(t.doc.getElementById('shvWalletMemBar'), 'está «Ver la evolución de tu Cartera»');
+  const after = t.st.redraws;
+  t.advance(5000);
+  assert.equal(t.st.redraws, after, 'en 5 segundos sin cambios, Destacadas no se vuelve a dibujar');
+});
+
+test('sin memoria tampoco hay bucle', () => {
+  const t = setup(false);
+  t.advance(1000);
+  const after = t.st.redraws;
+  t.advance(5000);
+  assert.equal(t.st.redraws, after);
 });

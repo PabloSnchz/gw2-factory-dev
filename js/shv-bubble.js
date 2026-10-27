@@ -1,6 +1,9 @@
 /*!
  * js/shv-bubble.js — Shiruvana que aparece: mi globo (BL-075 SHE-1, DEC-038)
- * Versión: 1.2.0
+ * Versión: 1.2.1
+ *
+ * 1.2.1: aparezco en los módulos. Para saber si su pantalla se ve miraba la caja de mi voz, que los módulos
+ *   ocultan cuando está vacía (y con el globo queda vacía): todo quedaba esperando. Ahora miro a su padre.
  *
  * 1.2.0 (SHE-3): speak(box, msg, meta): los módulos me pasan su mensaje de siempre y yo decido dónde va.
  *   Los avisos (advierte) y lo que el módulo pide dejar escrito quedan en el módulo; lo demás va a mi globo,
@@ -26,7 +29,7 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.2.0';
+  var VERSION = '1.2.1';
   var SEEN_KEY = 'gn:shv:seen', QUIET_KEY = 'gn:shv:quiet';
   var DELAY = 2000, TTL = 12000, RETRY = 3000, RETRY_ROUTE = 400, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
   var ID = 'shvBubble', LIVE_ID = 'shvBubbleLive', STYLE_ID = 'shv-bubble-css';
@@ -325,9 +328,12 @@
 
   // ------------------------------------------------------------------ SHE-3: los módulos me hablan por acá
   var INLINE = { advierte: true }; // DEC-038 D3: los avisos quedan escritos en el módulo
+  // ¿Se ve la pantalla del módulo? Miro al padre de la caja: los módulos ocultan la caja vacía (:empty) y,
+  // con mi globo, la caja queda vacía siempre (1.2.1: así no aparecía en ningún módulo fuera de la Cartera).
   function visible(n) {
     if (!n || !doc || (doc.body && doc.body.contains && !doc.body.contains(n))) return false;
-    return !!shown(n) && (typeof n.getClientRects !== 'function' || n.getClientRects().length > 0);
+    var p = n.parentNode && n.parentNode.nodeType !== 9 ? n.parentNode : n;
+    return !!shown(n) && (typeof p.getClientRects !== 'function' || p.getClientRects().length > 0);
   }
   function say(obs) {
     if (st.spoke[obs.module] || !offer(obs)) return false; // offer() ya descarta lo que viste
