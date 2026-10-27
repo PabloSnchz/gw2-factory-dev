@@ -1,0 +1,159 @@
+{
+ "id": "PATCH-217",
+ "summary": "BL-076 SHV-5b: Logros 1.4.0, Inventario 1.6.0 y Heredad 1.2.0 dicen «Lo sé por» también sin mi globo; guardián con 6 pendientes.",
+ "files": [
+  {
+   "path": "js/ach-view.js",
+   "base_sha": "e4b991f0ccb2a66e5fe4cc9d943d11616eed3c0e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-24)",
+     "text": " * Versión: 1.4.0 (2026-10-27) — BL-076 SHV-5b: sin mi globo, mi línea también dice «Lo sé por» · antes 1.3.0 (2026-10-24)"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text })); // SHE-3",
+     "text": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: 'tus logros (API oficial) · en este navegador' })); // SHE-3"
+    }
+   ]
+  },
+  {
+   "path": "tests/ach-view.test.cjs",
+   "base_sha": "8e9f17210597890833299e05de8fd0a74339cb66",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 1.3.0, la misma que pide js/modules.json, y por manifiesto', () => {",
+     "text": "test('versión 1.4.0, la misma que pide js/modules.json, y por manifiesto', () => {"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /\\* Versión: 1\\.3\\.0 /);",
+     "text": "assert.match(SRC, /\\* Versión: 1\\.4\\.0 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "[{ src: 'js/ach-view.js', v: '1.3.0' }]",
+     "text": "[{ src: 'js/ach-view.js', v: '1.4.0' }]"
+    }
+   ]
+  },
+  {
+   "path": "js/inv-view.js",
+   "base_sha": "c082feae18d72c9bb340b9a3a9c3ddc7f2a0d32b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.0 (2026-10-25) — INV-7b:",
+     "text": " * Versión: 1.6.0 (2026-10-27) — BL-076 SHV-5b: sin mi globo, mi línea también dice «Lo sé por» · antes 1.5.0 (2026-10-25) — INV-7b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.5.0';",
+     "text": "var VERSION = '1.6.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text })); // SHE-3",
+     "text": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: 'tu banco (API oficial) · en este navegador' })); // SHE-3"
+    }
+   ]
+  },
+  {
+   "path": "js/home-view.js",
+   "base_sha": "dabf0465bfb6ae77fdfddef8ad1c5d1831165abc",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-25) — ACT-6:",
+     "text": " * Versión: 1.2.0 (2026-10-27) — BL-076 SHV-5b: sin mi globo, mi línea también dice «Lo sé por» · antes 1.1.0 (2026-10-25) — ACT-6:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.1.0';",
+     "text": "var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text })); // SHE-3",
+     "text": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: 'tus nodos (API oficial) y lo que marcaste · en este navegador' })); // SHE-3"
+    }
+   ]
+  },
+  {
+   "path": "tests/home-view.test.cjs",
+   "base_sha": "bec6020d9a9eb7c96808103045e2e6b36af864f7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /Versión: 1\\.1\\.0/);",
+     "text": "assert.match(SRC, /Versión: 1\\.2\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.equal(man[i].v, '1.1.0');",
+     "text": "assert.equal(man[i].v, '1.2.0');"
+    }
+   ]
+  },
+  {
+   "path": "tests/home-extra.test.cjs",
+   "base_sha": "cbe8d33c9051916aa12c090c264c2d268e30145f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.match(HV, /Versión: 1\\.1\\.0/);",
+     "text": "assert.match(HV, /Versión: 1\\.2\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.equal(man[h].v, '1.1.0');",
+     "text": "assert.equal(man[h].v, '1.2.0');"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "926f3d3a634c2a21714124072f0f2f572de5fcc3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/ach-view.js\", \"v\": \"1.3.0\" }",
+     "text": "{ \"src\": \"js/ach-view.js\", \"v\": \"1.4.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/inv-view.js\", \"v\": \"1.5.0\" }",
+     "text": "{ \"src\": \"js/inv-view.js\", \"v\": \"1.6.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/home-view.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/home-view.js\", \"v\": \"1.2.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-basis.test.cjs",
+   "base_sha": "ed275a7b656a1461f76c607d636ca7a5d18f28a9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const PENDIENTES = [\n  'acc-view.js', 'ach-view.js', 'act-view.js', 'act-week.js', 'converter-modal.js',\n  'home-view.js', 'inv-view.js', 'meta-theme.js', 'wv-view.js'\n];",
+     "text": "const PENDIENTES = [\n  'acc-view.js', 'act-view.js', 'act-week.js', 'converter-modal.js', 'meta-theme.js', 'wv-view.js'\n];"
+    },
+    {
+     "op": "replace",
+     "anchor": "// SHV-5b: Logros, Inventario, Heredad · SHV-5c:",
+     "text": "// SHV-5b (hecho): Logros, Inventario, Heredad · SHV-5c:"
+    }
+   ]
+  }
+ ]
+}
