@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-202",
+ "summary": "BL-059 SHV-3 aprobada; SHV-3a hecho (js/shv-legendary.js 1.0.0 inerte); hallazgo de precios del Bazar.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "daac8bc54235615134d2c54127dfb3b92cfb064b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "BL-059 SHV-3: propuesta ENTREGADA 2026-10-27 03:44Z (docs/propuestas/propuesta-shiruvana-shv3.html), espera las decisiones D1 a D5 de Pablo.",
+     "text": "BL-059 SHV-3: propuesta APROBADA por Pablo 2026-10-27 04:00Z (D1 a D5 como recomendé). SHV-3a HECHO 04:05Z: js/shv-legendary.js 1.0.0 inerte (estimate/observe puros), tests/shv-legendary.test.cjs 11/11, 16/16 mutaciones, RUN-163 verde."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 03:44Z",
+     "text": "Última actualización: 2026-10-27 04:06Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con las decisiones de Pablo sobre la propuesta SHV-3, SHV-3a (js/shv-legendary.js inerte + estimate() puro + tests).",
+     "text": "Próxima acción: con el OK de Pablo, SHV-3b: Shiruvana habla en «Mi cola» con el globo (shv-legendary en el manifiesto, una consulta de precios al Bazar solo por lo que falta), guía y FEAT."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-059] Decisión: propuesta SHV-3 «¿Cuánto me falta para mi legendaria?» (docs/propuestas/propuesta-shiruvana-shv3.html), D1 a D5. Recomiendo: D1 la primera de «Mi cola»; D2 árbol si los precursores ya están cargados, si no receta directa; D3 precio de venta del Bazar como referencia; D4 ritmo solo con ≥ 7 días de memoria (SHV-3c); D5 lo que no se vende, aparte.",
+     "text": "- [BL-059] Info: propuesta SHV-3 APROBADA (2026-10-27 04:00Z), D1 a D5 como recomendé. SHV-3a HECHO (04:05Z): solo la cuenta, todavía no se ve nada en la app.\n- [BL-059] Info: hallazgo MEDIO al escribir SHV-3a: la Armería no guarda precios del Bazar de los materiales (el campo prices del tracker nunca se llena; los precios de la cola son los del catálogo, de la fecha en que se generó). La propuesta decía «sin llamadas nuevas»: en SHV-3b hago UNA consulta a /v2/commerce/prices (GW2Api.getCommercePrices, con su caché) solo por los materiales que faltan, al momento de hablar. Lo que no devuelve precio cuenta como «no se vende» (D5). Decisión técnica mía."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "a3c616e0fd14e931b1deb545fe1aa3fe531387b8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "módulo nuevo shv-legendary.js que solo lee el tracker y el árbol, sin llamadas nuevas; micro-ciclos SHV-3a/3b/3c.",
+     "text": "módulo nuevo shv-legendary.js que solo lee el tracker y el árbol, sin llamadas nuevas; micro-ciclos SHV-3a/3b/3c. APROBADA por Pablo 04:00Z. SHV-3a HECHO 04:05Z: js/shv-legendary.js 1.0.0 inerte (estimate/observe puros con el formato de shv-core; árbol o receta directa, oro solo de lo que se vende, lo que no se vende aparte), tests/shv-legendary.test.cjs 11/11, 16/16 mutaciones, RUN-163 verde. Hallazgo MEDIO: el tracker no tiene precios de materiales, SHV-3b hace una consulta a /v2/commerce/prices solo por lo que falta."
+    }
+   ]
+  }
+ ]
+}
