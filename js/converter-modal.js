@@ -1,8 +1,9 @@
 /*!
  * js/converter-modal.js — Cambio de divisas (oro ↔ gemas y tu Trading Post)
  * Proyecto: Bóveda del Gato Negro (GW2 Wallet Ligero)
- * Versión: 2.1.0 (2026-10-26)
+ * Versión: 2.2.0 (2026-10-27)
  *
+ * v2.2.0 (BL-076, SHV-5d): mi consejo dice «Lo sé por».
  * v2.1.0 (BL-074, BLS-3): el caché de precios (gw2_conv_cache_v3) va a IndexedDB por js/gn-idb.js
  *         si está (si no, sigue en localStorage) y al guardar tira lo vencido: antes crecía sin tope.
  * v2.0.0 (BL-056, CAR-2A): de modal a vista (calculadora en espejo, tu Trading Post, Populares
@@ -16,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '2.1.0';
+  var VERSION = '2.2.0';
   var LOG = '[ConverterModal]';
   var ICON = 'assets/icons/';
   var I_GEM = ICON + '502065.png', I_GOLD = ICON + '619316.png', I_TP = ICON + '155033.png';
@@ -265,7 +266,7 @@
       voiceHost.innerHTML = '';
       var a = adviceFor(gold);
       if (a && root.Shiruvana && typeof root.Shiruvana.voice === 'function') {
-        voiceHost.appendChild(root.Shiruvana.voice({ kind: a.kind, text: a.text }));
+        voiceHost.appendChild(root.Shiruvana.voice({ kind: a.kind, text: a.text, basis: 'el cambio de gemas (API oficial) · en este navegador' }));
       }
     }
   }

@@ -30,8 +30,8 @@ function row(id, o) { return Object.assign({ id, name: id, type: 'meta', chat: '
 const tracked19 = (done) => Array.from({ length: 19 }, (_, i) => row('t' + i, { type: i < 13 ? 'worldboss' : 'meta', tracked: true, done: i < done }));
 const untracked = (n) => Array.from({ length: n }, (_, i) => row('u' + i));
 
-test('versión 2.1.0 y API pública', () => {
-  assert.equal(MT.version, '2.1.0');
+test('versión 2.2.0 y API pública', () => {
+  assert.equal(MT.version, '2.2.0');
   assert.equal(typeof MT.refresh, 'function');
   for (const k of ['countdown', 'minsText', 'nextDailyReset', 'nextWeeklyReset', 'headerData', 'todayStats', 'todayView', 'whyText', 'pickVoice', 'headHTML']) assert.equal(typeof P[k], 'function', k);
 });

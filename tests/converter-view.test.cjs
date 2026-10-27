@@ -22,9 +22,9 @@ function load() {
 const CM = load();
 const P = CM._pure;
 
-test('versión 2.1.0, el header la declara y la API pública está completa', () => {
-  assert.equal(CM.version, '2.1.0');
-  assert.match(SRC, /Versión: 2\.1\.0/);
+test('versión 2.2.0, el header la declara y la API pública está completa', () => {
+  assert.equal(CM.version, '2.2.0');
+  assert.match(SRC, /Versión: 2\.2\.0/);
   for (const k of ['initOnce', 'mount', 'open', 'close']) assert.equal(typeof CM[k], 'function', k);
 });
 

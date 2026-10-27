@@ -16,10 +16,8 @@ const JS = path.join(__dirname, '..', 'js');
 //    tus datos. «Shiruvana te guía», que sí lo es, ya dice de dónde lo sé (tests/shiruvana-places.test.cjs).
 const EXENTOS = { 'shiruvana.js': 'define la voz', 'shiruvana-places.js': 'textos fijos de ayuda' };
 
-// SHV-5b (hecho): Logros, Inventario, Heredad · SHV-5c (hecho): Actividades y Cuentas · SHV-5d: Cámara, Metas y el Conversor.
-const PENDIENTES = [
-  'converter-modal.js', 'meta-theme.js', 'wv-view.js'
-];
+// SHV-5b (hecho): Logros, Inventario, Heredad · SHV-5c (hecho): Actividades y Cuentas · SHV-5d (hecho): Cámara, Metas y el Conversor. Desde acá, nadie habla sin decir de dónde lo sabe.
+const PENDIENTES = [];
 
 /** Cada llamada a .name( con sus argumentos completos (paréntesis anidados incluidos). */
 function calls(src, name) {
