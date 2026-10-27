@@ -59,3 +59,23 @@ test('Raids habla con los 4 tipos de DEC-024; los exentos y los pendientes exist
   PENDIENTES.forEach((f) => assert.ok(FILES.includes(f), f + ' existe'));
   assert.equal(new Set(PENDIENTES).size, PENDIENTES.length);
 });
+
+// D3 de SHV-5: la hora del dato solo si es real; si no, «en este navegador». Nunca una hora inventada.
+test('D3: las líneas fijas dicen «en este navegador» y no inventan hora; Cuentas y Metas, como corresponde', () => {
+  let fijas = 0;
+  FILES.forEach((f) => {
+    calls(read(f), 'voice').forEach((c) => {
+      const m = c.match(/\bbasis\s*:\s*'([^']*)'/);
+      if (!m) return;
+      fijas++;
+      assert.match(m[1], / · en este navegador$/, f + ': ' + m[1]);
+      assert.doesNotMatch(m[1], /\d{1,2}:\d{2}/, f + ': sin hora inventada');
+    });
+  });
+  assert.ok(fijas >= 8, 'leí las líneas fijas (' + fijas + ')');
+  const acc = read('acc-view.js'), mt = read('meta-theme.js');
+  assert.match(acc, /at: st\.readAt \|\| null/, 'Cuentas usa la hora real de su lectura');
+  assert.match(acc, /C\.basisText\(b\)/);
+  assert.match(mt, /todayStats\(S\.snap\)\.state === 'ok' \?/, 'Metas nombra tu día solo si la API respondió');
+  assert.match(mt, /insertBefore\(btn, bs\)/, 'el waypoint va antes de «Lo sé por»');
+});
