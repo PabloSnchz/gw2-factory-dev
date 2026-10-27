@@ -1,0 +1,47 @@
+{
+ "id": "PATCH-226",
+ "summary": "BL-077 cerrada: Pablo validó producción bc089b1 (BL-074, BL-075, BL-059 y BL-076).",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "55a03e0dbe2829bab64c5def14568b0d924f985d",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-077] [ALTO] Promoción a producción de BL-074, BL-075, BL-059 y BL-076 — pedido de Pablo (2026-10-27 21:30Z: «preparemos todo para pasar a PRD vía powershell»). «Vía PowerShell» (DEC-036): comparé blob a blob DEV 1952f2e con producción 383c8f5 (HEAD; sus 3 commits posteriores a BL-073 son de Pablo en assets/previews y no cambian nada que se publique). Manifiesto factory/promote/BL-077.txt: 28 movimientos (7 JS nuevos: gn-idb y los 6 shv-*; 18 JS modificados; index.html, privacy.html y docs/user-guide-avanzado.html; 0 bajas). Igual que en BL-073 no van js/analytics.js ni assets/meta-drops.json (versión PROD); css/, assets/ y los otros 51 JS ya son iguales. Commit DEV fijo 9f21446 (app idéntica a 1952f2e). Revisión: ALTO resuelto al pasar (app.js 2.9.1 deja de imprimir la API Key en la consola, que producción 2.9.0 todavía hace); MEDIO la mudanza de cachés a IndexedDB (BL-074) corre por primera vez para cada jugador de producción, con copia antes de borrar (en el navegador de Pablo ya corrió, mismo origen); BAJO los mensajes que Pablo ya vio en DEV no vuelven en el globo de producción (gn:shv:seen compartido); MEDIO index.html 48.435 B y converter-modal 48.596 B en zona de advertencia. Pablo lo corrió 21:45Z con el comando de una línea (regla nueva, factory/promote/README.md): 28 | 28 | 0 distintos; producción = bc089b1, rollback/pre-bl-077 = 383c8f5; mi control blob a blob OK (js/ 78 de 79 iguales a DEV, solo analytics.js de producción); informe ai-memory/missions/BL-077-informe-promocion.md. Espera la validación de Pablo en producción (Chrome). · DEC-036, BL-073, BL-074, BL-075, BL-059, BL-076 — 2026-10-27\n\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-077] [ALTO] Promoción a producción de BL-074, BL-075, BL-059 y BL-076 — pedido de Pablo (2026-10-27 21:30Z: «preparemos todo para pasar a PRD vía powershell»). «Vía PowerShell» (DEC-036): comparé blob a blob DEV 1952f2e con producción 383c8f5 (HEAD; sus 3 commits posteriores a BL-073 son de Pablo en assets/previews y no cambian nada que se publique). Manifiesto factory/promote/BL-077.txt: 28 movimientos (7 JS nuevos: gn-idb y los 6 shv-*; 18 JS modificados; index.html, privacy.html y docs/user-guide-avanzado.html; 0 bajas). Igual que en BL-073 no van js/analytics.js ni assets/meta-drops.json (versión PROD); css/, assets/ y los otros 51 JS ya son iguales. Commit DEV fijo 9f21446 (app idéntica a 1952f2e). Revisión: ALTO resuelto al pasar (app.js 2.9.1 deja de imprimir la API Key en la consola, que producción 2.9.0 todavía hace); MEDIO la mudanza de cachés a IndexedDB (BL-074) corre por primera vez para cada jugador de producción, con copia antes de borrar (en el navegador de Pablo ya corrió, mismo origen); BAJO los mensajes que Pablo ya vio en DEV no vuelven en el globo de producción (gn:shv:seen compartido); MEDIO index.html 48.435 B y converter-modal 48.596 B en zona de advertencia. Pablo lo corrió 21:45Z con el comando de una línea (regla nueva, factory/promote/README.md): 28 | 28 | 0 distintos; producción = bc089b1, rollback/pre-bl-077 = 383c8f5; mi control blob a blob OK (js/ 78 de 79 iguales a DEV, solo analytics.js de producción); informe ai-memory/missions/BL-077-informe-promocion.md. VALIDADA por Pablo en producción 2026-10-27 22:00Z («todo funciona perfectamente en PRD»): BL-077 CERRADA. · DEC-036, BL-073, BL-074, BL-075, BL-059, BL-076 — 2026-10-27\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "a6dc0781257d9c3d69222e2b522acf6803de28f5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "control blob a blob OK (informe ai-memory/missions/BL-077-informe-promocion.md).",
+     "text": "control blob a blob OK (informe ai-memory/missions/BL-077-informe-promocion.md). Pablo VALIDÓ producción 22:00Z: BL-077 CERRADA."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 21:48Z",
+     "text": "Última actualización: 2026-10-27 22:02Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Pablo valida BL-077 en producción (Chrome, Ctrl+F5). Con su OK cierro BL-077; si algo falla, rollback/pre-bl-077 = 383c8f5.",
+     "text": "Próxima acción: responder las dudas de Pablo (navegador en producción tras BL-074 y tamaño de archivos con el pasaje vía PowerShell) y esperar la próxima tarea que elija."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-077] Validación: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076. Qué mirar en Chrome (Ctrl+F5): «Lo sé por» en cada mensaje mío, mi globo desde el rincón, Ajustes → «Lo que recuerdo de vos» y «Silenciar a Shiruvana», la evolución de 30 días en la Cartera, mi línea en «Mi cola» de la Armería; que todo cargue como siempre (cachés en IndexedDB).",
+     "text": "- [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada."
+    }
+   ]
+  }
+ ]
+}
