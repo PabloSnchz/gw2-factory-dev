@@ -74,6 +74,7 @@ function load(opts) {
     URL: { createObjectURL: (b) => { calls.urls.push(b); return 'blob:1'; }, revokeObjectURL: (u) => calls.revoked.push(u) },
     navigator: opts.nav, setTimeout: (f) => setTimeout(f, 0) // el tiempo límite de estimate llega después de las promesas
   };
+  if (opts.win) Object.assign(window, opts.win(doc, calls));
   vm.runInNewContext(SRC, { window, globalThis: {}, Date, Math, JSON, Object, String, Array, Promise, Number, RegExp });
   return { window, doc, menu, calls, R: window.ShvRecall, mem, bub };
 }
@@ -220,8 +221,96 @@ test('el medidor solo cuenta: clave + valor, y separa lo mío (gn:shv:*)', () =>
   assert.equal(t.R._pure.fileName(T0), 'shiruvana-memoria-2026-10-20.json');
 });
 
+// ------------------------------------------------------------------ SHV-4c: el aviso del 85 % en Inicio
+// Inicio con «Shiruvana te guía» arriba, ShvCore falso (dibuja un botón .shv-obs__btn) y un MutationObserver falso.
+function home(ls, extra) {
+  const H = { renders: [], mo: null, win: {} };
+  const t = load(Object.assign({ ls, win: (doc) => {
+    const p = doc.body.appendChild(doc.createElement('section')); p.id = 'welcomePanel';
+    H.body = p.appendChild(doc.createElement('div')); H.body.className = 'panel__body';
+    H.guide = H.body.appendChild(doc.createElement('div')); H.guide.setAttribute('data-shv-place', 'welcome');
+    H.cards = H.body.appendChild(doc.createElement('div'));
+    return {
+      ShvCore: { render(o) { H.renders.push(o); const el = doc.createElement('div'); el.className = 'shv-voice'; const b = el.appendChild(doc.createElement('button')); b.className = 'shv-obs__btn'; b.textContent = o.action.label; return el; } },
+      MutationObserver: class { constructor(f) { H.mo = f; } observe(n, o) { H.obs = [n, o]; } },
+      addEventListener(t, f) { (H.win[t] = H.win[t] || []).push(f); },
+      setTimeout: (f) => { H.timers = (H.timers || 0) + 1; return setTimeout(f, 0); }
+    };
+  } }, extra || {}));
+  return Object.assign(t, { H, tick: () => new Promise((r) => setTimeout(r, 5)) });
+}
+const BIG = 'z'.repeat(4_600_000); // ~88 % de 5 M
+
+test('SHV-4c: debajo del 85 % no digo nada en Inicio', async () => {
+  const t = home({ big: 'z'.repeat(4_400_000) }); // ~84 %
+  await t.tick();
+  assert.equal(t.doc.getElementById('shvRecallHome'), null);
+  assert.equal(t.H.renders.length, 0);
+});
+
+test('SHV-4c: pasando el 85 % aviso en Inicio, escrito y debajo de «Shiruvana te guía»; «Ver lo que ocupa» abre la ventana', async () => {
+  const t = home({ big: BIG });
+  await t.tick();
+  const el = t.doc.getElementById('shvRecallHome');
+  assert.ok(el, 'el aviso está');
+  assert.equal(el.parentNode, t.H.body);
+  assert.equal(t.H.body.children.indexOf(el), t.H.body.children.indexOf(t.H.guide) + 1, 'debajo de mi guía, antes del resto');
+  const o = t.H.renders[0];
+  assert.equal(o.priority, 'alta');
+  assert.equal(o.kind, 'advierte');
+  assert.equal(o.text[0], 'Este navegador ya usa el 88 % del espacio que le da a la Bóveda (4,4 M de ~5,0 M). Si se llena, no puedo guardar nada nuevo: ni Keys, ni marcas, ni ajustes.');
+  assert.match(o.text[1], /^Lo mío ocupa 0 caracteres\. Antes de borrar algo, guardá una copia desde Ajustes\./);
+  assert.equal(o.basis.source, 'lo que ocupa este navegador, medido ahora');
+  assert.equal(typeof o.basis.at, 'number');
+  assert.ok(!t.H.obs || t.H.obs[0].id === 'welcomePanel');
+  el.querySelector('.shv-obs__btn').click();
+  await t.tick();
+  assert.equal(t.calls.dialogs.length, 1, 'abre «Lo que recuerdo de vos»');
+  assert.equal(t.calls.dialogs[0].title, 'Lo que recuerdo de vos');
+});
+
+test('SHV-4c: no me repito ni hago bucles; si la Bienvenida se redibuja vuelvo una vez; bajo el 85 % me voy', async () => {
+  const t = home({ big: BIG });
+  await t.tick();
+  assert.equal(t.H.renders.length, 1);
+  const timers = t.H.timers;
+  t.H.mo([{ addedNodes: [t.doc.getElementById('shvRecallHome')], removedNodes: [] }]); // mi propio dibujo
+  await t.tick();
+  assert.equal(t.H.timers, timers, 'lo mío no cuenta: ni siquiera vuelvo a medir');
+  t.H.mo([{ addedNodes: [], removedNodes: [] }]); // un registro sin nodos no es mío
+  await t.tick();
+  assert.equal(t.H.timers, timers + 1);
+  assert.equal(t.H.renders.length, 1);
+  t.H.mo([{ addedNodes: [t.H.cards], removedNodes: [] }]); // otra cosa cambió, lo que digo no
+  await t.tick();
+  assert.equal(t.H.renders.length, 1, 'mismo texto: no toco el DOM');
+  t.H.body.children.slice().forEach((c) => t.H.body.removeChild(c)); // la Bienvenida se redibuja entera
+  t.H.mo([{ addedNodes: [t.H.cards], removedNodes: [t.H.guide] }]);
+  await t.tick();
+  assert.equal(t.H.renders.length, 2);
+  assert.equal(t.doc.all().filter((n) => n.id === 'shvRecallHome').length, 1, 'una sola vez');
+  t.window.localStorage.removeItem('big');
+  t.H.win.storage.forEach((f) => f({}));
+  await t.tick();
+  assert.equal(t.doc.getElementById('shvRecallHome'), null, 'bajó del 85 %: me voy');
+});
+
+test('SHV-4c: el aviso es puro y empieza justo en el 85 %; sin Inicio no hago nada', () => {
+  const t = load();
+  const P = t.R._pure;
+  assert.equal(P.homeObs({ pct: 84.9, total: 1, mine: 0, quota: 5242880 }, 1), null);
+  const o = P.homeObs({ pct: 85, total: 4456448, mine: 2048, quota: 5242880 }, 7);
+  assert.equal(o.action.act, 'recall');
+  assert.equal(o.action.label, 'Ver lo que ocupa');
+  assert.equal(o.basis.at, 7);
+  assert.match(o.text[1], /^Lo mío ocupa 2,0 KB\./);
+  assert.equal(t.R.WARN, 85);
+  assert.equal(t.R.paintHome(), null);
+  assert.equal(t.doc.getElementById('shvRecallHome'), null);
+});
+
 test('reglas de la casa y orden de carga', () => {
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.match(SRC, /Versión: 1\.1\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   assert.ok(!/setItem|removeItem/.test(SRC), 'no escribo claves por mi cuenta');

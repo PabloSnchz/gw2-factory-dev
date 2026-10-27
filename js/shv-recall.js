@@ -1,6 +1,11 @@
 /*!
  * js/shv-recall.js — «Lo que recuerdo de vos» (BL-059 SHV-4b, nivel N5 de DEC-033)
- * Versión: 1.0.0 (2026-10-27)
+ * Versión: 1.1.0 (2026-10-27)
+ *
+ * 1.1.0 (SHV-4c, D6 de la propuesta SHV-4): si este navegador pasa el 85 % de su espacio, lo aviso en Inicio con
+ *   mi voz escrita (ShvCore.render, no en globo), debajo de «Shiruvana te guía», con «Ver lo que ocupa», que abre
+ *   esta ventana. Lo mido al entrar a Inicio, cuando la Bienvenida se redibuja y al cerrar la ventana; debajo del
+ *   85 % no digo nada. Solo toco el DOM si cambió lo que digo.
  *
  * Ajustes → «Lo que recuerdo de vos» abre la ventana común de la Bóveda (GNUI.dialog) y muestra:
  *  - qué guardo de tu Cartera (cuentas, desde y hasta, cuánto ocupa de mis 64 KB);
@@ -18,7 +23,8 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
+  var WARN = 85, HOME_ID = 'shvRecallHome'; // SHV-4c: desde cuánto aviso en Inicio
   var QUOTA = 5 * 1024 * 1024; // lo que suelen dar los navegadores a localStorage, en caracteres
   var MINE = /^gn:shv:/;
   var BTN_ID = 'shvRecallBtn', BAR_CLASS = 'shv-rc-bar', STYLE_ID = 'shv-recall-css';
@@ -29,7 +35,7 @@
     '#' + BTN_ID + ' img{border-radius:50%}'
   ].join('');
   var doc = root.document;
-  var st = { ls: null, busy: false };
+  var st = { ls: null, busy: false, sig: null, timer: null };
 
   // ------------------------------------------------------------------ puro
   function nf(n, dec) {
@@ -101,6 +107,19 @@
   function fileName(now) {
     var d = new Date(now);
     return 'shiruvana-memoria-' + d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '.json';
+  }
+
+  /** SHV-4c: el aviso de Inicio (puro). null debajo del 85 %. */
+  function homeObs(u, now) {
+    if (!u || !(u.pct >= WARN)) return null;
+    return {
+      module: 'inicio', id: 'storage', priority: 'alta', kind: 'advierte',
+      text: ['Este navegador ya usa el ' + nf(u.pct, 0) + ' % del espacio que le da a la Bóveda (' + size(u.total) + ' de ~' + size(u.quota) +
+        '). Si se llena, no puedo guardar nada nuevo: ni Keys, ni marcas, ni ajustes.',
+        'Lo mío ocupa ' + size(u.mine) + '. Antes de borrar algo, guardá una copia desde Ajustes. En «Lo que recuerdo de vos» ves cuánto ocupa todo.'],
+      action: { label: 'Ver lo que ocupa', act: 'recall' },
+      basis: { source: 'lo que ocupa este navegador, medido ahora', at: now }
+    };
   }
 
   // ------------------------------------------------------------------ Bóveda
@@ -177,7 +196,7 @@
     var bar = doc.createElement('div');
     bar.className = BAR_CLASS;
     bar.setAttribute('aria-hidden', 'true'); // el párrafo de arriba dice lo mismo en palabras
-    if (u.pct >= 85) bar.setAttribute('data-level', 'alto');
+    if (u.pct >= WARN) bar.setAttribute('data-level', 'alto');
     var fill = doc.createElement('i');
     fill.style.width = Math.max(1, Math.round(u.pct)) + '%';
     bar.appendChild(fill);
@@ -209,6 +228,7 @@
       return p;
     }).then(function (r) {
       st.busy = false;
+      schedule(); // pudiste haber liberado espacio
       var a = r && r.action;
       if (a === 'dl') { download(); return open('dl'); }
       if (a === 'pause') { togglePause(); return open('pause'); }
@@ -259,16 +279,58 @@
     return true;
   }
 
+  // ------------------------------------------------------------------ Inicio (SHV-4c)
+  function homeBody() {
+    var p = doc && doc.getElementById ? doc.getElementById('welcomePanel') : null;
+    return p && p.querySelector ? p.querySelector('.panel__body') : null;
+  }
+  /** Pongo, actualizo o saco el aviso de Inicio. Solo toco el DOM si cambió lo que digo. */
+  function paintHome() {
+    st.timer = null;
+    var body = homeBody(), C = root.ShvCore, cur = doc && doc.getElementById ? doc.getElementById(HOME_ID) : null;
+    var o = body && C && typeof C.render === 'function' ? homeObs(usage(ls()), Date.now()) : null;
+    var sig = o ? o.text.join(' ') : '';
+    if (o && cur && cur.parentNode === body && sig === st.sig) return cur;
+    if (cur && cur.parentNode) cur.parentNode.removeChild(cur);
+    st.sig = null;
+    if (!o) return null;
+    var el = C.render(o, { doc: doc });
+    if (!el) return null;
+    el.id = HOME_ID;
+    var btn = el.querySelector ? el.querySelector('.shv-obs__btn') : null;
+    if (btn) btn.addEventListener('click', function () { open(); });
+    var kids = body.children || [], guide = null;
+    for (var i = 0; i < kids.length; i++) if (kids[i].getAttribute && kids[i].getAttribute('data-shv-place') === 'welcome') { guide = kids[i]; break; }
+    body.insertBefore(el, guide ? guide.nextSibling : body.firstChild); // debajo de «Shiruvana te guía»
+    st.sig = sig;
+    return el;
+  }
+  function schedule() { if (!st.timer && root.setTimeout) st.timer = root.setTimeout(paintHome, 250); }
+  function onlyMine(recs) {
+    return (recs || []).every(function (r) {
+      var n = [].slice.call(r.addedNodes || []).concat([].slice.call(r.removedNodes || []));
+      return n.length > 0 && n.every(function (x) { return x && x.id === HOME_ID; });
+    });
+  }
+  function initHome() {
+    var p = doc && doc.getElementById ? doc.getElementById('welcomePanel') : null;
+    // La Bienvenida se redibuja entera: vuelvo a mirar. Lo que agrego o saco yo no cuenta (sin bucles).
+    if (p && typeof root.MutationObserver === 'function') new root.MutationObserver(function (recs) { if (!onlyMine(recs)) schedule(); }).observe(p, { childList: true, subtree: true });
+    if (root.addEventListener) { root.addEventListener('hashchange', schedule); root.addEventListener('storage', schedule); }
+    schedule();
+  }
+
   root.ShvRecall = {
     version: VERSION, QUOTA: QUOTA, BTN_ID: BTN_ID, CSS: CSS,
     open: open, download: download, forgetAll: forgetAll, togglePause: togglePause, wire: wire,
+    paintHome: paintHome, HOME_ID: HOME_ID, WARN: WARN,
     usage: function () { return usage(ls()); },
-    _pure: { size: size, pct: pct, usage: usage, lines: lines, forgetText: forgetText, fileName: fileName, dm: dm },
+    _pure: { size: size, pct: pct, usage: usage, lines: lines, forgetText: forgetText, fileName: fileName, dm: dm, homeObs: homeObs },
     _setStorage: function (L) { st.ls = L; }
   };
   if (doc && doc.addEventListener) {
-    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', wire);
-    else wire();
+    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', function () { wire(); initHome(); });
+    else { wire(); initHome(); }
   }
   if (root.console && root.console.info) root.console.info('[ShvRecall] ready v' + VERSION);
 })(typeof window !== 'undefined' ? window : globalThis);
