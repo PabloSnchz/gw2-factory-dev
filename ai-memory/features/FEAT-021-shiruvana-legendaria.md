@@ -1,6 +1,6 @@
 # FEAT-021 — Shiruvana y tu legendaria («¿Cuánto me falta?»)
 
-- Estado: EN DEV — SHV-3a/3b validados por Pablo (2026-10-27 04:34Z); SHV-3c hecho (04:39Z), espera validación. Producción: la decide Pablo.
+- Estado: CERRADA EN DEV — SHV-3 cerrado con el OK de Pablo (2026-10-27 04:46Z). Producción: la decide Pablo.
 - Backlog: BL-059 (nivel N4 de DEC-033) · Propuesta: docs/propuestas/propuesta-shiruvana-shv3.html (aprobada 04:00Z, D1 a D5) · Decisiones: DEC-033, DEC-038
 - Archivos: js/shv-legendary.js 1.2.0 (por js/modules.json, después de shv-memory y shv-bubble), docs/user-guide-avanzado.html («Cola de crafteo»)
 - Tests: tests/shv-legendary.test.cjs (24 tests, 46/46 mutaciones)
