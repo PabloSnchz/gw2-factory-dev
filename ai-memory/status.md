@@ -1,13 +1,13 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). Pablo vio que fuera de la Cartera yo no aparecía y que los íconos de la Cartera parpadeaban; los dos arreglados en PATCH-198 y cerrada por su pedido («corregí eso y si está ok podés cerrar BL-075»). BL-059 SHV-3: propuesta APROBADA por Pablo 2026-10-27 04:00Z (D1 a D5 como recomendé). SHV-3a HECHO 04:05Z: js/shv-legendary.js 1.0.0 inerte (estimate/observe puros), tests/shv-legendary.test.cjs 11/11, 16/16 mutaciones, RUN-163 verde. SHV-3b HECHO 04:22Z (PATCH-203), VALIDADO por Pablo 04:34Z. SHV-3c HECHO 04:39Z (PATCH-205, shv-legendary 1.2.0): si ese oro ya está en tu Cartera lo digo y, con 7 días o más de fotos, en cuántos días lo juntás a tu ritmo; FEAT-021. Pablo dio el OK y pidió seguir (04:46Z): SHV-3 cerrado; el plazo real se ve desde el 2026-11-03. SHV-4 propuesta ENTREGADA 04:48Z (docs/propuestas/propuesta-shiruvana-shv4.html), espera las decisiones D1 a D6 de Pablo.
+Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). Pablo vio que fuera de la Cartera yo no aparecía y que los íconos de la Cartera parpadeaban; los dos arreglados en PATCH-198 y cerrada por su pedido («corregí eso y si está ok podés cerrar BL-075»). BL-059 SHV-3: propuesta APROBADA por Pablo 2026-10-27 04:00Z (D1 a D5 como recomendé). SHV-3a HECHO 04:05Z: js/shv-legendary.js 1.0.0 inerte (estimate/observe puros), tests/shv-legendary.test.cjs 11/11, 16/16 mutaciones, RUN-163 verde. SHV-3b HECHO 04:22Z (PATCH-203), VALIDADO por Pablo 04:34Z. SHV-3c HECHO 04:39Z (PATCH-205, shv-legendary 1.2.0): si ese oro ya está en tu Cartera lo digo y, con 7 días o más de fotos, en cuántos días lo juntás a tu ritmo; FEAT-021. Pablo dio el OK y pidió seguir (04:46Z): SHV-3 cerrado; el plazo real se ve desde el 2026-11-03. SHV-4 propuesta ENTREGADA 04:48Z (docs/propuestas/propuesta-shiruvana-shv4.html), Pablo dio el dale (su respuesta se perdió con el corte del chat; RECOVERY 2026-10-27 05:50Z sigue con D1 a D6 como recomendé). SHV-4a HECHO 05:29Z (PATCH-208): shv-memory 1.1.0 (f75c041) con pausa gn:shv:paused (en pausa no saco fotos ni pido nada), forget() (borra solo gn:shv:wallet) y exportData() (huella de cada cuenta, nunca la Key); stats() suma desde, hasta, tope y pausa; tests/shv-memory 073431a; suite verde antes y después.
 Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-27 04:49Z
-Próxima acción: con las decisiones de Pablo sobre la propuesta SHV-4, SHV-4a (shv-memory 1.1.0: forget, exportData y pausa, con tests).
+Última actualización: 2026-10-27 05:55Z
+Próxima acción: SHV-4b (js/shv-recall.js: ítem en Ajustes, ventana GNUI.dialog, medidor, descarga, dejar de recordar y borrar con pregunta; privacidad con gn:shv:paused; guía).
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -194,7 +194,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: propuesta SHV-3 APROBADA (2026-10-27 04:00Z), D1 a D5 como recomendé. SHV-3a HECHO (04:05Z): solo la cuenta, todavía no se ve nada en la app.
 - [BL-059] Info: SHV-3b VALIDADO por Pablo (2026-10-27 04:34Z).
 - [BL-059] Info: SHV-3 CERRADO con el OK de Pablo (2026-10-27 04:46Z, FEAT-021). El plazo «a tu ritmo» se puede comprobar desde el 2026-11-03.
-- [BL-059] Decisión: propuesta SHV-4 «Lo que recuerdo de vos» (docs/propuestas/propuesta-shiruvana-shv4.html), D1 a D6. Recomiendo: D1 en Ajustes con la ventana común; D2 «Borrar todo» borra fotos y mensajes vistos, no «Silenciar»; D3 sí a «Dejar de recordar»; D4 sí a descargar (JSON, sin Keys); D5 todavía no dentro de «Guardar copia de ajustes»; D6 medidor en la ventana y aviso escrito en Inicio solo pasando el 85 %.
+- [BL-059] Info: SHV-4a hecho en DEV (PATCH-208), sin cambios visibles: la ventana «Lo que recuerdo de vos» llega en SHV-4b.
+- [BL-059] Decisión: confirmá D1 a D6 de la propuesta SHV-4 (docs/propuestas/propuesta-shiruvana-shv4.html): tu respuesta se perdió con el corte del chat. Sigo con lo que recomendé (D1 Ajustes con la ventana común; D2 borrar fotos y vistos, no «Silenciar»; D3 sí pausa; D4 sí descargar JSON sin Keys; D5 no por ahora en «Guardar copia de ajustes»; D6 aviso en Inicio solo pasando el 85 %); si cambiaste alguna, decímelo.
 - [BL-059] Info: hallazgo MEDIO al escribir SHV-3a: la Armería no guarda precios del Bazar de los materiales (el campo prices del tracker nunca se llena; los precios de la cola son los del catálogo, de la fecha en que se generó). La propuesta decía «sin llamadas nuevas»: en SHV-3b hago UNA consulta a /v2/commerce/prices (GW2Api.getCommercePrices, con su caché) solo por los materiales que faltan, al momento de hablar. Lo que no devuelve precio cuenta como «no se vende» (D5). Decisión técnica mía.
 - [BL-075] Info: BL-075 CERRADA (2026-10-27 03:35Z, FEAT-020). Si fuera de la Cartera sigo sin aparecer o algo parpadea, la reabro.
 - [BL-059] Info: la historia vieja de la Cartera (gn:wallet:snapshots:*) se suma a mi memoria si el formato sirve (Pablo, 00:43Z). La mido antes (SHV-2c).
