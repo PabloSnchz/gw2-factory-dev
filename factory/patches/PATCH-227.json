@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-227",
+ "summary": "BL-078 abierta: propuesta UNI-0 de unificación entregada (relojes, íconos, Raids, Enlaces, Chak); espera D1 a D6 y la acción de Chak.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "cf23d0532875ff7afcdbcbe104aecfe618d5de44",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-078] [ALTO] Una sola Bóveda: relojes, íconos y detalles — pedido de Pablo (2026-10-27 22:31Z): unificar el acabado del restyle. Medido: 5 diseños del mismo reloj (mh-pill de Metas, rv-pill, av-pill, wvx-pill, hs-pillr; MEDIO); pestañas e indicadores sin íconos del juego fuera de la Cartera (BAJO); encabezado del ala de Raids poco destacado (BAJO); 5 encuentros con ícono genérico en assets/data/raids/catalog.json (voice_claw, fraenir, xunlai_jade_junkyard, kaineng_overlook, harvest_temple: sin miniatura oficial en RAI-1; MEDIO); Chak sin vista previa (antes del restyle se cargaba de la wiki; en BL-057 la wiki dejó de servirla y DEC-031 la dejó como deuda; MEDIO); menú Enlaces sin íconos (BAJO). UNI-0 propuesta ENTREGADA 22:37Z (docs/propuestas/propuesta-unificacion-bl078.html, d3260d2): relojes opción C (reloj común nacido del de Metas, compacto en cabeceras y grande en Metas; Raids solo el semanal), íconos en pestañas e indicadores con lista verificada, encabezado del ala nuevo, miniatura oficial o ícono del logro (nunca wiki), Enlaces con íconos desde gn-topbar.js (index.html no crece), módulo nuevo js/gn-kit.js (manifiesto 39 de 40); micro-ciclos UNI-1 a UNI-7; D1 a D6. Chak necesita una acción de Pablo: subir chak_gerent.gif a assets/previews/ (DEC-031 lo permite). Espera D1 a D6. · DEC-024, DEC-031, DEC-035, BL-070, BL-075 — 2026-10-27\n\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "943002cca74cbcda0e7809096df9713c86bb7c8e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Pablo VALIDÓ producción 22:00Z: BL-077 CERRADA.",
+     "text": "Pablo VALIDÓ producción 22:00Z: BL-077 CERRADA. Pablo pidió BL-078 (22:31Z): unificar relojes, íconos, Raids, Enlaces y Chak; propuesta UNI-0 ENTREGADA 22:37Z (docs/propuestas/propuesta-unificacion-bl078.html)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 22:02Z",
+     "text": "Última actualización: 2026-10-27 22:39Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: responder las dudas de Pablo (navegador en producción tras BL-074 y tamaño de archivos con el pasaje vía PowerShell) y esperar la próxima tarea que elija.",
+     "text": "Próxima acción: con las decisiones de Pablo sobre UNI-0 (D1 a D6), UNI-1: js/gn-kit.js inerte (reloj común e íconos) con tests y la lista de íconos verificada."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada.",
+     "text": "- [BL-078] Decisión: propuesta UNI-0 (docs/propuestas/propuesta-unificacion-bl078.html), D1 a D6. Recomiendo: D1 reloj común C nacido del de Metas; D2 Raids solo el reset semanal; D3 íconos en pestañas e indicadores con lista verificada; D4 encabezado del ala nuevo; D5 miniatura oficial o ícono del logro, nunca wiki; D6 orden UNI-1 a UNI-7.\n- [BL-078] Acción: subir a gw2-factory-dev/assets/previews/ la imagen de Chak (Chak_Animation_8.gif de la wiki) como chak_gerent.gif; opcional Dragon's End como dragons_end.jpg.\n- [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada."
+    }
+   ]
+  }
+ ]
+}
