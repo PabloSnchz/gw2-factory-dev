@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-225",
+ "summary": "BL-077: pasaje a PRD hecho por Pablo (producción bc089b1), control blob a blob OK; espera validación en producción.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "7032591615d8c25168a2b3e282a17c2fc865fe28",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Rollback: el script crea rollback/pre-bl-077 = 383c8f5. Espera que Pablo corra promote.ps1.",
+     "text": "Pablo lo corrió 21:45Z con el comando de una línea (regla nueva, factory/promote/README.md): 28 | 28 | 0 distintos; producción = bc089b1, rollback/pre-bl-077 = 383c8f5; mi control blob a blob OK (js/ 78 de 79 iguales a DEV, solo analytics.js de producción); informe ai-memory/missions/BL-077-informe-promocion.md. Espera la validación de Pablo en producción (Chrome)."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "ea31f05f41e97f431c2ab3b2baacc98335920b09",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "BL-077, manifiesto factory/promote/BL-077.txt (28 movimientos) desde DEV 9f21446 sobre producción 383c8f5.",
+     "text": "BL-077, manifiesto factory/promote/BL-077.txt (28 movimientos) desde DEV 9f21446 sobre producción 383c8f5. Pablo lo corrió 21:45Z: producción = bc089b1 (28 | 28 | 0 distintos), rollback/pre-bl-077 = 383c8f5; control blob a blob OK (informe ai-memory/missions/BL-077-informe-promocion.md)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 21:36Z",
+     "text": "Última actualización: 2026-10-27 21:48Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Pablo corre factory/promote/promote.ps1 (BL-077) y me pasa el SHA de producción; yo controlo blob a blob, informe y lista de validación en PRD. Nada de tareas nuevas antes de cerrar BL-077.",
+     "text": "Próxima acción: Pablo valida BL-077 en producción (Chrome, Ctrl+F5). Con su OK cierro BL-077; si algo falla, rollback/pre-bl-077 = 383c8f5."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-077] Acción: correr el pasaje a PRD vía PowerShell: powershell -ExecutionPolicy Bypass -File promote.ps1 -DevSha 9f21446 -PrdBase 383c8f5 -Manifest factory/promote/BL-077.txt -Tarea BL-077. Esperado: 28 | 28 | 0 distintos; escribir SI; pasarme el SHA final.",
+     "text": "- [BL-077] Validación: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076. Qué mirar en Chrome (Ctrl+F5): «Lo sé por» en cada mensaje mío, mi globo desde el rincón, Ajustes → «Lo que recuerdo de vos» y «Silenciar a Shiruvana», la evolución de 30 días en la Cartera, mi línea en «Mi cola» de la Armería; que todo cargue como siempre (cachés en IndexedDB)."
+    }
+   ]
+  }
+ ]
+}
