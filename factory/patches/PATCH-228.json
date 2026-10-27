@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-228",
+ "summary": "BL-078: D1 a D6 aprobadas por Pablo; UNI-1 hecha (js/gn-kit.js 1.0.0 inerte + 8 pruebas).",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "e480440ae2734f5664fb7f34b79448a16635248a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera D1 a D6. ",
+     "text": "D1 a D6 APROBADAS por Pablo 22:53Z tal como las recomendé. UNI-1 HECHA 22:58Z: js/gn-kit.js 1.0.0 inerte (4faecab; reloj común con diario, PSNA, semanal, local y servidor, un solo temporizador, mapa de íconos con ok/propuesta/falta) + tests/gn-kit.test.cjs 8 pruebas (cf8547e); faltan elegir íconos para 11 claves (UNI-4). "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c4e34ca9038e7d47eaa860d77ed0545cf40e032c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "propuesta UNI-0 ENTREGADA 22:37Z (docs/propuestas/propuesta-unificacion-bl078.html).",
+     "text": "propuesta UNI-0 ENTREGADA 22:37Z (docs/propuestas/propuesta-unificacion-bl078.html). Pablo APROBÓ D1 a D6 22:53Z. UNI-1 HECHA 22:58Z: js/gn-kit.js 1.0.0 inerte + tests/gn-kit.test.cjs (8 pruebas)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 22:39Z",
+     "text": "Última actualización: 2026-10-27 23:00Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con las decisiones de Pablo sobre UNI-0 (D1 a D6), UNI-1: js/gn-kit.js inerte (reloj común e íconos) con tests y la lista de íconos verificada.",
+     "text": "Próxima acción: con UNI-1 validada por Pablo, UNI-2: el reloj común en Metas (grande) y Raids (solo el semanal) y gn-kit.js entra al manifiesto (39 de 40)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Decisión: propuesta UNI-0 (docs/propuestas/propuesta-unificacion-bl078.html), D1 a D6. Recomiendo: D1 reloj común C nacido del de Metas; D2 Raids solo el reset semanal; D3 íconos en pestañas e indicadores con lista verificada; D4 encabezado del ala nuevo; D5 miniatura oficial o ícono del logro, nunca wiki; D6 orden UNI-1 a UNI-7.\n",
+     "text": "- [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).\n- [BL-078] Validación: UNI-1 es inerte (no cambia nada en pantalla): js/gn-kit.js y sus 8 pruebas en verde. Con tu «ok» sigo con UNI-2 (relojes en Metas y Raids).\n"
+    }
+   ]
+  }
+ ]
+}
