@@ -1,0 +1,90 @@
+{
+ "id": "PATCH-187",
+ "summary": "BL-059 SHV-2: shv-memory.js entra al manifiesto (antes que la voz); shv-wallet 1.1.0 dibuja la evolución de 30 días de la cuenta activa; privacidad con gn:shv:wallet",
+ "files": [
+  {
+   "path": "js/shv-wallet.js",
+   "base_sha": "cb55978144d8d12a4d763f62ddd8f8f2bf4f39ff",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0\n",
+     "text": " * Versión: 1.1.0 (2026-10-27) · SHV-2: debajo de mi voz, la evolución de los últimos 30 días de la cuenta\n *          activa, con mi memoria (js/shv-memory.js). Con menos de 2 días no invento tendencias.\n *          1.0.0 (2026-10-26)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Lee lo que ya dibujó la Cartera (WalletTheme._state) y la Key activa de Storage: no pide nada\n * a la API ni guarda nada (la memoria de la Cartera llega en SHV-2). Se carga por js/modules.json.\n",
+     "text": " * Lee lo que ya dibujó la Cartera (WalletTheme._state), la Key activa de Storage y mi memoria\n * (js/shv-memory.js, que es la que guarda). Se carga por js/modules.json, después de shv-memory.js.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';",
+     "text": "  var VERSION = '1.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var HOST_ID = 'shvWalletVoice';",
+     "text": "  var HOST_ID = 'shvWalletVoice', MEM_ID = 'shvWalletMemory';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { sig: null, timer: null, mo: null };",
+     "text": "  var st = { sig: null, memSig: null, timer: null, mo: null };"
+    },
+    {
+     "op": "replace",
+     "anchor": "    while (n) { if (n.id === HOST_ID) return true; n = n.parentNode; }",
+     "text": "    while (n) { if (n.id === HOST_ID || n.id === MEM_ID) return true; n = n.parentNode; }"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function paint() {\n    st.timer = null;\n",
+     "text": "  // ------------------------------------------------------------------ SHV-2: mi memoria de la Cartera\n  var NF = typeof Intl !== 'undefined' ? new Intl.NumberFormat('es-AR', { maximumFractionDigits: 0 }) : null;\n  function num(v) { v = Math.round(v); return NF ? NF.format(v) : String(v); }\n  function short(v) {\n    if (Math.abs(v) >= 1e6) return String(Math.round(v / 1e5) / 10).replace('.', ',') + ' M';\n    return num(v);\n  }\n  var MEM_CSS = [\n    '#' + MEM_ID + '{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:12px 14px;margin:0 0 12px;color:var(--tx-1)}',\n    '.shv-mem__t{margin:0 0 6px;font-weight:700;font-size:.9rem;color:var(--tx-1)}',\n    '#' + MEM_ID + ' svg{display:block;color:var(--acc-1);margin:2px 0 6px}',\n    '.shv-mem__r{display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-top:1px solid var(--bd-1);font-size:.88rem;color:var(--tx-1)}',\n    '.shv-mem__v{font-weight:700;white-space:nowrap}.shv-mem__d{font-weight:600;color:var(--tx-2);margin-left:4px}',\n    '.shv-mem__sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}',\n    '.shv-mem__f,.shv-mem__x{margin:6px 0 0;font-size:.78rem;color:var(--tx-2)}'\n  ].join('');\n\n  /**\n   * Lo que muestra el panel de evolución (pura). sum: ShvMemory.summary(...).\n   * Con menos de 2 fotos en la ventana no hay tendencia: lo digo así, sin inventar.\n   */\n  function memoryModel(sum, now) {\n    if (!sum || !sum.days) return null;\n    var C = root.ShvCore, src = 'tus fotos diarias de la Cartera (' + plural(sum.days, 'día guardado', 'días guardados') + ' en este navegador)';\n    var basis = C ? C.basisText({ source: src, at: sum.lastAt }, now) : src;\n    if (sum.inWindow < 2) return { empty: true, text: 'Empecé a recordar tu Cartera. Con unos días más de fotos te muestro cómo evoluciona.', basis: basis };\n    var n = sum.gold.length, vals = sum.gold.filter(function (v) { return v !== null; });\n    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals), span = hi - lo || 1, pts = [];\n    sum.gold.forEach(function (v, i) {\n      if (v !== null) pts.push(Math.round(i * 300 / Math.max(1, n - 1)) + ',' + Math.round(62 - (v - lo) * 54 / span));\n    });\n    return {\n      empty: false, points: pts.join(' '), basis: basis,\n      label: 'Oro, últimos ' + n + ' días: de ' + num(vals[0]) + ' a ' + num(vals[vals.length - 1]),\n      rows: sum.rows.filter(function (r) { return r.value || r.delta; }).map(function (r) { // lo que está y sigue en 0, no\n        var d = r.delta;\n        return {\n          name: r.name, value: short(r.value) + (r.gold ? ' de oro' : ''),\n          delta: d === null ? '' : d > 0 ? '▲ ' + short(d) : d < 0 ? '▼ ' + short(-d) : '=',\n          sr: d === null ? '' : d > 0 ? 'subió ' + short(d) : d < 0 ? 'bajó ' + short(-d) : 'sin cambios'\n        };\n      })\n    };\n  }\n\n  function el(tag, cls, text) {\n    var n = doc.createElement(tag);\n    if (cls) n.className = cls;\n    if (text != null) n.textContent = text;\n    return n;\n  }\n  function memoryNode(m) {\n    var box = el('section', 'shv-mem');\n    box.id = MEM_ID;\n    box.setAttribute('aria-label', 'Evolución de tu Cartera');\n    box.appendChild(el('p', 'shv-mem__t', m.empty ? 'Mi memoria de tu Cartera' : 'Evolución · últimos 30 días'));\n    if (m.empty) box.appendChild(el('p', 'shv-mem__x', m.text));\n    else {\n      var NS = 'http://www.w3.org/2000/svg', svg = doc.createElementNS(NS, 'svg'), pl = doc.createElementNS(NS, 'polyline');\n      [['viewBox', '0 0 300 70'], ['width', '100%'], ['height', '70'], ['role', 'img'], ['aria-label', m.label]].forEach(function (a) { svg.setAttribute(a[0], a[1]); });\n      [['points', m.points], ['fill', 'none'], ['stroke', 'currentColor'], ['stroke-width', '2.5']].forEach(function (a) { pl.setAttribute(a[0], a[1]); });\n      svg.appendChild(pl);\n      box.appendChild(svg);\n      m.rows.forEach(function (r) {\n        var row = el('div', 'shv-mem__r'), v = el('span', 'shv-mem__v', r.value);\n        row.appendChild(el('span', null, r.name));\n        if (r.delta) {\n          var d = el('span', 'shv-mem__d', r.delta);\n          d.setAttribute('aria-hidden', 'true');\n          v.appendChild(d);\n          v.appendChild(el('span', 'shv-mem__sr', ' (' + r.sr + ')'));\n        }\n        row.appendChild(v);\n        box.appendChild(row);\n      });\n    }\n    box.appendChild(el('p', 'shv-mem__f', 'Lo sé por: ' + m.basis));\n    return box;\n  }\n\n  function paintMemory() {\n    var M = root.ShvMemory, body = host(), k = activeKey(), cur = doc.getElementById(MEM_ID);\n    if (!M || !body || !k || !k.value) {\n      if (cur && cur.parentNode) cur.parentNode.removeChild(cur);\n      st.memSig = null;\n      return;\n    }\n    var W = root.WalletTheme, S = W && W._state, names = {};\n    if (S && S.lastAt) M.ensureToday(k.value);\n    [S && S.models, S && S.tmodels].forEach(function (l) {\n      (Array.isArray(l) ? l : []).forEach(function (x) { if (x && x.id && x.id !== 1 && x.name) names[x.id] = x.name; });\n    });\n    var now = Date.now(), m = memoryModel(M.summary(M.fingerprint(k.value), 30, now, names), now);\n    var sig = m ? JSON.stringify(m) : '';\n    if (sig === st.memSig && (m ? !!cur : !cur)) return;\n    st.memSig = sig;\n    if (cur && cur.parentNode) cur.parentNode.removeChild(cur);\n    if (!m) return;\n    if (!doc.getElementById('shv-mem-css')) {\n      var s = doc.createElement('style');\n      s.id = 'shv-mem-css';\n      s.textContent = MEM_CSS;\n      (doc.head || doc.documentElement).appendChild(s);\n    }\n    var voice = doc.getElementById(HOST_ID);\n    body.insertBefore(memoryNode(m), voice && voice.parentNode === body ? voice.nextSibling : body.firstChild);\n  }\n\n  function paint() {\n    st.timer = null;\n    paintMemory();\n    paintVoice();\n  }\n  function paintVoice() {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    doc.addEventListener('gn:tokenchange', schedule);\n",
+     "text": "    doc.addEventListener('gn:tokenchange', schedule);\n    doc.addEventListener('gn:shv-memory', schedule);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  root.ShvWallet = { version: VERSION, observe: observe, refresh: paint, HOST_ID: HOST_ID };",
+     "text": "  root.ShvWallet = { version: VERSION, observe: observe, memoryModel: memoryModel, refresh: paint, HOST_ID: HOST_ID, MEM_ID: MEM_ID };"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-wallet.test.cjs",
+   "base_sha": "02af7bbba274646baafc8a00fd38d21024be79bc",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.0\\.0/);\n});\n",
+     "text": "  assert.match(SRC, /Versión: 1\\.1\\.0/);\n});\n\nconst AT2 = new Date(2026, 9, 26, 14, 10).getTime();\ntest('SHV-2: el panel de evolución dice de dónde lo sé, dibuja un punto por día con foto y no inventa', () => {\n  const w = load();\n  const sum = { days: 21, inWindow: 3, lastAt: AT2, gold: [1820, null, 1900, 2105], rows: [\n    { id: 1, name: 'Oro', value: 2105, delta: 285, gold: true }, { id: 2, name: 'Karma', value: 4100000, delta: 300000 },\n    { id: 4, name: 'Gemas', value: 400, delta: 0 }, { id: 63, name: 'Aclamación astral', value: 3950, delta: -1200 },\n    { id: 3, name: 'Monedas de Laurel', value: 212, delta: null }] };\n  const m = JSON.parse(JSON.stringify(w.ShvWallet.memoryModel(sum, AT2)));\n  assert.equal(m.empty, false);\n  assert.equal(m.basis, 'tus fotos diarias de la Cartera (21 días guardados en este navegador) · hoy 14:10');\n  assert.equal(m.points, '0,62 200,47 300,8');\n  assert.equal(m.label, 'Oro, últimos 4 días: de 1.820 a 2.105');\n  assert.deepEqual(m.rows.map((r) => [r.name, r.value, r.delta, r.sr]), [\n    ['Oro', '2.105 de oro', '▲ 285', 'subió 285'], ['Karma', '4,1 M', '▲ 300.000', 'subió 300.000'], ['Gemas', '400', '=', 'sin cambios'],\n    ['Aclamación astral', '3.950', '▼ 1.200', 'bajó 1.200'], ['Monedas de Laurel', '212', '', '']]);\n  const zero = w.ShvWallet.memoryModel(Object.assign({}, sum, { rows: sum.rows.concat([{ id: 7, name: 'Fractales', value: 0, delta: 0 }]) }), AT2);\n  assert.equal(zero.rows.length, 5, 'una divisa que está y sigue en 0 no ocupa lugar');\n  const one = w.ShvWallet.memoryModel({ days: 1, inWindow: 1, lastAt: AT2, gold: [], rows: [] }, AT2);\n  assert.equal(one.empty, true);\n  assert.match(one.text, /^Empecé a recordar tu Cartera/);\n  assert.match(one.basis, /\\(1 día guardado en este navegador\\)/);\n  assert.equal(w.ShvWallet.memoryModel({ days: 0 }, AT2), null, 'sin memoria no muestro nada');\n  assert.equal(w.ShvWallet.memoryModel(null, AT2), null);\n});\n\ntest('SHV-2: el panel usa solo colores del theme, no guarda nada y va debajo de mi voz', () => {\n  assert.equal(load().ShvWallet.MEM_ID, 'shvWalletMemory');\n  const css = (SRC.match(/var MEM_CSS = \\[[\\s\\S]*?\\]\\.join/) || [''])[0];\n  assert.ok(css, 'hay CSS del panel');\n  assert.doesNotMatch(css.replace(/'#' \\+ MEM_ID/g, ''), /#[0-9a-fA-F]{3,8}\\b/, 'sin colores fijos: los 19 themes mandan');\n  assert.match(css, /var\\(--tx-1\\)/);\n  assert.match(SRC, /voice\\.nextSibling/);\n  assert.match(SRC, /addEventListener\\('gn:shv-memory', schedule\\)/);\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "9ffda8dce3079a0a6080ac879333d93f91f7a4b2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/shv-wallet.js\", \"v\": \"1.0.0\" }",
+     "text": "    { \"src\": \"js/shv-memory.js\", \"v\": \"1.0.0\" },\n    { \"src\": \"js/shv-wallet.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "privacy.html",
+   "base_sha": "ebcbc8752dc2ef713b750b267a08770b8f84002e",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "      <tr><td>Metas y Eventos</td>",
+     "text": "      <tr><td>Cartera: mi memoria (Shiruvana)</td><td>Una foto por día y por cuenta de tu oro, karma, gemas, Monedas de Laurel, Aclamación astral y las divisas que fijaste, durante 90 días, para mostrarte cómo evolucionan. Cada cuenta se reconoce por una huella que no es la Key. Ocupa como mucho 64 KB.</td><td><code>gn:shv:wallet</code></td></tr>\n"
+    }
+   ]
+  }
+ ]
+}
