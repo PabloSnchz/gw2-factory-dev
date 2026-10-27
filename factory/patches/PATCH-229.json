@@ -1,0 +1,154 @@
+{
+ "id": "PATCH-229",
+ "summary": "BL-078 UNI-2: reloj común en Metas (grande, 4 relojes) y Raids (solo el reset semanal); gn-kit.js 1.0.1 entra al manifiesto (39 de 40).",
+ "files": [
+  {
+   "path": "js/gn-kit.js",
+   "base_sha": "24ff0f68e12dd03d9bb449a9a50e6db2842b4c3b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-27) — inerte: todavía no lo carga js/modules.json ni lo usa ningún módulo (UNI-2 en adelante).\n",
+     "text": " * Versión: 1.0.1 (2026-10-27) — UNI-2: lo carga js/modules.json antes de quien lo usa; lo usan Metas (meta-theme.js 2.3.0) y Raids\n *   (raids-view.js 1.4.0). · antes 1.0.0 (2026-10-27) — inerte.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.0.0';",
+     "text": "var VERSION = '1.0.1';"
+    }
+   ]
+  },
+  {
+   "path": "js/meta-theme.js",
+   "base_sha": "01675574dc319fe2628ae50639a37840053a672f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.2.0 (2026-10-27)\n",
+     "text": " * v2.3.0 (2026-10-27)\n *\n * v2.3.0 (BL-078 UNI-2): los cuatro relojes son el reloj común de la Bóveda (GNKit.clocks, versión grande): ícono,\n *   nombre arriba y valor abajo, dorado cuando está cerca. meta-theme.js carga antes que los módulos: si GNKit\n *   todavía no llegó, dibuja los botones de siempre y los cambia una sola vez apenas llega. Sin GNKit, igual que 2.2.0.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.2.0';",
+     "text": "var VERSION = '2.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function tickClocks() {\n    var d = headerData(new Date());\n",
+     "text": "  // UNI-2: el reloj común. Si GNKit ya está, cambia los cuatro botones una sola vez y desde ahí GNKit los pone al día.\n  var KIT_KINDS = ['local', 'server', 'daily', 'weekly'];\n  function useKit(head) {\n    var K = root.GNKit;\n    if (!head || !head.querySelector || !K || typeof K.clocks !== 'function') return false;\n    if (head.querySelector('[data-gk]')) return true;\n    var box = head.querySelector('.mh-pills');\n    if (!box) return false;\n    if (typeof K.ensureCSS === 'function') K.ensureCSS();\n    box.innerHTML = K.clocks(KIT_KINDS, Date.now(), { big: true });\n    return true;\n  }\n  function tickClocks() {\n    if (useKit(S.head)) { root.GNKit.tick(); return; }\n    var d = headerData(new Date());\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "    '.mh-pills{margin-left:auto;display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-end}',\n",
+     "text": "    '.mh-pills .gk-row{gap:10px;justify-content:flex-end}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '@media (max-width:980px){.mh-pills{margin-left:0;justify-content:flex-start;width:100%}}',\n",
+     "text": "    '@media (max-width:980px){.mh-pills{margin-left:0;justify-content:flex-start;width:100%}.mh-pills .gk-row{justify-content:flex-start}}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "pickVoice: pickVoice, headHTML: headHTML }",
+     "text": "pickVoice: pickVoice, headHTML: headHTML, useKit: useKit }"
+    }
+   ]
+  },
+  {
+   "path": "js/raids-view.js",
+   "base_sha": "7be362c146cee1bd76d7d66be15984328e5b2cc7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-27) — ",
+     "text": " * Versión: 1.4.0 (2026-10-27) — BL-078 UNI-2: la cabecera muestra solo el reset semanal con el reloj común de la Bóveda (GNKit) · antes 1.3.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": " *  - Cabecera con el ícono del módulo, hora local, servidor y reset semanal (lunes 07:30 UTC),\n",
+     "text": " *  - Cabecera con el ícono del módulo, el reset semanal (lunes 07:30 UTC) con el reloj común (UNI-2),\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function clockHTML(now) {\n    var d = new Date(now);\n    return '<span class=\"rv-pill\">Local <b>' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + '</b></span>' +\n      '<span class=\"rv-pill\">Servidor <b>' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ' UTC</b></span>' +\n      '<span class=\"rv-pill rv-pill--hot\">",
+     "text": "  // UNI-2 (D2 de UNI-0): Raids muestra solo el reset semanal, con el reloj común (GNKit). Sin GNKit, la píldora de antes.\n  function clockHTML(now) {\n    var K = root.GNKit;\n    if (K && typeof K.clock === 'function') return K.clock('weekly', now);\n    return '<span class=\"rv-pill rv-pill--hot\">"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('rvRoot');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('rvRoot');\n    if (!host) {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "25e36d2df1e6a39c583314bb8e0482c3302bff38",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "    { \"src\": \"js/gn-topbar.js\", \"v\": \"1.1.0\" },\n",
+     "text": "    { \"src\": \"js/gn-kit.js\", \"v\": \"1.0.1\" },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/raids-view.js\", \"v\": \"1.3.0\" },",
+     "text": "    { \"src\": \"js/raids-view.js\", \"v\": \"1.4.0\" },"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "5bbbb16b2466bd03589e0d3e8d6008714cb0d6b3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/meta-theme.js?v=2.2.0",
+     "text": "js/meta-theme.js?v=2.3.0"
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-kit.test.cjs",
+   "base_sha": "1c2112c3a583e1221a99c7531e23f0587e777176",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('1.0.0 inerte: fuera de js/modules.json y de index.html, dentro de 40 KB, sin pedidos ni almacenamiento', () => {\n  assert.match(SRC, /\\* Versión: 1\\.0\\.0 /);\n  assert.doesNotMatch(read('js/modules.json'), /gn-kit\\.js/);\n",
+     "text": "test('1.0.1: lo carga js/modules.json antes de Raids (no index.html), dentro de 40 KB, sin pedidos ni almacenamiento', () => {\n  assert.match(SRC, /\\* Versión: 1\\.0\\.1 /);\n  const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);\n  assert.ok(man.includes('js/gn-kit.js'), 'está en el manifiesto');\n  assert.ok(man.indexOf('js/gn-kit.js') < man.indexOf('js/raids-view.js'), 'antes de quien lo usa');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/meta-header.test.cjs",
+   "base_sha": "04c94c9c4b8c8246c513d999d321dcc31ce3b2b9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.2.0 y API pública', () => {\n  assert.equal(MT.version, '2.2.0');",
+     "text": "test('versión 2.3.0 y API pública', () => {\n  assert.equal(MT.version, '2.3.0');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "test('código: sin la 1.x",
+     "text": "test('UNI-2: con GNKit los cuatro botones pasan a ser el reloj común grande, una sola vez', () => {\n  const noop = () => {};\n  const document = { readyState: 'complete', hidden: false, head: { appendChild: noop }, documentElement: { appendChild: noop },\n    getElementById: () => null, querySelector: () => null, createElement: () => ({ style: {} }), addEventListener: noop };\n  const window = { document, addEventListener: noop };\n  vm.runInNewContext(SRC, { window, document, console, setInterval, clearInterval, setTimeout, clearTimeout });\n  const U = window.MetaTheme._pure.useKit;\n  assert.equal(U({ querySelector: () => null }), false, 'sin GNKit quedan los botones de siempre');\n  const kw = { console: { info: noop }, document: { getElementById: () => null, createElement: () => ({}), head: { appendChild: noop }, querySelectorAll: () => [] } };\n  kw.window = kw;\n  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/gn-kit.js'), 'utf8'), kw);\n  window.GNKit = kw.GNKit;\n  const box = { innerHTML: '' };\n  let has = false;\n  const head = { querySelector: (s) => (s === '[data-gk]' ? (has ? {} : null) : s === '.mh-pills' ? box : null) };\n  assert.equal(U(head), true);\n  for (const k of ['local', 'server', 'daily', 'weekly']) assert.match(box.innerHTML, new RegExp('class=\"gk gk--big[^\"]*\" data-gk=\"' + k + '\"'), k);\n  assert.doesNotMatch(box.innerHTML, /data-gk=\"psna\"/, 'Metas no muestra el PSNA');\n  has = true; box.innerHTML = 'x';\n  assert.equal(U(head), true);\n  assert.equal(box.innerHTML, 'x', 'una sola vez: no se redibuja');\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-view.test.cjs",
+   "base_sha": "3a02e40450f8cc51ab25ec85e050bdab213dd0aa",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "test('el CSS solo oculta lo viejo",
+     "text": "test('UNI-2: con GNKit la cabecera muestra solo el reset semanal con el reloj común', () => {\n  const sb = { console: { info() {}, warn() {} } };\n  sb.window = sb;\n  vm.createContext(sb);\n  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'gn-kit.js'), 'utf8'), sb, { filename: 'gn-kit.js' });\n  vm.runInContext(SRC, sb, { filename: 'raids-view.js' });\n  const Q = sb.RaidsView._pure;\n  const h = Q.viewHTML(Q.buildModel(CAT, sample(), {}), MON);\n  assert.match(h, /<span id=\"rvClock\" class=\"rv-clock\"><span class=\"gk\" data-gk=\"weekly\" title=\"Los lunes a las 07:30 UTC\">/);\n  assert.match(h, /<small>Reset semanal<\\/small><b>en 6 d 19 h<\\/b>/);\n  assert.doesNotMatch(h, /rv-pill|Servidor|>Local</, 'Raids ya no muestra hora local ni servidor (D2)');\n});\n\n"
+    }
+   ]
+  }
+ ]
+}
