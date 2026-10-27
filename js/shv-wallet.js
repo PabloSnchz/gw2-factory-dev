@@ -1,6 +1,8 @@
 /*!
  * js/shv-wallet.js — Mi voz en la Cartera (BL-059 SHV-1, nivel N2 de DEC-033)
- * Versión: 1.1.0 (2026-10-27) · SHV-2: debajo de mi voz, la evolución de los últimos 30 días de la cuenta
+ * Versión: 1.2.0 (2026-10-27) · SHV-2b: mi voz dice lo que noto en la memoria (el oro de la semana, la divisa que no se
+ *          mueve) y la evolución se abre desde mi voz con «Ver la evolución»: es parte de lo que digo, no otro bloque.
+ *          1.1.0 (2026-10-27) · SHV-2: debajo de mi voz, la evolución de los últimos 30 días de la cuenta
  *          activa, con mi memoria (js/shv-memory.js). Con menos de 2 días no invento tendencias.
  *          1.0.0 (2026-10-26)
  *
@@ -14,12 +16,69 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var HOST_ID = 'shvWalletVoice', MEM_ID = 'shvWalletMemory';
   var doc = root.document;
-  var st = { sig: null, memSig: null, timer: null, mo: null };
+  var st = { sig: null, memSig: null, timer: null, mo: null, memOpen: false, hasMem: false, focusMem: false };
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+
+  // ------------------------------------------------------------------ SHV-2b: lo que noto en mi memoria
+  var CUR = { 2: 'Karma', 4: 'Gemas', 3: 'Monedas de Laurel', 63: 'Aclamación astral' };
+  function namesOf(S) {
+    var out = {};
+    [S && S.models, S && S.tmodels].forEach(function (l) {
+      (Array.isArray(l) ? l : []).forEach(function (x) { if (x && x.id && x.id !== 1 && x.name) out[x.id] = x.name; });
+    });
+    return out;
+  }
+  function memBasis(hist) {
+    return { source: 'tus fotos diarias de la Cartera (' + plural(hist.length, 'día guardado', 'días guardados') + ' en este navegador)', at: hist[hist.length - 1].at };
+  }
+  /**
+   * Tendencias de la cuenta activa (pura). hist: ShvMemory.history(huella), de la foto más vieja a la más nueva.
+   * week: el oro de los últimos 7 días (contra la primera foto de esa ventana) y, si hay fotos, la semana anterior.
+   * stale: la divisa con saldo que más días lleva igual (14 o más).
+   */
+  function trends(hist, names) {
+    var out = { week: null, stale: null };
+    if (!Array.isArray(hist) || hist.length < 2) return out;
+    var last = hist[hist.length - 1], base = null, prev = null, i;
+    for (i = 0; i < hist.length - 1; i++) if (hist[i].day >= last.day - 7) { base = hist[i]; break; }
+    if (base && 1 in base.values && 1 in last.values) {
+      for (i = 0; i < hist.length; i++) if (hist[i].day >= base.day - 7 && hist[i].day <= base.day - 5) { prev = hist[i]; break; }
+      out.week = { days: last.day - base.day, from: base.values[1] / 10000, to: last.values[1] / 10000,
+        prevDelta: prev && 1 in prev.values ? (base.values[1] - prev.values[1]) / 10000 : null };
+    }
+    Object.keys(last.values).forEach(function (k) {
+      var id = Number(k), v = last.values[k];
+      if (id === 1 || !(v > 0)) return;
+      var j = hist.length - 1;
+      while (j > 0 && hist[j - 1].values[k] === v) j--;
+      var days = last.day - hist[j].day;
+      if (days >= 14 && (!out.stale || days > out.stale.days)) {
+        out.stale = { id: id, name: (names && names[id]) || CUR[id] || 'Divisa ' + id, days: days, value: v, sinceStart: j === 0 };
+      }
+    });
+    return out;
+  }
+  function trendObs(hist, names) {
+    var t = trends(hist, names), out = [];
+    if (!t.week && !t.stale) return out;
+    var basis = memBasis(hist), act = { label: 'Ver la evolución', act: 'mem' }, w = t.week, s = t.stale;
+    if (w) {
+      var d = w.to - w.from, txt = 'En ' + (w.days === 1 ? 'el último día' : 'los últimos ' + w.days + ' días') + ' tu oro ';
+      txt += Math.abs(d) < 1 ? 'no cambió en esta cuenta: ' + num(w.to) + ' de oro.' : (d > 0 ? 'subió ' : 'bajó ') + num(Math.abs(d)) + ' en esta cuenta: de ' + num(w.from) + ' a ' + num(w.to) + '.';
+      var lines = [txt];
+      if (w.prevDelta !== null) lines.push(Math.abs(w.prevDelta) < 1 ? 'La semana anterior no se había movido.' : 'La semana anterior había ' + (w.prevDelta > 0 ? 'subido ' : 'bajado ') + num(Math.abs(w.prevDelta)) + '.');
+      out.push({ module: 'cartera', id: 'trend', priority: 'media', kind: 'explica', text: lines, action: act, basis: basis });
+    }
+    if (s) {
+      out.push({ module: 'cartera', id: 'stale', priority: 'media', kind: 'explica',
+        text: ['«' + s.name + '» está igual hace ' + (s.sinceStart ? 'al menos ' : '') + s.days + ' días en esta cuenta (' + num(s.value) + ').'], action: act, basis: basis });
+    }
+    return out;
+  }
 
   /**
    * Observaciones de la Cartera (pura).
@@ -38,6 +97,8 @@
         basis: { source: 'los permisos guardados de la Key activa', at: null }
       });
     }
+    var hist = Array.isArray(input.history) ? input.history : [], tr = trendObs(hist, input.names);
+    if (tr[0] && tr[0].id === 'trend') out.push(tr.shift()); // lo que noto va antes que la sugerencia de fijar
     var models = Array.isArray(input.models) ? input.models : [];
     if (models.length) {
       var withBal = models.filter(function (m) { return Number(m && m.amount) > 0; }).length;
@@ -56,7 +117,9 @@
           basis: basis
         });
       }
+      if (hist.length === 1) out[out.length - 1].text.push('Desde hoy recuerdo tu Cartera: en unos días te digo cómo evoluciona.');
     }
+    out.push.apply(out, tr);
     return out;
   }
 
@@ -76,12 +139,14 @@
   }
 
   function input() {
-    var W = root.WalletTheme, S = W && W._state, k = activeKey();
+    var W = root.WalletTheme, S = W && W._state, k = activeKey(), M = root.ShvMemory;
     return {
       models: S && Array.isArray(S.models) ? S.models : [],
       lastAt: S && S.lastAt ? S.lastAt : null,
       perms: k && Array.isArray(k.perms) ? k.perms : null,
-      label: k ? String(k.label || '') : ''
+      label: k ? String(k.label || '') : '',
+      history: M && k && k.value ? M.history(M.fingerprint(k.value)) : null,
+      names: namesOf(S)
     };
   }
 
@@ -187,6 +252,7 @@
       (Array.isArray(l) ? l : []).forEach(function (x) { if (x && x.id && x.id !== 1 && x.name) names[x.id] = x.name; });
     });
     var now = Date.now(), m = memoryModel(M.summary(M.fingerprint(k.value), 30, now, names), now);
+    if (!st.memOpen || !st.hasMem || (m && m.empty)) m = null; // se abre desde mi voz
     var sig = m ? JSON.stringify(m) : '';
     if (sig === st.memSig && (m ? !!cur : !cur)) return;
     st.memSig = sig;
@@ -204,23 +270,33 @@
 
   function paint() {
     st.timer = null;
-    paintMemory();
     paintVoice();
+    paintMemory();
   }
   function paintVoice() {
     var C = root.ShvCore, body = host();
     if (!C || !root.Shiruvana || !body) return;
     var obs = C.pick(observe(input()));
     var cur = doc.getElementById(HOST_ID);
-    var sig = obs ? obs.id + '|' + obs.text.join(' ') + '|' + C.basisText(obs.basis) : '';
+    var sig = obs ? obs.id + '|' + obs.text.join(' ') + '|' + C.basisText(obs.basis) + '|' + st.memOpen : '';
     if (sig === st.sig && (obs ? !!cur : !cur)) return;
     st.sig = sig;
     if (cur && cur.parentNode) cur.parentNode.removeChild(cur);
+    st.hasMem = false;
     if (!obs) return;
     var el = C.render(obs, { doc: doc });
     if (!el) return;
     el.id = HOST_ID;
+    var mb = el.querySelector ? el.querySelector('[data-shv-act="mem"]') : null;
+    st.hasMem = !!mb;
+    if (mb) {
+      mb.textContent = st.memOpen ? 'Ocultar la evolución' : 'Ver la evolución';
+      mb.setAttribute('aria-expanded', String(st.memOpen));
+      mb.setAttribute('aria-controls', MEM_ID);
+    }
     body.insertBefore(el, body.firstChild);
+    if (mb && st.focusMem && mb.focus) mb.focus();
+    st.focusMem = false;
   }
   function schedule() { if (!st.timer) st.timer = root.setTimeout(paint, 250); }
 
@@ -228,6 +304,7 @@
     var b = e && e.target && e.target.closest ? e.target.closest('#' + HOST_ID + ' [data-shv-act]') : null;
     if (!b) return;
     if (b.getAttribute('data-shv-act') === 'keys') { var k = doc.getElementById('keysMenuBtn'); if (k) k.click(); }
+    if (b.getAttribute('data-shv-act') === 'mem') { st.memOpen = !st.memOpen; st.focusMem = true; paint(); }
   }
 
   function init() {
@@ -246,7 +323,7 @@
     schedule();
   }
 
-  root.ShvWallet = { version: VERSION, observe: observe, memoryModel: memoryModel, refresh: paint, HOST_ID: HOST_ID, MEM_ID: MEM_ID };
+  root.ShvWallet = { version: VERSION, observe: observe, memoryModel: memoryModel, trends: trends, refresh: paint, HOST_ID: HOST_ID, MEM_ID: MEM_ID };
   if (doc) {
     if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init);
     else init();

@@ -35,6 +35,6 @@
     { "src": "js/acc-view.js", "v": "1.2.0" },
     { "src": "js/shv-core.js", "v": "1.0.0" },
     { "src": "js/shv-memory.js", "v": "1.0.0" },
-    { "src": "js/shv-wallet.js", "v": "1.1.0" }
+    { "src": "js/shv-wallet.js", "v": "1.2.0" }
   ]
 }

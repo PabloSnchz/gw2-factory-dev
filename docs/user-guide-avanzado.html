@@ -129,6 +129,7 @@
     <dl class="uso">
       <dt>Mi cartera</dt><dd>Arriba, las Destacadas: las que fijás con la estrella o, si no fijaste ninguna, las principales. Debajo, el buscador, las categorías con su cantidad, el orden, «Ocultar las que están en 0» y la vista Tarjetas o Tabla.</dd>
       <dt>Todas las cuentas</dt><dd>Una fila por cuenta y una columna por divisa. Las columnas las elegís con «Agregar divisa» y las sacás con la cruz. El mejor valor de cada columna va en dorado y abajo está el total. Si una cuenta no se pudo leer, la Bóveda lo marca y no inventa un 0. También muestra la Suerte (hallazgo mágico) de cada cuenta. En el celular, cada cuenta es una tarjeta.</dd>
+      <dt>Mi memoria (Shiruvana)</dt><dd>Una vez por día guardo una foto de tus divisas principales de cada cuenta. Con eso te digo cómo se movió tu oro en la semana o qué divisa no cambia hace días, y «Ver la evolución» abre los últimos 30 días. El primer día solo empiezo a recordar.</dd>
       <dt>Cambio de divisas</dt><dd>A la izquierda, la calculadora en espejo: cuánto te dan por tu oro y cuánto oro cuestan las gemas que querés, el precio de 400 gemas en grande y si hoy conviene comprar (la referencia es 120 a 130 de oro). A la derecha, tu Trading Post: primero lo que tenés para recoger y después tus órdenes de compra y venta. «Lo más comerciado hoy» queda plegado abajo.</dd>
     </dl>
     <h3>Qué permisos pide</h3>
@@ -140,6 +141,7 @@
       <li><code>gn:wallet:hidezero</code> Si ocultás las que están en 0.</li>
       <li><code>gn:wallet:dashboard:selected_currencies</code> Las columnas que elegiste en Todas las cuentas.</li>
       <li><code>gn:wallet:dashboard:sort</code> El orden de esa tabla.</li>
+      <li><code>gn:shv:wallet</code> Mi memoria: una foto por día y por cuenta de tu oro, karma, gemas, Monedas de Laurel, Aclamación astral y las que fijaste, durante 90 días y hasta 64 KB. Cada cuenta va con una huella que no es la Key.</li>
     </ul>
   </section>
 
@@ -333,7 +335,7 @@
       <li><code>gn:accounts:cards</code> Lo leído de cada cuenta, durante 6 horas. Nunca la Key.</li>
       <li><code>gn:accounts:achmeta</code> Los datos de los logros que hacen falta para sumar los puntos, durante 7 días.</li>
       <li><code>accounts:vault2</code> La copia del Llavero, cifrada igual que tu archivo. Tu contraseña no se guarda nunca: si la perdés, no hay forma de abrirlo.</li>
-      <li><code>accounts:lastFile</code> La copia del formato viejo, también cifrada. Queda por compatibilidad.</li>
+      <li><code>accounts:lastFile</code> La copia del formato viejo, también cifrada. Se borra sola cuando ya guardaste la nueva.</li>
     </ul>
   </section>
 

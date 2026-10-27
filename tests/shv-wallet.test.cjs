@@ -64,7 +64,55 @@ test('toda observación de la Cartera cumple el formato común (con fundamento)'
 test('no guarda nada, no pide nada a la API y no arma HTML a mano', () => {
   assert.ok(!/localStorage|Storage\.set\(|fetch\(|GW2Api/.test(SRC));
   assert.ok(!/innerHTML/.test(SRC));
-  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.match(SRC, /Versión: 1\.2\.0/);
+});
+
+// SHV-2b: una foto por día; day = días desde 1970 como en js/shv-memory.js
+const H = (rows) => rows.map(([day, gold, extra]) => ({ day, at: AT2 - (100 - day) * 864e5, values: Object.assign({ 1: gold * 10000 }, extra || {}) }));
+test('SHV-2b: el oro de los últimos 7 días y la semana anterior, con fundamento y «Ver la evolución»', () => {
+  const w = load();
+  const hist = H([[86, 1800], [90, 1900], [93, 1963], [100, 2105]]);
+  const t = JSON.parse(JSON.stringify(w.ShvWallet.trends(hist, {})));
+  assert.deepEqual(t.week, { days: 7, from: 1963, to: 2105, prevDelta: 163 });
+  const top = w.ShvCore.pick(w.ShvWallet.observe({ models: [{ id: 1, amount: 5, pinned: false }], perms: ['wallet'], history: hist }));
+  assert.equal(top.id, 'trend', 'lo que noto le gana a la sugerencia de fijar');
+  assert.deepEqual([...top.text], ['En los últimos 7 días tu oro subió 142 en esta cuenta: de 1.963 a 2.105.', 'La semana anterior había subido 163.']);
+  assert.equal(w.ShvCore.basisText(top.basis, AT2), 'tus fotos diarias de la Cartera (4 días guardados en este navegador) · hoy 14:10');
+  assert.deepEqual(JSON.parse(JSON.stringify(top.action)), { label: 'Ver la evolución', act: 'mem', href: null });
+  const down = w.ShvWallet.observe({ history: H([[99, 300], [100, 250]]) })[0];
+  assert.equal(down.text[0], 'En el último día tu oro bajó 50 en esta cuenta: de 300 a 250.');
+  assert.equal(down.text.length, 1, 'sin fotos de la semana anterior no la invento');
+  assert.equal(w.ShvWallet.observe({ history: H([[99, 300], [100, 300.4]]) })[0].text[0], 'En el último día tu oro no cambió en esta cuenta: 300 de oro.');
+  assert.equal(w.ShvWallet.observe({ history: H([[80, 300], [100, 400]]) }).length, 0, 'sin foto en los últimos 7 días no hay semana');
+  assert.equal(w.ShvCore.pick(w.ShvWallet.observe({ models: [{ id: 1, amount: 5 }], perms: ['account'], history: hist })).id, 'perm', 'sin permiso, eso primero');
+});
+
+test('SHV-2b: la divisa con saldo que más días lleva igual (14 o más); el primer día lo digo', () => {
+  const w = load();
+  const hist = H([[70, 10, { 3: 212, 63: 50 }], [80, 10, { 3: 212, 63: 60 }], [86, 10, { 3: 212, 63: 60 }], [100, 10, { 3: 212, 63: 60 }]]);
+  const t = JSON.parse(JSON.stringify(w.ShvWallet.trends(hist, { 3: 'Monedas de Laurel (API)' })));
+  assert.deepEqual(t.stale, { id: 3, name: 'Monedas de Laurel (API)', days: 30, value: 212, sinceStart: true });
+  const obs = w.ShvWallet.observe({ models: [{ id: 3, amount: 212, pinned: true }], perms: ['wallet'], history: hist.slice(1) });
+  const st = obs.find((o) => o.id === 'stale');
+  assert.equal(st.text[0], '«Monedas de Laurel» está igual hace al menos 20 días en esta cuenta (212).');
+  assert.equal(w.ShvCore.pick(obs.filter((o) => o.id !== 'trend')).id, 'stale', 'le gana al resumen');
+  const moved = H([[70, 10, { 63: 50 }], [90, 10, { 63: 60 }], [100, 10, { 63: 60 }]]);
+  assert.equal(w.ShvWallet.trends(moved, {}).stale, null, '10 días no alcanzan');
+  assert.equal(w.ShvWallet.trends(H([[70, 10, { 4: 0 }], [100, 10, { 4: 0 }]]), {}).stale, null, 'una divisa en 0 que sigue en 0 no es noticia');
+  const two = w.ShvWallet.observe({ models: [{ id: 2, amount: 5, pinned: true }], perms: ['wallet'], history: H([[99, 10], [100, 10]]) });
+  assert.equal(two.find((o) => o.id === 'summary').text.length, 1, 'desde el segundo día ya no digo que empiezo');
+  const first = w.ShvWallet.observe({ models: [{ id: 2, amount: 5, pinned: true }], perms: ['wallet'], history: H([[100, 10]]) });
+  assert.deepEqual([...first[0].text], ['Tenés 1 divisa con saldo en esta cuenta y 1 fijada en Destacadas.', 'Desde hoy recuerdo tu Cartera: en unos días te digo cómo evoluciona.']);
+  assert.equal(w.ShvWallet.observe({ models: [{ id: 2, amount: 5, pinned: true }], perms: ['wallet'] })[0].text.length, 1, 'sin memoria no lo digo');
+});
+
+test('SHV-2b: la evolución se abre desde mi voz, con aria-expanded y el foco en el mismo botón', () => {
+  assert.match(SRC, /data-shv-act="mem"/);
+  assert.match(SRC, /setAttribute\('aria-expanded', String\(st\.memOpen\)\)/);
+  assert.match(SRC, /setAttribute\('aria-controls', MEM_ID\)/);
+  assert.match(SRC, /=== 'mem'\) \{ st\.memOpen = !st\.memOpen; st\.focusMem = true; paint\(\); \}/);
+  assert.match(SRC, /if \(!st\.memOpen \|\| !st\.hasMem \|\| \(m && m\.empty\)\) m = null;/);
+  assert.ok(SRC.indexOf('paintVoice();\n    paintMemory();') > 0, 'primero mi voz, después la evolución debajo');
 });
 
 const AT2 = new Date(2026, 9, 26, 14, 10).getTime();
