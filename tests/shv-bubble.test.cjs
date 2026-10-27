@@ -401,8 +401,97 @@ test('SHE-2: «Silenciar a Shiruvana» en Ajustes, y «Que Shiruvana vuelva a ap
   assert.equal(t.doc.querySelectorAll('#shvQuietBtn').length, 1, 'una sola vez');
 });
 
+// ------------------------------------------------------------------ SHE-3: los módulos me hablan por speak()
+const MSG = (key, text, kind) => ({ key, kind: kind || 'recomienda', text });
+function moduleBox(t, hidden) {
+  const sec = t.doc.body.appendChild(t.doc.createElement('section'));
+  if (hidden) sec.setAttribute('hidden', '');
+  return { sec, box: sec.appendChild(t.doc.createElement('div')) };
+}
+
+test('SHE-3: lo que recomienda un módulo va a mi globo, con su fundamento, y el módulo queda sin bloque', () => {
+  const t = load({ dom: bovedaDom });
+  const { box } = moduleBox(t);
+  assert.equal(t.B.speak(box, MSG('leg', 'Tu colección más avanzada es X.'), { module: 'logros', source: 'tus logros (API oficial)', key: 'leg|X' }), 'bubble');
+  assert.equal(box.children.length, 0, 'nada escrito en el módulo');
+  t.advance(2000);
+  assert.equal(t.B.current().module, 'logros');
+  assert.deepEqual([...t.B.current().text], ['Tu colección más avanzada es X.']);
+  assert.equal(t.box().querySelector('.shv-voice__basis').textContent, 'Lo sé por: tus logros (API oficial) · en este navegador');
+  t.click('[data-shv-bub="close"]');
+  assert.equal(t.B.speak(box, MSG('leg', 'Tu colección más avanzada es X.'), { module: 'logros', source: 's', key: 'leg|X' }), 'none', 'misma novedad: no la repito');
+  t.window._fire('hashchange');
+  assert.equal(t.B.speak(box, MSG('leg', 'Tu colección más avanzada es X.'), { module: 'logros', source: 's', key: 'leg|X' }), 'none', 'ni en otra visita');
+  assert.equal(t.B.speak(box, MSG('leg', 'Tu colección más avanzada es Y.'), { module: 'logros', source: 's', key: 'leg|Y' }), 'bubble', 'otra novedad, otra visita: sí');
+});
+
+test('SHE-3: uno por visita a cada pantalla; los avisos, lo que el módulo pide y silenciada, quedan escritos como siempre', () => {
+  const t = load({ dom: bovedaDom });
+  const { box } = moduleBox(t);
+  assert.equal(t.B.speak(box, MSG('a', 'uno'), { module: 'heredad', source: 's' }), 'bubble');
+  assert.equal(t.B.speak(box, MSG('b', 'dos'), { module: 'heredad', source: 's' }), 'none', 'marcar un nodo no me hace aparecer de nuevo');
+  assert.equal(t.B.speak(box, MSG('c', 'tres'), { module: 'raids', source: 's' }), 'bubble', 'cada pantalla tiene su turno');
+  const w = t.B.speak(box, MSG('ready', 'Tenés 2 objetivos listos.', 'advierte'), { module: 'camara', source: 's' });
+  assert.equal(w, 'inline');
+  assert.equal(box.children.length, 1);
+  assert.equal(box.children[0].className.includes('shv-voice--advierte'), true);
+  const box2 = moduleBox(t).box;
+  assert.equal(t.B.speak(box2, MSG('perm:1', 'A la Key le faltan permisos'), { module: 'cuentas', source: 's', keep: (m) => /^perm:/.test(m.key) }), 'inline');
+  assert.equal(box2.children.length, 1);
+  t.B.quiet(true);
+  const box3 = moduleBox(t).box;
+  assert.equal(t.B.speak(box3, MSG('z', 'zeta'), { module: 'inventario', source: 's' }), 'inline', 'silenciada te hablo adentro');
+  assert.equal(box3.children[0].querySelector('.shv-voice__body').children[0].textContent, 'zeta');
+  assert.equal(t.B.speak(null, MSG('z', 'z'), {}), 'none');
+  assert.equal(t.B.speak(box3, null, {}), 'none');
+});
+
+test('SHE-3: si el módulo se dibujó oculto, salgo cuando abrís esa pantalla (y solo la última versión)', () => {
+  const t = load({ dom: bovedaDom });
+  const { sec, box } = moduleBox(t, true);
+  assert.equal(t.B.speak(box, MSG('a', 'vieja'), { module: 'logros', source: 's' }), 'later');
+  assert.equal(t.B.speak(box, MSG('b', 'nueva'), { module: 'logros', source: 's' }), 'later');
+  t.advance(5000);
+  assert.equal(t.box(), null, 'oculto no aparezco');
+  t.window._fire('hashchange');
+  t.advance(5000);
+  assert.equal(t.box(), null, 'cambiaste a otra pantalla, no a esta: sigo esperando');
+  sec.removeAttribute('hidden');
+  t.window._fire('hashchange');
+  t.advance(2399);
+  assert.equal(t.B.current(), null, 'espero a que la pantalla se arme y 2 segundos');
+  t.advance(1);
+  assert.deepEqual([...t.B.current().text], ['nueva']);
+  t.window._fire('hashchange');
+  t.advance(5000);
+  assert.equal(t.box(), null, 'lo que esperaba ya salió: no vuelve');
+  const lost = t.doc.createElement('div');
+  assert.equal(t.B.speak(lost, MSG('c', 'suelta'), { module: 'raids', source: 's' }), 'later', 'fuera de la página tampoco');
+});
+
+test('SHE-3: lo que esperaba sale una sola vez, y si la pantalla ya habló con lo nuevo, lo viejo se olvida', () => {
+  const t = load({ dom: bovedaDom });
+  const a = moduleBox(t, true);
+  t.B.speak(a.box, MSG('a', 'pendiente'), { module: 'logros', source: 's' });
+  a.sec.removeAttribute('hidden');
+  t.window._fire('hashchange');
+  t.advance(400);
+  t.window._fire('hashchange'); // te fuiste antes de que saliera
+  t.advance(5000);
+  assert.equal(t.box(), null, 'no la vuelvo a ofrecer en la pantalla siguiente');
+  const b = moduleBox(t, true);
+  t.B.speak(b.box, MSG('v', 'vieja'), { module: 'raids', source: 's' });
+  b.sec.removeAttribute('hidden');
+  assert.equal(t.B.speak(b.box, MSG('n', 'nueva'), { module: 'raids', source: 's' }), 'bubble');
+  t.advance(2000);
+  t.click('[data-shv-bub="close"]');
+  t.window._fire('hashchange');
+  t.advance(5000);
+  assert.equal(t.box(), null, 'la vieja no aparece después');
+});
+
 test('versión, reglas de la casa y el orden de carga', () => {
-  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.match(SRC, /Versión: 1\.2\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   const css = SRC.match(/var CSS = \[([\s\S]*?)\]\.join/)[1];

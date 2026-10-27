@@ -1,6 +1,10 @@
 /*!
  * js/shv-bubble.js — Shiruvana que aparece: mi globo (BL-075 SHE-1, DEC-038)
- * Versión: 1.1.0
+ * Versión: 1.2.0
+ *
+ * 1.2.0 (SHE-3): speak(box, msg, meta): los módulos me pasan su mensaje de siempre y yo decido dónde va.
+ *   Los avisos (advierte) y lo que el módulo pide dejar escrito quedan en el módulo; lo demás va a mi globo,
+ *   uno por visita a cada pantalla. Si la pantalla se dibujó oculta, espero a que la abras.
  *
  * 1.1.0 (SHE-2): me conecto. El globo sale de mi rincón (js/shiruvana-places.js, pie de la Sidebar); en el celular,
  *   sobre la barra de abajo, y el punto va en «Más». Lo que no leíste: punto en mi rincón y el botón «Te dejé un
@@ -22,9 +26,9 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var SEEN_KEY = 'gn:shv:seen', QUIET_KEY = 'gn:shv:quiet';
-  var DELAY = 2000, TTL = 12000, RETRY = 3000, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
+  var DELAY = 2000, TTL = 12000, RETRY = 3000, RETRY_ROUTE = 400, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
   var ID = 'shvBubble', LIVE_ID = 'shvBubbleLive', STYLE_ID = 'shv-bubble-css';
   var CSS = [
     '#' + ID + '{position:fixed;z-index:900;left:16px;bottom:16px;width:min(380px,calc(100vw - 32px));',
@@ -51,7 +55,7 @@
   ].join('');
 
   var doc = root.document;
-  var st = { queue: [], cur: null, timer: null, deadline: 0, left: TTL, unread: [], anchor: null, inited: false, ls: null };
+  var st = { queue: [], cur: null, timer: null, deadline: 0, left: TTL, unread: [], anchor: null, inited: false, ls: null, spoke: {}, pending: {} };
 
   // ------------------------------------------------------------------ puro
   /**
@@ -314,7 +318,53 @@
   // Cambiar de pantalla: lo que esperaba era de la otra; lo que estaba a la vista queda en el punto.
   function onRoute() {
     st.queue = [];
+    st.spoke = {};
     if (st.cur) close('later');
+    if (Object.keys(st.pending).length) root.setTimeout(retry, RETRY_ROUTE);
+  }
+
+  // ------------------------------------------------------------------ SHE-3: los módulos me hablan por acá
+  var INLINE = { advierte: true }; // DEC-038 D3: los avisos quedan escritos en el módulo
+  function visible(n) {
+    if (!n || !doc || (doc.body && doc.body.contains && !doc.body.contains(n))) return false;
+    return !!shown(n) && (typeof n.getClientRects !== 'function' || n.getClientRects().length > 0);
+  }
+  function say(obs) {
+    if (st.spoke[obs.module] || !offer(obs)) return false; // offer() ya descarta lo que viste
+    st.spoke[obs.module] = true; // uno por visita a cada pantalla
+    return true;
+  }
+  // Lo que un módulo dibujó mientras estaba oculto sale cuando lo abrís.
+  function retry() {
+    Object.keys(st.pending).forEach(function (m) {
+      var p = st.pending[m];
+      if (!visible(p.box)) return;
+      delete st.pending[m];
+      say(p.obs);
+    });
+  }
+  /**
+   * Un módulo me pasa su mensaje de siempre ({kind, text, key}) y el lugar donde lo escribía (box, ya vacío).
+   * meta: {module, source (de dónde lo sé), key (qué lo hace la misma novedad), keep(msg) (lo dejo escrito)}.
+   * Avisos, lo que el módulo pide dejar escrito o si me silenciaste: lo escribo en box como siempre ('inline').
+   * Lo demás va a mi globo, una vez por novedad y uno por visita a esa pantalla ('bubble'); si ya lo viste,
+   * no lo repito ('none'); si la pantalla todavía no se ve, espero a que la abras ('later').
+   */
+  function speak(box, msg, meta) {
+    meta = meta || {};
+    if (!box || !msg || !msg.text) return 'none';
+    var S = root.Shiruvana, text = [].concat(msg.text).map(String);
+    if (isQuiet() || INLINE[msg.kind] || (typeof meta.keep === 'function' && meta.keep(msg))) {
+      if (S && typeof S.voice === 'function') box.appendChild(S.voice({ kind: msg.kind, text: msg.text }));
+      return 'inline';
+    }
+    var mod = String(meta.module || 'boveda');
+    var obs = { module: mod, id: String(msg.key || 'voz'), priority: 'media', kind: msg.kind, text: text,
+      basis: { source: String(meta.source || 'lo que ves en esta pantalla'), at: null },
+      key: String(meta.key != null ? meta.key : (msg.key ? msg.key + '|' : '') + text.join(' ')) };
+    delete st.pending[mod];
+    if (!visible(box)) { st.pending[mod] = { box: box, obs: obs }; return 'later'; }
+    return say(obs) ? 'bubble' : 'none';
   }
 
   // ------------------------------------------------------------------ Ajustes: silenciarme
@@ -380,7 +430,7 @@
   root.ShvBubble = {
     version: VERSION, SEEN_KEY: SEEN_KEY, QUIET_KEY: QUIET_KEY, DELAY: DELAY, TTL: TTL, ID: ID, CSS: CSS,
     offer: offer, reopen: reopen, close: function () { return close('read'); }, quiet: quiet, setAnchor: setAnchor,
-    seen: seenObs, wire: wire,
+    seen: seenObs, wire: wire, speak: speak,
     unread: function () { return st.unread.length; }, current: function () { return st.cur; },
     _pure: { sig: sig, prune: prune }, _setStorage: function (L) { st.ls = L; }
   };
