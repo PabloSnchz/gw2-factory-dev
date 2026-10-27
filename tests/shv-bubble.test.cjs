@@ -502,8 +502,23 @@ test('1.2.1: la caja vacía se oculta con :empty (no tiene cajas): miro a su pad
   assert.equal(t.B.speak(other.box, MSG('b', 'oculto'), { module: 'raids', source: 's' }), 'later');
 });
 
+test('1.3.0: cuántos mensajes viste y borrarlos (solo gn:shv:seen; el silencio queda)', () => {
+  const t = load();
+  assert.equal(t.B.seenCount(), 0);
+  t.B.offer(OBS(1)); t.advance(2000); t.click('[data-shv-bub="close"]');
+  t.B.offer(OBS(2)); t.advance(4000); t.click('[data-shv-bub="close"]');
+  assert.equal(t.B.seenCount(), 2);
+  t.B.quiet(true);
+  assert.deepEqual(JSON.parse(JSON.stringify(t.B.forgetSeen())), { ok: true, seen: 2 });
+  assert.equal(t.ls.getItem('gn:shv:seen'), null);
+  assert.equal(t.B.seenCount(), 0);
+  assert.equal(t.ls.getItem('gn:shv:quiet'), 'true', 'silenciar es una preferencia, no un recuerdo');
+  t.B.quiet(false);
+  assert.equal(t.B.offer(OBS(1)), true, 'lo que ya viste vuelve a ser nuevo');
+});
+
 test('versión, reglas de la casa y el orden de carga', () => {
-  assert.match(SRC, /Versión: 1\.2\.1/);
+  assert.match(SRC, /Versión: 1\.3\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   const css = SRC.match(/var CSS = \[([\s\S]*?)\]\.join/)[1];

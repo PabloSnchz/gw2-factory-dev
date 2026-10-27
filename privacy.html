@@ -90,7 +90,7 @@
       <tr><td>Inicio</td><td>El último módulo que abriste, cuántas veces abriste cada uno, la fecha de tu última copia y si ya viste la bienvenida. Solo nombres de módulo y fechas.</td><td><code>gn:global:welcome</code>, <code>gn:global:welcome_seen</code></td></tr>
       <tr><td>Cartera</td><td>Las divisas que fijaste, si ocultás las que están en 0 y las columnas y el orden de «Todas las cuentas».</td><td><code>gn:wallet:pins</code>, <code>gn:wallet:hidezero</code>, <code>gn:wallet:dashboard:selected_currencies</code>, <code>gn:wallet:dashboard:sort</code></td></tr>
       <tr><td>Cartera: mi memoria (Shiruvana)</td><td>Una foto por día y por cuenta de tu oro, karma, gemas, Monedas de Laurel, Aclamación astral y las divisas que fijaste, durante 90 días, para mostrarte cómo evolucionan. Cada cuenta se reconoce por una huella que no es la Key. Ocupa como mucho 64 KB.</td><td><code>gn:shv:wallet</code></td></tr>
-      <tr><td>Shiruvana: sus mensajes</td><td>Qué mensajes de Shiruvana ya viste, para no repetírtelos: solo una huella de 8 caracteres por mensaje, nunca el texto (como mucho 200, durante 60 días). Y si la silenciaste en Ajustes.</td><td><code>gn:shv:seen</code>, <code>gn:shv:quiet</code></td></tr>
+      <tr><td>Shiruvana: sus mensajes</td><td>Qué mensajes de Shiruvana ya viste, para no repetírtelos: solo una huella de 8 caracteres por mensaje, nunca el texto (como mucho 200, durante 60 días). Y si la silenciaste en Ajustes o le pediste que deje de recordar.</td><td><code>gn:shv:seen</code>, <code>gn:shv:quiet</code>, <code>gn:shv:paused</code></td></tr>
       <tr><td>Metas y Eventos</td><td>Las metas que fijaste.</td><td><code>gn:meta:favs</code></td></tr>
       <tr><td>Cámara del Brujo</td><td>Lo que fijaste y marcaste en la Tienda, solo de la temporada actual, por cuenta: cada cuenta se reconoce por los 4 primeros y los 4 últimos caracteres de su Key, que no alcanzan para usarla. También la vista de la Tienda y la última pestaña.</td><td><code>wv:season:current</code>, <code>wv:season:index</code>, <code>gn:wv:shop:view</code>, <code>gn:wv:last_tab</code></td></tr>
       <tr><td>Actividades</td><td>La llave y las piedras de Leivas que marcaste esta semana, por cuenta, con una huella que no es la Key.</td><td><code>gn:activities:week</code></td></tr>
@@ -109,6 +109,8 @@
   <p>En la barra de arriba, <strong>Ajustes → Guardar copia de ajustes</strong> baja un archivo con tus ajustes. <strong>Incluye tus API Keys sin cifrar</strong>: guardalo como guardarías una contraseña y no lo compartas. El Llavero no va en esa copia: tiene su propio archivo cifrado.</p>
   <h3>Restaurar una copia</h3>
   <p><strong>Ajustes → Restaurar una copia</strong>. Antes de escribir nada te pregunta.</p>
+  <h3>Lo que recuerda Shiruvana</h3>
+  <p><strong>Ajustes → Lo que recuerdo de vos</strong> te muestra qué guarda Shiruvana (las fotos de tu Cartera y los mensajes que ya viste) y cuánto ocupa todo lo que la Bóveda guarda en este navegador. Desde ahí lo descargás (un archivo JSON donde cada cuenta va por su huella, nunca la Key), le pedís que deje de recordar o lo borrás. Borrar te pregunta antes y no toca «Silenciar» ni la pausa.</p>
   <h3>Liberar la caché</h3>
   <p><strong>Ajustes → Liberar la caché de la API</strong> borra lo que la Bóveda guardó de la API para no pedirlo de nuevo. Tus Keys, marcas y ajustes quedan.</p>
   <h3>Borrar todo</h3>

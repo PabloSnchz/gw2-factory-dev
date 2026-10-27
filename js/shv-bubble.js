@@ -1,6 +1,9 @@
 /*!
  * js/shv-bubble.js — Shiruvana que aparece: mi globo (BL-075 SHE-1, DEC-038)
- * Versión: 1.2.1
+ * Versión: 1.3.0
+ *
+ * 1.3.0 (SHV-4b): seenCount() y forgetSeen() para «Lo que recuerdo de vos» (js/shv-recall.js): cuántos
+ *   mensajes ya viste y borrarlos. Solo borra gn:shv:seen: «Silenciar» es una preferencia tuya, no un recuerdo.
  *
  * 1.2.1: aparezco en los módulos. Para saber si su pantalla se ve miraba la caja de mi voz, que los módulos
  *   ocultan cuando está vacía (y con el globo queda vacía): todo quedaba esperando. Ahora miro a su padre.
@@ -29,7 +32,7 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.2.1';
+  var VERSION = '1.3.0';
   var SEEN_KEY = 'gn:shv:seen', QUIET_KEY = 'gn:shv:quiet';
   var DELAY = 2000, TTL = 12000, RETRY = 3000, RETRY_ROUTE = 400, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
   var ID = 'shvBubble', LIVE_ID = 'shvBubbleLive', STYLE_ID = 'shv-bubble-css';
@@ -90,6 +93,14 @@
     try { ls().setItem(SEEN_KEY, JSON.stringify({ v: 1, s: prune(map, Date.now()) })); } catch (_) {}
   }
   function seen(o) { return Object.prototype.hasOwnProperty.call(readSeen(), sig(o)); }
+  /** SHV-4b: cuántos mensajes ya viste. */
+  function seenCount() { return Object.keys(readSeen()).length; }
+  /** SHV-4b: olvido qué viste (te vuelvo a contar lo que ya te conté). No toca el silencio. */
+  function forgetSeen() {
+    var n = seenCount();
+    try { ls().removeItem(SEEN_KEY); } catch (_) { return { ok: false, seen: n }; }
+    return { ok: true, seen: n };
+  }
   function quiet(v) {
     if (typeof v === 'boolean') {
       try { if (v) ls().setItem(QUIET_KEY, 'true'); else ls().removeItem(QUIET_KEY); } catch (_) {}
@@ -436,7 +447,7 @@
   root.ShvBubble = {
     version: VERSION, SEEN_KEY: SEEN_KEY, QUIET_KEY: QUIET_KEY, DELAY: DELAY, TTL: TTL, ID: ID, CSS: CSS,
     offer: offer, reopen: reopen, close: function () { return close('read'); }, quiet: quiet, setAnchor: setAnchor,
-    seen: seenObs, wire: wire, speak: speak,
+    seen: seenObs, wire: wire, speak: speak, seenCount: seenCount, forgetSeen: forgetSeen,
     unread: function () { return st.unread.length; }, current: function () { return st.cur; },
     _pure: { sig: sig, prune: prune }, _setStorage: function (L) { st.ls = L; }
   };
