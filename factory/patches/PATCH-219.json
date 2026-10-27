@@ -1,0 +1,185 @@
+{
+ "id": "PATCH-219",
+ "summary": "BL-076 SHV-5d: Cámara 1.3.0, Metas 2.2.0 y Conversor 2.2.0 dicen «Lo sé por»; guardián en 0 pendientes: toda mi voz dice de dónde lo sé.",
+ "files": [
+  {
+   "path": "js/wv-view.js",
+   "base_sha": "df6ce61c73329a4e911af7e2548264bc2daa2b0a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-24)",
+     "text": " * Versión: 1.3.0 (2026-10-27) — BL-076 SHV-5d: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-24)"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.2.0';",
+     "text": "var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text })); // SHE-3",
+     "text": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: 'tu Cámara del Brujo (API oficial) · en este navegador' })); // SHE-3"
+    }
+   ]
+  },
+  {
+   "path": "tests/wv-view.test.cjs",
+   "base_sha": "69029f028779d092c43868af037e67d4c81a0d31",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 1.2.0, la misma que pide js/modules.json'",
+     "text": "test('versión 1.3.0, la misma que pide js/modules.json'"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);",
+     "text": "assert.match(SRC, /\\* Versión: 1\\.3\\.0 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "[{ src: 'js/wv-view.js', v: '1.2.0' }]",
+     "text": "[{ src: 'js/wv-view.js', v: '1.3.0' }]"
+    }
+   ]
+  },
+  {
+   "path": "js/meta-theme.js",
+   "base_sha": "37a298150527dca0a139b0da92fce8ba8a69027a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.1.0 (2026-10-23)\n",
+     "text": " * v2.2.0 (2026-10-27)\n *\n * v2.2.0 (BL-076 SHV-5d): mi voz dice «Lo sé por»: el horario de metas y, solo si la API respondió, lo que\n *   hiciste hoy. El botón del waypoint va antes de esa línea, así «Lo sé por» queda al final.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.1.0';",
+     "text": "var VERSION = '2.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // Mi mensaje: el componente oficial (Shiruvana.voice)",
+     "text": "  // SHV-5d: de dónde lo sé. Lo de tu día solo si la API respondió; los horarios son los del juego.\n  function basisOf() {\n    return (todayStats(S.snap).state === 'ok' ? 'el horario de metas y lo que hiciste hoy (API oficial)' : 'el horario de metas del juego') + ' · en este navegador';\n  }\n  // Mi mensaje: el componente oficial (Shiruvana.voice)"
+    },
+    {
+     "op": "replace",
+     "anchor": "var el = root.Shiruvana.voice({ kind: m.kind, text: '' });",
+     "text": "var el = root.Shiruvana.voice({ kind: m.kind, text: '', basis: basisOf() });"
+    },
+    {
+     "op": "replace",
+     "anchor": "var main = el.querySelector && el.querySelector('.shv-voice__main'); (main || el).appendChild(btn);",
+     "text": "var main = el.querySelector && el.querySelector('.shv-voice__main'), bs = el.querySelector && el.querySelector('.shv-voice__basis');\n      if (bs && bs.parentNode && bs.parentNode.insertBefore) bs.parentNode.insertBefore(btn, bs); else (main || el).appendChild(btn);"
+    }
+   ]
+  },
+  {
+   "path": "tests/meta-header.test.cjs",
+   "base_sha": "58978c576a7368a4f5833a94ff309f76784549d0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.1.0 y API pública'",
+     "text": "test('versión 2.2.0 y API pública'"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.equal(MT.version, '2.1.0');",
+     "text": "assert.equal(MT.version, '2.2.0');"
+    }
+   ]
+  },
+  {
+   "path": "js/converter-modal.js",
+   "base_sha": "0ebadd56a642ff5b137d266377664fc35c0a7e75",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.1.0 (2026-10-26)",
+     "text": " * Versión: 2.2.0 (2026-10-27)"
+    },
+    {
+     "op": "replace",
+     "anchor": " * v2.1.0 (BL-074, BLS-3):",
+     "text": " * v2.2.0 (BL-076, SHV-5d): mi consejo dice «Lo sé por».\n * v2.1.0 (BL-074, BLS-3):"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.1.0';",
+     "text": "var VERSION = '2.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "voiceHost.appendChild(root.Shiruvana.voice({ kind: a.kind, text: a.text }));",
+     "text": "voiceHost.appendChild(root.Shiruvana.voice({ kind: a.kind, text: a.text, basis: 'el cambio de gemas (API oficial) · en este navegador' }));"
+    }
+   ]
+  },
+  {
+   "path": "tests/converter-view.test.cjs",
+   "base_sha": "eb9f46d430f5ff4dc176906e1b3b8e6cbafc1e12",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.1.0, el header la declara",
+     "text": "test('versión 2.2.0, el header la declara"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.equal(CM.version, '2.1.0');",
+     "text": "assert.equal(CM.version, '2.2.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /Versión: 2\\.1\\.0/);",
+     "text": "assert.match(SRC, /Versión: 2\\.2\\.0/);"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "f518aa2f80e3747a20b120f6fedb3ec23b8edb99",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/converter-modal.js?v=2.1.0",
+     "text": "js/converter-modal.js?v=2.2.0"
+    },
+    {
+     "op": "replace",
+     "anchor": "js/meta-theme.js?v=2.1.0",
+     "text": "js/meta-theme.js?v=2.2.0"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "4d9135c3441e1835b1b9f648c15bbf02521a546e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/wv-view.js\", \"v\": \"1.2.0\" }",
+     "text": "{ \"src\": \"js/wv-view.js\", \"v\": \"1.3.0\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-basis.test.cjs",
+   "base_sha": "4f6b55bbc72d82702082188051fa02da9b812dcf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const PENDIENTES = [\n  'converter-modal.js', 'meta-theme.js', 'wv-view.js'\n];",
+     "text": "const PENDIENTES = [];"
+    },
+    {
+     "op": "replace",
+     "anchor": "· SHV-5d: Cámara, Metas y el Conversor.",
+     "text": "· SHV-5d (hecho): Cámara, Metas y el Conversor. Desde acá, nadie habla sin decir de dónde lo sabe."
+    }
+   ]
+  }
+ ]
+}
