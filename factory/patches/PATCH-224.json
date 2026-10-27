@@ -1,0 +1,52 @@
+{
+ "id": "PATCH-224",
+ "summary": "BL-076 cerrada con la validación de Pablo (FEAT-023); BL-077 abierta: pasaje a PRD vía PowerShell preparado (manifiesto factory/promote/BL-077.txt).",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "6064134b1f5f7a60751be67ef82b21bc64a484cb",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-076] [ALTO] Shiruvana: «Lo sé por» en toda la Bóveda (SHV-5) — sigue a BL-059 (cerrado 2026-10-27 12:06Z por pedido de Pablo, que pidió preparar SHV-5). RUN-164 (sonda, ya borrada): hablo sin fundamento en 11 archivos (ach-view, inv-view, act-view, act-week, home-view, acc-view, wv-view, raids-view, raids-sheet, meta-theme, converter-modal; MEDIO); raids-sheet usa success/hint fuera de DEC-024 (BAJO); manifiesto 38 de 40 (sin archivos nuevos); acc-view 39.502 B y converter-modal 48.472 B, a 680 B del límite de 49.152 (MEDIO). Propuesta ENTREGADA 12:10Z (docs/propuestas/propuesta-shiruvana-shv5.html): basis en la voz que ya usa cada módulo + test guardián tests/shv-basis.test.cjs con una lista exacta que solo se achica; micro-ciclos SHV-5a a 5d; D1 a D6. Afuera: la huella 4 + 4 de la Cámara y mi memoria en «Guardar copia de ajustes» (pendientes aparte). D1 a D6 CONFIRMADAS por Pablo 12:42Z, con pedido de hacer 5a a 5d de corrido y validar al final. SHV-5a HECHO 12:51Z (PATCH-216: shv-bubble 1.4.0 pone «Lo sé por» también en la línea escrita cuando el globo está silenciado; raids-view 1.3.0 y raids-sheet 1.3.0 con basis y los tipos saluda/explica de DEC-024; guardián tests/shv-basis.test.cjs con 9 pendientes, ed275a7; RUN-166 verde). SHV-5b HECHO 12:53Z (PATCH-217: ach-view 1.4.0, inv-view 1.6.0, home-view 1.2.0; 6 pendientes). SHV-5c HECHO 12:56Z (PATCH-218: act-view 1.5.0, act-week 1.2.0; acc-view 1.3.0 con la hora real de su lectura, st.readAt por ShvCore.basisText; 40.158 B, debajo de 40 KB; 3 pendientes). SHV-5d HECHO 13:00Z (PATCH-219: wv-view 1.3.0; meta-theme 2.2.0 nombra «lo que hiciste hoy» solo si la API respondió y deja el waypoint antes de «Lo sé por»; converter-modal 2.2.0 con +124 B, 48.596 B, dentro de D4; index.html ?v=2.2.0 en los dos; 0 pendientes). Revisión (PATCH-220): el guardián también exige que las líneas fijas terminen en «en este navegador» y no tengan hora, que Cuentas use st.readAt y que Metas condicione su fuente. Hallazgos: BAJO las vistas sin hora propia dicen «en este navegador» en vez de la hora de su lectura (D3: mejor eso que inventarla); BAJO en Cuentas, con cuentas del caché, la hora es la de la lectura más nueva; MEDIO index.html mide 48.435 B (mi nota decía 41.949): está en zona de advertencia, a 717 B de los 48 KB; cualquier cambio ahí tiene que ser de igual tamaño o achicar; MEDIO converter-modal 48.596 B, a 556 B del límite. Espera la validación de Pablo; con su OK, FEAT-023 y BL-076 a DONE. · DEC-033, DEC-024, BL-059 — 2026-10-27\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-077] [ALTO] Promoción a producción de BL-074, BL-075, BL-059 y BL-076 — pedido de Pablo (2026-10-27 21:30Z: «preparemos todo para pasar a PRD vía powershell»). «Vía PowerShell» (DEC-036): comparé blob a blob DEV 1952f2e con producción 383c8f5 (HEAD; sus 3 commits posteriores a BL-073 son de Pablo en assets/previews y no cambian nada que se publique). Manifiesto factory/promote/BL-077.txt: 28 movimientos (7 JS nuevos: gn-idb y los 6 shv-*; 18 JS modificados; index.html, privacy.html y docs/user-guide-avanzado.html; 0 bajas). Igual que en BL-073 no van js/analytics.js ni assets/meta-drops.json (versión PROD); css/, assets/ y los otros 51 JS ya son iguales. Commit DEV fijo 9f21446 (app idéntica a 1952f2e). Revisión: ALTO resuelto al pasar (app.js 2.9.1 deja de imprimir la API Key en la consola, que producción 2.9.0 todavía hace); MEDIO la mudanza de cachés a IndexedDB (BL-074) corre por primera vez para cada jugador de producción, con copia antes de borrar (en el navegador de Pablo ya corrió, mismo origen); BAJO los mensajes que Pablo ya vio en DEV no vuelven en el globo de producción (gn:shv:seen compartido); MEDIO index.html 48.435 B y converter-modal 48.596 B en zona de advertencia. Rollback: el script crea rollback/pre-bl-077 = 383c8f5. Espera que Pablo corra promote.ps1. · DEC-036, BL-073, BL-074, BL-075, BL-059, BL-076 — 2026-10-27\n\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-076] [ALTO] Shiruvana: «Lo sé por» en toda la Bóveda (SHV-5) — sigue a BL-059 (cerrado 2026-10-27 12:06Z por pedido de Pablo, que pidió preparar SHV-5). RUN-164 (sonda, ya borrada): hablo sin fundamento en 11 archivos (ach-view, inv-view, act-view, act-week, home-view, acc-view, wv-view, raids-view, raids-sheet, meta-theme, converter-modal; MEDIO); raids-sheet usa success/hint fuera de DEC-024 (BAJO); manifiesto 38 de 40 (sin archivos nuevos); acc-view 39.502 B y converter-modal 48.472 B, a 680 B del límite de 49.152 (MEDIO). Propuesta ENTREGADA 12:10Z (docs/propuestas/propuesta-shiruvana-shv5.html): basis en la voz que ya usa cada módulo + test guardián tests/shv-basis.test.cjs con una lista exacta que solo se achica; micro-ciclos SHV-5a a 5d; D1 a D6. Afuera: la huella 4 + 4 de la Cámara y mi memoria en «Guardar copia de ajustes» (pendientes aparte). D1 a D6 CONFIRMADAS por Pablo 12:42Z, con pedido de hacer 5a a 5d de corrido y validar al final. SHV-5a HECHO 12:51Z (PATCH-216: shv-bubble 1.4.0 pone «Lo sé por» también en la línea escrita cuando el globo está silenciado; raids-view 1.3.0 y raids-sheet 1.3.0 con basis y los tipos saluda/explica de DEC-024; guardián tests/shv-basis.test.cjs con 9 pendientes, ed275a7; RUN-166 verde). SHV-5b HECHO 12:53Z (PATCH-217: ach-view 1.4.0, inv-view 1.6.0, home-view 1.2.0; 6 pendientes). SHV-5c HECHO 12:56Z (PATCH-218: act-view 1.5.0, act-week 1.2.0; acc-view 1.3.0 con la hora real de su lectura, st.readAt por ShvCore.basisText; 40.158 B, debajo de 40 KB; 3 pendientes). SHV-5d HECHO 13:00Z (PATCH-219: wv-view 1.3.0; meta-theme 2.2.0 nombra «lo que hiciste hoy» solo si la API respondió y deja el waypoint antes de «Lo sé por»; converter-modal 2.2.0 con +124 B, 48.596 B, dentro de D4; index.html ?v=2.2.0 en los dos; 0 pendientes). Revisión (PATCH-220): el guardián también exige que las líneas fijas terminen en «en este navegador» y no tengan hora, que Cuentas use st.readAt y que Metas condicione su fuente. Hallazgos: BAJO las vistas sin hora propia dicen «en este navegador» en vez de la hora de su lectura (D3: mejor eso que inventarla); BAJO en Cuentas, con cuentas del caché, la hora es la de la lectura más nueva; MEDIO index.html mide 48.435 B (mi nota decía 41.949): está en zona de advertencia, a 717 B de los 48 KB; cualquier cambio ahí tiene que ser de igual tamaño o achicar; MEDIO converter-modal 48.596 B, a 556 B del límite. VALIDADO por Pablo 2026-10-27 21:30Z («validado ok»): BL-076 CERRADA, FEAT-023 (ai-memory/features/FEAT-023-shiruvana-lo-se-por-en-toda-la-boveda.md). Pablo pidió en el mismo mensaje preparar el pasaje a PRD vía PowerShell: BL-077. · DEC-033, DEC-024, BL-059, FEAT-023, BL-077 — 2026-10-27\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "e007fb2806e376f92a35caf325496bcdeff9aaa3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera la validación de todo SHV-5 en DEV.",
+     "text": "Pablo VALIDÓ SHV-5 (21:30Z): BL-076 CERRADA (FEAT-023). En el mismo mensaje pidió preparar el pasaje a PRD vía PowerShell: BL-077, manifiesto factory/promote/BL-077.txt (28 movimientos) desde DEV 9f21446 sobre producción 383c8f5."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 13:05Z",
+     "text": "Última actualización: 2026-10-27 21:36Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Pablo valida SHV-5 en DEV (Firefox, Ctrl+F5). Con su OK: FEAT-023 y cierro BL-076. Si algo no le cierra, lo corrijo en un micro-ciclo.",
+     "text": "Próxima acción: Pablo corre factory/promote/promote.ps1 (BL-077) y me pasa el SHA de producción; yo controlo blob a blob, informe y lista de validación en PRD. Nada de tareas nuevas antes de cerrar BL-077."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-076] Validación: SHV-5 HECHO de punta a punta en DEV (SHV-5a a 5d, PATCH-216 a PATCH-220). Qué mirar: debajo de mi línea, «Lo sé por: …» en Logros, Inventario, Heredad, Actividades (y su semana), Cuentas (con la hora de la lectura), Cámara, Metas (el waypoint arriba de esa línea), Cambio de divisas y Raids (que ahora habla con los 4 tipos: Shiruvana / te explica). Con mi globo silenciado también.\n- [BL-076] Info: propuesta SHV-5 «Lo sé por, en toda la Bóveda» (docs/propuestas/propuesta-shiruvana-shv5.html), D1 a D6 confirmadas por Pablo 12:42Z. Recomiendo: D1 solo el fundamento en los 11 archivos que hablan sin él y los tipos de Raids; D2 dentro de la voz que ya usa cada módulo, con test guardián; D3 la hora del dato o «en este navegador», nunca inventada; D4 el Conversor solo si entra en 200 B o menos; D5 la huella de la Cámara y mi memoria en la copia de ajustes, afuera; D6 guardián y Raids primero.",
+     "text": "- [BL-077] Acción: correr el pasaje a PRD vía PowerShell: powershell -ExecutionPolicy Bypass -File promote.ps1 -DevSha 9f21446 -PrdBase 383c8f5 -Manifest factory/promote/BL-077.txt -Tarea BL-077. Esperado: 28 | 28 | 0 distintos; escribir SI; pasarme el SHA final.\n- [BL-076] Info: SHV-5 VALIDADO por Pablo 2026-10-27 21:30Z y cerrado (FEAT-023)."
+    }
+   ]
+  }
+ ]
+}
