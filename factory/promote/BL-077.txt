@@ -1,0 +1,42 @@
+# BL-077: promoción de BL-074, BL-075, BL-059 (SHV-1 a SHV-4) y BL-076 (SHV-5) a producción (gw2-wallet-ligero)
+# Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
+# Base de producción esperada: 383c8f5. Comparación blob a blob de DEV 1952f2e contra producción 383c8f5:
+#   css/, assets/ (salvo meta-drops.json), docs/user-guide.html y los otros 51 JS son idénticos: no se tocan.
+# No se tocan: js/analytics.js y assets/meta-drops.json (versión PROD), README/CHANGELOG, docs internos y docs/herramientas,
+# tests/, tools/, factory/, ai-memory/.
+# index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006).
+# Totales: 7 JS nuevos + 18 JS modificados + 3 páginas = 28 copias; 0 bajas; 28 movimientos.
+
+# JS nuevos (7)
+C js/gn-idb.js
+C js/shv-bubble.js
+C js/shv-core.js
+C js/shv-legendary.js
+C js/shv-memory.js
+C js/shv-recall.js
+C js/shv-wallet.js
+
+# JS modificados (18)
+C js/acc-vault-edit.js
+C js/acc-vault-view.js
+C js/acc-view.js
+C js/ach-view.js
+C js/act-view.js
+C js/act-week.js
+C js/api-gw2.js
+C js/app.js
+C js/converter-modal.js
+C js/home-view.js
+C js/inv-view.js
+C js/meta-theme.js
+C js/modules.json
+C js/raids-sheet.js
+C js/raids-view.js
+C js/shiruvana-places.js
+C js/shiruvana.js
+C js/wv-view.js
+
+# Páginas (3)
+C index.html
+C privacy.html
+C docs/user-guide-avanzado.html
