@@ -124,10 +124,10 @@ const fire = (x, type, attrs, ev) => {
 };
 const voices = (x) => x.calls.filter((c) => c[0] === 'voice').map((c) => c[2]);
 
-test('versión 1.3.0, la misma que pide js/modules.json, y por manifiesto', () => {
-  assert.match(SRC, /\* Versión: 1\.3\.0 /);
+test('versión 1.4.0, la misma que pide js/modules.json, y por manifiesto', () => {
+  assert.match(SRC, /\* Versión: 1\.4\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8'));
-  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.3.0' }]);
+  assert.deepEqual(m.modules.filter((x) => x.src === 'js/ach-view.js'), [{ src: 'js/ach-view.js', v: '1.4.0' }]);
   assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /ach-view\.js/, 'se carga por el manifiesto, no por index.html');
   assert.match(SRC, /readyState === 'loading'[^\n]*DOMContentLoaded', init\);\s*else if \(doc\) init\(\);/, 'arranca aunque cargue tarde');
 });

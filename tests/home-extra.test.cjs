@@ -37,7 +37,7 @@ test('archivo: presupuesto, versión, manifiesto después de home-view, fuera de
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
   assert.ok(Buffer.byteLength(HV) <= 40 * 1024);
   assert.match(SRC, /Versión: 1\.0\.0/);
-  assert.match(HV, /Versión: 1\.1\.0/);
+  assert.match(HV, /Versión: 1\.2\.0/);
   [SRC, HV].forEach((s) => {
     assert.doesNotMatch(s, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
     assert.doesNotMatch(s, /localStorage|sessionStorage/);
@@ -47,7 +47,7 @@ test('archivo: presupuesto, versión, manifiesto después de home-view, fuera de
   const i = man.findIndex((m) => m.src === 'js/home-extra.js'), h = man.findIndex((m) => m.src === 'js/home-view.js');
   assert.ok(h >= 0 && i > h);
   assert.equal(man[i].v, '1.0.0');
-  assert.equal(man[h].v, '1.1.0');
+  assert.equal(man[h].v, '1.2.0');
   assert.doesNotMatch(read('index.html'), /home-extra\.js/);
 });
 
