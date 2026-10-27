@@ -184,8 +184,8 @@ test('si hoy no tengo foto, la pido una vez por día y por cuenta a GW2Api; si y
 
 test('archivo: versión, presupuesto, sin HTML ni emojis; la clave nueva está en la privacidad', () => {
   const M = load().ShvMemory;
-  assert.equal(M.version, '1.0.0');
-  assert.match(SRC, /Versión: 1\.0\.0/);
+  assert.equal(M.version, '1.1.0');
+  assert.match(SRC, /Versión: 1\.1\.0/);
   assert.equal(M.KEY, 'gn:shv:wallet');
   assert.deepEqual(J(M.TRACK), [1, 2, 4, 3, 63]);
   assert.ok(Buffer.byteLength(SRC) < 40 * 1024);
@@ -194,4 +194,113 @@ test('archivo: versión, presupuesto, sin HTML ni emojis; la clave nueva está e
   assert.match(fs.readFileSync(path.join(ROOT, 'privacy.html'), 'utf8'), /<code>gn:shv:wallet<\/code>/);
   const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).modules.map((m) => m.src);
   assert.ok(man.indexOf('js/shv-memory.js') >= 0 && man.indexOf('js/shv-memory.js') < man.indexOf('js/shv-wallet.js'), 'la memoria antes que la voz');
+});
+
+// ------------------------------------------------------------------ SHV-4a: «Lo que recuerdo de vos»
+test('en pausa no saco fotos ni pido nada; lo que ya sé lo sigo usando; volver a recordar', async () => {
+  let asked = 0;
+  const events = [];
+  const doc = { dispatchEvent: (e) => events.push(e.detail) };
+  const w = load({ document: doc, CustomEvent: function (t, o) { this.type = t; this.detail = o.detail; },
+    GW2Api: { getAccountWallet: () => { asked++; return Promise.resolve(W(9, 9)); } } });
+  const M = w.ShvMemory;
+  const ls = fakeLS();
+  M._setStorage(ls);
+  M.record('K', W(100, 1), D(2026, 10, 25));
+  assert.equal(M.paused(), false);
+  assert.equal(M.paused(true), true);
+  assert.equal(ls.getItem('gn:shv:paused'), 'true');
+  assert.deepEqual(J(events.pop()), { paused: true });
+  assert.equal(M.paused(true), true);
+  assert.equal(events.length, 1, 'pausar dos veces avisa una sola');
+  assert.equal(M.record('K', W(200, 1), D(2026, 10, 26)), false, 'en pausa no guardo');
+  assert.equal(await M.ensureToday('J'), false);
+  assert.equal(asked, 0, 'en pausa no pido nada');
+  assert.equal(M.history(M.fingerprint('K')).length, 1, 'lo que ya sabía sigue ahí');
+  assert.equal(M.stats().paused, true);
+  assert.equal(M.paused(false), false);
+  assert.equal(ls.getItem('gn:shv:paused'), null, 'volver a recordar borra la marca, no deja «false»');
+  assert.deepEqual(J(events.pop()), { paused: false });
+  assert.equal(M.record('K', W(200, 1), D(2026, 10, 26)), true);
+  assert.equal(M.history(M.fingerprint('K')).length, 2);
+  assert.equal(M.paused('si'), false, 'solo true o false cambian algo');
+  M._setStorage(fakeLS({ 'gn:shv:paused': 'false' }));
+  assert.equal(M.paused(), false, 'solo «true» es pausa');
+});
+
+test('borrar: se van todas mis fotos y solo mi clave; la pausa queda como estaba', () => {
+  const events = [];
+  const doc = { dispatchEvent: (e) => events.push(e.detail) };
+  const M = load({ document: doc, CustomEvent: function (t, o) { this.detail = o.detail; } }).ShvMemory;
+  const ls = fakeLS({ 'gn:shv:seen': 'x', 'gn:shv:quiet': 'true', 'gn:keys': 'k' });
+  M._setStorage(ls);
+  M.record('A', W(1, 1), D(2026, 10, 25));
+  M.record('A', W(2, 1), D(2026, 10, 26));
+  M.record('B', W(3, 1), D(2026, 10, 26));
+  M.paused(true);
+  assert.deepEqual(J(M.forget()), { ok: true, snapshots: 3 });
+  assert.equal(ls.getItem('gn:shv:wallet'), null);
+  assert.deepEqual(J(events.pop()), { forgot: true });
+  assert.equal(ls.getItem('gn:shv:paused'), 'true', 'la pausa es tuya: no la toco');
+  for (const k of ['gn:shv:seen', 'gn:shv:quiet', 'gn:keys']) assert.ok(ls.getItem(k) !== null, k + ' sigue');
+  assert.equal(M.stats().accounts, 0);
+  assert.deepEqual(J(M.forget()), { ok: true, snapshots: 0 }, 'sin nada, borrar no falla');
+  const broken = fakeLS();
+  broken.removeItem = () => { throw new Error('bloqueado'); };
+  M._setStorage(broken);
+  assert.equal(M.forget().ok, false, 'si el navegador no deja, lo digo');
+});
+
+test('después de borrar, puedo volver a pedir la foto de hoy (no me quedo con «ya pregunté»)', async () => {
+  let asked = 0;
+  const M = load({ GW2Api: { getAccountWallet: () => { asked++; return Promise.resolve(W(5, 5)); } } }).ShvMemory;
+  M._setStorage(fakeLS());
+  await M.ensureToday('K');
+  M.forget();
+  assert.equal(await M.ensureToday('K'), true);
+  assert.equal(asked, 2);
+});
+
+test('lo que te llevás: cada cuenta por su huella, nunca la Key, con fecha y valores', () => {
+  const tk = 'ABCDEF12-3456-7890-ABCD-EF1234567890ABCDEF12-3456-7890-ABCD-EF1234567890';
+  const M = load().ShvMemory;
+  M._setStorage(fakeLS());
+  M.record(tk, W(1234567, 10), D(2026, 10, 25, 9, 30));
+  M.record(tk, W(2234567, 11), D(2026, 10, 26, 20, 5));
+  M.record('OTRA', W(5, 1), D(2026, 10, 26));
+  const x = J(M.exportData(D(2026, 10, 27, 10)));
+  assert.equal(x.app, 'boveda-del-gato-negro');
+  assert.equal(x.kind, 'shv-memory');
+  assert.equal(x.v, 1);
+  assert.equal(x.exportedAt, new Date(D(2026, 10, 27, 10)).toISOString());
+  assert.deepEqual(Object.keys(x.accounts), [M.fingerprint(tk), M.fingerprint('OTRA')].sort());
+  const a = x.accounts[M.fingerprint(tk)];
+  assert.deepEqual(a.map((s) => s.date), ['2026-10-25', '2026-10-26']);
+  assert.equal(a[1].at, D(2026, 10, 26, 20, 5));
+  assert.equal(a[1].values[1], 2234567);
+  assert.equal(a[1].values[2], 11);
+  assert.equal(x.names[1], 'Oro');
+  const raw = JSON.stringify(x);
+  assert.ok(!raw.includes(tk.slice(0, 8)) && !raw.includes(tk.slice(-8)) && !raw.includes('OTRA'), 'nada de la Key');
+  assert.deepEqual(J(load().ShvMemory.exportData(1).accounts), {}, 'sin fotos, la lista va vacía');
+});
+
+test('qué recuerdo: cuentas, fotos, desde y hasta, días y el tope', () => {
+  const M = load().ShvMemory;
+  M._setStorage(fakeLS());
+  const empty = J(M.stats());
+  assert.equal(empty.first, null);
+  assert.equal(empty.days, 0);
+  assert.equal(empty.cap, 64 * 1024);
+  M.record('B', W(1, 1), D(2026, 10, 26));
+  M.record('B', W(1, 1), D(2026, 10, 22));
+  M.record('A', W(1, 1), D(2026, 10, 20)); // la cuenta con la foto más vieja va última
+  const s = J(M.stats());
+  assert.equal(s.accounts, 2);
+  assert.equal(s.snapshots, 3);
+  assert.equal(s.days, 7, 'del 20 al 26');
+  assert.equal(s.first, new Date(2026, 9, 20).getTime(), 'el comienzo del primer día');
+  assert.equal(s.last, new Date(2026, 9, 26).getTime());
+  assert.equal(s.paused, false);
+  assert.ok(s.chars > 0);
 });

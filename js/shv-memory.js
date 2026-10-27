@@ -1,6 +1,9 @@
 /*!
  * js/shv-memory.js — Mi memoria de la Cartera (BL-059 SHV-2, nivel N3 de DEC-033)
- * Versión: 1.0.0
+ * Versión: 1.1.0 (2026-10-27) · SHV-4a: «Lo que recuerdo de vos». Podés pausarme (gn:shv:paused: no saco fotos ni
+ *          pido nada; lo que ya sé lo sigo usando), borrar mis fotos (forget) y llevártelas (exportData: la huella
+ *          de cada cuenta, nunca la Key). La ventana que lo muestra llega en SHV-4b (js/shv-recall.js).
+ *          1.0.0 (2026-10-27) · SHV-2.
  *
  * Una foto por día y por cuenta de tus divisas principales (oro, karma, gemas, Monedas de Laurel,
  * Aclamación astral) y de las que fijaste en la Cartera. Así puedo decir si algo subió o bajó.
@@ -16,8 +19,8 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.0.0';
-  var KEY = 'gn:shv:wallet';
+  var VERSION = '1.1.0';
+  var KEY = 'gn:shv:wallet', PAUSE_KEY = 'gn:shv:paused';
   var DAYS = 90, CAP = 64 * 1024;
   var TRACK = [1, 2, 4, 3, 63]; // oro (en cobre), karma, gemas, Monedas de Laurel, Aclamación astral
   var NAMES = { 1: 'Oro', 2: 'Karma', 4: 'Gemas', 3: 'Monedas de Laurel', 63: 'Aclamación astral' };
@@ -149,16 +152,51 @@
     return out;
   }
 
-  function emit(fp) {
+  function emit(detail) {
     var doc = root.document;
     if (!doc || typeof root.CustomEvent !== 'function') return;
-    try { doc.dispatchEvent(new root.CustomEvent('gn:shv-memory', { detail: { fp: fp } })); } catch (_) {}
+    try { doc.dispatchEvent(new root.CustomEvent('gn:shv-memory', { detail: typeof detail === 'object' ? detail : { fp: detail } })); } catch (_) {}
   }
 
-  /** Guarda la foto de hoy de la cuenta de esa Key. */
+  // ------------------------------------------------------------------ SHV-4a: pausa, borrar y llevártelo
+  function isPaused() { try { return !!ls() && ls().getItem(PAUSE_KEY) === 'true'; } catch (_) { return false; } }
+  /** Sin argumento: ¿estoy en pausa? Con true/false: me pausás o me volvés a dejar recordar. */
+  function paused(v) {
+    if (typeof v === 'boolean' && v !== isPaused()) {
+      try { if (v) ls().setItem(PAUSE_KEY, 'true'); else ls().removeItem(PAUSE_KEY); } catch (_) { return isPaused(); }
+      emit({ paused: v });
+    }
+    return isPaused();
+  }
+  /** Borra todas mis fotos de la Cartera (no toca la pausa ni ninguna otra clave). Dice cuántas borró. */
+  function forget() {
+    var s = read(), n = 0;
+    Object.keys(s.a).forEach(function (fp) { n += Object.keys(s.a[fp].d).length; });
+    var L = ls();
+    try { if (L) L.removeItem(KEY); } catch (_) { return { ok: false, snapshots: n }; }
+    st.asked = {};
+    emit({ forgot: true });
+    return { ok: true, snapshots: n };
+  }
+  function iso(ts) {
+    var d = new Date(ts);
+    return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+  }
+  /** Lo que te llevás: cada cuenta por su huella (nunca la Key) con sus fotos, de la más vieja a la más nueva. */
+  function exportData(at) {
+    var s = read(), now = typeof at === 'number' ? at : Date.now(), accounts = {};
+    Object.keys(s.a).sort().forEach(function (fp) {
+      accounts[fp] = history(s, fp).map(function (x) { return { date: iso(x.at), at: x.at, values: x.values }; });
+    });
+    return { app: 'boveda-del-gato-negro', kind: 'shv-memory', v: 1, exportedAt: new Date(now).toISOString(),
+      note: 'Fotos diarias de tu Cartera que guarda Shiruvana. Cada cuenta va por una huella de 8 caracteres de su Key, nunca la Key. El oro (1) va en cobre.',
+      names: NAMES, accounts: accounts };
+  }
+
+  /** Guarda la foto de hoy de la cuenta de esa Key (en pausa, no). */
   function record(token, list, at) {
     var fp = fingerprint(token);
-    if (!fp || !Array.isArray(list)) return false;
+    if (!fp || !Array.isArray(list) || isPaused()) return false;
     var now = typeof at === 'number' ? at : Date.now(), store = read();
     if (!addSnapshot(store, fp, list, now, pinnedIds())) return true;
     var ok = write(store, now);
@@ -174,7 +212,7 @@
   /** Si hoy no tengo foto de esta cuenta, la pido una vez (GW2Api usa su caché). */
   function ensureToday(token) {
     var fp = fingerprint(token), A = root.GW2Api, k = fp + ':' + dayOf(Date.now());
-    if (!fp || st.asked[k] || hasToday(fp) || !A || typeof A.getAccountWallet !== 'function') return Promise.resolve(false);
+    if (!fp || isPaused() || st.asked[k] || hasToday(fp) || !A || typeof A.getAccountWallet !== 'function') return Promise.resolve(false);
     st.asked[k] = true;
     return Promise.resolve().then(function () { return A.getAccountWallet(token, { nocache: false }); })
       .then(function (list) { return record(token, list); }, function () { return false; });
@@ -207,11 +245,17 @@
     Object.keys(s.a).forEach(function (fp) { days += Object.keys(s.a[fp].d).length; });
     var chars = 0;
     try { chars = (ls() && (ls().getItem(KEY) || '').length) || 0; } catch (_) {}
-    return { accounts: Object.keys(s.a).length, snapshots: days, chars: chars };
+    var first = null, last = null;
+    Object.keys(s.a).forEach(function (fp) {
+      Object.keys(s.a[fp].d).forEach(function (k) { k = Number(k); if (first === null || k < first) first = k; if (last === null || k > last) last = k; });
+    });
+    return { accounts: Object.keys(s.a).length, snapshots: days, chars: chars, cap: CAP, paused: isPaused(),
+      first: first === null ? null : tsOf(first, 0), last: last === null ? null : tsOf(last, 0),
+      days: first === null ? 0 : last - first + 1 };
   }
 
   root.ShvMemory = {
-    version: VERSION, KEY: KEY, DAYS: DAYS, CAP: CAP, TRACK: TRACK.slice(), NAMES: NAMES,
+    version: VERSION, KEY: KEY, PAUSE_KEY: PAUSE_KEY, paused: paused, forget: forget, exportData: exportData, DAYS: DAYS, CAP: CAP, TRACK: TRACK.slice(), NAMES: NAMES,
     fingerprint: fingerprint, record: record, ensureToday: ensureToday, hookFetch: hookFetch, stats: stats,
     history: function (fp) { return history(read(), fp); },
     summary: function (fp, n, now, names) { return summary(read(), fp, n, typeof now === 'number' ? now : Date.now(), names); },
