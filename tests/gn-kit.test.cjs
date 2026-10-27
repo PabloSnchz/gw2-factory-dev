@@ -23,9 +23,11 @@ const K = load();
 const P = K._pure;
 const T = (s) => Date.parse(s);
 
-test('1.0.0 inerte: fuera de js/modules.json y de index.html, dentro de 40 KB, sin pedidos ni almacenamiento', () => {
-  assert.match(SRC, /\* Versión: 1\.0\.0 /);
-  assert.doesNotMatch(read('js/modules.json'), /gn-kit\.js/);
+test('1.0.1: lo carga js/modules.json antes de Raids (no index.html), dentro de 40 KB, sin pedidos ni almacenamiento', () => {
+  assert.match(SRC, /\* Versión: 1\.0\.1 /);
+  const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
+  assert.ok(man.includes('js/gn-kit.js'), 'está en el manifiesto');
+  assert.ok(man.indexOf('js/gn-kit.js') < man.indexOf('js/raids-view.js'), 'antes de quien lo usa');
   assert.doesNotMatch(read('index.html'), /gn-kit\.js/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|fetch\(|XMLHttpRequest/);

@@ -1,7 +1,8 @@
 /*!
  * js/gn-kit.js — Piezas comunes de la Bóveda: el reloj y los íconos (BL-078, UNI-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.0 (2026-10-27) — inerte: todavía no lo carga js/modules.json ni lo usa ningún módulo (UNI-2 en adelante).
+ * Versión: 1.0.1 (2026-10-27) — UNI-2: lo carga js/modules.json antes de quien lo usa; lo usan Metas (meta-theme.js 2.3.0) y Raids
+ *   (raids-view.js 1.4.0). · antes 1.0.0 (2026-10-27) — inerte.
  *
  * Propuesta UNI-0 aprobada por Pablo (2026-10-27 22:53Z, D1 a D6 como recomendé):
  *  - El reloj común (D1, opción C): nace del de Metas. Ícono del juego, el nombre arriba y el valor abajo, y dorado
@@ -15,7 +16,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var DIR = 'assets/icons/';
   var MIN = 60000, HOUR = 3600000, DAY = 86400000;
 

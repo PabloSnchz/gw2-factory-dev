@@ -155,6 +155,19 @@ test('vista: íconos oficiales, estados honestos, pestañas accesibles y botón 
   assert.match(P.subtitle(P.buildModel(CAT, { hasToken: false, loaded: true }, {})), /Cargá tu API Key/);
 });
 
+test('UNI-2: con GNKit la cabecera muestra solo el reset semanal con el reloj común', () => {
+  const sb = { console: { info() {}, warn() {} } };
+  sb.window = sb;
+  vm.createContext(sb);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'js', 'gn-kit.js'), 'utf8'), sb, { filename: 'gn-kit.js' });
+  vm.runInContext(SRC, sb, { filename: 'raids-view.js' });
+  const Q = sb.RaidsView._pure;
+  const h = Q.viewHTML(Q.buildModel(CAT, sample(), {}), MON);
+  assert.match(h, /<span id="rvClock" class="rv-clock"><span class="gk" data-gk="weekly" title="Los lunes a las 07:30 UTC">/);
+  assert.match(h, /<small>Reset semanal<\/small><b>en 6 d 19 h<\/b>/);
+  assert.doesNotMatch(h, /class="rv-pill[ "]|Servidor|>Local</, 'Raids ya no muestra hora local ni servidor (D2)');
+});
+
 test('el CSS solo oculta lo viejo cuando la vista está activa y respeta movimiento reducido y 44 px', () => {
   assert.match(P.CSS, /#raidTrackerPanel\.rv-on>\.panel__title,#raidTrackerPanel\.rv-on>\.panel__body\{display:none!important\}/);
   assert.match(P.CSS, /prefers-reduced-motion:reduce/);

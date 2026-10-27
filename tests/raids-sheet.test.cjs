@@ -45,7 +45,7 @@ test('el archivo entra en el presupuesto y se carga por el manifiesto después d
   const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).modules;
   const src = man.map((m) => m.src);
   assert.ok(src.indexOf('js/raids-sheet.js') > src.indexOf('js/raids-view.js'), 'la ficha va después de la vista');
-  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.3.0');
+  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.4.0');
   // index-versions lee «Versión: X» de la cabecera: tiene que coincidir con el manifiesto y con VERSION.
   const head = /Versi[oó]n:\s*(\d+\.\d+\.\d+)/.exec(SRC.slice(0, 3000));
   assert.ok(head, 'raids-sheet.js declara «Versión:» en la cabecera');

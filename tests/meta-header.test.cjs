@@ -30,8 +30,8 @@ function row(id, o) { return Object.assign({ id, name: id, type: 'meta', chat: '
 const tracked19 = (done) => Array.from({ length: 19 }, (_, i) => row('t' + i, { type: i < 13 ? 'worldboss' : 'meta', tracked: true, done: i < done }));
 const untracked = (n) => Array.from({ length: n }, (_, i) => row('u' + i));
 
-test('versión 2.2.0 y API pública', () => {
-  assert.equal(MT.version, '2.2.0');
+test('versión 2.3.0 y API pública', () => {
+  assert.equal(MT.version, '2.3.0');
   assert.equal(typeof MT.refresh, 'function');
   for (const k of ['countdown', 'minsText', 'nextDailyReset', 'nextWeeklyReset', 'headerData', 'todayStats', 'todayView', 'whyText', 'pickVoice', 'headHTML']) assert.equal(typeof P[k], 'function', k);
 });
@@ -145,6 +145,29 @@ test('cabecera: los cuatro botones, «Hoy en tu cuenta» con barra, Actualizar y
   assert.doesNotMatch(h, /style="/, 'sin estilos en línea');
   assert.doesNotMatch(h, /https?:\/\//, 'íconos de La Bóveda, no de internet');
   for (const icon of (h.match(/assets\/icons\/[^"]+/g) || [])) assert.ok(fs.existsSync(path.join(ROOT, icon)), 'existe ' + icon);
+});
+
+test('UNI-2: con GNKit los cuatro botones pasan a ser el reloj común grande, una sola vez', () => {
+  const noop = () => {};
+  const document = { readyState: 'complete', hidden: false, head: { appendChild: noop }, documentElement: { appendChild: noop },
+    getElementById: () => null, querySelector: () => null, createElement: () => ({ style: {} }), addEventListener: noop };
+  const window = { document, addEventListener: noop };
+  vm.runInNewContext(SRC, { window, document, console, setInterval, clearInterval, setTimeout, clearTimeout });
+  const U = window.MetaTheme._pure.useKit;
+  assert.equal(U({ querySelector: () => null }), false, 'sin GNKit quedan los botones de siempre');
+  const kw = { console: { info: noop }, document: { getElementById: () => null, createElement: () => ({}), head: { appendChild: noop }, querySelectorAll: () => [] } };
+  kw.window = kw;
+  vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'js/gn-kit.js'), 'utf8'), kw);
+  window.GNKit = kw.GNKit;
+  const box = { innerHTML: '' };
+  let has = false;
+  const head = { querySelector: (s) => (s === '[data-gk]' ? (has ? {} : null) : s === '.mh-pills' ? box : null) };
+  assert.equal(U(head), true);
+  for (const k of ['local', 'server', 'daily', 'weekly']) assert.match(box.innerHTML, new RegExp('class="gk gk--big[^"]*" data-gk="' + k + '"'), k);
+  assert.doesNotMatch(box.innerHTML, /data-gk="psna"/, 'Metas no muestra el PSNA');
+  has = true; box.innerHTML = 'x';
+  assert.equal(U(head), true);
+  assert.equal(box.innerHTML, 'x', 'una sola vez: no se redibuja');
 });
 
 test('código: sin la 1.x, mi voz por Shiruvana.voice y mis textos como texto (nunca HTML)', () => {

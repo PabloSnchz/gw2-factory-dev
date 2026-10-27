@@ -1,10 +1,10 @@
 /*!
  * js/raids-view.js — Raids renovado: cabecera, pestañas Alas y Encuentros, tarjetas (BL-070, RAI-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.3.0 (2026-10-27) — BL-076 SHV-5a: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-25) — RAI-6: estados y error legibles (AA) en los 19 themes · antes 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
+ * Versión: 1.4.0 (2026-10-27) — BL-078 UNI-2: la cabecera muestra solo el reset semanal con el reloj común de la Bóveda (GNKit) · antes 1.3.0 (2026-10-27) — BL-076 SHV-5a: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-25) — RAI-6: estados y error legibles (AA) en los 19 themes · antes 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
  *
  * Un solo módulo Raids, como el juego desde el 2026-02-03 (D1 de RAI-0):
- *  - Cabecera con el ícono del módulo, hora local, servidor y reset semanal (lunes 07:30 UTC),
+ *  - Cabecera con el ícono del módulo, el reset semanal (lunes 07:30 UTC) con el reloj común (UNI-2),
  *    4 indicadores (alas, conocimiento legendario, fragmentos por cobrar, encuentros) y mi línea.
  *  - Pestaña Alas: las 8 alas de /v2/account/raids. Pestaña Encuentros: los 16 encuentros, que se
  *    marcan con los objetivos del logro semanal 9125; Forjando acero y Nexo de la Eternidad no
@@ -20,7 +20,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var LOG = '[RaidsView]';
   var CATALOG = 'assets/data/raids/catalog.json';
   var ICON = 'assets/icons/raids/raid-icon.png';
@@ -273,11 +273,11 @@
     return h + '</div>';
   }
 
+  // UNI-2 (D2 de UNI-0): Raids muestra solo el reset semanal, con el reloj común (GNKit). Sin GNKit, la píldora de antes.
   function clockHTML(now) {
-    var d = new Date(now);
-    return '<span class="rv-pill">Local <b>' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + '</b></span>' +
-      '<span class="rv-pill">Servidor <b>' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ' UTC</b></span>' +
-      '<span class="rv-pill rv-pill--hot">Reset semanal <b>lun 07:30 UTC · ' + countdown(nextReset(now) - now) + '</b></span>';
+    var K = root.GNKit;
+    if (K && typeof K.clock === 'function') return K.clock('weekly', now);
+    return '<span class="rv-pill rv-pill--hot">Reset semanal <b>lun 07:30 UTC · ' + countdown(nextReset(now) - now) + '</b></span>';
   }
 
   function viewHTML(m, now) {
@@ -439,6 +439,7 @@
       s.textContent = CSS;
       doc.head.appendChild(s);
     }
+    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();
     var host = byId('rvRoot');
     if (!host) {
       host = doc.createElement('div');
