@@ -64,7 +64,7 @@ test('toda observación de la Cartera cumple el formato común (con fundamento)'
 test('no guarda nada, no pide nada a la API y no arma HTML a mano', () => {
   assert.ok(!/localStorage|Storage\.set\(|fetch\(|GW2Api/.test(SRC));
   assert.ok(!/innerHTML/.test(SRC));
-  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.match(SRC, /Versión: 1\.3\.0/);
 });
 
 // SHV-2b: una foto por día; day = días desde 1970 como en js/shv-memory.js
@@ -148,4 +148,46 @@ test('SHV-2: el panel usa solo colores del theme, no guarda nada y va debajo de 
   assert.match(css, /var\(--tx-1\)/);
   assert.match(SRC, /voice\.nextSibling/);
   assert.match(SRC, /addEventListener\('gn:shv-memory', schedule\)/);
+});
+
+// ------------------------------------------------------------------ SHE-2 (DEC-038): mi globo
+test('SHE-2: con globo, en la Cartera queda solo lo crítico; al globo, lo que noto y recomiendo, en orden', () => {
+  const w = load();
+  const ids = (l) => [...l].map((o) => o.id); // arrays del módulo: son de otro realm
+  const hist = H([[86, 1800], [90, 1900], [93, 1963], [100, 2105, { 3: 5 }]]);
+  const list = w.ShvWallet.observe({ models: [{ id: 1, amount: 5 }], lastAt: AT, perms: ['account'], label: 'Main', history: hist });
+  assert.deepEqual(ids(list), ['perm', 'trend', 'pin']);
+  const off = w.ShvWallet.split(list, 4, false);
+  assert.equal(off.voice.id, 'perm', 'silenciada: hablo acá como siempre, una sola voz');
+  assert.equal(off.offers.length, 0);
+  const on = w.ShvWallet.split(list, 4, true);
+  assert.equal(on.voice.id, 'perm', 'lo crítico queda escrito en la Cartera');
+  assert.deepEqual(ids(on.offers), ['trend', 'pin'], 'lo que noto antes que lo que te recomiendo');
+  const noPerm = w.ShvWallet.split(w.ShvWallet.observe({ models: [{ id: 1, amount: 5, pinned: true }], perms: ['wallet'], history: hist }), 4, true);
+  assert.equal(noPerm.voice, null, 'sin nada crítico, en la Cartera no hablo');
+  assert.deepEqual(ids(noPerm.offers), ['trend'], 'el resumen (baja) no es novedad');
+  const day1 = w.ShvWallet.observe({ models: [{ id: 1, amount: 5, pinned: true }], perms: ['wallet'], history: H([[100, 10]]) });
+  assert.deepEqual(ids(w.ShvWallet.split(day1, 1, true).offers), ['summary'], 'el primer día sí: «Desde hoy recuerdo tu Cartera»');
+  // Qué es «la misma novedad» para mi globo: el oro, una vez por día y cuenta; la divisa quieta, mientras siga igual; fijar, una vez.
+  assert.equal(on.offers[0].key, 'dia:100:2105');
+  assert.equal(on.offers[1].key, 'fijar');
+  const quiet = (d) => w.ShvWallet.observe({ history: H([[70, 10, { 3: 212 }], [d, 10, { 3: 212 }]]) }).find((o) => o.id === 'stale');
+  assert.equal(quiet(90).key, quiet(91).key, 'pasa un día y sigue igual: no es nuevo');
+  assert.equal(quiet(90).key, '3:212');
+  const order = w.ShvWallet.split([{ id: 'a', priority: 'baja' }, { id: 'b', priority: 'media' }, { id: 'c', priority: 'media' }], 1, true);
+  assert.deepEqual(ids(order.offers), ['b', 'c', 'a'], 'media antes que baja; a igual prioridad, el orden de llegada');
+});
+
+test('SHE-2: uno por visita a la Cartera, el primero que no viste; «Ver la evolución» del globo abre el panel', () => {
+  assert.match(SRC, /if \(st\.offered \|\| !offers\.length \|\| !onCartera\(\)\) return;/);
+  assert.match(SRC, /if \(B\.seen\(offers\[i\]\)\) continue;\n\s+if \(B\.offer\(offers\[i\]\)\) st\.offered = true;\n\s+return;/);
+  assert.match(SRC, /function onRoute\(\) \{ st\.offered = false; schedule\(\); \}/);
+  assert.match(SRC, /addEventListener\('gn:shv-act', onAct\)/);
+  assert.match(SRC, /addEventListener\('gn:shv-quiet', schedule\)/);
+  assert.match(SRC, /if \(!d \|\| d\.module !== 'cartera'\) return;/);
+  assert.match(SRC, /st\.memOpen = true;\n\s+st\.focusMem = true;\n\s+if \(!onCartera\(\) && root\.location\) root\.location\.hash = '#\/cards';/);
+  assert.match(SRC, /return \(h === '' \|\| h === '#' \|\| h === '#\/cards'\) && !!p && !hiddenUp\(p\);/);
+  assert.match(SRC, /'Ver la evolución de tu Cartera'/);
+  assert.match(SRC, /B && typeof B\.offer === 'function' && !B\.quiet\(\)/);
+  assert.equal(load().ShvWallet.BAR_ID, 'shvWalletMemBar');
 });

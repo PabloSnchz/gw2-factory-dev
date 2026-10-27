@@ -129,7 +129,7 @@
     <dl class="uso">
       <dt>Mi cartera</dt><dd>Arriba, las Destacadas: las que fijás con la estrella o, si no fijaste ninguna, las principales. Debajo, el buscador, las categorías con su cantidad, el orden, «Ocultar las que están en 0» y la vista Tarjetas o Tabla.</dd>
       <dt>Todas las cuentas</dt><dd>Una fila por cuenta y una columna por divisa. Las columnas las elegís con «Agregar divisa» y las sacás con la cruz. El mejor valor de cada columna va en dorado y abajo está el total. Si una cuenta no se pudo leer, la Bóveda lo marca y no inventa un 0. También muestra la Suerte (hallazgo mágico) de cada cuenta. En el celular, cada cuenta es una tarjeta.</dd>
-      <dt>Mi memoria (Shiruvana)</dt><dd>Una vez por día guardo una foto de tus divisas principales de cada cuenta. Con eso te digo cómo se movió tu oro en la semana o qué divisa no cambia hace días, y «Ver la evolución» abre los últimos 30 días. El primer día solo empiezo a recordar.</dd>
+      <dt>Mi memoria (Shiruvana)</dt><dd>Una vez por día guardo una foto de tus divisas principales de cada cuenta. Con eso te digo cómo se movió tu oro en la semana o qué divisa no cambia hace días: te lo cuento en un globo que sale de mi rincón, una sola vez por novedad, y «Ver la evolución» abre los últimos 30 días (también «Ver la evolución de tu Cartera», arriba de tus divisas). El primer día solo empiezo a recordar. Si me silenciaste en Ajustes, te lo digo acá, arriba de Mi cartera.</dd>
       <dt>Cambio de divisas</dt><dd>A la izquierda, la calculadora en espejo: cuánto te dan por tu oro y cuánto oro cuestan las gemas que querés, el precio de 400 gemas en grande y si hoy conviene comprar (la referencia es 120 a 130 de oro). A la derecha, tu Trading Post: primero lo que tenés para recoger y después tus órdenes de compra y venta. «Lo más comerciado hoy» queda plegado abajo.</dd>
     </dl>
     <h3>Qué permisos pide</h3>
@@ -373,6 +373,7 @@
       <dt>Guardar copia de ajustes</dt><dd>Descarga un archivo <code>gw2-backup-</code> con la fecha, con tus Keys, lo que fijaste y marcaste en la Cámara, la Cartera, Actividades y Metas, y tus preferencias. <strong>Lleva tus API Keys sin cifrar:</strong> guardalo como una contraseña. Inicio te recuerda hacer una copia cada 14 días.</dd>
       <dt>Restaurar una copia</dt><dd>Elegís el archivo, la Bóveda te pregunta antes de escribir nada y después recarga la página.</dd>
       <dt>Liberar la caché de la API</dt><dd>Si algo se ve viejo. Te dice cuántas claves borra y cuánto ocupan antes de hacerlo. Tus Keys, marcas y preferencias quedan.</dd>
+      <dt>Silenciar a Shiruvana</dt><dd>Cuando tengo algo nuevo para decirte, aparezco en un globo al lado de mi rincón (abajo de la barra lateral; en el celular, sobre la barra de abajo): una vez por novedad, nunca con una ventana abierta ni mientras escribís, y me voy sola a los 12 segundos. Lo que no leíste queda como un punto en mi rincón y «Te dejé un mensaje» lo vuelve a abrir. Si preferís que no aparezca, Ajustes → «Silenciar a Shiruvana»: te sigo hablando dentro de cada módulo. «Que Shiruvana vuelva a aparecer» lo deshace.</dd>
     </dl>
     <h3>Qué permisos pide</h3>
     <p class="none">Ninguno: no le pide nada a la API.</p>
@@ -380,6 +381,8 @@
     <ul class="keys">
       <li><code>gn:theme</code> El tema que elegiste.</li>
       <li><code>gn:theme:official</code> Una marca de que ya se aplicó el tema Gato Negro por defecto.</li>
+      <li><code>gn:shv:seen</code> Qué mensajes míos ya viste: una huella de 8 caracteres por mensaje, nunca el texto (como mucho 200, durante 60 días).</li>
+      <li><code>gn:shv:quiet</code> Si me silenciaste.</li>
     </ul>
   </section>
 

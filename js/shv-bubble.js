@@ -1,6 +1,11 @@
 /*!
  * js/shv-bubble.js — Shiruvana que aparece: mi globo (BL-075 SHE-1, DEC-038)
- * Versión: 1.0.0
+ * Versión: 1.1.0
+ *
+ * 1.1.0 (SHE-2): me conecto. El globo sale de mi rincón (js/shiruvana-places.js, pie de la Sidebar); en el celular,
+ *   sobre la barra de abajo, y el punto va en «Más». Lo que no leíste: punto en mi rincón y el botón «Te dejé un
+ *   mensaje», que lo vuelve a abrir. «Silenciar a Shiruvana» en Ajustes (y «Que Shiruvana vuelva a aparecer»).
+ *   Cambiar de pantalla me guarda en el punto: uno por pantalla. seen(obs) le dice a cada módulo qué ya viste.
  *
  * Mis observaciones (formato común de js/shv-core.js) pueden aparecer como un globo que sale de mi
  * avatar del rincón (DEC-034), con las reglas que aprobó Pablo:
@@ -13,11 +18,11 @@
  *    módulo dueño con el evento gn:shv-act;
  *  - silenciarme (gn:shv:quiet) me deja hablando solo dentro de los módulos;
  *  - el lector de pantalla me anuncia sin interrumpir; con «Movimiento reducido» aparezco sin animación.
- * SHE-1: inerte, nadie me llama todavía. SHE-2 conecta la Cartera y el rincón.
+ * Se carga por js/modules.json, después de js/shv-core.js y antes de los módulos que me hablan.
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var SEEN_KEY = 'gn:shv:seen', QUIET_KEY = 'gn:shv:quiet';
   var DELAY = 2000, TTL = 12000, RETRY = 3000, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
   var ID = 'shvBubble', LIVE_ID = 'shvBubbleLive', STYLE_ID = 'shv-bubble-css';
@@ -34,6 +39,12 @@
     '[data-shv-unread]{position:relative}',
     '[data-shv-unread]::after{content:"";position:absolute;top:2px;right:2px;width:12px;height:12px;border-radius:50%;',
     'background:var(--acc-warn,var(--acc-1));box-shadow:0 0 0 2px var(--bg-1,var(--panel))}',
+    '.shv-corner[data-shv-unread]::after{left:50px;right:auto;top:8px}',
+    '.shv-bub-open{display:inline-flex;align-items:center;min-height:32px;margin-top:4px;padding:2px 10px;border:1px solid var(--acc-1);',
+    'border-radius:999px;background:transparent;color:var(--text);font:inherit;font-size:.78rem;font-weight:600;cursor:pointer}',
+    '.shv-bub-open:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '#shvQuietBtn img{border-radius:50%}',
+    '@media (max-width:900px){.shv-bub-open{min-height:44px}}',
     '@keyframes shv-bub-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}',
     '@media (max-width:900px){#' + ID + '{left:12px;right:12px;bottom:72px;width:auto}}',
     '@media (prefers-reduced-motion:reduce){#' + ID + '{animation:none}}'
@@ -43,9 +54,12 @@
   var st = { queue: [], cur: null, timer: null, deadline: 0, left: TTL, unread: [], anchor: null, inited: false, ls: null };
 
   // ------------------------------------------------------------------ puro
-  /** Huella del mensaje (FNV-1a): no guarda el texto. */
+  /**
+   * Huella del mensaje (FNV-1a): no guarda el texto. Si el módulo dice qué es «la misma cosa» (key), uso eso:
+   * «está igual hace 20 días» y «hace 21 días» son la misma novedad.
+   */
   function sig(o) {
-    var s = String(o.module) + '|' + String(o.id) + '|' + o.text.join(' '), h = 0x811c9dc5;
+    var s = String(o.module) + '|' + String(o.id) + '|' + (o.key ? '=' + o.key : o.text.join(' ')), h = 0x811c9dc5;
     for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
     return ('0000000' + h.toString(16)).slice(-8);
   }
@@ -73,9 +87,12 @@
     if (typeof v === 'boolean') {
       try { if (v) ls().setItem(QUIET_KEY, 'true'); else ls().removeItem(QUIET_KEY); } catch (_) {}
       if (v) { st.queue = []; st.unread = []; close('read'); setUnread(); } // silenciada: tampoco queda el punto
+      paintQuiet();
+      if (doc && doc.dispatchEvent && typeof root.CustomEvent === 'function') doc.dispatchEvent(new root.CustomEvent('gn:shv-quiet', { detail: { quiet: v } }));
     }
-    try { return ls().getItem(QUIET_KEY) === 'true'; } catch (_) { return false; }
+    return isQuiet();
   }
+  function isQuiet() { try { return ls().getItem(QUIET_KEY) === 'true'; } catch (_) { return false; } }
 
   // ------------------------------------------------------------------ DOM
   function byId(id) { return doc && doc.getElementById ? doc.getElementById(id) : null; }
@@ -111,15 +128,44 @@
     for (var i = 0; i < list.length; i++) if (shown(list[i])) return true;
     return false;
   }
+  function mobile() { return (root.innerWidth || 0) <= 900; }
+  /** Mi rincón a la vista: el de la Sidebar en desktop; en el celular, «Más» de la barra de abajo. */
+  function corner() { return st.anchor || (doc && doc.querySelector ? doc.querySelector('#appSidebar [data-shv-place="corner"]') : null); }
+  function marks() { return st.anchor ? [st.anchor] : [corner(), byId('sbrMore')].filter(Boolean); }
+  function focusBack() {
+    var a = st.anchor || (mobile() ? byId('sbrMore') : corner());
+    if (!a || !a.focus) return;
+    if (!st.anchor && a.getAttribute && a.getAttribute('data-shv-place') === 'corner' && a.setAttribute) a.setAttribute('tabindex', '-1');
+    a.focus();
+  }
   function setUnread() {
-    var a = st.anchor;
-    if (!a || !a.setAttribute) return;
-    if (st.unread.length) a.setAttribute('data-shv-unread', String(st.unread.length));
-    else if (a.removeAttribute) a.removeAttribute('data-shv-unread');
+    var n = st.unread.length;
+    marks().forEach(function (a) {
+      if (!a.setAttribute) return;
+      if (n) a.setAttribute('data-shv-unread', String(n));
+      else if (a.removeAttribute) a.removeAttribute('data-shv-unread');
+    });
+    // «Te dejé un mensaje» en cada rincón (Sidebar y hoja «Más»): lo vuelve a abrir.
+    var corners = doc && doc.querySelectorAll ? doc.querySelectorAll('[data-shv-place="corner"]') : [];
+    for (var i = 0; i < corners.length; i++) {
+      var c = corners[i], old = c.querySelector('.shv-bub-open');
+      if (old && old.parentNode) old.parentNode.removeChild(old);
+      if (!n) continue;
+      ensure();
+      var b = el('button', 'shv-bub-open', n === 1 ? 'Te dejé un mensaje' : 'Te dejé ' + n + ' mensajes');
+      b.type = 'button';
+      b.addEventListener('click', onOpen);
+      (c.querySelector('.shv-voice__main') || c).appendChild(b);
+    }
+  }
+  function onOpen() {
+    var S = root.SidebarNav;
+    if (S && typeof S.closeSheet === 'function') S.closeSheet();
+    reopen();
   }
   function place(box) {
-    var a = st.anchor, w = root.innerWidth || 0;
-    if (!a || !a.getBoundingClientRect || w <= 900) return;
+    var a = corner();
+    if (!a || !a.getBoundingClientRect || mobile()) return;
     var r = a.getBoundingClientRect();
     box.style.left = Math.round(r.right + 12) + 'px';
     box.style.bottom = Math.max(16, Math.round((root.innerHeight || 0) - r.bottom)) + 'px';
@@ -149,7 +195,7 @@
     if (box && box.parentNode) {
       var hadFocus = box.contains && box.contains(doc.activeElement);
       box.parentNode.removeChild(box);
-      if (hadFocus && st.anchor && st.anchor.focus) st.anchor.focus();
+      if (hadFocus) focusBack();
     }
     if (!c) return false;
     markSeen(c);
@@ -229,9 +275,17 @@
   }
 
   // ------------------------------------------------------------------ API
-  /** Me ofrecen una observación. true si la voy a mostrar; false si estoy silenciada, ya la viste o no tiene formato. */
-  function offer(obs) {
+  function norm(obs) {
     var C = root.ShvCore, o = C && C.observation ? C.observation(obs) : null;
+    if (o && obs.key) o.key = String(obs.key);
+    return o;
+  }
+  /**
+   * Me ofrecen una observación (formato de ShvCore; opcional key: qué la hace la misma novedad).
+   * true si la voy a mostrar; false si estoy silenciada, ya la viste o no tiene formato.
+   */
+  function offer(obs) {
+    var o = norm(obs);
     if (!o || !doc || quiet() || seen(o)) return false;
     var s = sig(o);
     if ((st.cur && sig(st.cur) === s) || st.queue.some(function (q) { return sig(q) === s; })) return false;
@@ -251,17 +305,89 @@
     return render(o, true);
   }
   function setAnchor(a) { st.anchor = a || null; setUnread(); }
+  /** ¿Ya viste esta observación? Así cada módulo me ofrece la primera que no viste. */
+  function seenObs(obs) {
+    var o = norm(obs);
+    return !!o && seen(o);
+  }
+
+  // Cambiar de pantalla: lo que esperaba era de la otra; lo que estaba a la vista queda en el punto.
+  function onRoute() {
+    st.queue = [];
+    if (st.cur) close('later');
+  }
+
+  // ------------------------------------------------------------------ Ajustes: silenciarme
+  var QUIET_ON = 'Silenciar a Shiruvana', QUIET_OFF = 'Que Shiruvana vuelva a aparecer';
+  function paintQuiet() {
+    var menu = byId('gnTbSet');
+    if (!menu || !doc.createElement) return null;
+    var b = byId('shvQuietBtn');
+    if (!b) {
+      var li = el('li');
+      li.setAttribute('role', 'none');
+      b = el('button');
+      b.id = 'shvQuietBtn';
+      b.type = 'button';
+      b.setAttribute('role', 'menuitem');
+      var S = root.Shiruvana;
+      if (S && S.AVATAR) {
+        var img = el('img');
+        img.setAttribute('src', S.AVATAR);
+        img.setAttribute('width', '20');
+        img.setAttribute('height', '20');
+        img.setAttribute('alt', '');
+        b.appendChild(img);
+      }
+      b.appendChild(el('span', 'shv-quiet__t'));
+      b.addEventListener('click', function () {
+        var q = !isQuiet();
+        quiet(q);
+        var live = ensure();
+        live.textContent = '';
+        live.textContent = q ? 'Listo: ya no aparezco sola. Te sigo hablando dentro de cada módulo.' : 'Listo: vuelvo a aparecer cuando tenga algo nuevo para decirte.';
+      });
+      li.appendChild(b);
+      menu.appendChild(li);
+    }
+    var q = isQuiet();
+    b.querySelector('.shv-quiet__t').textContent = q ? QUIET_OFF : QUIET_ON;
+    b.setAttribute('title', q ? 'Vuelvo a aparecer en un globo cuando tenga algo nuevo' : 'No aparezco sola: te hablo solo dentro de cada módulo');
+    return b;
+  }
+
   function init() {
     if (st.inited || !doc || !doc.addEventListener) return;
     st.inited = true;
     doc.addEventListener('keydown', onKey);
+    if (root.addEventListener) root.addEventListener('hashchange', onRoute);
+  }
+  /** Me conecto a la Bóveda: Ajustes, mi rincón y su punto (se rearman solos). */
+  function wire() {
+    init();
+    if (!doc || !doc.getElementById || !doc.body) return false;
+    ensure();
+    paintQuiet();
+    setUnread();
+    if (typeof root.MutationObserver === 'function' && !st.mo) {
+      // Mi rincón se rearma cuando cambia lo que dice: vuelvo a poner el punto y «Te dejé un mensaje».
+      st.mo = new root.MutationObserver(function () { setUnread(); });
+      ['appSidebar', 'sbrSheet'].forEach(function (id) { var h = byId(id); if (h) st.mo.observe(h, { childList: true }); });
+    }
+    return true;
   }
 
   root.ShvBubble = {
     version: VERSION, SEEN_KEY: SEEN_KEY, QUIET_KEY: QUIET_KEY, DELAY: DELAY, TTL: TTL, ID: ID, CSS: CSS,
     offer: offer, reopen: reopen, close: function () { return close('read'); }, quiet: quiet, setAnchor: setAnchor,
+    seen: seenObs, wire: wire,
     unread: function () { return st.unread.length; }, current: function () { return st.cur; },
     _pure: { sig: sig, prune: prune }, _setStorage: function (L) { st.ls = L; }
   };
+  // La Sidebar y mi rincón se arman en DOMContentLoaded; boot.js me puede cargar antes o después.
+  if (doc && doc.addEventListener) {
+    if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', wire);
+    else wire();
+  }
   if (root.console && root.console.info) root.console.info('[ShvBubble] ready v' + VERSION);
 })(typeof window !== 'undefined' ? window : globalThis);

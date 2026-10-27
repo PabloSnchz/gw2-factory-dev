@@ -22,7 +22,7 @@ class El {
   removeChild(c) { this.children = this.children.filter((x) => x !== c); c.parentNode = null; if (this.ownerDocument.activeElement && !this.ownerDocument.body.contains(this.ownerDocument.activeElement)) this.ownerDocument.activeElement = this.ownerDocument.body; return c; }
   contains(n) { for (let x = n; x; x = x.parentNode) if (x === this) return true; return false; }
   all() { const out = []; const walk = (n) => n.children.forEach((c) => { out.push(c); walk(c); }); walk(this); return out; }
-  matches(sel) { return sel.split(',').some((s) => one(this, s.trim())); }
+  matches(sel) { return sel.split(',').some((s) => desc(this, s.trim().split(/\s+/))); }
   closest(sel) { for (let x = this; x && x.matches; x = x.parentNode) if (x.matches(sel)) return x; return null; }
   querySelector(sel) { return this.all().find((n) => n.matches(sel)) || null; }
   querySelectorAll(sel) { return this.all().filter((n) => n.matches(sel)); }
@@ -31,7 +31,15 @@ class El {
   focus() { this.ownerDocument.activeElement = this; }
   getBoundingClientRect() { return { right: 200, bottom: 700 }; }
 }
+// «a b»: n cumple b y algún antecesor cumple a.
+function desc(n, parts) {
+  if (!one(n, parts[parts.length - 1])) return false;
+  let rest = parts.slice(0, -1);
+  for (let x = n.parentNode; x && rest.length; x = x.parentNode) if (x.attrs && one(x, rest[rest.length - 1])) rest = rest.slice(0, -1);
+  return !rest.length;
+}
 function one(n, s) {
+  if (!n.attrs) return false;
   const m = s.match(/^([a-z]*)((?:[.#][\w-]+)*)((?:\[[^\]]+\])*)$/i);
   if (!m) throw new Error('selector ' + s);
   if (m[1] && n.tagName !== m[1].toUpperCase()) return false;
@@ -64,7 +72,10 @@ function load(opts) {
   class FD extends Date { static now() { return clock; } }
   class CE { constructor(type, init) { this.type = type; this.detail = init && init.detail; } }
   const ls = fakeLS();
+  const wls = {};
+  if (opts.dom) opts.dom(doc);
   const window = { console: { info() {} }, document: doc, localStorage: ls, innerWidth: opts.width || 1280, innerHeight: 800, CustomEvent: CE,
+    addEventListener: (t, f) => { (wls[t] = wls[t] || []).push(f); }, _fire: (t) => (wls[t] || []).forEach((f) => f({ type: t })),
     setTimeout: (f, ms) => { const id = ++seq; timers.set(id, { at: clock + ms, f }); return id; },
     clearTimeout: (id) => { timers.delete(id); } };
   const ctx = { window, globalThis: {}, Date: FD, Math, JSON, Object, String, Array };
@@ -119,6 +130,12 @@ test('una vez por cosa nueva: lo que ya viste no vuelve y no guardo el texto', (
   assert.ok(raw && !raw.includes('Mensaje'), 'solo huellas');
   assert.equal(JSON.parse(raw).v, 1);
   assert.equal(t.B.offer(OBS(1, { text: ['Mensaje 1, ahora distinto'] })), true, 'si cambia lo que digo, es nuevo');
+  t.advance(2000); t.click('[data-shv-bub="close"]');
+  t.B.offer(OBS(9, { key: 'k1', text: ['hace 20 días'] })); t.advance(2000); t.click('[data-shv-bub="close"]');
+  assert.equal(t.B.seen(OBS(9, { key: 'k1', text: ['hace 21 días'] })), true, 'con key, la misma novedad aunque cambie el texto');
+  assert.equal(t.B.offer(OBS(9, { key: 'k1', text: ['hace 21 días'] })), false);
+  assert.equal(t.B.offer(OBS(9, { key: 'k2', text: ['hace 21 días'] })), true, 'otra key, otra novedad');
+  assert.ok(!t.ls.getItem('gn:shv:seen').includes('k1'), 'tampoco guardo la key');
 });
 
 test('no repito lo que ya está esperando ni lo que está a la vista; las observaciones sin fundamento no salen', () => {
@@ -291,14 +308,109 @@ test('las huellas vistas: 60 días y como mucho 200, las más nuevas', () => {
   assert.notEqual(sig({ module: 'm', id: 'i', text: ['a'] }), sig({ module: 'm', id: 'i', text: ['b'] }));
 });
 
-test('versión, reglas de la casa y todavía inerte', () => {
-  assert.match(SRC, /Versión: 1\.0\.0/);
+// ------------------------------------------------------------------ SHE-2: conectada a la Bóveda
+function bovedaDom(doc) {
+  const side = doc.body.appendChild(doc.createElement('aside'));
+  side.id = 'appSidebar';
+  const c = side.appendChild(doc.createElement('aside'));
+  c.setAttribute('data-shv-place', 'corner');
+  c.className = 'shv-voice shv-corner';
+  const main = c.appendChild(doc.createElement('div'));
+  main.className = 'shv-voice__main';
+  const sheet = doc.body.appendChild(doc.createElement('div'));
+  sheet.id = 'sbrSheet';
+  const c2 = sheet.appendChild(doc.createElement('aside'));
+  c2.setAttribute('data-shv-place', 'corner');
+  c2.appendChild(doc.createElement('div')).className = 'shv-voice__main';
+  const more = doc.body.appendChild(doc.createElement('button'));
+  more.id = 'sbrMore';
+  const menu = doc.body.appendChild(doc.createElement('ul'));
+  menu.id = 'gnTbSet';
+}
+
+test('SHE-2: salgo de mi rincón; lo que no leíste deja el punto y «Te dejé un mensaje» en los dos rincones', () => {
+  const t = load({ dom: bovedaDom });
+  const corner = t.doc.querySelector('#appSidebar [data-shv-place="corner"]');
+  const more = t.doc.getElementById('sbrMore');
+  t.B.offer(OBS(1)); t.advance(2000);
+  assert.equal(t.box().style.left, '212px', 'al lado de mi rincón');
+  t.advance(12000);
+  assert.equal(corner.getAttribute('data-shv-unread'), '1');
+  assert.equal(more.getAttribute('data-shv-unread'), '1', 'en el celular, el punto va en «Más»');
+  const btns = t.doc.querySelectorAll('.shv-bub-open');
+  assert.equal(btns.length, 2, 'uno en la Sidebar y otro en la hoja «Más»');
+  assert.equal(btns[0].textContent, 'Te dejé un mensaje');
+  let closed = 0;
+  t.window.SidebarNav = { closeSheet() { closed++; } };
+  btns[1].dispatchEvent({ type: 'click' });
+  assert.equal(closed, 1, 'desde la hoja, primero la cierro');
+  assert.equal(t.B.current().id, 'o1');
+  assert.equal(t.doc.querySelectorAll('.shv-bub-open').length, 0);
+  assert.equal(corner.hasAttribute('data-shv-unread'), false);
+  t.click('[data-shv-bub="close"]');
+  assert.equal(t.doc.activeElement, corner, 'el foco vuelve a mi rincón');
+  assert.equal(corner.getAttribute('tabindex'), '-1');
+});
+
+test('SHE-2: en el celular, al cerrar, el foco vuelve a «Más»', () => {
+  const t = load({ dom: bovedaDom, width: 600 });
+  t.B.offer(OBS(1)); t.advance(2000); t.advance(12000);
+  t.B.reopen();
+  t.click('[data-shv-bub="close"]');
+  assert.equal(t.doc.activeElement, t.doc.getElementById('sbrMore'));
+});
+
+test('SHE-2: cambiar de pantalla me guarda en el punto y borra lo que esperaba (uno por pantalla)', () => {
+  const t = load({ dom: bovedaDom });
+  t.B.offer(OBS(1)); t.B.offer(OBS(2)); t.advance(2000);
+  t.window._fire('hashchange');
+  assert.equal(t.box(), null);
+  assert.equal(t.B.unread(), 1);
+  t.advance(3000);
+  assert.equal(t.box(), null, 'lo de la otra pantalla no aparece');
+  t.advance(17000);
+  t.B.offer(OBS(3));
+  t.window._fire('hashchange');
+  t.advance(20000);
+  assert.equal(t.box(), null, 'tampoco lo que todavía no había salido');
+  assert.equal(t.B.seen(OBS(1)), true);
+  assert.equal(t.B.seen(OBS(3)), false, 'lo que no llegó a salir sigue sin ver');
+  assert.equal(t.B.seen({ module: 'x' }), false);
+});
+
+test('SHE-2: «Silenciar a Shiruvana» en Ajustes, y «Que Shiruvana vuelva a aparecer»', () => {
+  const t = load({ dom: bovedaDom });
+  const got = [];
+  t.doc.addEventListener('gn:shv-quiet', (e) => got.push(e.detail.quiet));
+  const b = t.doc.getElementById('shvQuietBtn');
+  assert.ok(b, 'está en el menú Ajustes');
+  assert.equal(b.parentNode.parentNode.id, 'gnTbSet');
+  assert.equal(b.getAttribute('role'), 'menuitem', 'el menú lo maneja con el teclado como a los demás');
+  assert.equal(b.parentNode.getAttribute('role'), 'none');
+  assert.equal(b.querySelector('.shv-quiet__t').textContent, 'Silenciar a Shiruvana');
+  b.dispatchEvent({ type: 'click' });
+  assert.equal(t.ls.getItem('gn:shv:quiet'), 'true');
+  assert.equal(b.querySelector('.shv-quiet__t').textContent, 'Que Shiruvana vuelva a aparecer');
+  assert.match(t.doc.getElementById('shvBubbleLive').textContent, /^Listo: ya no aparezco sola/);
+  b.dispatchEvent({ type: 'click' });
+  assert.equal(t.ls.getItem('gn:shv:quiet'), null);
+  assert.equal(b.querySelector('.shv-quiet__t').textContent, 'Silenciar a Shiruvana');
+  assert.match(t.doc.getElementById('shvBubbleLive').textContent, /^Listo: vuelvo a aparecer/);
+  assert.deepEqual(got, [true, false], 'los módulos se enteran y vuelven a hablar adentro');
+  t.B.wire();
+  assert.equal(t.doc.querySelectorAll('#shvQuietBtn').length, 1, 'una sola vez');
+});
+
+test('versión, reglas de la casa y el orden de carga', () => {
+  assert.match(SRC, /Versión: 1\.1\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   const css = SRC.match(/var CSS = \[([\s\S]*?)\]\.join/)[1];
   assert.ok(!/#[0-9a-f]{3,8}\b/i.test(css.replace(/'#' \+ ID/g, '')), 'colores del theme, sin hex');
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.ok(!/aria-modal/.test(css), 'no soy un modal');
-  const mods = JSON.parse(read('js/modules.json'));
-  assert.ok(!JSON.stringify(mods).includes('shv-bubble'), 'SHE-1: nadie me carga todavía');
+  const src = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
+  const i = src.indexOf('js/shv-bubble.js');
+  assert.ok(i > src.indexOf('js/shv-core.js') && src.indexOf('js/shv-core.js') >= 0, 'después de shv-core');
+  assert.ok(i < src.indexOf('js/shv-wallet.js'), 'antes de la Cartera, que me habla');
 });

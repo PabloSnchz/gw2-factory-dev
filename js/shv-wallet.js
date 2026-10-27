@@ -1,6 +1,10 @@
 /*!
  * js/shv-wallet.js — Mi voz en la Cartera (BL-059 SHV-1, nivel N2 de DEC-033)
- * Versión: 1.2.0 (2026-10-27) · SHV-2b: mi voz dice lo que noto en la memoria (el oro de la semana, la divisa que no se
+ * Versión: 1.3.0 (2026-10-27) · BL-075 SHE-2 (DEC-038): lo que noto y lo que te recomiendo sale en mi globo (js/shv-bubble.js),
+ *          una vez por cosa nueva y uno por visita a la Cartera: el primero que no viste. Acá queda escrito solo lo
+ *          crítico (el permiso «billetera») y la evolución, que es un dato: «Ver la evolución de tu Cartera» la abre.
+ *          Si me silenciaste en Ajustes, hablo acá como en 1.2.0. «Ver la evolución» del globo abre el panel.
+ *          1.2.0 (2026-10-27) · SHV-2b: mi voz dice lo que noto en la memoria (el oro de la semana, la divisa que no se
  *          mueve) y la evolución se abre desde mi voz con «Ver la evolución»: es parte de lo que digo, no otro bloque.
  *          1.1.0 (2026-10-27) · SHV-2: debajo de mi voz, la evolución de los últimos 30 días de la cuenta
  *          activa, con mi memoria (js/shv-memory.js). Con menos de 2 días no invento tendencias.
@@ -16,10 +20,10 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.2.0';
-  var HOST_ID = 'shvWalletVoice', MEM_ID = 'shvWalletMemory';
+  var VERSION = '1.3.0';
+  var HOST_ID = 'shvWalletVoice', MEM_ID = 'shvWalletMemory', BAR_ID = 'shvWalletMemBar';
   var doc = root.document;
-  var st = { sig: null, memSig: null, timer: null, mo: null, memOpen: false, hasMem: false, focusMem: false };
+  var st = { sig: null, memSig: null, timer: null, mo: null, memOpen: false, hasMem: false, focusMem: false, offered: false };
 
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
 
@@ -71,11 +75,13 @@
       txt += Math.abs(d) < 1 ? 'no cambió en esta cuenta: ' + num(w.to) + ' de oro.' : (d > 0 ? 'subió ' : 'bajó ') + num(Math.abs(d)) + ' en esta cuenta: de ' + num(w.from) + ' a ' + num(w.to) + '.';
       var lines = [txt];
       if (w.prevDelta !== null) lines.push(Math.abs(w.prevDelta) < 1 ? 'La semana anterior no se había movido.' : 'La semana anterior había ' + (w.prevDelta > 0 ? 'subido ' : 'bajado ') + num(Math.abs(w.prevDelta)) + '.');
-      out.push({ module: 'cartera', id: 'trend', priority: 'media', kind: 'explica', text: lines, action: act, basis: basis });
+      out.push({ module: 'cartera', id: 'trend', priority: 'media', kind: 'explica', text: lines, action: act, basis: basis,
+        key: 'dia:' + hist[hist.length - 1].day + ':' + Math.round(w.to) }); // en mi globo, una vez por día (y por cuenta)
     }
     if (s) {
       out.push({ module: 'cartera', id: 'stale', priority: 'media', kind: 'explica',
-        text: ['«' + s.name + '» está igual hace ' + (s.sinceStart ? 'al menos ' : '') + s.days + ' días en esta cuenta (' + num(s.value) + ').'], action: act, basis: basis });
+        text: ['«' + s.name + '» está igual hace ' + (s.sinceStart ? 'al menos ' : '') + s.days + ' días en esta cuenta (' + num(s.value) + ').'], action: act, basis: basis,
+        key: s.id + ':' + s.value }); // la misma divisa quieta en el mismo saldo es la misma novedad, pasen los días que pasen
     }
     return out;
   }
@@ -108,7 +114,7 @@
         out.push({
           module: 'cartera', id: 'pin', priority: 'media', kind: 'recomienda',
           text: ['Tenés ' + plural(withBal, 'divisa', 'divisas') + ' con saldo en esta cuenta. Fijá con ★ las que seguís: suben a Destacadas y son las primeras que voy a mirar.'],
-          basis: basis
+          basis: basis, key: 'fijar' // te lo sugiero una vez, aunque cambie cuántas divisas tenés
         });
       } else {
         out.push({
@@ -121,6 +127,39 @@
     }
     out.push.apply(out, tr);
     return out;
+  }
+
+  /**
+   * Qué digo dónde (pura, DEC-038). Sin globo (o silenciada): una sola voz en la Cartera, la de mayor prioridad.
+   * Con globo: en la Cartera solo lo crítico (prioridad alta); al globo, en orden, lo que noto y lo que te recomiendo
+   * (media) y, el primer día, el resumen que dice «Desde hoy recuerdo tu Cartera».
+   */
+  function split(list, histLen, bubble) {
+    var C = root.ShvCore;
+    list = Array.isArray(list) ? list : [];
+    if (!bubble) return { voice: C.pick(list), offers: [] };
+    var P = C.PRIORITY, offers = list.filter(function (o) { return o.priority === 'media' || (o.priority === 'baja' && histLen === 1); });
+    offers = offers.map(function (o, i) { return [o, i]; }).sort(function (a, b) { return (P[b[0].priority] - P[a[0].priority]) || a[1] - b[1]; })
+      .map(function (x) { return x[0]; });
+    return { voice: C.pick(list.filter(function (o) { return o.priority === 'alta'; })), offers: offers };
+  }
+  function bubbleOn() { var B = root.ShvBubble; return !!(B && typeof B.offer === 'function' && !B.quiet()); }
+  function hiddenUp(n) { for (; n && n.getAttribute; n = n.parentNode) if (n.hidden || n.getAttribute('hidden') !== null) return true; return false; }
+  /** Estoy en la Cartera (#/cards, o sin hash, que el router muestra como la Cartera) y se ve. */
+  function onCartera() {
+    var h = String((root.location && root.location.hash) || '').split('?')[0].replace(/\/+$/, '');
+    var p = doc && doc.getElementById('walletPanel');
+    return (h === '' || h === '#' || h === '#/cards') && !!p && !hiddenUp(p);
+  }
+  // Uno por visita: la primera observación que no viste.
+  function offer(offers) {
+    var B = root.ShvBubble;
+    if (st.offered || !offers.length || !onCartera()) return;
+    for (var i = 0; i < offers.length; i++) {
+      if (B.seen(offers[i])) continue;
+      if (B.offer(offers[i])) st.offered = true;
+      return;
+    }
   }
 
   function activeKey() {
@@ -155,7 +194,7 @@
     return p ? p.querySelector('.panel__body') : null;
   }
   function inside(n) {
-    while (n) { if (n.id === HOST_ID || n.id === MEM_ID) return true; n = n.parentNode; }
+    while (n) { if (n.id === HOST_ID || n.id === MEM_ID || n.id === BAR_ID) return true; n = n.parentNode; }
     return false;
   }
 
@@ -243,6 +282,7 @@
     var M = root.ShvMemory, body = host(), k = activeKey(), cur = doc.getElementById(MEM_ID);
     if (!M || !body || !k || !k.value) {
       if (cur && cur.parentNode) cur.parentNode.removeChild(cur);
+      if (doc) removeBar();
       st.memSig = null;
       return;
     }
@@ -252,7 +292,9 @@
       (Array.isArray(l) ? l : []).forEach(function (x) { if (x && x.id && x.id !== 1 && x.name) names[x.id] = x.name; });
     });
     var now = Date.now(), m = memoryModel(M.summary(M.fingerprint(k.value), 30, now, names), now);
-    if (!st.memOpen || !st.hasMem || (m && m.empty)) m = null; // se abre desde mi voz
+    if (st.bubble) paintBar(body, !!(m && !m.empty)); // con globo, la evolución se abre desde su propio botón
+    else removeBar();
+    if (!st.memOpen || !st.hasMem || (m && m.empty)) m = null; // se abre desde mi voz (o desde su botón)
     var sig = m ? JSON.stringify(m) : '';
     if (sig === st.memSig && (m ? !!cur : !cur)) return;
     st.memSig = sig;
@@ -264,8 +306,32 @@
       s.textContent = MEM_CSS;
       (doc.head || doc.documentElement).appendChild(s);
     }
-    var voice = doc.getElementById(HOST_ID);
+    var voice = doc.getElementById(BAR_ID) || doc.getElementById(HOST_ID);
     body.insertBefore(memoryNode(m), voice && voice.parentNode === body ? voice.nextSibling : body.firstChild);
+  }
+
+  function removeBar() { var b = doc.getElementById(BAR_ID); if (b && b.parentNode) b.parentNode.removeChild(b); }
+  // «Ver la evolución de tu Cartera»: un dato, sin mi avatar (DEC-024). Debajo de mi voz si hay algo crítico.
+  function paintBar(body, avail) {
+    var bar = doc.getElementById(BAR_ID);
+    st.hasMem = avail;
+    if (!avail) { removeBar(); return; }
+    if (!bar) {
+      bar = el('div', 'shv-obs__acts');
+      bar.id = BAR_ID;
+      var b = el('button', 'shv-obs__btn');
+      b.type = 'button';
+      b.setAttribute('data-shv-act', 'mem');
+      b.setAttribute('aria-controls', MEM_ID);
+      bar.appendChild(b);
+      var voice = doc.getElementById(HOST_ID);
+      body.insertBefore(bar, voice && voice.parentNode === body ? voice.nextSibling : body.firstChild);
+    }
+    var btn = bar.firstChild;
+    btn.textContent = st.memOpen ? 'Ocultar la evolución de tu Cartera' : 'Ver la evolución de tu Cartera';
+    btn.setAttribute('aria-expanded', String(st.memOpen));
+    if (st.focusMem && btn.focus) btn.focus();
+    st.focusMem = false;
   }
 
   function paint() {
@@ -276,36 +342,52 @@
   function paintVoice() {
     var C = root.ShvCore, body = host();
     if (!C || !root.Shiruvana || !body) return;
-    var obs = C.pick(observe(input()));
+    var inp = input(), bubble = bubbleOn(), parts = split(observe(inp), inp.history ? inp.history.length : 0, bubble);
+    var obs = parts.voice;
+    if (bubble !== st.bubble) { st.bubble = bubble; st.sig = null; }
+    if (bubble) offer(parts.offers);
     var cur = doc.getElementById(HOST_ID);
     var sig = obs ? obs.id + '|' + obs.text.join(' ') + '|' + C.basisText(obs.basis) + '|' + st.memOpen : '';
     if (sig === st.sig && (obs ? !!cur : !cur)) return;
     st.sig = sig;
     if (cur && cur.parentNode) cur.parentNode.removeChild(cur);
-    st.hasMem = false;
+    if (!bubble) st.hasMem = false;
     if (!obs) return;
     var el = C.render(obs, { doc: doc });
     if (!el) return;
     el.id = HOST_ID;
     var mb = el.querySelector ? el.querySelector('[data-shv-act="mem"]') : null;
-    st.hasMem = !!mb;
+    if (!bubble) st.hasMem = !!mb;
     if (mb) {
       mb.textContent = st.memOpen ? 'Ocultar la evolución' : 'Ver la evolución';
       mb.setAttribute('aria-expanded', String(st.memOpen));
       mb.setAttribute('aria-controls', MEM_ID);
     }
     body.insertBefore(el, body.firstChild);
+    if (bubble) return; // con globo, el foco lo toma «Ver la evolución de tu Cartera» (paintBar)
     if (mb && st.focusMem && mb.focus) mb.focus();
     st.focusMem = false;
   }
   function schedule() { if (!st.timer) st.timer = root.setTimeout(paint, 250); }
 
   function onClick(e) {
-    var b = e && e.target && e.target.closest ? e.target.closest('#' + HOST_ID + ' [data-shv-act]') : null;
+    var b = e && e.target && e.target.closest ? e.target.closest('#' + HOST_ID + ' [data-shv-act],#' + BAR_ID + ' [data-shv-act]') : null;
     if (!b) return;
     if (b.getAttribute('data-shv-act') === 'keys') { var k = doc.getElementById('keysMenuBtn'); if (k) k.click(); }
     if (b.getAttribute('data-shv-act') === 'mem') { st.memOpen = !st.memOpen; st.focusMem = true; paint(); }
   }
+  // «Ver la evolución» desde mi globo: abro el panel (y si estás en otra pantalla, te llevo a la Cartera).
+  function onAct(e) {
+    var d = e && e.detail;
+    if (!d || d.module !== 'cartera') return;
+    if (d.act === 'keys') { var k = doc.getElementById('keysMenuBtn'); if (k) k.click(); return; }
+    if (d.act !== 'mem') return;
+    st.memOpen = true;
+    st.focusMem = true;
+    if (!onCartera() && root.location) root.location.hash = '#/cards';
+    paint();
+  }
+  function onRoute() { st.offered = false; schedule(); }
 
   function init() {
     if (!doc) return;
@@ -320,10 +402,13 @@
     doc.addEventListener('gn:tokenchange', schedule);
     doc.addEventListener('gn:shv-memory', schedule);
     doc.addEventListener('click', onClick);
+    doc.addEventListener('gn:shv-act', onAct);
+    doc.addEventListener('gn:shv-quiet', schedule);
+    if (root.addEventListener) root.addEventListener('hashchange', onRoute);
     schedule();
   }
 
-  root.ShvWallet = { version: VERSION, observe: observe, memoryModel: memoryModel, trends: trends, refresh: paint, HOST_ID: HOST_ID, MEM_ID: MEM_ID };
+  root.ShvWallet = { version: VERSION, observe: observe, split: split, memoryModel: memoryModel, trends: trends, refresh: paint, HOST_ID: HOST_ID, MEM_ID: MEM_ID, BAR_ID: BAR_ID };
   if (doc) {
     if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', init);
     else init();
