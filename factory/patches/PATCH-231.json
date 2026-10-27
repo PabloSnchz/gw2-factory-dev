@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-231",
+ "summary": "BL-078: UNI-1 validada; UNI-2 hecha (reloj común en Metas y Raids, PATCH-230); camino para el GIF de Chak.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "b8a88a671d5c029aa2c460074f3211b447a4284c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "faltan elegir íconos para 11 claves (UNI-4). ",
+     "text": "faltan elegir íconos para 11 claves (UNI-4). UNI-1 validada por Pablo 23:10Z. UNI-2 HECHA 23:17Z (PATCH-230; el 229 lo frenó la suite por 2 tests): reloj común en Metas (4 relojes grandes; meta-theme.js 2.3.0 los cambia una sola vez cuando llega GNKit) y en Raids (solo el reset semanal, D2; raids-view.js 1.4.0); gn-kit.js 1.0.1 entra al manifiesto (39 de 40); index.html sigue en 48.435 B. "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "6a0d2bd30382b40e4c76fc21104e2eeebca3200a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "UNI-1 HECHA 22:58Z: js/gn-kit.js 1.0.0 inerte + tests/gn-kit.test.cjs (8 pruebas).",
+     "text": "UNI-1 HECHA 22:58Z: js/gn-kit.js 1.0.0 inerte + tests/gn-kit.test.cjs (8 pruebas). Pablo validó UNI-1 23:10Z. UNI-2 HECHA 23:17Z (PATCH-230): reloj común en Metas y Raids; gn-kit.js en el manifiesto."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 23:00Z",
+     "text": "Última actualización: 2026-10-27 23:20Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con UNI-1 validada por Pablo, UNI-2: el reloj común en Metas (grande) y Raids (solo el semanal) y gn-kit.js entra al manifiesto (39 de 40).",
+     "text": "Próxima acción: con UNI-2 validada por Pablo, UNI-3: el reloj común en Actividades, Cámara del Brujo y Heredad."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: UNI-1 es inerte (no cambia nada en pantalla): js/gn-kit.js y sus 8 pruebas en verde. Con tu «ok» sigo con UNI-2 (relojes en Metas y Raids).\n",
+     "text": "- [BL-078] Validación: UNI-2 en DEV (Firefox, Ctrl+F5): Metas muestra Local, Servidor, Reset diario y Reset semanal con el reloj común (ícono, nombre arriba y valor abajo, dorado cuando está cerca); Raids muestra solo el Reset semanal con el mismo reloj.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "como chak_gerent.gif; opcional Dragon's End como dragons_end.jpg.",
+     "text": "como chak_gerent.gif; opcional Dragon's End como dragons_end.jpg. La wiki guarda el archivo en https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif (también en el archivo web: https://web.archive.org/web/2024id_/https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif); se sube desde GitHub con Add file > Upload files."
+    }
+   ]
+  }
+ ]
+}
