@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-235",
+ "summary": "BL-078: UNI-3 validada; UNI-4a selector de íconos publicado; espera la elección de Pablo.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "57f52b08067c1ab3b0ae19ab17ebe82961f34569",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Pablo decidió esperar a que vuelva (23:28Z). ",
+     "text": "Pablo decidió esperar a que vuelva (23:28Z). UNI-3 validada por Pablo 23:49Z. UNI-4a HECHA 23:54Z: selector de íconos docs/propuestas/uni4-iconos.html (04e71eb; 195 íconos del repo, 34 claves: 19 pestañas de 6 módulos, 5 del menú Enlaces que adelanta UNI-6 y 10 indicadores propios; 16 con ícono ya en uso o propuesto, 18 por elegir; sin almacenamiento, devuelve el texto «UNI4 clave=ruta»). Hallazgo MEDIO: el «Al alcance» de Logros usa el ícono AP de la wiki (ach-view.js ICON_AP), roto mientras la wiki no sirva imágenes; lo cambia UNI-4b. UNI-4b aplica la elección de Pablo. "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "b3c0d93f54cf4c4bbd68fd2cbe8987cc0ef16480",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "UNI-3 HECHA 23:35Z (PATCH-233): reloj común en Actividades, Cámara del Brujo y Heredad.",
+     "text": "UNI-3 HECHA 23:35Z (PATCH-233): reloj común en Actividades, Cámara del Brujo y Heredad. Pablo validó UNI-3 23:49Z. UNI-4a 23:54Z: selector de íconos publicado (docs/propuestas/uni4-iconos.html)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 23:42Z",
+     "text": "Última actualización: 2026-10-27 23:56Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con UNI-3 validada por Pablo, UNI-4: íconos del juego en pestañas e indicadores (primera tanda), con la lista para que Pablo la mire antes.",
+     "text": "Próxima acción: con la elección de Pablo (texto «UNI4»), UNI-4b: íconos en las pestañas de Raids, Actividades, Heredad, Cámara, Logros e Inventario e indicadores, desde GNKit.ICONS; el ícono AP de Logros deja la wiki."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: UNI-3 en DEV (Firefox, Ctrl+F5): Actividades muestra Reset diario, PSNA y Reset semanal con el reloj común; Cámara del Brujo, Reset diario y Reset semanal; Heredad, Reset diario. Mismo estilo que Metas y Raids.\n",
+     "text": "- [BL-078] Decisión: elegir los íconos en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni4-iconos.html (18 por elegir, 16 ya en uso o propuestos); «Copiar mi elección» y pegarla en el chat.\n"
+    }
+   ]
+  }
+ ]
+}
