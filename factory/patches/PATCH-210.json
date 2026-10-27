@@ -1,0 +1,96 @@
+{
+ "id": "PATCH-210",
+ "summary": "BL-059 SHV-4b: «Lo que recuerdo de vos» en Ajustes (js/shv-recall.js 1.0.0 al manifiesto), shv-bubble 1.3.0 (seenCount, forgetSeen), privacidad y guía.",
+ "files": [
+  {
+   "path": "js/shv-bubble.js",
+   "base_sha": "22bac97ab26c0a53272bbd0deeb820821594728f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.1\n *\n * 1.2.1:",
+     "text": " * Versión: 1.3.0\n *\n * 1.3.0 (SHV-4b): seenCount() y forgetSeen() para «Lo que recuerdo de vos» (js/shv-recall.js): cuántos\n *   mensajes ya viste y borrarlos. Solo borra gn:shv:seen: «Silenciar» es una preferencia tuya, no un recuerdo.\n *\n * 1.2.1:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.2.1';",
+     "text": "var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function seen(o) { return Object.prototype.hasOwnProperty.call(readSeen(), sig(o)); }\n",
+     "text": "  function seen(o) { return Object.prototype.hasOwnProperty.call(readSeen(), sig(o)); }\n  /** SHV-4b: cuántos mensajes ya viste. */\n  function seenCount() { return Object.keys(readSeen()).length; }\n  /** SHV-4b: olvido qué viste (te vuelvo a contar lo que ya te conté). No toca el silencio. */\n  function forgetSeen() {\n    var n = seenCount();\n    try { ls().removeItem(SEEN_KEY); } catch (_) { return { ok: false, seen: n }; }\n    return { ok: true, seen: n };\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    seen: seenObs, wire: wire, speak: speak,\n",
+     "text": "    seen: seenObs, wire: wire, speak: speak, seenCount: seenCount, forgetSeen: forgetSeen,\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-bubble.test.cjs",
+   "base_sha": "e5947985cf235acaccb3eb67676981472b8334e7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión, reglas de la casa y el orden de carga', () => {",
+     "text": "test('1.3.0: cuántos mensajes viste y borrarlos (solo gn:shv:seen; el silencio queda)', () => {\n  const t = load();\n  assert.equal(t.B.seenCount(), 0);\n  t.B.offer(OBS(1)); t.advance(2000); t.click('[data-shv-bub=\"close\"]');\n  t.B.offer(OBS(2)); t.advance(4000); t.click('[data-shv-bub=\"close\"]');\n  assert.equal(t.B.seenCount(), 2);\n  t.B.quiet(true);\n  assert.deepEqual(JSON.parse(JSON.stringify(t.B.forgetSeen())), { ok: true, seen: 2 });\n  assert.equal(t.ls.getItem('gn:shv:seen'), null);\n  assert.equal(t.B.seenCount(), 0);\n  assert.equal(t.ls.getItem('gn:shv:quiet'), 'true', 'silenciar es una preferencia, no un recuerdo');\n  t.B.quiet(false);\n  assert.equal(t.B.offer(OBS(1)), true, 'lo que ya viste vuelve a ser nuevo');\n});\n\ntest('versión, reglas de la casa y el orden de carga', () => {"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /Versión: 1\\.2\\.1/);",
+     "text": "assert.match(SRC, /Versión: 1\\.3\\.0/);"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "747fc9296e2b7e78adda8c59b5cb382efa14273e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.2.1\" }",
+     "text": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.3.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/shv-legendary.js\", \"v\": \"1.2.0\" }\n",
+     "text": "{ \"src\": \"js/shv-legendary.js\", \"v\": \"1.2.0\" },\n    { \"src\": \"js/shv-recall.js\", \"v\": \"1.0.0\" }\n"
+    }
+   ]
+  },
+  {
+   "path": "privacy.html",
+   "base_sha": "2dfc02eb295d41190e432f5598752a936345ee97",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Y si la silenciaste en Ajustes.</td><td><code>gn:shv:seen</code>, <code>gn:shv:quiet</code></td>",
+     "text": "Y si la silenciaste en Ajustes o le pediste que deje de recordar.</td><td><code>gn:shv:seen</code>, <code>gn:shv:quiet</code>, <code>gn:shv:paused</code></td>"
+    },
+    {
+     "op": "replace",
+     "anchor": "  <h3>Liberar la caché</h3>\n",
+     "text": "  <h3>Lo que recuerda Shiruvana</h3>\n  <p><strong>Ajustes → Lo que recuerdo de vos</strong> te muestra qué guarda Shiruvana (las fotos de tu Cartera y los mensajes que ya viste) y cuánto ocupa todo lo que la Bóveda guarda en este navegador. Desde ahí lo descargás (un archivo JSON donde cada cuenta va por su huella, nunca la Key), le pedís que deje de recordar o lo borrás. Borrar te pregunta antes y no toca «Silenciar» ni la pausa.</p>\n  <h3>Liberar la caché</h3>\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/user-guide-avanzado.html",
+   "base_sha": "9a19a1242229195641097d2a6cca92b29e1309d1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "«Que Shiruvana vuelva a aparecer» lo deshace.</dd>\n",
+     "text": "«Que Shiruvana vuelva a aparecer» lo deshace.</dd>\n      <dt>Lo que recuerdo de vos</dt><dd>Ajustes → «Lo que recuerdo de vos» te muestra qué guardo: las fotos de tu Cartera (de cuántas cuentas, desde cuándo y cuánto ocupan de mis 64 KB) y cuántos mensajes míos ya viste. También cuánto ocupa todo lo que la Bóveda guarda en este navegador (lo comparten la Bóveda pública y la de prueba), y si pasa del 85 % la barra se pone roja. «Descargar mi memoria» baja un archivo JSON con mis fotos: cada cuenta va por una huella, nunca la Key. «Dejar de recordar» hace que no saque más fotos (lo que ya sé lo sigo usando hasta que lo borres); «Volver a recordar» lo deshace. «Borrar todo» borra las fotos y los mensajes vistos, te pregunta antes y te ofrece descargarlos primero; no toca «Silenciar» ni la pausa.</dd>\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      <li><code>gn:shv:quiet</code> Si me silenciaste.</li>\n",
+     "text": "      <li><code>gn:shv:quiet</code> Si me silenciaste.</li>\n      <li><code>gn:shv:paused</code> Si me pediste que deje de recordar.</li>\n"
+    }
+   ]
+  }
+ ]
+}
