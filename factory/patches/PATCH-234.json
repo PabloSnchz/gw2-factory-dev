@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-234",
+ "summary": "BL-078: UNI-2 validada; UNI-3 hecha (reloj común en Actividades, Cámara y Heredad, PATCH-233); Chak espera a la wiki.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "cd567403f9fe65b07a1b032235139f25d169bfa6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "index.html sigue en 48.435 B. ",
+     "text": "index.html sigue en 48.435 B. UNI-2 validada por Pablo 23:28Z. UNI-3 HECHA 23:35Z (PATCH-233; el 232 lo frenó la suite por 4 tests que fijan versiones): reloj común en Actividades (diario, PSNA, semanal; act-view.js 1.6.0), Cámara del Brujo (diario y semanal; wv-view.js 1.4.0) y Heredad (diario; home-view.js 1.3.0); tests/gn-kit-modules.test.cjs. Ya no queda ninguna píldora vieja de reloj en la Bóveda. Chak: la wiki no sirve el GIF; Pablo decidió esperar a que vuelva (23:28Z). "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "32c094c6e301be625b0a4390c4a41a706c736073",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "UNI-2 HECHA 23:17Z (PATCH-230): reloj común en Metas y Raids; gn-kit.js en el manifiesto.",
+     "text": "UNI-2 HECHA 23:17Z (PATCH-230): reloj común en Metas y Raids; gn-kit.js en el manifiesto. Pablo validó UNI-2 23:28Z. UNI-3 HECHA 23:35Z (PATCH-233): reloj común en Actividades, Cámara del Brujo y Heredad."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 23:20Z",
+     "text": "Última actualización: 2026-10-27 23:42Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con UNI-2 validada por Pablo, UNI-3: el reloj común en Actividades, Cámara del Brujo y Heredad.",
+     "text": "Próxima acción: con UNI-3 validada por Pablo, UNI-4: íconos del juego en pestañas e indicadores (primera tanda), con la lista para que Pablo la mire antes."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: UNI-2 en DEV (Firefox, Ctrl+F5): Metas muestra Local, Servidor, Reset diario y Reset semanal con el reloj común (ícono, nombre arriba y valor abajo, dorado cuando está cerca); Raids muestra solo el Reset semanal con el mismo reloj.\n",
+     "text": "- [BL-078] Validación: UNI-3 en DEV (Firefox, Ctrl+F5): Actividades muestra Reset diario, PSNA y Reset semanal con el reloj común; Cámara del Brujo, Reset diario y Reset semanal; Heredad, Reset diario. Mismo estilo que Metas y Raids.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Acción: subir a gw2-factory-dev/assets/previews/ la imagen de Chak (Chak_Animation_8.gif de la wiki) como chak_gerent.gif; opcional Dragon's End como dragons_end.jpg. La wiki guarda el archivo en https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif (también en el archivo web: https://web.archive.org/web/2024id_/https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif); se sube desde GitHub con Add file > Upload files.\n",
+     "text": "- [BL-078] Info: Chak sigue sin vista previa: la wiki no sirve el GIF y Pablo decidió esperar a que vuelva (2026-10-27 23:28Z). Cuando vuelva: subir chak_gerent.gif a assets/previews/ (https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif).\n"
+    }
+   ]
+  }
+ ]
+}
