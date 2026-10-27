@@ -1,0 +1,140 @@
+{
+ "id": "PATCH-232",
+ "summary": "BL-078 UNI-3: reloj común en Actividades (diario, PSNA, semanal), Cámara del Brujo (diario y semanal) y Heredad (diario).",
+ "files": [
+  {
+   "path": "js/act-view.js",
+   "base_sha": "59733f6a442136b2e57ad913553eb2e08ca1886e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.0 (2026-10-27) — ",
+     "text": " * Versión: 1.6.0 (2026-10-27) — BL-078 UNI-3: los 3 relojes son el reloj común de la Bóveda (GNKit) · antes 1.5.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.5.0';",
+     "text": "var VERSION = '1.6.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "items: d.items || {}, clocks: clocks(now), crafting: null,",
+     "text": "items: d.items || {}, clocks: clocks(now), now: Number(now), crafting: null,"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (clk) {\n      h.push('<span class=\"av-pill\" title=\"00:00 UTC\">",
+     "text": "    var K = root.GNKit; // UNI-3: el reloj común; sin GNKit, las píldoras de antes\n    if (clk && K && typeof K.clocks === 'function') h.push(K.clocks(['daily', 'psna', 'weekly'], m.now));\n    else if (clk) {\n      h.push('<span class=\"av-pill\" title=\"00:00 UTC\">"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('avRoot');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('avRoot');\n    if (!host) {\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "    set('avClkD', 'en ' + c.daily); set('avClkP', 'en ' + c.psna); set('avClkW', c.weekly);\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.tick === 'function') root.GNKit.tick(now());\n"
+    }
+   ]
+  },
+  {
+   "path": "js/wv-view.js",
+   "base_sha": "280a0ebf40021e9a32f052ae72803f6ed5391280",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-27) — ",
+     "text": " * Versión: 1.4.0 (2026-10-27) — BL-078 UNI-3: reset diario y semanal con el reloj común de la Bóveda (GNKit) · antes 1.3.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    h.push('<span class=\"wvx-pill' + (m.dailyHot ? ' wvx-pill--hot' : '') + '\">Reset diario <b data-wvx-clock=\"daily\">en ' + esc(m.dailyLeft) + '</b></span>');\n    h.push('<span class=\"wvx-pill\">Semanal <b data-wvx-clock=\"weekly\">lun 07:30 UTC · en ' + esc(m.weeklyLeft) + '</b></span>');\n",
+     "text": "    var K = root.GNKit; // UNI-3: el reloj común; sin GNKit, las píldoras de antes\n    if (K && typeof K.clocks === 'function' && m.now != null) h.push(K.clocks(['daily', 'weekly'], m.now));\n    else {\n      h.push('<span class=\"wvx-pill' + (m.dailyHot ? ' wvx-pill--hot' : '') + '\">Reset diario <b data-wvx-clock=\"daily\">en ' + esc(m.dailyLeft) + '</b></span>');\n      h.push('<span class=\"wvx-pill\">Semanal <b data-wvx-clock=\"weekly\">lun 07:30 UTC · en ' + esc(m.weeklyLeft) + '</b></span>');\n    }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      voice: voice, accountsSub: st.accountsSub,\n",
+     "text": "      voice: voice, accountsSub: st.accountsSub, now: now,\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('wvxHead');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('wvxHead');\n    if (!host) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    renderVoice(buildModel(now).voice);\n  }\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.tick === 'function') root.GNKit.tick(now);\n    renderVoice(buildModel(now).voice);\n  }\n"
+    }
+   ]
+  },
+  {
+   "path": "js/home-view.js",
+   "base_sha": "c1e9ff73d8969a248f52269cbc2aab399d58c2cf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-27) — ",
+     "text": " * Versión: 1.3.0 (2026-10-27) — BL-078 UNI-3: el reset diario con el reloj común de la Bóveda (GNKit) · antes 1.2.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.2.0';",
+     "text": "var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "      reset: untilReset(now)\n    };",
+     "text": "      reset: untilReset(now), now: Number(now)\n    };"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function viewHTML(m, ext) {\n",
+     "text": "  // UNI-3: el reset diario con el reloj común (GNKit); sin GNKit, la píldora de antes.\n  function clockHTML(m) {\n    var K = root.GNKit;\n    if (K && typeof K.clock === 'function' && isFinite(m.now)) return K.clock('daily', m.now);\n    return '<span class=\"hs-pillr\">Reset diario <b id=\"hsClk\">en ' + esc(m.reset) + '</b></span>';\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "'<div class=\"hs-top\"><span class=\"hs-pillr\">Reset diario <b id=\"hsClk\">en ' + esc(m.reset) + '</b></span><button",
+     "text": "'<div class=\"hs-top\">' + clockHTML(m) + '<button"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('hsRoot');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('hsRoot');\n    if (!host) {\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "    if (n) n.textContent = 'en ' + untilReset(now);\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.tick === 'function') root.GNKit.tick(now);\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "d0e2f6c123415a8d171fda3e8809cf00575627cb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/wv-view.js\", \"v\": \"1.3.0\" },",
+     "text": "    { \"src\": \"js/wv-view.js\", \"v\": \"1.4.0\" },"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/act-view.js\", \"v\": \"1.5.0\" },",
+     "text": "    { \"src\": \"js/act-view.js\", \"v\": \"1.6.0\" },"
+    },
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/home-view.js\", \"v\": \"1.2.0\" },",
+     "text": "    { \"src\": \"js/home-view.js\", \"v\": \"1.3.0\" },"
+    }
+   ]
+  }
+ ]
+}
