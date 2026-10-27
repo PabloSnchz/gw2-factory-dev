@@ -43,14 +43,14 @@ function raw(o) {
 
 test('archivo: presupuesto, versión, manifiesto después de acc-model, fuera de index.html, sin emojis ni localStorage', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024, Buffer.byteLength(SRC) + ' bytes');
-  assert.match(SRC, /Versión: 1\.2\.0/);
-  assert.equal(B.AccView.version, '1.2.0');
+  assert.match(SRC, /Versión: 1\.3\.0/);
+  assert.equal(B.AccView.version, '1.3.0');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage/);
   const man = JSON.parse(read('js/modules.json')).modules;
   const i = man.findIndex((m) => m.src === 'js/acc-view.js'), j = man.findIndex((m) => m.src === 'js/acc-model.js');
   assert.ok(j >= 0 && i > j, 'el modelo antes que la vista');
-  assert.equal(man[i].v, '1.2.0');
+  assert.equal(man[i].v, '1.3.0');
   assert.doesNotMatch(read('index.html'), /acc-view\.js|acc-model\.js/);
 });
 

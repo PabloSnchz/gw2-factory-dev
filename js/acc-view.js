@@ -1,7 +1,8 @@
 /*!
  * js/acc-view.js — Cuentas renovado: «Mis cuentas» en vivo y la puerta al Llavero (BL-070, paso 4, CTA-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-26) · BL-074 BLS-3: las definiciones de logros (gn:accounts:achmeta) van a IndexedDB
+ * Versión: 1.3.0 (2026-10-27) · BL-076 SHV-5c: mi línea dice «Lo sé por», con la hora de la lectura
+ *          1.2.0 (2026-10-26) · BL-074 BLS-3: las definiciones de logros (gn:accounts:achmeta) van a IndexedDB
  *          por js/gn-idb.js si está, y espero a que abra antes de leerlas.
  *          1.1.0 (2026-10-26) · CTA-3: la pestaña Llavero la dibuja js/acc-vault-view.js; con el Llavero abierto, las
  *          tarjetas suman sus etiquetas y aparecen en gris las cuentas sin Key (D7)
@@ -24,7 +25,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[AccView]';
   var PANEL = 'accountsPanel';
   var ROUTE = '#/account/accounts'; // la misma que usa js/router.js
@@ -475,7 +476,13 @@
     if (key === st.voiceKey) return;
     st.voiceKey = key;
     while (box.firstChild) box.removeChild(box.firstChild);
-    if (msg && root.Shiruvana && typeof root.Shiruvana.voice === 'function') box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text }));
+    if (msg && root.Shiruvana && typeof root.Shiruvana.voice === 'function') box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: basisOf(msg) }));
+  }
+  // SHV-5c: de dónde lo sé, con la hora real de la última lectura (st.readAt), nunca una inventada.
+  var SRC = { bad: 'tus Keys, consultadas en la API oficial', perm: 'los permisos de tus Keys (API oficial)', voe: 'tus puntos de maestría (API oficial)' };
+  function basisOf(msg) {
+    var b = { source: SRC[String(msg.key).split(':')[0]] || 'tus cuentas (API oficial)', at: st.readAt || null }, C = root.ShvCore;
+    return C && typeof C.basisText === 'function' ? C.basisText(b) : b.source + ' · en este navegador';
   }
 
   // «Usar esta»: el mismo camino que el selector de arriba (app.js escucha su «change»).

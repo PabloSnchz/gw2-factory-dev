@@ -35,9 +35,9 @@ const NORN = { name: 'Brok', level: 11, created: '2026-10-20T11:00:00Z', race: '
 
 test('archivo: presupuesto, manifiesto después de act-view, sin emojis ni almacenamiento propio; datos verificados', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
-  assert.match(SRC, /Versión: 1\.1\.0/);
+  assert.match(SRC, /Versión: 1\.2\.0/);
   assert.doesNotMatch(SRC, /\bActivities\b|oldCount|migrated/, 'ACT-7c: no lee la pantalla vieja de Actividades');
-  assert.equal(JSON.parse(read('js/modules.json')).modules.filter((m) => m.src === 'js/act-week.js')[0].v, '1.1.0');
+  assert.equal(JSON.parse(read('js/modules.json')).modules.filter((m) => m.src === 'js/act-week.js')[0].v, '1.2.0');
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u, 'sin emojis');
   assert.doesNotMatch(SRC, /localStorage|sessionStorage/, 'guarda solo por Storage');
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
