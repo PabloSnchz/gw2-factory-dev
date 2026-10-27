@@ -1,6 +1,10 @@
 /*!
  * js/shv-bubble.js — Shiruvana que aparece: mi globo (BL-075 SHE-1, DEC-038)
- * Versión: 1.3.0
+ * Versión: 1.4.0
+ *
+ * 1.4.0 (BL-076 SHV-5a): lo que escribo dentro del módulo (avisos, lo que el módulo pide dejar escrito o si me
+ *   silenciaste) también dice «Lo sé por», con la misma fuente que uso en el globo. meta.at (opcional): la hora
+ *   del dato; sin ella digo «en este navegador», nunca una hora inventada.
  *
  * 1.3.0 (SHV-4b): seenCount() y forgetSeen() para «Lo que recuerdo de vos» (js/shv-recall.js): cuántos
  *   mensajes ya viste y borrarlos. Solo borra gn:shv:seen: «Silenciar» es una preferencia tuya, no un recuerdo.
@@ -32,7 +36,7 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var SEEN_KEY = 'gn:shv:seen', QUIET_KEY = 'gn:shv:quiet';
   var DELAY = 2000, TTL = 12000, RETRY = 3000, RETRY_ROUTE = 400, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
   var ID = 'shvBubble', LIVE_ID = 'shvBubbleLive', STYLE_ID = 'shv-bubble-css';
@@ -367,17 +371,24 @@
    * Lo demás va a mi globo, una vez por novedad y uno por visita a esa pantalla ('bubble'); si ya lo viste,
    * no lo repito ('none'); si la pantalla todavía no se ve, espero a que la abras ('later').
    */
+  // BL-076 SHV-5a: de dónde lo sé, igual en mi globo y escrito en el módulo.
+  function src(meta) { return String(meta.source || 'lo que ves en esta pantalla'); }
+  function atOf(meta) { return typeof meta.at === 'number' && isFinite(meta.at) && meta.at > 0 ? meta.at : null; }
+  function basisOf(meta) {
+    var C = root.ShvCore, b = { source: src(meta), at: atOf(meta) };
+    return C && typeof C.basisText === 'function' ? C.basisText(b) : b.source + ' · en este navegador';
+  }
   function speak(box, msg, meta) {
     meta = meta || {};
     if (!box || !msg || !msg.text) return 'none';
     var S = root.Shiruvana, text = [].concat(msg.text).map(String);
     if (isQuiet() || INLINE[msg.kind] || (typeof meta.keep === 'function' && meta.keep(msg))) {
-      if (S && typeof S.voice === 'function') box.appendChild(S.voice({ kind: msg.kind, text: msg.text }));
+      if (S && typeof S.voice === 'function') box.appendChild(S.voice({ kind: msg.kind, text: msg.text, basis: basisOf(meta) }));
       return 'inline';
     }
     var mod = String(meta.module || 'boveda');
     var obs = { module: mod, id: String(msg.key || 'voz'), priority: 'media', kind: msg.kind, text: text,
-      basis: { source: String(meta.source || 'lo que ves en esta pantalla'), at: null },
+      basis: { source: src(meta), at: atOf(meta) },
       key: String(meta.key != null ? meta.key : (msg.key ? msg.key + '|' : '') + text.join(' ')) };
     delete st.pending[mod];
     if (!visible(box)) { st.pending[mod] = { box: box, obs: obs }; return 'later'; }

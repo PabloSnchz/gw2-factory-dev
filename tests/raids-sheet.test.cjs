@@ -45,7 +45,7 @@ test('el archivo entra en el presupuesto y se carga por el manifiesto después d
   const man = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).modules;
   const src = man.map((m) => m.src);
   assert.ok(src.indexOf('js/raids-sheet.js') > src.indexOf('js/raids-view.js'), 'la ficha va después de la vista');
-  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.2.0');
+  assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.3.0');
   // index-versions lee «Versión: X» de la cabecera: tiene que coincidir con el manifiesto y con VERSION.
   const head = /Versi[oó]n:\s*(\d+\.\d+\.\d+)/.exec(SRC.slice(0, 3000));
   assert.ok(head, 'raids-sheet.js declara «Versión:» en la cabecera');
@@ -156,7 +156,11 @@ test('fichas que no son iguales: HoT con modo desafío, eventos, el campamento y
 
 test('mi línea en la ficha: solo hechos del catálogo y de tu semana', () => {
   assert.equal(S.voiceOf(model('greer')).text, 'Esta semana todavía te esperan 1 de conocimiento legendario y 16 fragmentos de magnetita, y 10 más si lo hacés en modo desafío.');
-  assert.equal(S.voiceOf(model('decima')).kind, 'success');
+  assert.equal(S.voiceOf(model('decima')).kind, 'saluda', 'SHV-5a: los 4 tipos de DEC-024');
+  assert.equal(S.voiceOf(model('decima')).basis, 'tus raids de esta semana (API oficial)');
+  assert.equal(S.voiceOf(model('greer')).kind, 'explica');
+  assert.equal(S.voiceOf(model('greer')).basis, 'tu semana de raids (API oficial) y las recompensas de la wiki');
+  assert.equal(S.voiceOf(model('forging_steel', data({ marks: ['forging_steel'] }))).basis, 'lo que marcaste esta semana', 'lo que marcaste vos no es de la API');
   assert.match(S.voiceOf(model('nexus_of_eternity')).text, /14 cristales de Gaets/);
   assert.equal(S.voiceOf(model('gate')), null, 'un evento que no da nada no tiene línea');
   assert.equal(S.voiceOf(model('greer', { hasToken: false })), null, 'sin Key no hablo de tu semana');
@@ -417,7 +421,7 @@ function boot(o) {
       getAccountWallet: () => Promise.resolve([{ id: 70, value: 3 }]),
       getItemsMany: (ids) => { itemCalls.push(JSON.parse(JSON.stringify(ids))); return Promise.resolve(ids.map((id) => ({ id, name: 'Cofre ' + id, icon: 'https://render.guildwars2.com/file/I/' + id + '.png' }))); },
     },
-    Shiruvana: { voice: (m) => ({ text: m.text, kind: m.kind }) },
+    Shiruvana: { voice: (m) => ({ text: m.text, kind: m.kind, basis: m.basis }) },
   };
   sb.window = sb;
   vm.createContext(sb);
@@ -445,6 +449,7 @@ test('humo: la fila abre la ficha, trae el cofre de la API, Escape vuelve a la m
   assert.deepEqual(itemCalls, [[104306, 107171]], 'pide solo los dos cofres, una vez');
   assert.match(rs.innerHTML, /Cofre 104306/, 'nombre de la API');
   assert.match(D.els.rsVoice.children[0].text, /16 fragmentos/);
+  assert.equal(D.els.rsVoice.children[0].basis, 'tu semana de raids (API oficial) y las recompensas de la wiki · en este navegador', 'SHV-5a: «Lo sé por»');
   assert.ok(sb.RaidsSheet.isOpen());
 
   // Siguiente encuentro desde la ficha

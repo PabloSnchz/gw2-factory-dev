@@ -215,7 +215,7 @@ function boot(opts) {
       getAccountAchievements: (t, o) => { calls.push(['achs', o.nocache]); return Promise.resolve(sample().achs); },
       getAccountWallet: (t, o) => { calls.push(['wallet', o.nocache]); return Promise.resolve(sample().wallet); },
     },
-    Shiruvana: { voice: (m) => ({ id: null, text: m.text, children: [] }) },
+    Shiruvana: { voice: (m) => ({ id: null, text: m.text, basis: m.basis, children: [] }) },
   };
   sb.window = sb;
   vm.createContext(sb);
@@ -238,6 +238,7 @@ test('humo: en #/account/raids toma el panel, lee la semana y muestra la vista n
   assert.deepEqual(calls.map((c) => c[0]).sort(), ['achs', 'raids', 'wallet']);
   assert.ok(calls.every((c) => c[1] === false), 'la primera carga usa la caché');
   assert.ok(D.els.rvVoice.children.length === 1 && /Greer y Ura/.test(D.els.rvVoice.children[0].text), 'mi línea aparece');
+  assert.equal(D.els.rvVoice.children[0].basis, 'tus raids de esta semana (API oficial) · en este navegador', 'SHV-5a: sin mi globo también digo de dónde lo sé');
   assert.ok(!Object.keys(store).some((k) => store[k].includes('TOKEN-DE-PRUEBA')), 'la Key nunca se guarda');
 
   // marcar Forjando acero, en la pestaña Encuentros

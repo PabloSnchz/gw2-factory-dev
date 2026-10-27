@@ -517,8 +517,31 @@ test('1.3.0: cuántos mensajes viste y borrarlos (solo gn:shv:seen; el silencio 
   assert.equal(t.B.offer(OBS(1)), true, 'lo que ya viste vuelve a ser nuevo');
 });
 
+test('1.4.0 (SHV-5a): lo que escribo en el módulo también dice de dónde lo sé, con la hora del dato si me la pasan', () => {
+  const t = load({ dom: bovedaDom });
+  const a = moduleBox(t).box;
+  assert.equal(t.B.speak(a, MSG('w', 'Aviso', 'advierte'), { module: 'camara', source: 'tu Cámara del Brujo (API oficial)' }), 'inline');
+  assert.equal(a.children[0].querySelector('.shv-voice__basis').textContent, 'Lo sé por: tu Cámara del Brujo (API oficial) · en este navegador');
+  const at = t.now();
+  const k = moduleBox(t).box;
+  t.B.speak(k, MSG('perm:1', 'Faltan permisos'), { module: 'cuentas', source: 'tus Keys guardadas', at, keep: () => true });
+  assert.match(k.children[0].querySelector('.shv-voice__basis').textContent, /^Lo sé por: tus Keys guardadas · hoy \d\d:\d\d$/);
+  t.B.quiet(true);
+  const b = moduleBox(t).box;
+  assert.equal(t.B.speak(b, MSG('q', 'Silenciada'), { module: 'logros', source: 'tus logros (API oficial)', at }), 'inline');
+  assert.match(b.children[0].querySelector('.shv-voice__basis').textContent, /^Lo sé por: tus logros \(API oficial\) · hoy \d\d:\d\d$/);
+  const c = moduleBox(t).box;
+  t.B.speak(c, MSG('q2', 'Sin fuente'), { module: 'x', at: 'ayer' });
+  assert.equal(c.children[0].querySelector('.shv-voice__basis').textContent, 'Lo sé por: lo que ves en esta pantalla · en este navegador', 'sin fuente ni hora válida no invento');
+  t.B.quiet(false);
+  const d = moduleBox(t).box;
+  assert.equal(t.B.speak(d, MSG('g', 'Al globo'), { module: 'heredad', source: 'tus nodos (API oficial)', at }), 'bubble');
+  t.advance(2000);
+  assert.match(t.box().querySelector('.shv-voice__basis').textContent, /^Lo sé por: tus nodos \(API oficial\) · hoy \d\d:\d\d$/);
+});
+
 test('versión, reglas de la casa y el orden de carga', () => {
-  assert.match(SRC, /Versión: 1\.3\.0/);
+  assert.match(SRC, /Versión: 1\.4\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   const css = SRC.match(/var CSS = \[([\s\S]*?)\]\.join/)[1];

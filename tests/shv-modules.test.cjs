@@ -21,8 +21,10 @@ const SPEAK = {
 test('cada módulo me pasa su mensaje con su pantalla y de dónde lo sé, y sin mi globo escribe como siempre', () => {
   Object.keys(SPEAK).forEach((f) => {
     const [mod, src, key] = SPEAK[f], s = read(f);
-    const call = "if (msg && root.ShvBubble && root.ShvBubble.speak) root.ShvBubble.speak(box, msg, { module: '" + mod + "', source: '" + src + "'" + (key ? ', key: key' : '') + ' }); ' + FALLBACK;
-    assert.equal(s.split(call).length - 1, 1, f + ': una sola llamada, con el respaldo de siempre en la misma línea');
+    const head = "if (msg && root.ShvBubble && root.ShvBubble.speak) root.ShvBubble.speak(box, msg, { module: '" + mod + "', source: '" + src + "'" + (key ? ', key: key' : '') + ' }); ';
+    // BL-076 SHV-5: sin mi globo, el respaldo dice en «Lo sé por» lo mismo que el globo. Quién falta: tests/shv-basis.test.cjs.
+    const withBasis = head + FALLBACK.replace('text: msg.text })', "text: msg.text, basis: '" + src + " · en este navegador' })");
+    assert.equal(s.split(withBasis).length - 1 + s.split(head + FALLBACK).length - 1, 1, f + ': una sola llamada, con el respaldo en la misma línea');
     assert.equal(s.split('root.Shiruvana.voice(').length - 1, 1, f + ': no habla por otro lado');
   });
   const mods = Object.values(SPEAK).map((x) => x[0]);
