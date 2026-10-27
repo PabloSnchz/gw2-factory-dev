@@ -1,0 +1,179 @@
+{
+ "id": "PATCH-216",
+ "summary": "BL-076 SHV-5a: shv-bubble 1.4.0 (lo escrito en el módulo dice «Lo sé por»), Raids con fundamento y los tipos de DEC-024.",
+ "files": [
+  {
+   "path": "js/shv-bubble.js",
+   "base_sha": "9313a602044792d0ae4e167c9326a0ae4160f72e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0\n *\n * 1.3.0 (SHV-4b):",
+     "text": " * Versión: 1.4.0\n *\n * 1.4.0 (BL-076 SHV-5a): lo que escribo dentro del módulo (avisos, lo que el módulo pide dejar escrito o si me\n *   silenciaste) también dice «Lo sé por», con la misma fuente que uso en el globo. meta.at (opcional): la hora\n *   del dato; sin ella digo «en este navegador», nunca una hora inventada.\n *\n * 1.3.0 (SHV-4b):"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function speak(box, msg, meta) {\n",
+     "text": "  // BL-076 SHV-5a: de dónde lo sé, igual en mi globo y escrito en el módulo.\n  function src(meta) { return String(meta.source || 'lo que ves en esta pantalla'); }\n  function atOf(meta) { return typeof meta.at === 'number' && isFinite(meta.at) && meta.at > 0 ? meta.at : null; }\n  function basisOf(meta) {\n    var C = root.ShvCore, b = { source: src(meta), at: atOf(meta) };\n    return C && typeof C.basisText === 'function' ? C.basisText(b) : b.source + ' · en este navegador';\n  }\n  function speak(box, msg, meta) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(S.voice({ kind: msg.kind, text: msg.text }));",
+     "text": "box.appendChild(S.voice({ kind: msg.kind, text: msg.text, basis: basisOf(meta) }));"
+    },
+    {
+     "op": "replace",
+     "anchor": "basis: { source: String(meta.source || 'lo que ves en esta pantalla'), at: null },",
+     "text": "basis: { source: src(meta), at: atOf(meta) },"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-bubble.test.cjs",
+   "base_sha": "12dbc49077020ef795602dbab9dff78daf99d101",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión, reglas de la casa y el orden de carga', () => {",
+     "text": "test('1.4.0 (SHV-5a): lo que escribo en el módulo también dice de dónde lo sé, con la hora del dato si me la pasan', () => {\n  const t = load({ dom: bovedaDom });\n  const a = moduleBox(t).box;\n  assert.equal(t.B.speak(a, MSG('w', 'Aviso', 'advierte'), { module: 'camara', source: 'tu Cámara del Brujo (API oficial)' }), 'inline');\n  assert.equal(a.children[0].querySelector('.shv-voice__basis').textContent, 'Lo sé por: tu Cámara del Brujo (API oficial) · en este navegador');\n  const at = t.now();\n  const k = moduleBox(t).box;\n  t.B.speak(k, MSG('perm:1', 'Faltan permisos'), { module: 'cuentas', source: 'tus Keys guardadas', at, keep: () => true });\n  assert.match(k.children[0].querySelector('.shv-voice__basis').textContent, /^Lo sé por: tus Keys guardadas · hoy \\d\\d:\\d\\d$/);\n  t.B.quiet(true);\n  const b = moduleBox(t).box;\n  assert.equal(t.B.speak(b, MSG('q', 'Silenciada'), { module: 'logros', source: 'tus logros (API oficial)', at }), 'inline');\n  assert.match(b.children[0].querySelector('.shv-voice__basis').textContent, /^Lo sé por: tus logros \\(API oficial\\) · hoy \\d\\d:\\d\\d$/);\n  const c = moduleBox(t).box;\n  t.B.speak(c, MSG('q2', 'Sin fuente'), { module: 'x', at: 'ayer' });\n  assert.equal(c.children[0].querySelector('.shv-voice__basis').textContent, 'Lo sé por: lo que ves en esta pantalla · en este navegador', 'sin fuente ni hora válida no invento');\n  t.B.quiet(false);\n  const d = moduleBox(t).box;\n  assert.equal(t.B.speak(d, MSG('g', 'Al globo'), { module: 'heredad', source: 'tus nodos (API oficial)', at }), 'bubble');\n  t.advance(2000);\n  assert.match(t.box().querySelector('.shv-voice__basis').textContent, /^Lo sé por: tus nodos \\(API oficial\\) · hoy \\d\\d:\\d\\d$/);\n});\n\ntest('versión, reglas de la casa y el orden de carga', () => {"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(SRC, /Versión: 1\\.3\\.0/);",
+     "text": "assert.match(SRC, /Versión: 1\\.4\\.0/);"
+    }
+   ]
+  },
+  {
+   "path": "js/raids-view.js",
+   "base_sha": "a03f45f48c14224af9a13d685b73b6c4dab3fb7c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-25) — RAI-6:",
+     "text": " * Versión: 1.3.0 (2026-10-27) — BL-076 SHV-5a: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-25) — RAI-6:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.2.0';",
+     "text": "var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text })); // SHE-3",
+     "text": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: 'tus raids de esta semana (API oficial) · en este navegador' })); // SHE-3"
+    }
+   ]
+  },
+  {
+   "path": "js/raids-sheet.js",
+   "base_sha": "95fa2099a31bd5c4c833780e693dd4815f096162",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-25) — RAI-6:",
+     "text": " * Versión: 1.3.0 (2026-10-27) — BL-076 SHV-5a: mi línea dice «Lo sé por» y usa los tipos de DEC-024 · antes 1.2.0 (2026-10-25) — RAI-6:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.2.0';",
+     "text": "var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "return { kind: 'success', text: 'Ya lo cobraste esta semana.",
+     "text": "return { kind: 'saluda', basis: m.state === 'hand' ? 'lo que marcaste esta semana' : 'tus raids de esta semana (API oficial)', text: 'Ya lo cobraste esta semana."
+    },
+    {
+     "op": "replace",
+     "anchor": "return { kind: 'hint', text: 'Esta semana todavía te esperan '",
+     "text": "return { kind: 'explica', basis: 'tu semana de raids (API oficial) y las recompensas de la wiki', text: 'Esta semana todavía te esperan '"
+    },
+    {
+     "op": "replace",
+     "anchor": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text }));",
+     "text": "box.appendChild(root.Shiruvana.voice({ kind: msg.kind, text: msg.text, basis: msg.basis + ' · en este navegador' }));"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "65e2d78303d1fec48df4ba901e853dbf40b2e7f2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.2.0');",
+     "text": "assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.3.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(S.voiceOf(model('decima')).kind, 'success');\n",
+     "text": "  assert.equal(S.voiceOf(model('decima')).kind, 'saluda', 'SHV-5a: los 4 tipos de DEC-024');\n  assert.equal(S.voiceOf(model('decima')).basis, 'tus raids de esta semana (API oficial)');\n  assert.equal(S.voiceOf(model('greer')).kind, 'explica');\n  assert.equal(S.voiceOf(model('greer')).basis, 'tu semana de raids (API oficial) y las recompensas de la wiki');\n  assert.equal(S.voiceOf(model('forging_steel', data({ marks: ['forging_steel'] }))).basis, 'lo que marcaste esta semana', 'lo que marcaste vos no es de la API');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    Shiruvana: { voice: (m) => ({ text: m.text, kind: m.kind }) },",
+     "text": "    Shiruvana: { voice: (m) => ({ text: m.text, kind: m.kind, basis: m.basis }) },"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(D.els.rsVoice.children[0].text, /16 fragmentos/);\n",
+     "text": "  assert.match(D.els.rsVoice.children[0].text, /16 fragmentos/);\n  assert.equal(D.els.rsVoice.children[0].basis, 'tu semana de raids (API oficial) y las recompensas de la wiki · en este navegador', 'SHV-5a: «Lo sé por»');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-view.test.cjs",
+   "base_sha": "3079010306df8a5268a06e6ad78af3e29b9a9650",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    Shiruvana: { voice: (m) => ({ id: null, text: m.text, children: [] }) },",
+     "text": "    Shiruvana: { voice: (m) => ({ id: null, text: m.text, basis: m.basis, children: [] }) },"
+    },
+    {
+     "op": "replace",
+     "anchor": "/Greer y Ura/.test(D.els.rvVoice.children[0].text), 'mi línea aparece');\n",
+     "text": "/Greer y Ura/.test(D.els.rvVoice.children[0].text), 'mi línea aparece');\n  assert.equal(D.els.rvVoice.children[0].basis, 'tus raids de esta semana (API oficial) · en este navegador', 'SHV-5a: sin mi globo también digo de dónde lo sé');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-modules.test.cjs",
+   "base_sha": "ec09c21cce51453a0b8f4bec82a1365cb7e3b41e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    const call = \"if (msg && root.ShvBubble && root.ShvBubble.speak) root.ShvBubble.speak(box, msg, { module: '\" + mod + \"', source: '\" + src + \"'\" + (key ? ', key: key' : '') + ' }); ' + FALLBACK;\n    assert.equal(s.split(call).length - 1, 1, f + ': una sola llamada, con el respaldo de siempre en la misma línea');\n",
+     "text": "    const head = \"if (msg && root.ShvBubble && root.ShvBubble.speak) root.ShvBubble.speak(box, msg, { module: '\" + mod + \"', source: '\" + src + \"'\" + (key ? ', key: key' : '') + ' }); ';\n    // BL-076 SHV-5: sin mi globo, el respaldo dice en «Lo sé por» lo mismo que el globo. Quién falta: tests/shv-basis.test.cjs.\n    const withBasis = head + FALLBACK.replace('text: msg.text })', \"text: msg.text, basis: '\" + src + \" · en este navegador' })\");\n    assert.equal(s.split(withBasis).length - 1 + s.split(head + FALLBACK).length - 1, 1, f + ': una sola llamada, con el respaldo en la misma línea');\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "4c2c59f2e9d39ee1b7f0e4125b305860c7df5d96",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/raids-view.js\", \"v\": \"1.2.0\" }",
+     "text": "{ \"src\": \"js/raids-view.js\", \"v\": \"1.3.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/raids-sheet.js\", \"v\": \"1.2.0\" }",
+     "text": "{ \"src\": \"js/raids-sheet.js\", \"v\": \"1.3.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.3.0\" }",
+     "text": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.4.0\" }"
+    }
+   ]
+  }
+ ]
+}
