@@ -149,17 +149,76 @@ test('el oro se redondea y lleva punto de miles; menos de 1 oro se dice así', (
 });
 
 test('la cuenta sigue pura; no guardo nada, no armo HTML y voy en el manifiesto después de mi globo', () => {
-  const pure = SRC.slice(0, SRC.indexOf('SHV-3b: hablo en «Mi cola»'));
-  assert.doesNotMatch(pure, /document|fetch\(|GW2Api|addEventListener/);
+  const cut = SRC.indexOf('// ------------------------------------------------------------------ SHV-3b');
+  assert.ok(cut > SRC.indexOf('function pace('), 'la cuenta (y el ritmo) va arriba, antes de la parte que mira la pantalla');
+  const pure = SRC.slice(SRC.indexOf('(function (root)'), cut);
+  assert.doesNotMatch(pure, /document|fetch\(|GW2Api|ShvMemory|addEventListener/);
   assert.doesNotMatch(SRC, /localStorage|innerHTML|insertAdjacentHTML|fetch\(|XMLHttpRequest/);
   const mods = JSON.parse(read('js/modules.json')).modules;
   const src = mods.map((m) => m.src);
   const i = src.indexOf('js/shv-legendary.js');
   assert.ok(i > src.indexOf('js/shv-bubble.js') && src.indexOf('js/shv-bubble.js') >= 0, 'después de shv-bubble');
-  assert.equal(mods[i].v, '1.1.0');
+  assert.equal(mods[i].v, '1.2.0');
+  assert.ok(i > src.indexOf('js/shv-memory.js') && src.indexOf('js/shv-memory.js') >= 0, 'después de mi memoria');
   assert.ok(Buffer.byteLength(SRC) < 20 * 1024, 'presupuesto de 20 KB');
-  assert.match(SRC, /Versión: 1\.1\.0/);
-  assert.equal(load().ShvLegendary.version, '1.1.0');
+  assert.match(SRC, /Versión: 1\.2\.0/);
+  assert.equal(load().ShvLegendary.version, '1.2.0');
+});
+
+// ------------------------------------------------------------------ SHV-3c: el ritmo, con mis fotos de la Cartera
+const G = 10000; // 1 oro en cobre
+const snap = (day, gold) => ({ day, at: day, values: { 1: gold * G } });
+
+test('ritmo: con 7 días de fotos y el oro en subida, en cuántos días juntás lo que falta', () => {
+  const P = load().ShvLegendary.pace;
+  const hist = [snap(90, 0), snap(93, 50), snap(100, 400), snap(101, 450)];
+  assert.deepEqual(plain(P(hist, 1450 * G, 101)), { perDay: 50 * G, span: 8, days: 20 }, 'la más nueva de hace 7 a 14 días (la del 93)');
+  assert.deepEqual(plain(P([snap(92, 50), { day: 93, values: { 2: 9 } }, snap(101, 500)], 1500 * G, 101)),
+    { perDay: 50 * G, span: 9, days: 20 }, 'una foto sin oro no sirve de base: uso la anterior');
+  assert.deepEqual(plain(P(hist, 1451 * G, 102)), { perDay: 50 * G, span: 8, days: 21 }, 'foto de ayer: vale; redondeo hacia arriba');
+  assert.equal(P(hist, 1450 * G, 103), null, 'foto más vieja que ayer: no hablo de tu oro');
+});
+
+test('ritmo: menos de 7 días, más de 14, oro quieto o en baja, o sin datos: no invento plazo', () => {
+  const P = load().ShvLegendary.pace;
+  assert.equal(P([snap(95, 0), snap(101, 450)], 1000 * G, 101), null, '6 días');
+  assert.equal(P([snap(86, 0), snap(101, 450)], 1000 * G, 101), null, '15 días');
+  assert.equal(P([snap(94, 450), snap(101, 450)], 1000 * G, 101), null, 'quieto');
+  assert.equal(P([snap(94, 500), snap(101, 450)], 1000 * G, 101), null, 'en baja');
+  assert.equal(P([{ day: 94, values: {} }, snap(101, 450)], 1000 * G, 101), null, 'la foto vieja no tiene oro');
+  assert.equal(P([snap(94, 0), { day: 101, values: { 2: 5 } }], 1000 * G, 101), null, 'la nueva no tiene oro');
+  assert.equal(P([], 1000 * G, 101), null);
+  assert.equal(P(null, 1000 * G, 101), null);
+  assert.equal(P([snap(94, 0), snap(101, 450)], 0, 101), null, 'no falta oro');
+  assert.equal(P([snap(94, 0), snap(101, 450)], 1000 * G, null), null, 'sin día de hoy');
+});
+
+test('ritmo: si ese oro ya está en tu Cartera te lo digo, aunque tenga una sola foto', () => {
+  const P = load().ShvLegendary.pace;
+  assert.deepEqual(plain(P([snap(101, 2000)], 1500 * G, 101)), { have: true, gold: 2000 * G });
+  assert.deepEqual(plain(P([snap(101, 1500)], 1500 * G, 101)), { have: true, gold: 1500 * G });
+});
+
+test('ritmo en la frase: va después del oro y suma mis fotos al fundamento; nunca sin precios', () => {
+  const L = load().ShvLegendary;
+  const base = { item: ITEM, tree: TREE, stock: {}, prices: PRICES, today: 101 };
+  const o = L.observe(Object.assign({ hist: [snap(93, 0), snap(101, 80)] }, base))[0];
+  assert.deepEqual(plain(o.text), ['Para Bifrost te faltan 3 materiales base (de 3).',
+    'Comprando lo que se vende: ~225 oro al precio del Bazar.',
+    'A tu ritmo de los últimos 8 días (~10 oro por día), lo que te falta de ese oro lo juntás en ~15 días.',
+    '1 no se vende: se fabrica o se consigue jugando.']);
+  assert.match(o.basis.source, /con los precios del Bazar y tus fotos diarias de la Cartera$/);
+  const have = L.observe(Object.assign({ hist: [snap(101, 1234.5)] }, base))[0];
+  assert.equal(have.text[2], 'Ese oro ya lo tenés en tu Cartera (1.235 oro).');
+  const slow = L.observe(Object.assign({ hist: [snap(93, 0), snap(101, 0.5)] }, base))[0];
+  assert.equal(slow.text[2], 'A tu ritmo de los últimos 8 días (menos de 1 oro por día), lo que te falta de ese oro lo juntás en más de un año.');
+  const one = L.observe(Object.assign({ hist: [snap(93, 0), snap(101, 224)] }, base))[0];
+  assert.match(one.text[2], /lo juntás en ~1 día\.$/);
+  const none = L.observe(Object.assign({ hist: [snap(96, 0), snap(101, 80)] }, base))[0];
+  assert.equal(none.text.length, 3, 'menos de 7 días: sin ritmo');
+  assert.doesNotMatch(none.basis.source, /fotos/);
+  const noPrice = L.observe({ item: ITEM, tree: TREE, stock: {}, prices: null, today: 101, hist: [snap(93, 0), snap(101, 80)] })[0];
+  assert.equal(noPrice.text.length, 1, 'sin precios no hay oro que juntar');
 });
 
 // ------------------------------------------------------------------ SHV-3b: «Mi cola», con un DOM falso
@@ -243,6 +302,8 @@ function setup(o = {}) {
     ShvBubble: { offer: (x) => { t.offers.push(x); return true; }, quiet: () => t.quiet }
   };
   if (o.noBubble) delete window.ShvBubble;
+  if (o.memory) window.ShvMemory = { fingerprint: (k) => 'fp:' + k, history: (fp) => { t.fp = fp; return o.memory; },
+    _pure: { dayOf: () => 101 } };
   vm.runInNewContext(read('js/shv-core.js'), { window, globalThis: {} });
   vm.runInNewContext(SRC, { window, globalThis: {}, Date, Promise });
   const tick = () => { const fs = t.timers.splice(0); fs.forEach((f) => f()); };
@@ -352,6 +413,24 @@ test('sin precursores cuento la receta directa (D2); sin respuesta del Bazar no 
   assert.equal(o.text.length, 1);
   assert.match(o.text[0], /ingredientes de la receta directa/);
   assert.match(o.basis.source, /^tu inventario .* la receta de la Armería$/);
+});
+
+test('SHV-3c en «Mi cola»: leo mis fotos de la cuenta activa por su huella, nunca la Key', async () => {
+  const s = setup({ memory: [{ day: 93, values: { 1: 0 } }, { day: 101, values: { 1: 60 * 10000 } }] });
+  s.draw();
+  assert.equal(await s.w.ShvLegendary.check(), 'bubble');
+  assert.equal(s.t.fp, 'fp:K');
+  assert.equal(s.t.offers[0].text[2], 'A tu ritmo de los últimos 8 días (~8 oro por día), lo que te falta de ese oro lo juntás en ~20 días.');
+  assert.equal(s.t.offers[0].key, '30698|tree|3', 'el ritmo cambia cada día, pero no es una novedad para el globo');
+  const bad = setup({ memory: [] });
+  bad.w.ShvMemory.history = () => { throw new Error('x'); };
+  bad.draw();
+  assert.equal(await bad.w.ShvLegendary.check(), 'bubble', 'si mi memoria falla, hablo igual sin ritmo');
+  assert.equal(bad.t.offers[0].text.length, 3);
+  const off = setup();
+  off.draw();
+  await off.w.ShvLegendary.check();
+  assert.equal(off.t.offers[0].text.length, 3, 'sin shv-memory cargado, sin ritmo');
 });
 
 test('sin globo (shv-bubble no cargó) lo escribo en «Mi cola»; el inventario suma banco, materiales y personajes', async () => {

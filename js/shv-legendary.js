@@ -1,6 +1,8 @@
 /*!
  * js/shv-legendary.js — Lo que noto de tu legendaria (BL-059 SHV-3, nivel N4 de DEC-033)
- * Versión: 1.1.0 (2026-10-27) · SHV-3b: hablo en «Mi cola» de la Armería con mi globo (js/shv-bubble.js), una vez por
+ * Versión: 1.2.0 (2026-10-27) · SHV-3c: con mis fotos diarias de la Cartera (js/shv-memory.js) te digo si ese oro ya
+ *          lo tenés y, con 7 días o más de fotos, en cuánto lo juntás a tu ritmo. Si tu oro no subió, no invento plazo.
+ *          1.1.0 (2026-10-27) · SHV-3b: hablo en «Mi cola» de la Armería con mi globo (js/shv-bubble.js), una vez por
  *          visita y por novedad (cambia la legendaria o cuántos materiales te faltan). Si me silenciaste, lo escribo
  *          dentro de «Mi cola». «Ver qué me falta» abre su ficha. Pido precios al Bazar solo por lo que falta.
  *          1.0.0 (2026-10-27) · SHV-3a: solo la cuenta, sin pantalla.
@@ -20,7 +22,8 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
+  var PACE_MIN = 7, PACE_MAX = 14; // D4: el ritmo sale de 7 a 14 días de fotos, nunca de menos
 
   function num(v) { var n = Number(v); return isFinite(n) && n > 0 ? n : 0; }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
@@ -100,6 +103,36 @@
     return '~' + String(g).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' oro';
   }
 
+  /**
+   * SHV-3c (puro). hist: mis fotos diarias de la Cartera de esta cuenta (js/shv-memory.js), de la más vieja a la
+   * más nueva ({day, values:{1: cobre}}). copper: el oro que falta, en cobre. today: hoy, contado como en mi memoria.
+   * Solo hablo con una foto de hoy o de ayer (si no, el oro que veo es viejo).
+   *  - Si ya tenés ese oro: {have, gold}.
+   *  - Si no, comparo con la foto más nueva de hace 7 a 14 días: si el oro subió, {perDay, span, days}.
+   *  - Menos de 7 días de fotos, o el oro no subió: null (no invento plazo).
+   */
+  function pace(hist, copper, today) {
+    if (!Array.isArray(hist) || !hist.length || !(copper > 0) || typeof today !== 'number') return null;
+    var last = hist[hist.length - 1];
+    if (!last || !last.values || last.day < today - 1) return null; // sin oro en la foto: now 0, no hay ritmo
+    var now = Number(last.values[1]) || 0;
+    if (now >= copper) return { have: true, gold: now };
+    var base = null;
+    for (var i = hist.length - 1; i >= 0; i--) {
+      var h = hist[i];
+      if (h && h.values && 1 in h.values && h.day <= last.day - PACE_MIN && h.day >= last.day - PACE_MAX) { base = h; break; }
+    }
+    if (!base) return null;
+    var span = last.day - base.day, perDay = (now - Number(base.values[1])) / span;
+    if (!(perDay > 0)) return null;
+    return { perDay: perDay, span: span, days: Math.ceil((copper - now) / perDay) };
+  }
+  function paceText(p) {
+    if (p.have) return 'Ese oro ya lo tenés en tu Cartera (' + goldText(p.gold).replace('~', '') + ').';
+    var d = p.days > 365 ? 'más de un año' : '~' + plural(p.days, 'día', 'días');
+    return 'A tu ritmo de los últimos ' + p.span + ' días (' + goldText(p.perDay) + ' por día), lo que te falta de ese oro lo juntás en ' + d + '.';
+  }
+
   /** Observaciones con el formato de js/shv-core.js (a lo sumo una). opts: { at } = cuándo se leyó. */
   function observe(input, opts) {
     opts = opts || {};
@@ -115,11 +148,13 @@
         'Para ' + e.name + ' ' + falta + e.missingKinds + ' de los ' + e.total + ' ingredientes de la receta directa' +
         ' (cuando abras su árbol, te cuento los materiales base).');
       if (e.buyable) text.push('Comprando lo que se vende: ' + goldText(e.gold) + ' al precio del Bazar.');
+      var pc = e.buyable ? pace(input.hist, e.gold, input.today) : null;
+      if (pc) text.push(paceText(pc));
       if (e.untradeable) text.push(plural(e.untradeable, 'no se vende', 'no se venden') + ': ' +
         (e.untradeable === 1 ? 'se fabrica o se consigue' : 'se fabrican o se consiguen') + ' jugando.');
     }
     var src = 'tu inventario (banco, materiales y personajes) y ' + (tree ? 'el árbol de fabricación' : 'la receta de la Armería') +
-      (e.priced ? ', con los precios del Bazar' : '');
+      (e.priced ? ', con los precios del Bazar' : '') + (pc ? ' y tus fotos diarias de la Cartera' : '');
     return [{
       module: 'legendary', id: 'falta:' + e.itemId, priority: 'media',
       kind: e.missingKinds ? 'explica' : 'saluda', text: text,
@@ -168,7 +203,17 @@
     var tree = null;
     try { if (LT && typeof LT.hasPrecursors === 'function' && LT.hasPrecursors()) tree = LT.build(id); } catch (e) { tree = null; }
     var recipe = typeof T.computeMaterials === 'function' ? T.computeMaterials(id) : null;
-    return { item: { id: id, name: nameOf(id) || ('#' + id) }, tree: tree, recipe: recipe, stock: stockOf(s), prices: null, token: s.token };
+    return { item: { id: id, name: nameOf(id) || ('#' + id) }, tree: tree, recipe: recipe, stock: stockOf(s), prices: null, token: s.token,
+      hist: histOf(s.token), today: todayOf() };
+  }
+  // SHV-3c: mis fotos diarias de la Cartera de esta cuenta (por la huella de la Key; nunca la Key).
+  function histOf(token) {
+    var M = root.ShvMemory;
+    try { return M && typeof M.history === 'function' && typeof M.fingerprint === 'function' ? M.history(M.fingerprint(token)) : null; } catch (e) { return null; }
+  }
+  function todayOf() {
+    var M = root.ShvMemory, f = M && M._pure && M._pure.dayOf;
+    return typeof f === 'function' ? f(Date.now()) : null;
   }
   function missingIds(input) {
     var src = rowsOf(input), out = [];
@@ -267,7 +312,7 @@
     return true;
   }
 
-  root.ShvLegendary = { version: VERSION, estimate: estimate, observe: observe, priceOf: priceOf, goldText: goldText,
+  root.ShvLegendary = { version: VERSION, estimate: estimate, observe: observe, priceOf: priceOf, goldText: goldText, pace: pace,
     check: check, wire: wire, _pure: { stockOf: stockOf, missingIds: missingIds, inputNow: inputNow } };
   if (doc && doc.addEventListener) {
     if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', wire);
