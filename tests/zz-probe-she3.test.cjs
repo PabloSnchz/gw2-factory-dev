@@ -1,21 +1,21 @@
-// Sonda SHE-3 (se borra después): dónde hablo hoy y con qué tipo.
+// Sonda SHE-3 (se borra después): qué digo en cada módulo (la función que arma mi mensaje).
 'use strict';
 const { test } = require('node:test');
 const fs = require('node:fs');
 const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
-test('censo de mi voz', () => {
-  const dir = path.join(ROOT, 'js');
+const FILES = ['ach-view.js', 'act-view.js', 'act-week.js', 'home-view.js', 'inv-view.js', 'raids-view.js', 'raids-sheet.js', 'wv-view.js', 'acc-view.js'];
+test('mis mensajes por módulo', () => {
   const out = [];
-  fs.readdirSync(dir).filter((f) => f.endsWith('.js')).forEach((f) => {
-    const s = fs.readFileSync(path.join(dir, f), 'utf8');
-    const lines = s.split('\n');
-    const hits = [];
-    lines.forEach((l, i) => {
-      if (/Shiruvana\.voice\(|ShvCore\.(render|pick)\(|C\.render\(|S\.voice\(|\.voice\(\{/.test(l)) hits.push((i + 1) + ': ' + l.trim().slice(0, 150));
-    });
-    const kinds = (s.match(/kind:\s*'(\w+)'/g) || []).reduce((a, k) => { a[k] = (a[k] || 0) + 1; return a; }, {});
-    if (hits.length) out.push('## ' + f + ' (' + s.length + ' B) kinds=' + JSON.stringify(kinds) + '\n' + hits.slice(0, 8).join('\n'));
+  FILES.forEach((f) => {
+    const lines = fs.readFileSync(path.join(ROOT, 'js', f), 'utf8').split('\n');
+    const idx = lines.findIndex((l) => /root\.Shiruvana\.voice\(/.test(l));
+    const kl = [];
+    lines.forEach((l, i) => { if (/kind:\s*'/.test(l)) kl.push(i); });
+    const shown = new Set();
+    kl.forEach((i) => { for (let j = Math.max(0, i - 2); j <= Math.min(lines.length - 1, i + 1); j++) shown.add(j); });
+    for (let j = Math.max(0, idx - 6); j <= idx + 1; j++) shown.add(j);
+    out.push('## ' + f + '\n' + [...shown].sort((a, b) => a - b).map((j) => (j + 1) + ': ' + lines[j].trim().slice(0, 230)).join('\n'));
   });
   console.log(out.join('\n\n'));
 });
