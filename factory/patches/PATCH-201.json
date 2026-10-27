@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-201",
+ "summary": "BL-059 SHV-3: propuesta entregada; la API Key queda como decisión de Pablo (no rotarla).",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "d9a5b7159b9e718e5ea0f82ac9c8ff6604796d47",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue BL-059 SHV-3 (legendaria, N4).",
+     "text": "BL-059 SHV-3: propuesta ENTREGADA 2026-10-27 03:44Z (docs/propuestas/propuesta-shiruvana-shv3.html), espera las decisiones D1 a D5 de Pablo."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 03:36Z",
+     "text": "Última actualización: 2026-10-27 03:44Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-059 SHV-3: lo que noto de tu Armería Legendaria (N4), con el globo. Pablo debería cambiar la API Key que quedó en la conversación.",
+     "text": "Próxima acción: con las decisiones de Pablo sobre la propuesta SHV-3, SHV-3a (js/shv-legendary.js inerte + estimate() puro + tests)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-059] Acción: la API Key que aparece en la consola de producción (app.js 2.9.0 la imprime) quedó copiada en la conversación: cambiala en account.arena.net/applications y cargá la nueva en Keys. DEV ya no la imprime (app.js 2.9.1).",
+     "text": "- [BL-059] Info: la API Key que imprime app.js 2.9.0 de producción: Pablo decidió no cambiarla (2026-10-27 03:38Z, «no es un riesgo»). DEV ya no la imprime (app.js 2.9.1).\n- [BL-059] Decisión: propuesta SHV-3 «¿Cuánto me falta para mi legendaria?» (docs/propuestas/propuesta-shiruvana-shv3.html), D1 a D5. Recomiendo: D1 la primera de «Mi cola»; D2 árbol si los precursores ya están cargados, si no receta directa; D3 precio de venta del Bazar como referencia; D4 ritmo solo con ≥ 7 días de memoria (SHV-3c); D5 lo que no se vende, aparte."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "d3205d256b8b3598b51d36ba53a6fc5463c3db69",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Hallazgo ALTO: app.js 2.9.0 de producción imprime la API Key en la consola (DEV 2.9.1 ya no).",
+     "text": "Hallazgo ALTO: app.js 2.9.0 de producción imprime la API Key en la consola (DEV 2.9.1 ya no). Pablo decidió no cambiar la Key (03:38Z). SHV-3 propuesta ENTREGADA 03:44Z (docs/propuestas/propuesta-shiruvana-shv3.html; RUN-160 a RUN-162): Shiruvana dice cuántos materiales faltan para la primera de «Mi cola», cuánto oro al precio de referencia y cuántos no se venden; módulo nuevo shv-legendary.js que solo lee el tracker y el árbol, sin llamadas nuevas; micro-ciclos SHV-3a/3b/3c."
+    }
+   ]
+  }
+ ]
+}
