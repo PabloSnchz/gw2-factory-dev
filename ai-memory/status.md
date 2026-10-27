@@ -1,13 +1,13 @@
 # STATUS
 
 Estado: ESPERANDO A PABLO
-Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). Pablo vio que fuera de la Cartera yo no aparecía y que los íconos de la Cartera parpadeaban; los dos arreglados en PATCH-198 y cerrada por su pedido («corregí eso y si está ok podés cerrar BL-075»). Sigue BL-059 SHV-3 (legendaria, N4).
+Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). Pablo vio que fuera de la Cartera yo no aparecía y que los íconos de la Cartera parpadeaban; los dos arreglados en PATCH-198 y cerrada por su pedido («corregí eso y si está ok podés cerrar BL-075»). BL-059 SHV-3: propuesta ENTREGADA 2026-10-27 03:44Z (docs/propuestas/propuesta-shiruvana-shv3.html), espera las decisiones D1 a D5 de Pablo.
 Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-27 03:36Z
-Próxima acción: BL-059 SHV-3: lo que noto de tu Armería Legendaria (N4), con el globo. Pablo debería cambiar la API Key que quedó en la conversación.
+Última actualización: 2026-10-27 03:44Z
+Próxima acción: con las decisiones de Pablo sobre la propuesta SHV-3, SHV-3a (js/shv-legendary.js inerte + estimate() puro + tests).
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -190,7 +190,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-074] Info: BLS-0 APROBADA (2026-10-26 20:54Z); D1 a D3 decididos por mí, D4 = pensar siempre en el jugador de producción.
 - [BL-059] Info: SHV-2 y SHV-2b VALIDADOS por Pablo (2026-10-27 01:16Z).
 - [BL-059] Info: SHV-2c CERRADO (03:05Z): no hay historia vieja de la Cartera en producción (0 claves).
-- [BL-059] Acción: la API Key que aparece en la consola de producción (app.js 2.9.0 la imprime) quedó copiada en la conversación: cambiala en account.arena.net/applications y cargá la nueva en Keys. DEV ya no la imprime (app.js 2.9.1).
+- [BL-059] Info: la API Key que imprime app.js 2.9.0 de producción: Pablo decidió no cambiarla (2026-10-27 03:38Z, «no es un riesgo»). DEV ya no la imprime (app.js 2.9.1).
+- [BL-059] Decisión: propuesta SHV-3 «¿Cuánto me falta para mi legendaria?» (docs/propuestas/propuesta-shiruvana-shv3.html), D1 a D5. Recomiendo: D1 la primera de «Mi cola»; D2 árbol si los precursores ya están cargados, si no receta directa; D3 precio de venta del Bazar como referencia; D4 ritmo solo con ≥ 7 días de memoria (SHV-3c); D5 lo que no se vende, aparte.
 - [BL-075] Info: BL-075 CERRADA (2026-10-27 03:35Z, FEAT-020). Si fuera de la Cartera sigo sin aparecer o algo parpadea, la reabro.
 - [BL-059] Info: la historia vieja de la Cartera (gn:wallet:snapshots:*) se suma a mi memoria si el formato sirve (Pablo, 00:43Z). La mido antes (SHV-2c).
 - [BL-070] Info: BL-070 CERRADA (2026-10-26 05:43Z). Paso 5 VALIDADO por Pablo (FEAT-018); los 5 pasos, validados.
