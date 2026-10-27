@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta SHV-3 — Shiruvana en la Armería (BL-059)</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#111;color:#e8e2d4;max-width:900px;margin:2rem auto;padding:0 1rem;line-height:1.55}
+h1,h2{color:#e0b84c}h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:2rem;border-bottom:1px solid #333;padding-bottom:.3rem}
+table{border-collapse:collapse;width:100%;margin:.6rem 0}th,td{border:1px solid #333;padding:.4rem .55rem;text-align:left;vertical-align:top}th{background:#1c1c1c}
+.mock{background:#1a1712;border:1px solid #5a4a22;border-radius:12px;padding:.8rem 1rem;margin:.8rem 0;max-width:460px}
+.mock b{color:#e0b84c}.rec{color:#8fd18f}code{background:#222;padding:0 .25rem;border-radius:3px}
+small{color:#9a937f}
+</style>
+</head>
+<body>
+<h1>Propuesta SHV-3 — «¿Cuánto me falta para mi legendaria?»</h1>
+<p><small>BL-059 · Nivel N4 de la propuesta SHV-0 · 2026-10-27 · Shiruvana. La decisión D1 de SHV-0 pedía propuesta propia para SHV-3: esta es.</small></p>
+
+<h2>1. Product</h2>
+<p><b>Problema.</b> La Armería ya responde «de qué se hace y qué me falta» (ficha, árbol, Materiales totales), pero en <b>unidades</b>. El jugador tiene que traducir solo esa tabla a la pregunta real: <i>¿cuánto oro es eso y qué parte no se puede comprar?</i></p>
+<p><b>Valor.</b> Una frase de Shiruvana sobre la legendaria que <b>el jugador eligió</b> (la primera de «Mi cola»), con números que ya existen en la app. Cero pantallas nuevas.</p>
+<p><b>Prioridad.</b> Media-alta: es el N4 prometido en SHV-0 y el primer cruce Armería × Bazar × inventario.</p>
+
+<h2>2. Lo que medí (RUN-160/161/162)</h2>
+<table>
+<tr><th>Fuente</th><th>Qué da</th><th>Costo</th></tr>
+<tr><td><code>LegendaryTracker.getState()</code> / <code>getQueue()</code></td><td>Lo que tenés (banco + materiales + personajes, vía <code>stockMap()</code>), la cola (máx. 5), caché de precios del Bazar</td><td>Ya cargado, sin llamadas nuevas</td></tr>
+<tr><td><code>computeMaterials</code> (receta)</td><td>Ingredientes directos: necesito / tengo / falta, totales</td><td>Barato, sin precursores</td></tr>
+<tr><td><code>LegendaryTree.build(id)</code></td><td>Materiales <b>base</b> del árbol completo (incluye precursor)</td><td>Necesita <code>legendary-precursors.js</code> (268 KB), se carga recién al abrir un árbol; el index NO lo carga</td></tr>
+<tr><td>Memoria (<code>ShvMemory</code>)</td><td>Hoy ~1-2 días de historia</td><td>Un «ritmo semanal» honesto pide ≥ 7 días</td></tr>
+</table>
+<p><code>legendary-tracker.js</code> (63,8 KB) y <code>render-catologo.js</code> (61 KB) están por encima del presupuesto: <b>no los toco</b>.</p>
+
+<h2>3. Cómo se ve</h2>
+<div class="mock">🐈‍⬛ <b>Shiruvana</b><br>
+Para <b>Bifrost</b> te faltan <b>14 materiales base</b> (de 22).<br>
+Comprando lo que se vende: <b>~1.240 oro</b> al precio de referencia del Bazar.<br>
+<b>3</b> no se venden: esos los conseguís jugando.<br>
+<small>[Ver qué me falta] · [Ahora no]</small></div>
+<p><small>Números de ejemplo.</small> Aparece en el globo (FEAT-020), una vez por visita, al entrar en «Mi cola». Si Shiruvana está silenciada, va inline en la voz de la Armería. Con memoria ≥ 7 días (SHV-3c) se suma: «a tu ritmo de esta semana, ~Y días».</p>
+
+<h2>4. Architecture</h2>
+<ul>
+<li>Módulo nuevo <code>js/shv-legendary.js</code> (presupuesto ≤ 20 KB): solo <b>lee</b> el estado público del tracker y del árbol; habla con <code>ShvBubble.speak()</code>.</li>
+<li>Cálculo puro y testeable: <code>estimate(queueTop, stock, prices, tree|recipe)</code> → <code>{name, missing, total, gold, untradeable, base:'tree'|'recipe'}</code>.</li>
+<li>Sin llamadas nuevas a la API: usa la caché de precios que el tracker ya pidió; lo que no tenga precio se cuenta como «no se vende / sin precio».</li>
+<li>Bajo acoplamiento: si falta el tracker, la cola está vacía o algo falla → silencio (<code>'none'</code>), nunca rompe la Armería.</li>
+</ul>
+
+<h2>5. Decisiones</h2>
+<table>
+<tr><th>#</th><th>Pregunta</th><th>Mi recomendación</th></tr>
+<tr><td>D1</td><td>¿De qué legendaria habla?</td><td class="rec">La primera de «Mi cola» (la que elegiste). Sin cola → no habla.</td></tr>
+<tr><td>D2</td><td>¿Receta o árbol completo?</td><td class="rec">Árbol si los precursores ya están cargados; si no, receta directa y lo dice («contando la receta directa»). No fuerzo la descarga de 268 KB.</td></tr>
+<tr><td>D3</td><td>¿Qué precio?</td><td class="rec">Precio de venta del Bazar (lo que pagás comprando al instante), rotulado «precio de referencia», nunca «en vivo».</td></tr>
+<tr><td>D4</td><td>¿Ritmo / días?</td><td class="rec">Solo con ≥ 7 días de memoria; queda para SHV-3c. Antes, no invento.</td></tr>
+<tr><td>D5</td><td>¿Lo que no se vende?</td><td class="rec">Se cuenta aparte («N no se venden») y no suma oro.</td></tr>
+</table>
+
+<h2>6. Micro-ciclos</h2>
+<table>
+<tr><th>MC</th><th>Qué</th></tr>
+<tr><td>SHV-3a</td><td><code>shv-legendary.js</code> inerte + <code>estimate()</code> puro + tests</td></tr>
+<tr><td>SHV-3b</td><td>Cableado en «Mi cola» con <code>speak()</code>, guía y FEAT</td></tr>
+<tr><td>SHV-3c</td><td>Ritmo semanal (cuando la memoria tenga ≥ 7 días)</td></tr>
+</table>
+</body>
+</html>
