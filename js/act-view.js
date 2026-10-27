@@ -1,7 +1,7 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.5.0 (2026-10-27) — BL-076 SHV-5c: sin mi globo, mi línea también dice «Lo sé por» · antes 1.4.0 (2026-10-25) — ACT-7: el PSNA lo dibuja js/act-psna.js; ya no reubico nada de js/activities.js
+ * Versión: 1.6.0 (2026-10-27) — BL-078 UNI-3: los 3 relojes son el reloj común de la Bóveda (GNKit) · antes 1.5.0 (2026-10-27) — BL-076 SHV-5c: sin mi globo, mi línea también dice «Lo sé por» · antes 1.4.0 (2026-10-25) — ACT-7: el PSNA lo dibuja js/act-psna.js; ya no reubico nada de js/activities.js
  *          1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)
  *          1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)
  * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)
@@ -26,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.5.0';
+  var VERSION = '1.6.0';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
   var ROUTE = '#/activities'; // la misma que usa js/router.js
@@ -72,7 +72,7 @@
     ui = ui || {};
     var P = A(), d = data || {}, c = cat || {}, ok = !!d.loaded && !!d.hasToken;
     var m = { tab: ui.tab === 'semana' ? 'semana' : 'hoy', loaded: !!d.loaded, hasToken: !!d.hasToken, unread: d.unread || [],
-      items: d.items || {}, clocks: clocks(now), crafting: null, fr: null, frProg: null,
+      items: d.items || {}, clocks: clocks(now), now: Number(now), crafting: null, fr: null, frProg: null,
       key: { state: 'unknown', chars: [] }, stones: null, stonesTotal: (c.leivas && c.leivas.perWeek) || 5, voice: null };
     if (!P) return m;
     if (c.dailyCrafting) m.crafting = P.dailyCrafting(c.dailyCrafting.items, ok ? d.crafting : null);
@@ -227,7 +227,9 @@
     h.push('<div class="av-hero"><div class="av-row"><img class="av-ico" src="' + ICON + '" alt="" width="56" height="56">');
     h.push('<div class="av-title"><h2 id="avTitle">Actividades</h2><p>' + esc(subtitle(m)) + '</p></div>');
     h.push('<div class="av-acts">');
-    if (clk) {
+    var K = root.GNKit; // UNI-3: el reloj común; sin GNKit, las píldoras de antes
+    if (clk && K && typeof K.clocks === 'function') h.push(K.clocks(['daily', 'psna', 'weekly'], m.now));
+    else if (clk) {
       h.push('<span class="av-pill" title="00:00 UTC">Reset diario <b id="avClkD">en ' + esc(clk.daily) + '</b></span>' +
         '<span class="av-pill" title="08:00 UTC">PSNA cambia <b id="avClkP">en ' + esc(clk.psna) + '</b></span>' +
         '<span class="av-pill" title="lunes 07:30 UTC">Semanal <b id="avClkW">' + esc(clk.weekly) + '</b></span>');
@@ -423,6 +425,7 @@
       s.textContent = CSS;
       doc.head.appendChild(s);
     }
+    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();
     var host = byId('avRoot');
     if (!host) {
       host = doc.createElement('div');
@@ -484,6 +487,7 @@
     if (!c) return;
     var set = function (id, txt) { var n = byId(id); if (n) n.textContent = txt; };
     set('avClkD', 'en ' + c.daily); set('avClkP', 'en ' + c.psna); set('avClkW', c.weekly);
+    if (root.GNKit && typeof root.GNKit.tick === 'function') root.GNKit.tick(now());
     if (root.ActPsna && typeof root.ActPsna.tick === 'function' && root.ActPsna.tick(now())) render(); // 08:00 UTC: lugares nuevos
     if (st.day && st.day !== c.day) { st.day = c.day; load(true); }
     st.day = c.day;

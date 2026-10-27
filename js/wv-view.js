@@ -1,7 +1,7 @@
 /*!
  * js/wv-view.js — Cámara del Brujo: cabecera y navegación (BL-064, CAM-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.3.0 (2026-10-27) — BL-076 SHV-5d: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-24)
+ * Versión: 1.4.0 (2026-10-27) — BL-078 UNI-3: reset diario y semanal con el reloj común de la Bóveda (GNKit) · antes 1.3.0 (2026-10-27) — BL-076 SHV-5d: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-24)
  *  - 1.2.0 (CAM-POLISH-001): si js/gn-surface.js está cargado, la guarda de contraste se calcula
  *    sobre la bandeja y la tarjeta reales (GNSurface.surfaceTokens), no sobre el fondo del theme.
  *
@@ -28,7 +28,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var LOG = '[WVView]';
   var DAY = 86400000;
   var WEEK_BTN = { daily: 'wvTabBtnDaily', weekly: 'wvTabBtnWeekly', special: 'wvTabBtnSpecial', shop: 'wvTabBtnShop' };
@@ -243,8 +243,12 @@
     h.push('<div class="wvx-row"><img src="assets/icons/3172791.png" alt="" width="56" height="56">');
     h.push('<div class="wvx-title"><h2 id="wvxTitle">Cámara del Brujo</h2><p>' + esc(m.season) + '</p></div>');
     h.push('<div class="wvx-pills">');
-    h.push('<span class="wvx-pill' + (m.dailyHot ? ' wvx-pill--hot' : '') + '">Reset diario <b data-wvx-clock="daily">en ' + esc(m.dailyLeft) + '</b></span>');
-    h.push('<span class="wvx-pill">Semanal <b data-wvx-clock="weekly">lun 07:30 UTC · en ' + esc(m.weeklyLeft) + '</b></span>');
+    var K = root.GNKit; // UNI-3: el reloj común; sin GNKit, las píldoras de antes
+    if (K && typeof K.clocks === 'function' && m.now != null) h.push(K.clocks(['daily', 'weekly'], m.now));
+    else {
+      h.push('<span class="wvx-pill' + (m.dailyHot ? ' wvx-pill--hot' : '') + '">Reset diario <b data-wvx-clock="daily">en ' + esc(m.dailyLeft) + '</b></span>');
+      h.push('<span class="wvx-pill">Semanal <b data-wvx-clock="weekly">lun 07:30 UTC · en ' + esc(m.weeklyLeft) + '</b></span>');
+    }
     h.push('<button type="button" class="wvx-btn" data-wvx="refresh">↻ Actualizar</button>');
     h.push('</div></div>');
     h.push('<div class="wvx-stats">');
@@ -418,7 +422,7 @@
       income: weekIncome(c), seasonEnd: isFinite(end) ? end : NaN, pinnedLeft: pinnedLeft(rows, pm.pinned, pm.marks)
     });
     return {
-      voice: voice, accountsSub: st.accountsSub,
+      voice: voice, accountsSub: st.accountsSub, now: now,
       view: view, season: seasonLine(d.season, now),
       dailyLeft: fmtLeft(dl), dailyHot: dl <= 3 * 3600000, weeklyLeft: fmtLeft(nextWeeklyReset(now) - now),
       aa: aa, aaNote: reserved ? 'reservada para fijados: ' + fmtInt(reserved) : 'para gastar en la Tienda',
@@ -436,6 +440,7 @@
       s.textContent = CSS;
       doc.head.appendChild(s);
     }
+    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();
     var host = byId('wvxHead');
     if (!host) {
       host = doc.createElement('div');
@@ -517,6 +522,7 @@
       b.textContent = k === 'daily' ? 'en ' + fmtLeft(nextDailyReset(now) - now)
         : 'lun 07:30 UTC · en ' + fmtLeft(nextWeeklyReset(now) - now);
     });
+    if (root.GNKit && typeof root.GNKit.tick === 'function') root.GNKit.tick(now);
     renderVoice(buildModel(now).voice);
   }
   function startClock() { if (!st.timer) st.timer = setInterval(tick, 30000); }

@@ -1,7 +1,7 @@
 /*!
  * js/home-view.js — La Heredad: tu casa y tu heredad de Janthir, módulo propio (BL-070 ACT-5, BL-055)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.2.0 (2026-10-27) — BL-076 SHV-5b: sin mi globo, mi línea también dice «Lo sé por» · antes 1.1.0 (2026-10-25) — ACT-6: pestañas Glifos y Decoraciones (las dibuja js/home-extra.js); las
+ * Versión: 1.3.0 (2026-10-27) — BL-078 UNI-3: el reset diario con el reloj común de la Bóveda (GNKit) · antes 1.2.0 (2026-10-27) — BL-076 SHV-5b: sin mi globo, mi línea también dice «Lo sé por» · antes 1.1.0 (2026-10-25) — ACT-6: pestañas Glifos y Decoraciones (las dibuja js/home-extra.js); las
  *          pestañas se recorren con las flechas, Inicio y Fin
  * Versión: 1.0.0 (2026-10-25) — ACT-5: módulo, ruta, barra lateral y la pestaña Nodos y gatos
  *
@@ -26,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[HomeView]';
   var PANEL = 'homesteadPanel';
   var ROUTE = '#/account/homestead'; // la misma que usa js/router.js
@@ -115,7 +115,7 @@
         cats: catIds ? cats.filter(function (c) { return c.have; }).length : null, catsTotal: cats.length,
         manual: data.hasToken ? man.filter(function (n) { return n.have; }).length : null, manualTotal: man.length
       },
-      reset: untilReset(now)
+      reset: untilReset(now), now: Number(now)
     };
   }
 
@@ -199,12 +199,19 @@
     return h + '</div>';
   }
 
+  // UNI-3: el reset diario con el reloj común (GNKit); sin GNKit, la píldora de antes.
+  function clockHTML(m) {
+    var K = root.GNKit;
+    if (K && typeof K.clock === 'function' && isFinite(m.now)) return K.clock('daily', m.now);
+    return '<span class="hs-pillr">Reset diario <b id="hsClk">en ' + esc(m.reset) + '</b></span>';
+  }
+
   function viewHTML(m, ext) {
     var tabs = [['nodes', 'Nodos y gatos']].concat((ext && ext.tabs) || []), tab = ext && ext.tab;
     if (!tabs.some(function (t) { return t[0] === tab; })) tab = 'nodes';
     var err = errorText(m), h = '<div class="hs-hero"><div class="hs-row"><img class="hs-ico" src="' + ICON + '" alt="" width="56" height="56">' +
       '<div class="hs-title"><h2 id="hsTitle">Heredad</h2><p>Tu casa y tu heredad de Janthir: nodos, gatos, glifos y decoraciones</p></div>' +
-      '<div class="hs-top"><span class="hs-pillr">Reset diario <b id="hsClk">en ' + esc(m.reset) + '</b></span><button type="button" class="hs-btn" data-hs="refresh">Actualizar</button></div></div>' +
+      '<div class="hs-top">' + clockHTML(m) + '<button type="button" class="hs-btn" data-hs="refresh">Actualizar</button></div></div>' +
       '<div class="hs-stats" id="hsStats">' + statsHTML(m) + '</div>' + (err ? '<p class="hs-err" role="status">' + esc(err) + '</p>' : '') +
       '<div id="hsVoice" class="hs-voice" aria-live="polite"></div></div>';
     h += tabsHTML(tabs, tab);
@@ -353,6 +360,7 @@
     if (!byId('home-view-css') && doc.createElement && doc.head) {
       var s = doc.createElement('style'); s.id = 'home-view-css'; s.textContent = CSS; doc.head.appendChild(s);
     }
+    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();
     var host = byId('hsRoot');
     if (!host) {
       host = doc.createElement('div'); host.id = 'hsRoot';
@@ -482,6 +490,7 @@
     if (!visible()) { stopTick(); return; }
     var n = byId('hsClk'), now = Date.now(), d = dayKey(now);
     if (n) n.textContent = 'en ' + untilReset(now);
+    if (root.GNKit && typeof root.GNKit.tick === 'function') root.GNKit.tick(now);
     if (st.day && st.day !== d) render(); // pasó el reset diario: las marcas de ayer ya no cuentan
     st.day = d;
   }
