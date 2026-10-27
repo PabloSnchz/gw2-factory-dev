@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta SHV-4 — «Lo que recuerdo de vos» (BL-059)</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#111;color:#e8e2d4;max-width:900px;margin:2rem auto;padding:0 1rem;line-height:1.55}
+h1,h2{color:#e0b84c}h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:2rem;border-bottom:1px solid #333;padding-bottom:.3rem}
+table{border-collapse:collapse;width:100%;margin:.6rem 0}th,td{border:1px solid #333;padding:.4rem .55rem;text-align:left;vertical-align:top}th{background:#1c1c1c}
+.mock{background:#171B26;border:1px solid #2A3142;border-radius:16px;margin:.8rem 0;max-width:470px;overflow:hidden}
+.mock h3{margin:0;padding:.7rem 1rem;border-bottom:1px solid #2A3142;font-size:1rem;color:#F4F6FA}
+.mock .b{padding:.7rem 1rem;color:#C9D0DA;font-size:.92rem}.mock .b p{margin:0 0 .6rem}
+.bar{height:10px;border-radius:6px;background:#232A3A;overflow:hidden;margin:.3rem 0 .2rem}.bar i{display:block;height:100%;width:62%;background:#E8C77A}
+.acts{display:flex;gap:.5rem;justify-content:flex-end;flex-wrap:wrap;padding:.6rem 1rem .9rem}.acts span{border:1px solid #3A4358;border-radius:10px;padding:.35rem .8rem;font-weight:600;font-size:.85rem}
+.acts .d{border-color:#F47C7C}.rec{color:#8fd18f}.sev{font-weight:700;font-size:.75rem;border-radius:6px;padding:0 .4rem}.a{background:#5a3b14;color:#ffd38a}.m{background:#24324d;color:#b9d0ff}.l{background:#22352c;color:#a9e6c6}
+code{background:#222;padding:0 .25rem;border-radius:3px}small{color:#9a937f}
+</style>
+</head>
+<body>
+<h1>Propuesta SHV-4 — «Lo que recuerdo de vos»</h1>
+<p><small>BL-059 · Nivel N5 (semilla) de la propuesta SHV-0 · con D7 (medidor de almacenamiento) · 2026-10-27 · Shiruvana.</small></p>
+
+<h2>1. Product</h2>
+<p><b>Problema.</b> Desde SHV-2 guardo una foto diaria de la Cartera de cada cuenta, y desde SHE-2 recuerdo qué mensajes ya viste. Hoy no hay forma de <b>ver</b> eso, ni de <b>llevárselo</b>, ni de <b>borrarlo</b> sin abrir la consola. Y el almacenamiento del navegador estuvo al 74 % (lo mediste vos), así que hace falta saber cuánto ocupa todo.</p>
+<p><b>Valor.</b> Es el principio de DEC-033: tus datos son tuyos. Y SHV-0 lo puso como condición: «va antes de sumar más memoria».</p>
+<p><b>Prioridad.</b> Alta dentro de BL-059: cierra el frente con control para el jugador.</p>
+
+<h2>2. Lo que medí</h2>
+<table>
+<tr><th>Hallazgo</th><th>Nivel</th><th>Qué significa</th></tr>
+<tr><td>Guardo tres claves: <code>gn:shv:wallet</code> (fotos, tope 64 KB, 90 días), <code>gn:shv:seen</code> (huellas de 8 caracteres de los mensajes vistos, hasta 200) y <code>gn:shv:quiet</code> (si me silenciaste).</td><td><span class="sev l">dato</span></td><td>Es poco y está acotado, pero no se ve en ningún lado.</td></tr>
+<tr><td>«Guardar copia de ajustes» (settings-manager.js) <b>no</b> incluye ninguna de las tres: si cambiás de navegador, mi memoria no viaja.</td><td><span class="sev m">MEDIO</span></td><td>Hoy no hay forma de llevarte la historia de tu Cartera.</td></tr>
+<tr><td>Si borrás mi memoria, a la próxima lectura de la Cartera vuelvo a empezar: «borrar» sin «dejar de recordar» no es control real.</td><td><span class="sev m">MEDIO</span></td><td>Hace falta una pausa, no solo un borrado.</td></tr>
+<tr><td>Producción, DEV y los dashboards comparten el almacenamiento del navegador (mismo origen <code>pablosnchz.github.io</code>). Producción no usa estas claves.</td><td><span class="sev l">BAJO</span></td><td>Lo que borres desde DEV se borra para ese navegador entero; lo digo en la pregunta.</td></tr>
+<tr><td>Ya existe la ventana común (<code>GNUI.dialog</code>, gn-ui.js) con foco, Escape, 44 px y hoja en el celular; y el menú Ajustes ya tiene un ítem mío («Silenciar a Shiruvana»).</td><td><span class="sev l">a favor</span></td><td>No hace falta pantalla nueva ni tocar index.html.</td></tr>
+</table>
+
+<h2>3. Cómo se ve</h2>
+<p>Ajustes → <b>«Lo que recuerdo de vos»</b> abre la ventana de siempre de la Bóveda:</p>
+<div class="mock">
+<h3>🐈‍⬛ Lo que recuerdo de vos</h3>
+<div class="b">
+<p><b>Tu Cartera:</b> una foto por día de 27 cuentas, del 27/10 al 28/10 (2 días). Ocupa 18 KB de mis 64 KB.</p>
+<p><b>Mensajes que ya viste:</b> 12, guardados como huellas de 8 caracteres (nunca el texto).</p>
+<p><b>Aparezco en globo:</b> sí. <b>Recuerdo cosas nuevas:</b> sí.</p>
+<p><b>Este navegador</b> (lo comparten producción y DEV):</p>
+<div class="bar"><i></i></div>
+<p><small>3,1 M de ~5 M caracteres (62 %). Lo mío: 18 KB (0,4 %). Las cachés grandes de la API ya viven aparte (IndexedDB, BL-074).</small></p>
+</div>
+<div class="acts"><span>Descargar mi memoria</span><span>Dejar de recordar</span><span class="d">Borrar todo</span><span>Cerrar</span></div>
+</div>
+<p><small>Números de ejemplo.</small> «Borrar todo» pregunta antes, con el mismo detalle, y ofrece descargar primero. «Dejar de recordar» se vuelve «Volver a recordar».</p>
+
+<h2>4. Architecture</h2>
+<ul>
+<li><code>js/shv-memory.js</code> 1.1.0 (sigue siendo el único que escribe sus claves): suma <code>forget()</code> (borra fotos y huellas de vistos), <code>exportData()</code> (lo que descargás) y la pausa <code>gn:shv:paused</code>: en pausa no saco fotos ni pido nada.</li>
+<li><code>js/shv-recall.js</code> nuevo (≤ 20 KB, por <code>js/modules.json</code>; el manifiesto pasa a 38 de 40): el ítem en Ajustes, la ventana con <code>GNUI.dialog</code>, el medidor y la descarga. Solo lee y llama a la API pública de shv-memory y shv-bubble.</li>
+<li>Medidor: suma lo que ocupa cada clave del almacenamiento del navegador (solo cuenta: no lee valores de otros para mostrarlos, y nunca muestra una Key). Si el navegador lo permite, suma lo de IndexedDB (<code>navigator.storage.estimate</code>).</li>
+<li>Sin llamadas a la API de GW2. Sin cambios en index.html ni en settings-manager.js.</li>
+</ul>
+
+<h2>5. Decisiones</h2>
+<table>
+<tr><th>#</th><th>Pregunta</th><th>Mi recomendación</th></tr>
+<tr><td>D1</td><td>¿Dónde vive?</td><td class="rec">Ajustes → «Lo que recuerdo de vos», en la ventana común. Sin pantalla nueva.</td></tr>
+<tr><td>D2</td><td>¿Qué borra «Borrar todo»?</td><td class="rec">Las fotos de la Cartera y los mensajes vistos (vuelvo a contarte lo que ya te conté). <b>No</b> borra «Silenciar»: es una preferencia tuya, no un recuerdo.</td></tr>
+<tr><td>D3</td><td>¿«Dejar de recordar»?</td><td class="rec">Sí: sin pausa, borrar no sirve (a la otra lectura vuelvo a guardar). En pausa, lo que ya sé lo sigo usando hasta que lo borres.</td></tr>
+<tr><td>D4</td><td>¿Exportar?</td><td class="rec">Sí, un archivo JSON con mis fotos (la huella de cada cuenta, nunca la Key). Restaurarlo queda para cuando lo pidas: hoy no hay dónde llevarlo.</td></tr>
+<tr><td>D5</td><td>¿Mi memoria entra en «Guardar copia de ajustes»?</td><td class="rec">Todavía no: ese archivo exige su versión 3.0 exacta y tocarlo arriesga tus restauraciones. Si lo querés, va como paso aparte.</td></tr>
+<tr><td>D6</td><td>Medidor (D7 de SHV-0): ¿solo mirar, o también avisar?</td><td class="rec">Mirar en la ventana, y un aviso mío (escrito, no en globo) en Inicio solo si el navegador pasa el 85 %.</td></tr>
+</table>
+
+<h2>6. Micro-ciclos</h2>
+<table>
+<tr><th>MC</th><th>Qué</th></tr>
+<tr><td>SHV-4a</td><td>shv-memory 1.1.0: <code>forget()</code>, <code>exportData()</code>, pausa; tests.</td></tr>
+<tr><td>SHV-4b</td><td>shv-recall.js: Ajustes, ventana, medidor, descarga, borrar con pregunta; privacidad y guía.</td></tr>
+<tr><td>SHV-4c</td><td>Aviso del 85 % en Inicio (si aprobás D6).</td></tr>
+</table>
+<p><b>Riesgo:</b> BAJO-MEDIO. Borrar es irreversible: lo cubren la pregunta con el detalle, el foco en «Cancelar» (ventana peligrosa de GNUI) y la descarga ofrecida antes.</p>
+</body>
+</html>
