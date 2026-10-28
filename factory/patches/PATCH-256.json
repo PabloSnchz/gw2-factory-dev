@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-256",
+ "summary": "BL-078 CERRADA con la validación de Pablo (03:17Z, FEAT-024); BL-081 abierta: pasaje a PRD vía PowerShell de BL-078 y BL-079 (manifiesto factory/promote/BL-081.txt, 15 movimientos, DEV 761b1fc sobre producción bc089b1).",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "037ccbac909077e2f0256bd337525a29fcb27329",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "## IN_PROGRESS\n\n- [BL-078] [ALTO]",
+     "text": "## IN_PROGRESS\n\n- [BL-081] [ALTO] Promoción a producción de BL-078 (FEAT-024) y BL-079 — pedido de Pablo (2026-10-28 03:17Z: «cerrá BL-078 y prepará para pasaje a PRD vía PowerShell»). «Vía PowerShell» (DEC-036): comparé blob a blob DEV con producción bc089b1 (HEAD = BL-077, sin commits posteriores). Manifiesto factory/promote/BL-081.txt: 15 movimientos (js/gn-kit.js nuevo; 12 de js/ modificados: acc-view, ach-view, act-view, app, gn-topbar, home-view, inv-view, meta-theme, modules.json, raids-sheet, raids-view, wv-view; assets/data/raids/catalog.json; index.html; 0 bajas). No van js/analytics.js ni assets/meta-drops.json (versión PROD); css/, assets/icons/ (los íconos elegidos ya están en PRD), assets/previews/, privacy.html, las guías y los otros 64 archivos de js/ ya son iguales. Incluye BL-079 (app.js 2.9.2, validado por Pablo en DEV 02:51Z; index.html ya lo pide con ?v=2.9.2). Commit DEV fijo 761b1fc. Revisión: ALTO resuelto al pasar (en producción la API Key real de 72 caracteres hoy se rechaza); BAJO Chak, Dragon's End y retratos siguen sin imagen (BL-080); MEDIO index.html 48.435 B y acc-view 40.418 B cerca de su límite. Rollback: el script crea rollback/pre-bl-081 = bc089b1. Espera que Pablo corra promote.ps1. · DEC-036, BL-077, BL-078, BL-079, FEAT-024 — 2026-10-28\n\n## DONE\n\n- [BL-078] [ALTO]"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-070, BL-075 — 2026-10-27\n\n## DONE\n",
+     "text": "BL-070, BL-075 — 2026-10-27. CERRADA 2026-10-28 03:17Z con la validación de Pablo («ok, cerrá BL-078»): FEAT-024 (ai-memory/features/FEAT-024-una-sola-boveda-relojes-e-iconos.md). En el mismo mensaje pidió el pasaje a PRD vía PowerShell: BL-081.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "791d302f58e0e93d89ec65367399b9e7dd2f4b5f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 03:16Z",
+     "text": "Última actualización: 2026-10-28 03:22Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con la validación de Pablo de UNI-7b, registrar FEAT-024 y cerrar BL-078 (BL-080 queda bloqueada hasta que vuelva la wiki).",
+     "text": "Próxima acción: Pablo corre el pasaje a PRD de BL-081 (una línea de PowerShell, factory/promote/README.md) y me pasa el SHA de producción; yo controlo blob a blob, informe ai-memory/missions/BL-081-informe-promocion.md y lista de validación en PRD. Nada de tareas nuevas antes de cerrar BL-081."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: en DEV (Firefox, Ctrl+F5): Cuentas muestra el ícono en Mis cuentas y Llavero; en el celular (o ventana angosta), la ficha de un encuentro de Raids muestra el ícono en Recompensas y Cómo se pelea. Con tu OK cierro BL-078 (FEAT-024).\n",
+     "text": "- [BL-081] Acción: correr el pasaje a PRD vía PowerShell (una línea, -DevSha 761b1fc12eae2186bd0608d7a4be92568a9181c7 -PrdBase bc089b1 -Manifest factory/promote/BL-081.txt -Tarea BL-081). Esperado: 15 | 15 | 0 distintos; escribir SI; pasarme el SHA final.\n- [BL-078] Info: BL-078 CERRADA con tu OK (2026-10-28 03:17Z, FEAT-024).\n"
+    }
+   ]
+  }
+ ]
+}
