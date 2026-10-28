@@ -1,0 +1,54 @@
+{
+ "id": "PATCH-250",
+ "summary": "BL-078 UNI-6b: íconos del menú Enlaces con la elección de Pablo (UNI6, 2026-10-28 02:51Z). Ayuda pasa al de «Primeros pasos» (Welcome/102367); Wiki, Foros, Sitio oficial y API Key quedan como estaban. gn-kit 1.2.0.",
+ "files": [
+  {
+   "path": "js/gn-kit.js",
+   "base_sha": "006dcee267f767d71d223f2fc8e606af14cb8536",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-28) — UNI-4b:",
+     "text": " * Versión: 1.2.0 (2026-10-28) — UNI-6b: Ayuda del menú Enlaces con el ícono de «Primeros pasos» (Welcome/102367), elegido por\n *   Pablo; Foros y Sitio oficial siguen con el mismo 156384 por su elección · antes 1.1.0 (2026-10-28) — UNI-4b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    'link.ayuda': { src: 'Welcome/156384.png', ok: true },",
+     "text": "    'link.ayuda': { src: 'Welcome/102367.png', ok: true },"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "cd94820cc7d596016db4e1d5d64f1dc5b3ba20e4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/gn-kit.js\", \"v\": \"1.1.0\"",
+     "text": "\"js/gn-kit.js\", \"v\": \"1.2.0\""
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-kit.test.cjs",
+   "base_sha": "18473b7f0455ff87c179e8550234d63b8308d43a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.1\\.0 /);",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  assert.equal(K.icon('no.existe'), '');",
+     "text": "  // UNI-6b (Pablo, 2026-10-28): Ayuda con «Primeros pasos»; Foros y Sitio oficial comparten ícono por su elección.\n  assert.equal(K.iconSrc('link.ayuda'), 'assets/icons/Welcome/102367.png');\n  assert.equal(K.iconSrc('link.wiki'), 'assets/icons/Welcome/102353.png');\n  assert.equal(K.iconSrc('link.foros'), K.iconSrc('link.oficial'));\n  assert.equal(K.iconSrc('link.apikey'), 'assets/icons/Welcome/2604909.png');\n"
+    }
+   ]
+  }
+ ]
+}
