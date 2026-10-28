@@ -1,0 +1,38 @@
+{
+  "id": "PATCH-275",
+  "summary": "BL-082 docs: avance BLD-1 a BLD-15, arreglo PATCH-274 y propuesta BUI-0 en status y backlog",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "0a662ea8a103b42f633e83ec5daf9773e6786524",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-10-28 03:50Z\n",
+          "text": "Última actualización: 2026-10-28 21:36Z\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: con las decisiones D1 a D6 de Pablo sobre la propuesta del módulo Builds (BL-082), arrancar BLD-1 (boot por ruta, panel, ruta y Sidebar) y BLD-2 (códec del código de plantilla con tests).\n",
+          "text": "Próxima acción: con el «sí» de Pablo a la dirección visual de Builds (BUI-0, U1), arrancar BUI-1 (íconos oficiales de profesión y élite en bld-ref y bld-show) y seguir hasta BUI-5.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-082] Decisión: propuesta del módulo Builds en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-builds-bl082.html; decidir D1 a D6 (recomiendo: curación propia con crédito, WvW como segundo modo, 36 élites × 2 modos, Mis builds en el navegador, etapa 1 = BLD-1 a BLD-11, español).\n",
+          "text": "- [BL-082] Decisión: interfaz de Builds con íconos oficiales de GW2 y el marco del resto de la Bóveda, en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-builds-ui-bl082.html; decidir U1 (recomiendo: sí, BUI-1 a BUI-5 de corrido y validación al final).\n- [BL-082] Validación: el error «Unexpected token <» de la Biblioteca y el Editor ya está arreglado en DEV (PATCH-274, bld-ref 1.1.0). Recargá #/builds y probá «Ver» en una build y una profesión en el Editor; si vuelve a fallar, el mensaje ahora dice qué pedido falló.\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "4721047c3d26b07db0d41396c4304c84ab2755dc",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-082] [ALTO] Módulo Builds de Guild Wars 2 — requerimiento de Pablo (2026-10-28 03:41Z): biblioteca curada de builds para las 9 profesiones y sus élites en PvE, PvP y WvW; editor que genera el código de plantilla del juego; importar y exportar (también AE2); funcionalidades de valor D1 a D6. BLD-0 propuesta ENTREGADA 03:48Z (docs/propuestas/propuesta-builds-bl082.html, 6896aae): investigación con fuentes (formato del código en la wiki oficial, paletas con /v2/professions?v=latest, AE2 v3 con librería MIT, MetaBattle y Snow Crows sin API ni licencia de reuso, simulador de Snow Crows sin API, gw2skills con API restringida por IP). Dos correcciones medidas: son 36 élites, no ~27 (Visions of Eternity sumó una cuarta por profesión), y la Bóveda no tiene servidor ni cuentas (Mis builds en el navegador y en el respaldo; enlace con el código adentro). Evalué D1 a D6: D3 y D4 en la etapa 1, D5 simple en la etapa 1, D2 y D6 en la etapa 2, D1 no (enlace al simulador de Snow Crows). Arquitectura: bld-code, bld-ref, bld-view, bld-editor (bld-ae2 en la etapa 2), datos en assets/data/builds/catalog.json; el manifiesto está en 40 de 40, así que boot.js 1.2.0 suma módulos por ruta (decisión técnica mía); index.html no crece. Backlog: BLD-1 a BLD-11, 17 días (etapa 1); BLD-12 a BLD-15, 9,5 días (etapa 2). Riesgo ALTO: mantener 72 builds vigentes (vigía semanal y estado «revisar»). Espera D1 a D6. · DEC-018, DEC-035, DEC-024 — 2026-10-28",
+          "text": "- [BL-082] [ALTO] Módulo Builds de Guild Wars 2 — requerimiento de Pablo (2026-10-28 03:41Z): biblioteca curada de builds para las 9 profesiones y sus élites en PvE, PvP y WvW; editor que genera el código de plantilla del juego; importar y exportar (también AE2); funcionalidades de valor D1 a D6. BLD-0 propuesta ENTREGADA 03:48Z (docs/propuestas/propuesta-builds-bl082.html, 6896aae): investigación con fuentes (formato del código en la wiki oficial, paletas con /v2/professions?v=latest, AE2 v3 con librería MIT, MetaBattle y Snow Crows sin API ni licencia de reuso, simulador de Snow Crows sin API, gw2skills con API restringida por IP). Dos correcciones medidas: son 36 élites, no ~27 (Visions of Eternity sumó una cuarta por profesión), y la Bóveda no tiene servidor ni cuentas (Mis builds en el navegador y en el respaldo; enlace con el código adentro). Evalué D1 a D6: D3 y D4 en la etapa 1, D5 simple en la etapa 1, D2 y D6 en la etapa 2, D1 no (enlace al simulador de Snow Crows). Arquitectura: bld-code, bld-ref, bld-view, bld-editor (bld-ae2 en la etapa 2), datos en assets/data/builds/catalog.json; el manifiesto está en 40 de 40, así que boot.js 1.2.0 suma módulos por ruta (decisión técnica mía); index.html no crece. Backlog: BLD-1 a BLD-11, 17 días (etapa 1); BLD-12 a BLD-15, 9,5 días (etapa 2). Riesgo ALTO: mantener 72 builds vigentes (vigía semanal y estado «revisar»). Avance BLD (2026-10-28): Pablo aprobó D1 a D6 a las 03:58Z y pidió hacer BLD-1 a BLD-15 de corrido. Código completo en DEV a las 11:45Z (FEAT-025, DEC-039, LES-040): 104 builds, PvE 36/36, WvW 36/36 (7 para revisar), PvP 32/36; editor, AE2, sugerencia de equipo, Mis builds, Importar y vigía semanal. BLD-11 (revisión final) pendiente: pasa a BUI-5. 21:20Z Pablo validó el trabajo y mandó 2 capturas con «Unexpected token <» y pidió íconos de GW2 y una interfaz armonizada con el resto. Arreglo: PATCH-274 (bld-ref 1.1.0, reintento sin caché y error con el pedido; RUN-200/201 descartaron la API y la app). BUI-0 propuesta ENTREGADA 21:35Z (docs/propuestas/propuesta-builds-ui-bl082.html): íconos oficiales de la API, filtros por ícono, tarjeta nueva, editor como el panel del juego y marco común; BUI-1 a BUI-5. Espera U1. · DEC-018, DEC-035, DEC-024 — 2026-10-28"
+        }
+      ]
+    }
+  ]
+}
