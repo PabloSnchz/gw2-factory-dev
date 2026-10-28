@@ -32,8 +32,8 @@ const B = load().GNBoot;
 const res = (status, body) => ({ ok: status === 200, status, json: async () => (typeof body === 'string' ? JSON.parse(body) : body) });
 
 test('versión y manifiesto', () => {
-  assert.equal(B.version, '1.1.0');
-  assert.match(SRC, /\* Versión: 1\.1\.0\n/);
+  assert.equal(B.version, '1.2.0');
+  assert.match(SRC, /\* Versión: 1\.2\.0 /);
   assert.equal(B.manifest, 'js/modules.json');
 });
 
@@ -43,6 +43,14 @@ test('el manifiesto del repo es válido y cada módulo existe', () => {
   const p = B.plan(m);
   assert.deepEqual(p.errors, []);
   for (const x of p.list) assert.ok(fs.existsSync(path.join(ROOT, x.src)), 'el módulo existe: ' + x.src);
+  // 1.2.0 (BL-082): los módulos por ruta también existen y cada uno declara la versión con que se pide.
+  const r = B.planRoutes(m);
+  assert.deepEqual(r.errors, []);
+  Object.keys(r.routes).forEach((k) => r.routes[k].forEach((x) => {
+    const f = path.join(ROOT, x.src);
+    assert.ok(fs.existsSync(f), 'el módulo existe: ' + x.src);
+    assert.match(fs.readFileSync(f, 'utf8').slice(0, 600), new RegExp('Versión: ' + x.v.replace(/\./g, '\\.') + '\\b'), x.src + ' pide ' + x.v);
+  }));
 });
 
 test('plan: solo js/ propios con versión; malas entradas se saltean con motivo', () => {
@@ -131,4 +139,64 @@ test('arranca solo en el navegador, una vez; con GN_BOOT_MANUAL o sin fetch, no'
   load({ document: fakeDoc([]) });
   await new Promise((r) => setTimeout(r, 0));
   assert.equal(calls.length, 1);
+});
+
+// 1.2.0 (BL-082 BLD-1): módulos por ruta.
+test('planRoutes: rutas válidas, sin repetir módulos de "modules" ni entre rutas', () => {
+  const r = B.planRoutes({ modules: [{ src: 'js/a.js', v: '1.0.0' }], routes: {
+    '#/builds': [{ src: 'js/b.js', v: '1.0.0' }, { src: 'js/a.js', v: '1.0.0' }, { src: '../x.js', v: '1.0.0' }],
+    '#/otra': [{ src: 'js/b.js', v: '1.0.0' }, { src: 'js/c.js', v: '2.0.0' }],
+    'builds': [{ src: 'js/d.js', v: '1.0.0' }],
+    '#/a/b': []
+  } });
+  assert.deepEqual(r.routes, { '#/builds': [{ src: 'js/b.js', v: '1.0.0' }], '#/otra': [{ src: 'js/c.js', v: '2.0.0' }] });
+  assert.deepEqual(r.errors, [
+    'routes[#/builds].modules[2]: src no permitido (../x.js)',
+    'routes[#/builds]: js/a.js ya se carga en modules',
+    'routes[#/otra]: js/b.js ya se carga en #/builds',
+    'routes: ruta no permitida (builds)',
+    'routes: ruta no permitida (#/a/b)'
+  ]);
+  assert.deepEqual(B.planRoutes({ modules: [] }), { routes: {}, errors: [] }, 'sin routes no hay nada que hacer');
+  assert.deepEqual(B.planRoutes({ modules: [], routes: [] }).errors, ['"routes" no es un objeto']);
+  const many = Array.from({ length: 13 }, (_, i) => ({ src: 'js/r' + i + '.js', v: '1.0.0' }));
+  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many } }).errors, ['routes[#/x]: más de 12 módulos']);
+});
+
+test('routeFor: la ruta o una sub-ruta; nunca un prefijo de otra palabra', () => {
+  const R = { '#/builds': [] };
+  assert.equal(B.routeFor('#/builds', R), '#/builds');
+  assert.equal(B.routeFor('#/builds/editor/abc', R), '#/builds');
+  assert.equal(B.routeFor('#/builds?x=1', R), '#/builds');
+  assert.equal(B.routeFor('#/buildsx', R), null);
+  assert.equal(B.routeFor('#/cards', R), null);
+  assert.equal(B.routeFor('', R), null);
+});
+
+test('load: los módulos de una ruta se cargan recién al entrar, una sola vez, y avisan', async () => {
+  class CE { constructor(t, o) { this.type = t; this.detail = o.detail; } }
+  const listeners = {};
+  const w = load({ GN_BOOT_MANUAL: true, CustomEvent: CE, location: { hash: '#/cards' }, addEventListener: (t, f) => { listeners[t] = f; } });
+  const doc = fakeDoc([]);
+  const man = { modules: [{ src: 'js/a.js', v: '1.0.0' }], routes: { '#/builds': [{ src: 'js/bld-x.js', v: '1.0.0' }, { src: 'js/bld-y.js', v: '1.1.0' }] } };
+  const st = await w.GNBoot.load({ document: doc, fetch: async () => res(200, man) });
+  assert.deepEqual(st.loaded, ['js/a.js'], 'en otra ruta no carga los de Builds');
+  assert.equal(typeof listeners.hashchange, 'function');
+  w.location.hash = '#/builds/editor';
+  listeners.hashchange();
+  assert.deepEqual(doc.head.appended.map((s) => s.src), ['js/a.js?v=1.0.0', 'js/bld-x.js?v=1.0.0', 'js/bld-y.js?v=1.1.0']);
+  const ev = doc.events.filter((e) => e.type === 'gn:route-modules');
+  assert.equal(ev.length, 1);
+  assert.deepEqual(ev[0].detail, { route: '#/builds', loaded: ['js/bld-x.js', 'js/bld-y.js'] });
+  w.location.hash = '#/builds';
+  listeners.hashchange();
+  assert.equal(doc.head.appended.length, 3, 'la segunda vez no repite');
+});
+
+test('load: si se entra directo a la ruta, carga junto con el manifiesto', async () => {
+  const w = load({ GN_BOOT_MANUAL: true, location: { hash: '#/builds/c/DQU' } });
+  const doc = fakeDoc([]);
+  const st = await w.GNBoot.load({ document: doc, fetch: async () => res(200, { modules: [], routes: { '#/builds': [{ src: 'js/bld-x.js', v: '1.0.0' }] } }) });
+  assert.deepEqual(st.loaded, ['js/bld-x.js']);
+  assert.deepEqual(st.errors, []);
 });
