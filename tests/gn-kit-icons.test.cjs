@@ -1,5 +1,6 @@
 // BL-078 UNI-4b: los íconos del juego que eligió Pablo (2026-10-28) en las pestañas y los indicadores de cada módulo.
 // Con GNKit cargado cada módulo los dibuja; sin GNKit, nada cambia (lo siguen probando los tests de cada módulo).
+// UNI-6: también los 5 enlaces del menú Enlaces de la barra (gn-topbar.js).
 // Corre con: node --test tests/*.test.cjs
 'use strict';
 const { test } = require('node:test');
@@ -66,4 +67,34 @@ test('los íconos son decorativos: alt vacío y el nombre sigue en texto', () =>
   const h = V.viewHTML(V.buildModel({}, {}, {}, T));
   assert.doesNotMatch(h, /<img class="gk-ic"(?![^>]*alt="")[^>]*>/);
   assert.match(h, /<img class="gk-ic" src="assets\/icons\/534745\.png"[^>]*>Hoy/);
+});
+
+test('UNI-6: el menú Enlaces lleva el ícono de cada enlace, una sola vez, aunque GNKit llegue después que la barra', () => {
+  const HREFS = ['https://wiki-es.guildwars2.com/wiki/P%C3%A1gina_principal', 'https://en-forum.guildwars2.com/', 'https://help.guildwars2.com/hc',
+    'https://www.guildwars2.com/', 'https://account.arena.net/applications'];
+  const links = HREFS.map((href) => ({ attrs: { href, role: 'menuitem' }, html: '',
+    getAttribute(k) { return k in this.attrs ? this.attrs[k] : null; }, setAttribute(k, v) { this.attrs[k] = String(v); },
+    insertAdjacentHTML(pos, h) { assert.equal(pos, 'afterbegin'); this.html = h + this.html; } }));
+  const menu = { id: 'gnTbLinks', querySelectorAll: () => links };
+  const heard = {};
+  const sb = { console: { info() {} } };
+  sb.window = sb;
+  sb.document = { readyState: 'complete', documentElement: { classList: { add() {}, remove() {} } },
+    getElementById: (id) => (id === 'gnTbLinks' ? menu : null), addEventListener: (t, f) => { heard[t] = f; } };
+  sb.location = { pathname: '/' };
+  vm.createContext(sb);
+  vm.runInContext(read('js/gn-topbar.js'), sb, { filename: 'js/gn-topbar.js' });
+  assert.ok(links.every((a) => a.html === ''), 'sin GNKit, el menú queda como antes');
+  assert.equal(typeof heard['gn:boot-ready'], 'function', 'espera a gn:boot-ready');
+  vm.runInContext(read('js/gn-kit.js'), sb, { filename: 'js/gn-kit.js' });
+  heard['gn:boot-ready']();
+  const K = sb.GNKit;
+  ['link.wiki', 'link.foros', 'link.ayuda', 'link.oficial', 'link.apikey'].forEach((k, i) => {
+    assert.equal(sb.GNTopbar.linkKey(HREFS[i]), k);
+    assert.equal(links[i].html, K.icon(k, 18), k);
+    assert.match(links[i].html, /^<img class="gk-ic" src="assets\/icons\/[^"]+" width="18" height="18" alt=""/);
+  });
+  assert.equal(sb.GNTopbar.linkIcons(), 0, 'no repite el ícono');
+  assert.equal(sb.GNTopbar.linkKey('https://otro.sitio/'), null);
+  assert.match(read('js/gn-topbar.js'), /if \(menu\.id === 'gnTbLinks'\) linkIcons\(\);/, 'también al abrir el menú');
 });
