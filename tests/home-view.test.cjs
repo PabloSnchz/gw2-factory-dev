@@ -26,13 +26,13 @@ const NOW = Date.UTC(2026, 9, 25, 18, 30); // 25/10 18:30 UTC: el reset diario e
 
 test('archivo: presupuesto, versión, manifiesto después de act-week, fuera de index.html y sin emojis ni localStorage', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
-  assert.match(SRC, /Versión: 1\.3\.0/);
+  assert.match(SRC, /Versión: 1\.4\.0/);
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage/);
   const man = JSON.parse(read('js/modules.json')).modules;
   const i = man.findIndex((m) => m.src === 'js/home-view.js');
   assert.ok(i > man.findIndex((m) => m.src === 'js/act-week.js'));
-  assert.equal(man[i].v, '1.3.0');
+  assert.equal(man[i].v, '1.4.0');
   assert.doesNotMatch(read('index.html'), /home-view\.js/);
 });
 

@@ -32,7 +32,7 @@ const first = (r) => r && r.waypoints[0].name;
 test('archivo: presupuesto, versión, manifiesto antes de act-view, fuera de index.html, sin emojis ni almacenamiento', () => {
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
   assert.match(SRC, /Versión: 1\.0\.0/);
-  assert.match(VIEW, /Versión: 1\.6\.0/);
+  assert.match(VIEW, /Versión: 1\.7\.0/);
   assert.doesNotMatch(SRC, /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
   assert.doesNotMatch(SRC, /localStorage|sessionStorage|Storage\.set/);
   assert.doesNotMatch(SRC, /gw2-wallet-ligero/, 'lee solo el archivo propio, nunca el repo de producción');

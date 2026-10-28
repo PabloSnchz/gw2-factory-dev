@@ -1,7 +1,7 @@
 /*!
  * js/act-view.js — Actividades renovado: cabecera con los 3 relojes, 4 indicadores y pestañas Hoy y Semana (BL-070, ACT-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.6.0 (2026-10-27) — BL-078 UNI-3: los 3 relojes son el reloj común de la Bóveda (GNKit) · antes 1.5.0 (2026-10-27) — BL-076 SHV-5c: sin mi globo, mi línea también dice «Lo sé por» · antes 1.4.0 (2026-10-25) — ACT-7: el PSNA lo dibuja js/act-psna.js; ya no reubico nada de js/activities.js
+ * Versión: 1.7.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas y en los 4 indicadores · antes 1.6.0 (2026-10-27) — BL-078 UNI-3: los 3 relojes son el reloj común de la Bóveda (GNKit) · antes 1.5.0 (2026-10-27) — BL-076 SHV-5c: sin mi globo, mi línea también dice «Lo sé por» · antes 1.4.0 (2026-10-25) — ACT-7: el PSNA lo dibuja js/act-psna.js; ya no reubico nada de js/activities.js
  *          1.3.0 (2026-10-25) — ACT-5: los nodos de casa se mudaron a la Heredad (js/home-view.js, #/account/homestead)
  *          1.2.0 (2026-10-25) — ACT-4: la pestaña Semana la dibuja js/act-week.js (llave como señal, guía y piedras por moneda)
  * Versión: 1.1.0 (2026-10-25) — ACT-3: los fractales del día en Hoy, por rango y escala, con tu progreso y los de mañana (D4)
@@ -26,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.6.0';
+  var VERSION = '1.7.0';
   var LOG = '[ActView]';
   var PANEL = 'activitiesPanel';
   var ROUTE = '#/activities'; // la misma que usa js/router.js
@@ -51,6 +51,9 @@
   }
   function A() { return root.ActModel && root.ActModel._pure; }
   function pad(n) { return (n < 10 ? '0' : '') + n; }
+  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.
+  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }
+  var STAT_ICON = { 'Fabricación diaria': 'stat.act.fabricacion', 'Fractales del día': 'stat.act.fractales', 'Llave semanal': 'stat.act.llave', 'Piedras vetustas': 'stat.act.piedras' };
   function hhmm(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
   function and(parts) { return parts.length < 2 ? parts.join('') : parts.slice(0, -1).join(', ') + ' y ' + parts[parts.length - 1]; }
   function rarityOf(r) { return RARITY[r] || RARITY.Basic; }
@@ -112,6 +115,7 @@
   }
 
   function stat(label, value, note, bar) {
+    label = kitIcon(STAT_ICON[label], 16) + label;
     return '<div class="av-st"><small>' + label + '</small><b>' + value + '</b>' +
       (bar != null ? '<div class="av-bar" aria-hidden="true"><i style="width:' + bar + '%"></i></div>' : '') + '<em>' + note + '</em></div>';
   }
@@ -241,7 +245,7 @@
     h.push('<div class="av-tabs" role="tablist" aria-label="Secciones de Actividades">');
     TABS.forEach(function (t) {
       var on = m.tab === t[0];
-      h.push('<button type="button" role="tab" id="avTab-' + t[0] + '" data-av-tab="' + t[0] + '" aria-selected="' + on + '" aria-controls="avPanel-' + t[0] + '" tabindex="' + (on ? '0' : '-1') + '">' + t[1] + '</button>');
+      h.push('<button type="button" role="tab" id="avTab-' + t[0] + '" data-av-tab="' + t[0] + '" aria-selected="' + on + '" aria-controls="avPanel-' + t[0] + '" tabindex="' + (on ? '0' : '-1') + '">' + kitIcon('tab.act.' + t[0]) + t[1] + '</button>');
     });
     h.push('</div>');
     TABS.forEach(function (t) {

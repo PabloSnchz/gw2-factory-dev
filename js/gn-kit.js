@@ -1,7 +1,8 @@
 /*!
  * js/gn-kit.js — Piezas comunes de la Bóveda: el reloj y los íconos (BL-078, UNI-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.0.1 (2026-10-27) — UNI-2: lo carga js/modules.json antes de quien lo usa; lo usan Metas (meta-theme.js 2.3.0) y Raids
+ * Versión: 1.1.0 (2026-10-28) — UNI-4b: el mapa de íconos con la elección de Pablo (todas las claves elegidas); el ícono va con
+ *   margen a la derecha para pestañas e indicadores · antes 1.0.1 (2026-10-27) — UNI-2: lo carga js/modules.json antes de quien lo usa; lo usan Metas (meta-theme.js 2.3.0) y Raids
  *   (raids-view.js 1.4.0). · antes 1.0.0 (2026-10-27) — inerte.
  *
  * Propuesta UNI-0 aprobada por Pablo (2026-10-27 22:53Z, D1 a D6 como recomendé):
@@ -16,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.1';
+  var VERSION = '1.1.0';
   var DIR = 'assets/icons/';
   var MIN = 60000, HOUR = 3600000, DAY = 86400000;
 
@@ -87,36 +88,47 @@
 
   // ------------------------------------------------------------------ íconos
   // ok: la Bóveda ya usa este ícono con este mismo significado. false: propuesta para que la mire Pablo. src null: falta elegir.
+  // Elegidos por Pablo el 2026-10-28 (docs/propuestas/uni4-iconos.html). ok: elegido o ya en uso; false: propuesta mía.
   var ICONS = {
     'clock.local': { src: '841720.png', ok: true },
     'clock.server': { src: '460028.png', ok: true },
     'clock.daily': { src: '534745.png', ok: true },
     'clock.weekly': { src: '155064.png', ok: true },
     'clock.psna': { src: '1302773.png', ok: false, nota: 'el de Actividades; el PSNA no tiene uno propio en la Bóveda' },
-    'tab.ach.cerca': { src: '155059.png', ok: true },
-    'tab.ach.categorias': { src: null },
-    'tab.ach.legendarias': { src: 'Cuentas/157085.png', ok: true },
-    'tab.inv.multi': { src: '3601748.png', ok: true },
-    'tab.inv.buscar': { src: null },
-    'tab.inv.materiales': { src: null },
-    'tab.inv.banco': { src: null },
-    'tab.inv.armeria': { src: 'Cuentas/157085.png', ok: true },
-    'tab.inv.personajes': { src: null },
+    'tab.raids.alas': { src: 'raids/raid-icon.png', ok: true },
+    'tab.raids.encuentros': { src: '784370.png', ok: true },
     'tab.act.hoy': { src: '534745.png', ok: true },
     'tab.act.semana': { src: '155064.png', ok: true },
     'tab.home.nodos': { src: 'Welcome/3380755.png', ok: true },
-    'tab.home.glifos': { src: null },
-    'tab.home.decoraciones': { src: null },
-    'tab.raids.alas': { src: 'raids/raid-icon.png', ok: true },
-    'tab.raids.encuentros': { src: null },
+    'tab.home.glifos': { src: '1228929.png', ok: true },
+    'tab.home.decoraciones': { src: '156016.png', ok: true },
     'tab.wv.objetivos': { src: '3172791.png', ok: true },
-    'tab.wv.tienda': { src: null },
-    'tab.wv.cuentas': { src: '3601748.png', ok: true },
-    'link.wiki': { src: 'Welcome/102353.png', ok: false, nota: 'el de «Guías»' },
-    'link.foros': { src: null },
-    'link.ayuda': { src: 'Welcome/102367.png', ok: false, nota: 'el de «Primeros pasos»' },
-    'link.oficial': { src: null },
-    'link.apikey': { src: 'Welcome/2604909.png', ok: true }
+    'tab.wv.tienda': { src: '3594051.png', ok: true },
+    'tab.wv.cuentas': { src: '578844.png', ok: true },
+    'tab.ach.cerca': { src: '155059.png', ok: true },
+    'tab.ach.categorias': { src: 'Welcome/1013045.png', ok: true },
+    'tab.ach.legendarias': { src: 'Cuentas/157085.png', ok: true },
+    'tab.inv.multi': { src: '578844.png', ok: true },
+    'tab.inv.buscar': { src: 'Welcome/3124974.png', ok: true },
+    'tab.inv.materiales': { src: '866124.png', ok: true },
+    'tab.inv.banco': { src: 'Welcome/1228903.png', ok: true },
+    'tab.inv.armeria': { src: '1228891.png', ok: true },
+    'tab.inv.personajes': { src: 'Cuentas/156409.png', ok: true },
+    'link.wiki': { src: 'Welcome/102353.png', ok: true },
+    'link.foros': { src: 'Welcome/156384.png', ok: true },
+    'link.ayuda': { src: 'Welcome/156384.png', ok: true },
+    'link.oficial': { src: 'Welcome/156384.png', ok: true },
+    'link.apikey': { src: 'Welcome/2604909.png', ok: true },
+    'stat.act.fabricacion': { src: 'Welcome/102609.png', ok: true },
+    'stat.act.fractales': { src: 'Fractal/2591.png', ok: true },
+    'stat.act.llave': { src: 'Cuentas/LLave.png', ok: true },
+    'stat.act.piedras': { src: 'Activities/96978.png', ok: true },
+    'stat.home.recolectados': { src: 'Cuentas/23033.png', ok: true },
+    'stat.home.gatos': { src: '3601748.png', ok: true },
+    'stat.home.janthir': { src: 'Welcome/222580.png', ok: true },
+    'stat.wv.aa': { src: 'Welcome/156108.png', ok: true },
+    'stat.wv.gastada': { src: 'Welcome/156107.png', ok: true },
+    'stat.ach.ap': { src: '155059.png', ok: true }
   };
   function iconSrc(key) { var e = ICONS[key]; return e && e.src ? (/^https:\/\//.test(e.src) ? e.src : DIR + e.src) : ''; }
   // El ícono es decorativo (alt vacío): el lector de pantalla sigue leyendo el texto de al lado.
@@ -144,7 +156,7 @@
     '.gk b{color:var(--tx-1);font-weight:700;font-variant-numeric:tabular-nums}',
     '.gk.is-soon{border-color:var(--gn-gold,#E8B34B)}.gk.is-soon b{color:var(--gn-gold,#E8B34B)}',
     '.gk--big{padding:7px 14px 7px 8px;font-size:.9rem}.gk--big img{width:24px;height:24px}',
-    '.gk-ic{vertical-align:middle;flex-shrink:0;border-radius:4px}'
+    '.gk-ic{vertical-align:-3px;flex-shrink:0;border-radius:4px;margin-right:6px}'
   ].join('\n');
 
   // ------------------------------------------------------------------ DOM

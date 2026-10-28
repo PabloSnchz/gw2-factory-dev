@@ -99,10 +99,10 @@ const fire = (x, type, attrs, ev) => {
   (x.host().listeners[type] || []).forEach((f) => f(Object.assign({ target, preventDefault() {} }, ev || {})));
 };
 
-test('versión 1.4.0, la misma que pide js/modules.json', () => {
-  assert.match(SRC, /\* Versión: 1\.4\.0 /);
+test('versión 1.5.0, la misma que pide js/modules.json', () => {
+  assert.match(SRC, /\* Versión: 1\.5\.0 /);
   const m = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8'));
-  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.4.0' }]);
+  assert.deepEqual(m.modules.filter((x) => x.src === 'js/wv-view.js'), [{ src: 'js/wv-view.js', v: '1.5.0' }]);
   assert.doesNotMatch(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /wv-view\.js/, 'se carga por el manifiesto, no por index.html');
   assert.match(SRC, /readyState === 'loading'[^\n]*DOMContentLoaded', init\);\s*else if \(doc\) init\(\);/, 'arranca aunque cargue tarde');
 });

@@ -1,7 +1,7 @@
 /*!
  * js/raids-view.js — Raids renovado: cabecera, pestañas Alas y Encuentros, tarjetas (BL-070, RAI-2)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.4.0 (2026-10-27) — BL-078 UNI-2: la cabecera muestra solo el reset semanal con el reloj común de la Bóveda (GNKit) · antes 1.3.0 (2026-10-27) — BL-076 SHV-5a: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-25) — RAI-6: estados y error legibles (AA) en los 19 themes · antes 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
+ * Versión: 1.5.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas Alas y Encuentros · antes 1.4.0 (2026-10-27) — BL-078 UNI-2: la cabecera muestra solo el reset semanal con el reloj común de la Bóveda (GNKit) · antes 1.3.0 (2026-10-27) — BL-076 SHV-5a: sin mi globo, mi línea también dice «Lo sé por» · antes 1.2.0 (2026-10-25) — RAI-6: estados y error legibles (AA) en los 19 themes · antes 1.1.0 (2026-10-24) — RAI-3: toda la fila abre la ficha (js/raids-sheet.js)
  *
  * Un solo módulo Raids, como el juego desde el 2026-02-03 (D1 de RAI-0):
  *  - Cabecera con el ícono del módulo, el reset semanal (lunes 07:30 UTC) con el reloj común (UNI-2),
@@ -20,7 +20,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.4.0';
+  var VERSION = '1.5.0';
   var LOG = '[RaidsView]';
   var CATALOG = 'assets/data/raids/catalog.json';
   var ICON = 'assets/icons/raids/raid-icon.png';
@@ -48,6 +48,8 @@
   }
 
   function pad(n) { return (n < 10 ? '0' : '') + n; }
+  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.
+  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }
 
   // Último reset semanal (lunes 07:30 UTC) que ya pasó.
   function weekStart(now) {
@@ -294,7 +296,7 @@
       var on = m.tab === t[0];
       var badge = !m.loaded || !m.hasToken ? '' : t[0] === 'wings' ? m.stats.wDone + '/' + m.stats.wTotal : (m.stats.eKnown ? m.stats.eDone + '/' : '') + m.stats.eTotal;
       h.push('<button type="button" role="tab" id="rvTab-' + t[0] + '" data-rv-tab="' + t[0] + '" aria-selected="' + on + '" aria-controls="rvPanel" tabindex="' + (on ? '0' : '-1') + '">' +
-        t[1] + (badge ? '<span class="rv-badge">' + badge + '</span>' : '') + '</button>');
+        kitIcon(t[0] === 'enc' ? 'tab.raids.encuentros' : 'tab.raids.alas') + t[1] + (badge ? '<span class="rv-badge">' + badge + '</span>' : '') + '</button>');
     });
     h.push('</div><div class="rv-filters">' + segHTML('filter', STATES, m.filter, 'Mostrar'));
     h.push(segHTML('exp', [['all', 'Todas']].concat(m.exps.map(function (x) { return [x, EXP_SHORT[x] || x]; })), m.exp, 'Expansión') + '</div>');
