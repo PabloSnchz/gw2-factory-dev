@@ -148,6 +148,10 @@ test('vista: íconos oficiales, estados honestos, pestañas accesibles y botón 
   const w = P.viewHTML(P.buildModel(CAT, sample(), {}), MON);
   assert.match(w, /Ala 8 · Monte Balrior/);
   assert.match(w, /rv-mini--ev/, 'los eventos sin miniatura propia llevan la marca de evento');
+  assert.match(w, /<section class="rv-wing rv-wing--done" aria-labelledby="rvG-spirit_vale">/, 'UNI-5: el ala completa se marca en verde');
+  assert.match(w, /<span class="rv-cnt rv-cnt--ok">✓ 4\/4<\/span><span class="rv-wbar" aria-hidden="true"><i style="width:100%"><\/i><\/span>/);
+  assert.match(w, /<span class="rv-cnt">2\/4<\/span><span class="rv-wbar" aria-hidden="true"><i style="width:50%"><\/i><\/span>/, 'Monte Balrior: 2 de 4, barra a la mitad');
+  assert.match(w, /<section class="rv-wing" aria-labelledby="rvG-mount_balrior">/);
   assert.match(w, /✓ Hecho/);
   const err = P.viewHTML(P.buildModel(CAT, sample({ achs: null, errors: ['No pude leer tus encuentros.'] }), { tab: 'enc' }), MON);
   assert.match(err, /Sin datos/);
