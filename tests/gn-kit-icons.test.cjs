@@ -34,9 +34,11 @@ test('Actividades: Hoy, Semana y los 4 indicadores', () => {
   all(V.viewHTML(V.buildModel({}, {}, {}, T)), ['534745.png', '155064.png', 'Welcome/102609.png', 'Fractal/2591.png', 'Cuentas/LLave.png', 'Activities/96978.png'], 'actividades');
 });
 
-test('Heredad: las 3 pestañas y los 4 indicadores', () => {
+test('Heredad: las 3 pestañas (Glifos y Decoraciones las suma home-extra.js) y los 4 indicadores', () => {
   const V = sandbox(['js/home-view.js']).HomeView._pure;
-  all(V.viewHTML(V.buildModel({}, {}, {}, T), null), ['Welcome/3380755.png', '1228929.png', '156016.png', 'Cuentas/23033.png', '3601748.png', 'Welcome/222580.png'], 'heredad');
+  const ext = { tabs: [['glyphs', 'Glifos'], ['decor', 'Decoraciones']], tab: 'nodes', html: '' };
+  all(V.viewHTML(V.buildModel({}, {}, {}, T), ext), ['Welcome/3380755.png', '1228929.png', '156016.png', 'Cuentas/23033.png', '3601748.png', 'Welcome/222580.png'], 'heredad');
+  assert.match(read('js/home-extra.js'), /tabs: \[\['glyphs', 'Glifos'\], \['decor', 'Decoraciones'\]\]/, 'los ids que mapea HS_TAB');
 });
 
 test('Cámara del Brujo: las 3 pestañas y los 4 indicadores', () => {
