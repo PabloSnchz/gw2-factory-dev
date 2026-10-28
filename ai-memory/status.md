@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-28 02:04Z
-Próxima acción: con la elección de Pablo (texto «UNI6»), UNI-6b: aplicar los íconos de los enlaces en GNKit.ICONS; después UNI-7 (Chak y retratos de jefes cuando vuelva la wiki, revisión final, FEAT-024).
+Última actualización: 2026-10-28 02:55Z
+Próxima acción: con la validación de Pablo de UNI-6b (menú Enlaces), UNI-7: Chak y retratos de jefes cuando vuelva la wiki, revisión final de BL-078 y FEAT-024.
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -196,8 +196,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: SHV-3 CERRADO con el OK de Pablo (2026-10-27 04:46Z, FEAT-021). El plazo «a tu ritmo» se puede comprobar desde el 2026-11-03.
 - [BL-059] Info: BL-059 CERRADO por pedido de Pablo (2026-10-27 12:06Z): SHV-1 a SHV-4 en DEV (FEAT-020, FEAT-021, FEAT-022).
 - [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).
-- [BL-079] Validación: en DEV (Firefox, Ctrl+F5), Gestión de API Keys: una Key real de 72 caracteres se acepta y pasa a la puerta de permisos; con texto incompleto el mensaje dice «la API Key de GW2 tiene 72 caracteres». El mismo defecto sigue en PRD.
-- [BL-078] Decisión: elegir los íconos repetidos del menú Enlaces en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni6-enlaces.html y pegar el texto «UNI6» en el chat.
+- [BL-079] Info: VALIDADO por Pablo en DEV (2026-10-28 02:51Z): la API Key real ya se carga. El mismo defecto sigue en PRD (decisión de Pablo).
+- [BL-078] Validación: en DEV (Firefox, Ctrl+F5), menú Enlaces de la barra: Ayuda muestra ahora el ícono de «Primeros pasos»; Wiki, Foros, Sitio oficial y API Key como antes (gn-kit 1.2.0).
 - [BL-078] Info: Chak sigue sin vista previa: la wiki no sirve el GIF y Pablo decidió esperar a que vuelva (2026-10-27 23:28Z). Cuando vuelva: subir chak_gerent.gif a assets/previews/ (https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif).
 - [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada.
 - [BL-076] Info: SHV-5 VALIDADO por Pablo 2026-10-27 21:30Z y cerrado (FEAT-023).
