@@ -24,7 +24,7 @@ const P = K._pure;
 const T = (s) => Date.parse(s);
 
 test('1.0.1: lo carga js/modules.json antes de Raids (no index.html), dentro de 40 KB, sin pedidos ni almacenamiento', () => {
-  assert.match(SRC, /\* Versión: 1\.2\.0 /);
+  assert.match(SRC, /\* Versión: 1\.3\.0 /);
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
   assert.ok(man.includes('js/gn-kit.js'), 'está en el manifiesto');
   assert.ok(man.indexOf('js/gn-kit.js') < man.indexOf('js/raids-view.js'), 'antes de quien lo usa');
@@ -86,6 +86,11 @@ test('los íconos del mapa existen en el repo; los que faltan no dibujan nada y 
   assert.equal(K.iconSrc('link.wiki'), 'assets/icons/Welcome/102353.png');
   assert.equal(K.iconSrc('link.foros'), K.iconSrc('link.oficial'));
   assert.equal(K.iconSrc('link.apikey'), 'assets/icons/Welcome/2604909.png');
+  // UNI-7b (Pablo, 2026-10-28): las 4 pestañas que faltaban.
+  assert.equal(K.iconSrc('tab.acc.mias'), 'assets/icons/578844.png');
+  assert.equal(K.iconSrc('tab.acc.llavero'), 'assets/icons/Cuentas/LLave.png');
+  assert.equal(K.iconSrc('tab.rs.recompensas'), 'assets/icons/Cuentas/255373.png');
+  assert.equal(K.iconSrc('tab.rs.pelea'), 'assets/icons/784370.png');
   assert.equal(K.icon('no.existe'), '');
   assert.equal(K.icon('tab.raids.alas', 18), '<img class="gk-ic" src="assets/icons/raids/raid-icon.png" width="18" height="18" alt="" loading="lazy">');
   const p = P.pending();
