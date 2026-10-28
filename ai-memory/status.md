@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-28 03:50Z
-Próxima acción: con las decisiones D1 a D6 de Pablo sobre la propuesta del módulo Builds (BL-082), arrancar BLD-1 (boot por ruta, panel, ruta y Sidebar) y BLD-2 (códec del código de plantilla con tests).
+Última actualización: 2026-10-28 21:36Z
+Próxima acción: con el «sí» de Pablo a la dirección visual de Builds (BUI-0, U1), arrancar BUI-1 (íconos oficiales de profesión y élite en bld-ref y bld-show) y seguir hasta BUI-5.
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -184,7 +184,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-082] Decisión: propuesta del módulo Builds en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-builds-bl082.html; decidir D1 a D6 (recomiendo: curación propia con crédito, WvW como segundo modo, 36 élites × 2 modos, Mis builds en el navegador, etapa 1 = BLD-1 a BLD-11, español).
+- [BL-082] Decisión: interfaz de Builds con íconos oficiales de GW2 y el marco del resto de la Bóveda, en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-builds-ui-bl082.html; decidir U1 (recomiendo: sí, BUI-1 a BUI-5 de corrido y validación al final).
+- [BL-082] Validación: el error «Unexpected token <» de la Biblioteca y el Editor ya está arreglado en DEV (PATCH-274, bld-ref 1.1.0). Recargá #/builds y probá «Ver» en una build y una profesión en el Editor; si vuelve a fallar, el mensaje ahora dice qué pedido falló.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
 - [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes esperan a que la wiki salga de mantenimiento (BL-080, bloqueada por entorno).
