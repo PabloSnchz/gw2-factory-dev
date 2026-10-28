@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-247",
+ "summary": "BL-078 UNI-5 validada; BL-079 (API Key real rechazada) hecho en DEV y documentado; espera validación.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "48f9429888ed527a3059760c22c1acf2d1275c63",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Pablo validó UNI-4b 01:08Z. ",
+     "text": "Pablo validó UNI-4b 01:08Z y UNI-5 01:32Z. "
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n",
+     "text": "- [BL-079] API Key real rechazada en el formulario (CRÍTICO, reportado por un usuario a Pablo el 2026-10-28 con captura). HECHO 01:40Z en DEV (PATCH-246; el 245 fue rechazado por hb75-permisos, index-versions y size-budget). Causa: isValidKeyFormat (js/app.js, «Propuesta 3») esperaba dos GUID unidos por guion (73 caracteres), deducido de la doc de /v2/tokeninfo; la Key real son 72 caracteres, 8-4-4-4-20-4-4-4-12 (dos GUID pegados SIN guion). Toda Key nueva era rechazada antes de llegar a la API; las cuentas ya guardadas no se vieron afectadas. Arreglo: regla de 72, se quitan espacios y saltos de línea al pegar, mensaje que describe la Key real; app.js 2.9.2 (index.html ?v=2.9.2, 66.711 B dentro del techo 66.869). Tests: hb75-permisos corregido (su premisa era la forma de 73) y tests/api-key-format.test.cjs nuevo, con Keys inventadas (nunca la Key del usuario). El defecto también está en PRD (gw2-wallet-ligero js/app.js); PRD es de Pablo.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "40b190de23168cab95eb010fb2518d0618eb4684",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 01:22Z",
+     "text": "Última actualización: 2026-10-28 01:45Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con UNI-5 validada por Pablo, UNI-6: íconos del menú Enlaces del header (gn-topbar.js), con un ícono distinto para Foros, Ayuda y Oficial.",
+     "text": "Próxima acción: con BL-079 validado por Pablo (API Key real aceptada en DEV), retomar BL-078 UNI-6: íconos del menú Enlaces del header (gn-topbar.js), con un ícono distinto para Foros, Ayuda y Oficial."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: UNI-5 en DEV (Firefox, Ctrl+F5), Raids: la cabecera de cada tarjeta tiene tinte y franja roja (verde con «✓» si el ala está completa), miniaturas más grandes, contador en píldora y barra de avance; en Encuentros, Voz y Garra, Fraenir, Chatarrería de Xunlai Jade, Mirador de Kaineng y Templo de la Cosecha muestran el emblema de su expansión.\n",
+     "text": "- [BL-079] Validación: en DEV (Firefox, Ctrl+F5), Gestión de API Keys: una Key real de 72 caracteres se acepta y pasa a la puerta de permisos; con texto incompleto el mensaje dice «la API Key de GW2 tiene 72 caracteres». El mismo defecto sigue en PRD.\n"
+    }
+   ]
+  }
+ ]
+}
