@@ -1,0 +1,1 @@
+{"id": "RUN-199", "summary": "BL-082: líneas de status/backlog y últimos FEAT/DEC para documentar la etapa", "tests": ["tests/bld-docs.smoke.cjs"]}
