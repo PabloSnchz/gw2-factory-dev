@@ -1,0 +1,63 @@
+{
+ "id": "PATCH-243",
+ "summary": "BL-078 UNI-5b: los 5 encuentros sin miniatura (la API no la tiene: RUN-174/175) dejan el ícono genérico de Raids y muestran el emblema oficial de su expansión (The Icebrood Saga o End of Dragons).",
+ "files": [
+  {
+   "path": "assets/data/raids/catalog.json",
+   "base_sha": "17e273edb5a0ea69e53d084d44f13e947da5dc27",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{\"kind\": \"generic\", \"src\": \"assets/icons/raids/raid-icon.png\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 2}",
+     "text": "{\"kind\": \"emblem\", \"src\": \"https://render.guildwars2.com/file/245AA24CF4D3D529AAAB123CE5B9EBB0DF534F49/2352419.png\", \"from\": \"categoría de logros 330\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 2}"
+    },
+    {
+     "op": "replace",
+     "anchor": "{\"kind\": \"generic\", \"src\": \"assets/icons/raids/raid-icon.png\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 1}",
+     "text": "{\"kind\": \"emblem\", \"src\": \"https://render.guildwars2.com/file/245AA24CF4D3D529AAAB123CE5B9EBB0DF534F49/2352419.png\", \"from\": \"categoría de logros 330\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 1}"
+    },
+    {
+     "op": "replace",
+     "anchor": "{\"kind\": \"generic\", \"src\": \"assets/icons/raids/raid-icon.png\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 7}",
+     "text": "{\"kind\": \"emblem\", \"src\": \"https://render.guildwars2.com/file/2CAABB0316B6B270CC791F027853BF6B34149426/2700772.png\", \"from\": \"categoría de logros 333\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 7}"
+    },
+    {
+     "op": "replace",
+     "anchor": "{\"kind\": \"generic\", \"src\": \"assets/icons/raids/raid-icon.png\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 8}",
+     "text": "{\"kind\": \"emblem\", \"src\": \"https://render.guildwars2.com/file/2CAABB0316B6B270CC791F027853BF6B34149426/2700772.png\", \"from\": \"categoría de logros 333\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 8}"
+    },
+    {
+     "op": "replace",
+     "anchor": "{\"kind\": \"generic\", \"src\": \"assets/icons/raids/raid-icon.png\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 9}",
+     "text": "{\"kind\": \"emblem\", \"src\": \"https://render.guildwars2.com/file/2CAABB0316B6B270CC791F027853BF6B34149426/2700772.png\", \"from\": \"categoría de logros 333\"}, \"track\": {\"by\": \"weekly_achievement\", \"achievement\": 9125, \"bit\": 9}"
+    },
+    {
+     "op": "replace",
+     "anchor": "generic = sin miniatura oficial todavía.",
+     "text": "emblem = la API no tiene miniatura del jefe (RUN-174 y RUN-175, 2026-10-28): emblema oficial de la expansión, de /v2/achievements/categories; generic = ícono del módulo."
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-catalog.test.cjs",
+   "base_sha": "21ef95b6d5449e910792ad9bd090e6c714674c88",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  const KINDS = ['local', 'mini', 'next-boss', 'generic'];",
+     "text": "  const KINDS = ['local', 'mini', 'next-boss', 'emblem', 'generic'];"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (e.icon.kind === 'mini') {\n      assert.ok(Number.isInteger(e.icon.mini), e.id);",
+     "text": "    if (e.icon.kind === 'mini' || e.icon.kind === 'emblem') {\n      if (e.icon.kind === 'mini') assert.ok(Number.isInteger(e.icon.mini), e.id);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const generic = ENC.filter((e) => e.icon.kind === 'generic').map((e) => e.id).sort();\n  assert.deepEqual(generic, ['fraenir', 'harvest_temple', 'kaineng_overlook', 'voice_claw', 'xunlai_jade_junkyard']);",
+     "text": "  // BL-078 UNI-5: la API no tiene miniatura de estos 5 jefes (RUN-174, RUN-175): llevan el emblema oficial de su expansión.\n  assert.deepEqual(ENC.filter((e) => e.icon.kind === 'generic').map((e) => e.id), [], 'ningún encuentro con el ícono genérico');\n  const emblem = ENC.filter((e) => e.icon.kind === 'emblem');\n  assert.deepEqual(emblem.map((e) => e.id).sort(), ['fraenir', 'harvest_temple', 'kaineng_overlook', 'voice_claw', 'xunlai_jade_junkyard']);\n  emblem.forEach((e) => assert.match(e.icon.src, e.group === 'ibs' ? /\\/2352419\\.png$/ : /\\/2700772\\.png$/, e.id + ': emblema de su expansión'));"
+    }
+   ]
+  }
+ ]
+}
