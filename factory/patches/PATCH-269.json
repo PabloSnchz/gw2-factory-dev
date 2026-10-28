@@ -1,0 +1,24 @@
+{
+ "id": "PATCH-269",
+ "summary": "BL-082 BLD-6 (reintento de PATCH-268): «Mis builds» viajan en el respaldo. settings-manager.js 1.1.0 con el log de versión al día (idea50) y la clave en una variable (hb89 vigila los setItem literales «gn:»).",
+ "files": [
+  {
+   "path": "index.html",
+   "base_sha": "86d09c7c92dcefa8b8a4439640aedb0e9df96bd8",
+   "ops": [
+    { "op": "replace", "anchor": "js/settings-manager.js?v=1.0.5", "text": "js/settings-manager.js?v=1.1.0" }
+   ]
+  },
+  {
+   "path": "js/settings-manager.js",
+   "base_sha": "f90c60756f0023c6d2f9e0c17ce4ad60d62cfb9d",
+   "ops": [
+    { "op": "replace", "anchor": " * Versión: 1.0.5\n", "text": " * Versión: 1.1.0\n * v1.1.0: BL-082 BLD-6: tus builds (gn:builds:mine) viajan en global.buildsMine; un respaldo sin builds no borra las tuyas.\n" },
+    { "op": "replace", "anchor": "Settings Manager v1.0.5 inicializado", "text": "Settings Manager v1.1.0 inicializado" },
+    { "op": "replace", "anchor": "  var EXPORT_VERSION = '3.0';", "text": "  var EXPORT_VERSION = '3.0';\n  var BUILDS_KEY = 'gn:builds:mine'; // BL-082 BLD-6: Mis builds (js/bld-store.js)" },
+    { "op": "replace", "anchor": "      var welcomeSeen = Storage.get(Storage.STORAGE_KEYS.GLOBAL_WELCOME_SEEN) === true;\n      return { welcomeSeen: welcomeSeen };", "text": "      var welcomeSeen = Storage.get(Storage.STORAGE_KEYS.GLOBAL_WELCOME_SEEN) === true;\n      var out = { welcomeSeen: welcomeSeen };\n      // BL-082 BLD-6: Mis builds viajan en el respaldo.\n      try { var mb = root.localStorage && root.localStorage.getItem(BUILDS_KEY); if (mb) out.buildsMine = JSON.parse(mb); } catch (_) {}\n      return out;" },
+    { "op": "replace", "anchor": "    if (globalData.welcomeSeen !== undefined) {\n      Storage.set(Storage.STORAGE_KEYS.GLOBAL_WELCOME_SEEN, globalData.welcomeSeen);\n    }", "text": "    if (globalData.welcomeSeen !== undefined) {\n      Storage.set(Storage.STORAGE_KEYS.GLOBAL_WELCOME_SEEN, globalData.welcomeSeen);\n    }\n    // BL-082 BLD-6: Mis builds (solo una lista válida; cada código se vuelve a validar al usarlo).\n    if (Array.isArray(globalData.buildsMine)) {\n      try {\n        var ok = globalData.buildsMine.filter(function (b) { return b && typeof b.id === 'string' && typeof b.code === 'string' && b.code.length < 700; }).slice(0, 300);\n        root.localStorage.setItem(BUILDS_KEY, JSON.stringify(ok));\n      } catch (_) {}\n    }" }
+   ]
+  }
+ ]
+}
