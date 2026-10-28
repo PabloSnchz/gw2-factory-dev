@@ -1,0 +1,1 @@
+{"id": "RUN-180", "summary": "BL-078 UNI-7b: test guardián de pestañas con ícono", "tests": ["tests/gn-kit-tabs.test.cjs", "tests/gn-kit-icons.test.cjs", "tests/gn-kit-modules.test.cjs"]}
