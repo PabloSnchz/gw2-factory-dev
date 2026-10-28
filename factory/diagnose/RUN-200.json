@@ -1,0 +1,1 @@
+{"id": "RUN-200", "summary": "BL-082 fix: Pablo ve 'Unexpected token <' en Builds; qué pedido a la API devuelve HTML", "tests": ["tests/bld-api.smoke.cjs"]}
