@@ -1,0 +1,1 @@
+{"id": "RUN-192", "summary": "BL-082 BLD-6/7/8: respaldo y MetaBattle (sonda 10) y curación grupo a (Guardián, Guerrero, Ingeniero)", "tests": ["tests/bld-probe10.smoke.cjs", "tests/bld-curate-a.smoke.cjs"]}
