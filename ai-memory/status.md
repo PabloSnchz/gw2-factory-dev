@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-27 23:56Z
-Próxima acción: con la elección de Pablo (texto «UNI4»), UNI-4b: íconos en las pestañas de Raids, Actividades, Heredad, Cámara, Logros e Inventario e indicadores, desde GNKit.ICONS; el ícono AP de Logros deja la wiki.
+Última actualización: 2026-10-28 00:52Z
+Próxima acción: con UNI-4b validada por Pablo, UNI-5: rediseño del encabezado de las cards de Raids y miniaturas de los 5 jefes sin ícono (voice_claw, fraenir, xunlai_jade_junkyard, kaineng_overlook, harvest_temple).
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -196,7 +196,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: SHV-3 CERRADO con el OK de Pablo (2026-10-27 04:46Z, FEAT-021). El plazo «a tu ritmo» se puede comprobar desde el 2026-11-03.
 - [BL-059] Info: BL-059 CERRADO por pedido de Pablo (2026-10-27 12:06Z): SHV-1 a SHV-4 en DEV (FEAT-020, FEAT-021, FEAT-022).
 - [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).
-- [BL-078] Decisión: elegir los íconos en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni4-iconos.html (18 por elegir, 16 ya en uso o propuestos); «Copiar mi elección» y pegarla en el chat.
+- [BL-078] Validación: UNI-4b en DEV (Firefox, Ctrl+F5): pestañas con ícono en Raids, Actividades, Heredad, Cámara del Brujo, Logros e Inventario; indicadores con ícono en Actividades, Heredad, Cámara, Inventario y Logros (Puntos de logro y Al alcance); el ícono AP de «Al alcance» vuelve a verse.
 - [BL-078] Info: Chak sigue sin vista previa: la wiki no sirve el GIF y Pablo decidió esperar a que vuelva (2026-10-27 23:28Z). Cuando vuelva: subir chak_gerent.gif a assets/previews/ (https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif).
 - [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada.
 - [BL-076] Info: SHV-5 VALIDADO por Pablo 2026-10-27 21:30Z y cerrado (FEAT-023).
