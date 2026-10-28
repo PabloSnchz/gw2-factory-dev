@@ -1,0 +1,1 @@
+{"id": "RUN-189", "summary": "BL-082 BLD-4/5/6/7: tests de ficha, Importar, Mis builds y Editor; ayuda de curación (Snow Crows, solo datos factuales)", "tests": ["tests/bld-mods.test.cjs", "tests/bld-editor.test.cjs", "tests/bld-curate.smoke.cjs"]}
