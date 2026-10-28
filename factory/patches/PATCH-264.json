@@ -1,0 +1,39 @@
+{
+ "id": "PATCH-264",
+ "summary": "BL-082 BLD-1 (reintento de PATCH-263): js/router.js 2.22.0 muestra #buildsPanel en #/builds y lo esconde al salir. router.js está en su techo: compenso los bytes acortando un comentario largo (HomesteadTracker), sin tocar código.",
+ "files": [
+  {
+   "path": "index.html",
+   "base_sha": "7cfecaa9f2ae0917f2360f353967b55500fb0fc9",
+   "ops": [
+    { "op": "replace", "anchor": "js/router.js?v=2.21.0", "text": "js/router.js?v=2.22.0" }
+   ]
+  },
+  {
+   "path": "js/router.js",
+   "base_sha": "7ec9d842468077c830ac3911015e5c3883893560",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * v2.21.0 (2026-10-25) — BL-070 ACT-7b: Actividades ya no usa js/activities.js",
+     "text": " * v2.22.0 (2026-10-28) — BL-082 BLD-1: #/builds (js/bld-view.js por ruta)"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // su deactivate() (homestead-tracker.js:403) solo hace abortLastFetch() y no\n  // tiene panel propio -- escribe en `homesteadTrackerBody`, que no existe en\n  // index.html (medido: 0 matches). Además nadie lo activa: `HomesteadTracker\n  // .activate` no aparece en ningún call site de js/ (medido: 0 matches). Su\n  // latch es inerte por partida doble, y sin panel no hay predicado posible.",
+     "text": "  // no tiene panel propio ni quien lo active (medido en BL-070): su latch es inerte."
+    },
+    {
+     "op": "replace",
+     "anchor": "'welcomePanel','walletDashboardPanel',",
+     "text": "'welcomePanel','walletDashboardPanel','buildsPanel',"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "        if (h === '#/welcome') {",
+     "text": "        if(h.indexOf('#/builds')===0){showPanel('buildsPanel');updateSidebarFor('');setActiveNav(h);return}\n"
+    }
+   ]
+  }
+ ]
+}
