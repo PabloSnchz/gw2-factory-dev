@@ -1,0 +1,58 @@
+{
+ "id": "PATCH-248",
+ "summary": "BL-078 UNI-6a: íconos del juego en los 5 enlaces del menú Enlaces del header, desde GNKit (gn-topbar 1.2.0). index.html no cambia; sin GNKit el menú queda como antes.",
+ "files": [
+  {
+   "path": "js/gn-topbar.js",
+   "base_sha": "c57fb06b696dd7e4fe161f5732764208f53bc440",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0\n",
+     "text": " * Versión: 1.2.0\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": " */\n(function (root) {",
+     "text": " *\n * 1.2.0 (BL-078 UNI-6, 2026-10-28): íconos del juego en los 5 enlaces del menú Enlaces, desde GNKit (decorativos,\n *   alt vacío: el nombre sigue en texto). Sin GNKit, el menú queda como antes.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  // ---------------------------------------------------------------- hoja del celular\n",
+     "text": "  // ---------------------------------------------------------------- íconos del menú Enlaces (BL-078 UNI-6)\n  // Los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo). index.html no crece: los pongo yo,\n  // una sola vez por enlace. GNKit se carga después que yo, así que pruebo al arrancar, con gn:boot-ready y al abrir.\n  var LINK_ICONS = [[/^https:\\/\\/wiki-es\\.guildwars2\\.com\\//, 'link.wiki'], [/^https:\\/\\/en-forum\\.guildwars2\\.com\\//, 'link.foros'],\n    [/^https:\\/\\/help\\.guildwars2\\.com\\//, 'link.ayuda'], [/^https:\\/\\/www\\.guildwars2\\.com\\//, 'link.oficial'],\n    [/^https:\\/\\/account\\.arena\\.net\\//, 'link.apikey']];\n  function linkKey(href) {\n    for (var i = 0; i < LINK_ICONS.length; i++) if (LINK_ICONS[i][0].test(String(href || ''))) return LINK_ICONS[i][1];\n    return null;\n  }\n  function linkIcons() {\n    var K = root.GNKit, menu = byId('gnTbLinks'), n = 0;\n    if (!menu || !K || typeof K.icon !== 'function') return 0;\n    if (typeof K.ensureCSS === 'function') K.ensureCSS();\n    items(menu).forEach(function (a) {\n      if (a.getAttribute('data-gk-icon') !== null || typeof a.insertAdjacentHTML !== 'function') return;\n      var h = K.icon(linkKey(a.getAttribute('href')), 18);\n      if (!h) return;\n      a.insertAdjacentHTML('afterbegin', h);\n      a.setAttribute('data-gk-icon', '');\n      n++;\n    });\n    return n;\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (st.open && st.open !== btn) closeMenu(false);\n    menu.removeAttribute('hidden');",
+     "text": "    if (st.open && st.open !== btn) closeMenu(false);\n    if (menu.id === 'gnTbLinks') linkIcons();\n    menu.removeAttribute('hidden');"
+    },
+    {
+     "op": "replace",
+     "anchor": "    footer();\n    if (root.console && root.console.info) root.console.info('[GNTopbar] v' + VERSION);",
+     "text": "    footer();\n    if (!linkIcons() && doc().addEventListener) doc().addEventListener('gn:boot-ready', linkIcons);\n    if (root.console && root.console.info) root.console.info('[GNTopbar] v' + VERSION);"
+    },
+    {
+     "op": "replace",
+     "anchor": "    openMenu: openMenu, closeMenu: closeMenu, openSheet: openSheet, closeSheet: closeSheet, footer: footer,",
+     "text": "    openMenu: openMenu, closeMenu: closeMenu, openSheet: openSheet, closeSheet: closeSheet, footer: footer, linkKey: linkKey, linkIcons: linkIcons,"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "9ce872532fa585567545c9cdff14552a4b63cae1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/gn-topbar.js\", \"v\": \"1.1.0\"",
+     "text": "\"js/gn-topbar.js\", \"v\": \"1.2.0\""
+    }
+   ]
+  }
+ ]
+}
