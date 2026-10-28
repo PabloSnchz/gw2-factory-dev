@@ -1,0 +1,1 @@
+{"id": "RUN-193", "summary": "BL-082 BLD-7/8/12/13: curación grupo b (Guardabosques, Ladrón, Elementalista) e ids de estadísticas, runas, sigilos y reliquias de la API", "tests": ["tests/bld-curate-b.smoke.cjs", "tests/bld-items.smoke.cjs"]}
