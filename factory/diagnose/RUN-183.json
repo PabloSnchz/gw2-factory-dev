@@ -1,0 +1,1 @@
+{"id": "RUN-183", "summary": "BL-082 BLD-1: sonda 4 (rangos de router, sidebar y presupuesto de tamaño)", "tests": ["tests/bld-probe4.smoke.cjs"]}
