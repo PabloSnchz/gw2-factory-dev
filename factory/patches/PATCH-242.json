@@ -1,0 +1,100 @@
+{
+ "id": "PATCH-242",
+ "summary": "BL-078 UNI-5a: Raids, cabecera de las tarjetas de alas y encuentros rediseñada para que se distinga del contenido (franja y tinte del módulo, verde al completar, miniaturas de 36 px, título más fuerte, contador en píldora y barra de avance).",
+ "files": [
+  {
+   "path": "js/raids-view.js",
+   "base_sha": "7e94e9c22666156661ddd96f6dc5c07d3ea1e773",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.0 (2026-10-28) — ",
+     "text": " * Versión: 1.6.0 (2026-10-28) — BL-078 UNI-5: cabecera de las tarjetas de alas y encuentros con la franja del módulo, miniaturas más grandes, contador en píldora y barra de avance · antes 1.5.0 (2026-10-28) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.5.0';",
+     "text": "var VERSION = '1.6.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var h = '<section class=\"rv-wing\" aria-labelledby=\"rvG-' + esc(g.id) + '\"><div class=\"rv-wing-h\"><span class=\"rv-stack\" aria-hidden=\"true\">';",
+     "text": "    // UNI-5: la cabecera se distingue del contenido: franja del módulo (verde si el grupo está completo) y barra de avance.\n    var full = !!count && !G.unknown && G.done === G.total, pct = G.total ? Math.round(G.done * 100 / G.total) : 0;\n    var h = '<section class=\"rv-wing' + (full ? ' rv-wing--done' : '') + '\" aria-labelledby=\"rvG-' + esc(g.id) + '\"><div class=\"rv-wing-h\"><span class=\"rv-stack\" aria-hidden=\"true\">';"
+    },
+    {
+     "op": "replace",
+     "anchor": "alt=\"\" width=\"30\" height=\"30\"",
+     "text": "alt=\"\" width=\"36\" height=\"36\""
+    },
+    {
+     "op": "replace",
+     "anchor": "(count ? '<span class=\"rv-cnt' + (G.done === G.total ? ' rv-cnt--ok' : '') + '\">' + count + '</span>' : '') + '</div><ul class=\"rv-list\">';",
+     "text": "(count ? '<span class=\"rv-cnt' + (full ? ' rv-cnt--ok' : '') + '\">' + (full ? '✓ ' : '') + count + '</span>' : '') +\n      (count && !G.unknown ? '<span class=\"rv-wbar\" aria-hidden=\"true\"><i style=\"width:' + pct + '%\"></i></span>' : '') + '</div><ul class=\"rv-list\">';"
+    },
+    {
+     "op": "replace",
+     "anchor": "'.rv-wing{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);box-shadow:var(--gn-elev,0 6px 18px rgba(0,0,0,.28));min-width:0}',",
+     "text": "'.rv-wing{border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-1);box-shadow:var(--gn-elev,0 6px 18px rgba(0,0,0,.28));min-width:0;overflow:hidden}',"
+    },
+    {
+     "op": "replace",
+     "anchor": "'.rv-wing-h{display:flex;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid var(--bd-1)}',",
+     "text": "'.rv-wing-h{position:relative;display:flex;gap:12px;align-items:center;padding:14px 16px 16px;background:linear-gradient(90deg,color-mix(in srgb,var(--rv-mod) 12%,var(--bg-1)),var(--bg-1) 85%);border-bottom:1px solid color-mix(in srgb,var(--rv-mod) 40%,var(--bd-1));box-shadow:inset 4px 0 0 var(--rv-mod)}',\n    '.rv-wing--done .rv-wing-h{box-shadow:inset 4px 0 0 var(--color-green,#3CC48A)}',\n    '.rv-wbar{position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--bg-2)}.rv-wbar i{display:block;height:100%;background:var(--rv-mod)}.rv-wing--done .rv-wbar i{background:var(--color-green,#3CC48A)}',"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rv-stack img{width:30px;height:30px;border-radius:8px;background:var(--bg-2);border:2px solid var(--bg-1);margin-left:-8px}",
+     "text": ".rv-stack img{width:36px;height:36px;border-radius:9px;background:var(--bg-2);border:2px solid var(--bg-1);box-shadow:0 0 0 1px var(--bd-2);margin-left:-10px}"
+    },
+    {
+     "op": "replace",
+     "anchor": ".rv-wn h3{margin:0;font-size:.95rem;color:var(--tx-1)}.rv-wn small{font-size:.76rem;color:var(--tx-2)}",
+     "text": ".rv-wn h3{margin:0;font-size:1.08rem;font-weight:800;line-height:1.25;color:var(--tx-1)}.rv-wn small{display:block;margin-top:2px;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-2)}"
+    },
+    {
+     "op": "replace",
+     "anchor": "'.rv-cnt{font-weight:800;font-size:.95rem;color:var(--tx-1)}.rv-cnt--ok{color:var(--color-green,#3CC48A)}',",
+     "text": "'.rv-cnt{font-weight:800;font-size:.9rem;color:var(--tx-1);border:1px solid var(--bd-2);border-radius:999px;padding:3px 10px;background:var(--bg-0);white-space:nowrap}.rv-cnt--ok{color:var(--color-green,#3CC48A);border-color:color-mix(in srgb,var(--color-green,#3CC48A) 60%,transparent)}',"
+    },
+    {
+     "op": "replace",
+     "anchor": "'.rv-list{list-style:none;margin:0;padding:0}',",
+     "text": "'.rv-list{list-style:none;margin:0;padding:4px 0}',"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "b25375803233aaf767fbe7bd646b75f1235b9bf5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/raids-view.js\", \"v\": \"1.5.0\"",
+     "text": "\"js/raids-view.js\", \"v\": \"1.6.0\""
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "70ef73becf9e53f6aff4a2d59507b42651516bca",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.5.0');",
+     "text": "assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.6.0');"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-view.test.cjs",
+   "base_sha": "fca3c926cf76666b9ef875879123c0d6882b4264",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "  assert.match(w, /rv-mini--ev/, 'los eventos sin miniatura propia llevan la marca de evento');\n",
+     "text": "  assert.match(w, /<section class=\"rv-wing rv-wing--done\" aria-labelledby=\"rvG-spirit_vale\">/, 'UNI-5: el ala completa se marca en verde');\n  assert.match(w, /<span class=\"rv-cnt rv-cnt--ok\">✓ 4\\/4<\\/span><span class=\"rv-wbar\" aria-hidden=\"true\"><i style=\"width:100%\"><\\/i><\\/span>/);\n  assert.match(w, /<span class=\"rv-cnt\">2\\/4<\\/span><span class=\"rv-wbar\" aria-hidden=\"true\"><i style=\"width:50%\"><\\/i><\\/span>/, 'Monte Balrior: 2 de 4, barra a la mitad');\n  assert.match(w, /<section class=\"rv-wing\" aria-labelledby=\"rvG-mount_balrior\">/);\n"
+    }
+   ]
+  }
+ ]
+}
