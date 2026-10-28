@@ -1,0 +1,99 @@
+{
+ "id": "PATCH-238",
+ "summary": "BL-078 UNI-4b (2 de 2): íconos en pestañas e indicadores de Logros e Inventario; el ícono AP de Logros deja la wiki.",
+ "files": [
+  {
+   "path": "js/ach-view.js",
+   "base_sha": "ad5b8ccb006462149fe2ac1d96167f1c49aa98bf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-27) — ",
+     "text": " * Versión: 1.5.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas y en los puntos de logro; el ícono AP ya no viene de la wiki · antes 1.4.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.4.0';",
+     "text": "var VERSION = '1.5.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';",
+     "text": "  var ICON_AP = 'assets/icons/155059.png'; // UNI-4b (stat.ach.ap): el de la wiki dejó de cargar"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function plural(n, uno, varios) {",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var ACH_TAB = { near: 'tab.ach.cerca', cats: 'tab.ach.categorias', legendary: 'tab.ach.legendarias' };\n  var ACH_STAT = { 'Puntos de logro': 'stat.ach.ap', 'Al alcance': 'stat.ach.ap' };\n\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function stat(label, value, note) {\n",
+     "text": "    label = kitIcon(ACH_STAT[label], 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] +\n        (m.loaded && badge[t[0]]",
+     "text": "tabindex=\"' + (on ? '0' : '-1') + '\">' + kitIcon(ACH_TAB[t[0]]) + t[1] +\n        (m.loaded && badge[t[0]]"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('achxHead');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('achxHead');\n    if (!host) {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/inv-view.js",
+   "base_sha": "0d8e202772a9831501541d13299da4ef360383f6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.6.0 (2026-10-27) — ",
+     "text": " * Versión: 1.7.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las 6 pestañas y en los 4 indicadores · antes 1.6.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.6.0';",
+     "text": "var VERSION = '1.7.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function fold(s) { var P = M();",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var IV_ICON = { 'Multicuenta': 'tab.inv.multi', 'Buscar': 'tab.inv.buscar', 'Materiales': 'tab.inv.materiales', 'Banco': 'tab.inv.banco',\n    'Armería legendaria': 'tab.inv.armeria', 'Personajes': 'tab.inv.personajes' }; // por nombre: las pestañas sumadas traen el suyo\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function stat(label, value, note, bar) {\n",
+     "text": "    label = kitIcon(IV_ICON[label], 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "aria-controls=\"ivPanel\" tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + '</button>');",
+     "text": "aria-controls=\"ivPanel\" tabindex=\"' + (on ? '0' : '-1') + '\">' + kitIcon(IV_ICON[t[1]]) + t[1] + '</button>');"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('ivRoot');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('ivRoot');\n    if (!host) {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "516f57d9987e8199d27479fdb050d1ae56e8a37a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/ach-view.js\", \"v\": \"1.4.0\"",
+     "text": "\"js/ach-view.js\", \"v\": \"1.5.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/inv-view.js\", \"v\": \"1.6.0\"",
+     "text": "\"js/inv-view.js\", \"v\": \"1.7.0\""
+    }
+   ]
+  }
+ ]
+}
