@@ -1,0 +1,1 @@
+{"id": "RUN-201", "summary": "BL-082 fix: en Node la API da JSON (RUN-200); buscar quién envuelve fetch en el navegador", "tests": ["tests/bld-api2.smoke.cjs"]}
