@@ -1,0 +1,1 @@
+{"id": "RUN-198", "summary": "BL-082 BLD-8: las 8 builds de WvW (roaming) de MetaBattle para completar las 36 élites en WvW", "tests": ["tests/bld-probe15.smoke.cjs"]}
