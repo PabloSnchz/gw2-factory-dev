@@ -1,7 +1,8 @@
 /*!
  * js/gn-kit.js — Piezas comunes de la Bóveda: el reloj y los íconos (BL-078, UNI-1)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 1.1.0 (2026-10-28) — UNI-4b: el mapa de íconos con la elección de Pablo (todas las claves elegidas); el ícono va con
+ * Versión: 1.2.0 (2026-10-28) — UNI-6b: Ayuda del menú Enlaces con el ícono de «Primeros pasos» (Welcome/102367), elegido por
+ *   Pablo; Foros y Sitio oficial siguen con el mismo 156384 por su elección · antes 1.1.0 (2026-10-28) — UNI-4b: el mapa de íconos con la elección de Pablo (todas las claves elegidas); el ícono va con
  *   margen a la derecha para pestañas e indicadores · antes 1.0.1 (2026-10-27) — UNI-2: lo carga js/modules.json antes de quien lo usa; lo usan Metas (meta-theme.js 2.3.0) y Raids
  *   (raids-view.js 1.4.0). · antes 1.0.0 (2026-10-27) — inerte.
  *
@@ -17,7 +18,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var DIR = 'assets/icons/';
   var MIN = 60000, HOUR = 3600000, DAY = 86400000;
 
@@ -116,7 +117,7 @@
     'tab.inv.personajes': { src: 'Cuentas/156409.png', ok: true },
     'link.wiki': { src: 'Welcome/102353.png', ok: true },
     'link.foros': { src: 'Welcome/156384.png', ok: true },
-    'link.ayuda': { src: 'Welcome/156384.png', ok: true },
+    'link.ayuda': { src: 'Welcome/102367.png', ok: true },
     'link.oficial': { src: 'Welcome/156384.png', ok: true },
     'link.apikey': { src: 'Welcome/2604909.png', ok: true },
     'stat.act.fabricacion': { src: 'Welcome/102609.png', ok: true },

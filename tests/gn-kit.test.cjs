@@ -24,7 +24,7 @@ const P = K._pure;
 const T = (s) => Date.parse(s);
 
 test('1.0.1: lo carga js/modules.json antes de Raids (no index.html), dentro de 40 KB, sin pedidos ni almacenamiento', () => {
-  assert.match(SRC, /\* Versión: 1\.1\.0 /);
+  assert.match(SRC, /\* Versión: 1\.2\.0 /);
   const man = JSON.parse(read('js/modules.json')).modules.map((m) => m.src);
   assert.ok(man.includes('js/gn-kit.js'), 'está en el manifiesto');
   assert.ok(man.indexOf('js/gn-kit.js') < man.indexOf('js/raids-view.js'), 'antes de quien lo usa');
@@ -81,6 +81,11 @@ test('los íconos del mapa existen en el repo; los que faltan no dibujan nada y 
   });
   Object.values(P.CLOCKS).forEach((c) => assert.ok(fs.existsSync(path.join(ROOT, 'assets', 'icons', c.icon)), c.icon));
   assert.equal(K.icon('tab.raids.encuentros', 18), '<img class="gk-ic" src="assets/icons/784370.png" width="18" height="18" alt="" loading="lazy">', 'elegido por Pablo');
+  // UNI-6b (Pablo, 2026-10-28): Ayuda con «Primeros pasos»; Foros y Sitio oficial comparten ícono por su elección.
+  assert.equal(K.iconSrc('link.ayuda'), 'assets/icons/Welcome/102367.png');
+  assert.equal(K.iconSrc('link.wiki'), 'assets/icons/Welcome/102353.png');
+  assert.equal(K.iconSrc('link.foros'), K.iconSrc('link.oficial'));
+  assert.equal(K.iconSrc('link.apikey'), 'assets/icons/Welcome/2604909.png');
   assert.equal(K.icon('no.existe'), '');
   assert.equal(K.icon('tab.raids.alas', 18), '<img class="gk-ic" src="assets/icons/raids/raid-icon.png" width="18" height="18" alt="" loading="lazy">');
   const p = P.pending();
