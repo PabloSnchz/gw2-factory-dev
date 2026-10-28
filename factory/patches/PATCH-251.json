@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-251",
+ "summary": "BL-079 validado por Pablo en DEV (02:51Z); BL-078 UNI-6b hecha (PATCH-250, gn-kit 1.2.0), espera su validación.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "7360d05c95f59309da3a060839ca1525eda1ea8f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "El defecto también está en PRD (gw2-wallet-ligero js/app.js); PRD es de Pablo.",
+     "text": "El defecto también está en PRD (gw2-wallet-ligero js/app.js); PRD es de Pablo. VALIDADO por Pablo en DEV 2026-10-28 02:51Z («la carga de API Key ya funciona»)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Pablo devuelve el texto «UNI6» y se aplica en GNKit.ICONS. ",
+     "text": "Pablo devuelve el texto «UNI6» y se aplica en GNKit.ICONS. UNI-6b HECHA 02:53Z (PATCH-250): elección de Pablo (02:51Z) = Wiki 102353, Foros 156384, Ayuda 102367 («Primeros pasos», el único cambio), Sitio oficial 156384 (Foros y Oficial comparten ícono por su decisión), API Key 2604909; gn-kit 1.2.0 (modules.json), tests/gn-kit.test.cjs fija la elección; suite verde. "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "5e6d1dbe9192de768038d3b495046b3cec4073bf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 02:04Z",
+     "text": "Última actualización: 2026-10-28 02:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con la elección de Pablo (texto «UNI6»), UNI-6b: aplicar los íconos de los enlaces en GNKit.ICONS; después UNI-7 (Chak y retratos de jefes cuando vuelva la wiki, revisión final, FEAT-024).",
+     "text": "Próxima acción: con la validación de Pablo de UNI-6b (menú Enlaces), UNI-7: Chak y retratos de jefes cuando vuelva la wiki, revisión final de BL-078 y FEAT-024."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-079] Validación: en DEV (Firefox, Ctrl+F5), Gestión de API Keys: una Key real de 72 caracteres se acepta y pasa a la puerta de permisos; con texto incompleto el mensaje dice «la API Key de GW2 tiene 72 caracteres». El mismo defecto sigue en PRD.\n- [BL-078] Decisión: elegir los íconos repetidos del menú Enlaces en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni6-enlaces.html y pegar el texto «UNI6» en el chat.\n",
+     "text": "- [BL-079] Info: VALIDADO por Pablo en DEV (2026-10-28 02:51Z): la API Key real ya se carga. El mismo defecto sigue en PRD (decisión de Pablo).\n- [BL-078] Validación: en DEV (Firefox, Ctrl+F5), menú Enlaces de la barra: Ayuda muestra ahora el ícono de «Primeros pasos»; Wiki, Foros, Sitio oficial y API Key como antes (gn-kit 1.2.0).\n"
+    }
+   ]
+  }
+ ]
+}
