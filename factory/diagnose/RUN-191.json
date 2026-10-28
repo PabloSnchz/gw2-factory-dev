@@ -1,0 +1,1 @@
+{"id": "RUN-191", "summary": "BL-082: sonda 9 (tests de la Sidebar que fijan la lista de módulos)", "tests": ["tests/bld-probe9.smoke.cjs"]}
