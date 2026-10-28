@@ -1,0 +1,1 @@
+{"id": "RUN-173", "summary": "BL-078 UNI-5: íconos oficiales candidatos para voice_claw, fraenir, xunlai_jade_junkyard, kaineng_overlook y harvest_temple", "tests": ["tests/probe-uni5.smoke.cjs"]}
