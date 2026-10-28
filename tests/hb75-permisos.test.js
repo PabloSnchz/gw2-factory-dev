@@ -19,10 +19,9 @@
  *   le mande (medido con 5 formatos distintos), o sea que no da ninguna señal.
  *   La evidencia del formato viene de la documentacion: /v2/tokeninfo dice
  *   que su campo `id` es "the first HALF of the API key" y su ejemplo oficial
- *   son 36 chars (8-4-4-4-12 en hex), de modo que la key completa son dos GUID
- *   unidos por un guion. Un regex de 48 chars rechaza keys reales; el de 36
- *   acepta el `id` que devuelve /v2/tokeninfo. Por eso el 2do bloque es
- *   opcional y el 1ro obligatorio.
+ *   son 36 chars (8-4-4-4-12 en hex). BL-079 (2026-10-28, lo reporto un usuario): la key
+ *   real son dos GUID pegados SIN guion en la union: 72 chars, 8-4-4-4-20-4-4-4-12. La
+ *   regla de 73 (con guion) rechazaba TODA key real; se corrige y el `id` suelto ya no pasa.
  *
  * Alcance de los asserts: analisis estatico sobre el fuente mas evaluacion
  *   del regex como funcion pura. No levantan DOM ni el modulo completo
@@ -124,30 +123,36 @@ ok(/p\.para/.test(app),
 
 section('3. T1b: el regex de formato acepta las keys reales y rechaza la basura');
 // El regex tal como esta en el fuente, extraido para no duplicar la constante.
-const m = app.match(/function isValidKeyFormat\(v\)\s*\{\s*return\s*(\/.*\/)\.test\(v\)/);
+const m = app.match(/function isValidKeyFormat\(v\)\s*\{\s*return\s*(\/.*\/[a-z]*)\.test\(v\)/);
 ok(!!m, 'isValidKeyFormat devuelve una regex');
 const re = m ? eval(m[1]) : /$/;
 
+// Keys INVENTADAS con la forma real (nunca una key de verdad en el repo).
+const KEY_72 = '1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B';
 const KEY_73 = '1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B';
 const ID_36 = 'ABCDE02B-8888-FEBA-1234-DE98765C7DEF';
 
-ok(re.test(KEY_73), 'acepta la key real (dos GUID, 73 chars)');
-ok(re.test(ID_36), 'acepta el id de /v2/tokeninfo (un GUID, 36 chars)');
+ok(KEY_72.length === 72, 'la key de prueba tiene 72 chars');
+ok(re.test(KEY_72), 'acepta la key real (dos GUID pegados, 72 chars, 8-4-4-4-20-4-4-4-12)');
+ok(re.test(KEY_72.toLowerCase()), 'acepta la key en minusculas');
+ok(!re.test(KEY_73), 'rechaza la forma inventada de 73 (con guion en la union): BL-079');
+ok(!re.test(ID_36), 'rechaza el id suelto de /v2/tokeninfo (media key)');
 ok(!re.test('ABCDE02B-8888-FEBA-1234-DE98-765C7DEF-1122-3344'),
    'rechaza el formato de 9 bloques de 4 (48 chars): NO es el de GW2');
 ok(!re.test('estaesunaclaveinventada1234567890'), 'rechaza basura alfanumerica');
 ok(!re.test('AAAAAAAAAAAAAAAAAAAA'), 'rechaza 20 caracteres de basura');
 ok(!re.test('mi-clave-principal-de-la-app'), 'rechaza el nombre de una cuenta');
-ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9AOB-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),
+ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9AOB-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),
    'rechaza una O en vez de un 0 (no es hexadecimal)');
-ok(!re.test('1A2B3C4D--5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),
+ok(!re.test('1A2B3C4D--5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),
    'rechaza un guion de mas');
-ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),
+ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),
    'rechaza un guion de menos');
 ok(!re.test('1A2B3C4D5E6F7A8B9C0D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B'),
    'rechaza una key sin guiones');
 ok(!re.test(''), 'rechaza cadena vacia');
-ok(!re.test('  ' + KEY_73 + '  '), 'rechaza espacios alrededor (la UI hace trim antes)');
+ok(!re.test('  ' + KEY_72 + '  '), 'rechaza espacios alrededor (la UI los quita antes)');
+ok(/replace\(\/\\s\+\/g, ''\)/.test(app), 'BL-079: la UI quita espacios y saltos de linea al pegar');
 
 // La guarda anterior: 20+ alfanumericos. Se conserva el dato de que fallaba,
 // no su codigo. Debe fallar TODOS los casos que no son key.
@@ -171,7 +176,7 @@ ok(/account\.arena\.net\/applications/.test(html),
 
 section('5. el mensaje de formato no promete algo que el regex no cumple');
 ok(!/20 caracteres alfanumericos/.test(app), 'nada promete "20 caracteres alfanumericos"');
-ok(/8-4-4-4-12/.test(app), 'el mensaje nombra el formato que el regex realmente exige');
+ok(/72 caracteres/.test(app) && !/GUID 8-4-4-4-12/.test(app), 'el mensaje nombra el formato real (72 caracteres), no el viejo');
 
 // ---------------------------------------------------------------------------
 // Seccion 6 (HB#91): la puerta por COMPORTAMIENTO, no por forma.
