@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-28 03:31Z
-Próxima acción: repasar con Pablo las validaciones y aprobaciones pendientes del backlog (pedido 03:30Z) y ajustar el backlog a lo que valide, descarte o reabra.
+Última actualización: 2026-10-28 03:45Z
+Próxima acción: propuesta del módulo Builds (BL-082, pedido de Pablo 03:41Z): investigación de fuentes, chat codes, AE2 y funcionalidades D1 a D6, arquitectura, backlog estimado y maqueta del editor, para su aprobación. Nada se construye antes.
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -184,44 +184,10 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-071] Info: BL-071 CERRADA (2026-10-26 14:49Z). GUI-0 a GUI-5 validados; FEAT-019 VALIDADA.
-- [BL-073] Info: BL-073 CERRADA (2026-10-26 17:44Z). Producción = 3dbcee8; DEC-036 ACEPTADA (pasaje «vía PowerShell» o «vía Shiruvana»).
-- [BL-059] Info: SHV-1 VALIDADO (2026-10-26 20:09Z). SHV-2 espera a BL-074.
-- [BL-074] Info: BLS-0 APROBADA (2026-10-26 20:54Z); D1 a D3 decididos por mí, D4 = pensar siempre en el jugador de producción.
-- [BL-059] Info: SHV-2 y SHV-2b VALIDADOS por Pablo (2026-10-27 01:16Z).
-- [BL-059] Info: SHV-2c CERRADO (03:05Z): no hay historia vieja de la Cartera en producción (0 claves).
-- [BL-059] Info: la API Key que imprime app.js 2.9.0 de producción: Pablo decidió no cambiarla (2026-10-27 03:38Z, «no es un riesgo»). DEV ya no la imprime (app.js 2.9.1).
-- [BL-059] Info: propuesta SHV-3 APROBADA (2026-10-27 04:00Z), D1 a D5 como recomendé. SHV-3a HECHO (04:05Z): solo la cuenta, todavía no se ve nada en la app.
-- [BL-059] Info: SHV-3b VALIDADO por Pablo (2026-10-27 04:34Z).
-- [BL-059] Info: SHV-3 CERRADO con el OK de Pablo (2026-10-27 04:46Z, FEAT-021). El plazo «a tu ritmo» se puede comprobar desde el 2026-11-03.
-- [BL-059] Info: BL-059 CERRADO por pedido de Pablo (2026-10-27 12:06Z): SHV-1 a SHV-4 en DEV (FEAT-020, FEAT-021, FEAT-022).
-- [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).
-- [BL-079] Info: VALIDADO por Pablo en DEV (2026-10-28 02:51Z): la API Key real ya se carga. El mismo defecto sigue en PRD (decisión de Pablo).
-- [BL-081] Info: BL-081 CERRADA (2026-10-28 03:30Z). Producción = a501bea con BL-078 (FEAT-024) y BL-079; rollback/pre-bl-081 = bc089b1.
-- [BL-078] Info: BL-078 CERRADA con tu OK (2026-10-28 03:17Z, FEAT-024).
-- [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes quedan en BL-080, bloqueada hasta que la wiki salga de mantenimiento.
-- [BL-078] Info: UNI-6b VALIDADA por Pablo (2026-10-28 02:58Z). La wiki sigue en mantenimiento (RUN-178, 03:00Z): Chak, Dragon's End y los retratos de jefes esperan.
-- [BL-078] Info: Chak sigue sin vista previa: la wiki no sirve el GIF y Pablo decidió esperar a que vuelva (2026-10-27 23:28Z). Cuando vuelva: subir chak_gerent.gif a assets/previews/ (https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif).
-- [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada.
-- [BL-076] Info: SHV-5 VALIDADO por Pablo 2026-10-27 21:30Z y cerrado (FEAT-023).
-- [BL-059] Info: hallazgo MEDIO al escribir SHV-3a: la Armería no guarda precios del Bazar de los materiales (el campo prices del tracker nunca se llena; los precios de la cola son los del catálogo, de la fecha en que se generó). La propuesta decía «sin llamadas nuevas»: en SHV-3b hago UNA consulta a /v2/commerce/prices (GW2Api.getCommercePrices, con su caché) solo por los materiales que faltan, al momento de hablar. Lo que no devuelve precio cuenta como «no se vende» (D5). Decisión técnica mía.
-- [BL-075] Info: BL-075 CERRADA (2026-10-27 03:35Z, FEAT-020). Si fuera de la Cartera sigo sin aparecer o algo parpadea, la reabro.
-- [BL-059] Info: la historia vieja de la Cartera (gn:wallet:snapshots:*) se suma a mi memoria si el formato sirve (Pablo, 00:43Z). La mido antes (SHV-2c).
-- [BL-070] Info: BL-070 CERRADA (2026-10-26 05:43Z). Paso 5 VALIDADO por Pablo (FEAT-018); los 5 pasos, validados.
-- [BL-070] Info: el paso 3 (Actividades y la Heredad, FEAT-016) VALIDADO por Pablo (21:55Z).
-- [BL-070] Info: ACT-7b VALIDADO por Pablo (20:57Z).
-- [BL-070] Info: ACT-7a VALIDADO por Pablo (20:16Z).
-- [BL-070] Info: ACT-6 VALIDADO por Pablo (19:46Z).
-- [BL-070] Info: ACT-5 VALIDADO por Pablo (19:09Z).
-- [BL-070] Info: ACT-4 VALIDADO por Pablo (18:24Z).
-- [BL-070] Info: ACT-3 VALIDADO por Pablo (los fractales del día en Hoy).
-- [BL-070] Info: ACT-2 VALIDADO por Pablo (16:08Z). Mirá la cabecera con los 3 relojes y los 4 indicadores, y la pestaña Hoy con las 5 fabricaciones diarias (el cristal de cuarzo cargado ya aparece) y el PSNA de siempre; en Semana, la llave como «Probable» con cualquier profesión, y las piedras y los nodos de casa como hasta ahora. Con tu dale sigo con ACT-3, los fractales del día por rango.
-- [BL-070] Validación: ACT-1, datos verificados de Actividades (todavía sin pantalla). Revisá si coincide con lo que ves en el juego: la fabricación diaria son 5 (con el cristal de cuarzo cargado); Leivas te vende 5 piedras por semana, una con 1 de oro, otra con 7.000 de karma, otra con 100 de favor imperial, otra con 10 monedas antiguas y otra con 10 esquirlas de magnetita; y el seguimiento «Solitary Throne CM» se va porque eran los diarios del fractal, no del modo desafío. Con tu dale sigo con ACT-2, la vista nueva con la pestaña Hoy.
-- [BL-069] Validación: abrí producción con recarga completa (Ctrl+F5) y recorré Logros (cabecera, tres pestañas, tarjetas con el ícono oficial grande y anillo dorado en los que están a un paso; la barra lateral ya sin el panel viejo de Logros), la Cámara del Brujo y Actividades, Raids, Strikes, Inventario, Personajes y Cuentas con la cabecera común. Probá también un theme claro (Notion o macOS). Si algo no va, la vuelta atrás es la rama `rollback/pre-restyle-ciclo`; para quitar solo el marco común, sacar `js/gn-frame.js` de `js/modules.json`.
-- [BL-063] Validación: abrí producción con recarga completa (Ctrl+F5). En la computadora: Sidebar a la izquierda, «Nuevo» en los módulos con novedad y mi rincón al pie. En el celular: barra abajo; «Más» abre la hoja con tu cuenta, los otros módulos y mi rincón. Si algo no va, la vuelta atrás es la rama `rollback/pre-sidebar-final`.
-- [BL-062] Acción: para que en producción se vean las 6 vistas previas que faltan, subí a `gw2-wallet-ligero/assets/previews/` los archivos de DEV `octovine.webp`, `drakkar.webp`, `drizzlewood_north.webp`, `vinewrath.webp`, `death_branded_shatterer.webp` y `dragonstorm.webp` (en GitHub: Add file → Upload files). Son imágenes y yo no puedo subirlas.
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
+- [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes esperan a que la wiki salga de mantenimiento (BL-080, bloqueada por entorno).
+- [BL-059] Info: el plazo «a tu ritmo» de la legendaria (FEAT-021) se puede comprobar desde el 2026-11-03.
 
 ## Para tu información
 
