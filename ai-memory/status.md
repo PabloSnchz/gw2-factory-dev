@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-28 03:16Z
-Próxima acción: con la validación de Pablo de UNI-7b, registrar FEAT-024 y cerrar BL-078 (BL-080 queda bloqueada hasta que vuelva la wiki).
+Última actualización: 2026-10-28 03:22Z
+Próxima acción: Pablo corre el pasaje a PRD de BL-081 (una línea de PowerShell, factory/promote/README.md) y me pasa el SHA de producción; yo controlo blob a blob, informe ai-memory/missions/BL-081-informe-promocion.md y lista de validación en PRD. Nada de tareas nuevas antes de cerrar BL-081.
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -197,7 +197,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: BL-059 CERRADO por pedido de Pablo (2026-10-27 12:06Z): SHV-1 a SHV-4 en DEV (FEAT-020, FEAT-021, FEAT-022).
 - [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).
 - [BL-079] Info: VALIDADO por Pablo en DEV (2026-10-28 02:51Z): la API Key real ya se carga. El mismo defecto sigue en PRD (decisión de Pablo).
-- [BL-078] Validación: en DEV (Firefox, Ctrl+F5): Cuentas muestra el ícono en Mis cuentas y Llavero; en el celular (o ventana angosta), la ficha de un encuentro de Raids muestra el ícono en Recompensas y Cómo se pelea. Con tu OK cierro BL-078 (FEAT-024).
+- [BL-081] Acción: correr el pasaje a PRD vía PowerShell (una línea, -DevSha 761b1fc12eae2186bd0608d7a4be92568a9181c7 -PrdBase bc089b1 -Manifest factory/promote/BL-081.txt -Tarea BL-081). Esperado: 15 | 15 | 0 distintos; escribir SI; pasarme el SHA final.
+- [BL-078] Info: BL-078 CERRADA con tu OK (2026-10-28 03:17Z, FEAT-024).
 - [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes quedan en BL-080, bloqueada hasta que la wiki salga de mantenimiento.
 - [BL-078] Info: UNI-6b VALIDADA por Pablo (2026-10-28 02:58Z). La wiki sigue en mantenimiento (RUN-178, 03:00Z): Chak, Dragon's End y los retratos de jefes esperan.
 - [BL-078] Info: Chak sigue sin vista previa: la wiki no sirve el GIF y Pablo decidió esperar a que vuelva (2026-10-27 23:28Z). Cuando vuelva: subir chak_gerent.gif a assets/previews/ (https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif).
