@@ -1,0 +1,1 @@
+{"id": "RUN-184", "summary": "BL-082 BLD-1: sonda 5 (ruta por defecto del router, tests de Sidebar y Bienvenida)", "tests": ["tests/bld-probe5.smoke.cjs"]}
