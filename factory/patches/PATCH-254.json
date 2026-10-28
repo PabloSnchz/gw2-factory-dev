@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-254",
+ "summary": "BL-078 UNI-7b hecha (PATCH-253 + tests/gn-kit-tabs.test.cjs, RUN-179/180 verdes), espera la validación de Pablo para FEAT-024 y el cierre; BL-080 nueva en BLOCKED: Chak, Dragon's End y retratos de jefes (la wiki está en mantenimiento).",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "cb8fb7f9b10ee556a6c3444ddb5871f12c57a7d9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Chak, Dragon's End y retratos pasan a una tarea propia BLOCKED por entorno. ",
+     "text": "Chak, Dragon's End y retratos pasan a una tarea propia BLOCKED por entorno. UNI-7b HECHA 03:13Z con la elección de Pablo (03:08Z: Mis cuentas 578844, Llavero Cuentas/LLave, Recompensas Cuentas/255373, Cómo se pelea 784370): PATCH-253 (gn-kit 1.3.0, acc-view 1.4.0 40.418 B dentro de 40 KB, raids-sheet 1.4.0; acc-view.test y gn-kit.test con las versiones nuevas). Sonda RUN-179: las 16 pestañas de los 6 módulos renovados (Raids 2, Actividades 2, Heredad 3, Cámara 3, Cuentas 2, ficha de Raids 2) llevan ícono; sonda borrada (06ae356). Test guardián tests/gn-kit-tabs.test.cjs (374f251, RUN-180 verde): con GNKit toda pestaña role=tab lleva su ícono y el archivo existe; sin GNKit, ninguna. Logros e Inventario siguen cubiertos por tests/gn-kit-icons.test.cjs. Con la validación de Pablo: FEAT-024 y BL-078 a DONE. Chak, Dragon's End y retratos: BL-080. "
+    },
+    {
+     "op": "replace",
+     "anchor": "## BLOCKED\n\n",
+     "text": "## BLOCKED\n\n- [BL-080] [BAJO] Chak, Dragon's End y retratos de los 5 jefes sin miniatura — resto de BL-078 (UNI-7). Chak y Dragon's End vuelven a tener vista previa en Metas si el archivo está en assets/previews/ (DEC-031: chak_gerent.gif desde Chak_Animation_8.gif y dragons_end.jpg desde Echo_of_the_Dragonvoid_infusion.jpg); los retratos reemplazarían el emblema de expansión que hoy muestran voice_claw, fraenir, xunlai_jade_junkyard, kaineng_overlook y harvest_temple (PATCH-243). Yo no puedo subir binarios: los sube Pablo desde el navegador y yo los conecto. · BL-078, DEC-031, RUN-178 — Bloqueado por entorno: la wiki oficial está en mantenimiento (RUN-178, 2026-10-28 03:00Z: imágenes y api.php devuelven la página de mantenimiento; web.archive 404); se revisa cuando vuelva.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "fc393125c1a50f22aa172ab5a3c8fa632bee38ae",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 03:03Z",
+     "text": "Última actualización: 2026-10-28 03:14Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con la elección de Pablo (texto «UNI7»), UNI-7b: íconos en las pestañas de Cuentas y de la ficha de Raids, test guardián, FEAT-024 y cierre de BL-078; Chak, Dragon's End y retratos a una tarea propia bloqueada por entorno (la wiki está en mantenimiento, RUN-178).",
+     "text": "Próxima acción: con la validación de Pablo de UNI-7b, registrar FEAT-024 y cerrar BL-078 (BL-080 queda bloqueada hasta que vuelva la wiki)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Decisión: elegir los íconos de las 4 pestañas que faltan (Cuentas y ficha de Raids) en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni7-pestanas.html y pegar el texto «UNI7» en el chat.\n",
+     "text": "- [BL-078] Validación: en DEV (Firefox, Ctrl+F5): Cuentas muestra el ícono en Mis cuentas y Llavero; en el celular (o ventana angosta), la ficha de un encuentro de Raids muestra el ícono en Recompensas y Cómo se pelea. Con tu OK cierro BL-078 (FEAT-024).\n- [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes quedan en BL-080, bloqueada hasta que la wiki salga de mantenimiento.\n"
+    }
+   ]
+  }
+ ]
+}
