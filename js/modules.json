@@ -47,9 +47,11 @@
       { "src": "js/bld-ref.js", "v": "1.0.0" },
       { "src": "js/bld-show.js", "v": "1.0.0" },
       { "src": "js/bld-store.js", "v": "1.0.0" },
+      { "src": "js/bld-ae2.js", "v": "1.0.0" },
+      { "src": "js/bld-gear.js", "v": "1.0.0" },
       { "src": "js/bld-view.js", "v": "1.1.0" },
       { "src": "js/bld-import.js", "v": "1.0.0" },
-      { "src": "js/bld-editor.js", "v": "1.0.0" }
+      { "src": "js/bld-editor.js", "v": "1.1.0" }
     ]
   }
 }

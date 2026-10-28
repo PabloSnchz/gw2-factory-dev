@@ -24,8 +24,8 @@ const SKILLS = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, name: 'H' + id }));
 const REF = R.normalize({ prof: PROF, specs: SPECS, traits: TRAITS, skills: SKILLS });
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.0\.0 /);
-  assert.equal(E.version, '1.0.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.1\.0 /);
+  assert.equal(E.version, '1.1.0');
 });
 
 test('opciones de la barra: por casillero y solo las de la élite elegida', () => {
@@ -89,4 +89,21 @@ test('vista: rasgos con aria-pressed y nombre, barra con etiquetas, ficha con c�
   const t0 = Date.now();
   for (let i = 0; i < 50; i++) P.viewHTML();
   assert.ok((Date.now() - t0) / 50 < 200, 'cada redibujo en menos de 200 ms');
+});
+
+test('BLD-12/13: con bld-gear cargado, la ficha suma el panel de equipo y un AE2 válido', () => {
+  globalThis.GNBldAe2 = require('../js/bld-ae2.js');
+  globalThis.GNBldGear = require('../js/bld-gear.js');
+  const st = E._state;
+  st.gear = null;
+  st.build.weapons = [50];
+  const h = P.viewHTML();
+  assert.match(h, /Equipo y código AE2/);
+  const ae2 = (h.match(/<code>(AE2:[^<]+)<\/code>/) || [])[1];
+  assert.ok(ae2, 'hay código AE2');
+  const d = GNBldAe2.decode(ae2);
+  assert.equal(d.code, C.encode(st.build));
+  assert.equal(d.gear.WeaponA1.weaponType, 'Greatsword');
+  assert.equal(d.gear.Helm.statId, 1077, 'poder en PvE: Berserker');
+  delete globalThis.GNBldGear; delete globalThis.GNBldAe2;
 });

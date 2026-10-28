@@ -1,6 +1,6 @@
 /*!
  * js/bld-editor.js — Builds: pestaña Editor (BL-082 BLD-5: B1, B2, B3, B5, B6 y C2)
- * Versión: 1.0.0 (2026-10-28)
+ * Versión: 1.1.0 (2026-10-28) · BLD-12/13: panel «Equipo y código AE2» (js/bld-gear.js) debajo de la ficha · antes 1.0.0 BLD-5
  *
  * Elegís profesión, las 3 líneas (la élite solo en la tercera), los 3 rasgos de cada una, la barra de tierra
  * (y la de agua), mascotas o leyendas y armas; a la derecha ves la ficha y el código del juego al instante
@@ -11,11 +11,11 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var TIER = ['Adepto', 'Maestro', 'Gran maestro'];
   var SLOT = ['Curación', 'Utilidad 1', 'Utilidad 2', 'Utilidad 3', 'Élite'];
   var SLOT_TYPE = ['Heal', 'Utility', 'Utility', 'Utility', 'Elite'];
-  var st = { build: null, ref: null, loading: false, error: '', title: '', mineId: '', lastArg: null, req: 0 };
+  var st = { build: null, ref: null, loading: false, error: '', title: '', mineId: '', lastArg: null, req: 0, gear: null };
 
   function C() { return root.GNBldCode; }
   function esc(s) { return root.GNBldShow ? root.GNBldShow.esc(s) : String(s == null ? '' : s); }
@@ -142,8 +142,24 @@
     return '<div class="bld-ed-prev"><label for="bldEdTitle"><small>Nombre</small></label><input id="bldEdTitle" data-ed="title" maxlength="80" value="' + esc(st.title) + '" placeholder="Mi build">' +
       (err ? '<p class="bld-err">' + esc(err) + '</p>' : root.GNBldShow.detailHTML(v, { code: code, checks: checks, title: st.title || null,
         actions: ['copy', 'share', 'gw2skills', 'save'] })) +
-      (st.mineId ? '<p class="bld-muted">Editando una build de Mis builds: «Guardar» actualiza esa misma.</p>' : '') + '</div>';
+      (st.mineId ? '<p class="bld-muted">Editando una build de Mis builds: «Guardar» actualiza esa misma.</p>' : '') + (err ? '' : gearHTML(b, code)) + '</div>';
   }
+  // BLD-12/13: equipo, sugerencia y AE2 (si js/bld-gear.js está cargado).
+  function gearHTML(b, code) {
+    var G = root.GNBldGear;
+    if (!G || !code) return '';
+    if (!st.gear) st.gear = G.fresh();
+    return G.panelHTML(st.gear, (b.weapons || []).map(function (w) { return C().WEAPONS[w]; }).filter(Boolean), code);
+  }
+  function onGear(ctx, e) {
+    var G = root.GNBldGear;
+    if (!G || !st.gear || !e.target || !e.target.closest || !e.target.closest('[data-gear],[data-gear-box]')) return false;
+    var code = '';
+    try { code = C().encode(st.build); } catch (_) {}
+    if (G.onEvent(e, st.gear, code, function () { paint(ctx); })) paint(ctx, e.target.id || '');
+    return true;
+  }
+
   function viewHTML() {
     var b = st.build;
     var left = profHTML(b);
@@ -271,12 +287,14 @@
     ctx.host = host;
     if (!host._bldEd) {
       host._bldEd = true;
-      host.addEventListener('change', function (e) { if (ctx.tab === 'editor' || host.querySelector('.bld-ed')) onInput(st.ctx, e); });
+      host.addEventListener('change', function (e) { if (!host.querySelector('.bld-ed')) return; if (onGear(st.ctx, e)) return; onInput(st.ctx, e); });
+      host.addEventListener('toggle', function (e) { if (host.querySelector('.bld-ed')) onGear(st.ctx, e); }, true);
       host.addEventListener('input', function (e) { if (e.target && e.target.getAttribute && e.target.getAttribute('data-ed') === 'title') st.title = e.target.value; });
       host.addEventListener('click', function (e) {
         if (!host.querySelector('.bld-ed')) return;
         var s = e.target && e.target.closest ? e.target.closest('[data-bld-act="save"]') : null;
         if (s) { e.preventDefault(); e.stopPropagation(); return saveFromEditor(st.ctx); }
+        if (e.target && e.target.closest && e.target.closest('[data-gear]')) return onGear(st.ctx, e);
         onClick(st.ctx, e);
       }, true);
       if (root.GNBldShow) root.GNBldShow.wire(host, function () {
@@ -289,7 +307,7 @@
     paint(ctx);
   }
 
-  var api = { version: VERSION, render: render,
+  var api = { version: VERSION, render: render, refresh: function () { if (st.ctx && st.ctx.host && st.ctx.host.querySelector('.bld-ed')) paint(st.ctx); },
     _pure: { options: options, prune: prune, legendBar: legendBar, setSpec: setSpec, setTrait: setTrait, toggleWeapon: toggleWeapon, fresh: fresh, eliteId: eliteId,
       viewHTML: viewHTML, CSS: CSS }, _state: st };
   root.GNBldEditor = api;
