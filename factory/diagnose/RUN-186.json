@@ -1,0 +1,1 @@
+{"id": "RUN-186", "summary": "BL-082: sonda 7 (tests de la Sidebar, íconos del kit, respaldo y Storage)", "tests": ["tests/bld-probe7.smoke.cjs"]}
