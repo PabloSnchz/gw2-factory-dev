@@ -1,0 +1,1 @@
+{"id": "RUN-175", "summary": "BL-078 UNI-5: logros e ítems con el nombre de los 5 jefes sin miniatura", "tests": ["tests/probe-uni5.smoke.cjs"]}
