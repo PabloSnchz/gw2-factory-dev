@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-28 03:25Z
-Próxima acción: Pablo valida producción (a501bea) en Chrome con la lista del informe ai-memory/missions/BL-081-informe-promocion.md; con su OK, BL-081 a DONE. Nada de tareas nuevas antes de cerrar BL-081.
+Última actualización: 2026-10-28 03:31Z
+Próxima acción: repasar con Pablo las validaciones y aprobaciones pendientes del backlog (pedido 03:30Z) y ajustar el backlog a lo que valide, descarte o reabra.
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -197,7 +197,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: BL-059 CERRADO por pedido de Pablo (2026-10-27 12:06Z): SHV-1 a SHV-4 en DEV (FEAT-020, FEAT-021, FEAT-022).
 - [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).
 - [BL-079] Info: VALIDADO por Pablo en DEV (2026-10-28 02:51Z): la API Key real ya se carga. El mismo defecto sigue en PRD (decisión de Pablo).
-- [BL-081] Validación: producción = a501bea (control blob a blob OK). En Chrome, Ctrl+F5: una API Key real se acepta; relojes con ícono en Metas, Actividades, Cámara, Heredad y Raids; pestañas con ícono (también Cuentas y la ficha de Raids en el celular); cabecera del ala de Raids; íconos del menú Enlaces. Rollback: rollback/pre-bl-081 = bc089b1.
+- [BL-081] Info: BL-081 CERRADA (2026-10-28 03:30Z). Producción = a501bea con BL-078 (FEAT-024) y BL-079; rollback/pre-bl-081 = bc089b1.
 - [BL-078] Info: BL-078 CERRADA con tu OK (2026-10-28 03:17Z, FEAT-024).
 - [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes quedan en BL-080, bloqueada hasta que la wiki salga de mantenimiento.
 - [BL-078] Info: UNI-6b VALIDADA por Pablo (2026-10-28 02:58Z). La wiki sigue en mantenimiento (RUN-178, 03:00Z): Chak, Dragon's End y los retratos de jefes esperan.
