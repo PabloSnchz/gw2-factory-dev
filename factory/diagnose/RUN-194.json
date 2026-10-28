@@ -1,0 +1,1 @@
+{"id": "RUN-194", "summary": "BL-082 BLD-6/7/8: curación grupo c (Hipnotizador, Nigromante, Retornado), fuentes WvW alternativas y qué fijan los tests del respaldo", "tests": ["tests/bld-probe12.smoke.cjs", "tests/bld-probe11.smoke.cjs", "tests/bld-curate-c.smoke.cjs"]}
