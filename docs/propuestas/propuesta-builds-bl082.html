@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta BLD-0 — Módulo Builds (BL-082)</title>
+<style>
+body{font-family:system-ui,Segoe UI,Arial,sans-serif;background:#111;color:#e8e2d4;max-width:1000px;margin:2rem auto;padding:0 1rem;line-height:1.55}
+h1,h2{color:#e0b84c}h1{font-size:1.5rem}h2{font-size:1.15rem;margin-top:2.2rem;border-bottom:1px solid #333;padding-bottom:.3rem}h3{font-size:1rem;color:#f0d78c;margin:1.4rem 0 .4rem}
+table{border-collapse:collapse;width:100%;margin:.6rem 0;font-size:.92rem}th,td{border:1px solid #333;padding:.4rem .55rem;text-align:left;vertical-align:top}th{background:#1c1c1c}
+code{background:#222;padding:0 .25rem;border-radius:3px}small,.cap{color:#9a937f}.cap{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .3rem}
+a{color:#9fc3ff}.rec{color:#8fd18f}.no{color:#f19a9a}.sev{font-weight:700;font-size:.75rem;border-radius:6px;padding:0 .4rem;white-space:nowrap}.a{background:#4d2424;color:#ffc9c9}.m{background:#24324d;color:#b9d0ff}.l{background:#22352c;color:#a9e6c6}
+.box{background:#171a21;border:1px solid #2c3140;border-radius:12px;padding:12px 16px;margin:.6rem 0}
+.stage{background:#0F131C;border:1px solid #2A3142;border-radius:14px;padding:14px 16px;margin:.4rem 0}
+.hero{display:flex;gap:12px;align-items:center;border-bottom:1px solid #2A3142;padding-bottom:10px;margin-bottom:10px}.hero b{font-size:1.1rem;color:#F4F6FA}.hero small{display:block}
+.ico{width:40px;height:40px;border-radius:10px;background:#22263a;display:grid;place-items:center;color:#c9b6ff;font-weight:800}
+.tabs{display:flex;gap:4px;border-bottom:1px solid #2A3142;margin-bottom:10px}.tab{padding:7px 12px;color:#8E96A3;font-size:.88rem;border-bottom:2px solid transparent}.tab.on{color:#F4F6FA;font-weight:700;border-bottom-color:#a896ff}
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}.pill{font-size:.78rem;border:1px solid #2A3142;border-radius:999px;padding:3px 10px;color:#A9B1BE;background:#0B0E15}.pill.on{border-color:#a896ff;color:#F4F6FA}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.card{border:1px solid #2A3142;border-radius:12px;background:#141925;padding:10px 12px}.card b{color:#F4F6FA}.card .meta{font-size:.76rem;color:#8E96A3;margin:4px 0}.card .tags{display:flex;gap:4px;flex-wrap:wrap}.tag{font-size:.7rem;border:1px solid #3A4256;border-radius:999px;padding:0 7px;color:#C9D0DA}.tag.ok{border-color:#3cc48a;color:#3cc48a}.tag.old{border-color:#e8b34b;color:#e8b34b}
+.btn{display:inline-block;font-size:.78rem;border:1px solid #3A4256;border-radius:999px;padding:3px 10px;color:#F4F6FA;margin-top:6px}
+.ed{display:grid;grid-template-columns:1fr 280px;gap:12px}@media (max-width:760px){.ed{grid-template-columns:1fr}}
+.spec{border:1px solid #2A3142;border-radius:10px;padding:8px;margin-bottom:8px;background:#0B0E15}.spec b{font-size:.85rem}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:6px}.tier{display:flex;flex-direction:column;gap:4px}.tr{height:26px;border-radius:6px;background:#22263a;border:1px solid #2A3142}.tr.on{background:#5a4bb0;border-color:#a896ff}
+.bar{display:flex;gap:6px;margin:6px 0}.sk{width:38px;height:38px;border-radius:8px;background:#22263a;border:1px solid #2A3142}.sk.h{border-color:#3cc48a}.sk.e{border-color:#e8b34b}
+.code{font-family:ui-monospace,monospace;font-size:.75rem;word-break:break-all;background:#0B0E15;border:1px solid #2A3142;border-radius:8px;padding:8px;color:#c9d0da}
+.ok{color:#3cc48a}
+</style>
+</head>
+<body>
+<h1>Propuesta BLD-0 — Módulo Builds de Guild Wars 2</h1>
+<p><small>BL-082 · pedido de Pablo (2026-10-28 03:41Z) · Shiruvana · 2026-10-28. Nada de esto está construido: es para que lo apruebes o lo cambies. Investigación hecha hoy contra fuentes públicas; las fuentes están al final.</small></p>
+
+<div class="box"><b>En una línea:</b> un módulo nuevo, «Builds», con una biblioteca curada (las 36 élites en dos modos), un editor que genera el código del juego <code>[&amp;DQ…]</code>, importación con validación contra la API oficial y enlaces para compartir; todo en el navegador, sin servidor, como el resto de la Bóveda. El equipo completo (formato AE2), el optimizador y Discord van en una segunda etapa. El simulador de DPS propio, no.</div>
+
+<h2>1. Product</h2>
+<p><b>Problema.</b> Para elegir una build el jugador salta entre MetaBattle, Snow Crows y gw2skills, en inglés, y copia códigos a mano. Ninguno le dice si esa build sigue vigente para el último parche ni la guarda junto a sus cuentas.</p>
+<p><b>Valor.</b> En la Bóveda ya están las cuentas, la Armería y Raids: las builds cierran el círculo «qué juego y con qué». En español (los nombres de rasgos y habilidades salen de la API oficial en español), con el código listo para pegar y con mi aviso cuando una build quedó vieja.</p>
+<p><b>Prioridad.</b> ALTA como funcionalidad nueva. Es el módulo más grande desde el restyle: lo parto en micro-ciclos chicos y cada uno se ve en DEV.</p>
+
+<h3>Dos correcciones al requerimiento (medidas hoy)</h3>
+<table>
+<tr><th>El requerimiento dice</th><th>Lo que medí</th><th>Consecuencia</th></tr>
+<tr><td>«~27 especializaciones élite»</td><td>Son <b>36</b>: Visions of Eternity (2025-10-28) agregó una cuarta por profesión (Luminary, Paragon, Amalgam, Galeshot, Antiquary, Evoker, Troubadour, Ritualist y Conduit). gw2skills ya las tiene desde su versión 9.0.</td><td>El criterio mínimo pasa de ~54 a <b>72 builds</b> (36 × 2 modos).</td></tr>
+<tr><td>«Usuarios autenticados guardan en su cuenta de La Bóveda»; «labobeda.com/builds/&lt;id&gt;»</td><td>La Bóveda no tiene servidor ni cuentas: es una página estática en GitHub Pages; tus datos viven en tu navegador y en tu archivo de respaldo.</td><td>«Mis builds» se guardan en el navegador (y entran en el respaldo). El enlace para compartir lleva el código adentro: <code>…/gw2-wallet-ligero/#/builds/c/&lt;código&gt;</code>. Funciona igual, sin servidor.</td></tr>
+</table>
+
+<h2>2. Lo que investigué</h2>
+<table>
+<tr><th>Tema</th><th>Hallazgo</th><th>Para la Bóveda</th></tr>
+<tr><td>Código de plantilla <code>[&amp;DQ…]</code></td><td>Formato público en la wiki oficial: byte 0x0D, profesión (1–9), 3 líneas de especialización con 3 rasgos en 2 bits cada uno, 10 habilidades por «paleta» (tierra y agua), 16 bytes de mascotas (Guardabosques) o leyendas (Retornado), y desde 2023 las armas y las variantes de habilidades. Las paletas se traducen con <code>/v2/professions?v=latest</code> (<code>skills_by_palette</code>). El juego rechaza un código con la misma habilidad repetida en la barra.</td><td>Lo escribo yo, chico y sin dependencias (<code>js/bld-code.js</code>), con tests de ida y vuelta sobre códigos reales del juego. <code>gw2buildlink</code> es TypeScript con npm y pide la API para resolver nombres: sirve de referencia, no de dependencia.</td></tr>
+<tr><td>Formato AE2 (equipo completo)</td><td>Especificación pública v3 (estable, abril 2026): <code>AE2:</code> + binario con el código de plantilla, modo de juego, estadísticas de 16 piezas, runa, reliquia (ID exótico), sigilos y tipo de arma; entra en el chat (130–150 caracteres). Librería de un archivo, sin dependencias, licencia MIT.</td><td>Viable. Lo porto a un archivo propio (<code>js/bld-ae2.js</code>) en la etapa 2, con el crédito y la licencia MIT. Ninguna web en español lo ofrece.</td></tr>
+<tr><td>Fuentes de builds</td><td>MetaBattle es una wiki comunitaria con calificaciones por modo y marca el parche de cada sección («up to date for the September 15, 2026 patch»). Snow Crows publica builds y benchmarks. Ninguna ofrece API pública ni publica una licencia de reuso de su contenido.</td><td>No hago scraping ni copio textos ni imágenes. Curo los datos factuales (profesión, élite, modo, rol, código, parche) y enlazo la página original con crédito. Una vigía semanal en Actions solo mira si cambió el parche declarado.</td></tr>
+<tr><td>Simulador de Snow Crows</td><td>Octubre 2026: DPS y APM por build y comparación de curvas de daño en el tiempo. No encontré API pública ni licencia de datos; ellos mismos advierten que son resultados simulados.</td><td>Copiar sus números sería usar su trabajo sin permiso; uno propio son semanas. Enlace a su simulador desde cada build de PvE.</td></tr>
+<tr><td>gw2skills.net</td><td>Editor de referencia (versión 9.1.6, balance 2026-09-29). Su API de enlaces está restringida por IP fija y hay que pedirla. Su editor carga un código de plantilla («Load Build»).</td><td>Sin API: botón «Abrir en gw2skills» que copia el código y abre su editor.</td></tr>
+</table>
+
+<h2>3. Funcionalidades de valor (Pilar D): evalué las 6</h2>
+<table>
+<tr><th>#</th><th>Funcionalidad</th><th>Viabilidad</th><th>Esfuerzo</th><th>Recomendación</th></tr>
+<tr><td>D3</td><td>Validación contra la API oficial</td><td>Alta: specs, rasgos, habilidades, mascotas y leyendas son públicos; la paleta exige <code>v=latest</code>.</td><td>1 día (va con importar)</td><td class="rec">Etapa 1</td></tr>
+<tr><td>D4</td><td>Vigencia por parche</td><td>Alta: cada build guarda «revisada para el parche X»; la vigía semanal compara con el último parche de balance y la build pasa a «revisar».</td><td>1 día</td><td class="rec">Etapa 1</td></tr>
+<tr><td>D2</td><td>Optimizador de equipo</td><td>Media: por reglas sobre el equipo curado de cada build (estadísticas, runa, sigilos, reliquia por rol y modo), más «lo que ya tenés» si la Key da inventarios. No es un optimizador matemático como el de Snow Crows.</td><td>3 días</td><td class="rec">Etapa 2, después de AE2</td></tr>
+<tr><td>D5</td><td>Exportar a gw2skills</td><td>Baja como API (IP fija); alta como «copiar y abrir».</td><td>0,5 día</td><td class="rec">Etapa 1, versión simple</td></tr>
+<tr><td>D6</td><td>Discord / webhooks</td><td>Media: el webhook no puede vivir en el navegador (cualquiera lo leería); sí en un secreto de GitHub Actions que avise cuando cambia la biblioteca.</td><td>1 día + tu webhook</td><td class="rec">Etapa 2</td></tr>
+<tr><td>D1</td><td>Comparador DPS/APM</td><td>Baja: sin API pública de Snow Crows; uno propio necesita rotaciones y fórmulas de daño de cada build.</td><td>20 días o más</td><td class="no">No. Enlace a su simulador</td></tr>
+</table>
+<p><small>También fuera de la etapa 1: A6 (votar o reportar) necesita servidor; la variante sin servidor es «Avisar que está vieja» con un issue de GitHub prellenado, como el canal del panel (DEC-012). La interfaz en inglés: la Bóveda entera está en español; los nombres del juego llegan en español desde la API.</small></p>
+
+<h2>4. Así se vería (maqueta)</h2>
+<p class="cap">Biblioteca</p>
+<div class="stage">
+<div class="hero"><div class="ico">⚔</div><div><b>Builds</b><small>72 builds curadas · revisadas para el parche del 2026-09-29 · 3 tuyas</small></div></div>
+<div class="tabs"><span class="tab on">Biblioteca</span><span class="tab">Editor</span><span class="tab">Mis builds</span><span class="tab">Importar</span></div>
+<div class="filters"><span class="pill on">Todas las profesiones</span><span class="pill">Guardián</span><span class="pill">Guerrero</span><span class="pill">…</span><span class="pill on">PvE</span><span class="pill">WvW</span><span class="pill">DPS</span><span class="pill on">Quickness</span><span class="pill">Alacrity</span><span class="pill">Curación</span><span class="pill">Power</span><span class="pill">Condi</span></div>
+<div class="grid">
+<div class="card"><b>Paragon · Quickness DPS</b><div class="meta">Guerrero · PvE (raids, fractales) · dificultad 2/5</div><div class="tags"><span class="tag ok">vigente · 2026-09-29</span><span class="tag">Power</span><span class="tag">Lanza</span></div><span class="btn">Copiar código</span> <span class="btn">Ver</span> <span class="btn">Fuente ↗</span></div>
+<div class="card"><b>Luminary · Heal Alacrity</b><div class="meta">Guardián · PvE · dificultad 3/5</div><div class="tags"><span class="tag ok">vigente · 2026-09-29</span><span class="tag">Curación</span></div><span class="btn">Copiar código</span> <span class="btn">Ver</span> <span class="btn">Fuente ↗</span></div>
+<div class="card"><b>Amalgam · Roamer</b><div class="meta">Ingeniero · WvW roaming · dificultad 4/5</div><div class="tags"><span class="tag old">revisar · parche 2026-07-14</span><span class="tag">Condi</span></div><span class="btn">Copiar código</span> <span class="btn">Ver</span> <span class="btn">Fuente ↗</span></div>
+</div>
+<p><small>Builds, roles y fechas de ejemplo. Profesión, modo y rol en 3 toques o menos (criterio 4). Mi línea arriba: «2 builds de tu lista quedaron viejas con el parche del 29/09» (Lo sé por: la biblioteca y el último parche · en este navegador).</small></p>
+</div>
+<p class="cap">Editor</p>
+<div class="stage"><div class="ed"><div>
+<div class="spec"><b>Fuerza</b><div class="tiers"><div class="tier"><div class="tr on"></div><div class="tr"></div><div class="tr"></div></div><div class="tier"><div class="tr"></div><div class="tr on"></div><div class="tr"></div></div><div class="tier"><div class="tr"></div><div class="tr"></div><div class="tr on"></div></div></div></div>
+<div class="spec"><b>Disciplina</b><div class="tiers"><div class="tier"><div class="tr"></div><div class="tr on"></div><div class="tr"></div></div><div class="tier"><div class="tr on"></div><div class="tr"></div><div class="tr"></div></div><div class="tier"><div class="tr"></div><div class="tr on"></div><div class="tr"></div></div></div></div>
+<div class="spec"><b>Paragon (élite)</b><div class="tiers"><div class="tier"><div class="tr on"></div><div class="tr"></div><div class="tr"></div></div><div class="tier"><div class="tr"></div><div class="tr"></div><div class="tr on"></div></div><div class="tier"><div class="tr on"></div><div class="tr"></div><div class="tr"></div></div></div></div>
+<div class="cap">Barra · tierra | agua</div><div class="bar"><div class="sk h"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk e"></div></div>
+</div><div>
+<div class="cap">Código del juego</div><div class="code">[&amp;DQI…]  (se genera al elegir)</div>
+<p class="ok">✓ Válido para Guerrero (comprobado contra la API oficial)</p>
+<span class="btn">Copiar</span> <span class="btn">Guardar en Mis builds</span> <span class="btn">Enlace para compartir</span> <span class="btn">Abrir en gw2skills ↗</span>
+<p><small>Cada cambio regenera el código al instante (&lt; 200 ms: todo es local). Flechas y Enter en cada rasgo; cada ícono con su nombre para el lector de pantalla.</small></p>
+</div></div></div>
+
+<h2>5. Architecture</h2>
+<ul>
+<li><b>Sin servidor y sin dependencias nuevas.</b> Archivos propios, chicos, por responsabilidad: <code>js/bld-code.js</code> (códec puro del código del juego), <code>js/bld-ref.js</code> (datos de la API oficial en español, en IndexedDB con <code>GNIdb</code>, renovados cuando cambia <code>/v2/build</code>), <code>js/bld-view.js</code> (biblioteca, Mis builds, importar), <code>js/bld-editor.js</code>; en la etapa 2, <code>js/bld-ae2.js</code>. Datos curados en <code>assets/data/builds/catalog.json</code>.</li>
+<li><b>El manifiesto está lleno (40 de 40).</b> Decisión técnica mía: <code>boot.js</code> 1.2.0 suma módulos «por ruta», que se cargan recién al entrar a <code>#/builds</code>. Así no toco el tope de 40, la portada no carga nada de más y el método sirve para los módulos que vengan.</li>
+<li><b><code>index.html</code> no crece</b> (48.435 B, zona de advertencia): el panel lo crea el módulo; la ruta va en <code>router.js</code> y el botón en la Sidebar.</li>
+<li><b>Seguridad.</b> El código pegado se acepta solo si coincide con <code>[&amp;…]</code> o <code>AE2:</code>, con base64 válido y un largo máximo; todo lo que se muestra pasa por el escape de siempre. Builds no pide API Key: la etapa 2 la usa, si querés, para «lo que ya tenés».</li>
+<li><b>Modelo de una build curada:</b> <code>{ id, prof, elite, specs, mode, sub, role[], damage, weapons[], code, ae2?, gear?, patch, reviewed, difficulty, source:{name,url}, notes }</code>. Un test exige que cada código se decodifique, que su profesión y élite coincidan con la ficha, que la fuente sea una URL de la lista permitida y que la cobertura llegue a las 36 élites en los dos modos.</li>
+<li><b>Actualización.</b> Vigía semanal en Actions (como las sondas de hoy): lee el último parche de balance y la fecha que declara cada fuente; si una build quedó atrás, la marca «revisar» y me lo deja en el estado. La curación la hago yo en micro-ciclos (es criterio, no automatismo); con un parche grande de balance, una tanda dedicada.</li>
+</ul>
+
+<h2>6. Backlog estimado</h2>
+<p><small>En días de trabajo de la Factory. Cada micro-ciclo se valida en DEV antes del siguiente, como en UNI.</small></p>
+<table>
+<tr><th>MC</th><th>Historia (como jugador…)</th><th>Pilar</th><th>Días</th></tr>
+<tr><td>BLD-1</td><td>…entro a Builds desde la Sidebar y la pantalla aparece sin cargar nada de más en el resto de la Bóveda (boot por ruta, panel, ruta, Sidebar).</td><td>base</td><td>1</td></tr>
+<tr><td>BLD-2</td><td>…un código de cualquiera de las 9 profesiones se lee y se vuelve a escribir idéntico (códec, mascotas, leyendas, armas, variantes; tests con códigos reales).</td><td>B5, C1</td><td>1,5</td></tr>
+<tr><td>BLD-3</td><td>…veo nombres e íconos en español de especializaciones, rasgos y habilidades, rápido la segunda vez (datos de la API, caché).</td><td>B1–B3, D3</td><td>1,5</td></tr>
+<tr><td>BLD-4</td><td>…pego un código y veo la build completa, o un error claro si no es válido (importar y validar).</td><td>C1, D3</td><td>1</td></tr>
+<tr><td>BLD-5</td><td>…armo una build con profesión, 3 líneas, rasgos y barra de tierra y agua, y copio el código (editor y vista previa, teclado).</td><td>B1–B3, B5, B6, C2</td><td>3</td></tr>
+<tr><td>BLD-6</td><td>…guardo, edito y duplico mis builds, y viajan en mi respaldo (Mis builds).</td><td>B7</td><td>1</td></tr>
+<tr><td>BLD-7</td><td>…filtro la biblioteca por profesión, élite, modo, rol, arma, tipo de daño y parche; primera tanda: las 36 élites en PvE.</td><td>A1–A5</td><td>3</td></tr>
+<tr><td>BLD-8</td><td>…segunda tanda: las 36 élites en el segundo modo (D2 de abajo).</td><td>A1, A2</td><td>2,5</td></tr>
+<tr><td>BLD-9</td><td>…comparto una build con un enlace y abro cualquiera en gw2skills.</td><td>C4, D5</td><td>0,5</td></tr>
+<tr><td>BLD-10</td><td>…sé si una build está vigente para el último parche (vigía semanal y aviso).</td><td>D4</td><td>1</td></tr>
+<tr><td>BLD-11</td><td>Revisión final: 19 themes, teclado, lector, celular, rendimiento (lista &lt; 2 s, editor &lt; 200 ms) y FEAT.</td><td>no funcionales</td><td>1</td></tr>
+<tr><th colspan="3">Etapa 1</th><th>17</th></tr>
+<tr><td>BLD-12</td><td>…copio la build con equipo completo en formato AE2 y lo importo (estadísticas, runa, sigilos, reliquia).</td><td>B4, C3</td><td>2,5</td></tr>
+<tr><td>BLD-13</td><td>…recibo una sugerencia de equipo para la build y el modo, y veo qué ya tengo.</td><td>D2</td><td>3</td></tr>
+<tr><td>BLD-14</td><td>…mi gremio se entera en Discord cuando cambia la biblioteca.</td><td>D6</td><td>1</td></tr>
+<tr><td>BLD-15</td><td>…aviso que una build quedó vieja (issue prellenado) y tercer modo (PvP o WvW).</td><td>A6, A2</td><td>3</td></tr>
+<tr><th colspan="3">Etapa 2</th><th>9,5</th></tr>
+</table>
+
+<h2>7. Criterios de aceptación, ajustados</h2>
+<ol>
+<li>Al menos una build vigente por cada una de las <b>36</b> élites en PvE y en el segundo modo (72).</li>
+<li>El código del editor carga rasgos y habilidades en el juego para las 9 profesiones: lo validás vos pegándolo en el juego (yo no puedo); los tests de ida y vuelta sobre códigos reales lo cubren antes.</li>
+<li>Un código externo válido se importa sin errores; uno inválido da un mensaje claro y no rompe nada.</li>
+<li>Profesión, modo y rol en 3 toques o menos.</li>
+<li>Este documento evalúa las 6 funcionalidades del Pilar D (sección 3).</li>
+</ol>
+
+<h2>8. Riesgos</h2>
+<table>
+<tr><th>Riesgo</th><th>Nivel</th><th>Mitigación</th></tr>
+<tr><td>Mantener 72 builds vigentes: hay parches de balance cada pocas semanas</td><td><span class="sev a">ALTO</span></td><td>Vigía semanal, estado «revisar» visible (mejor eso que una build vieja presentada como vigente) y tandas de revisión por parche.</td></tr>
+<tr><td>Contenido de terceros sin licencia de reuso</td><td><span class="sev m">MEDIO</span></td><td>Solo datos factuales y el código; ni textos ni imágenes; crédito y enlace a la fuente en cada build; si una fuente pide retirar algo, se retira.</td></tr>
+<tr><td>ArenaNet cambia el formato del código (ya pasó en 2023)</td><td><span class="sev m">MEDIO</span></td><td>Códec con tests sobre códigos reales; ante un cambio, el importador lo dice y no adivina.</td></tr>
+<tr><td>Manifiesto lleno, <code>index.html</code> al límite</td><td><span class="sev m">MEDIO</span></td><td>Boot por ruta (decisión técnica mía); nada nuevo en <code>index.html</code>.</td></tr>
+<tr><td>La paleta de habilidades solo sale con <code>v=latest</code></td><td><span class="sev l">BAJO</span></td><td>Lo fija el test de <code>bld-ref</code>.</td></tr>
+</table>
+
+<h2>9. Decisiones para vos</h2>
+<table>
+<tr><th>#</th><th>Pregunta</th><th>Mi recomendación</th></tr>
+<tr><td>D1</td><td>¿De dónde salen las builds?</td><td class="rec">Curación mía de datos factuales con enlace y crédito a la fuente, más una vigía semanal. Sin scraping de contenido ni copia de textos.</td></tr>
+<tr><td>D2</td><td>¿Qué segundo modo en la etapa 1?</td><td class="rec">WvW (roaming y zerg): usa el mismo equipo que PvE, así AE2 y el optimizador sirven para los dos. PvP (amuletos propios) en la etapa 2.</td></tr>
+<tr><td>D3</td><td>¿Aceptás el criterio corregido?</td><td class="rec">Sí: 36 élites × 2 modos = 72 builds.</td></tr>
+<tr><td>D4</td><td>¿Mis builds sin cuentas?</td><td class="rec">Sí: en el navegador y en el respaldo, como el resto de la Bóveda; enlace con el código adentro.</td></tr>
+<tr><td>D5</td><td>¿Alcance de la etapa 1?</td><td class="rec">BLD-1 a BLD-11 (17 días). AE2, optimizador, Discord y el tercer modo en la etapa 2. Sin simulador propio.</td></tr>
+<tr><td>D6</td><td>¿Idioma?</td><td class="rec">Español, con los nombres oficiales del juego en español. Inglés fuera (cambiaría toda la Bóveda).</td></tr>
+</table>
+<p>Con tu OK arranco por BLD-1 y BLD-2, que no muestran builds todavía pero dejan la base probada.</p>
+
+<h2>Fuentes (consultadas el 2026-10-28)</h2>
+<ul>
+<li>Formato del código de plantilla: <a href="https://wiki.guildwars2.com/wiki/Chat_link_format">wiki oficial, Chat link format</a> y su <a href="https://wiki.guildwars2.com/wiki/Chat_link_format/skill_palette_table">tabla de paletas</a>.</li>
+<li>AE2: <a href="https://github.com/PieOrCake/alter_ego/blob/main/docs/shared-build-spec.md">Alter Ego Shared Build Template Specification v3</a> y la librería <code>alter-ego-build</code> (MIT).</li>
+<li>Élites de Visions of Eternity: <a href="https://www.guildwars2.com/en/news/elite-specializations-beta-feedback/">guildwars2.com</a>; versión 9.0 de gw2skills con las 9 nuevas: <a href="https://en-forum.guildwars2.com/topic/162284-gw2skillsnet-version-90-of-build-editor-behold-the-visions-of-eternity/">foro oficial</a>.</li>
+<li>Simulador: <a href="https://snowcrows.com/news/website/combat-simulated-update-october-2026">Snow Crows, actualización de octubre 2026</a>.</li>
+<li>gw2skills: <a href="https://en.gw2skills.net/editor/">editor</a> (versión 9.1.6, balance 2026-09-29).</li>
+<li>MetaBattle: <a href="https://metabattle.com/wiki/MetaBattle_Wiki">portada</a> y <a href="https://metabattle.com/wiki/PvP_Builds">PvP</a> (parche declarado por sección).</li>
+<li>Referencia de códec: <a href="https://github.com/darkharasho/gw2buildlink">gw2buildlink</a>.</li>
+</ul>
+</body>
+</html>
