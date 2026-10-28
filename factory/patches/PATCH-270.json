@@ -1,0 +1,35 @@
+{
+ "id": "PATCH-270",
+ "summary": "BL-082 BLD-12/13 en el Editor (bld-editor 1.1.0): panel «Equipo y código AE2» con la sugerencia por reglas (D2), lo que ya tenés en la Armería legendaria y copiar AE2 (C3). La ruta #/builds suma bld-ae2 y bld-gear.",
+ "files": [
+  {
+   "path": "js/bld-editor.js",
+   "base_sha": "a268c7a96f55d316e240cefe4681727ae465d8d5",
+   "ops": [
+    { "op": "replace", "anchor": " * Versión: 1.0.0 (2026-10-28)\n", "text": " * Versión: 1.1.0 (2026-10-28) · BLD-12/13: panel «Equipo y código AE2» (js/bld-gear.js) debajo de la ficha · antes 1.0.0 BLD-5\n" },
+    { "op": "replace", "anchor": "  var VERSION = '1.0.0';", "text": "  var VERSION = '1.1.0';" },
+    { "op": "replace", "anchor": "  var st = { build: null, ref: null, loading: false, error: '', title: '', mineId: '', lastArg: null, req: 0 };", "text": "  var st = { build: null, ref: null, loading: false, error: '', title: '', mineId: '', lastArg: null, req: 0, gear: null };" },
+    { "op": "replace", "anchor": "      (st.mineId ? '<p class=\"bld-muted\">Editando una build de Mis builds: «Guardar» actualiza esa misma.</p>' : '') + '</div>';", "text": "      (st.mineId ? '<p class=\"bld-muted\">Editando una build de Mis builds: «Guardar» actualiza esa misma.</p>' : '') + (err ? '' : gearHTML(b, code)) + '</div>';" },
+    { "op": "insert_before", "anchor": "  function viewHTML() {", "text": "  // BLD-12/13: equipo, sugerencia y AE2 (si js/bld-gear.js está cargado).\n  function gearHTML(b, code) {\n    var G = root.GNBldGear;\n    if (!G || !code) return '';\n    if (!st.gear) st.gear = G.fresh();\n    return G.panelHTML(st.gear, (b.weapons || []).map(function (w) { return C().WEAPONS[w]; }).filter(Boolean), code);\n  }\n  function onGear(ctx, e) {\n    var G = root.GNBldGear;\n    if (!G || !st.gear || !e.target || !e.target.closest || !e.target.closest('[data-gear],[data-gear-box]')) return false;\n    var code = '';\n    try { code = C().encode(st.build); } catch (_) {}\n    if (G.onEvent(e, st.gear, code, function () { paint(ctx); })) paint(ctx, e.target.id || '');\n    return true;\n  }\n\n" },
+    { "op": "replace", "anchor": "      host.addEventListener('change', function (e) { if (ctx.tab === 'editor' || host.querySelector('.bld-ed')) onInput(st.ctx, e); });", "text": "      host.addEventListener('change', function (e) { if (!host.querySelector('.bld-ed')) return; if (onGear(st.ctx, e)) return; onInput(st.ctx, e); });\n      host.addEventListener('toggle', function (e) { if (host.querySelector('.bld-ed')) onGear(st.ctx, e); }, true);" },
+    { "op": "replace", "anchor": "        if (s) { e.preventDefault(); e.stopPropagation(); return saveFromEditor(st.ctx); }\n        onClick(st.ctx, e);", "text": "        if (s) { e.preventDefault(); e.stopPropagation(); return saveFromEditor(st.ctx); }\n        if (e.target && e.target.closest && e.target.closest('[data-gear]')) return onGear(st.ctx, e);\n        onClick(st.ctx, e);" },
+    { "op": "replace", "anchor": "  var api = { version: VERSION, render: render,\n", "text": "  var api = { version: VERSION, render: render, refresh: function () { if (st.ctx && st.ctx.host && st.ctx.host.querySelector('.bld-ed')) paint(st.ctx); },\n" }
+   ]
+  },
+  {
+   "path": "tests/bld-editor.test.cjs",
+   "base_sha": "08402be6f94a65c79785ca17dccf79587536b633",
+   "ops": [
+    { "op": "replace", "anchor": "  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\\.0\\.0 /);\n  assert.equal(E.version, '1.0.0');", "text": "  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\\.1\\.0 /);\n  assert.equal(E.version, '1.1.0');" },
+    { "op": "insert_after", "anchor": "  assert.ok((Date.now() - t0) / 50 < 200, 'cada redibujo en menos de 200 ms');\n});\n", "text": "\ntest('BLD-12/13: con bld-gear cargado, la ficha suma el panel de equipo y un AE2 válido', () => {\n  globalThis.GNBldAe2 = require('../js/bld-ae2.js');\n  globalThis.GNBldGear = require('../js/bld-gear.js');\n  const st = E._state;\n  st.gear = null;\n  st.build.weapons = [50];\n  const h = P.viewHTML();\n  assert.match(h, /Equipo y código AE2/);\n  const ae2 = (h.match(/<code>(AE2:[^<]+)<\\/code>/) || [])[1];\n  assert.ok(ae2, 'hay código AE2');\n  const d = GNBldAe2.decode(ae2);\n  assert.equal(d.code, C.encode(st.build));\n  assert.equal(d.gear.WeaponA1.weaponType, 'Greatsword');\n  assert.equal(d.gear.Helm.statId, 1077, 'poder en PvE: Berserker');\n  delete globalThis.GNBldGear; delete globalThis.GNBldAe2;\n});\n" }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "119d66ce1e366f86d8eb801b1e5483914ee02411",
+   "ops": [
+    { "op": "replace", "anchor": "      { \"src\": \"js/bld-store.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-view.js\", \"v\": \"1.1.0\" },\n      { \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-editor.js\", \"v\": \"1.0.0\" }", "text": "      { \"src\": \"js/bld-store.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-ae2.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-gear.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-view.js\", \"v\": \"1.1.0\" },\n      { \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-editor.js\", \"v\": \"1.1.0\" }" }
+   ]
+  }
+ ]
+}
