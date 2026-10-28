@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-28 03:03Z
-Próxima acción: con la elección de Pablo (texto «UNI7»), UNI-7b: íconos en las pestañas de Cuentas y de la ficha de Raids, test guardián, FEAT-024 y cierre de BL-078; Chak, Dragon's End y retratos a una tarea propia bloqueada por entorno (la wiki está en mantenimiento, RUN-178).
+Última actualización: 2026-10-28 03:16Z
+Próxima acción: con la validación de Pablo de UNI-7b, registrar FEAT-024 y cerrar BL-078 (BL-080 queda bloqueada hasta que vuelva la wiki).
 
 Micro-ciclo:
 BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.
@@ -197,7 +197,8 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 - [BL-059] Info: BL-059 CERRADO por pedido de Pablo (2026-10-27 12:06Z): SHV-1 a SHV-4 en DEV (FEAT-020, FEAT-021, FEAT-022).
 - [BL-078] Info: D1 a D6 aprobadas por Pablo 2026-10-27 22:53Z (como las recomendé).
 - [BL-079] Info: VALIDADO por Pablo en DEV (2026-10-28 02:51Z): la API Key real ya se carga. El mismo defecto sigue en PRD (decisión de Pablo).
-- [BL-078] Decisión: elegir los íconos de las 4 pestañas que faltan (Cuentas y ficha de Raids) en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni7-pestanas.html y pegar el texto «UNI7» en el chat.
+- [BL-078] Validación: en DEV (Firefox, Ctrl+F5): Cuentas muestra el ícono en Mis cuentas y Llavero; en el celular (o ventana angosta), la ficha de un encuentro de Raids muestra el ícono en Recompensas y Cómo se pelea. Con tu OK cierro BL-078 (FEAT-024).
+- [BL-080] Info: Chak, Dragon's End y los retratos de los 5 jefes quedan en BL-080, bloqueada hasta que la wiki salga de mantenimiento.
 - [BL-078] Info: UNI-6b VALIDADA por Pablo (2026-10-28 02:58Z). La wiki sigue en mantenimiento (RUN-178, 03:00Z): Chak, Dragon's End y los retratos de jefes esperan.
 - [BL-078] Info: Chak sigue sin vista previa: la wiki no sirve el GIF y Pablo decidió esperar a que vuelva (2026-10-27 23:28Z). Cuando vuelva: subir chak_gerent.gif a assets/previews/ (https://wiki.guildwars2.com/images/a/ae/Chak_Animation_8.gif).
 - [BL-077] Info: producción = bc089b1 con BL-074, BL-075, BL-059 y BL-076, validada por Pablo 2026-10-27 22:00Z. BL-077 cerrada.
