@@ -1,0 +1,1 @@
+{"id": "RUN-182", "summary": "BL-082 BLD-1: sondas 2 y 3 (router, sidebar, respaldo, kit, idb, reglas de tests)", "tests": ["tests/bld-probe2.smoke.cjs", "tests/bld-probe3.smoke.cjs"]}
