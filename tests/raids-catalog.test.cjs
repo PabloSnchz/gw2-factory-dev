@@ -107,18 +107,21 @@ test('monedas con los ids de la API: conocimiento 70, magnetita 28, Gaeting actu
 });
 
 test('íconos: los locales existen, las miniaturas son oficiales y los genéricos están contados', () => {
-  const KINDS = ['local', 'mini', 'next-boss', 'generic'];
+  const KINDS = ['local', 'mini', 'next-boss', 'emblem', 'generic'];
   ENC.forEach((e) => {
     assert.ok(KINDS.includes(e.icon.kind), e.id);
-    if (e.icon.kind === 'mini') {
-      assert.ok(Number.isInteger(e.icon.mini), e.id);
+    if (e.icon.kind === 'mini' || e.icon.kind === 'emblem') {
+      if (e.icon.kind === 'mini') assert.ok(Number.isInteger(e.icon.mini), e.id);
       assert.match(e.icon.src, /^https:\/\/render\.guildwars2\.com\/file\/[0-9A-F]{40}\/\d+\.png$/, e.id);
     } else {
       assert.ok(fs.existsSync(path.join(ROOT, e.icon.src)), e.id + ': no existe ' + e.icon.src);
     }
   });
-  const generic = ENC.filter((e) => e.icon.kind === 'generic').map((e) => e.id).sort();
-  assert.deepEqual(generic, ['fraenir', 'harvest_temple', 'kaineng_overlook', 'voice_claw', 'xunlai_jade_junkyard']);
+  // BL-078 UNI-5: la API no tiene miniatura de estos 5 jefes (RUN-174, RUN-175): llevan el emblema oficial de su expansión.
+  assert.deepEqual(ENC.filter((e) => e.icon.kind === 'generic').map((e) => e.id), [], 'ningún encuentro con el ícono genérico');
+  const emblem = ENC.filter((e) => e.icon.kind === 'emblem');
+  assert.deepEqual(emblem.map((e) => e.id).sort(), ['fraenir', 'harvest_temple', 'kaineng_overlook', 'voice_claw', 'xunlai_jade_junkyard']);
+  emblem.forEach((e) => assert.match(e.icon.src, e.group === 'ibs' ? /\/2352419\.png$/ : /\/2700772\.png$/, e.id + ': emblema de su expansión'));
   assert.ok(ENC.filter((e) => e.icon.kind === 'next-boss').every((e) => e.type === 'event'));
 });
 
