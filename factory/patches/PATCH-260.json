@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-260",
+ "summary": "BL-082 Builds: propuesta BLD-0 entregada (docs/propuestas/propuesta-builds-bl082.html, 6896aae). Espera las decisiones D1 a D6 de Pablo; nada se construye antes.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "85ac7aac095ede75db43612a57fb6f4a9b5fb59d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "## IN_PROGRESS\n\n## DONE\n",
+     "text": "## IN_PROGRESS\n\n- [BL-082] [ALTO] Módulo Builds de Guild Wars 2 — requerimiento de Pablo (2026-10-28 03:41Z): biblioteca curada de builds para las 9 profesiones y sus élites en PvE, PvP y WvW; editor que genera el código de plantilla del juego; importar y exportar (también AE2); funcionalidades de valor D1 a D6. BLD-0 propuesta ENTREGADA 03:48Z (docs/propuestas/propuesta-builds-bl082.html, 6896aae): investigación con fuentes (formato del código en la wiki oficial, paletas con /v2/professions?v=latest, AE2 v3 con librería MIT, MetaBattle y Snow Crows sin API ni licencia de reuso, simulador de Snow Crows sin API, gw2skills con API restringida por IP). Dos correcciones medidas: son 36 élites, no ~27 (Visions of Eternity sumó una cuarta por profesión), y la Bóveda no tiene servidor ni cuentas (Mis builds en el navegador y en el respaldo; enlace con el código adentro). Evalué D1 a D6: D3 y D4 en la etapa 1, D5 simple en la etapa 1, D2 y D6 en la etapa 2, D1 no (enlace al simulador de Snow Crows). Arquitectura: bld-code, bld-ref, bld-view, bld-editor (bld-ae2 en la etapa 2), datos en assets/data/builds/catalog.json; el manifiesto está en 40 de 40, así que boot.js 1.2.0 suma módulos por ruta (decisión técnica mía); index.html no crece. Backlog: BLD-1 a BLD-11, 17 días (etapa 1); BLD-12 a BLD-15, 9,5 días (etapa 2). Riesgo ALTO: mantener 72 builds vigentes (vigía semanal y estado «revisar»). Espera D1 a D6. · DEC-018, DEC-035, DEC-024 — 2026-10-28\n\n## DONE\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "360d5571a5952bef7d6cee63f3e584d752ee494c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 03:45Z",
+     "text": "Última actualización: 2026-10-28 03:50Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: propuesta del módulo Builds (BL-082, pedido de Pablo 03:41Z): investigación de fuentes, chat codes, AE2 y funcionalidades D1 a D6, arquitectura, backlog estimado y maqueta del editor, para su aprobación. Nada se construye antes.",
+     "text": "Próxima acción: con las decisiones D1 a D6 de Pablo sobre la propuesta del módulo Builds (BL-082), arrancar BLD-1 (boot por ruta, panel, ruta y Sidebar) y BLD-2 (códec del código de plantilla con tests)."
+    },
+    {
+     "op": "replace",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "## Esperando a Pablo\n\n- [BL-082] Decisión: propuesta del módulo Builds en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-builds-bl082.html; decidir D1 a D6 (recomiendo: curación propia con crédito, WvW como segundo modo, 36 élites × 2 modos, Mis builds en el navegador, etapa 1 = BLD-1 a BLD-11, español).\n"
+    }
+   ]
+  }
+ ]
+}
