@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-244",
+ "summary": "BL-078: UNI-4b validada; UNI-5 hecha (cabecera de las tarjetas de Raids y emblema para los 5 encuentros sin miniatura); espera validación; próxima UNI-6.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "2eac4bceacbdc3db3d99c961560f847c37ab190c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Logros tiene ícono en 2 de 4 indicadores y Raids en ninguno (BAJO). ",
+     "text": "Logros tiene ícono en 2 de 4 indicadores y Raids en ninguno (BAJO). Pablo validó UNI-4b 01:08Z. UNI-5 HECHA 01:20Z: (a) PATCH-242, raids-view 1.6.0: la cabecera de cada tarjeta de ala o grupo de encuentros se distingue del contenido (tinte y franja izquierda del color del módulo, verde con «✓» cuando el grupo está completo, miniaturas de 36 px, título 1.08rem en negrita, subtítulo en versalitas, contador en píldora y barra de avance de 3 px); tests de raids-view fijan ala completa, 2 de 4 y la barra. (b) La API no tiene miniatura de los 5 jefes sin ícono (RUN-174 y RUN-175: ni minis, ni logros con ícono propio, ni ítems; los cofres usan el cofre genérico): PATCH-243 les pone el emblema oficial de su expansión (The Icebrood Saga, categoría de logros 330; End of Dragons, categoría 333) en vez del ícono genérico de Raids; catálogo con el tipo nuevo «emblem» y raids-catalog.test sin genéricos. Los retratos de la wiki quedan para UNI-7, junto con Chak, cuando la wiki vuelva. "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "850c103fc7861e2a3a5e7a35dc3b6a280d63e88c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 00:52Z",
+     "text": "Última actualización: 2026-10-28 01:22Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con UNI-4b validada por Pablo, UNI-5: rediseño del encabezado de las cards de Raids y miniaturas de los 5 jefes sin ícono (voice_claw, fraenir, xunlai_jade_junkyard, kaineng_overlook, harvest_temple).",
+     "text": "Próxima acción: con UNI-5 validada por Pablo, UNI-6: íconos del menú Enlaces del header (gn-topbar.js), con un ícono distinto para Foros, Ayuda y Oficial."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: UNI-4b en DEV (Firefox, Ctrl+F5): pestañas con ícono en Raids, Actividades, Heredad, Cámara del Brujo, Logros e Inventario; indicadores con ícono en Actividades, Heredad, Cámara, Inventario y Logros (Puntos de logro y Al alcance); el ícono AP de «Al alcance» vuelve a verse.\n",
+     "text": "- [BL-078] Validación: UNI-5 en DEV (Firefox, Ctrl+F5), Raids: la cabecera de cada tarjeta tiene tinte y franja roja (verde con «✓» si el ala está completa), miniaturas más grandes, contador en píldora y barra de avance; en Encuentros, Voz y Garra, Fraenir, Chatarrería de Xunlai Jade, Mirador de Kaineng y Templo de la Cosecha muestran el emblema de su expansión.\n"
+    }
+   ]
+  }
+ ]
+}
