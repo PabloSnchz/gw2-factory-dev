@@ -1,0 +1,1 @@
+{"id": "RUN-187", "summary": "BL-082 BLD-3: tests de bld-ref, API real de las 9 profesiones, portada de Snow Crows y shas para los próximos parches", "tests": ["tests/bld-ref.test.cjs", "tests/bld-live.smoke.cjs", "tests/bld-sha.smoke.cjs"]}
