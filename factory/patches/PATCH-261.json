@@ -1,0 +1,79 @@
+{
+ "id": "PATCH-261",
+ "summary": "BL-082 BLD-1: js/boot.js 1.2.0 carga módulos «por ruta» (routes en js/modules.json, recién al entrar a la ruta); #/builds carga bld-code y bld-view.",
+ "files": [
+  {
+   "path": "js/boot.js",
+   "base_sha": "130894a27a3c63f32588b97f34b641c50a05f078",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0\n",
+     "text": " * Versión: 1.2.0 (2026-10-28) · BL-082 BLD-1: módulos «por ruta» (ver abajo)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * Los módulos que ya están en index.html siguen como están (DEC-035).\n */",
+     "text": " * Los módulos que ya están en index.html siguen como están (DEC-035).\n *\n * Módulos «por ruta» (1.2.0): \"routes\": { \"#/builds\": [ { \"src\": …, \"v\": … } ] } se cargan recién al entrar a\n * esa ruta (o a una sub-ruta, #/builds/…), una sola vez, y no cuentan para el tope de 40. Avisan con\n * `gn:route-modules` { route, loaded }. Un módulo va en un solo lugar: o en \"modules\" o en una ruta.\n */"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var state = { status: 'idle', loaded: [], errors: [] };",
+     "text": "  var ROUTE_RE = /^#\\/[a-z0-9-]+$/;\n  var ROUTE_MAX = 12, ROUTES_MAX = 10; // módulos por ruta y rutas\n  var state = { status: 'idle', loaded: [], errors: [], routes: {}, routeLoaded: {}, listening: false };"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function urlOf(m) {",
+     "text": "  // 1.2.0: valida \"routes\". Cada ruta pasa por plan(); un módulo no puede estar en \"modules\" y en una ruta.\n  function planRoutes(manifest) {\n    var out = { routes: {}, errors: [] };\n    var r = manifest && manifest.routes;\n    if (r == null) return out;\n    if (typeof r !== 'object' || Array.isArray(r)) { out.errors.push('\"routes\" no es un objeto'); return out; }\n    var seen = {}, n = 0;\n    ((manifest && manifest.modules) || []).forEach(function (m) { if (m && m.src) seen[String(m.src)] = 'modules'; });\n    Object.keys(r).forEach(function (key) {\n      if (!ROUTE_RE.test(key)) { out.errors.push('routes: ruta no permitida (' + key + ')'); return; }\n      if (n >= ROUTES_MAX) { out.errors.push('routes: más de ' + ROUTES_MAX + ' rutas'); return; }\n      var p = plan({ modules: Array.isArray(r[key]) ? r[key] : null }), list = [];\n      p.errors.forEach(function (e) { out.errors.push('routes[' + key + '].' + e); });\n      p.list.forEach(function (m) {\n        if (seen[m.src]) { out.errors.push('routes[' + key + ']: ' + m.src + ' ya se carga en ' + seen[m.src]); return; }\n        if (list.length >= ROUTE_MAX) { out.errors.push('routes[' + key + ']: más de ' + ROUTE_MAX + ' módulos'); return; }\n        seen[m.src] = key; list.push(m);\n      });\n      n++; out.routes[key] = list;\n    });\n    return out;\n  }\n\n  // ¿Qué ruta del manifiesto corresponde a este hash? La misma o una sub-ruta (#/builds/editor).\n  function routeFor(hash, routes) {\n    var h = String(hash || '').split('?')[0], keys = Object.keys(routes || {});\n    for (var i = 0; i < keys.length; i++) if (h === keys[i] || h.indexOf(keys[i] + '/') === 0) return keys[i];\n    return null;\n  }\n\n  // Carga (una vez) los módulos de la ruta del hash. Devuelve lo que agregó, o null si no había nada que cargar.\n  function loadRoute(hash, opts) {\n    var doc = (opts && opts.document) || root.document;\n    var key = routeFor(hash, state.routes);\n    if (!key || state.routeLoaded[key] || !doc) return null;\n    state.routeLoaded[key] = true;\n    var added = inject(doc, state.routes[key]);\n    state.loaded = state.loaded.concat(added);\n    try {\n      if (typeof root.CustomEvent === 'function' && doc.dispatchEvent) doc.dispatchEvent(new root.CustomEvent('gn:route-modules', { detail: { route: key, loaded: added } }));\n    } catch (_) {}\n    return added;\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "        var p = plan(m);\n        state.errors = state.errors.concat(p.errors);\n        state.loaded = state.loaded.concat(inject(doc, p.list));\n        return done(doc);",
+     "text": "        var p = plan(m), pr = planRoutes(m);\n        state.routes = pr.routes;\n        state.errors = state.errors.concat(p.errors, pr.errors);\n        state.loaded = state.loaded.concat(inject(doc, p.list));\n        loadRoute(root.location && root.location.hash, { document: doc });\n        if (!state.listening && typeof root.addEventListener === 'function' && Object.keys(pr.routes).length) {\n          state.listening = true;\n          root.addEventListener('hashchange', function () { loadRoute(root.location && root.location.hash, { document: doc }); });\n        }\n        return done(doc);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  root.GNBoot = { version: VERSION, manifest: MANIFEST, plan: plan, urlOf: urlOf, inject: inject, load: load, state: state };",
+     "text": "  root.GNBoot = { version: VERSION, manifest: MANIFEST, plan: plan, planRoutes: planRoutes, routeFor: routeFor, loadRoute: loadRoute,\n    urlOf: urlOf, inject: inject, load: load, state: state };"
+    }
+   ]
+  },
+  {
+   "path": "tests/boot.test.cjs",
+   "base_sha": "c4b53ca3c8e71f5c2ffe14cf1b8432b77cd9e305",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(B.version, '1.1.0');\n  assert.match(SRC, /\\* Versión: 1\\.1\\.0\\n/);",
+     "text": "  assert.equal(B.version, '1.2.0');\n  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  for (const x of p.list) assert.ok(fs.existsSync(path.join(ROOT, x.src)), 'el módulo existe: ' + x.src);\n});",
+     "text": "  for (const x of p.list) assert.ok(fs.existsSync(path.join(ROOT, x.src)), 'el módulo existe: ' + x.src);\n  // 1.2.0 (BL-082): los módulos por ruta también existen y cada uno declara la versión con que se pide.\n  const r = B.planRoutes(m);\n  assert.deepEqual(r.errors, []);\n  Object.keys(r.routes).forEach((k) => r.routes[k].forEach((x) => {\n    const f = path.join(ROOT, x.src);\n    assert.ok(fs.existsSync(f), 'el módulo existe: ' + x.src);\n    assert.match(fs.readFileSync(f, 'utf8').slice(0, 600), new RegExp('Versión: ' + x.v.replace(/\\./g, '\\\\.') + '\\\\b'), x.src + ' pide ' + x.v);\n  }));\n});"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  assert.equal(calls.length, 1);\n});\n",
+     "text": "\n// 1.2.0 (BL-082 BLD-1): módulos por ruta.\ntest('planRoutes: rutas válidas, sin repetir módulos de \"modules\" ni entre rutas', () => {\n  const r = B.planRoutes({ modules: [{ src: 'js/a.js', v: '1.0.0' }], routes: {\n    '#/builds': [{ src: 'js/b.js', v: '1.0.0' }, { src: 'js/a.js', v: '1.0.0' }, { src: '../x.js', v: '1.0.0' }],\n    '#/otra': [{ src: 'js/b.js', v: '1.0.0' }, { src: 'js/c.js', v: '2.0.0' }],\n    'builds': [{ src: 'js/d.js', v: '1.0.0' }],\n    '#/a/b': []\n  } });\n  assert.deepEqual(r.routes, { '#/builds': [{ src: 'js/b.js', v: '1.0.0' }], '#/otra': [{ src: 'js/c.js', v: '2.0.0' }] });\n  assert.deepEqual(r.errors, [\n    'routes[#/builds].modules[2]: src no permitido (../x.js)',\n    'routes[#/builds]: js/a.js ya se carga en modules',\n    'routes[#/otra]: js/b.js ya se carga en #/builds',\n    'routes: ruta no permitida (builds)',\n    'routes: ruta no permitida (#/a/b)'\n  ]);\n  assert.deepEqual(B.planRoutes({ modules: [] }), { routes: {}, errors: [] }, 'sin routes no hay nada que hacer');\n  assert.deepEqual(B.planRoutes({ modules: [], routes: [] }).errors, ['\"routes\" no es un objeto']);\n  const many = Array.from({ length: 13 }, (_, i) => ({ src: 'js/r' + i + '.js', v: '1.0.0' }));\n  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many } }).errors, ['routes[#/x]: más de 12 módulos']);\n});\n\ntest('routeFor: la ruta o una sub-ruta; nunca un prefijo de otra palabra', () => {\n  const R = { '#/builds': [] };\n  assert.equal(B.routeFor('#/builds', R), '#/builds');\n  assert.equal(B.routeFor('#/builds/editor/abc', R), '#/builds');\n  assert.equal(B.routeFor('#/builds?x=1', R), '#/builds');\n  assert.equal(B.routeFor('#/buildsx', R), null);\n  assert.equal(B.routeFor('#/cards', R), null);\n  assert.equal(B.routeFor('', R), null);\n});\n\ntest('load: los módulos de una ruta se cargan recién al entrar, una sola vez, y avisan', async () => {\n  class CE { constructor(t, o) { this.type = t; this.detail = o.detail; } }\n  const listeners = {};\n  const w = load({ GN_BOOT_MANUAL: true, CustomEvent: CE, location: { hash: '#/cards' }, addEventListener: (t, f) => { listeners[t] = f; } });\n  const doc = fakeDoc([]);\n  const man = { modules: [{ src: 'js/a.js', v: '1.0.0' }], routes: { '#/builds': [{ src: 'js/bld-x.js', v: '1.0.0' }, { src: 'js/bld-y.js', v: '1.1.0' }] } };\n  const st = await w.GNBoot.load({ document: doc, fetch: async () => res(200, man) });\n  assert.deepEqual(st.loaded, ['js/a.js'], 'en otra ruta no carga los de Builds');\n  assert.equal(typeof listeners.hashchange, 'function');\n  w.location.hash = '#/builds/editor';\n  listeners.hashchange();\n  assert.deepEqual(doc.head.appended.map((s) => s.src), ['js/a.js?v=1.0.0', 'js/bld-x.js?v=1.0.0', 'js/bld-y.js?v=1.1.0']);\n  const ev = doc.events.filter((e) => e.type === 'gn:route-modules');\n  assert.equal(ev.length, 1);\n  assert.deepEqual(ev[0].detail, { route: '#/builds', loaded: ['js/bld-x.js', 'js/bld-y.js'] });\n  w.location.hash = '#/builds';\n  listeners.hashchange();\n  assert.equal(doc.head.appended.length, 3, 'la segunda vez no repite');\n});\n\ntest('load: si se entra directo a la ruta, carga junto con el manifiesto', async () => {\n  const w = load({ GN_BOOT_MANUAL: true, location: { hash: '#/builds/c/DQU' } });\n  const doc = fakeDoc([]);\n  const st = await w.GNBoot.load({ document: doc, fetch: async () => res(200, { modules: [], routes: { '#/builds': [{ src: 'js/bld-x.js', v: '1.0.0' }] } }) });\n  assert.deepEqual(st.loaded, ['js/bld-x.js']);\n  assert.deepEqual(st.errors, []);\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "075858a3dc8414665b7b457a109dd13c5e56bbe3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "    { \"src\": \"js/shv-recall.js\", \"v\": \"1.1.0\" }\n  ]\n}",
+     "text": "    { \"src\": \"js/shv-recall.js\", \"v\": \"1.1.0\" }\n  ],\n  \"routes\": {\n    \"#/builds\": [\n      { \"src\": \"js/bld-code.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-view.js\", \"v\": \"1.0.0\" }\n    ]\n  }\n}"
+    }
+   ]
+  }
+ ]
+}
