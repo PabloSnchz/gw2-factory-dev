@@ -1,0 +1,370 @@
+{
+ "id": "PATCH-236",
+ "summary": "BL-078 UNI-4b: íconos del juego elegidos por Pablo en las pestañas de Raids, Actividades, Heredad, Cámara, Logros e Inventario y en sus indicadores; el ícono AP de Logros deja la wiki.",
+ "files": [
+  {
+   "path": "js/gn-kit.js",
+   "base_sha": "f53e3d5f1cbf0313ec48831132fed894d6714d45",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.1 (2026-10-27) — ",
+     "text": " * Versión: 1.1.0 (2026-10-28) — UNI-4b: el mapa de íconos con la elección de Pablo (todas las claves elegidas); el ícono va con\n *   margen a la derecha para pestañas e indicadores · antes 1.0.1 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.0.1';",
+     "text": "var VERSION = '1.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var ICONS = {\n    'clock.local': { src: '841720.png', ok: true },\n    'clock.server': { src: '460028.png', ok: true },\n    'clock.daily': { src: '534745.png', ok: true },\n    'clock.weekly': { src: '155064.png', ok: true },\n    'clock.psna': { src: '1302773.png', ok: false, nota: 'el de Actividades; el PSNA no tiene uno propio en la Bóveda' },\n    'tab.ach.cerca': { src: '155059.png', ok: true },\n    'tab.ach.categorias': { src: null },\n    'tab.ach.legendarias': { src: 'Cuentas/157085.png', ok: true },\n    'tab.inv.multi': { src: '3601748.png', ok: true },\n    'tab.inv.buscar': { src: null },\n    'tab.inv.materiales': { src: null },\n    'tab.inv.banco': { src: null },\n    'tab.inv.armeria': { src: 'Cuentas/157085.png', ok: true },\n    'tab.inv.personajes': { src: null },\n    'tab.act.hoy': { src: '534745.png', ok: true },\n    'tab.act.semana': { src: '155064.png', ok: true },\n    'tab.home.nodos': { src: 'Welcome/3380755.png', ok: true },\n    'tab.home.glifos': { src: null },\n    'tab.home.decoraciones': { src: null },\n    'tab.raids.alas': { src: 'raids/raid-icon.png', ok: true },\n    'tab.raids.encuentros': { src: null },\n    'tab.wv.objetivos': { src: '3172791.png', ok: true },\n    'tab.wv.tienda': { src: null },\n    'tab.wv.cuentas': { src: '3601748.png', ok: true },\n    'link.wiki': { src: 'Welcome/102353.png', ok: false, nota: 'el de «Guías»' },\n    'link.foros': { src: null },\n    'link.ayuda': { src: 'Welcome/102367.png', ok: false, nota: 'el de «Primeros pasos»' },\n    'link.oficial': { src: null },\n    'link.apikey': { src: 'Welcome/2604909.png', ok: true }\n  };\n",
+     "text": "  // Elegidos por Pablo el 2026-10-28 (docs/propuestas/uni4-iconos.html). ok: elegido o ya en uso; false: propuesta mía.\n  var ICONS = {\n    'clock.local': { src: '841720.png', ok: true },\n    'clock.server': { src: '460028.png', ok: true },\n    'clock.daily': { src: '534745.png', ok: true },\n    'clock.weekly': { src: '155064.png', ok: true },\n    'clock.psna': { src: '1302773.png', ok: false, nota: 'el de Actividades; el PSNA no tiene uno propio en la Bóveda' },\n    'tab.raids.alas': { src: 'raids/raid-icon.png', ok: true },\n    'tab.raids.encuentros': { src: '784370.png', ok: true },\n    'tab.act.hoy': { src: '534745.png', ok: true },\n    'tab.act.semana': { src: '155064.png', ok: true },\n    'tab.home.nodos': { src: 'Welcome/3380755.png', ok: true },\n    'tab.home.glifos': { src: '1228929.png', ok: true },\n    'tab.home.decoraciones': { src: '156016.png', ok: true },\n    'tab.wv.objetivos': { src: '3172791.png', ok: true },\n    'tab.wv.tienda': { src: '3594051.png', ok: true },\n    'tab.wv.cuentas': { src: '578844.png', ok: true },\n    'tab.ach.cerca': { src: '155059.png', ok: true },\n    'tab.ach.categorias': { src: 'Welcome/1013045.png', ok: true },\n    'tab.ach.legendarias': { src: 'Cuentas/157085.png', ok: true },\n    'tab.inv.multi': { src: '578844.png', ok: true },\n    'tab.inv.buscar': { src: 'Welcome/3124974.png', ok: true },\n    'tab.inv.materiales': { src: '866124.png', ok: true },\n    'tab.inv.banco': { src: 'Welcome/1228903.png', ok: true },\n    'tab.inv.armeria': { src: '1228891.png', ok: true },\n    'tab.inv.personajes': { src: 'Cuentas/156409.png', ok: true },\n    'link.wiki': { src: 'Welcome/102353.png', ok: true },\n    'link.foros': { src: 'Welcome/156384.png', ok: true },\n    'link.ayuda': { src: 'Welcome/156384.png', ok: true },\n    'link.oficial': { src: 'Welcome/156384.png', ok: true },\n    'link.apikey': { src: 'Welcome/2604909.png', ok: true },\n    'stat.act.fabricacion': { src: 'Welcome/102609.png', ok: true },\n    'stat.act.fractales': { src: 'Fractal/2591.png', ok: true },\n    'stat.act.llave': { src: 'Cuentas/LLave.png', ok: true },\n    'stat.act.piedras': { src: 'Activities/96978.png', ok: true },\n    'stat.home.recolectados': { src: 'Cuentas/23033.png', ok: true },\n    'stat.home.gatos': { src: '3601748.png', ok: true },\n    'stat.home.janthir': { src: 'Welcome/222580.png', ok: true },\n    'stat.wv.aa': { src: 'Welcome/156108.png', ok: true },\n    'stat.wv.gastada': { src: 'Welcome/156107.png', ok: true },\n    'stat.ach.ap': { src: '155059.png', ok: true }\n  };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.gk-ic{vertical-align:middle;flex-shrink:0;border-radius:4px}'\n",
+     "text": "    '.gk-ic{vertical-align:-3px;flex-shrink:0;border-radius:4px;margin-right:6px}'\n"
+    }
+   ]
+  },
+  {
+   "path": "js/raids-view.js",
+   "base_sha": "72909b19898459b7227ea1168454daba692012ca",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-27) — ",
+     "text": " * Versión: 1.5.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas Alas y Encuentros · antes 1.4.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.4.0';",
+     "text": "var VERSION = '1.5.0';"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function pad(n) { return (n < 10 ? '0' : '') + n; }\n",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "tabindex=\"' + (on ? '0' : '-1') + '\">' +\n        t[1] + (badge ?",
+     "text": "tabindex=\"' + (on ? '0' : '-1') + '\">' +\n        kitIcon(t[0] === 'enc' ? 'tab.raids.encuentros' : 'tab.raids.alas') + t[1] + (badge ?"
+    }
+   ]
+  },
+  {
+   "path": "js/act-view.js",
+   "base_sha": "72b81a075c8f6c4362dd6a094db9d0ea0012929b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.6.0 (2026-10-27) — ",
+     "text": " * Versión: 1.7.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas y en los 4 indicadores · antes 1.6.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.6.0';",
+     "text": "var VERSION = '1.7.0';"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function pad(n) { return (n < 10 ? '0' : '') + n; }\n",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var STAT_ICON = { 'Fabricación diaria': 'stat.act.fabricacion', 'Fractales del día': 'stat.act.fractales', 'Llave semanal': 'stat.act.llave', 'Piedras vetustas': 'stat.act.piedras' };\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function stat(label, value, note, bar) {\n",
+     "text": "    label = kitIcon(STAT_ICON[label], 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + '</button>');",
+     "text": "tabindex=\"' + (on ? '0' : '-1') + '\">' + kitIcon('tab.act.' + t[0]) + t[1] + '</button>');"
+    }
+   ]
+  },
+  {
+   "path": "js/home-view.js",
+   "base_sha": "95362f11a7ed940d2161696cca84d15e21891af3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-27) — ",
+     "text": " * Versión: 1.4.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas y en los 4 indicadores · antes 1.3.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function pad(n) { return (n < 10 ? '0' : '') + n; }\n",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var HS_TAB = { nodes: 'tab.home.nodos', glyphs: 'tab.home.glifos', decor: 'tab.home.decoraciones' };\n  var HS_STAT = { 'Nodos': 'tab.home.nodos', 'Recolectados hoy': 'stat.home.recolectados', 'Gatos': 'stat.home.gatos', 'Janthir y contratos': 'stat.home.janthir' };\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function stat(label, value, note, bar) {\n",
+     "text": "    label = kitIcon(HS_STAT[label], 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "tabindex=\"' + (on ? 0 : -1) + '\">' + esc(t[1]) + '</button>';",
+     "text": "tabindex=\"' + (on ? 0 : -1) + '\">' + kitIcon(HS_TAB[t[0]]) + esc(t[1]) + '</button>';"
+    }
+   ]
+  },
+  {
+   "path": "js/wv-view.js",
+   "base_sha": "6cdc9a8b308883dabccc16277356d02c330728e9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-27) — ",
+     "text": " * Versión: 1.5.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas y en los 4 indicadores · antes 1.4.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.4.0';",
+     "text": "var VERSION = '1.5.0';"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function pad2(n) { return (n < 10 ? '0' : '') + n; }\n",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var WV_TAB = { objectives: 'tab.wv.objetivos', shop: 'tab.wv.tienda', accounts: 'tab.wv.cuentas' };\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function statCount(label, c) {\n",
+     "text": "    label = kitIcon(label === 'Hoy' ? 'clock.daily' : 'clock.weekly', 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "<small>AA disponible</small>",
+     "text": "<small>' + kitIcon('stat.wv.aa', 16) + 'AA disponible</small>"
+    },
+    {
+     "op": "replace",
+     "anchor": "<small>Gastada en la temporada</small>",
+     "text": "<small>' + kitIcon('stat.wv.gastada', 16) + 'Gastada en la temporada</small>"
+    },
+    {
+     "op": "replace",
+     "anchor": "tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + t[2] + '</button>');",
+     "text": "tabindex=\"' + (on ? '0' : '-1') + '\">' + kitIcon(WV_TAB[t[0]]) + t[1] + t[2] + '</button>');"
+    }
+   ]
+  },
+  {
+   "path": "js/ach-view.js",
+   "base_sha": "ad5b8ccb006462149fe2ac1d96167f1c49aa98bf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-27) — ",
+     "text": " * Versión: 1.5.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las pestañas y en los puntos de logro; el ícono AP ya no viene de la wiki · antes 1.4.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.4.0';",
+     "text": "var VERSION = '1.5.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var ICON_AP = 'https://wiki.guildwars2.com/images/thumb/c/cd/AP.png/30px-AP.png';",
+     "text": "  var ICON_AP = 'assets/icons/155059.png'; // UNI-4b (stat.ach.ap): el de la wiki dejó de cargar"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function plural(n, uno, varios) {",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var ACH_TAB = { near: 'tab.ach.cerca', cats: 'tab.ach.categorias', legendary: 'tab.ach.legendarias' };\n  var ACH_STAT = { 'Puntos de logro': 'stat.ach.ap', 'Al alcance': 'stat.ach.ap' };\n\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function stat(label, value, note) {\n",
+     "text": "    label = kitIcon(ACH_STAT[label], 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] +\n        (m.loaded && badge[t[0]]",
+     "text": "tabindex=\"' + (on ? '0' : '-1') + '\">' + kitIcon(ACH_TAB[t[0]]) + t[1] +\n        (m.loaded && badge[t[0]]"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('achxHead');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('achxHead');\n    if (!host) {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/inv-view.js",
+   "base_sha": "0d8e202772a9831501541d13299da4ef360383f6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.6.0 (2026-10-27) — ",
+     "text": " * Versión: 1.7.0 (2026-10-28) — BL-078 UNI-4b: íconos del juego en las 6 pestañas y en los 4 indicadores · antes 1.6.0 (2026-10-27) — "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.6.0';",
+     "text": "var VERSION = '1.7.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function fold(s) { var P = M();",
+     "text": "  // BL-078 UNI-4b: los íconos del juego vienen de GNKit (js/gn-kit.js, elegidos por Pablo); sin GNKit, sin ícono.\n  function kitIcon(k, size) { var K = root.GNKit; return k && K && typeof K.icon === 'function' ? K.icon(k, size || 18) : ''; }\n  var IV_ICON = { 'Multicuenta': 'tab.inv.multi', 'Buscar': 'tab.inv.buscar', 'Materiales': 'tab.inv.materiales', 'Banco': 'tab.inv.banco',\n    'Armería legendaria': 'tab.inv.armeria', 'Personajes': 'tab.inv.personajes' }; // por nombre: las pestañas sumadas traen el suyo\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function stat(label, value, note, bar) {\n",
+     "text": "    label = kitIcon(IV_ICON[label], 16) + label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "aria-controls=\"ivPanel\" tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + '</button>');",
+     "text": "aria-controls=\"ivPanel\" tabindex=\"' + (on ? '0' : '-1') + '\">' + kitIcon(IV_ICON[t[1]]) + t[1] + '</button>');"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var host = byId('ivRoot');\n    if (!host) {\n",
+     "text": "    if (root.GNKit && typeof root.GNKit.ensureCSS === 'function') root.GNKit.ensureCSS();\n    var host = byId('ivRoot');\n    if (!host) {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "d7ebbda8ac1c5b57f11f76d3672f242096503ffb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/gn-kit.js\", \"v\": \"1.0.1\"",
+     "text": "\"js/gn-kit.js\", \"v\": \"1.1.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/raids-view.js\", \"v\": \"1.4.0\"",
+     "text": "\"js/raids-view.js\", \"v\": \"1.5.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/act-view.js\", \"v\": \"1.6.0\"",
+     "text": "\"js/act-view.js\", \"v\": \"1.7.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/home-view.js\", \"v\": \"1.3.0\"",
+     "text": "\"js/home-view.js\", \"v\": \"1.4.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/wv-view.js\", \"v\": \"1.4.0\"",
+     "text": "\"js/wv-view.js\", \"v\": \"1.5.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/ach-view.js\", \"v\": \"1.4.0\"",
+     "text": "\"js/ach-view.js\", \"v\": \"1.5.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/inv-view.js\", \"v\": \"1.6.0\"",
+     "text": "\"js/inv-view.js\", \"v\": \"1.7.0\""
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-kit.test.cjs",
+   "base_sha": "44f7057a479d804c0d1057e87e43d253d7a586ca",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.0\\.1 /);",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.1\\.0 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(K.icon('tab.raids.encuentros'), '', 'todavía sin elegir');\n",
+     "text": "  assert.equal(K.icon('tab.raids.encuentros', 18), '<img class=\"gk-ic\" src=\"assets/icons/784370.png\" width=\"18\" height=\"18\" alt=\"\" loading=\"lazy\">', 'elegido por Pablo');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.ok(p.missing.includes('tab.raids.encuentros'));\n",
+     "text": "  assert.equal(p.missing.length, 0, 'Pablo eligió todas (2026-10-28)');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/raids-sheet.test.cjs",
+   "base_sha": "a0af07541a44e701d3398aca5ea6b077b7ca1cf3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.4.0');",
+     "text": "assert.equal(man.find((m) => m.src === 'js/raids-view.js').v, '1.5.0');"
+    }
+   ]
+  },
+  {
+   "path": "tests/act-psna.test.cjs",
+   "base_sha": "593f5ea835b7edf93b1bf51325a840de7ef8e1ed",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(VIEW, /Versión: 1\\.6\\.0/);",
+     "text": "  assert.match(VIEW, /Versión: 1\\.7\\.0/);"
+    }
+   ]
+  },
+  {
+   "path": "tests/home-extra.test.cjs",
+   "base_sha": "7918ada9f84f340b861b920d6a47c96ec1bf4f81",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(HV, /Versión: 1\\.3\\.0/);",
+     "text": "  assert.match(HV, /Versión: 1\\.4\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man[h].v, '1.3.0');",
+     "text": "  assert.equal(man[h].v, '1.4.0');"
+    }
+   ]
+  },
+  {
+   "path": "tests/home-view.test.cjs",
+   "base_sha": "35f953049886cbc2d28440e38741cfaa62500d0b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.3\\.0/);",
+     "text": "  assert.match(SRC, /Versión: 1\\.4\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man[i].v, '1.3.0');",
+     "text": "  assert.equal(man[i].v, '1.4.0');"
+    }
+   ]
+  },
+  {
+   "path": "tests/wv-view.test.cjs",
+   "base_sha": "60a467e48cd6f4b523dbcff28c39468fec9ba71d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 1.4.0, la misma que pide js/modules.json', () => {\n  assert.match(SRC, /\\* Versión: 1\\.4\\.0 /);",
+     "text": "test('versión 1.5.0, la misma que pide js/modules.json', () => {\n  assert.match(SRC, /\\* Versión: 1\\.5\\.0 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "[{ src: 'js/wv-view.js', v: '1.4.0' }]",
+     "text": "[{ src: 'js/wv-view.js', v: '1.5.0' }]"
+    }
+   ]
+  }
+ ]
+}
