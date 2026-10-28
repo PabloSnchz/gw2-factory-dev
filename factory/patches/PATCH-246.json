@@ -1,0 +1,89 @@
+{
+ "id": "PATCH-246",
+ "summary": "BL-079 (CRÍTICO, reportado por un usuario; reintento del 245): el formulario de API Keys rechazaba toda Key real de GW2. Se esperaban dos GUID unidos por guion (73 caracteres) y la Key real tiene 72 (8-4-4-4-20-4-4-4-12). Regla corregida, mensaje claro, espacios fuera al pegar; app.js 2.9.2 dentro de su techo de tamaño; hb75-permisos corrige la forma de prueba.",
+ "files": [
+  {
+   "path": "js/app.js",
+   "base_sha": "d673de529c0c02cdb922151ab1f7e27d122326fd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "GW2 Wallet app.js v2.9.1 — ",
+     "text": "GW2 Wallet app.js v2.9.2 — "
+    },
+    {
+     "op": "replace",
+     "anchor": "  // 1 o 2 bloques GUID (8-4-4-4-12): el `id` de /v2/tokeninfo es la mitad (36 + 1 + 36 = 73).\n  function isValidKeyFormat(v) {\n    return /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}(?:-[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})*$/.test(v);\n  }",
+     "text": "  // BL-079: la Key real tiene 72 caracteres, 8-4-4-4-20-4-4-4-12 (dos GUID pegados SIN guion en la unión).\n  function isValidKeyFormat(v) {\n    return /^[0-9A-F]{8}(-[0-9A-F]{4}){3}-[0-9A-F]{20}(-[0-9A-F]{4}){3}-[0-9A-F]{12}$/i.test(v);\n  }"
+    },
+    {
+     "op": "replace",
+     "anchor": "      const value = el.kfValue?.value.trim() || '';",
+     "text": "      const value = (el.kfValue?.value || '').replace(/\\s+/g, ''); // BL-079"
+    },
+    {
+     "op": "replace",
+     "anchor": "'El formato no es válido. Se espera un GUID 8-4-4-4-12 en hexadecimal, guion por guion.'",
+     "text": "'Formato no válido: la API Key de GW2 tiene 72 caracteres. Copiala entera desde account.arena.net.'"
+    },
+    {
+     "op": "replace",
+     "anchor": "'El formato de la API key no es válido. Debe ser un GUID de 8-4-4-4-12 (opcionalmente seguido de otro igual).'",
+     "text": "'La API key no tiene el formato de GW2 (72 caracteres).'"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "f956a5596549cf41b663d395077a80d8cfbc9244",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/app.js?v=2.9.1\"",
+     "text": "js/app.js?v=2.9.2\""
+    }
+   ]
+  },
+  {
+   "path": "tests/hb75-permisos.test.js",
+   "base_sha": "14a2a09851660f2b211e3109a1faaa928f93ad58",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " *   son 36 chars (8-4-4-4-12 en hex), de modo que la key completa son dos GUID\n *   unidos por un guion. Un regex de 48 chars rechaza keys reales; el de 36\n *   acepta el `id` que devuelve /v2/tokeninfo. Por eso el 2do bloque es\n *   opcional y el 1ro obligatorio.",
+     "text": " *   son 36 chars (8-4-4-4-12 en hex). BL-079 (2026-10-28, lo reporto un usuario): la key\n *   real son dos GUID pegados SIN guion en la union: 72 chars, 8-4-4-4-20-4-4-4-12. La\n *   regla de 73 (con guion) rechazaba TODA key real; se corrige y el `id` suelto ya no pasa."
+    },
+    {
+     "op": "replace",
+     "anchor": "const m = app.match(/function isValidKeyFormat\\(v\\)\\s*\\{\\s*return\\s*(\\/.*\\/)\\.test\\(v\\)/);\nok(!!m, 'isValidKeyFormat devuelve una regex');\nconst re = m ? eval(m[1]) : /$/;\n\nconst KEY_73 = '1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B';\nconst ID_36 = 'ABCDE02B-8888-FEBA-1234-DE98765C7DEF';\n\nok(re.test(KEY_73), 'acepta la key real (dos GUID, 73 chars)');\nok(re.test(ID_36), 'acepta el id de /v2/tokeninfo (un GUID, 36 chars)');",
+     "text": "const m = app.match(/function isValidKeyFormat\\(v\\)\\s*\\{\\s*return\\s*(\\/.*\\/[a-z]*)\\.test\\(v\\)/);\nok(!!m, 'isValidKeyFormat devuelve una regex');\nconst re = m ? eval(m[1]) : /$/;\n\n// Keys INVENTADAS con la forma real (nunca una key de verdad en el repo).\nconst KEY_72 = '1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B';\nconst KEY_73 = '1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B';\nconst ID_36 = 'ABCDE02B-8888-FEBA-1234-DE98765C7DEF';\n\nok(KEY_72.length === 72, 'la key de prueba tiene 72 chars');\nok(re.test(KEY_72), 'acepta la key real (dos GUID pegados, 72 chars, 8-4-4-4-20-4-4-4-12)');\nok(re.test(KEY_72.toLowerCase()), 'acepta la key en minusculas');\nok(!re.test(KEY_73), 'rechaza la forma inventada de 73 (con guion en la union): BL-079');\nok(!re.test(ID_36), 'rechaza el id suelto de /v2/tokeninfo (media key)');"
+    },
+    {
+     "op": "replace",
+     "anchor": "ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9AOB-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),",
+     "text": "ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9AOB-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),"
+    },
+    {
+     "op": "replace",
+     "anchor": "ok(!re.test('1A2B3C4D--5E6F-7A8B-9C0D-1E2F3A4B5C6D-7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),",
+     "text": "ok(!re.test('1A2B3C4D--5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),"
+    },
+    {
+     "op": "replace",
+     "anchor": "ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D-1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),\n   'rechaza un guion de menos');",
+     "text": "ok(!re.test('1A2B3C4D-5E6F-7A8B-9C0D1E2F3A4B5C6D7E8F9A0B-1C2D-3E4F-5A6B-7C8D9E0F1A2B'),\n   'rechaza un guion de menos');"
+    },
+    {
+     "op": "replace",
+     "anchor": "ok(!re.test('  ' + KEY_73 + '  '), 'rechaza espacios alrededor (la UI hace trim antes)');",
+     "text": "ok(!re.test('  ' + KEY_72 + '  '), 'rechaza espacios alrededor (la UI los quita antes)');\nok(/replace\\(\\/\\\\s\\+\\/g, ''\\)/.test(app), 'BL-079: la UI quita espacios y saltos de linea al pegar');"
+    },
+    {
+     "op": "replace",
+     "anchor": "ok(/8-4-4-4-12/.test(app), 'el mensaje nombra el formato que el regex realmente exige');",
+     "text": "ok(/72 caracteres/.test(app) && !/GUID 8-4-4-4-12/.test(app), 'el mensaje nombra el formato real (72 caracteres), no el viejo');"
+    }
+   ]
+  }
+ ]
+}
