@@ -1,0 +1,14 @@
+{
+ "id": "PATCH-273",
+ "summary": "BL-082 BLD-6/7: la ruta #/builds carga la Biblioteca (bld-lib 1.0.0) y Mis builds (bld-mine 1.0.0). 11 módulos en la ruta.",
+ "files": [
+  {
+   "path": "js/modules.json",
+   "base_sha": "68bd7bdc35b53b402444bde94188e70f7c593fde",
+   "ops": [
+    { "op": "replace", "anchor": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.1.0\" },\n", "text": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.1.0\" },\n      { \"src\": \"js/bld-lib.js\", \"v\": \"1.0.0\" },\n" },
+    { "op": "replace", "anchor": "      { \"src\": \"js/bld-editor.js\", \"v\": \"1.1.0\" }", "text": "      { \"src\": \"js/bld-editor.js\", \"v\": \"1.1.0\" },\n      { \"src\": \"js/bld-mine.js\", \"v\": \"1.0.0\" }" }
+   ]
+  }
+ ]
+}
