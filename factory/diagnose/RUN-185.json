@@ -1,0 +1,1 @@
+{"id": "RUN-185", "summary": "BL-082: sonda de red (API oficial: build, especializaciones, leyendas, archivos; robots.txt de las fuentes; API de MediaWiki de MetaBattle)", "tests": ["tests/bld-probe6.smoke.cjs"]}
