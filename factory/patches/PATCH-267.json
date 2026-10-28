@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-267",
+ "summary": "BL-082 BLD-1 (reintento de PATCH-266): la Sidebar suma Builds (#/builds) antes de Cuentas, también en «Más» del celular (sidebar-nav.js 2.3.0, EXTRA). Los tests que fijan la lista suman Builds.",
+ "files": [
+  {
+   "path": "index.html",
+   "base_sha": "b5db3f0ce240a4340b1aa2e67d241c9c84efbc78",
+   "ops": [
+    { "op": "replace", "anchor": "js/sidebar-nav.js?v=2.2.6", "text": "js/sidebar-nav.js?v=2.3.0" }
+   ]
+  },
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "0d512e3b9ad261b8335de30392f8e269a2d56d12",
+   "ops": [
+    { "op": "replace", "anchor": " * Versión: 2.2.6 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)", "text": " * Versión: 2.3.0 (2026-10-28) · BL-082 BLD-1: Builds en la lista, antes de Cuentas (EXTRA)\n *          2.2.6 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)" },
+    { "op": "replace", "anchor": "  var VERSION = '2.2.6';", "text": "  var VERSION = '2.3.0';" },
+    { "op": "insert_before", "anchor": "  // Los grupos de la Sidebar: Inicio, los módulos y Cuentas aparte.", "text": "  // BL-082 BLD-1: módulos que la Bienvenida todavía no lista (welcome-panel.js no tiene lugar: 48 KB).\n  // Van antes de Cuentas y una sola vez: si algún día la Bienvenida los suma, no se repiten.\n  var EXTRA = [{ id: 'builds', name: 'Builds', href: '#/builds', icon: 'assets/icons/professions/2163510.png', color: '#C9B6FF' }];\n  function withExtra(list) {\n    var out = list.filter(function (m) { return m.id !== 'accounts'; }), tail = list.filter(function (m) { return m.id === 'accounts'; });\n    EXTRA.forEach(function (x) { if (!list.some(function (m) { return m.id === x.id; })) out.push(x); });\n    return out.concat(tail);\n  }\n\n" },
+    { "op": "replace", "anchor": "    return list.map(function (m) { return { id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color }; });", "text": "    return withExtra(list).map(function (m) { return { id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color }; });" },
+    { "op": "replace", "anchor": "LINK_ID: LINK_ID, VIEW: VIEW, ALIAS: ALIAS, CSS: CSS }", "text": "LINK_ID: LINK_ID, VIEW: VIEW, ALIAS: ALIAS, CSS: CSS, EXTRA: EXTRA }" }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "4edb962cb442a3862e00a8ded471022810203f6b",
+   "ops": [
+    { "op": "replace", "anchor": "test('versión 2.2.6', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.2\\.6/);\n  assert.equal(x.S().version, '2.2.6');", "text": "test('versión 2.3.0', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.3\\.0/);\n  assert.equal(x.S().version, '2.3.0');" },
+    { "op": "replace", "anchor": "'#/account/characters', '#/account/legendary-armory', '#/account/accounts']);", "text": "'#/account/characters', '#/account/legendary-armory', '#/builds', '#/account/accounts']);" },
+    { "op": "replace", "anchor": "'navLegendaryArmory:legendaryArmory', 'navAccounts:accounts']);", "text": "'navLegendaryArmory:legendaryArmory', 'nav-builds:builds', 'navAccounts:accounts']);" },
+    { "op": "replace", "anchor": "'#/account/characters', '#/account/accounts']);", "text": "'#/account/characters', '#/builds', '#/account/accounts']);" },
+    { "op": "replace", "anchor": "'Inventario y Personajes', 'Cuentas']);", "text": "'Inventario y Personajes', 'Builds', 'Cuentas']);" },
+    { "op": "replace", "anchor": "  assert.equal(x.document.querySelectorAll('#sbrNav a').length, 11);", "text": "  assert.equal(x.document.querySelectorAll('#sbrNav a').length, 12, 'Inicio, 10 módulos (con Builds, BL-082) y Cuentas');" },
+    { "op": "replace", "anchor": "  same(hrefs(x), ['#/welcome', '#/meta', '#/cards']);", "text": "  same(hrefs(x), ['#/welcome', '#/meta', '#/cards', '#/builds'], 'Builds (BL-082) se suma aunque la Bienvenida no lo liste');" },
+    { "op": "replace", "anchor": "  assert.equal(hrefs(x).length, 11);", "text": "  assert.equal(hrefs(x).length, 12);" }
+   ]
+  }
+ ]
+}
