@@ -1,0 +1,1 @@
+{"id": "RUN-190", "summary": "BL-082 BLD-7/8: ayuda de curación por profesión (PvE, WvW y PvP de Snow Crows; solo datos factuales) y nombres en castellano de las 36 élites", "tests": ["tests/bld-curate2.smoke.cjs"]}
