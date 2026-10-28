@@ -1,0 +1,33 @@
+# BL-081: promoción de BL-078 (Una sola Bóveda, FEAT-024) y BL-079 (formato de la API Key) a producción (gw2-wallet-ligero)
+# Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
+# Base de producción esperada: bc089b1 (BL-077). Comparación blob a blob de DEV contra producción bc089b1:
+#   css/, assets/icons/, assets/previews/, privacy.html, docs/user-guide*.html y los otros 66 JS son idénticos: no se tocan.
+# No se tocan: js/analytics.js y assets/meta-drops.json (versión PROD), README/CHANGELOG, docs internos y docs/propuestas,
+# tests/, tools/, factory/, ai-memory/.
+# index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006).
+# js/app.js trae BL-079 (la API Key real de 72 caracteres se acepta), validado por Pablo en DEV 2026-10-28 02:51Z;
+#   index.html ya lo pide como ?v=2.9.2, así que va junto.
+# Totales: 1 JS nuevo + 12 JS modificados + 1 dato + 1 página = 15 copias; 0 bajas; 15 movimientos.
+
+# JS nuevo (1)
+C js/gn-kit.js
+
+# JS modificados (12)
+C js/acc-view.js
+C js/ach-view.js
+C js/act-view.js
+C js/app.js
+C js/gn-topbar.js
+C js/home-view.js
+C js/inv-view.js
+C js/meta-theme.js
+C js/modules.json
+C js/raids-sheet.js
+C js/raids-view.js
+C js/wv-view.js
+
+# Datos (1)
+C assets/data/raids/catalog.json
+
+# Páginas (1)
+C index.html
