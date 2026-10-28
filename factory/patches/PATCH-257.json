@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-257",
+ "summary": "BL-081 EN PRD: Pablo corrió el pasaje (15|15|0), producción = a501bea, rollback/pre-bl-081 = bc089b1; control blob a blob OK (informe ai-memory/missions/BL-081-informe-promocion.md). Espera la validación de Pablo en Chrome.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "fcffcfa58acce60038161313e3db359beba73887",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " · DEC-036, BL-077, BL-078, BL-079, FEAT-024 — 2026-10-28",
+     "text": " EN PRD 2026-10-28 03:24Z: Pablo corrió el comando de una línea (15 | 15 | 0 distintos, SI); producción = a501bea, rollback/pre-bl-081 = bc089b1 (verificada). Control blob a blob OK: js/ 77 de 78 iguales a DEV (solo js/analytics.js, propia de PRD), index.html, assets/data/ e assets/icons/ iguales, meta-drops.json de PRD intacto. Informe ai-memory/missions/BL-081-informe-promocion.md (c60248a). Espera la validación de Pablo en Chrome; con su OK, BL-081 a DONE. · DEC-036, BL-077, BL-078, BL-079, FEAT-024 — 2026-10-28"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "da94a046ae37f80a429db1bb39e43ebf6dfedff8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 03:22Z",
+     "text": "Última actualización: 2026-10-28 03:25Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Pablo corre el pasaje a PRD de BL-081 (una línea de PowerShell, factory/promote/README.md) y me pasa el SHA de producción; yo controlo blob a blob, informe ai-memory/missions/BL-081-informe-promocion.md y lista de validación en PRD. Nada de tareas nuevas antes de cerrar BL-081.",
+     "text": "Próxima acción: Pablo valida producción (a501bea) en Chrome con la lista del informe ai-memory/missions/BL-081-informe-promocion.md; con su OK, BL-081 a DONE. Nada de tareas nuevas antes de cerrar BL-081."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-081] Acción: correr el pasaje a PRD vía PowerShell (una línea, -DevSha 761b1fc12eae2186bd0608d7a4be92568a9181c7 -PrdBase bc089b1 -Manifest factory/promote/BL-081.txt -Tarea BL-081). Esperado: 15 | 15 | 0 distintos; escribir SI; pasarme el SHA final.\n",
+     "text": "- [BL-081] Validación: producción = a501bea (control blob a blob OK). En Chrome, Ctrl+F5: una API Key real se acepta; relojes con ícono en Metas, Actividades, Cámara, Heredad y Raids; pestañas con ícono (también Cuentas y la ficha de Raids en el celular); cabecera del ala de Raids; íconos del menú Enlaces. Rollback: rollback/pre-bl-081 = bc089b1.\n"
+    }
+   ]
+  }
+ ]
+}
