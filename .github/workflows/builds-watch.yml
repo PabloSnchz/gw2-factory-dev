@@ -1,0 +1,63 @@
+# Vigía semanal de builds (BL-082 BLD-10 y BLD-14, D4 y D6).
+# Lunes 12:00 UTC (y a mano, o cuando cambia la biblioteca): lee el último parche de balance declarado en las
+# páginas públicas de MetaBattle y la versión del juego, actualiza assets/data/builds/watch.json y republica DEV.
+# Discord: solo si existe el secreto DISCORD_WEBHOOK_URL (nunca llega al navegador).
+# Seguridad: solo en gw2-factory-dev; el único archivo que commitea es watch.json, verificado antes del commit.
+
+name: builds-watch
+
+on:
+  schedule:
+    - cron: '0 12 * * 1'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'assets/data/builds/catalog.json'
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: builds-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    if: github.repository == 'PabloSnchz/gw2-factory-dev'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tests de la vigía
+        run: node --test .github/scripts/bld-watch.test.cjs
+
+      - name: Mirar el último parche
+        id: watch
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: node .github/scripts/bld-watch.cjs
+
+      - name: Commit de watch.json
+        if: steps.watch.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/data/builds/watch.json
+          if git diff --cached --name-only | grep -vx 'assets/data/builds/watch.json'; then echo "Cambios no esperados"; exit 1; fi
+          git commit -m "builds-watch: último parche de balance"
+          git push origin HEAD:main || { git pull --rebase origin main && git push origin HEAD:main; }
+
+      - name: Republicar DEV
+        if: steps.watch.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run dev-pages.yml --ref main
