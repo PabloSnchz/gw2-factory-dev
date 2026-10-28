@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-249",
+ "summary": "BL-078 UNI-6a hecha (íconos del menú Enlaces desde GNKit); UNI-6b espera la elección de Pablo para los repetidos.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "5a4695eb92599faf42d96c1e04ffed105973567f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Los retratos de la wiki quedan para UNI-7, junto con Chak, cuando la wiki vuelva. ",
+     "text": "Los retratos de la wiki quedan para UNI-7, junto con Chak, cuando la wiki vuelva. Pablo pidió avanzar a UNI-6 02:00Z. UNI-6a HECHA 02:03Z (PATCH-248): gn-topbar 1.2.0 pone el ícono de GNKit en los 5 enlaces del menú Enlaces (por la dirección del enlace; al arrancar, con gn:boot-ready y al abrir el menú, una sola vez; index.html no cambia); test de conducta en tests/gn-kit-icons.test.cjs. UNI-6b: selector chico docs/propuestas/uni6-enlaces.html para resolver los repetidos (Foros, Ayuda y Sitio oficial con el mismo ícono; Wiki igual al botón Guías de al lado); propongo para Ayuda el de «Primeros pasos» (Welcome/102367); Pablo devuelve el texto «UNI6» y se aplica en GNKit.ICONS. "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c26eab6a5be2ded1a72800e16dd42df8477e6cc7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 01:45Z",
+     "text": "Última actualización: 2026-10-28 02:04Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con BL-079 validado por Pablo (API Key real aceptada en DEV), retomar BL-078 UNI-6: íconos del menú Enlaces del header (gn-topbar.js), con un ícono distinto para Foros, Ayuda y Oficial.",
+     "text": "Próxima acción: con la elección de Pablo (texto «UNI6»), UNI-6b: aplicar los íconos de los enlaces en GNKit.ICONS; después UNI-7 (Chak y retratos de jefes cuando vuelva la wiki, revisión final, FEAT-024)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-079] Validación: en DEV (Firefox, Ctrl+F5), Gestión de API Keys: una Key real de 72 caracteres se acepta y pasa a la puerta de permisos; con texto incompleto el mensaje dice «la API Key de GW2 tiene 72 caracteres». El mismo defecto sigue en PRD.\n",
+     "text": "- [BL-079] Validación: en DEV (Firefox, Ctrl+F5), Gestión de API Keys: una Key real de 72 caracteres se acepta y pasa a la puerta de permisos; con texto incompleto el mensaje dice «la API Key de GW2 tiene 72 caracteres». El mismo defecto sigue en PRD.\n- [BL-078] Decisión: elegir los íconos repetidos del menú Enlaces en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni6-enlaces.html y pegar el texto «UNI6» en el chat.\n"
+    }
+   ]
+  }
+ ]
+}
