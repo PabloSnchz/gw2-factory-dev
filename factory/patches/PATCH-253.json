@@ -1,0 +1,127 @@
+{
+ "id": "PATCH-253",
+ "summary": "BL-078 UNI-7b: íconos del juego en las 4 pestañas que faltaban, con la elección de Pablo (UNI7, 2026-10-28 03:08Z): Cuentas (Mis cuentas 578844, Llavero Cuentas/LLave) y la ficha de Raids en el celular (Recompensas Cuentas/255373, Cómo se pelea 784370). gn-kit 1.3.0, acc-view 1.4.0, raids-sheet 1.4.0. Sin GNKit, todo se ve como antes.",
+ "files": [
+  {
+   "path": "js/gn-kit.js",
+   "base_sha": "e41051786db6c0918160d78a0e3fcd68cd82a28a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-28) — UNI-6b:",
+     "text": " * Versión: 1.3.0 (2026-10-28) — UNI-7b: las 4 pestañas que faltaban (Cuentas y la ficha de Raids), elegidas por Pablo\n *   · antes 1.2.0 (2026-10-28) — UNI-6b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.2.0';",
+     "text": "  var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    'tab.inv.personajes': { src: 'Cuentas/156409.png', ok: true },\n",
+     "text": "    'tab.inv.personajes': { src: 'Cuentas/156409.png', ok: true },\n    'tab.acc.mias': { src: '578844.png', ok: true },\n    'tab.acc.llavero': { src: 'Cuentas/LLave.png', ok: true },\n    'tab.rs.recompensas': { src: 'Cuentas/255373.png', ok: true },\n    'tab.rs.pelea': { src: '784370.png', ok: true },\n"
+    }
+   ]
+  },
+  {
+   "path": "js/acc-view.js",
+   "base_sha": "99ad8654f79f9228f0a60046a7ee0204013c77f4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-27) · BL-076 SHV-5c:",
+     "text": " * Versión: 1.4.0 (2026-10-28) · BL-078 UNI-7b: íconos del juego en las pestañas, desde GNKit (sin GNKit, como antes)\n *          1.3.0 (2026-10-27) · BL-076 SHV-5c:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.3.0';",
+     "text": "  var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function tabsHTML(cur) {\n    return '<div class=\"cv-tabs\"",
+     "text": "  function tabsHTML(cur) {\n    var K = root.GNKit;\n    if (K && K.ensureCSS) K.ensureCSS();\n    return '<div class=\"cv-tabs\""
+    },
+    {
+     "op": "replace",
+     "anchor": "'\" tabindex=\"' + (on ? 0 : -1) + '\">' + t[1] + '</button>';",
+     "text": "'\" tabindex=\"' + (on ? 0 : -1) + '\">' + (K ? K.icon(t[0] === 'mine' ? 'tab.acc.mias' : 'tab.acc.llavero') : '') + t[1] + '</button>';"
+    }
+   ]
+  },
+  {
+   "path": "js/raids-sheet.js",
+   "base_sha": "10ada5c4361d511ace810de7480716a1ebd5bf0a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-27) — BL-076 SHV-5a:",
+     "text": " * Versión: 1.4.0 (2026-10-28) — BL-078 UNI-7b: íconos del juego en las pestañas del celular, desde GNKit · antes 1.3.0 (2026-10-27) — BL-076 SHV-5a:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.3.0';",
+     "text": "  var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "(t[0] === 'fight' ? 'rsPaneFight' : 'rsPaneRew') + '\" tabindex=\"' + (on ? '0' : '-1') + '\">' + t[1] + '</button>';",
+     "text": "(t[0] === 'fight' ? 'rsPaneFight' : 'rsPaneRew') + '\" tabindex=\"' + (on ? '0' : '-1') + '\">' +\n        (root.GNKit ? root.GNKit.icon(t[0] === 'fight' ? 'tab.rs.pelea' : 'tab.rs.recompensas') : '') + t[1] + '</button>';"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "b559adacb922b0d7a58b3414fbb22e385b8f566f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "\"js/gn-kit.js\", \"v\": \"1.2.0\"",
+     "text": "\"js/gn-kit.js\", \"v\": \"1.3.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/raids-sheet.js\", \"v\": \"1.3.0\"",
+     "text": "\"js/raids-sheet.js\", \"v\": \"1.4.0\""
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/acc-view.js\", \"v\": \"1.3.0\"",
+     "text": "\"js/acc-view.js\", \"v\": \"1.4.0\""
+    }
+   ]
+  },
+  {
+   "path": "tests/gn-kit.test.cjs",
+   "base_sha": "cd8a3771976057d6b1b9179a33688937c7ca1ddb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.3\\.0 /);"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  assert.equal(K.icon('no.existe'), '');",
+     "text": "  // UNI-7b (Pablo, 2026-10-28): las 4 pestañas que faltaban.\n  assert.equal(K.iconSrc('tab.acc.mias'), 'assets/icons/578844.png');\n  assert.equal(K.iconSrc('tab.acc.llavero'), 'assets/icons/Cuentas/LLave.png');\n  assert.equal(K.iconSrc('tab.rs.recompensas'), 'assets/icons/Cuentas/255373.png');\n  assert.equal(K.iconSrc('tab.rs.pelea'), 'assets/icons/784370.png');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/acc-view.test.cjs",
+   "base_sha": "f62ed95ebbe0b1f3285986649b5796f30a4c7423",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /Versión: 1\\.3\\.0/);\n  assert.equal(B.AccView.version, '1.3.0');",
+     "text": "  assert.match(SRC, /Versión: 1\\.4\\.0/);\n  assert.equal(B.AccView.version, '1.4.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(man[i].v, '1.3.0');",
+     "text": "  assert.equal(man[i].v, '1.4.0');"
+    }
+   ]
+  }
+ ]
+}
