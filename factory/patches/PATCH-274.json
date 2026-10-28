@@ -1,0 +1,74 @@
+{
+  "id": "PATCH-274",
+  "summary": "BL-082 arreglo: Builds mostraba 'Unexpected token <' (llegaba una página web en vez de datos de la API). bld-ref 1.1.0 reintenta sin caché del navegador y el error dice qué pedido falló; test nuevo; modules.json ?v.",
+  "files": [
+    {
+      "path": "js/bld-ref.js",
+      "base_sha": "120d6cf7f378bc04c2fb62d94811ec290e567aba",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.0.0 (2026-10-28)\n",
+          "text": " * Versión: 1.1.0 (2026-10-28) · si llega una página web en vez de datos, reintento sin caché del navegador y el error\n *          dice qué pedido falló (Pablo lo vio en la Biblioteca y el Editor) · antes 1.0.0\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "var VERSION = '1.0.0';",
+          "text": "var VERSION = '1.1.0';"
+        },
+        {
+          "op": "replace",
+          "anchor": "      return getOnce(url, f);\n",
+          "text": "      return getOnce(bust(url), f, true); // 1.1.0: el segundo intento va sin caché del navegador\n"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "  function getOnce(url, f) {",
+          "text": "  // 1.1.0: el reintento lleva una marca para que el navegador no devuelva lo que tenga guardado.\n  function bust(url) { return url + (url.indexOf('?') < 0 ? '?' : '&') + '_=' + Date.now(); }\n  // Qué pedido falló, sin la lista de ids: «/v2/skills», «/v2/professions/Engineer».\n  function where(url) { var m = /\\/v2\\/[a-z/]+/i.exec(String(url)); return m ? m[0] : 'la API'; }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "function getOnce(url, f) {",
+          "text": "function getOnce(url, f, fresh) {"
+        },
+        {
+          "op": "replace",
+          "anchor": "return Promise.resolve(f(url, ctl ? { signal: ctl.signal } : undefined)).then(function (r) {",
+          "text": "var o = {};\n    if (ctl) o.signal = ctl.signal;\n    if (fresh) o.cache = 'no-store';\n    return Promise.resolve(f(url, o)).then(function (r) {"
+        },
+        {
+          "op": "replace",
+          "anchor": "throw new Error('La API del juego respondió ' + (r ? r.status : 'nada') + '.');\n      return r.json();",
+          "text": "throw new Error('La API del juego respondió ' + (r ? r.status : 'nada') + ' en ' + where(url) + '.');\n      if (typeof r.text !== 'function') return r.json();\n      return r.text().then(function (s) {\n        // A veces llega una página web (HTML) en lugar de datos: lo digo claro y el segundo intento va sin caché.\n        if (/^\\s*</.test(s)) throw new Error('en lugar de datos llegó una página web desde ' + where(url) + (fresh ? ', también sin caché' : ''));\n        return JSON.parse(s);\n      });"
+        }
+      ]
+    },
+    {
+      "path": "tests/bld-ref.test.cjs",
+      "base_sha": "2ebd420f29e5cc6a6ec7a143b02f782e1bc8432f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "/Versión: 1\\.0\\.0 /);\n  assert.equal(R.version, '1.0.0');",
+          "text": "/Versión: 1\\.1\\.0 /);\n  assert.equal(R.version, '1.1.0');"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "/respondió 503/);\n});",
+          "text": "\n\ntest('1.1.0: si llega una página web, reintento sin caché y con marca; si sigue, el error dice qué pedido', async () => {\n  R._test.reset();\n  const log = [], opts = [];\n  let html = 1;\n  const base = fakeFetch(log);\n  const f = async (url, o) => {\n    opts.push(o || {});\n    if (/\\/v2\\/professions\\//.test(url) && html-- > 0) { log.push(url); return { ok: true, status: 200, text: async () => '<!DOCTYPE html><p>x</p>' }; }\n    const r = await base(url);\n    const body = await r.json();\n    return { ok: r.ok, status: r.status, text: async () => JSON.stringify(body) };\n  };\n  const ref = await R.load(1, { fetch: f });\n  assert.equal(ref.specs.length, 3);\n  const prof = log.filter((u) => /\\/v2\\/professions\\//.test(u));\n  assert.equal(prof.length, 2, 'un intento normal y uno sin caché');\n  assert.match(prof[1], /&_=\\d+$/);\n  assert.ok(opts.some((o) => o.cache === 'no-store'));\n  R._test.reset();\n  const always = async (url) => ({ ok: true, status: 200, text: async () => (/\\/v2\\/build/.test(url) ? '{\"id\":1}' : '<!DOCTYPE html>') });\n  await assert.rejects(R.load(3, { fetch: always }), /página web desde \\/v2\\/professions\\/Engineer, también sin caché/);\n});"
+        }
+      ]
+    },
+    {
+      "path": "js/modules.json",
+      "base_sha": "986452f8f88a8dea0770a8feeeec30d7a7d21cdd",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "{ \"src\": \"js/bld-ref.js\", \"v\": \"1.0.0\" }",
+          "text": "{ \"src\": \"js/bld-ref.js\", \"v\": \"1.1.0\" }"
+        }
+      ]
+    }
+  ]
+}
