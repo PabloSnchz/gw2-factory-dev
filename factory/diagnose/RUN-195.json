@@ -1,0 +1,1 @@
+{"id": "RUN-195", "summary": "BL-082 BLD-12/13: ids de runas superiores, sigilos superiores y reliquias exóticas (rangos de la API)", "tests": ["tests/bld-items2.smoke.cjs"]}
