@@ -1,0 +1,1 @@
+{"id": "RUN-181", "summary": "BL-082 BLD-1: sonda de integración (router, sidebar, raids-view, respaldo, gn-kit, gn-idb, tests de versiones y tamaño)", "tests": ["tests/bld-probe.smoke.cjs"]}
