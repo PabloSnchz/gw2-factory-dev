@@ -1,6 +1,7 @@
 /*!
  * js/bld-view.js — Builds: el panel, las pestañas y las rutas del módulo (BL-082)
- * Versión: 1.0.0 (2026-10-28) · BLD-1: panel propio, ruta #/builds y pestañas
+ * Versión: 1.1.0 (2026-10-28) · BLD-4: cada pestaña dibuja en un lugar nuevo (sin oyentes de la anterior);
+ *          íconos de pestaña por GNKit (tab.bld.*) · antes 1.0.0 BLD-1: panel propio, ruta #/builds y pestañas
  *
  * Se carga «por ruta» (js/boot.js 1.2.0, js/modules.json → routes["#/builds"]): recién al entrar a #/builds.
  * No vive en index.html: crea su <section id="buildsPanel"> al lado de los otros paneles y js/router.js
@@ -13,7 +14,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var LOG = '[GNBld]';
   var PANEL = 'buildsPanel';
   var ROUTE = '#/builds';
@@ -64,7 +65,7 @@
     var h = ['<div class="bld-tabs" role="tablist" aria-label="Secciones de Builds">'];
     TABS.forEach(function (t) {
       var on = t.id === active;
-      var ic = kit && typeof kit.icon === 'function' && kit.has && kit.has('bld.' + t.id) ? kit.icon('bld.' + t.id, 18) : '';
+      var ic = kit && typeof kit.icon === 'function' ? kit.icon('tab.bld.' + t.id, 18) : '';
       h.push('<button type="button" role="tab" id="bldTab-' + t.id + '" data-bld-tab="' + t.id + '" aria-selected="' + on +
         '" aria-controls="bldBody" tabindex="' + (on ? '0' : '-1') + '">' + ic + esc(t.label) + '</button>');
     });
@@ -177,7 +178,7 @@
     if (!p) return null;
     ensureCss();
     var keep = byId('bldSub') ? byId('bldSub').textContent : '';
-    if (!byId('bldBody') || st.renderedTab === null) {
+    if (!byId('bldBody') || st.renderedTab !== st.tab) {
       p.innerHTML = viewHTML({ tab: st.tab, kit: root.GNKit, sub: keep });
     } else {
       TABS.forEach(function (t) {

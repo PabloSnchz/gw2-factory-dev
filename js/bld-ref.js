@@ -18,7 +18,7 @@
   var API = 'https://api.guildwars2.com';
   var LANG = 'es';
   var KEY = 'gn:bld:ref:';
-  var TIMEOUT = 15000;
+  var TIMEOUT = 30000; // la API a veces tarda: 30 s y un reintento antes de rendirse
   var CHUNK = 150;
   var PROFS = ['', 'Guardian', 'Warrior', 'Engineer', 'Ranger', 'Thief', 'Elementalist', 'Mesmer', 'Necromancer', 'Revenant'];
   var SLOT_TYPE = ['Heal', 'Utility', 'Utility', 'Utility', 'Elite'];
@@ -29,6 +29,12 @@
 
   // ---------------------------------------------------------------- red
   function getJSON(url, f) {
+    return getOnce(url, f).catch(function (e) {
+      if (/respondió (4\d\d)/.test(String(e && e.message))) throw e; // un 404 no mejora al reintentar
+      return getOnce(url, f);
+    });
+  }
+  function getOnce(url, f) {
     f = f || root.fetch;
     if (typeof f !== 'function') return Promise.reject(new Error('Sin conexión con la API del juego.'));
     var ctl = typeof root.AbortController === 'function' ? new root.AbortController() : null;
