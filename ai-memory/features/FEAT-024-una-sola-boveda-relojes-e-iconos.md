@@ -8,7 +8,7 @@
 ## Qué hace
 
 - Un solo reloj para toda la Bóveda (js/gn-kit.js), nacido del de Metas: ícono del juego, nombre arriba y valor abajo, dorado cuando está cerca (menos de 1 h el diario y el PSNA, menos de 24 h el semanal) y la hora fija al pasar el mouse. Grande en Metas; compacto en Actividades (diario, PSNA, semanal), Cámara del Brujo (diario y semanal), Heredad (diario) y Raids (solo el semanal, D2). Un solo temporizador que se apaga solo.
-- Íconos del juego, elegidos por Pablo, en las 21 pestañas de los módulos renovados (Raids, Actividades, Heredad, Cámara, Logros, Inventario, Cuentas y la ficha de Raids en el celular), en los indicadores de Actividades, Heredad, Cámara, Inventario y Logros, y en los 5 enlaces del menú Enlaces de la barra. Decorativos (alt vacío): el texto sigue siendo el nombre.
+- Íconos del juego, elegidos por Pablo, en las 23 pestañas de los módulos renovados (Raids 2, Actividades 2, Heredad 3, Cámara 3, Logros 3, Inventario 6, Cuentas 2 y la ficha de Raids en el celular 2), en los indicadores de Actividades, Heredad, Cámara, Inventario y Logros, y en los 5 enlaces del menú Enlaces de la barra. Decorativos (alt vacío): el texto sigue siendo el nombre.
 - Raids: la cabecera de cada ala o grupo se distingue de sus filas (tinte y franja del color del módulo, verde con «✓» si está completa, contador en píldora y barra de avance). Los 5 encuentros sin miniatura oficial muestran el emblema de su expansión en lugar del ícono genérico.
 - Logros: el ícono AP de «Al alcance» es local (la wiki dejó de servirlo).
 - Sin js/gn-kit.js, cada módulo se ve exactamente como antes.
