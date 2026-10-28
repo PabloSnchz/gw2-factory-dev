@@ -1,0 +1,1 @@
+{"id": "RUN-197", "summary": "BL-082 BLD-8: sonda 14, builds de WvW en MetaBattle (WvW, Roaming y páginas de profesión) para las 8 élites que faltan", "tests": ["tests/bld-probe14.smoke.cjs"]}
