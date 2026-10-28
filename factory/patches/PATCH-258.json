@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-258",
+ "summary": "BL-081 CERRADA: Pablo validó producción a501bea y pidió cerrarla (2026-10-28 03:30Z). Sin tarea en curso; siguiente: repaso de las validaciones pendientes del backlog con Pablo.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "fc2fc798cc86f7e58e5aaf8b22078bb754cf2c9e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "## IN_PROGRESS\n\n- [BL-081] [ALTO]",
+     "text": "## IN_PROGRESS\n\n## DONE\n\n- [BL-081] [ALTO]"
+    },
+    {
+     "op": "replace",
+     "anchor": "FEAT-024 — 2026-10-28\n\n## DONE\n\n- [BL-078]",
+     "text": "FEAT-024 — 2026-10-28. CERRADA 2026-10-28 03:30Z con la validación de Pablo en producción («cerrá BL-081»).\n- [BL-078]"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c2f8fbe9059232d2a60f6a68c9016e7d1fb090c9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 03:25Z",
+     "text": "Última actualización: 2026-10-28 03:31Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Pablo valida producción (a501bea) en Chrome con la lista del informe ai-memory/missions/BL-081-informe-promocion.md; con su OK, BL-081 a DONE. Nada de tareas nuevas antes de cerrar BL-081.",
+     "text": "Próxima acción: repasar con Pablo las validaciones y aprobaciones pendientes del backlog (pedido 03:30Z) y ajustar el backlog a lo que valide, descarte o reabra."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-081] Validación: producción = a501bea (control blob a blob OK). En Chrome, Ctrl+F5: una API Key real se acepta; relojes con ícono en Metas, Actividades, Cámara, Heredad y Raids; pestañas con ícono (también Cuentas y la ficha de Raids en el celular); cabecera del ala de Raids; íconos del menú Enlaces. Rollback: rollback/pre-bl-081 = bc089b1.\n",
+     "text": "- [BL-081] Info: BL-081 CERRADA (2026-10-28 03:30Z). Producción = a501bea con BL-078 (FEAT-024) y BL-079; rollback/pre-bl-081 = bc089b1.\n"
+    }
+   ]
+  }
+ ]
+}
