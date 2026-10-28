@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-245",
+ "summary": "BL-079 (CRÍTICO, lo reportó un usuario): el formulario de API Keys rechazaba toda Key real de GW2. La regla esperaba dos GUID separados por guion (73 caracteres) y la Key real tiene 72 (8-4-4-4-20-4-4-4-12, sin guion en la unión). Regla corregida, mensaje claro y se quitan espacios al pegar; app.js?v=2.9.2 para que el navegador tome el arreglo.",
+ "files": [
+  {
+   "path": "js/app.js",
+   "base_sha": "d673de529c0c02cdb922151ab1f7e27d122326fd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  // 1 o 2 bloques GUID (8-4-4-4-12): el `id` de /v2/tokeninfo es la mitad (36 + 1 + 36 = 73).\n  function isValidKeyFormat(v) {\n    return /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}(?:-[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12})*$/.test(v);\n  }",
+     "text": "  // BL-079 (2026-10-28): la API Key real de GW2 tiene 72 caracteres, 8-4-4-4-20-4-4-4-12: dos GUID pegados SIN guion\n  // entre medio (el segundo empieza dentro del bloque de 20). La regla vieja pedía un guion ahí y rechazaba toda Key nueva.\n  var KEY_FORMAT = /^[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{20}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}$/;\n  function isValidKeyFormat(v) {\n    return KEY_FORMAT.test(v);\n  }"
+    },
+    {
+     "op": "replace",
+     "anchor": "      const value = el.kfValue?.value.trim() || '';",
+     "text": "      const value = (el.kfValue?.value || '').replace(/\\s+/g, ''); // BL-079: sin espacios ni saltos de línea al pegar"
+    },
+    {
+     "op": "replace",
+     "anchor": "'El formato no es válido. Se espera un GUID 8-4-4-4-12 en hexadecimal, guion por guion.'",
+     "text": "'El formato no es válido. La API Key de GW2 tiene 72 caracteres (XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXXXXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX): copiala entera desde account.arena.net/applications.'"
+    },
+    {
+     "op": "replace",
+     "anchor": "'El formato de la API key no es válido. Debe ser un GUID de 8-4-4-4-12 (opcionalmente seguido de otro igual).'",
+     "text": "'El formato de la API key no es válido: tiene que ser la Key completa de 72 caracteres, tal como la da account.arena.net.'"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "f956a5596549cf41b663d395077a80d8cfbc9244",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/app.js?v=2.9.1\"",
+     "text": "js/app.js?v=2.9.2\""
+    }
+   ]
+  }
+ ]
+}
