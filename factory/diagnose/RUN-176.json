@@ -1,0 +1,1 @@
+{"id": "RUN-176", "summary": "BL-079: formato de API Key real (72 caracteres)", "tests": ["tests/api-key-format.test.cjs", "tests/hb75-permisos.test.js", "tests/index-versions.test.cjs", "tests/size-budget.test.cjs"]}
