@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-252",
+ "summary": "BL-078 UNI-7a: UNI-6b validada; revisión final (4 pestañas sin ícono en Cuentas y ficha de Raids, selector uni7-pestanas.html); wiki en mantenimiento (RUN-178): Chak, Dragon's End y retratos siguen bloqueados por entorno.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "a964e8ee8e3abe3b508d6a0e1e63d8d8d69712fd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "tests/gn-kit.test.cjs fija la elección; suite verde. ",
+     "text": "tests/gn-kit.test.cjs fija la elección; suite verde. Pablo validó UNI-6b y pidió UNI-7 02:58Z. UNI-7a HECHA 03:02Z (revisión final): (1) RUN-178: la wiki sigue «undergoing maintenance» (Chak_Animation_8.gif, Echo_of_the_Dragonvoid_infusion.jpg y api.php devuelven la página de mantenimiento; web.archive 404) → Chak, Dragon's End y los retratos de los 5 jefes siguen bloqueados por entorno; sonda borrada (eb9bf19). (2) Hueco frente a D3 («íconos en todos los módulos renovados»): quedaron sin ícono 4 pestañas, Cuentas (Mis cuentas, Llavero; acc-view.js 40.158 B, entra con ≈ 150 B) y la ficha de un encuentro de Raids (Recompensas, Cómo se pelea; solo en el celular, raids-sheet.js). Selector docs/propuestas/uni7-pestanas.html (183d6ba): propongo 578844 para Mis cuentas, Cuentas/LLave para Llavero y 784370 para Cómo se pelea; Recompensas sin propuesta. (3) Teclado y lector: todos los íconos de BL-078 son decorativos (alt vacío) y no agregan nada que reciba foco; el reloj común no se mueve solo ni roba el foco (tick solo cambia el texto). (4) Themes: el reloj y los íconos usan los tokens de cada theme (--tx-1/2/3, --bd-1, --bg-0); el rótulo chico usa --tx-3, que ya está medido en BL-060 (9 themes por debajo de 4.5:1): no es deuda nueva. (5) Celular: .gk-row se acomoda en varias líneas. La verificación visual en los 19 themes y el celular queda para Pablo. UNI-7b: aplicar la elección «UNI7» (GNKit 1.3.0, acc-view, raids-sheet) + test guardián (toda pestaña role=tab de un módulo renovado lleva ícono con GNKit) + FEAT-024 y cierre; Chak, Dragon's End y retratos pasan a una tarea propia BLOCKED por entorno. "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "69780aaf89ae9adb243e8fb029d200714ad0b927",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 02:55Z",
+     "text": "Última actualización: 2026-10-28 03:03Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con la validación de Pablo de UNI-6b (menú Enlaces), UNI-7: Chak y retratos de jefes cuando vuelva la wiki, revisión final de BL-078 y FEAT-024.",
+     "text": "Próxima acción: con la elección de Pablo (texto «UNI7»), UNI-7b: íconos en las pestañas de Cuentas y de la ficha de Raids, test guardián, FEAT-024 y cierre de BL-078; Chak, Dragon's End y retratos a una tarea propia bloqueada por entorno (la wiki está en mantenimiento, RUN-178)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Validación: en DEV (Firefox, Ctrl+F5), menú Enlaces de la barra: Ayuda muestra ahora el ícono de «Primeros pasos»; Wiki, Foros, Sitio oficial y API Key como antes (gn-kit 1.2.0).\n",
+     "text": "- [BL-078] Decisión: elegir los íconos de las 4 pestañas que faltan (Cuentas y ficha de Raids) en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni7-pestanas.html y pegar el texto «UNI7» en el chat.\n- [BL-078] Info: UNI-6b VALIDADA por Pablo (2026-10-28 02:58Z). La wiki sigue en mantenimiento (RUN-178, 03:00Z): Chak, Dragon's End y los retratos de jefes esperan.\n"
+    }
+   ]
+  }
+ ]
+}
