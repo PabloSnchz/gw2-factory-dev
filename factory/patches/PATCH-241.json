@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-241",
+ "summary": "BL-078: UNI-4b hecha (íconos elegidos por Pablo en 6 módulos); espera validación; próxima UNI-5. (reintento del 240: la línea «Próxima acción:» queda al principio, como la lee el panel)",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "4c27f3db094fd4f42a1eb32d8f87888f69648e99",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "UNI-4b aplica la elección de Pablo. ",
+     "text": "UNI-4b aplica la elección de Pablo. UNI-4b HECHA 00:50Z (PATCH-237 y PATCH-239; el 236 pasó el tope de 50 operaciones del canal y el 238 chocó con el test de versión de Logros): GNKit 1.1.0 guarda las 34 claves elegidas por Pablo; íconos en las pestañas de Raids 1.5.0, Actividades 1.7.0, Heredad 1.4.0, Cámara 1.5.0, Logros 1.5.0 e Inventario 1.7.0 y en los indicadores de Actividades, Heredad, Cámara, Inventario y Logros; el ícono AP de Logros ahora es local (assets/icons/155059.png). Sin GNKit cada módulo dibuja exactamente lo de antes. Test nuevo tests/gn-kit-icons.test.cjs (RUN-171/172). Observaciones para Pablo (aplicado tal cual, cada cambio es una línea de GNKit.ICONS): Foros, Ayuda y Oficial del menú Enlaces comparten el mismo ícono (UNI-6); «Gatos» de Heredad usa el ícono del módulo Cuentas; «Gastada» de la Cámara usa el de «Liberar la caché»; la Armería del Inventario usa otro ícono que la Armería y las Colecciones legendarias de Logros; Logros tiene ícono en 2 de 4 indicadores y Raids en ninguno (BAJO). "
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "b18f02d3d90f2ac6950a92b1d122bab969782262",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-27 23:56Z",
+     "text": "Última actualización: 2026-10-28 00:52Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con la elección de Pablo (texto «UNI4»), UNI-4b: íconos en las pestañas de Raids, Actividades, Heredad, Cámara, Logros e Inventario e indicadores, desde GNKit.ICONS; el ícono AP de Logros deja la wiki.",
+     "text": "Próxima acción: con UNI-4b validada por Pablo, UNI-5: rediseño del encabezado de las cards de Raids y miniaturas de los 5 jefes sin ícono (voice_claw, fraenir, xunlai_jade_junkyard, kaineng_overlook, harvest_temple)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-078] Decisión: elegir los íconos en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/uni4-iconos.html (18 por elegir, 16 ya en uso o propuestos); «Copiar mi elección» y pegarla en el chat.\n",
+     "text": "- [BL-078] Validación: UNI-4b en DEV (Firefox, Ctrl+F5): pestañas con ícono en Raids, Actividades, Heredad, Cámara del Brujo, Logros e Inventario; indicadores con ícono en Actividades, Heredad, Cámara, Inventario y Logros (Puntos de logro y Al alcance); el ícono AP de «Al alcance» vuelve a verse.\n"
+    }
+   ]
+  }
+ ]
+}
