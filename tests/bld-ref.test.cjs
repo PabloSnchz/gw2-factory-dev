@@ -37,8 +37,8 @@ function fakeFetch(log) {
 }
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\.0\.0 /);
-  assert.equal(R.version, '1.0.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\.1\.0 /);
+  assert.equal(R.version, '1.1.0');
 });
 
 test('normalize: paleta, líneas con los 3 rasgos de cada nivel en orden, barra y armas', () => {
@@ -112,4 +112,27 @@ test('load: profesión desconocida o API caída dan un error claro', async () =>
   R._test.reset();
   await assert.rejects(R.load(10), /Profesión desconocida/);
   await assert.rejects(R.load(2, { fetch: async () => ({ ok: false, status: 503, json: async () => null }) }), /respondió 503/);
+});
+
+test('1.1.0: si llega una página web, reintento sin caché y con marca; si sigue, el error dice qué pedido', async () => {
+  R._test.reset();
+  const log = [], opts = [];
+  let html = 1;
+  const base = fakeFetch(log);
+  const f = async (url, o) => {
+    opts.push(o || {});
+    if (/\/v2\/professions\//.test(url) && html-- > 0) { log.push(url); return { ok: true, status: 200, text: async () => '<!DOCTYPE html><p>x</p>' }; }
+    const r = await base(url);
+    const body = await r.json();
+    return { ok: r.ok, status: r.status, text: async () => JSON.stringify(body) };
+  };
+  const ref = await R.load(1, { fetch: f });
+  assert.equal(ref.specs.length, 3);
+  const prof = log.filter((u) => /\/v2\/professions\//.test(u));
+  assert.equal(prof.length, 2, 'un intento normal y uno sin caché');
+  assert.match(prof[1], /&_=\d+$/);
+  assert.ok(opts.some((o) => o.cache === 'no-store'));
+  R._test.reset();
+  const always = async (url) => ({ ok: true, status: 200, text: async () => (/\/v2\/build/.test(url) ? '{"id":1}' : '<!DOCTYPE html>') });
+  await assert.rejects(R.load(3, { fetch: always }), /página web desde \/v2\/professions\/Engineer, también sin caché/);
 });

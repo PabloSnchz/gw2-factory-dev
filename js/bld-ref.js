@@ -1,6 +1,7 @@
 /*!
  * js/bld-ref.js — Builds: datos del juego para leer y armar builds (BL-082 BLD-3)
- * Versión: 1.0.0 (2026-10-28)
+ * Versión: 1.1.0 (2026-10-28) · si llega una página web en vez de datos, reintento sin caché del navegador y el error
+ *          dice qué pedido falló (Pablo lo vio en la Biblioteca y el Editor) · antes 1.0.0
  *
  * Trae de la API oficial (sin Key, en castellano) lo que hace falta para una profesión:
  *   /v2/professions/<P>?v=latest (paletas de habilidades, armas, habilidades de la barra),
@@ -14,7 +15,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var API = 'https://api.guildwars2.com';
   var LANG = 'es';
   var KEY = 'gn:bld:ref:';
@@ -31,18 +32,30 @@
   function getJSON(url, f) {
     return getOnce(url, f).catch(function (e) {
       if (/respondió (4\d\d)/.test(String(e && e.message))) throw e; // un 404 no mejora al reintentar
-      return getOnce(url, f);
+      return getOnce(bust(url), f, true); // 1.1.0: el segundo intento va sin caché del navegador
     });
   }
-  function getOnce(url, f) {
+  // 1.1.0: el reintento lleva una marca para que el navegador no devuelva lo que tenga guardado.
+  function bust(url) { return url + (url.indexOf('?') < 0 ? '?' : '&') + '_=' + Date.now(); }
+  // Qué pedido falló, sin la lista de ids: «/v2/skills», «/v2/professions/Engineer».
+  function where(url) { var m = /\/v2\/[a-z/]+/i.exec(String(url)); return m ? m[0] : 'la API'; }
+  function getOnce(url, f, fresh) {
     f = f || root.fetch;
     if (typeof f !== 'function') return Promise.reject(new Error('Sin conexión con la API del juego.'));
     var ctl = typeof root.AbortController === 'function' ? new root.AbortController() : null;
     var t = ctl ? setTimeout(function () { ctl.abort(); }, TIMEOUT) : null;
-    return Promise.resolve(f(url, ctl ? { signal: ctl.signal } : undefined)).then(function (r) {
+    var o = {};
+    if (ctl) o.signal = ctl.signal;
+    if (fresh) o.cache = 'no-store';
+    return Promise.resolve(f(url, o)).then(function (r) {
       if (t) clearTimeout(t);
-      if (!r || (!r.ok && r.status !== 206)) throw new Error('La API del juego respondió ' + (r ? r.status : 'nada') + '.');
-      return r.json();
+      if (!r || (!r.ok && r.status !== 206)) throw new Error('La API del juego respondió ' + (r ? r.status : 'nada') + ' en ' + where(url) + '.');
+      if (typeof r.text !== 'function') return r.json();
+      return r.text().then(function (s) {
+        // A veces llega una página web (HTML) en lugar de datos: lo digo claro y el segundo intento va sin caché.
+        if (/^\s*</.test(s)) throw new Error('en lugar de datos llegó una página web desde ' + where(url) + (fresh ? ', también sin caché' : ''));
+        return JSON.parse(s);
+      });
     }, function (e) { if (t) clearTimeout(t); throw e; });
   }
   function many(path, ids, f) {

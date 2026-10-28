@@ -44,7 +44,7 @@
   "routes": {
     "#/builds": [
       { "src": "js/bld-code.js", "v": "1.0.0" },
-      { "src": "js/bld-ref.js", "v": "1.0.0" },
+      { "src": "js/bld-ref.js", "v": "1.1.0" },
       { "src": "js/bld-show.js", "v": "1.0.0" },
       { "src": "js/bld-store.js", "v": "1.0.0" },
       { "src": "js/bld-ae2.js", "v": "1.0.0" },
