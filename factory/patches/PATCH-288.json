@@ -1,0 +1,120 @@
+{
+ "id": "PATCH-288",
+ "summary": "BL-082 BUI-6 (parte 2 de 2): un solo marco en Builds: la cabecera es el techo del panel, de borde a borde, con el fondo oficial de una élite que cambia cada día bajo un velo; indicadores con la franja del módulo; fondo de élite en las tarjetas (bandStyle). bld-view 1.4.0. La guarda de contraste mide el peor caso de la imagen bajo el velo en los 19 temas.",
+ "files": [
+  {
+   "path": "js/bld-view.js",
+   "base_sha": "9dc8f5b95e37934fbf6c8a29e895b129bef4aa48",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se\n",
+     "text": " * Versión: 1.4.0 (2026-10-29) · BUI-6: un solo marco: la cabecera es el techo del panel, de borde a borde, con el fondo\n *          oficial de una especialización élite (cambia cada día) bajo un velo que la funde; tarjetas con el fondo de su\n *          élite de borde a borde (bandStyle) · antes 1.3.0 BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.3.0';\n",
+     "text": "  var VERSION = '1.4.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return '<div class=\"bld-hero\"><div class=\"bld-row\"><img class=\"bld-ico\" src=\"' + ICON + '\" alt=\"\" width=\"56\" height=\"56\">' +\n",
+     "text": "    var hs = heroStyle(m.ident === undefined ? ident() : m.ident, m.now);\n    return '<div class=\"bld-hero\" id=\"bldHero\"' + (hs ? ' style=\"' + hs + '\"' : '') + '><div class=\"bld-row\"><img class=\"bld-ico\" src=\"' + ICON + '\" alt=\"\" width=\"60\" height=\"60\">' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  }\n  function badge(id, s) {\n",
+     "text": "  }\n  // BUI-6: fondo oficial de una élite como variable CSS (solo de render.guildwars2.com; cualquier otra cosa, nada).\n  var RENDER = /^https:\\/\\/render\\.guildwars2\\.com\\/[\\w\\/.-]+\\.(png|jpg)$/;\n  function ident() { var R = root.GNBldRef; return R && typeof R.identitySync === 'function' ? R.identitySync() : null; }\n  function bgOf(elite, idn) { var e = (idn || ident() || { elites: {} }).elites || {}; e = e[elite]; return e && RENDER.test(e.background || '') ? e.background : ''; }\n  function bandStyle(elite, idn) { var u = bgOf(elite, idn); return u ? ' style=\"--bld-bg:url(' + u + ')\"' : ''; }\n  // La élite de la cabecera: una por día, siempre la misma ese día (sin parpadeo entre pestañas).\n  function heroElite(idn, now) {\n    var ids = Object.keys((idn && idn.elites) || {}).filter(function (k) { return bgOf(k, idn); }).sort(function (a, b) { return a - b; });\n    return ids.length ? ids[Math.floor((now == null ? Date.now() : now) / 864e5) % ids.length] : '';\n  }\n  function heroStyle(idn, now) { var e = heroElite(idn, now), u = e ? bgOf(e, idn) : ''; return u ? '--bld-spec:url(' + u + ')' : ''; }\n  function badge(id, s) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    P + ' .bld-hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--gn-mod) 8%,var(--bg-1)),var(--bg-1) 70%);padding:16px 18px}',\n    P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',\n    P + ' .bld-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gn-mod) 70%,transparent);flex-shrink:0;box-sizing:border-box}',\n    P + ' .bld-ttl h2{margin:0;font-size:1.3rem;font-weight:800;color:var(--tx-1)}',\n    P + ' .bld-sub{margin:2px 0 0;color:var(--tx-2);font-size:.86rem}',\n    P + ' .bld-pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}',\n    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}.bld-pill b{color:var(--tx-1)}',\n    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}',\n    P + ' .bld-st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px;min-width:0}',\n    P + ' .bld-st small{display:block;font-size:.7rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}',\n    P + ' .bld-st b{font-size:1.25rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',\n    P + ' .bld-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',\n    P + ' .bld-tabs{display:flex;gap:4px;margin:16px 0 12px;border-bottom:1px solid var(--bd-1);overflow-x:auto}',\n    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:8px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:40px}',\n    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}',\n",
+     "text": "    // BUI-6: un solo marco. El panel no tiene relleno: la cabecera es su techo y el contenido lleva su propio margen.\n    P + '{padding:0!important;overflow:hidden}' + P + ' .bld-body{padding:14px 18px 20px}' + P + '>#bldToast{padding:0 18px 12px}',\n    P + ' .bld-hero{position:relative;isolation:isolate;padding:22px 22px 18px;background:var(--bg-1)}',\n    P + ' .bld-hero::before{content:\"\";position:absolute;inset:0;z-index:-2;background:var(--bld-spec,none) right center/cover no-repeat;opacity:.55}',\n    // Velo: 92 % del fondo del panel donde va el texto (izquierda), la imagen se ve a la derecha y se funde abajo.\n    P + ' .bld-hero::after{content:\"\";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,color-mix(in srgb,var(--bg-1) 92%,transparent) 0,color-mix(in srgb,var(--bg-1) 92%,transparent) 45%,color-mix(in srgb,var(--bg-1) 40%,transparent)),' +\n      'linear-gradient(180deg,transparent 45%,var(--bg-1)),radial-gradient(120% 100% at 0 0,color-mix(in srgb,var(--gn-mod) 6%,transparent),transparent 60%)}',\n    P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',\n    P + ' .bld-ico{width:60px;height:60px;border-radius:14px;background:var(--bg-0);padding:6px;box-shadow:0 0 0 2px var(--gn-mod),0 0 20px color-mix(in srgb,var(--gn-mod) 40%,transparent);flex-shrink:0;box-sizing:border-box}',\n    P + ' .bld-ttl h2{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:.01em;color:var(--tx-1)}',\n    P + ' .bld-sub{margin:2px 0 0;color:var(--tx-2);font-size:.86rem}',\n    P + ' .bld-pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}',\n    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap;border-color:color-mix(in srgb,var(--gn-mod) 55%,var(--bd-1))}' + P + ' .bld-pill b{color:var(--tx-1)}',\n    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}',\n    P + ' .bld-st{border:1px solid var(--bd-1);border-top:2px solid var(--gn-mod);border-radius:12px;background:color-mix(in srgb,var(--bg-0) 92%,transparent);padding:10px 12px;min-width:0}',\n    P + ' .bld-st small{display:block;font-size:.7rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}',\n    P + ' .bld-st b{font-size:1.35rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',\n    P + ' .bld-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',\n    P + ' .bld-tabs{display:flex;gap:4px;margin:0;padding:0 14px;border-bottom:1px solid var(--bd-1);overflow-x:auto;background:var(--bg-1)}',\n    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:12px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:44px}',\n    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom:3px solid var(--gn-mod)}',\n    // BUI-6: tarjeta con el fondo de su élite de borde a borde. Velo 72 % arriba y 90 % desde los 72 px (AA en los 19 temas, ver bld-ui).\n    P + ' .bld-band{position:relative;isolation:isolate;overflow:hidden}',\n    P + ' .bld-band::before{content:\"\";position:absolute;inset:0;z-index:-2;background:var(--bld-bg,none) center 30%/cover no-repeat;opacity:.6;border-radius:inherit}',\n    P + ' .bld-band::after{content:\"\";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(180deg,color-mix(in srgb,var(--bg-1) 72%,transparent) 0,color-mix(in srgb,var(--bg-1) 90%,transparent) 72px,color-mix(in srgb,var(--bg-1) 90%,transparent))}',\n    P + ' .bld-band{transition:transform .15s,box-shadow .15s,border-color .15s}' + P + ' .bld-band:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gn-mod) 60%,var(--bd-1));box-shadow:0 10px 24px rgba(0,0,0,.28)}',\n    P + ' .bld-band.is-open:hover{transform:none}' + P + ' .bld-band .bld-emb{box-shadow:0 0 0 2px var(--bg-1),0 0 0 3px var(--gn-mod)}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '@media (max-width:900px){' + P + ' .bld-hero{padding:12px}' + P + ' .bld-ico{width:40px;height:40px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.05rem}' +\n",
+     "text": "    '@media (max-width:900px){' + P + ' .bld-hero{padding:14px}' + P + ' .bld-ico{width:44px;height:44px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.15rem}' + P + ' .bld-body{padding:12px}' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    }\n    return { cat: ls && ls.cat, watch: ls && ls.watch, mine: mine, lib: L && L._pure };\n",
+     "text": "    }\n    var R = root.GNBldRef;\n    if (R && !ident() && typeof R.identity === 'function' && !st.identLoading) {\n      st.identLoading = true;\n      Promise.resolve().then(function () { return R.identity(); }).then(function () { st.identLoading = false; refreshHead(); }, function () { st.identLoading = false; });\n    }\n    return { cat: ls && ls.cat, watch: ls && ls.watch, mine: mine, lib: L && L._pure };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    TABS.forEach(function (t) { var x = byId('bldBadge-' + t.id); if (x) x.innerHTML = badge(t.id, s); });\n    return s;\n",
+     "text": "    TABS.forEach(function (t) { var x = byId('bldBadge-' + t.id); if (x) x.innerHTML = badge(t.id, s); });\n    var h = byId('bldHero'), hs = heroStyle(ident());\n    if (h && hs && h.getAttribute && h.getAttribute('style') !== hs) h.setAttribute('style', hs);\n    return s;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    version: VERSION, register: register, go: go, render: render, toast: toast,\n    _pure: { parseHash: parseHash, hashFor: hashFor, shareUrl: shareUrl, viewHTML: viewHTML, tabsHTML: tabsHTML, esc: esc, TABS: TABS, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL,\n      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus }\n",
+     "text": "    version: VERSION, register: register, go: go, render: render, toast: toast, bandStyle: bandStyle,\n    _pure: { parseHash: parseHash, hashFor: hashFor, shareUrl: shareUrl, viewHTML: viewHTML, tabsHTML: tabsHTML, esc: esc, TABS: TABS, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL,\n      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus, bgOf: bgOf, bandStyle: bandStyle, heroElite: heroElite, heroStyle: heroStyle }\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-view.test.cjs",
+   "base_sha": "830b0869410022564608b34410f034a505c3d535",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.3\\.0 /);\n  assert.equal(V.version, '1.3.0');\n",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.4\\.0 /);\n  assert.equal(V.version, '1.4.0');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /<img class=\"bld-ico\" [^>]*width=\"56\"/);\n",
+     "text": "  assert.match(h, /<img class=\"bld-ico\" [^>]*width=\"60\"/);\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-ui.test.cjs",
+   "base_sha": "b0d6e3fc3a1e8112426fd45431ef8ba57cb502fd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "// BL-082 BUI-5: guarda de Builds en los 19 temas, teclado, lector de pantalla, celular y rendimiento.\n",
+     "text": "// BL-082 BUI-5 y BUI-6: guarda de Builds en los 19 temas, teclado, lector de pantalla, celular y rendimiento.\n// BUI-6 suma los fondos oficiales (cabecera y tarjetas): se mide el peor caso de la imagen debajo del velo.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "function pct(src, re, what) { const m = re.exec(src); assert.ok(m, 'encuentro en el CSS: ' + what); return Number(m[1]) / 100; }\nconst CFG = {\n",
+     "text": "function pct(src, re, what) { const m = re.exec(src); assert.ok(m, 'encuentro en el CSS: ' + what); return Number(m[1]) / 100; }\nfunction op(src, re, what) { const m = re.exec(src); assert.ok(m, 'encuentro en el CSS: ' + what); return Number('0.' + m[1]); }\nconst CFG = {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  hero: pct(VIEW, /\\.bld-hero\\{[^}]*color-mix\\(in srgb,var\\(--gn-mod\\) (\\d+)%,var\\(--bg-1\\)\\)/, 'fondo de la cabecera'),\n",
+     "text": "  hero: pct(VIEW, /radial-gradient\\(120% 100% at 0 0,color-mix\\(in srgb,var\\(--gn-mod\\) (\\d+)%,transparent\\)/, 'tinte del módulo en la cabecera'),\n  heroImg: op(VIEW, /\\.bld-hero::before\\{[^}]*opacity:\\.(\\d+)\\}/, 'opacidad del fondo de la cabecera'),\n  heroVeil: pct(VIEW, /\\.bld-hero::after\\{[^}]*linear-gradient\\(90deg,color-mix\\(in srgb,var\\(--bg-1\\) (\\d+)%,transparent\\)/, 'velo de la cabecera donde va el texto'),\n  cardImg: op(VIEW, /\\.bld-band::before\\{[^}]*opacity:\\.(\\d+);/, 'opacidad del fondo de la tarjeta'),\n  cardTop: pct(VIEW, /\\.bld-band::after\\{[^}]*linear-gradient\\(180deg,color-mix\\(in srgb,var\\(--bg-1\\) (\\d+)%,transparent\\) 0/, 'velo arriba de la tarjeta'),\n  cardBot: pct(VIEW, /\\.bld-band::after\\{[^}]*,color-mix\\(in srgb,var\\(--bg-1\\) (\\d+)%,transparent\\)\\)\\}/, 'velo del resto de la tarjeta'),\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim), 'cabecera': mix(mod, bg1, CFG.hero) };\n",
+     "text": "  // BUI-6: debajo del velo hay una imagen. Arriba de la tarjeta y en la cabecera, un gris medio; en el resto de la\n  // tarjeta, el peor caso: blanco puro en un tema oscuro, negro puro en uno claro.\n  const dark = lum(bg1) < 0.3, ext = dark ? [255, 255, 255, 1] : [0, 0, 0, 1], grey = [128, 128, 128, 1];\n  const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim),\n    'cabecera': mix(grey, mix(mod, bg1, CFG.hero), (1 - CFG.heroVeil) * CFG.heroImg),\n    'tarjeta arriba': mix(grey, bg1, (1 - CFG.cardTop) * CFG.cardImg), 'tarjeta (peor caso)': mix(ext, bg1, (1 - CFG.cardBot) * CFG.cardImg) };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.ok(f.some((x) => /^acento/.test(x)), 'el lavanda puro sobre Notion no llega a 3:1');\n});\n",
+     "text": "  assert.ok(f.some((x) => /^acento/.test(x)), 'el lavanda puro sobre Notion no llega a 3:1');\n  const od = THEMES.find((x) => x.id === 'one-dark');\n  Object.assign(CFG, { cardTop: 0.4 });\n  const g = fails(od.t);\n  Object.assign(CFG, save);\n  assert.ok(g.some((x) => /tarjeta arriba/.test(x)), 'un velo flojo sobre el fondo de la élite no se lee en One Dark');\n});\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal((html.match(/<img\\b/g) || []).filter((x) => x).length, (html.match(/<img\\b[^>]*loading=\"lazy\"/g) || []).length, 'los emblemas cargan a medida que se ven');\n});\n",
+     "text": "  assert.equal((html.match(/<img\\b/g) || []).filter((x) => x).length, (html.match(/<img\\b[^>]*loading=\"lazy\"/g) || []).length, 'los emblemas cargan a medida que se ven');\n});\n\ntest('BUI-6 un solo marco y fondos oficiales: solo de render.guildwars2.com, el de la cabecera cambia por día', () => {\n  const sb = { console: { info() {}, warn() {} } };\n  sb.window = sb;\n  require('node:vm').runInNewContext(VIEW, sb, { filename: 'js/bld-view.js' });\n  const P = sb.GNBld._pure;\n  const ok = 'https://render.guildwars2.com/file/ABC/123.png';\n  const idn = { elites: { 74: { background: ok }, 81: { background: 'https://evil.example/x.png' }, 40: { background: ok.replace('123', '456') } } };\n  assert.equal(P.bgOf(74, idn), ok);\n  assert.equal(P.bgOf(81, idn), '', 'otro dominio: nada');\n  assert.equal(P.bandStyle(74, idn), ' style=\"--bld-bg:url(' + ok + ')\"');\n  assert.equal(P.bandStyle(999, idn), '');\n  assert.equal(P.bandStyle(74, { elites: { 74: { background: ok + '\") ;x:url(\"' } } }), '', 'nada de comillas ni CSS colado');\n  assert.notEqual(P.heroElite(idn, 0), '81');\n  assert.equal(P.heroElite(idn, 0), P.heroElite(idn, 864e5 - 1), 'el mismo día, la misma élite');\n  assert.notEqual(P.heroElite(idn, 0), P.heroElite(idn, 864e5), 'al día siguiente, otra');\n  assert.equal(P.heroElite({ elites: {} }, 0), '');\n  const h = P.viewHTML({ tab: 'lib', ident: idn, now: 0 });\n  assert.match(h, /<div class=\"bld-hero\" id=\"bldHero\" style=\"--bld-spec:url\\(https:\\/\\/render\\.guildwars2\\.com\\//);\n  assert.match(P.viewHTML({ tab: 'lib', ident: null }), /<div class=\"bld-hero\" id=\"bldHero\"><div/, 'sin datos del juego: sin imagen');\n  assert.match(VIEW, /'\\{padding:0!important;overflow:hidden\\}'/, 'el panel no tiene relleno propio: un solo marco');\n  assert.doesNotMatch(VIEW, /\\.bld-hero\\{[^}]*border:/, 'la cabecera no tiene borde propio (no hay caja adentro de la caja)');\n  assert.match(LIB, /bld-lib-card bld-band/);\n  assert.match(SRC['bld-mine.js'], /bld-mine-row bld-band/);\n  assert.match(VIEW, /\\.bld-band::before\\{content:\"\";position:absolute;inset:0;/, 'el fondo de la élite cubre toda la tarjeta, de borde a borde');\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "242b4bd1cb357038c6d821159e61affb9d1cab9a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.3.0\" },\n",
+     "text": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.4.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
