@@ -1,0 +1,1 @@
+{"id": "RUN-210", "summary": "BL-082 BENCH-1: estructura de la página de benchmarks de Snow Crows", "tests": ["tests/bld-bench.smoke.cjs"]}
