@@ -1,0 +1,124 @@
+{
+ "id": "PATCH-291",
+ "summary": "BL-082 BENCH-1: la Biblioteca muestra el bench de daño de Snow Crows (DPS contra el golem: máximo, promedio, % de la mejor y barra) en las builds de PvE que lo tienen, con «Más DPS primero» y, si no hay bench, por qué (WvW/PvP sin golem; curación y tanque sin medir). Datos en assets/data/builds/bench.json (188 benchmarks). bld-lib 1.6.0.",
+ "files": [
+  {
+   "path": "js/bld-lib.js",
+   "base_sha": "4cac938cb4a58e98a64460c77ca9f1b6e753d12b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.0 (2026-10-29) · BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,\n",
+     "text": " * Versión: 1.6.0 (2026-10-29) · BENCH-1: cada build de PvE con bench publicado muestra su DPS en el golem de Snow Crows\n *          (máximo, promedio, % de la mejor y barra), «Más DPS primero» y, si no hay bench, por qué · antes 1.5.0 BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " * abrir la fuente y «avisar que está vieja» (un issue de GitHub ya escrito, A6 sin servidor).\n * Íconos: GNBldRef.identity() (API oficial); hasta que llegan, las profesiones se muestran con su nombre.\n",
+     "text": " * abrir la fuente y «avisar que está vieja» (un issue de GitHub ya escrito, A6 sin servidor).\n * Bench (BENCH-1): assets/data/builds/bench.json = benchmarks públicos de Snow Crows (DPS contra el golem, el techo\n * ideal); se cruza por la dirección de la build en la fuente. WvW, PvP, curación y tanque no tienen golem: se dice.\n * Íconos: GNBldRef.identity() (API oficial); hasta que llegan, las profesiones se muestran con su nombre.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.5.0';\n  var CATALOG = 'assets/data/builds/catalog.json';\n  var WATCH = 'assets/data/builds/watch.json';\n",
+     "text": "  var VERSION = '1.6.0';\n  var CATALOG = 'assets/data/builds/catalog.json';\n  var WATCH = 'assets/data/builds/watch.json';\n  var BENCH = 'assets/data/builds/bench.json';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var st = { cat: null, watch: null, error: '', loading: false, f: { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' },\n",
+     "text": "  var SORT = { '': 'Orden de la biblioteca', dps: 'Más DPS primero' };\n  var st = { cat: null, watch: null, bench: null, bidx: null, error: '', loading: false, f: { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: '' },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return ISSUES + '?labels=' + encodeURIComponent('build-vieja') + '&title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);\n  }\n",
+     "text": "    return ISSUES + '?labels=' + encodeURIComponent('build-vieja') + '&title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);\n  }\n  // BENCH-1: bench de Snow Crows por la dirección de la build en la fuente (profesión/nombre, sin la sección).\n  function benchKey(url) { var m = /^https:\\/\\/snowcrows\\.com\\/(?:en\\/)?builds\\/(?:[a-z-]+\\/)?([a-z]+\\/[a-z0-9-]+)\\/?$/.exec(String(url || '')); return m ? m[1] : ''; }\n  function benchIndex(bench) {\n    var idx = { top: 0, n: 0, rows: {} }, F = bench && bench.fields;\n    if (!Array.isArray(F) || !Array.isArray(bench.rows)) return idx;\n    bench.rows.forEach(function (r) {\n      var o = {}; F.forEach(function (k, i) { o[k] = r[i]; });\n      if (typeof o.path !== 'string' || !(o.max > 0)) return;\n      if (!/^[A-Za-z0-9_-]+$/.test(o.log || '')) o.log = '';\n      idx.rows[o.path] = o; idx.n++; if (o.max > idx.top) idx.top = o.max;\n    });\n    return idx;\n  }\n  function benchOf(b, idx) { return idx && b && b.mode === 'pve' && b.source && b.source.name === 'Snow Crows' ? idx.rows[benchKey(b.source.url)] || null : null; }\n  function fmtN(n) { return String(Math.round(n)).replace(/\\B(?=(\\d{3})+(?!\\d))/g, '.'); }\n  // «Más DPS primero»: las que tienen bench, de mayor a menor; después el resto en el orden de la biblioteca.\n  function sortBuilds(list, sort, idx) {\n    if (sort !== 'dps') return list;\n    return list.map(function (b, i) { var m = benchOf(b, idx); return { b: b, i: i, v: m ? m.max : -1 }; })\n      .sort(function (x, y) { return y.v - x.v || x.i - y.i; }).map(function (x) { return x.b; });\n  }\n  function benchHTML(b, idx) {\n    var m = benchOf(b, idx);\n    if (!m) {\n      var why = b.mode !== 'pve' ? 'en ' + (MODES[b.mode] || b.mode) + ' no hay golem que mida el daño' : 'Snow Crows no publica bench de esta variante (solo mide DPS; no curación ni tanque)';\n      return '<p class=\"bld-bench is-none bld-muted\">Sin bench de daño: ' + esc(why) + '.</p>';\n    }\n    var pct = Math.max(1, Math.min(100, Math.round(m.max / idx.top * 100)));\n    var boon = (b.roles || []).some(function (r) { return r !== 'dps'; });\n    return '<div class=\"bld-bench\" title=\"Bench de Snow Crows contra el golem: el techo ideal de la build; en una pelea real se hace menos.\">' +\n      '<p class=\"bld-bench-t\"><b>' + fmtN(m.max) + ' DPS</b><span class=\"bld-muted\">promedio ' + fmtN(m.avg) + ' · ' + pct + ' % de la mejor' + (boon ? ' · además da bendiciones' : '') + '</span>' +\n      (m.log ? '<a class=\"bld-muted\" href=\"https://dps.report/' + esc(m.log) + '\" target=\"_blank\" rel=\"noopener\">registro ↗</a>' : '') + '</p>' +\n      '<span class=\"bld-bench-bar\" aria-hidden=\"true\"><i style=\"width:' + pct + '%\"></i></span></div>';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      '<div class=\"bld-chiprow\">' + chips('Modo', 'mode', MODES, f.mode) + '<span class=\"bld-sep\" aria-hidden=\"true\"></span>' + chips('Rol', 'role', ROLES, f.role) + '</div>' +\n",
+     "text": "      '<div class=\"bld-chiprow\">' + chips('Modo', 'mode', MODES, f.mode) + '<span class=\"bld-sep\" aria-hidden=\"true\"></span>' + chips('Rol', 'role', ROLES, f.role) +\n      (st.bidx && st.bidx.n ? '<span class=\"bld-sep\" aria-hidden=\"true\"></span><div class=\"bld-chips\" role=\"group\" aria-label=\"Orden\">' + Object.keys(SORT).map(function (k) {\n        return '<button type=\"button\" class=\"bld-chip\" data-lib-p=\"sort\" data-v=\"' + k + '\" aria-pressed=\"' + ((f.sort || '') === k) + '\">' + esc(SORT[k]) + '</button>'; }).join('') + '</div>' : '') + '</div>' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      '<div class=\"bld-tags\">' + tags.join(' ') + '</div></div>' +\n",
+     "text": "      '<div class=\"bld-tags\">' + tags.join(' ') + '</div></div>' + benchHTML(b, st.bidx) +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var latest = latestPatch(st.cat, st.watch), list = filter(st.cat.builds, st.f, latest);\n",
+     "text": "    var latest = latestPatch(st.cat, st.watch), list = sortBuilds(filter(st.cat.builds, st.f, latest), st.f.sort, st.bidx);\n    var nb = st.cat.builds.filter(function (b) { return benchOf(b, st.bidx); }).length;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      '<p class=\"bld-muted bld-count\" aria-live=\"polite\">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + '</p>' +\n",
+     "text": "      '<p class=\"bld-muted bld-count\" aria-live=\"polite\">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + (nb ? ' · ' + nb + ' con bench de daño' : '') + '</p>' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente. Íconos: API oficial de Guild Wars 2. Si una fuente pide retirar algo, se retira.</small></p>';\n",
+     "text": "      ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente.' +\n      (nb ? ' Bench de daño: <a href=\"' + esc(st.bench.source && st.bench.source.url || '') + '\" target=\"_blank\" rel=\"noopener\">benchmarks de Snow Crows</a> (DPS contra el golem, ' + esc(fmtDate(st.bench.fetched)) + '): es el techo ideal, en una pelea real se hace menos.' : '') + ' Íconos: API oficial de Guild Wars 2. Si una fuente pide retirar algo, se retira.</small></p>';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '#buildsPanel .bld-tags{display:flex;flex-wrap:wrap;gap:4px}#buildsPanel .bld-tag.is-ok{border-color:var(--color-green,#3fb950)}#buildsPanel .bld-tag.is-old{border-color:var(--color-amber,#F2B94B)}',\n    '#buildsPanel .bld-shv{border-left:3px solid var(--gn-mod);padding:6px 10px;background:var(--bg-1);border-radius:6px;color:var(--tx-1)}',\n",
+     "text": "    '#buildsPanel .bld-tags{display:flex;flex-wrap:wrap;gap:4px}#buildsPanel .bld-tag.is-ok{border-color:var(--color-green,#3fb950)}#buildsPanel .bld-tag.is-old{border-color:var(--color-amber,#F2B94B)}',\n    '#buildsPanel .bld-bench{grid-column:1/-1;display:grid;gap:5px;margin:0}#buildsPanel .bld-bench-t{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;margin:0;font-size:.78rem}',\n    '#buildsPanel .bld-bench-t b{color:var(--tx-1);font-size:.95rem}#buildsPanel .bld-bench-t a{margin-left:auto}',\n    '#buildsPanel .bld-bench-bar{display:block;height:6px;border-radius:999px;background:var(--bg-0);box-shadow:inset 0 0 0 1px var(--bd-1);overflow:hidden}',\n    '#buildsPanel .bld-bench-bar>i{display:block;height:100%;border-radius:999px;background:var(--bld-prof,var(--gn-mod))}#buildsPanel .bld-bench.is-none{font-size:.75rem}',\n    '#buildsPanel .bld-shv{border-left:3px solid var(--gn-mod);padding:6px 10px;background:var(--bg-1);border-radius:6px;color:var(--tx-1)}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      st.pre = Promise.all([getJSON(CATALOG), getJSON(WATCH).catch(function () { return null; })]).then(function (r) {\n        st.cat = r[0]; st.watch = r[1]; return st;\n",
+     "text": "      st.pre = Promise.all([getJSON(CATALOG), getJSON(WATCH).catch(function () { return null; }), getJSON(BENCH).catch(function () { return null; })]).then(function (r) {\n        st.cat = r[0]; st.watch = r[1]; st.bench = r[2]; st.bidx = benchIndex(r[2]); return st;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function clearFilters() { st.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' }; st.more = false; }\n",
+     "text": "  function clearFilters() { st.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: st.f.sort || '' }; st.more = false; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS }, _state: st };\n",
+     "text": "    filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS,\n    benchKey: benchKey, benchIndex: benchIndex, benchOf: benchOf, benchHTML: benchHTML, sortBuilds: sortBuilds, fmtN: fmtN }, _state: st };\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "d54eb4e076d796f6f2bea495773c031d5177e879",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));\n// Las 36 élites (API oficial /v2/specializations, 2026-10-28) y su profesión.\n",
+     "text": "const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));\nconst BENCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/bench.json'), 'utf8'));\n// Las 36 élites (API oficial /v2/specializations, 2026-10-28) y su profesión.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  for (const [f, m, v] of [['bld-lib.js', L, '1.5.0'], ['bld-mine.js', M, '1.3.0']]) {\n",
+     "text": "  for (const [f, m, v] of [['bld-lib.js', L, '1.6.0'], ['bld-mine.js', M, '1.3.0']]) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  globalThis.fetch = async (u) => { urls.push(u); return { ok: true, json: async () => (/catalog/.test(u) ? CAT : WATCH) }; };\n",
+     "text": "  globalThis.fetch = async (u) => { urls.push(u); return { ok: true, json: async () => (/catalog/.test(u) ? CAT : /bench/.test(u) ? BENCH : WATCH) }; };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.deepEqual(urls, ['assets/data/builds/catalog.json', 'assets/data/builds/watch.json']);\n  await L.preload();\n  assert.equal(urls.length, 2, 'ya cargado: nada nuevo');\n",
+     "text": "  assert.deepEqual(urls, ['assets/data/builds/catalog.json', 'assets/data/builds/watch.json', 'assets/data/builds/bench.json']);\n  assert.ok(st.bidx.n > 100, 'bench indexado');\n  await L.preload();\n  assert.equal(urls.length, 3, 'ya cargado: nada nuevo');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  if (prev.f) globalThis.fetch = prev.f; else delete globalThis.fetch;\n});\n",
+     "text": "  if (prev.f) globalThis.fetch = prev.f; else delete globalThis.fetch;\n});\n\n// BENCH-1: el bench de Snow Crows en la Biblioteca.\ntest('BENCH-1 bench.json: benchmarks de Snow Crows con forma fija, élite de su profesión y números sanos', () => {\n  assert.equal(BENCH.source.name, 'Snow Crows');\n  assert.match(BENCH.source.url, /^https:\\/\\/snowcrows\\.com\\//);\n  assert.match(BENCH.fetched, /^\\d{4}-\\d{2}-\\d{2}$/);\n  assert.deepEqual(BENCH.fields, ['path', 'prof', 'elite', 'damage', 'boon', 'difficulty', 'max', 'avg', 'log']);\n  assert.ok(BENCH.rows.length >= 100, 'al menos 100 benchmarks');\n  const seen = new Set();\n  BENCH.rows.forEach((r) => {\n    const [p, prof, elite, dmg, boon, diff, max, avg, log] = r;\n    assert.match(p, /^[a-z]+\\/[a-z0-9-]+$/, p); assert.ok(!seen.has(p), 'repetido ' + p); seen.add(p);\n    assert.ok(prof >= 1 && prof <= 9, p);\n    assert.ok(elite === 0 || ELITES[prof].includes(elite), p + ': élite de su profesión');\n    assert.ok(['power', 'condition', 'hybrid'].includes(dmg) && ['', 'quickness', 'alacrity', 'boon'].includes(boon), p);\n    assert.ok(diff >= 0 && diff <= 5, p);\n    assert.ok(max > 10000 && max < 80000 && avg > 10000 && Math.abs(max - avg) < 0.1 * max, p + ': DPS sano');\n    assert.match(log, /^[A-Za-z0-9_-]*$/, p);\n  });\n});\n\ntest('BENCH-1 cruce: las builds de PvE de Snow Crows encuentran su bench por la dirección; WvW, PvP y MetaBattle no', () => {\n  const idx = P.benchIndex(BENCH);\n  assert.equal(idx.n, BENCH.rows.length);\n  assert.equal(idx.top, Math.max(...BENCH.rows.map((r) => r[6])));\n  assert.equal(P.benchKey('https://snowcrows.com/builds/raids/guardian/power-dragonhunter-radiance-spear-greatsword'), 'guardian/power-dragonhunter-radiance-spear-greatsword');\n  assert.equal(P.benchKey('https://snowcrows.com/en/builds/guardian/x-y'), 'guardian/x-y');\n  assert.equal(P.benchKey('https://metabattle.com/wiki/Build:x'), '');\n  const hits = CAT.builds.filter((b) => P.benchOf(b, idx));\n  assert.ok(hits.length >= 20, 'al menos 20 builds con bench (' + hits.length + ')');\n  hits.forEach((b) => {\n    const m = P.benchOf(b, idx);\n    assert.equal(b.mode, 'pve'); assert.equal(b.source.name, 'Snow Crows');\n    assert.equal(m.elite, b.elite, b.id + ': el bench es de su misma élite');\n    assert.equal(m.prof, b.prof, b.id);\n  });\n  CAT.builds.filter((b) => b.mode !== 'pve').forEach((b) => assert.equal(P.benchOf(b, idx), null, b.id));\n  assert.equal(P.benchIndex(null).n, 0); assert.equal(P.benchIndex({ fields: 'x' }).n, 0);\n  const evil = P.benchIndex({ fields: ['path', 'max', 'log'], rows: [['a/b', 40000, '\"><x'], ['c/d', 0, ''], [7, 1, '']] });\n  assert.equal(evil.n, 1); assert.equal(evil.rows['a/b'].log, '', 'un registro raro no se enlaza');\n});\n\ntest('BENCH-1 tarjeta: DPS máximo y promedio, % de la mejor, barra y registro; sin bench dice por qué', () => {\n  const idx = P.benchIndex(BENCH), b = CAT.builds.find((x) => P.benchOf(x, idx)), m = P.benchOf(b, idx);\n  assert.equal(P.fmtN(46309), '46.309'); assert.equal(P.fmtN(950), '950');\n  const h = P.benchHTML(b, idx), pct = Math.round(m.max / idx.top * 100);\n  assert.match(h, new RegExp('<b>' + P.fmtN(m.max).replace('.', '\\\\.') + ' DPS</b>'));\n  assert.match(h, new RegExp('promedio ' + P.fmtN(m.avg).replace('.', '\\\\.') + ' · ' + pct + ' % de la mejor'));\n  assert.match(h, new RegExp('<i style=\"width:' + pct + '%\"></i>'));\n  assert.match(h, /aria-hidden=\"true\"/, 'la barra es adorno: el número está en texto');\n  assert.match(h, /techo ideal/);\n  if (m.log) assert.match(h, /href=\"https:\\/\\/dps\\.report\\/[A-Za-z0-9_-]+\" target=\"_blank\" rel=\"noopener\">registro ↗/);\n  const boon = CAT.builds.find((x) => P.benchOf(x, idx) && x.roles.some((r) => r !== 'dps'));\n  if (boon) assert.match(P.benchHTML(boon, idx), /además da bendiciones/);\n  const w = CAT.builds.find((x) => x.mode === 'wvw');\n  assert.match(P.benchHTML(w, idx), /Sin bench de daño: en WvW no hay golem/);\n  const heal = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx));\n  assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica bench de esta variante/);\n  L._state.bidx = idx; L._state.open = '';\n  assert.match(P.cardHTML(b, '2026-01-01'), /class=\"bld-bench\"/, 'la tarjeta lo muestra');\n});\n\ntest('BENCH-1 «Más DPS primero»: de mayor a menor, las sin bench al final y en su orden; el chip aparece si hay bench', () => {\n  const idx = P.benchIndex(BENCH);\n  const s = P.sortBuilds(CAT.builds, 'dps', idx);\n  assert.equal(s.length, CAT.builds.length);\n  const v = s.map((b) => (P.benchOf(b, idx) || { max: -1 }).max);\n  for (let i = 1; i < v.length; i++) assert.ok(v[i - 1] >= v[i], 'ordenado en ' + i);\n  const rest = s.filter((b) => !P.benchOf(b, idx)), orig = CAT.builds.filter((b) => !P.benchOf(b, idx));\n  assert.deepEqual(rest.map((b) => b.id), orig.map((b) => b.id), 'las sin bench quedan en el orden de la biblioteca');\n  assert.equal(P.sortBuilds(CAT.builds, '', idx), CAT.builds, 'sin orden pedido no toca la lista');\n  Object.assign(L._state, { cat: CAT, watch: WATCH, bench: BENCH, bidx: idx, loading: false, error: '', open: '' });\n  L._state.f = Object.assign({}, L._state.f, { prof: 0, elite: 0, mode: '', role: '', sort: 'dps' });\n  const h = P.viewHTML();\n  assert.match(h, /role=\"group\" aria-label=\"Orden\"/);\n  assert.match(h, /data-lib-p=\"sort\" data-v=\"dps\" aria-pressed=\"true\">Más DPS primero/);\n  assert.match(h, / con bench de daño<\\/p>/);\n  assert.match(h, /benchmarks de Snow Crows<\\/a> \\(DPS contra el golem/);\n  const first = /data-id=\"([^\"]+)\"/.exec(h)[1];\n  assert.equal(first, s[0].id, 'la primera tarjeta es la de más DPS');\n  L._state.f.sort = '';\n  L._state.bidx = P.benchIndex(null);\n  assert.doesNotMatch(P.viewHTML(), /aria-label=\"Orden\"/, 'sin bench no hay chip de orden');\n  L._state.bidx = idx;\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "ae12ca7263e2dbeca477e8e5d6de18fab652e2c4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.5.0\" },\n",
+     "text": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.6.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
