@@ -1,0 +1,1 @@
+{"id": "RUN-209", "summary": "BL-082 BUI-6b: CSS completo de la cabecera de Cuentas y Heredad (patrón a copiar en Builds)", "tests": ["tests/bld-ref6.smoke.cjs"]}
