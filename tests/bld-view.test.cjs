@@ -20,8 +20,8 @@ const P = V._pure;
 const same = (a, b, m) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, m);
 
 test('versión en la cabecera y en el código', () => {
-  assert.match(SRC, /\* Versión: 1\.1\.0 /);
-  assert.equal(V.version, '1.1.0');
+  assert.match(SRC, /\* Versión: 1\.2\.0 /);
+  assert.equal(V.version, '1.2.0');
 });
 
 test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
@@ -69,6 +69,45 @@ test('CSS: solo tokens de los themes y foco visible', () => {
   assert.match(P.CSS, /focus-visible\{outline:2px solid var\(--acc-1\)/);
   assert.match(P.CSS, /prefers-reduced-motion/);
   assert.match(P.CSS, /min-height:44px/);
+});
+
+test('BUI-4 cabecera: marco de Raids con 4 indicadores, píldora del parche y contadores en las pestañas', () => {
+  const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
+  const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));
+  globalThis.GNBldCode = require('../js/bld-code.js');
+  const L = require('../js/bld-lib.js');
+  const s = P.statsModel({ cat: CAT, watch: WATCH, mine: 3, lib: L._pure });
+  assert.equal(s.builds, CAT.builds.length);
+  assert.equal(s.cov.pve, 36);
+  assert.equal(s.cov.wvw, 36);
+  assert.equal(s.mine, 3);
+  assert.equal(s.latest, '2026-09-29');
+  assert.ok(s.old >= 0 && s.old < s.builds);
+  const h = P.viewHTML({ tab: 'mine', stats: s });
+  assert.match(h, /class="bld-hero"/);
+  assert.match(h, /<img class="bld-ico" [^>]*width="56"/);
+  assert.match(h, /<h2 id="bldTitle">Builds<\/h2>/);
+  assert.equal((h.match(/class="bld-st"/g) || []).length, 4);
+  assert.match(h, /Último parche de balance <b>29\/09\/2026<\/b>/);
+  assert.match(h, /36 <span>PvE<\/span> · 36 <span>WvW<\/span>/);
+  assert.match(h, /id="bldBadge-lib"><span class="bld-badge">104</, 'contador en Biblioteca');
+  assert.match(h, /id="bldBadge-mine"><span class="bld-badge">3</, 'contador en Mis builds');
+  assert.match(h, /id="bldBadge-editor"><\/span>/, 'sin contador en Editor');
+  const empty = P.viewHTML({ tab: 'lib' });
+  assert.match(empty, /cargando la biblioteca…/, 'sin catálogo: guiones, no números inventados');
+  assert.doesNotMatch(empty, /Último parche de balance/);
+  delete globalThis.GNBldCode;
+});
+
+test('BUI-4 menú ⋯ común: tocar afuera cierra los abiertos menos el tocado', () => {
+  const a = { open: true }, b = { open: true };
+  const p = { querySelectorAll: (sel) => (sel === '.bld-menu[open]' ? [a, b].filter((m) => m.open) : []) };
+  assert.equal(P.closeMenus(p, b), 1);
+  assert.deepEqual([a.open, b.open], [false, true]);
+  assert.equal(P.closeMenus(p, null), 1);
+  assert.equal(b.open, false);
+  assert.equal(P.closeMenus(null), 0);
+  assert.match(P.CSS, /\.bld-menu-l\{position:absolute/, 'el estilo del menú vive en el marco');
 });
 
 test('sin documento no rompe y register no falla', () => {
