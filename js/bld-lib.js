@@ -1,19 +1,21 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.0.0 (2026-10-28)
+ * Versión: 1.1.0 (2026-10-28) · BUI-2: las 9 profesiones y sus élites como íconos oficiales, modo y rol como chips,
+ *          «Más filtros» (arma, daño, vigencia, búsqueda) y tarjeta con emblema, «Copiar código» y menú ⋯ · antes 1.0.0
  *
  * Builds curadas por mí (assets/data/builds/catalog.json): solo datos factuales (élite, modo, rol, armas, código,
  * fecha) con crédito y enlace a la fuente; ni textos ni imágenes de terceros (D1).
- * Filtros: profesión, élite, modo, rol, arma, tipo de daño y vigencia, más búsqueda por nombre. Profesión, modo y rol
- * en 3 toques o menos. Vigencia (D4): cada build dice para qué parche la revisé; si la vigía semanal
+ * Filtros: profesión y élite (íconos), modo y rol (chips) y, en «Más filtros», arma, tipo de daño, vigencia y búsqueda.
+ * Profesión, modo y rol en 3 toques. Vigencia (D4): cada build dice para qué parche la revisé; si la vigía semanal
  * (assets/data/builds/watch.json) detecta un parche de balance más nuevo, pasa a «revisar».
- * Cada build: copiar código, ver la ficha (con validación contra la API), guardar en Mis builds, abrir la fuente y
- * «avisar que está vieja» (un issue de GitHub ya escrito, A6 sin servidor).
+ * Cada build: copiar código, ver la ficha (con validación contra la API) y, en el menú ⋯, guardar en Mis builds,
+ * abrir la fuente y «avisar que está vieja» (un issue de GitHub ya escrito, A6 sin servidor).
+ * Íconos: GNBldRef.identity() (API oficial); hasta que llegan, las profesiones se muestran con su nombre.
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
   var ISSUES = 'https://github.com/PabloSnchz/gw2-factory-dev/issues/new';
@@ -71,31 +73,57 @@
   function moreCount(f) { return ['weapon', 'damage', 'state', 'q'].filter(function (k) { return f[k]; }).length; }
 
   // ---------------------------------------------------------------- vista
-  function select(id, label, key, opts, cur) {
-    return '<label class="bld-f" for="' + id + '"><small>' + label + '</small><select id="' + id + '" data-lib-f="' + key + '"><option value="">Todas</option>' +
-      opts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (String(o[0]) === String(cur) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>';
+  function chips(label, key, map, cur) {
+    return '<div class="bld-chips" role="group" aria-label="' + esc(label) + '">' +
+      ['<button type="button" class="bld-chip" data-lib-p="' + key + '" data-v="" aria-pressed="' + (!cur) + '">' + (key === 'mode' ? 'Todos los modos' : key === 'role' ? 'Todos los roles' : 'Todos') + '</button>']
+        .concat(Object.keys(map).map(function (k) {
+          return '<button type="button" class="bld-chip" data-lib-p="' + key + '" data-v="' + k + '" aria-pressed="' + (cur === k) + '">' + esc(map[k]) + '</button>';
+        })).join('') + '</div>';
   }
-  function pills(label, key, map, cur) {
-    return '<div class="bld-pills" role="group" aria-label="' + esc(label) + '"><small>' + esc(label) + '</small>' +
-      ['<button type="button" class="bld-btn" data-lib-p="' + key + '" data-v="" aria-pressed="' + (!cur) + '">Todos</button>'].concat(Object.keys(map).map(function (k) {
-        return '<button type="button" class="bld-btn" data-lib-p="' + key + '" data-v="' + k + '" aria-pressed="' + (cur === k) + '">' + esc(map[k]) + '</button>';
-      })).join('') + '</div>';
+  function profsHTML(f, id) {
+    var Cc = C();
+    var all = '<button type="button" class="bld-pf is-all" data-lib-prof="0" aria-pressed="' + (!f.prof) + '">Todas</button>';
+    return '<div class="bld-profs" role="group" aria-label="Profesión">' + all + [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (p) {
+      var name = (id && id.profs[p] && id.profs[p].name) || Cc.PROF_ES[p];
+      return '<button type="button" class="bld-pf' + (id ? '' : ' is-text') + '" data-lib-prof="' + p + '" aria-pressed="' + (f.prof === p) + '" aria-label="' + esc(name) + '" title="' + esc(name) + '">' +
+        (id ? emblem(p, 0, 30, false) : '<span>' + esc(name) + '</span>') + '</button>';
+    }).join('') + '</div>';
+  }
+  function elitesHTML(cat, f, id) {
+    if (!f.prof) return '';
+    var seen = {}, list = [];
+    cat.builds.forEach(function (b) { if (b.prof === f.prof && !seen[b.elite]) { seen[b.elite] = 1; list.push({ id: b.elite, name: b.eliteName }); } });
+    if (id && id.profs[f.prof]) {
+      var order = id.profs[f.prof].elites;
+      list.sort(function (a, b) { return order.indexOf(a.id) - order.indexOf(b.id); });
+    }
+    var pname = (id && id.profs[f.prof] && id.profs[f.prof].name) || C().PROF_ES[f.prof];
+    return '<div class="bld-elites" role="group" aria-label="Élites de ' + esc(pname) + '"><small>Élites:</small>' +
+      '<button type="button" class="bld-el" data-lib-elite="0" aria-pressed="' + (!f.elite) + '">Todas</button>' +
+      list.map(function (e) {
+        var name = (id && id.elites[e.id] && id.elites[e.id].name) || e.name;
+        return '<button type="button" class="bld-el" data-lib-elite="' + e.id + '" aria-pressed="' + (f.elite === e.id) + '">' + (id ? emblem(f.prof, e.id, 22, false) : '') + esc(name) + '</button>';
+      }).join('') + '</div>';
+  }
+  function moreHTML(cat, f) {
+    var Cc = C(), weapons = {};
+    cat.builds.forEach(function (b) { (b.weapons || []).forEach(function (w) { weapons[w] = Cc.WEAPONS_ES[w] || w; }); });
+    var n = moreCount(f), open = st.more || n > 0;
+    var wopts = Object.keys(weapons).map(function (w) { return [w, weapons[w]]; }).sort(function (a, b) { return a[1].localeCompare(b[1], 'es'); });
+    return '<details class="bld-more" data-lib-more' + (open ? ' open' : '') + '><summary>Más filtros' + (n ? ' (' + n + ')' : '') + '</summary><div class="bld-more-b">' +
+      '<label class="bld-f" for="bldLibQ"><small>Buscar</small><input id="bldLibQ" type="search" data-lib-f="q" value="' + esc(f.q) + '" placeholder="nombre o élite"></label>' +
+      '<label class="bld-f" for="bldLibWeapon"><small>Arma</small><select id="bldLibWeapon" data-lib-f="weapon"><option value="">Todas</option>' +
+      wopts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (o[0] === f.weapon ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>' +
+      '<div class="bld-f"><small>Daño</small>' + chips('Daño', 'damage', DAMAGE, f.damage) + '</div>' +
+      '<div class="bld-f"><small>Vigencia</small>' + chips('Vigencia', 'state', { vigente: 'Vigentes', revisar: 'Para revisar' }, f.state) + '</div>' +
+      (n || f.prof || f.mode || f.role ? '<button type="button" class="bld-btn" data-lib="clear">Sacar todos los filtros</button>' : '') +
+      '</div></details>';
   }
   function filtersHTML(cat, f) {
-    var Cc = C(), builds = cat.builds;
-    var elites = {}, weapons = {};
-    builds.forEach(function (b) {
-      if (!f.prof || b.prof === f.prof) elites[b.elite] = b.eliteName;
-      (b.weapons || []).forEach(function (w) { weapons[w] = (Cc.WEAPONS_ES[w] || w); });
-    });
-    return '<div class="bld-card bld-filters">' +
-      select('bldLibProf', 'Profesión', 'prof', [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (p) { return [p, Cc.PROF_ES[p]]; }), f.prof || '') +
-      select('bldLibElite', 'Élite', 'elite', Object.keys(elites).map(function (e) { return [e, elites[e]]; }).sort(function (a, b) { return a[1].localeCompare(b[1], 'es'); }), f.elite || '') +
-      select('bldLibWeapon', 'Arma', 'weapon', Object.keys(weapons).map(function (w) { return [w, weapons[w]]; }).sort(function (a, b) { return a[1].localeCompare(b[1], 'es'); }), f.weapon) +
-      '<label class="bld-f" for="bldLibQ"><small>Buscar</small><input id="bldLibQ" type="search" data-lib-f="q" value="' + esc(f.q) + '" placeholder="nombre o élite"></label>' +
-      pills('Modo', 'mode', MODES, f.mode) + pills('Rol', 'role', ROLES, f.role) + pills('Daño', 'damage', DAMAGE, f.damage) +
-      pills('Vigencia', 'state', { vigente: 'Vigentes', revisar: 'Para revisar' }, f.state) +
-      '</div>';
+    var id = ident();
+    return '<div class="bld-filters">' + profsHTML(f, id) + elitesHTML(cat, f, id) +
+      '<div class="bld-chiprow">' + chips('Modo', 'mode', MODES, f.mode) + '<span class="bld-sep" aria-hidden="true"></span>' + chips('Rol', 'role', ROLES, f.role) + '</div>' +
+      moreHTML(cat, f) + '</div>';
   }
   function cardHTML(b, latest) {
     var Cc = C(), s = stateOf(b, latest), on = st.open === b.id;
@@ -103,16 +131,19 @@
     if (b.damage) tags.push('<span class="bld-tag">' + esc(DAMAGE[b.damage]) + '</span>');
     (b.roles || []).forEach(function (r) { if (r !== 'dps' || (b.roles || []).length === 1) tags.push('<span class="bld-tag">' + esc(ROLES[r] || r) + '</span>'); });
     (b.weapons || []).forEach(function (w) { tags.push('<span class="bld-tag">' + esc(Cc.WEAPONS_ES[w] || w) + '</span>'); });
-    var h = '<li class="bld-card bld-lib-card" data-id="' + esc(b.id) + '">' +
-      '<b>' + esc(b.name) + '</b>' +
+    var h = '<li class="bld-card bld-lib-card' + (on ? ' is-open' : '') + '" data-id="' + esc(b.id) + '">' +
+      emblem(b.prof, b.elite, 44, true).replace('class="bld-emb', 'class="bld-emb bld-lib-emb') +
+      '<div class="bld-lib-main"><b class="bld-lib-t">' + esc(b.name) + '</b>' +
       '<p class="bld-muted">' + esc(Cc.PROF_ES[b.prof]) + ' · ' + esc(MODES[b.mode] || b.mode) + (b.sub ? ' (' + esc(SUB[b.sub] || b.sub) + ')' : '') +
       ' · dificultad ' + (b.difficulty || '?') + '/5 · fuente actualizada ' + fmtDate(b.sourceUpdated) + '</p>' +
-      '<div class="bld-tags">' + tags.join(' ') + '</div>' +
-      '<div class="bld-acts"><button type="button" class="bld-btn" data-bld-act="copy">Copiar código</button>' +
-      '<button type="button" class="bld-btn" data-lib="toggle" aria-expanded="' + on + '">' + (on ? 'Cerrar' : 'Ver') + '</button>' +
-      '<button type="button" class="bld-btn" data-bld-act="save">Guardar</button>' +
-      '<a class="bld-btn" href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>' +
-      '<a class="bld-btn" href="' + esc(issueUrl(b, latest)) + '" target="_blank" rel="noopener" title="Abre un aviso en GitHub ya escrito">Avisar que está vieja</a></div>';
+      '<div class="bld-tags">' + tags.join(' ') + '</div></div>' +
+      '<div class="bld-acts"><button type="button" class="bld-btn is-primary" data-bld-act="copy">Copiar código</button>' +
+      '<button type="button" class="bld-btn" data-lib="toggle" aria-expanded="' + on + '">' + (on ? 'Cerrar ficha' : 'Ver ficha') + '</button>' +
+      '<details class="bld-menu"><summary class="bld-btn" aria-label="Más acciones: ' + esc(b.name) + '" title="Más acciones">⋯</summary><div class="bld-menu-l">' +
+      '<button type="button" class="bld-btn" data-bld-act="save">Guardar en Mis builds</button>' +
+      '<a class="bld-btn" href="' + esc(b.source.url) + '" target="_blank" rel="noopener">Abrir en ' + esc(b.source.name) + ' ↗</a>' +
+      '<a class="bld-btn" href="' + esc(issueUrl(b, latest)) + '" target="_blank" rel="noopener" title="Abre un aviso en GitHub ya escrito">Avisar que está vieja ↗</a>' +
+      '</div></details></div>';
     if (on) {
       h += st.views[b.id] ? root.GNBldShow.detailHTML(st.views[b.id], { code: b.code, checks: st.checks[b.id], title: b.name,
         meta: esc(MODES[b.mode]) + ' · <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>', actions: ['share', 'gw2skills', 'edit'] })
@@ -134,8 +165,9 @@
       '). Las marco «para revisar»: sirven, pero conviene mirar la fuente. <small class="bld-muted">Lo sé por: la fecha que declara cada fuente</small></p>')
       : '<p class="bld-shv">Todas las builds están revisadas para el último parche de balance (' + fmtDate(latest) + '). <small class="bld-muted">Lo sé por: la biblioteca y la vigía semanal</small></p>';
     return line + filtersHTML(st.cat, st.f) +
-      '<p class="bld-muted" aria-live="polite">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + '</p>' +
-      (list.length ? '<ul class="bld-lib">' + list.map(function (b) { return cardHTML(b, latest); }).join('') + '</ul>' : '<div class="bld-card bld-muted">Ninguna build con esos filtros. Probá sacando alguno.</div>') +
+      '<p class="bld-muted bld-count" aria-live="polite">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + '</p>' +
+      (list.length ? '<ul class="bld-lib">' + list.map(function (b) { return cardHTML(b, latest); }).join('') + '</ul>'
+        : '<div class="bld-card bld-muted">Ninguna build con esos filtros. <button type="button" class="bld-btn" data-lib="clear">Sacar todos los filtros</button></div>') +
       '<p class="bld-muted"><small>Builds curadas por mí con datos de ' + (st.cat.sources || []).map(function (s) { return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.name) + '</a>'; }).join(', ') +
       ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente. Íconos: API oficial de Guild Wars 2. Si una fuente pide retirar algo, se retira.</small></p>';
   }
@@ -301,7 +333,8 @@
     paint(ctx);
   }
 
-  var api = { version: VERSION, render: render, _pure: { filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML, MODES: MODES, ROLES: ROLES }, _state: st };
+  var api = { version: VERSION, render: render, _pure: { filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML,
+    filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS }, _state: st };
   root.GNBldLib = api;
   if (root.GNBld && typeof root.GNBld.register === 'function') root.GNBld.register('lib', api);
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

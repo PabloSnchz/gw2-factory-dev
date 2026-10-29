@@ -19,9 +19,9 @@ const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m] of [['bld-lib.js', L], ['bld-mine.js', M]]) {
-    assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), /Versión: 1\.0\.0 /, f);
-    assert.equal(m.version, '1.0.0');
+  for (const [f, m, v] of [['bld-lib.js', L, '1.1.0'], ['bld-mine.js', M, '1.0.0']]) {
+    assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
+    assert.equal(m.version, v, f);
   }
 });
 
@@ -97,13 +97,98 @@ test('vista completa: filtros con etiquetas, conteo y cobertura; dibuja rápido 
   const t0 = Date.now();
   const h = P.viewHTML();
   assert.ok(Date.now() - t0 < 2000);
-  assert.match(h, /<label class="bld-f" for="bldLibProf">/);
+  assert.match(h, /role="group" aria-label="Profesión"/);
+  assert.match(h, /<label class="bld-f" for="bldLibWeapon">/);
   assert.match(h, /élites cubiertas: PvE 36\/36, WvW 36\/36/);
   assert.match(h, /parche anterior al último de balance/, 'sin vigía nueva no habla de «salió un parche»');
   L._state.watch = Object.assign({}, WATCH, { latestPatch: '2026-11-10' });
   assert.match(P.viewHTML(), /salió un parche de balance \(10\/11\/2026\)/);
   L._state.watch = WATCH;
   assert.match(h, /role="group" aria-label="Modo"/);
+});
+
+// BUI-2: identidad oficial simulada (la daría GNBldRef.identity()).
+const RG = 'https://render.guildwars2.com/file/';
+function fakeIdent() {
+  const id = { profs: {}, elites: {} };
+  for (const [p, els] of Object.entries(ELITES)) {
+    id.profs[p] = { name: C.PROF_ES[p], icon: RG + 'p' + p + '.png', iconBig: RG + 'P' + p + '.png', elites: els.slice().reverse() };
+    els.forEach((e) => { id.elites[e] = { name: 'E' + e, icon: RG + 'e' + e + '.png', iconBig: RG + 'E' + e + '.png' }; });
+  }
+  return id;
+}
+function el(attrs, opts) {
+  opts = opts || {};
+  const me = {
+    getAttribute: (k) => (k in attrs ? attrs[k] : null),
+    classList: { contains: (c) => (opts.classes || []).includes(c) },
+    closest: (sel) => (opts.match || []).some((m) => sel.split(',').includes(m)) ? me : (opts.parent ? opts.parent.closest(sel) : null),
+  };
+  return me;
+}
+
+test('BUI-2 filtros: profesiones con su ícono oficial (o su nombre mientras cargan), élites al elegir una, chips y «Más filtros»', () => {
+  const B = CAT.builds;
+  const f0 = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' };
+  globalThis.GNBldRef = { identitySync: () => null };
+  let h = P.filtersHTML(CAT, f0);
+  assert.match(h, /data-lib-prof="1"[^>]*aria-label="Guardián"[^>]*><span>Guardián<\/span>/, 'sin íconos todavía: el nombre');
+  assert.doesNotMatch(h, /data-lib-elite/, 'sin profesión elegida no hay élites');
+  assert.doesNotMatch(h, /<details class="bld-more" data-lib-more open/, '«Más filtros» cerrado si no hay nada puesto');
+  const id = fakeIdent();
+  globalThis.GNBldRef = { identitySync: () => id };
+  h = P.filtersHTML(CAT, Object.assign({}, f0, { prof: 1, mode: 'pve', role: 'dps' }));
+  assert.match(h, /data-lib-prof="1" aria-pressed="true"[^>]*>.*p1\.png/, 'ícono oficial de la profesión');
+  const els = [...h.matchAll(/data-lib-elite="(\d+)"/g)].map((m) => Number(m[1])).filter(Boolean);
+  assert.deepEqual(els, ELITES[1].slice().reverse(), 'las 4 élites del Guardián en el orden de la API');
+  assert.match(h, /data-lib-elite="27"[^>]*>.*e27\.png/, 'emblema de la élite');
+  assert.match(h, /data-lib-p="mode" data-v="pve" aria-pressed="true"/);
+  assert.match(h, /data-lib-p="role" data-v="dps" aria-pressed="true"/);
+  h = P.filtersHTML(CAT, Object.assign({}, f0, { weapon: 'Spear', state: 'revisar' }));
+  assert.match(h, /data-lib-more open><summary>Más filtros \(2\)/, 'se abre solo y cuenta lo que hay puesto');
+  assert.match(h, /data-lib="clear"/);
+  assert.equal(P.moreCount({ q: 'x', damage: 'power' }), 2);
+  delete globalThis.GNBldRef;
+  assert.ok(B.length > 0);
+});
+
+test('BUI-2 tarjeta: emblema de la élite, «Copiar código» principal, «Ver ficha» y el resto en el menú ⋯', () => {
+  globalThis.GNBldRef = { identitySync: () => fakeIdent() };
+  L._state.open = '';
+  const b = CAT.builds.find((x) => x.elite === 74);
+  const h = P.cardHTML(b, P.latestPatch(CAT, WATCH));
+  assert.match(h, /bld-emb bld-lib-emb" title="E74"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/E74\.png" width="44"/);
+  assert.match(h, /class="bld-btn is-primary" data-bld-act="copy">Copiar código/);
+  assert.match(h, /data-lib="toggle" aria-expanded="false">Ver ficha/);
+  const menu = h.slice(h.indexOf('<details class="bld-menu">'));
+  assert.match(menu, /aria-label="Más acciones: /);
+  for (const re of [/data-bld-act="save"/, /Abrir en Snow Crows ↗/, /Avisar que está vieja ↗/]) assert.match(menu, re);
+  assert.doesNotMatch(h.slice(0, h.indexOf('<details class="bld-menu">')), /data-bld-act="save"/, 'guardar va en el menú');
+  delete globalThis.GNBldRef;
+});
+
+test('BUI-2 clics: profesión limpia la élite, chips, «Sacar filtros» y tocar la tarjeta abre la ficha (no en botones ni en el menú)', () => {
+  const host = { innerHTML: '', contains: () => false, querySelector: () => null };
+  const ctx = { host, ref: { load: () => new Promise(() => {}) } };
+  Object.assign(L._state, { cat: CAT, watch: WATCH, loading: false, error: '', open: '' });
+  L._state.f = { prof: 2, elite: 74, mode: '', role: '', weapon: '', damage: '', state: '', q: '' };
+  assert.equal(P.onClick(ctx, { target: el({ 'data-lib-prof': '1' }, { match: ['[data-lib-prof]'] }) }), 'prof');
+  assert.equal(L._state.f.prof, 1);
+  assert.equal(L._state.f.elite, 0, 'cambiar de profesión saca la élite');
+  P.onClick(ctx, { target: el({ 'data-lib-elite': '27' }, { match: ['[data-lib-elite]'] }) });
+  assert.equal(L._state.f.elite, 27);
+  P.onClick(ctx, { target: el({ 'data-lib-p': 'mode', 'data-v': 'wvw' }, { match: ['[data-lib-p]'] }) });
+  assert.equal(L._state.f.mode, 'wvw');
+  assert.match(host.innerHTML, /data-lib-p="mode" data-v="wvw" aria-pressed="true"/);
+  assert.equal(P.onClick(ctx, { target: el({ 'data-lib': 'clear' }, { match: ['[data-lib]'] }) }), 'clear');
+  assert.deepEqual([L._state.f.prof, L._state.f.elite, L._state.f.mode], [0, 0, '']);
+  const id = CAT.builds[0].id;
+  const card = el({ 'data-id': id }, { match: ['.bld-lib-card', '[data-id]'] });
+  assert.equal(P.onClick(ctx, { target: el({}, { parent: card }) }), 'card');
+  assert.equal(L._state.open, id);
+  assert.equal(P.onClick(ctx, { target: el({}, { match: ['summary'], parent: card }) }), '', 'el menú ⋯ no abre ni cierra la ficha');
+  assert.equal(L._state.open, id);
+  L._state.open = '';
 });
 
 test('Mis builds: lista vacía con caminos, filas con acciones y confirmación al borrar', () => {
