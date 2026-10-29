@@ -1,0 +1,151 @@
+{
+ "id": "PATCH-276",
+ "summary": "BL-082 BUI-1: íconos oficiales de Guild Wars 2 en Builds. bld-ref 1.2.0 trae las 9 profesiones y sus élites con nombre, ícono e ícono grande (un pedido, guardado por versión del juego); bld-show 1.1.0 suma emblem() y la ficha abre con el emblema de su élite. Tests nuevos.",
+ "files": [
+  {
+   "path": "js/bld-ref.js",
+   "base_sha": "8940b7249ee2705c3207fb1a43483ab9a8034cfc",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-28) · si llega",
+     "text": " * Versión: 1.2.0 (2026-10-28) · BUI-1: identity() = las 9 profesiones y sus élites con nombre, ícono e ícono grande\n *          oficiales (un pedido, guardado por versión del juego); la ficha guarda el emblema de cada élite · antes 1.1.0:\n *          si llega"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.1.0';",
+     "text": "var VERSION = '1.2.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var mem = {}, inflight = {}, buildInfo = { id: null, at: 0 };",
+     "text": "  var REF_V = 2; // 1.2.0: el ref guarda también el emblema de cada élite (lo de v1 se vuelve a pedir una vez)\n  var IDKEY = 'gn:bld:id:';\n  var mem = {}, inflight = {}, buildInfo = { id: null, at: 0 }, ident = null, identInflight = null;"
+    },
+    {
+     "op": "replace",
+     "anchor": "      return { id: s.id, name: s.name, elite: !!s.elite, icon: s.icon, background: s.background, minor: s.minor_traits || [], major: tiers,",
+     "text": "      return { id: s.id, name: s.name, elite: !!s.elite, icon: s.icon, background: s.background, minor: s.minor_traits || [], major: tiers,\n        profIcon: s.profession_icon || '', profIconBig: s.profession_icon_big || '',"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return { v: 1, profession: profCode(p.id),",
+     "text": "    return { v: REF_V, profession: profCode(p.id),"
+    },
+    {
+     "op": "replace",
+     "anchor": "if (c && c.v === 1 && c.profession)",
+     "text": "if (c && c.v === REF_V && c.profession)"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  // ---------------------------------------------------------------- de números a nombres (puro)",
+     "text": "  // ---------------------------------------------------------------- identidad: profesiones y élites (BUI-1)\n  // profs = /v2/professions?ids=all, specs = sus /v2/specializations → { v, profs: { 1..9 }, elites: { id } } con los íconos\n  // oficiales: el de la profesión (icon, icon_big) y, por élite, su emblema (profession_icon, profession_icon_big).\n  function normalizeIdentity(profs, specs) {\n    var byId = {}, out = { v: 1, profs: {}, elites: {} };\n    (specs || []).forEach(function (s) { if (s && s.id) byId[s.id] = s; });\n    (profs || []).forEach(function (p) {\n      var code = profCode(p && p.id);\n      if (!code) return;\n      var elites = (p.specializations || []).map(function (id) { return byId[id]; }).filter(function (s) { return s && s.elite; });\n      elites.forEach(function (s) {\n        out.elites[s.id] = { id: s.id, name: s.name, prof: code, icon: s.profession_icon || s.icon || '',\n          iconBig: s.profession_icon_big || s.profession_icon || s.icon || '', specIcon: s.icon || '', background: s.background || '' };\n      });\n      out.profs[code] = { code: code, id: p.id, name: p.name, icon: p.icon || '', iconBig: p.icon_big || p.icon || '',\n        elites: elites.map(function (s) { return s.id; }) };\n    });\n    return out;\n  }\n  // identity(opts) → Promise<identidad>. Un pedido de profesiones y uno de especializaciones; se guarda por versión del juego.\n  function identity(opts) {\n    opts = opts || {};\n    var f = opts.fetch;\n    return gameBuild(f).then(function (bid) {\n      var key = IDKEY + LANG + ':' + (bid || 0);\n      if (!opts.force && ident && ident.key === key) return ident;\n      var S = store();\n      var ready = S && typeof S.ready === 'function' ? S.ready() : Promise.resolve();\n      return Promise.resolve(ready).then(function () {\n        if (!opts.force && S) { var c = S.get(key); if (c && c.v === 1 && c.profs && c.profs[1]) { ident = c; return c; } }\n        if (identInflight) return identInflight;\n        identInflight = getJSON(API + '/v2/professions?ids=all&v=latest&lang=' + LANG, f).then(function (profs) {\n          var ids = [];\n          (profs || []).forEach(function (p) { ids = ids.concat(p.specializations || []); });\n          return many('/v2/specializations', ids, f).then(function (specs) {\n            var x = normalizeIdentity(profs, specs);\n            x.key = key; x.gameBuild = bid || 0;\n            ident = x; identInflight = null;\n            if (S) { try { S.set(key, x); pruneIdent(S, key); } catch (_) {} }\n            return x;\n          });\n        }).then(null, function (e) { identInflight = null; throw e; });\n        return identInflight;\n      });\n    });\n  }\n  function identitySync() { return ident; }\n  function pruneIdent(S, keep) {\n    if (typeof S.keys !== 'function') return;\n    S.keys().forEach(function (k) { if (k.indexOf(IDKEY + LANG + ':') === 0 && k !== keep) S.del(k); });\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var out = { profession: b.profession, profName: ref.name, profIcon: ref.icon, specs: [],",
+     "text": "    var out = { profession: b.profession, profName: ref.name, profIcon: ref.icon, profIconBig: ref.iconBig || ref.icon, specs: [],"
+    },
+    {
+     "op": "replace",
+     "anchor": "      out.specs.push({ id: s.id, name: sp ? sp.name : (s.id ? '#' + s.id : ''), icon: sp ? sp.icon : '', background: sp ? sp.background : '', elite: !!(sp && sp.elite),",
+     "text": "      out.specs.push({ id: s.id, name: sp ? sp.name : (s.id ? '#' + s.id : ''), icon: sp ? sp.icon : '', background: sp ? sp.background : '', elite: !!(sp && sp.elite),\n        profIcon: sp ? sp.profIcon || '' : '', profIconBig: sp ? sp.profIconBig || '' : '',"
+    },
+    {
+     "op": "replace",
+     "anchor": "    version: VERSION, PROFS: PROFS, load: load, normalize: normalize, resolve: resolve, check: check,",
+     "text": "    version: VERSION, PROFS: PROFS, load: load, normalize: normalize, resolve: resolve, check: check,\n    identity: identity, identitySync: identitySync, normalizeIdentity: normalizeIdentity,"
+    },
+    {
+     "op": "replace",
+     "anchor": "_test: { reset: function () { mem = {}; inflight = {}; buildInfo = { id: null, at: 0 }; } }",
+     "text": "_test: { reset: function () { mem = {}; inflight = {}; buildInfo = { id: null, at: 0 }; ident = null; identInflight = null; } }"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-ref.test.cjs",
+   "base_sha": "4a013435bb3ff3f1b49ccb03cc541470bed9e132",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "/Versión: 1\\.1\\.0 /);\n  assert.equal(R.version, '1.1.0');",
+     "text": "/Versión: 1\\.2\\.0 /);\n  assert.equal(R.version, '1.2.0');"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "/página web desde \\/v2\\/professions\\/Engineer, también sin caché/);\n});",
+     "text": "\n\n// BUI-1: identidad oficial. Dos profesiones de mentira con la forma real de /v2/professions?ids=all y /v2/specializations.\nconst R_ = 'https://render.guildwars2.com/file/';\nconst IPROFS = [{ id: 'Guardian', name: 'Guardián', icon: R_ + 'g.png', icon_big: R_ + 'G.png', specializations: [16, 27, 62] },\n  { id: 'Warrior', name: 'Guerrero', icon: R_ + 'w.png', icon_big: R_ + 'W.png', specializations: [4, 74] },\n  { id: 'Commander', name: '?', specializations: [] }];\nconst ISPECS = [{ id: 16, name: 'Celo', elite: false, icon: R_ + 's16.png' },\n  { id: 27, name: 'Cazadragones', elite: true, icon: R_ + 's27.png', profession_icon: R_ + 'e27.png', profession_icon_big: R_ + 'E27.png', background: R_ + 'b27.png' },\n  { id: 62, name: 'Abrasador', elite: true, icon: R_ + 's62.png', profession_icon: R_ + 'e62.png' },\n  { id: 4, name: 'Fuerza', elite: false }, { id: 74, name: 'Paragón', elite: true, profession_icon: R_ + 'e74.png', profession_icon_big: R_ + 'E74.png' }];\n\ntest('BUI-1 normalizeIdentity: profesiones con su ícono grande y élites con su emblema, en el orden de la API', () => {\n  const x = R.normalizeIdentity(IPROFS, ISPECS);\n  assert.deepEqual(Object.keys(x.profs), ['1', '2'], 'lo que no es profesión se descarta');\n  assert.equal(x.profs[1].iconBig, R_ + 'G.png');\n  assert.deepEqual(x.profs[1].elites, [27, 62], 'solo élites');\n  assert.equal(x.elites[27].iconBig, R_ + 'E27.png');\n  assert.equal(x.elites[27].background, R_ + 'b27.png');\n  assert.equal(x.elites[62].iconBig, R_ + 'e62.png', 'sin ícono grande, el chico');\n  assert.equal(x.elites[74].prof, 2);\n});\n\ntest('BUI-1 identity(): un pedido de profesiones y uno de especializaciones; la segunda vez, nada', async () => {\n  R._test.reset();\n  const log = [];\n  const f = async (url) => {\n    log.push(url);\n    const u = new URL(url);\n    const body = u.pathname === '/v2/build' ? { id: 209026 } : u.pathname === '/v2/professions' ? IPROFS\n      : u.pathname === '/v2/specializations' ? ISPECS.filter((s) => u.searchParams.get('ids').split(',').includes(String(s.id))) : null;\n    return { ok: !!body, status: body ? 200 : 404, text: async () => JSON.stringify(body) };\n  };\n  assert.equal(R.identitySync(), null);\n  const x = await R.identity({ fetch: f });\n  assert.equal(x.elites[74].name, 'Paragón');\n  assert.equal(x.gameBuild, 209026);\n  assert.match(log.find((u) => /\\/v2\\/professions\\?/.test(u)), /ids=all&v=latest&lang=es/);\n  assert.equal(R.identitySync(), x, 'queda a mano para dibujar sin esperar');\n  const n = log.length;\n  await R.identity({ fetch: f });\n  assert.equal(log.length, n, 'sin pedidos nuevos');\n});\n\ntest('BUI-1 la ficha lleva el emblema de su élite; lo guardado con el formato viejo se vuelve a pedir', () => {\n  const sp = SPECS.map((s) => (s.id === 27 ? Object.assign({}, s, { profession_icon: 'e.png', profession_icon_big: 'E.png' }) : s));\n  const ref = R.normalize({ prof: PROF, specs: sp, traits: TRAITS, skills: SKILLS });\n  assert.equal(ref.v, 2);\n  const b = C.empty(1);\n  b.specs = [{ id: 16, traits: [1, 1, 1] }, { id: 42, traits: [1, 1, 1] }, { id: 27, traits: [1, 1, 1] }];\n  const v = R.resolve(b, ref);\n  assert.equal(v.specs[2].profIconBig, 'E.png');\n  assert.equal(v.profIconBig, 'G.png');\n});"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-show.js",
+   "base_sha": "8a7014bf99ce5000ec56811ef9d4328a55dcbdc0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-28)\n",
+     "text": " * Versión: 1.1.0 (2026-10-28) · BUI-1: emblem() con los íconos oficiales de profesión y élite (GNBldRef.identity) y la\n *          ficha encabezada por el emblema grande de su élite · antes 1.0.0 BLD-4\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';",
+     "text": "  var VERSION = '1.1.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function specHTML(s, i) {",
+     "text": "  // BUI-1: emblema oficial. Con élite, el de la élite; si no, el de la profesión; sin datos, un hueco del mismo tamaño.\n  // ident = GNBldRef.identitySync() (o el que se pase). Más de 32 px usa el ícono grande. opts: { ident, label, cls }\n  function emblemOf(prof, elite, big, ident) {\n    var R = root.GNBldRef;\n    ident = ident || (R && typeof R.identitySync === 'function' ? R.identitySync() : null);\n    var e = ident && elite ? ident.elites[elite] : null, p = ident && prof ? ident.profs[prof] : null;\n    if (e) return { src: big ? e.iconBig : e.icon, name: e.name };\n    if (p) return { src: big ? p.iconBig : p.icon, name: p.name };\n    return { src: '', name: '' };\n  }\n  function emblem(prof, elite, size, opts) {\n    opts = opts || {};\n    var x = emblemOf(prof, elite, size > 32, opts.ident);\n    return '<span class=\"bld-emb' + (opts.cls ? ' ' + opts.cls : '') + '\"' + (opts.label && x.name ? ' title=\"' + esc(x.name) + '\"' : '') + '>' +\n      img(x.src, opts.label ? x.name : '', size, '') + '</span>';\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      '<header class=\"bld-detail-h\">' + img(v.profIcon, '', 32, 'bld-ic') + '<div>",
+     "text": "      '<header class=\"bld-detail-h\"><span class=\"bld-emb is-big\">' + img((elite && (elite.profIconBig || elite.profIcon)) || v.profIconBig || v.profIcon, '', 40, '') + '</span><div>"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '#buildsPanel .bld-detail-h{display:flex;gap:10px;align-items:center}",
+     "text": "    '#buildsPanel .bld-emb{display:inline-grid;place-items:center;flex:none;border-radius:10px;background:var(--bg-0);box-shadow:inset 0 0 0 1px var(--bd-1);padding:3px}',\n    '#buildsPanel .bld-emb.is-big{padding:6px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--bd-1),0 0 0 2px color-mix(in srgb,var(--gn-mod) 45%,transparent)}',\n    '#buildsPanel .bld-emb img,#buildsPanel .bld-emb .bld-ph{display:block}',\n    '#buildsPanel .bld-detail-h{display:flex;gap:10px;align-items:center}"
+    },
+    {
+     "op": "replace",
+     "anchor": "detailHTML: detailHTML, copy: copy, act: act, wire: wire, ensureCss: ensureCss, esc: esc, plain: plain, img: img,",
+     "text": "detailHTML: detailHTML, copy: copy, act: act, wire: wire, ensureCss: ensureCss, esc: esc, plain: plain, img: img,\n    emblem: emblem, emblemOf: emblemOf,"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-mods.test.cjs",
+   "base_sha": "c309d4b9f922f59294e698b965b867bec2bd1187",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  for (const [f, m] of [['bld-show.js', S], ['bld-import.js', I], ['bld-store.js', T]]) {\n    assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), /Versión: 1\\.0\\.0 /, f);\n    assert.equal(m.version, '1.0.0');\n  }",
+     "text": "  for (const [f, m, v] of [['bld-show.js', S, '1.1.0'], ['bld-import.js', I, '1.0.0'], ['bld-store.js', T, '1.0.0']]) {\n    assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\\./g, '\\\\.') + ' '), f);\n    assert.equal(m.version, v, f);\n  }"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "test('importar: acepta el código del juego",
+     "text": "test('BUI-1 emblema: élite, si no profesión, si no un hueco; grande por encima de 32 px; solo íconos oficiales', () => {\n  const RG = 'https://render.guildwars2.com/file/';\n  const ID = { profs: { 1: { name: 'Guardián', icon: RG + 'g.png', iconBig: RG + 'G.png' } },\n    elites: { 27: { name: 'Cazadragones', icon: RG + 'e.png', iconBig: RG + 'E.png' }, 99: { name: 'Mala', icon: 'javascript:x', iconBig: 'javascript:x' } } };\n  assert.match(S.emblem(1, 27, 44, { ident: ID }), /E\\.png/);\n  assert.match(S.emblem(1, 27, 22, { ident: ID }), /e\\.png/);\n  assert.match(S.emblem(1, 0, 44, { ident: ID, label: true }), /G\\.png\" width=\"44\" height=\"44\" alt=\"Guardián\"/);\n  assert.match(S.emblem(1, 0, 44), /bld-ph/, 'sin identidad todavía: hueco del mismo tamaño');\n  assert.doesNotMatch(S.emblem(1, 99, 44, { ident: ID }), /javascript/);\n  const h = S.detailHTML(Object.assign({}, VIEW, { specs: [VIEW.specs[0], VIEW.specs[1], Object.assign({}, VIEW.specs[2], { profIconBig: RG + 'big.png' })] }), {});\n  assert.match(h, /class=\"bld-emb is-big\"><img class=\"\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/big\\.png\" width=\"40\"/, 'la ficha abre con el emblema de su élite');\n  assert.match(S.detailHTML(VIEW, {}), /1\\.png\" width=\"40\"/, 'sin emblema de élite, el de la profesión');\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "b03eb4ceaa67aad239e9818aa686e2e9c2696681",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-ref.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/bld-ref.js\", \"v\": \"1.2.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-show.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/bld-show.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  }
+ ]
+}
