@@ -1,6 +1,7 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones
+ * Versión: 1.4.0 (2026-10-29) · BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)
+ *          y el emblema a 56 px · antes 1.3.0 BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones
  *          sin elegir se atenúan solo en el ícono (el texto queda entero) · antes 1.2.0 BUI-4: preload() trae el
  *          catálogo sin dibujar (para la cabecera de Builds); el estilo del
  *          menú ⋯ y del botón principal pasa al marco común (js/bld-view.js) · antes 1.1.0 (2026-10-28) · BUI-2: las 9 profesiones y sus élites como íconos oficiales, modo y rol como chips,
@@ -18,7 +19,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
   var ISSUES = 'https://github.com/PabloSnchz/gw2-factory-dev/issues/new';
@@ -134,8 +135,9 @@
     if (b.damage) tags.push('<span class="bld-tag">' + esc(DAMAGE[b.damage]) + '</span>');
     (b.roles || []).forEach(function (r) { if (r !== 'dps' || (b.roles || []).length === 1) tags.push('<span class="bld-tag">' + esc(ROLES[r] || r) + '</span>'); });
     (b.weapons || []).forEach(function (w) { tags.push('<span class="bld-tag">' + esc(Cc.WEAPONS_ES[w] || w) + '</span>'); });
-    var h = '<li class="bld-card bld-lib-card' + (on ? ' is-open' : '') + '" data-id="' + esc(b.id) + '">' +
-      emblem(b.prof, b.elite, 44, true).replace('class="bld-emb', 'class="bld-emb bld-lib-emb') +
+    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite) : '';
+    var h = '<li class="bld-card bld-lib-card bld-band' + (on ? ' is-open' : '') + '" data-id="' + esc(b.id) + '"' + band + '>' +
+      emblem(b.prof, b.elite, 56, true).replace('class="bld-emb', 'class="bld-emb bld-lib-emb') +
       '<div class="bld-lib-main"><b class="bld-lib-t">' + esc(b.name) + '</b>' +
       '<p class="bld-muted">' + esc(Cc.PROF_ES[b.prof]) + ' · ' + esc(MODES[b.mode] || b.mode) + (b.sub ? ' (' + esc(SUB[b.sub] || b.sub) + ')' : '') +
       ' · dificultad ' + (b.difficulty || '?') + '/5 · fuente actualizada ' + fmtDate(b.sourceUpdated) + '</p>' +

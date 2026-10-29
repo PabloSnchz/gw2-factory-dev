@@ -19,7 +19,7 @@ const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-lib.js', L, '1.3.0'], ['bld-mine.js', M, '1.1.0']]) {
+  for (const [f, m, v] of [['bld-lib.js', L, '1.4.0'], ['bld-mine.js', M, '1.2.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -157,7 +157,7 @@ test('BUI-2 tarjeta: emblema de la élite, «Copiar código» principal, «Ver f
   L._state.open = '';
   const b = CAT.builds.find((x) => x.elite === 74);
   const h = P.cardHTML(b, P.latestPatch(CAT, WATCH));
-  assert.match(h, /bld-emb bld-lib-emb" title="E74"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/E74\.png" width="44"/);
+  assert.match(h, /bld-emb bld-lib-emb" title="E74"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/E74\.png" width="56"/);
   assert.match(h, /class="bld-btn is-primary" data-bld-act="copy">Copiar código/);
   assert.match(h, /data-lib="toggle" aria-expanded="false">Ver ficha/);
   const menu = h.slice(h.indexOf('<details class="bld-menu">'));
@@ -212,7 +212,7 @@ test('BUI-4 Mis builds con la tarjeta de la Biblioteca: emblema de su élite, «
   globalThis.GNBldRef = { identitySync: () => ({ profs: { 2: { name: 'Guerrero', icon: RG + 'p2.png', iconBig: RG + 'P2.png' } }, elites: { 74: { name: 'Paragón', icon: RG + 'e74.png', iconBig: RG + 'E74.png' } } }) };
   M._state.confirm = ''; M._state.open = '';
   let h = M._pure.rowHTML(b);
-  assert.match(h, /class="bld-emb bld-mine-emb" title="Paragón"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/E74\.png" width="44"/);
+  assert.match(h, /class="bld-emb bld-mine-emb" title="Paragón"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/E74\.png" width="56"/);
   assert.match(h, /class="bld-btn is-primary" data-mine="copy">Copiar código/);
   assert.match(h, /data-mine="toggle" aria-expanded="false">Ver ficha/);
   const menu = h.slice(h.indexOf('<details class="bld-menu">'));
