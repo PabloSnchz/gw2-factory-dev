@@ -1,0 +1,105 @@
+{
+ "id": "PATCH-292",
+ "summary": "BL-082 BENCH-2: referencia de daño por parecido. La Biblioteca muestra, en las builds de PvE que hacen daño y no tienen bench propio, la «Referencia» medida más parecida de Snow Crows (misma élite, daño, rol y armas) diciendo que no es su DPS; Mis builds muestra el bench de la build de la Biblioteca en que se basa o esa referencia (por fuente, código o parecido de líneas y rasgos). Módulo js/bld-bench.js 1.0.0 en la ruta; bld-lib 1.7.0, bld-mine 1.4.0.",
+ "files": [
+  {
+   "path": "js/bld-lib.js",
+   "base_sha": "36190e2a6ff847b7bf6321354be483b38b17f4ba",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.6.0 (2026-10-29) · BENCH-1:",
+     "text": " * Versión: 1.7.0 (2026-10-29) · BENCH-2: sin bench exacto, la build de PvE que hace daño muestra la «Referencia» medida más\n *          parecida (js/bld-bench.js), diciendo en qué se parece y que no es su DPS · antes 1.6.0 BENCH-1:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.6.0';",
+     "text": "var VERSION = '1.7.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (!m) {\n      var why = b.mode",
+     "text": "    if (!m) {\n      // BENCH-2: sin medición propia, la medida más parecida (solo PvE y si hace daño); si no hay, por qué.\n      var B = root.GNBldBench, r = B && typeof B.forLib === 'function' ? B.forLib(b, idx) : null;\n      if (r) return B.html(r, idx);\n      var why = b.mode"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "    ensureCss();\n    ctx.host = host;\n    st.ctx = ctx;",
+     "text": "    if (root.GNBldBench) root.GNBldBench.ensureCss();\n"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-mine.js",
+   "base_sha": "a751df9ea1859ec0591fb5bdff18d9d700ae435b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-29) · BUI-6b:",
+     "text": " * Versión: 1.4.0 (2026-10-29) · BENCH-2: cada build muestra el bench de la build de la Biblioteca en que se basa o,\n *          si no hay, la «Referencia» medida más parecida (js/bld-bench.js), sin inventar su DPS · antes 1.3.0 BUI-6b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function rowHTML(b) {",
+     "text": "  // BENCH-2: bench de la build de la Biblioteca en que se basa o la «Referencia» medida más parecida (js/bld-bench.js).\n  // Usa el catálogo y el bench que ya cargó la Biblioteca (GNBldLib.preload); si no están, no muestra nada.\n  function benchLine(b) {\n    var Lb = root.GNBldLib, Bb = root.GNBldBench, s = Lb && Lb._state;\n    if (!Bb || !s || !s.cat || !s.bidx) return '';\n    try { return Bb.html(Bb.forMine(b, s.cat, s.bidx, Lb._pure.benchOf), s.bidx); } catch (_) { return ''; }\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "'</p></div></div>' +\n      '<div class=\"bld-acts\">' +",
+     "text": "'</p></div></div>' + benchLine(b) +\n      '<div class=\"bld-acts\">' +"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "    ensureCss();\n    ctx.host = host;\n    if (!ctx.store)",
+     "text": "    if (root.GNBldBench) root.GNBldBench.ensureCss();\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    }, ctx);\n    paint(ctx);\n  }",
+     "text": "    }, ctx);\n    paint(ctx);\n    // BENCH-2: el bench vive en la Biblioteca; si todavía no se cargó, lo pido y vuelvo a dibujar.\n    var Lb = root.GNBldLib;\n    if (Lb && typeof Lb.preload === 'function' && !(Lb._state && Lb._state.cat)) Lb.preload().then(function () { paint(ctx); }, function () {});\n  }"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "3a5f612ca7ad5d347b7b1513051754ad6cd0fcac",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "[['bld-lib.js', L, '1.6.0'], ['bld-mine.js', M, '1.3.0']]",
+     "text": "[['bld-lib.js', L, '1.7.0'], ['bld-mine.js', M, '1.4.0']]"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const heal = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx));\n  assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica bench de esta variante/);\n",
+     "text": "  const isHeal = (x) => x.roles.some((r) => r === 'heal' || r === 'support');\n  const heal = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx) && isHeal(x)) || CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx));\n  const saveB = globalThis.GNBldBench; delete globalThis.GNBldBench;\n  assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica bench de esta variante/, 'sin bld-bench: el porqué de siempre');\n  globalThis.GNBldBench = require('../js/bld-bench.js');\n  const dps = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx) && globalThis.GNBldBench.forLib(x, idx));\n  if (dps) assert.match(P.benchHTML(dps, idx), /class=\"bld-bench is-ref\"[\\s\\S]*No es el DPS de esta build/, 'BENCH-2: la referencia en la tarjeta');\n  if (isHeal(heal)) assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica/, 'BENCH-2: curación y tanque siguen sin número');\n  if (saveB) globalThis.GNBldBench = saveB; else delete globalThis.GNBldBench;\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  assert.doesNotMatch(P.viewHTML(), /aria-label=\"Orden\"/, 'sin bench no hay chip de orden');\n  L._state.bidx = idx;\n});\n",
+     "text": "\n// BENCH-2: Mis builds muestra el bench de la build en que se basa (o la referencia, ver tests/bld-bench.test.cjs).\ntest('BENCH-2 Mis builds: la tarjeta lleva el bench de la build de la Biblioteca en que se basa, antes de los botones', () => {\n  globalThis.GNBldBench = require('../js/bld-bench.js');\n  const idx = P.benchIndex(BENCH);\n  Object.assign(L._state, { cat: CAT, bidx: idx });\n  M._state.open = ''; M._state.confirm = '';\n  const src = CAT.builds.find((b) => P.benchOf(b, idx));\n  const item = { id: 'b9', code: src.code, title: 'x', profession: src.prof, updated: 0, source: src.source };\n  const h = M._pure.rowHTML(item);\n  assert.match(h, /la build de la Biblioteca en que se basa/);\n  assert.ok(h.indexOf('class=\"bld-bench\"') > 0 && h.indexOf('class=\"bld-bench\"') < h.indexOf('class=\"bld-acts\"'), 'va antes de los botones');\n  L._state.cat = null;\n  assert.doesNotMatch(M._pure.rowHTML(item), /bld-bench/, 'sin la Biblioteca cargada: nada, sin error');\n  L._state.cat = CAT;\n  delete globalThis.GNBldBench;\n  assert.doesNotMatch(M._pure.rowHTML(item), /bld-bench/, 'sin bld-bench: nada');\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "89b887d573d781c8848759894100cfb7f0499311",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.6.0\" },",
+     "text": "      { \"src\": \"js/bld-bench.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-lib.js\", \"v\": \"1.7.0\" },"
+    },
+    {
+     "op": "replace",
+     "anchor": "\"js/bld-mine.js\", \"v\": \"1.3.0\" }",
+     "text": "\"js/bld-mine.js\", \"v\": \"1.4.0\" }"
+    }
+   ]
+  }
+ ]
+}
