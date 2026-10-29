@@ -1,6 +1,8 @@
 /*!
  * js/bld-view.js — Builds: el panel, las pestañas y las rutas del módulo (BL-082)
- * Versión: 1.2.0 (2026-10-29) · BUI-4: el marco de Raids y Cuentas: cabecera con ícono, subtítulo, píldora del último
+ * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se
+ *          mezclan con el texto del tema; seleccionados y botón principal sobre --bg-0 · antes 1.2.0 BUI-4: el marco
+ *          de Raids y Cuentas: cabecera con ícono, subtítulo, píldora del último
  *          parche de balance y 4 indicadores; pestañas con contador; el menú ⋯ es común a todas las pestañas y se cierra
  *          con Escape o tocando afuera · antes 1.1.0 BLD-4: cada pestaña dibuja en un lugar nuevo; íconos tab.bld.* de GNKit
  *
@@ -15,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var LOG = '[GNBld]';
   var PANEL = 'buildsPanel';
   var ROUTE = '#/builds';
@@ -122,8 +124,10 @@
   // ---------------------------------------------------------------- CSS (con los tokens de los 19 themes)
   var P = '#' + PANEL;
   var CSS = [
-    P + '{--gn-mod:' + COLOR + '}',
-    P + ' .bld-hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--gn-mod) 12%,transparent),var(--bg-1) 70%);padding:16px 18px}',
+    // BUI-5: el lavanda solo no llega a 3:1 en los temas claros; mezclado con el texto del tema, sí (y en los oscuros se aclara).
+    P + '{--gn-mod:color-mix(in srgb,' + COLOR + ' 55%,var(--tx-1));--bld-ok:color-mix(in srgb,var(--color-green,#3fb950) 30%,var(--tx-1));' +
+      '--bld-err:color-mix(in srgb,var(--color-red,#F47C7C) 40%,var(--tx-1));--bld-focus:color-mix(in srgb,var(--acc-1) 65%,var(--tx-1))}',
+    P + ' .bld-hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--gn-mod) 8%,var(--bg-1)),var(--bg-1) 70%);padding:16px 18px}',
     P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',
     P + ' .bld-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gn-mod) 70%,transparent);flex-shrink:0;box-sizing:border-box}',
     P + ' .bld-ttl h2{margin:0;font-size:1.3rem;font-weight:800;color:var(--tx-1)}',
@@ -139,7 +143,7 @@
     P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:8px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:40px}',
     P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}',
     P + ' .bld-badge{font-size:.72rem;color:var(--tx-2);margin-left:6px;font-weight:600;border:1px solid var(--bd-1);border-radius:999px;padding:0 6px}',
-    P + ' .bld-btn.is-primary{background:color-mix(in srgb,var(--gn-mod) 38%,var(--bg-2));border-color:var(--gn-mod);color:var(--tx-1);font-weight:600}',
+    P + ' .bld-btn.is-primary{background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0));border-color:var(--gn-mod);color:var(--tx-1);font-weight:700}',
     P + ' .bld-menu{position:relative;margin-left:auto}' + P + ' .bld-menu>summary{list-style:none;cursor:pointer}' + P + ' .bld-menu>summary::-webkit-details-marker{display:none}',
     P + ' .bld-menu-l{position:absolute;right:0;top:calc(100% + 4px);z-index:5;display:grid;gap:4px;min-width:220px;padding:6px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35)}',
     P + ' .bld-menu-l .bld-btn{text-align:left;justify-content:flex-start}',
@@ -148,9 +152,9 @@
     P + ' .bld-btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--bd-2,var(--bd-1));border-radius:999px;background:var(--bg-2);color:var(--tx-1);padding:5px 12px;font:inherit;font-size:.85rem;cursor:pointer;text-decoration:none}',
     P + ' .bld-btn:hover{border-color:var(--gn-mod)}',
     P + ' .bld-btn[disabled]{opacity:.5;cursor:not-allowed}',
-    P + ' .bld-err{color:var(--color-red,#F47C7C)}',
-    P + ' .bld-ok{color:var(--color-green,#3fb950)}',
-    P + ' :is(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    P + ' .bld-err{color:var(--bld-err)}',
+    P + ' .bld-ok{color:var(--bld-ok)}',
+    P + ' :is(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--bld-focus);outline-offset:2px}',
     '@media (prefers-reduced-motion:reduce){' + P + ' *{transition:none!important;animation:none!important}}',
     '@media (max-width:900px){' + P + ' .bld-hero{padding:12px}' + P + ' .bld-ico{width:40px;height:40px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.05rem}' +
       P + ' .bld-pills{margin-left:0;width:100%}' + P + ' .bld-stats{grid-template-columns:1fr 1fr;gap:6px}' + P + ' .bld-st{padding:8px 10px}' + P + ' .bld-st b{font-size:1.05rem}}',

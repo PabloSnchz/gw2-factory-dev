@@ -20,8 +20,8 @@ const P = V._pure;
 const same = (a, b, m) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, m);
 
 test('versión en la cabecera y en el código', () => {
-  assert.match(SRC, /\* Versión: 1\.2\.0 /);
-  assert.equal(V.version, '1.2.0');
+  assert.match(SRC, /\* Versión: 1\.3\.0 /);
+  assert.equal(V.version, '1.3.0');
 });
 
 test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
@@ -66,7 +66,8 @@ test('escape de todo lo que se muestra', () => {
 });
 
 test('CSS: solo tokens de los themes y foco visible', () => {
-  assert.match(P.CSS, /focus-visible\{outline:2px solid var\(--acc-1\)/);
+  assert.match(P.CSS, /focus-visible\{outline:2px solid var\(--bld-focus\)/);
+  assert.match(P.CSS, /--bld-focus:color-mix\(in srgb,var\(--acc-1\) \d+%,var\(--tx-1\)\)/);
   assert.match(P.CSS, /prefers-reduced-motion/);
   assert.match(P.CSS, /min-height:44px/);
 });

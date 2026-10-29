@@ -24,8 +24,8 @@ const SKILLS = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, name: 'H' + id }));
 const REF = R.normalize({ prof: PROF, specs: SPECS, traits: TRAITS, skills: SKILLS });
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.2\.0 /);
-  assert.equal(E.version, '1.2.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.3\.0 /);
+  assert.equal(E.version, '1.3.0');
 });
 
 test('opciones de la barra: por casillero y solo las de la élite elegida', () => {

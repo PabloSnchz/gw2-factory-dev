@@ -1,6 +1,8 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.2.0 (2026-10-29) · BUI-4: preload() trae el catálogo sin dibujar (para la cabecera de Builds); el estilo del
+ * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones
+ *          sin elegir se atenúan solo en el ícono (el texto queda entero) · antes 1.2.0 BUI-4: preload() trae el
+ *          catálogo sin dibujar (para la cabecera de Builds); el estilo del
  *          menú ⋯ y del botón principal pasa al marco común (js/bld-view.js) · antes 1.1.0 (2026-10-28) · BUI-2: las 9 profesiones y sus élites como íconos oficiales, modo y rol como chips,
  *          «Más filtros» (arma, daño, vigencia, búsqueda) y tarjeta con emblema, «Copiar código» y menú ⋯ · antes 1.0.0
  *
@@ -16,7 +18,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
   var ISSUES = 'https://github.com/PabloSnchz/gw2-factory-dev/issues/new';
@@ -176,18 +178,18 @@
   var CSS = [
     '#buildsPanel .bld-filters{display:grid;gap:10px;margin-bottom:12px}',
     '#buildsPanel .bld-profs{display:flex;flex-wrap:wrap;gap:6px}',
-    '#buildsPanel .bld-pf{min-width:44px;height:44px;border-radius:10px;border:1px solid var(--bd-1);background:var(--bg-0);color:var(--tx-1);display:grid;place-items:center;padding:0 6px;cursor:pointer;opacity:.7;font:inherit;font-size:.8rem}',
+    '#buildsPanel .bld-pf{min-width:44px;height:44px;border-radius:10px;border:1px solid var(--bd-1);background:var(--bg-0);color:var(--tx-1);display:grid;place-items:center;padding:0 6px;cursor:pointer;font:inherit;font-size:.8rem}',
     '#buildsPanel .bld-pf .bld-emb{background:none;box-shadow:none;padding:0}',
-    '#buildsPanel .bld-pf:hover,#buildsPanel .bld-pf:focus-visible{opacity:1}',
-    '#buildsPanel .bld-pf[aria-pressed=true]{opacity:1;border-color:var(--gn-mod);box-shadow:0 0 0 1px var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-pf img{opacity:.7}#buildsPanel .bld-pf:hover img,#buildsPanel .bld-pf:focus-visible img,#buildsPanel .bld-pf[aria-pressed=true] img{opacity:1}',
+    '#buildsPanel .bld-pf[aria-pressed=true]{opacity:1;border-color:var(--gn-mod);box-shadow:0 0 0 1px var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0))}',
     '#buildsPanel .bld-elites{display:flex;flex-wrap:wrap;gap:6px;align-items:center}#buildsPanel .bld-elites small{color:var(--tx-2)}',
     '#buildsPanel .bld-el{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--bd-1);border-radius:999px;padding:2px 10px 2px 3px;font:inherit;font-size:.8rem;color:var(--tx-2);background:var(--bg-0);cursor:pointer;min-height:30px}',
     '#buildsPanel .bld-el[data-lib-elite="0"]{padding-left:10px}#buildsPanel .bld-el .bld-emb{background:none;box-shadow:none;padding:0}',
-    '#buildsPanel .bld-el[aria-pressed=true]{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-el[aria-pressed=true]{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0))}',
     '#buildsPanel .bld-chiprow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}#buildsPanel .bld-sep{width:1px;height:20px;background:var(--bd-1);margin:0 4px}',
     '#buildsPanel .bld-chips{display:flex;flex-wrap:wrap;gap:6px}',
     '#buildsPanel .bld-chip{font:inherit;font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 11px;color:var(--tx-2);background:var(--bg-0);cursor:pointer;min-height:30px}',
-    '#buildsPanel .bld-chip[aria-pressed=true]{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-chip[aria-pressed=true]{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0))}',
     '#buildsPanel .bld-more>summary{cursor:pointer;color:var(--tx-1);font-size:.85rem;width:max-content;padding:4px 0}',
     '#buildsPanel .bld-more-b{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;padding:8px 0 2px}',
     '#buildsPanel .bld-f small{display:block;color:var(--tx-2);font-size:.7rem;text-transform:uppercase;margin-bottom:3px}',

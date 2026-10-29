@@ -1,6 +1,8 @@
 /*!
  * js/bld-editor.js — Builds: pestaña Editor (BL-082 BLD-5: B1, B2, B3, B5, B6 y C2)
- * Versión: 1.2.0 (2026-10-28) · BUI-3: como el panel del juego: profesiones con su ícono, cada línea con el fondo
+ * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA en los 19 temas (lo elegido sobre --bg-0 al 14 %, la profesión sin
+ *          elegir se atenúa solo en el ícono) y rótulos de la barra a .7rem · antes 1.2.0 BUI-3: como el panel del
+ *          juego: profesiones con su ícono, cada línea con el fondo
  *          oficial de su especialización y los rasgos como íconos (menores incluidos), barra de 5 casilleros con
  *          ícono que abren un selector, y la barra del Retornado a la vista · antes 1.1.0 BLD-12/13 (equipo y AE2)
  *
@@ -14,7 +16,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var TIER = ['Adepto', 'Maestro', 'Gran maestro'];
   var SLOT = ['Curación', 'Utilidad 1', 'Utilidad 2', 'Utilidad 3', 'Élite'];
   var SLOT_TYPE = ['Heal', 'Utility', 'Utility', 'Utility', 'Elite'];
@@ -229,12 +231,12 @@
     '#buildsPanel .bld-ed fieldset{border:1px solid var(--bd-1);border-radius:10px;padding:8px;margin:0 0 10px;display:flex;flex-wrap:wrap;gap:6px}',
     '#buildsPanel .bld-ed fieldset.bld-ed-bar{display:grid}',
     '#buildsPanel .bld-ed legend,#buildsPanel .bld-ed-h{font-weight:700;color:var(--tx-1);font-size:.9rem;margin:6px 0}',
-    '#buildsPanel .bld-ed [aria-pressed=true].bld-btn{border-color:var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 22%,var(--bg-2))}',
+    '#buildsPanel .bld-ed [aria-pressed=true].bld-btn{border-color:var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0))}',
     '#buildsPanel .bld-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}',
-    '#buildsPanel .bld-ed-pf{display:grid;justify-items:center;gap:2px;min-width:64px;padding:6px 4px;border:1px solid var(--bd-1);border-radius:10px;background:var(--bg-0);color:var(--tx-2);font:inherit;font-size:.7rem;cursor:pointer;opacity:.75}',
+    '#buildsPanel .bld-ed-pf{display:grid;justify-items:center;gap:2px;min-width:64px;padding:6px 4px;border:1px solid var(--bd-1);border-radius:10px;background:var(--bg-0);color:var(--tx-2);font:inherit;font-size:.7rem;cursor:pointer}',
     '#buildsPanel .bld-ed-pf .bld-emb{background:none;box-shadow:none;padding:0}',
-    '#buildsPanel .bld-ed-pf:hover,#buildsPanel .bld-ed-pf:focus-visible{opacity:1}',
-    '#buildsPanel .bld-ed-pf[aria-pressed=true]{opacity:1;color:var(--tx-1);border-color:var(--gn-mod);box-shadow:0 0 0 1px var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-ed-pf img{opacity:.75}#buildsPanel .bld-ed-pf:hover img,#buildsPanel .bld-ed-pf:focus-visible img,#buildsPanel .bld-ed-pf[aria-pressed=true] img{opacity:1}',
+    '#buildsPanel .bld-ed-pf[aria-pressed=true]{opacity:1;color:var(--tx-1);border-color:var(--gn-mod);box-shadow:0 0 0 1px var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0))}',
     '#buildsPanel .bld-ed-line{position:relative;border:1px solid var(--bd-1);border-radius:12px;padding:10px;margin-bottom:10px;background:var(--bg-1) center/cover no-repeat;overflow:hidden;isolation:isolate}',
     '#buildsPanel .bld-ed-line.has-spec::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,color-mix(in srgb,var(--bg-0) 92%,transparent) 0,color-mix(in srgb,var(--bg-0) 70%,transparent) 45%,color-mix(in srgb,var(--bg-0) 35%,transparent))}',
     '#buildsPanel .bld-ed-line.is-elite{border-color:var(--gn-mod)}',
@@ -256,7 +258,7 @@
     '#buildsPanel .bld-ed-sk.is-heal img,#buildsPanel .bld-ed-sk.is-heal .bld-ed-plus{box-shadow:0 0 0 2px var(--color-green,#3fb950)}',
     '#buildsPanel .bld-ed-sk.is-elite img,#buildsPanel .bld-ed-sk.is-elite .bld-ed-plus{box-shadow:0 0 0 2px var(--color-amber,#F2B94B)}',
     '#buildsPanel button.bld-ed-sk[aria-expanded=true] img,#buildsPanel button.bld-ed-sk[aria-expanded=true] .bld-ed-plus{box-shadow:0 0 0 2px var(--gn-mod),0 0 12px color-mix(in srgb,var(--gn-mod) 60%,transparent)}',
-    '#buildsPanel .bld-ed-sk small{font-size:.65rem;text-transform:uppercase}#buildsPanel .bld-ed-bar.is-ro .bld-ed-sk{cursor:default}',
+    '#buildsPanel .bld-ed-sk small{font-size:.7rem;text-transform:uppercase}#buildsPanel .bld-ed-bar.is-ro .bld-ed-sk{cursor:default}',
     '#buildsPanel .bld-ed-pick{border:1px solid var(--gn-mod);border-radius:12px;padding:8px;margin:-2px 0 12px;background:var(--bg-1);display:grid;gap:8px}',
     '#buildsPanel .bld-ed-pick-l{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:4px;max-height:300px;overflow:auto}',
     '#buildsPanel .bld-ed-opt{display:flex;align-items:center;gap:8px;text-align:left;background:var(--bg-2);border:1px solid var(--bd-1);border-radius:8px;padding:4px 6px;color:var(--tx-1);font:inherit;font-size:.8rem;cursor:pointer}',
