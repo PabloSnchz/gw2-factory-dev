@@ -1,0 +1,1 @@
+{"id": "RUN-206", "summary": "BL-082 BUI-5: pedazos de status, backlog, roadmap, FEAT-025 y últimos DEC/LES para documentar el cierre", "tests": ["tests/bld-bui5docs.smoke.cjs"]}
