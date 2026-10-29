@@ -1,0 +1,104 @@
+{
+ "id": "PATCH-282",
+ "summary": "BL-082 BUI-4 (parte 2 de 2): marco común de Builds (bld-view 1.2.0), como Raids y Cuentas: cabecera con ícono, subtítulo, píldora del último parche de balance y 4 indicadores (builds curadas, élites cubiertas, para revisar, Mis builds); pestañas con contador; menú ⋯ común que se cierra tocando afuera o con Escape. Tests nuevos.",
+ "files": [
+  {
+   "path": "js/bld-view.js",
+   "base_sha": "70456a657c78aa18b3d6dcd3de5e55c806fa67a0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-28) · BLD-4: cada pestaña dibuja en un lugar nuevo (sin oyentes de la anterior);\n *          íconos de pestaña por GNKit (tab.bld.*) · antes 1.0.0 BLD-1: panel propio, ruta #/builds y pestañas\n",
+     "text": " * Versión: 1.2.0 (2026-10-29) · BUI-4: el marco de Raids y Cuentas: cabecera con ícono, subtítulo, píldora del último\n *          parche de balance y 4 indicadores; pestañas con contador; el menú ⋯ es común a todas las pestañas y se cierra\n *          con Escape o tocando afuera · antes 1.1.0 BLD-4: cada pestaña dibuja en un lugar nuevo; íconos tab.bld.* de GNKit\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';\n",
+     "text": "  var VERSION = '1.2.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function headHTML(sub) {\n    return '<h2 class=\"panel__title bld-title\" id=\"bldTitle\"><img src=\"' + ICON + '\" alt=\"\" width=\"40\" height=\"40\"> ' +\n      '<span>Builds</span></h2>' +\n      '<p class=\"bld-sub\" id=\"bldSub\">' + esc(sub || 'Builds curadas, tu editor y tus códigos del juego, en castellano.') + '</p>';\n  }\n  function tabsHTML(active, kit) {\n",
+     "text": "  function fmtDate(iso) { var m = /^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(iso || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : ''; }\n  // BUI-4: lo que muestra la cabecera. info = { cat, watch, mine, lib } (lib = GNBldLib._pure); sin catálogo, guiones.\n  function statsModel(info) {\n    info = info || {};\n    var out = { builds: null, cov: null, ok: null, old: null, latest: '', mine: typeof info.mine === 'number' ? info.mine : null };\n    var cat = info.cat, L = info.lib;\n    if (!cat || !Array.isArray(cat.builds) || !L) return out;\n    var latest = L.latestPatch(cat, info.watch);\n    out.builds = cat.builds.length;\n    out.latest = latest;\n    out.cov = L.coverage(cat.builds, latest, true);\n    out.ok = L.coverage(cat.builds, latest);\n    out.old = cat.builds.filter(function (b) { return L.stateOf(b, latest) === 'revisar'; }).length;\n    return out;\n  }\n  function stat(label, value, note) {\n    return '<div class=\"bld-st\"><small>' + label + '</small><b>' + value + '</b><em>' + note + '</em></div>';\n  }\n  function statsHTML(s) {\n    var none = s.builds == null, n = function (x) { return x == null ? '—' : String(x); };\n    var cov = none ? '—' : (s.cov.pve || 0) + ' <span>PvE</span> · ' + (s.cov.wvw || 0) + ' <span>WvW</span>';\n    return stat('Builds curadas', n(s.builds), none ? 'cargando la biblioteca…' : 'Snow Crows y MetaBattle, con crédito') +\n      stat('Élites cubiertas', cov, none ? 'de 36 por modo' : 'de 36 por modo' + (s.cov.pvp ? ' · PvP ' + s.cov.pvp + '/36' : '')) +\n      stat('Para revisar', n(s.old), none ? 'según el último parche' : (s.old ? 'de un parche anterior al ' + fmtDate(s.latest) : 'todas al día con el ' + fmtDate(s.latest))) +\n      stat('Mis builds', n(s.mine), 'en este navegador · viajan en tu respaldo');\n  }\n  function pillsHTML(s) {\n    return s.latest ? '<span class=\"bld-pill\" title=\"Último parche de balance que declaran las fuentes o la vigía semanal\">Último parche de balance <b>' +\n      esc(fmtDate(s.latest)) + '</b></span>' : '';\n  }\n  function heroHTML(m) {\n    var s = m.stats || statsModel(null);\n    return '<div class=\"bld-hero\"><div class=\"bld-row\"><img class=\"bld-ico\" src=\"' + ICON + '\" alt=\"\" width=\"56\" height=\"56\">' +\n      '<div class=\"bld-ttl\"><h2 id=\"bldTitle\">Builds</h2>' +\n      '<p class=\"bld-sub\" id=\"bldSub\">' + esc(m.sub || 'Builds curadas, tu editor y tus códigos del juego, en castellano.') + '</p></div>' +\n      '<div class=\"bld-pills\" id=\"bldPills\">' + pillsHTML(s) + '</div></div>' +\n      '<div class=\"bld-stats\" id=\"bldStats\">' + statsHTML(s) + '</div></div>';\n  }\n  function badge(id, s) {\n    var v = id === 'lib' ? s.builds : id === 'mine' ? s.mine : null;\n    return v == null ? '' : '<span class=\"bld-badge\">' + v + '</span>';\n  }\n  function tabsHTML(active, kit, stats) {\n    var s = stats || statsModel(null);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "        '\" aria-controls=\"bldBody\" tabindex=\"' + (on ? '0' : '-1') + '\">' + ic + esc(t.label) + '</button>');\n",
+     "text": "        '\" aria-controls=\"bldBody\" tabindex=\"' + (on ? '0' : '-1') + '\">' + ic + esc(t.label) + '<span id=\"bldBadge-' + t.id + '\">' + badge(t.id, s) + '</span></button>');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return headHTML(m.sub) + tabsHTML(m.tab, m.kit) +\n",
+     "text": "    return heroHTML(m) + tabsHTML(m.tab, m.kit, m.stats) +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    P + ' .bld-title{display:flex;align-items:center;gap:10px;font-size:1.3rem;font-weight:800;color:var(--tx-1);padding-bottom:12px;margin:0 0 6px;border-bottom:1px solid var(--bd-1);background:linear-gradient(90deg,var(--gn-mod),transparent) 0 100%/140px 2px no-repeat}',\n    P + ' .bld-title img{width:40px;height:40px;padding:4px;border-radius:10px;background:var(--gn-plate,var(--bg-2));box-shadow:0 0 0 2px color-mix(in srgb,var(--gn-mod) 70%,transparent);box-sizing:content-box}',\n    P + ' .bld-sub{margin:0 0 12px;color:var(--tx-2);font-size:.9rem}',\n    P + ' .bld-tabs{display:flex;gap:4px;flex-wrap:wrap;border-bottom:1px solid var(--bd-1);margin-bottom:12px}',\n    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;gap:6px;background:none;border:0;border-bottom:2px solid transparent;color:var(--tx-2);padding:8px 12px;font:inherit;cursor:pointer}',\n    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}',\n",
+     "text": "    P + ' .bld-hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--gn-mod) 12%,transparent),var(--bg-1) 70%);padding:16px 18px}',\n    P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',\n    P + ' .bld-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gn-mod) 70%,transparent);flex-shrink:0;box-sizing:border-box}',\n    P + ' .bld-ttl h2{margin:0;font-size:1.3rem;font-weight:800;color:var(--tx-1)}',\n    P + ' .bld-sub{margin:2px 0 0;color:var(--tx-2);font-size:.86rem}',\n    P + ' .bld-pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}',\n    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}.bld-pill b{color:var(--tx-1)}',\n    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}',\n    P + ' .bld-st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px;min-width:0}',\n    P + ' .bld-st small{display:block;font-size:.7rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}',\n    P + ' .bld-st b{font-size:1.25rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',\n    P + ' .bld-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',\n    P + ' .bld-tabs{display:flex;gap:4px;margin:16px 0 12px;border-bottom:1px solid var(--bd-1);overflow-x:auto}',\n    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:8px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:40px}',\n    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}',\n    P + ' .bld-badge{font-size:.72rem;color:var(--tx-2);margin-left:6px;font-weight:600;border:1px solid var(--bd-1);border-radius:999px;padding:0 6px}',\n    P + ' .bld-btn.is-primary{background:color-mix(in srgb,var(--gn-mod) 38%,var(--bg-2));border-color:var(--gn-mod);color:var(--tx-1);font-weight:600}',\n    P + ' .bld-menu{position:relative;margin-left:auto}' + P + ' .bld-menu>summary{list-style:none;cursor:pointer}' + P + ' .bld-menu>summary::-webkit-details-marker{display:none}',\n    P + ' .bld-menu-l{position:absolute;right:0;top:calc(100% + 4px);z-index:5;display:grid;gap:4px;min-width:220px;padding:6px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35)}',\n    P + ' .bld-menu-l .bld-btn{text-align:left;justify-content:flex-start}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '@media (max-width:720px){' + P + ' :is(button,.bld-btn,select,input,textarea){min-height:44px}' + P + ' .bld-title{font-size:1.15rem}}'\n",
+     "text": "    '@media (max-width:900px){' + P + ' .bld-hero{padding:12px}' + P + ' .bld-ico{width:40px;height:40px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.05rem}' +\n      P + ' .bld-pills{margin-left:0;width:100%}' + P + ' .bld-stats{grid-template-columns:1fr 1fr;gap:6px}' + P + ' .bld-st{padding:8px 10px}' + P + ' .bld-st b{font-size:1.05rem}}',\n    '@media (max-width:720px){' + P + ' :is(button,.bld-btn,select,input,textarea){min-height:44px}}'\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (!doc || byId('bld-view-css') || !doc.head) return;\n    var s = doc.createElement('style');\n    s.id = 'bld-view-css';\n    s.textContent = CSS;\n    doc.head.appendChild(s);\n",
+     "text": "    if (!doc || !doc.head) return;\n    var s = byId('bld-view-css');\n    if (!s) { s = doc.createElement('style'); s.id = 'bld-view-css'; doc.head.appendChild(s); }\n    if (s.textContent !== CSS) s.textContent = CSS;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function wire(p) {\n    p.addEventListener('click', function (e) {\n      var b = e.target && e.target.closest ? e.target.closest('[data-bld-tab]') : null;\n      if (b) { e.preventDefault(); go(b.getAttribute('data-bld-tab')); }\n",
+     "text": "  // BUI-4: el menú ⋯ de cualquier pestaña se cierra tocando afuera o con Escape (y el foco vuelve a su botón).\n  function closeMenus(p, except) {\n    if (!p || !p.querySelectorAll) return 0;\n    var n = 0;\n    Array.prototype.forEach.call(p.querySelectorAll('.bld-menu[open]'), function (m) { if (m !== except) { m.open = false; n++; } });\n    return n;\n  }\n  function wire(p) {\n    p.addEventListener('click', function (e) {\n      var t = e.target, m = t && t.closest ? t.closest('.bld-menu') : null;\n      closeMenus(p, m);\n      var b = t && t.closest ? t.closest('[data-bld-tab]') : null;\n      if (b) { e.preventDefault(); go(b.getAttribute('data-bld-tab')); }\n    });\n    p.addEventListener('keydown', function (e) {\n      if (e.key === 'Escape') {\n        var m = e.target && e.target.closest ? e.target.closest('.bld-menu[open]') : null;\n        if (m) { m.open = false; var s = m.querySelector('summary'); if (s && s.focus) s.focus(); }\n        else closeMenus(p, null);\n      }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function setSub(text) { var s = byId('bldSub'); if (s) s.textContent = text; }\n",
+     "text": "  function setSub(text) { var s = byId('bldSub'); if (s) s.textContent = text; refreshHead(); }\n\n  // BUI-4: datos de la cabecera. La Biblioteca trae el catálogo; si todavía no lo trajo, se lo pido (sin dibujarla).\n  function info() {\n    var L = root.GNBldLib, S = root.GNBldStore, mine = null;\n    try { if (S && typeof S.list === 'function') mine = S.list().length; } catch (_) {}\n    var ls = L && L._state;\n    if (L && ls && !ls.cat && typeof L.preload === 'function' && !st.preloading) {\n      st.preloading = true;\n      L.preload().then(function () { st.preloading = false; refreshHead(); }, function () { st.preloading = false; });\n    }\n    return { cat: ls && ls.cat, watch: ls && ls.watch, mine: mine, lib: L && L._pure };\n  }\n  function refreshHead() {\n    var s = statsModel(info()), a = byId('bldStats'), b = byId('bldPills');\n    if (a) a.innerHTML = statsHTML(s);\n    if (b) b.innerHTML = pillsHTML(s);\n    TABS.forEach(function (t) { var x = byId('bldBadge-' + t.id); if (x) x.innerHTML = badge(t.id, s); });\n    return s;\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      p.innerHTML = viewHTML({ tab: st.tab, kit: root.GNKit, sub: keep });\n",
+     "text": "      p.innerHTML = viewHTML({ tab: st.tab, kit: root.GNKit, sub: keep, stats: statsModel(info()) });\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (root.addEventListener) root.addEventListener('hashchange', function () { setTimeout(onRoute, 60); });\n    onRoute();\n",
+     "text": "    if (root.addEventListener) root.addEventListener('hashchange', function () { setTimeout(onRoute, 60); });\n    if (doc && doc.addEventListener) doc.addEventListener('gn:builds-changed', function () { refreshHead(); });\n    onRoute();\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    _pure: { parseHash: parseHash, hashFor: hashFor, shareUrl: shareUrl, viewHTML: viewHTML, tabsHTML: tabsHTML, esc: esc, TABS: TABS, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL }\n",
+     "text": "    _pure: { parseHash: parseHash, hashFor: hashFor, shareUrl: shareUrl, viewHTML: viewHTML, tabsHTML: tabsHTML, esc: esc, TABS: TABS, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL,\n      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus }\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-view.test.cjs",
+   "base_sha": "5ca872eb9fff311ecea528801dda1a917cac0227",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.1\\.0 /);\n  assert.equal(V.version, '1.1.0');\n",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);\n  assert.equal(V.version, '1.2.0');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "\ntest('sin documento no rompe y register no falla', () => {\n",
+     "text": "\ntest('BUI-4 cabecera: marco de Raids con 4 indicadores, píldora del parche y contadores en las pestañas', () => {\n  const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));\n  const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));\n  globalThis.GNBldCode = require('../js/bld-code.js');\n  const L = require('../js/bld-lib.js');\n  const s = P.statsModel({ cat: CAT, watch: WATCH, mine: 3, lib: L._pure });\n  assert.equal(s.builds, CAT.builds.length);\n  assert.equal(s.cov.pve, 36);\n  assert.equal(s.cov.wvw, 36);\n  assert.equal(s.mine, 3);\n  assert.equal(s.latest, '2026-09-29');\n  assert.ok(s.old >= 0 && s.old < s.builds);\n  const h = P.viewHTML({ tab: 'mine', stats: s });\n  assert.match(h, /class=\"bld-hero\"/);\n  assert.match(h, /<img class=\"bld-ico\" [^>]*width=\"56\"/);\n  assert.match(h, /<h2 id=\"bldTitle\">Builds<\\/h2>/);\n  assert.equal((h.match(/class=\"bld-st\"/g) || []).length, 4);\n  assert.match(h, /Último parche de balance <b>29\\/09\\/2026<\\/b>/);\n  assert.match(h, /36 <span>PvE<\\/span> · 36 <span>WvW<\\/span>/);\n  assert.match(h, /id=\"bldBadge-lib\"><span class=\"bld-badge\">104</, 'contador en Biblioteca');\n  assert.match(h, /id=\"bldBadge-mine\"><span class=\"bld-badge\">3</, 'contador en Mis builds');\n  assert.match(h, /id=\"bldBadge-editor\"><\\/span>/, 'sin contador en Editor');\n  const empty = P.viewHTML({ tab: 'lib' });\n  assert.match(empty, /cargando la biblioteca…/, 'sin catálogo: guiones, no números inventados');\n  assert.doesNotMatch(empty, /Último parche de balance/);\n  delete globalThis.GNBldCode;\n});\n\ntest('BUI-4 menú ⋯ común: tocar afuera cierra los abiertos menos el tocado', () => {\n  const a = { open: true }, b = { open: true };\n  const p = { querySelectorAll: (sel) => (sel === '.bld-menu[open]' ? [a, b].filter((m) => m.open) : []) };\n  assert.equal(P.closeMenus(p, b), 1);\n  assert.deepEqual([a.open, b.open], [false, true]);\n  assert.equal(P.closeMenus(p, null), 1);\n  assert.equal(b.open, false);\n  assert.equal(P.closeMenus(null), 0);\n  assert.match(P.CSS, /\\.bld-menu-l\\{position:absolute/, 'el estilo del menú vive en el marco');\n});\n\ntest('sin documento no rompe y register no falla', () => {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "68b05ac843a24b850264d9749e89e605645af564",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.1.0\" },\n",
+     "text": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.2.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
