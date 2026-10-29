@@ -1,5 +1,5 @@
 // BL-082 BUI-5 y BUI-6: guarda de Builds en los 19 temas, teclado, lector de pantalla, celular y rendimiento.
-// BUI-6 suma los fondos oficiales (cabecera y tarjetas): se mide el peor caso de la imagen debajo del velo.
+// BUI-6b: el marco de Cuentas (gradiente del módulo en el panel) y las tarjetas con el tinte de las 9 profesiones.
 // El contraste se calcula con los porcentajes que de verdad usa el CSS de bld-view/bld-lib/bld-editor y con los
 // tokens reales de css/themes/: si alguien sube una mezcla o agrega un tema que no llega a WCAG AA, falla acá.
 'use strict';
@@ -54,12 +54,9 @@ const CFG = {
   ok: pct(VIEW, /--bld-ok:color-mix\(in srgb,var\(--color-green,#3fb950\) (\d+)%,var\(--tx-1\)\)/, '--bld-ok'),
   err: pct(VIEW, /--bld-err:color-mix\(in srgb,var\(--color-red,#F47C7C\) (\d+)%,var\(--tx-1\)\)/, '--bld-err'),
   focus: pct(VIEW, /--bld-focus:color-mix\(in srgb,var\(--acc-1\) (\d+)%,var\(--tx-1\)\)/, '--bld-focus'),
-  hero: pct(VIEW, /radial-gradient\(120% 100% at 0 0,color-mix\(in srgb,var\(--gn-mod\) (\d+)%,transparent\)/, 'tinte del módulo en la cabecera'),
-  heroImg: op(VIEW, /\.bld-hero::before\{[^}]*opacity:\.(\d+)\}/, 'opacidad del fondo de la cabecera'),
-  heroVeil: pct(VIEW, /\.bld-hero::after\{[^}]*linear-gradient\(90deg,color-mix\(in srgb,var\(--bg-1\) (\d+)%,transparent\)/, 'velo de la cabecera donde va el texto'),
-  cardImg: op(VIEW, /\.bld-band::before\{[^}]*opacity:\.(\d+);/, 'opacidad del fondo de la tarjeta'),
-  cardTop: pct(VIEW, /\.bld-band::after\{[^}]*linear-gradient\(180deg,color-mix\(in srgb,var\(--bg-1\) (\d+)%,transparent\) 0/, 'velo arriba de la tarjeta'),
-  cardBot: pct(VIEW, /\.bld-band::after\{[^}]*,color-mix\(in srgb,var\(--bg-1\) (\d+)%,transparent\)\)\}/, 'velo del resto de la tarjeta'),
+  hero: pct(VIEW, /background:linear-gradient\(180deg,color-mix\(in srgb,' \+ COLOR \+ ' (\d+)%,transparent\),transparent 300px\)/, 'gradiente del módulo en el panel'),
+  tint: pct(VIEW, /\.bld-card\.bld-band\{[^}]*color-mix\(in srgb,var\(--bld-prof,var\(--gn-mod\)\) (\d+)%,var\(--bg-1\)\) 56px/, 'tinte de la profesión detrás del texto'),
+  prof: (/var PROF_COLOR = \{([^}]*)\}/.exec(VIEW) || ['', ''])[1].match(/#[0-9A-Fa-f]{6}/g) || [],
   prim: pct(VIEW, /\.bld-btn\.is-primary\{background:color-mix\(in srgb,var\(--gn-mod\) (\d+)%,var\(--bg-0\)\)/, 'botón principal'),
   // El mayor porcentaje de acento detrás de texto elegido, en las 3 pestañas que lo usan.
   sel: Math.max.apply(null, [VIEW, LIB, ED].map((s) => Math.max.apply(null, [0].concat((s.match(/color-mix\(in srgb,var\(--gn-mod\) \d+%,var\(--bg-0\)\)/g) || [])
@@ -73,12 +70,11 @@ function fails(t) {
   const bg2 = over(c('--bg-2'), bg1);
   const tx1 = over(c('--tx-1'), bg1), tx2 = over(c('--tx-2'), bg1);
   const mod = mix(parse(CFG.color), tx1, CFG.mod);
-  // BUI-6: debajo del velo hay una imagen. Arriba de la tarjeta y en la cabecera, un gris medio; en el resto de la
-  // tarjeta, el peor caso: blanco puro en un tema oscuro, negro puro en uno claro.
-  const dark = lum(bg1) < 0.3, ext = dark ? [255, 255, 255, 1] : [0, 0, 0, 1], grey = [128, 128, 128, 1];
+  // BUI-6b: la cabecera va sobre el gradiente del módulo (color crudo sobre la bandeja); el texto de las tarjetas, sobre el
+  // tinte de cada una de las 9 profesiones. El arte de la élite va en la franja de arriba, sin texto encima.
   const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim),
-    'cabecera': mix(grey, mix(mod, bg1, CFG.hero), (1 - CFG.heroVeil) * CFG.heroImg),
-    'tarjeta arriba': mix(grey, bg1, (1 - CFG.cardTop) * CFG.cardImg), 'tarjeta (peor caso)': mix(ext, bg1, (1 - CFG.cardBot) * CFG.cardImg) };
+    'cabecera': mix(parse(CFG.color), bg0, CFG.hero) };
+  CFG.prof.forEach((p) => { surf['tarjeta ' + p] = mix(parse(p), bg1, CFG.tint); });
   const out = [];
   const chk = (n, a, b, min) => { const r = ratio(a, b); if (r < min) out.push(n + ' ' + r.toFixed(2)); };
   [['--tx-1', tx1], ['--tx-2', tx2]].forEach(([n, x]) => Object.keys(surf).forEach((s) => chk(n + ' / ' + s, x, surf[s], 4.5)));
@@ -109,10 +105,11 @@ test('sin el arreglo de BUI-5 la guarda sí detecta el problema (no mide en el v
   assert.ok(f.some((x) => /--color-green/.test(x)), 'el verde puro sobre Notion no se lee');
   assert.ok(f.some((x) => /^acento/.test(x)), 'el lavanda puro sobre Notion no llega a 3:1');
   const od = THEMES.find((x) => x.id === 'one-dark');
-  Object.assign(CFG, { cardTop: 0.4 });
+  Object.assign(CFG, { tint: 0.18 });
   const g = fails(od.t);
   Object.assign(CFG, save);
-  assert.ok(g.some((x) => /tarjeta arriba/.test(x)), 'un velo flojo sobre el fondo de la élite no se lee en One Dark');
+  assert.ok(g.some((x) => /tarjeta #FFD166/.test(x)), 'un tinte fuerte del Guerrero no se lee en One Dark');
+  assert.equal(CFG.prof.length, 9, 'los colores de las 9 profesiones');
 });
 
 test('colores: nada fijo en el CSS de Builds salvo el acento del módulo y los respaldos de var()', () => {
@@ -176,28 +173,27 @@ test('rendimiento: la biblioteca filtra y dibuja las 104 builds muy por debajo d
   assert.equal((html.match(/<img\b/g) || []).filter((x) => x).length, (html.match(/<img\b[^>]*loading="lazy"/g) || []).length, 'los emblemas cargan a medida que se ven');
 });
 
-test('BUI-6 un solo marco y fondos oficiales: solo de render.guildwars2.com, el de la cabecera cambia por día', () => {
+test('BUI-6b el marco de Cuentas: gradiente del panel, cabecera sin fondo, pestañas debajo de la línea; tarjetas con franja de la élite', () => {
   const sb = { console: { info() {}, warn() {} } };
   sb.window = sb;
   require('node:vm').runInNewContext(VIEW, sb, { filename: 'js/bld-view.js' });
   const P = sb.GNBld._pure;
   const ok = 'https://render.guildwars2.com/file/ABC/123.png';
-  const idn = { elites: { 74: { background: ok }, 81: { background: 'https://evil.example/x.png' }, 40: { background: ok.replace('123', '456') } } };
+  const idn = { elites: { 74: { background: ok }, 81: { background: 'https://evil.example/x.png' } } };
   assert.equal(P.bgOf(74, idn), ok);
   assert.equal(P.bgOf(81, idn), '', 'otro dominio: nada');
-  assert.equal(P.bandStyle(74, idn), ' style="--bld-bg:url(' + ok + ')"');
-  assert.equal(P.bandStyle(999, idn), '');
-  assert.equal(P.bandStyle(74, { elites: { 74: { background: ok + '") ;x:url("' } } }), '', 'nada de comillas ni CSS colado');
-  assert.notEqual(P.heroElite(idn, 0), '81');
-  assert.equal(P.heroElite(idn, 0), P.heroElite(idn, 864e5 - 1), 'el mismo día, la misma élite');
-  assert.notEqual(P.heroElite(idn, 0), P.heroElite(idn, 864e5), 'al día siguiente, otra');
-  assert.equal(P.heroElite({ elites: {} }, 0), '');
-  const h = P.viewHTML({ tab: 'lib', ident: idn, now: 0 });
-  assert.match(h, /<div class="bld-hero" id="bldHero" style="--bld-spec:url\(https:\/\/render\.guildwars2\.com\//);
-  assert.match(P.viewHTML({ tab: 'lib', ident: null }), /<div class="bld-hero" id="bldHero"><div/, 'sin datos del juego: sin imagen');
-  assert.match(VIEW, /'\{padding:0!important;overflow:hidden\}'/, 'el panel no tiene relleno propio: un solo marco');
-  assert.doesNotMatch(VIEW, /\.bld-hero\{[^}]*border:/, 'la cabecera no tiene borde propio (no hay caja adentro de la caja)');
-  assert.match(LIB, /bld-lib-card bld-band/);
-  assert.match(SRC['bld-mine.js'], /bld-mine-row bld-band/);
-  assert.match(VIEW, /\.bld-band::before\{content:"";position:absolute;inset:0;/, 'el fondo de la élite cubre toda la tarjeta, de borde a borde');
+  assert.equal(P.bandStyle(74, idn, 2), ' style="--bld-bg:url(' + ok + ');--bld-prof:#FFD166"');
+  assert.equal(P.bandStyle(81, idn, 1), ' style="--bld-prof:#72C1D9"', 'sin arte: igual lleva el color de su profesión');
+  assert.equal(P.bandStyle(999, idn, 0), '');
+  assert.equal(P.bandStyle(74, { elites: { 74: { background: ok + '") ;x:url("' } } }, 0), '', 'nada de comillas ni CSS colado');
+  const h = P.viewHTML({ tab: 'lib' });
+  assert.match(h, /<div class="bld-hero" id="bldHero"><div class="bld-row">/, 'la cabecera no lleva imagen ni estilo propio');
+  assert.ok(h.indexOf('class="bld-hero"') < h.indexOf('class="bld-tabs"'), 'las pestañas van después de la cabecera');
+  assert.match(VIEW, /' \.bld-hero\{border-bottom:1px solid var\(--bd-1\);padding:20px 24px 18px\}'/, 'como Cuentas: la cabecera la cierra una línea');
+  assert.doesNotMatch(VIEW, /\.bld-hero::(before|after)/, 'sin capas propias en la cabecera');
+  assert.match(VIEW, /' \.bld-tabs\{display:flex;gap:4px;margin:16px 24px 10px;border-bottom:1px solid var\(--bd-1\)/, 'pestañas 16 px debajo de la línea, con la suya');
+  assert.match(VIEW, /transparent 300px\),var\(--gn-tray,var\(--bg-1\)\)!important\}/, 'el gradiente es del panel y se funde a los 300 px');
+  assert.match(VIEW, /\.bld-card\.bld-band::before\{content:"";position:absolute;left:0;right:0;top:0;height:56px;/, 'la franja va de lado a lado');
+  assert.match(LIB, /V\.bandStyle\(b\.elite, null, b\.prof\)/);
+  assert.match(SRC['bld-mine.js'], /V\.bandStyle\(eliteOf\(b\), null, b\.profession\)/);
 });
