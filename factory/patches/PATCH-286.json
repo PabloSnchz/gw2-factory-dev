@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-286",
+ "summary": "BL-082 BUI-5: memoria oficial al día (status y backlog con BUI-1 a BUI-5 y la validación final que espera Pablo).",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "1c6d593f7c187982555c9115523392a74e9bf4f4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). ",
+     "text": "Tarea actual: BL-082 Builds, BUI-1 a BUI-5 HECHOS 2026-10-29 (PATCH-276 a 286, FEAT-025, DEC-040); espera la validación final de Pablo. Antes: BL-075 CERRADA 2026-10-27 03:35Z (FEAT-020). "
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-28 21:36Z\n",
+     "text": "Última actualización: 2026-10-29 18:15Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: con el «sí» de Pablo a la dirección visual de Builds (BUI-0, U1), arrancar BUI-1 (íconos oficiales de profesión y élite en bld-ref y bld-show) y seguir hasta BUI-5.\n",
+     "text": "Próxima acción: Builds (BL-082) completo en DEV con BUI-1 a BUI-5 (FEAT-025, DEC-040): espera la validación final de Pablo en #/builds (Firefox = DEV). Con su OK, BL-082 a DONE. No toco producción.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-082] Decisión: interfaz de Builds con íconos oficiales de GW2 y el marco del resto de la Bóveda, en https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-builds-ui-bl082.html; decidir U1 (recomiendo: sí, BUI-1 a BUI-5 de corrido y validación al final).\n- [BL-082] Validación: el error «Unexpected token <» de la Biblioteca y el Editor ya está arreglado en DEV (PATCH-274, bld-ref 1.1.0). Recargá #/builds y probá «Ver» en una build y una profesión en el Editor; si vuelve a fallar, el mensaje ahora dice qué pedido falló.\n",
+     "text": "- [BL-082] Validación: Builds completo (BUI-1 a BUI-5, FEAT-025) en #/builds (Firefox = DEV): íconos oficiales de profesiones y élites en la Biblioteca y el Editor, cabecera con 4 indicadores y pestañas con tus íconos, Mis builds con la tarjeta nueva, menú ⋯ que se cierra tocando afuera, y un tema claro (Notion o macOS) y uno oscuro: todo se tiene que leer. Con tu OK cierro BL-082.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "51ecf1c22146f729819064749b427dab022fd75b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": ". Espera U1. · DEC-018, DEC-035, DEC-024 — 2026-10-28\n",
+     "text": ". U1 aprobado (Pablo, «comenzá con BUI 1», 2026-10-29 01:28Z). BUI-1 HECHO (PATCH-276: íconos oficiales de profesión y élite, bld-ref 1.2.0, bld-show 1.1.0). BUI-2 HECHO (PATCH-277/278: Biblioteca con profesiones y élites como íconos, chips de modo y rol, «Más filtros», tarjeta con «Copiar código» y menú ⋯; bld-lib 1.1.0). BUI-3 HECHO (PATCH-279/280: Editor como el panel del juego, fondos de especialización, rasgos como íconos, barra con selector; bld-editor 1.2.0). BUI-4 HECHO 2026-10-29 (PATCH-281/282: marco común con cabecera, píldora del último parche, 4 indicadores y contadores en las pestañas; Mis builds con la tarjeta de la Biblioteca; menú ⋯ que se cierra afuera o con Escape; PATCH-283: íconos de las pestañas elegidos por Pablo, gn-kit 1.4.0). BUI-5 HECHO 2026-10-29 18:10Z (PATCH-284, bld-view, bld-lib y bld-editor 1.3.0): RUN-203/204 midieron el contraste en los 19 temas y fallaban 11 (acento lavanda en Notion y macOS, verde y rojo en los temas claros, botón principal en 9 oscuros, foco en Discord, texto con opacidad en One Dark y Everforest); arreglado mezclando con el texto del tema (DEC-040); guarda nueva tests/bld-ui.test.cjs (19 temas AA, teclado, lector, celular y rendimiento: filtrar y dibujar las 104 builds ~2 ms), RUN-205 verde; 20 sondas borradas (quedan las de curación, LES-041). Espera la validación final de Pablo. · DEC-018, DEC-035, DEC-024, DEC-040 — 2026-10-29\n"
+    }
+   ]
+  }
+ ]
+}
