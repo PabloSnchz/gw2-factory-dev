@@ -1,0 +1,1 @@
+{"id": "RUN-205", "summary": "BL-082 BUI-5: guarda bld-ui (19 temas, teclado, lector, celular, rendimiento) y los tests de Builds tras PATCH-284", "tests": ["tests/bld-ui.test.cjs", "tests/bld-view.test.cjs", "tests/bld-lib.test.cjs", "tests/bld-editor.test.cjs", "tests/boot.test.cjs", "tests/size-budget.test.cjs"]}
