@@ -1,0 +1,1 @@
+{"id": "RUN-204", "summary": "BL-082 BUI-5: tokens de color de los 19 temas para corregir el contraste de Builds", "tests": ["tests/bld-bui5.smoke.cjs"]}
