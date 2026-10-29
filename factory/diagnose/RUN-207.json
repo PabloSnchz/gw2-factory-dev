@@ -1,0 +1,1 @@
+{"id": "RUN-207", "summary": "BL-082 BUI-5: líneas completas de status, backlog y FEAT-025 para documentar el cierre", "tests": ["tests/bld-bui5docs.smoke.cjs"]}

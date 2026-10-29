@@ -1,33 +1,14 @@
-// BUI-5 sonda de documentos (borrar después): los pedazos de la memoria oficial que voy a tocar.
+// BUI-5 sonda de documentos 2 (borrar después): líneas completas a reemplazar.
 'use strict';
 const { test } = require('node:test');
 const fs = require('node:fs');
 const path = require('node:path');
-const crypto = require('node:crypto');
-const ROOT = path.join(__dirname, '..');
-const M = path.join(ROOT, 'ai-memory');
-const sha = (b) => crypto.createHash('sha1').update('blob ' + b.length + '\0').update(b).digest('hex');
-test('BUI-5 docs', () => {
-  ['status.md', 'backlog.md', 'roadmap.md'].forEach((f) => {
-    const b = fs.readFileSync(path.join(M, f));
-    const s = b.toString('utf8');
-    console.log('==== ' + f + ' sha=' + sha(b) + ' bytes=' + b.length);
-    console.log(s.slice(0, f === 'status.md' ? 2600 : 600));
-    console.log('---- líneas con BL-082 / FEAT-025 / BUI- (número: primeros 260 caracteres)');
-    s.split('\n').forEach((l, i) => { if (/BL-082|FEAT-025|BUI-/.test(l)) console.log((i + 1) + ': ' + l.slice(0, 260)); });
-  });
-  ['features', 'decisions', 'lessons'].forEach((d) => {
-    const all = fs.readdirSync(path.join(M, d)).sort();
-    console.log('==== ' + d + ' (' + all.length + ') últimos: ' + all.slice(-6).join(', '));
-    all.filter((f) => /FEAT-025|BL-082|builds/i.test(f)).forEach((f) => {
-      const b = fs.readFileSync(path.join(M, d, f));
-      console.log('---- ' + d + '/' + f + ' sha=' + sha(b) + ' bytes=' + b.length);
-      console.log(b.toString('utf8'));
-    });
-  });
-  ['features', 'decisions', 'lessons'].forEach((d) => {
-    const all = fs.readdirSync(path.join(M, d)).sort();
-    const last = all.filter((f) => f.endsWith('.md')).slice(-1)[0];
-    if (last) console.log('==== ejemplo ' + d + '/' + last + '\n' + fs.readFileSync(path.join(M, d, last), 'utf8').slice(0, 1500));
-  });
+const M = path.join(__dirname, '..', 'ai-memory');
+test('BUI-5 docs 2', () => {
+  const st = fs.readFileSync(path.join(M, 'status.md'), 'utf8').split('\n');
+  [4, 5, 6, 7, 8, 9, 10, 11, 12].forEach((n) => console.log('S' + n + ': ' + (n === 4 ? st[n - 1].slice(0, 120) + ' …[' + st[n - 1].length + ' chars]' : st[n - 1])));
+  for (let n = 180; n <= 195; n++) console.log('S' + n + ': ' + st[n - 1]);
+  const bl = fs.readFileSync(path.join(M, 'backlog.md'), 'utf8').split('\n');
+  for (let n = 18; n <= 26; n++) console.log('B' + n + ': ' + bl[n - 1]);
+  console.log('FEAT ' + fs.readFileSync(path.join(M, 'features', 'FEAT-025-modulo-builds.md'), 'utf8'));
 });
