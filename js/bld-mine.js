@@ -1,6 +1,7 @@
 /*!
  * js/bld-mine.js — Builds: pestaña Mis builds (BL-082 BLD-6, B7)
- * Versión: 1.2.0 (2026-10-29) · BUI-6: como la Biblioteca, la tarjeta lleva el fondo de su élite de borde a borde y el
+ * Versión: 1.3.0 (2026-10-29) · BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
+ *          filo y tinte del color de la profesión) · antes 1.2.0 BUI-6: como la Biblioteca, la tarjeta lleva el fondo de su élite de borde a borde y el
  *          emblema a 56 px · antes 1.1.0 BUI-4: la misma tarjeta que la Biblioteca: emblema de la élite, «Copiar código»,
  *          «Ver ficha» y el menú ⋯ (editar, duplicar, borrar con confirmación) · antes 1.0.0 BLD-6
  *
@@ -10,7 +11,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var st = { open: '', confirm: '', view: {}, checks: {} };
 
   function esc(s) { return root.GNBldShow ? root.GNBldShow.esc(s) : String(s == null ? '' : s); }
@@ -27,7 +28,7 @@
   }
   function rowHTML(b) {
     var C = root.GNBldCode, on = st.open === b.id, ask = st.confirm === b.id;
-    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(eliteOf(b)) : '';
+    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(eliteOf(b), null, b.profession) : '';
     var h = '<li class="bld-card bld-mine-row bld-band' + (on ? ' is-open' : '') + '" data-id="' + esc(b.id) + '"' + band + '>' +
       '<div class="bld-mine-h">' + emblem(b, 56) + '<div class="bld-mine-t"><b>' + esc(b.title) + '</b><p class="bld-muted">' + esc(C ? C.PROF_ES[b.profession] || '' : '') + ' · editada ' + fmt(b.updated) +
       (b.source && b.source.url ? ' · basada en <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name || 'la fuente') + ' ↗</a>' : '') + '</p></div></div>' +
