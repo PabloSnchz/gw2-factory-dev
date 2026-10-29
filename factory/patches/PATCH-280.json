@@ -1,0 +1,59 @@
+{
+ "id": "PATCH-280",
+ "summary": "BL-082 BUI-3 (parte 2 de 2, barra con selector, versión y tests): Editor con cara del panel del juego (bld-editor 1.2.0). Profesiones con su ícono oficial, cada línea con el fondo oficial de su especialización y los rasgos como íconos (menores incluidos, nombre para el lector y resumen de lo elegido), barra de 5 casilleros con ícono que abren un selector (Escape cierra y vuelve al casillero) y la barra del Retornado a la vista. Tests nuevos.",
+ "files": [
+  {
+   "path": "js/bld-editor.js",
+   "base_sha": "6ba004283a1ad913cbaa201abd93855baf9ecf52",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-28) · BLD-12/13: panel «Equipo y código AE2» (js/bld-gear.js) debajo de la ficha · antes 1.0.0 BLD-5\n",
+     "text": " * Versión: 1.2.0 (2026-10-28) · BUI-3: como el panel del juego: profesiones con su ícono, cada línea con el fondo\n *          oficial de su especialización y los rasgos como íconos (menores incluidos), barra de 5 casilleros con\n *          ícono que abren un selector, y la barra del Retornado a la vista · antes 1.1.0 BLD-12/13 (equipo y AE2)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';\n",
+     "text": "  var VERSION = '1.2.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function barHTML(b, ref, bar) {\n    if (b.profession === 9) return '';\n    var el = eliteId(b, ref);\n    return '<div class=\"bld-ed-bar\">' + [0, 1, 2, 3, 4].map(function (i) {\n      var id = 'bldEdSk' + bar + i, cur = b.skills[bar][i];\n      return '<label for=\"' + id + '\"><small>' + SLOT[i] + '</small><select id=\"' + id + '\" data-ed=\"skill\" data-bar=\"' + bar + '\" data-slot=\"' + i + '\"><option value=\"0\">— vacío —</option>' +\n        options(ref, i, el).map(function (o) { return '<option value=\"' + o.pid + '\"' + (o.pid === cur ? ' selected' : '') + '>' + esc(o.name) + '</option>'; }).join('') + '</select></label>';\n",
+     "text": "  // Barra: 5 casilleros con el ícono de la habilidad; tocar uno abre el selector debajo (st.pick).\n  function skillOf(ref, pid) { return pid ? root.GNBldRef.skillOf(ref, pid) : null; }\n  function barHTML(b, ref, bar) {\n    if (b.profession === 9) return legendBarHTML(b, ref, bar);\n    var el = eliteId(b, ref), pick = st.pick && st.pick.bar === bar ? st.pick.slot : -1;\n    var h = '<div class=\"bld-ed-bar\" role=\"group\" aria-label=\"' + BAR[bar] + '\">' + [0, 1, 2, 3, 4].map(function (i) {\n      var s = skillOf(ref, b.skills[bar][i]), open = pick === i;\n      return '<button type=\"button\" class=\"bld-ed-sk' + (i === 0 ? ' is-heal' : i === 4 ? ' is-elite' : '') + (s ? '' : ' is-empty') + '\" id=\"bldEdSk' + bar + i + '\" data-ed=\"slot\" data-bar=\"' + bar + '\" data-slot=\"' + i + '\"' +\n        ' aria-haspopup=\"true\" aria-expanded=\"' + open + '\" aria-label=\"' + SLOT[i] + ': ' + esc(s ? s.name : 'vacío') + '\" title=\"' + esc(s ? s.name + (s.description ? ': ' + plain(s.description) : '') : SLOT[i] + ': vacío') + '\">' +\n        (s ? img(s.icon, 44) : '<span class=\"bld-ed-plus\" aria-hidden=\"true\">+</span>') + '<small>' + SLOT[i] + '</small></button>';\n    }).join('') + '</div>';\n    if (pick >= 0) h += pickHTML(b, ref, bar, pick, el);\n    return h;\n  }\n  function pickHTML(b, ref, bar, slot, el) {\n    var cur = b.skills[bar][slot], opts = options(ref, slot, el);\n    return '<div class=\"bld-ed-pick\" role=\"group\" aria-label=\"Elegí ' + SLOT[slot].toLowerCase() + '\" data-ed-pick>' +\n      '<div class=\"bld-ed-pick-h\"><b>' + SLOT[slot] + '</b> <small class=\"bld-muted\">' + opts.length + ' opciones · Escape para cerrar</small></div><div class=\"bld-ed-pick-l\">' +\n      opts.map(function (o, k) {\n        var s = ref.skills[o.id] || {};\n        return '<button type=\"button\" class=\"bld-ed-opt\" id=\"bldEdOpt' + k + '\" data-ed=\"pick\" data-v=\"' + o.pid + '\" aria-pressed=\"' + (o.pid === cur) + '\" title=\"' + esc(plain(s.description)) + '\">' +\n          img(o.icon, 32) + '<span>' + esc(o.name) + '</span></button>';\n      }).join('') + '</div>' +\n      '<div class=\"bld-ed-pick-a\"><button type=\"button\" class=\"bld-btn\" data-ed=\"pick\" data-v=\"0\">Dejar vacío</button><button type=\"button\" class=\"bld-btn\" data-ed=\"pick-close\">Cerrar</button></div></div>';\n  }\n  // Retornado: la barra la ponen las leyendas; se muestra para ver qué quedó, sin elegir.\n  function legendBarHTML(b, ref, bar) {\n    if (!b.skills[bar].some(Boolean)) return '';\n    return '<div class=\"bld-ed-bar is-ro\" role=\"group\" aria-label=\"' + BAR[bar] + ' (la ponen las leyendas)\">' + [0, 1, 2, 3, 4].map(function (i) {\n      var s = skillOf(ref, b.skills[bar][i]);\n      return '<span class=\"bld-ed-sk' + (i === 0 ? ' is-heal' : i === 4 ? ' is-elite' : '') + '\" title=\"' + esc(s ? s.name : '') + '\">' + (s ? img(s.icon, 44) : '') + '<small>' + SLOT[i] + '</small></span>';\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-editor.test.cjs",
+   "base_sha": "f7d3caa8bafff1ebf85fb2587d275d078ef6e5c0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\\.1\\.0 /);\n  assert.equal(E.version, '1.1.0');\n",
+     "text": "  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\\.2\\.0 /);\n  assert.equal(E.version, '1.2.0');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /<label for=\"bldEdSkland0\"><small>Curación<\\/small>/);\n",
+     "text": "  assert.match(h, /id=\"bldEdSkland0\" data-ed=\"slot\" data-bar=\"land\" data-slot=\"0\" aria-haspopup=\"true\" aria-expanded=\"false\" aria-label=\"Curación: H2\"/);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  delete globalThis.GNBldGear; delete globalThis.GNBldAe2;\n});\n",
+     "text": "  delete globalThis.GNBldGear; delete globalThis.GNBldAe2;\n});\n\n// BUI-3: elementos de mentira para simular clics sin navegador.\nfunction btn(attrs) {\n  const me = { tagName: 'BUTTON', id: attrs.id || '', getAttribute: (k) => (k in attrs ? attrs[k] : null), closest: (s) => (s === '[data-ed]' ? me : null) };\n  return me;\n}\n\ntest('BUI-3 líneas: fondo oficial (solo render.guildwars2.com), rasgos como íconos con su nombre para el lector, menores y resumen', () => {\n  const RG = 'https://render.guildwars2.com/file/AB12/1012.png';\n  assert.equal(P.bgStyle(RG), ' style=\"background-image:url(\\'' + RG + '\\')\"');\n  for (const bad of ['javascript:x', 'https://evil.com/a.png', RG + \"');x:url('y\", '']) assert.equal(P.bgStyle(bad), '', 'no entra: ' + bad);\n  const specs = SPECS.map((s) => Object.assign({}, s, { background: s.id === 27 ? RG : 'http://x/y.png', minor_traits: [s.id * 1000, s.id * 1000 + 1, s.id * 1000 + 2] }));\n  const traits = TRAITS.concat(specs.flatMap((s) => s.minor_traits.map((id, i) => ({ id, name: 'M' + id, tier: i + 1, slot: 'Minor', specialization: s.id, icon: 'https://render.guildwars2.com/file/m.png' }))));\n  const ref = R.normalize({ prof: PROF, specs, traits, skills: SKILLS });\n  const st = E._state;\n  st.build = P.fresh(1); st.ref = ref; st.loading = false; st.error = ''; st.pick = null;\n  P.setSpec(st.build, ref, 0, 16); P.setSpec(st.build, ref, 2, 27); P.setTrait(st.build, 2, 0, 2);\n  const h = P.viewHTML();\n  assert.match(h, /class=\"bld-ed-line has-spec is-elite\" style=\"background-image:url\\('https:\\/\\/render\\.guildwars2\\.com\\/file\\/AB12\\/1012\\.png'\\)\"/);\n  assert.doesNotMatch(h, /http:\\/\\/x\\/y\\.png/, 'un fondo que no es oficial no se usa');\n  const tr = h.match(/<button type=\"button\" class=\"bld-ed-tr\" id=\"bldEdTr201\"[^>]*>/)[0];\n  assert.match(tr, /aria-pressed=\"true\"/);\n  assert.match(tr, /aria-label=\"R2701\"/, 'el lector dice el nombre del rasgo');\n  assert.equal((h.match(/class=\"bld-ed-mn\"/g) || []).length, 6, '3 menores por línea elegida');\n  assert.match(h, /<p class=\"bld-ed-picked\">R2701 · <span class=\"bld-muted\">Maestro: sin elegir/);\n  assert.match(h, /<span>Línea 2<\\/span>|data-line=\"1\"/);\n});\n\ntest('BUI-3 barra: casilleros con ícono que abren un selector; elegir, vaciar, cerrar y volver al casillero', () => {\n  const st = E._state;\n  st.build = P.fresh(1); st.ref = REF; st.loading = false; st.error = ''; st.pick = null;\n  P.setSpec(st.build, REF, 2, 27);\n  const ctx = { host: { innerHTML: '', contains: () => false, querySelector: () => null } };\n  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '0', id: 'bldEdSkland0' }) });\n  assert.deepEqual(st.pick, { bar: 'land', slot: 0 });\n  let h = ctx.host.innerHTML;\n  assert.match(h, /aria-expanded=\"true\" aria-label=\"Curación: vacío\"/);\n  assert.match(h, /role=\"group\" aria-label=\"Elegí curación\" data-ed-pick/);\n  assert.deepEqual([...h.matchAll(/data-ed=\"pick\" data-v=\"(\\d+)\" aria-pressed/g)].map((m) => +m[1]), [11, 12], 'solo las de esa élite');\n  P.onClick(ctx, { target: btn({ 'data-ed': 'pick', 'data-v': '12' }) });\n  assert.equal(st.build.skills.land[0], 12);\n  assert.equal(st.pick, null, 'elegir cierra el selector');\n  assert.match(ctx.host.innerHTML, /aria-label=\"Curación: H2\"/);\n  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'water', 'data-slot': '4' }) });\n  assert.match(ctx.host.innerHTML, /<details class=\"bld-ed-water\" open>/, 'el selector de agua abre su sección');\n  P.onClick(ctx, { target: btn({ 'data-ed': 'pick', 'data-v': '17' }) });\n  assert.equal(st.build.skills.water[4], 17);\n  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '0' }) });\n  P.onClick(ctx, { target: btn({ 'data-ed': 'pick', 'data-v': '0' }) });\n  assert.equal(st.build.skills.land[0], 0, '«Dejar vacío»');\n  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '1' }) });\n  P.onClick(ctx, { target: btn({ 'data-ed': 'pick-close' }) });\n  assert.equal(st.pick, null);\n  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '1' }) });\n  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '1' }) });\n  assert.equal(st.pick, null, 'tocar el mismo casillero cierra');\n});\n\ntest('BUI-3 profesiones con su ícono oficial; Retornado: la barra de la leyenda a la vista, sin selector', () => {\n  const RG = 'https://render.guildwars2.com/file/';\n  const id = { profs: {}, elites: {} };\n  for (let p = 1; p <= 9; p++) id.profs[p] = { name: 'P' + p, icon: RG + 'p' + p + '.png', iconBig: RG + 'P' + p + '.png', elites: [] };\n  const prev = R.identitySync;\n  R.identitySync = () => id;\n  const st = E._state;\n  st.build = P.fresh(1); st.ref = REF; st.pick = null;\n  let h = P.viewHTML();\n  assert.match(h, /class=\"bld-ed-pf\" data-ed=\"prof\" data-v=\"1\" aria-pressed=\"true\" title=\"P1\"><span class=\"bld-emb\"><img class=\"\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/p1\\.png\" width=\"30\"/);\n  R.identitySync = prev;\n  const ref9 = Object.assign({}, REF, { profession: 9, legends: [{ code: 1, heal: 1, elite: 7, utilities: [3, 4, 5], name: 'L1' }] });\n  st.build = P.fresh(9); st.ref = ref9;\n  st.build.legends.land = [1, 0];\n  P.legendBar(st.build, ref9);\n  h = P.viewHTML();\n  assert.match(h, /class=\"bld-ed-bar is-ro\" role=\"group\" aria-label=\"Barra \\(la ponen las leyendas\\)\"/);\n  assert.doesNotMatch(h, /data-ed=\"slot\"/, 'sin casilleros para elegir');\n  assert.doesNotMatch(h, /bld-ed-water/, 'sin barra de agua vacía');\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "c3e446de10897a48f1aee97e9d209cbe5e540ce3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-editor.js\", \"v\": \"1.1.0\" },\n",
+     "text": "      { \"src\": \"js/bld-editor.js\", \"v\": \"1.2.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
