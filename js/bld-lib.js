@@ -1,6 +1,7 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.6.0 (2026-10-29) · BENCH-1: cada build de PvE con bench publicado muestra su DPS en el golem de Snow Crows
+ * Versión: 1.7.0 (2026-10-29) · BENCH-2: sin bench exacto, la build de PvE que hace daño muestra la «Referencia» medida más
+ *          parecida (js/bld-bench.js), diciendo en qué se parece y que no es su DPS · antes 1.6.0 BENCH-1: cada build de PvE con bench publicado muestra su DPS en el golem de Snow Crows
  *          (máximo, promedio, % de la mejor y barra), «Más DPS primero» y, si no hay bench, por qué · antes 1.5.0 BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
  *          filo y tinte del color de la profesión) · antes 1.4.0 BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)
  *          y el emblema a 56 px · antes 1.3.0 BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones
@@ -23,7 +24,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.6.0';
+  var VERSION = '1.7.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
   var BENCH = 'assets/data/builds/bench.json';
@@ -102,6 +103,9 @@
   function benchHTML(b, idx) {
     var m = benchOf(b, idx);
     if (!m) {
+      // BENCH-2: sin medición propia, la medida más parecida (solo PvE y si hace daño); si no hay, por qué.
+      var B = root.GNBldBench, r = B && typeof B.forLib === 'function' ? B.forLib(b, idx) : null;
+      if (r) return B.html(r, idx);
       var why = b.mode !== 'pve' ? 'en ' + (MODES[b.mode] || b.mode) + ' no hay golem que mida el daño' : 'Snow Crows no publica bench de esta variante (solo mide DPS; no curación ni tanque)';
       return '<p class="bld-bench is-none bld-muted">Sin bench de daño: ' + esc(why) + '.</p>';
     }
@@ -354,6 +358,7 @@
 
   function render(host, ctx) {
     if (root.GNBldShow) root.GNBldShow.ensureCss();
+    if (root.GNBldBench) root.GNBldBench.ensureCss();
     ensureCss();
     ctx.host = host;
     st.ctx = ctx;

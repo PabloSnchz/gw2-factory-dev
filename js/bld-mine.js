@@ -1,6 +1,7 @@
 /*!
  * js/bld-mine.js — Builds: pestaña Mis builds (BL-082 BLD-6, B7)
- * Versión: 1.3.0 (2026-10-29) · BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
+ * Versión: 1.4.0 (2026-10-29) · BENCH-2: cada build muestra el bench de la build de la Biblioteca en que se basa o,
+ *          si no hay, la «Referencia» medida más parecida (js/bld-bench.js), sin inventar su DPS · antes 1.3.0 BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
  *          filo y tinte del color de la profesión) · antes 1.2.0 BUI-6: como la Biblioteca, la tarjeta lleva el fondo de su élite de borde a borde y el
  *          emblema a 56 px · antes 1.1.0 BUI-4: la misma tarjeta que la Biblioteca: emblema de la élite, «Copiar código»,
  *          «Ver ficha» y el menú ⋯ (editar, duplicar, borrar con confirmación) · antes 1.0.0 BLD-6
@@ -11,7 +12,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var st = { open: '', confirm: '', view: {}, checks: {} };
 
   function esc(s) { return root.GNBldShow ? root.GNBldShow.esc(s) : String(s == null ? '' : s); }
@@ -26,12 +27,19 @@
     var S = root.GNBldShow;
     return S && typeof S.emblem === 'function' ? S.emblem(b.profession, eliteOf(b), size, { label: true, cls: 'bld-mine-emb' }) : '';
   }
+  // BENCH-2: bench de la build de la Biblioteca en que se basa o la «Referencia» medida más parecida (js/bld-bench.js).
+  // Usa el catálogo y el bench que ya cargó la Biblioteca (GNBldLib.preload); si no están, no muestra nada.
+  function benchLine(b) {
+    var Lb = root.GNBldLib, Bb = root.GNBldBench, s = Lb && Lb._state;
+    if (!Bb || !s || !s.cat || !s.bidx) return '';
+    try { return Bb.html(Bb.forMine(b, s.cat, s.bidx, Lb._pure.benchOf), s.bidx); } catch (_) { return ''; }
+  }
   function rowHTML(b) {
     var C = root.GNBldCode, on = st.open === b.id, ask = st.confirm === b.id;
     var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(eliteOf(b), null, b.profession) : '';
     var h = '<li class="bld-card bld-mine-row bld-band' + (on ? ' is-open' : '') + '" data-id="' + esc(b.id) + '"' + band + '>' +
       '<div class="bld-mine-h">' + emblem(b, 56) + '<div class="bld-mine-t"><b>' + esc(b.title) + '</b><p class="bld-muted">' + esc(C ? C.PROF_ES[b.profession] || '' : '') + ' · editada ' + fmt(b.updated) +
-      (b.source && b.source.url ? ' · basada en <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name || 'la fuente') + ' ↗</a>' : '') + '</p></div></div>' +
+      (b.source && b.source.url ? ' · basada en <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name || 'la fuente') + ' ↗</a>' : '') + '</p></div></div>' + benchLine(b) +
       '<div class="bld-acts">' +
       '<button type="button" class="bld-btn is-primary" data-mine="copy">Copiar código</button>' +
       '<button type="button" class="bld-btn" data-mine="toggle" aria-expanded="' + on + '">' + (on ? 'Cerrar ficha' : 'Ver ficha') + '</button>' +
@@ -129,6 +137,7 @@
 
   function render(host, ctx) {
     if (root.GNBldShow) root.GNBldShow.ensureCss();
+    if (root.GNBldBench) root.GNBldBench.ensureCss();
     ensureCss();
     ctx.host = host;
     if (!ctx.store) { host.innerHTML = '<div class="bld-card bld-err">Mis builds no cargó: recargá la página.</div>'; return; }
@@ -138,6 +147,9 @@
       return item ? { code: item.code, title: item.title } : null;
     }, ctx);
     paint(ctx);
+    // BENCH-2: el bench vive en la Biblioteca; si todavía no se cargó, lo pido y vuelvo a dibujar.
+    var Lb = root.GNBldLib;
+    if (Lb && typeof Lb.preload === 'function' && !(Lb._state && Lb._state.cat)) Lb.preload().then(function () { paint(ctx); }, function () {});
   }
 
   var api = { version: VERSION, render: render, _pure: { viewHTML: viewHTML, rowHTML: rowHTML, eliteOf: eliteOf }, _state: st };

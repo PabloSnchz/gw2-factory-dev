@@ -20,7 +20,7 @@ const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-lib.js', L, '1.6.0'], ['bld-mine.js', M, '1.3.0']]) {
+  for (const [f, m, v] of [['bld-lib.js', L, '1.7.0'], ['bld-mine.js', M, '1.4.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -300,8 +300,15 @@ test('BENCH-1 tarjeta: DPS máximo y promedio, % de la mejor, barra y registro; 
   if (boon) assert.match(P.benchHTML(boon, idx), /además da bendiciones/);
   const w = CAT.builds.find((x) => x.mode === 'wvw');
   assert.match(P.benchHTML(w, idx), /Sin bench de daño: en WvW no hay golem/);
-  const heal = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx));
-  assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica bench de esta variante/);
+  const isHeal = (x) => x.roles.some((r) => r === 'heal' || r === 'support');
+  const heal = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx) && isHeal(x)) || CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx));
+  const saveB = globalThis.GNBldBench; delete globalThis.GNBldBench;
+  assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica bench de esta variante/, 'sin bld-bench: el porqué de siempre');
+  globalThis.GNBldBench = require('../js/bld-bench.js');
+  const dps = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx) && globalThis.GNBldBench.forLib(x, idx));
+  if (dps) assert.match(P.benchHTML(dps, idx), /class="bld-bench is-ref"[\s\S]*No es el DPS de esta build/, 'BENCH-2: la referencia en la tarjeta');
+  if (isHeal(heal)) assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica/, 'BENCH-2: curación y tanque siguen sin número');
+  if (saveB) globalThis.GNBldBench = saveB; else delete globalThis.GNBldBench;
   L._state.bidx = idx; L._state.open = '';
   assert.match(P.cardHTML(b, '2026-01-01'), /class="bld-bench"/, 'la tarjeta lo muestra');
 });
@@ -328,4 +335,22 @@ test('BENCH-1 «Más DPS primero»: de mayor a menor, las sin bench al final y e
   L._state.bidx = P.benchIndex(null);
   assert.doesNotMatch(P.viewHTML(), /aria-label="Orden"/, 'sin bench no hay chip de orden');
   L._state.bidx = idx;
+});
+
+// BENCH-2: Mis builds muestra el bench de la build en que se basa (o la referencia, ver tests/bld-bench.test.cjs).
+test('BENCH-2 Mis builds: la tarjeta lleva el bench de la build de la Biblioteca en que se basa, antes de los botones', () => {
+  globalThis.GNBldBench = require('../js/bld-bench.js');
+  const idx = P.benchIndex(BENCH);
+  Object.assign(L._state, { cat: CAT, bidx: idx });
+  M._state.open = ''; M._state.confirm = '';
+  const src = CAT.builds.find((b) => P.benchOf(b, idx));
+  const item = { id: 'b9', code: src.code, title: 'x', profession: src.prof, updated: 0, source: src.source };
+  const h = M._pure.rowHTML(item);
+  assert.match(h, /la build de la Biblioteca en que se basa/);
+  assert.ok(h.indexOf('class="bld-bench"') > 0 && h.indexOf('class="bld-bench"') < h.indexOf('class="bld-acts"'), 'va antes de los botones');
+  L._state.cat = null;
+  assert.doesNotMatch(M._pure.rowHTML(item), /bld-bench/, 'sin la Biblioteca cargada: nada, sin error');
+  L._state.cat = CAT;
+  delete globalThis.GNBldBench;
+  assert.doesNotMatch(M._pure.rowHTML(item), /bld-bench/, 'sin bld-bench: nada');
 });
