@@ -1,0 +1,70 @@
+{
+ "id": "PATCH-289",
+ "summary": "BL-082 BUI-6b (parte 1 de 2): las tarjetas de la Biblioteca y Mis builds pasan su profesión al marco (bld-lib 1.5.0, bld-mine 1.3.0); la franja, el filo y el color llegan con la parte 2.",
+ "files": [
+  {
+   "path": "js/bld-lib.js",
+   "base_sha": "a84b8f38d00ecd710cf2546defe07c74301a4023",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-29) · BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)\n",
+     "text": " * Versión: 1.5.0 (2026-10-29) · BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,\n *          filo y tinte del color de la profesión) · antes 1.4.0 BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.4.0';\n",
+     "text": "  var VERSION = '1.5.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite) : '';\n",
+     "text": "    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite, null, b.prof) : '';\n"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-mine.js",
+   "base_sha": "30df04c025801601dbbee4ef978c3b68a6e56b74",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-29) · BUI-6: como la Biblioteca, la tarjeta lleva el fondo de su élite de borde a borde y el\n",
+     "text": " * Versión: 1.3.0 (2026-10-29) · BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,\n *          filo y tinte del color de la profesión) · antes 1.2.0 BUI-6: como la Biblioteca, la tarjeta lleva el fondo de su élite de borde a borde y el\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.2.0';\n",
+     "text": "  var VERSION = '1.3.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(eliteOf(b)) : '';\n",
+     "text": "    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(eliteOf(b), null, b.profession) : '';\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "c3bdb044b3131df19c9c81c1db356fff88a12e25",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  for (const [f, m, v] of [['bld-lib.js', L, '1.4.0'], ['bld-mine.js', M, '1.2.0']]) {\n",
+     "text": "  for (const [f, m, v] of [['bld-lib.js', L, '1.5.0'], ['bld-mine.js', M, '1.3.0']]) {\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "7f54e031983fc6efe4686981f4fe70beabcbfa3a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.4.0\" },\n      { \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-editor.js\", \"v\": \"1.3.0\" },\n      { \"src\": \"js/bld-mine.js\", \"v\": \"1.2.0\" }\n",
+     "text": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.5.0\" },\n      { \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-editor.js\", \"v\": \"1.3.0\" },\n      { \"src\": \"js/bld-mine.js\", \"v\": \"1.3.0\" }\n"
+    }
+   ]
+  }
+ ]
+}
