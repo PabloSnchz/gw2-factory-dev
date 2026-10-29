@@ -1,0 +1,1 @@
+{"id": "RUN-211", "summary": "BL-082 BENCH-1: todos los benchmarks de Snow Crows y cuántas builds del catálogo los tienen", "tests": ["tests/bld-bench.smoke.cjs"]}
