@@ -1,0 +1,1 @@
+{"id": "RUN-208", "summary": "BL-082 BUI-6b: cómo arman cabecera, fondo y pestañas los módulos renovados (para copiar el patrón en Builds)", "tests": ["tests/bld-ref6.smoke.cjs"]}
