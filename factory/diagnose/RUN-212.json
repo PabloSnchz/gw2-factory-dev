@@ -1,0 +1,1 @@
+{"id": "RUN-212", "summary": "BL-082 BENCH-1: los 188 benchmarks de Snow Crows en forma compacta (mitad 1)", "tests": ["tests/bld-bench1.smoke.cjs"]}
