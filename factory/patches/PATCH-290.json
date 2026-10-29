@@ -1,0 +1,120 @@
+{
+ "id": "PATCH-290",
+ "summary": "BL-082 BUI-6b (parte 2 de 2): Builds con el marco exacto de Cuentas y Heredad: el gradiente del módulo es del panel (baja 300 px y se funde, ya no se corta), la cabecera sin fondo propio cerrada por una línea y las pestañas 16 px debajo de esa línea. Tarjetas con franja de lado a lado con el arte oficial de su élite (sin texto encima), filo de 3 px y tinte del color de su profesión. bld-view 1.5.0; guarda AA con las 9 profesiones.",
+ "files": [
+  {
+   "path": "js/bld-view.js",
+   "base_sha": "e701c9ef70ce34528fa1c4a75e47346ebed3b4af",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-29) · BUI-6: un solo marco: la cabecera es el techo del panel, de borde a borde, con el fondo\n *          oficial de una especialización élite (cambia cada día) bajo un velo que la funde; tarjetas con el fondo de su\n *          élite de borde a borde (bandStyle) · antes 1.3.0 BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se\n",
+     "text": " * Versión: 1.5.0 (2026-10-29) · BUI-6b: el marco exacto de Cuentas y Heredad: el gradiente del módulo es del panel (baja\n *          300 px y se funde, no se corta), la cabecera sin fondo propio cerrada por una línea y las pestañas debajo de esa\n *          línea; tarjetas con franja de lado a lado con el arte de su élite, filo y tinte del color de su profesión\n *          (bandStyle) · antes 1.4.0 BUI-6: un solo marco con imagen en la cabecera · antes 1.3.0 BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.4.0';\n",
+     "text": "  var VERSION = '1.5.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var hs = heroStyle(m.ident === undefined ? ident() : m.ident, m.now);\n    return '<div class=\"bld-hero\" id=\"bldHero\"' + (hs ? ' style=\"' + hs + '\"' : '') + '><div class=\"bld-row\"><img class=\"bld-ico\" src=\"' + ICON + '\" alt=\"\" width=\"60\" height=\"60\">' +\n",
+     "text": "    return '<div class=\"bld-hero\" id=\"bldHero\"><div class=\"bld-row\"><img class=\"bld-ico\" src=\"' + ICON + '\" alt=\"\" width=\"56\" height=\"56\">' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function bandStyle(elite, idn) { var u = bgOf(elite, idn); return u ? ' style=\"--bld-bg:url(' + u + ')\"' : ''; }\n  // La élite de la cabecera: una por día, siempre la misma ese día (sin parpadeo entre pestañas).\n  function heroElite(idn, now) {\n    var ids = Object.keys((idn && idn.elites) || {}).filter(function (k) { return bgOf(k, idn); }).sort(function (a, b) { return a - b; });\n    return ids.length ? ids[Math.floor((now == null ? Date.now() : now) / 864e5) % ids.length] : '';\n  }\n  function heroStyle(idn, now) { var e = heroElite(idn, now), u = e ? bgOf(e, idn) : ''; return u ? '--bld-spec:url(' + u + ')' : ''; }\n",
+     "text": "  // Color de cada profesión (el de la wiki oficial), por su código en el juego: 1 Guardián … 9 Retornado.\n  var PROF_COLOR = { 1: '#72C1D9', 2: '#FFD166', 3: '#D09C59', 4: '#8CDC82', 5: '#C08F95', 6: '#F68A87', 7: '#B679D5', 8: '#52A76F', 9: '#D16E5A' };\n  function bandStyle(elite, idn, prof) {\n    var u = bgOf(elite, idn), c = PROF_COLOR[prof], v = (u ? '--bld-bg:url(' + u + ');' : '') + (c ? '--bld-prof:' + c : '');\n    return v ? ' style=\"' + v.replace(/;$/, '') + '\"' : '';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    // BUI-6: un solo marco. El panel no tiene relleno: la cabecera es su techo y el contenido lleva su propio margen.\n    P + '{padding:0!important;overflow:hidden}' + P + ' .bld-body{padding:14px 18px 20px}' + P + '>#bldToast{padding:0 18px 12px}',\n    P + ' .bld-hero{position:relative;isolation:isolate;padding:22px 22px 18px;background:var(--bg-1)}',\n    P + ' .bld-hero::before{content:\"\";position:absolute;inset:0;z-index:-2;background:var(--bld-spec,none) right center/cover no-repeat;opacity:.55}',\n    // Velo: 92 % del fondo del panel donde va el texto (izquierda), la imagen se ve a la derecha y se funde abajo.\n    P + ' .bld-hero::after{content:\"\";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,color-mix(in srgb,var(--bg-1) 92%,transparent) 0,color-mix(in srgb,var(--bg-1) 92%,transparent) 45%,color-mix(in srgb,var(--bg-1) 40%,transparent)),' +\n      'linear-gradient(180deg,transparent 45%,var(--bg-1)),radial-gradient(120% 100% at 0 0,color-mix(in srgb,var(--gn-mod) 6%,transparent),transparent 60%)}',\n    P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',\n    P + ' .bld-ico{width:60px;height:60px;border-radius:14px;background:var(--bg-0);padding:6px;box-shadow:0 0 0 2px var(--gn-mod),0 0 20px color-mix(in srgb,var(--gn-mod) 40%,transparent);flex-shrink:0;box-sizing:border-box}',\n    P + ' .bld-ttl h2{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:.01em;color:var(--tx-1)}',\n    P + ' .bld-sub{margin:2px 0 0;color:var(--tx-2);font-size:.86rem}',\n    P + ' .bld-pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}',\n    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap;border-color:color-mix(in srgb,var(--gn-mod) 55%,var(--bd-1))}' + P + ' .bld-pill b{color:var(--tx-1)}',\n    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}',\n    P + ' .bld-st{border:1px solid var(--bd-1);border-top:2px solid var(--gn-mod);border-radius:12px;background:color-mix(in srgb,var(--bg-0) 92%,transparent);padding:10px 12px;min-width:0}',\n    P + ' .bld-st small{display:block;font-size:.7rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}',\n    P + ' .bld-st b{font-size:1.35rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',\n    P + ' .bld-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',\n    P + ' .bld-tabs{display:flex;gap:4px;margin:0;padding:0 14px;border-bottom:1px solid var(--bd-1);overflow-x:auto;background:var(--bg-1)}',\n    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:12px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:44px}',\n    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom:3px solid var(--gn-mod)}',\n    // BUI-6: tarjeta con el fondo de su élite de borde a borde. Velo 72 % arriba y 90 % desde los 72 px (AA en los 19 temas, ver bld-ui).\n    P + ' .bld-band{position:relative;isolation:isolate;overflow:hidden}',\n    P + ' .bld-band::before{content:\"\";position:absolute;inset:0;z-index:-2;background:var(--bld-bg,none) center 30%/cover no-repeat;opacity:.6;border-radius:inherit}',\n    P + ' .bld-band::after{content:\"\";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(180deg,color-mix(in srgb,var(--bg-1) 72%,transparent) 0,color-mix(in srgb,var(--bg-1) 90%,transparent) 72px,color-mix(in srgb,var(--bg-1) 90%,transparent))}',\n    P + ' .bld-band{transition:transform .15s,box-shadow .15s,border-color .15s}' + P + ' .bld-band:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gn-mod) 60%,var(--bd-1));box-shadow:0 10px 24px rgba(0,0,0,.28)}',\n    P + ' .bld-band.is-open:hover{transform:none}' + P + ' .bld-band .bld-emb{box-shadow:0 0 0 2px var(--bg-1),0 0 0 3px var(--gn-mod)}',\n",
+     "text": "    // BUI-6b: el marco de Cuentas y Heredad. El gradiente del módulo es del panel (300 px, se funde); la cabecera no tiene fondo.\n    P + '{padding:0 0 22px!important;overflow:hidden;background:linear-gradient(180deg,color-mix(in srgb,' + COLOR + ' 12%,transparent),transparent 300px),var(--gn-tray,var(--bg-1))!important}' +\n      P + ' .bld-body{padding:0 24px}' + P + '>#bldToast{padding:0 24px}',\n    P + ' .bld-hero{border-bottom:1px solid var(--bd-1);padding:20px 24px 18px}',\n    P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',\n    P + ' .bld-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gn-mod) 70%,transparent);flex-shrink:0;box-sizing:border-box}',\n    P + ' .bld-ttl h2{margin:0;font-size:1.3rem;font-weight:800;color:var(--tx-1)}',\n    P + ' .bld-sub{margin:2px 0 0;color:var(--tx-2);font-size:.86rem}',\n    P + ' .bld-pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}',\n    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}' + P + ' .bld-pill b{color:var(--tx-1)}',\n    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}',\n    P + ' .bld-st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px;min-width:0}',\n    P + ' .bld-st small{display:block;font-size:.7rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}',\n    P + ' .bld-st b{font-size:1.25rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',\n    P + ' .bld-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',\n    P + ' .bld-tabs{display:flex;gap:4px;margin:16px 24px 10px;border-bottom:1px solid var(--bd-1);overflow-x:auto}',\n    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:8px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:40px}' + P + ' .bld-tabs [role=tab]:hover{color:var(--tx-1)}',\n    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}',\n    // BUI-6b: tarjeta con franja de 56 px de lado a lado: el arte oficial de su élite a pleno (sin texto encima) o, si no llegó,\n    // el color de su profesión; filo de 3 px y tinte del 8 % de ese color detrás del texto (AA en los 19 temas, ver bld-ui).\n    P + ' .bld-card.bld-band{position:relative;isolation:isolate;overflow:hidden;padding-top:66px!important;box-shadow:inset 3px 0 0 var(--bld-prof,var(--gn-mod)),var(--gn-elev,none);' +\n      'background:linear-gradient(180deg,color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 8%,var(--bg-1)) 56px,var(--bg-1) 70%)}',\n    P + ' .bld-card.bld-band::before{content:\"\";position:absolute;left:0;right:0;top:0;height:56px;z-index:-1;background:var(--bld-bg,none) 0 35%/cover no-repeat,' +\n      'linear-gradient(90deg,color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 55%,var(--bg-1)),color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 20%,var(--bg-1)))}',\n    P + ' .bld-card.bld-band::after{content:\"\";position:absolute;left:0;right:0;top:0;height:56px;z-index:-1;background:linear-gradient(180deg,transparent 55%,color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 8%,var(--bg-1)));pointer-events:none}',\n    P + ' .bld-card.bld-band{transition:transform .15s,box-shadow .15s,border-color .15s}' + P + ' .bld-card.bld-band:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 60%,var(--bd-1));box-shadow:inset 3px 0 0 var(--bld-prof,var(--gn-mod)),0 10px 24px rgba(0,0,0,.28)}',\n    P + ' .bld-card.bld-band.is-open:hover{transform:none}' + P + ' .bld-card.bld-band .bld-emb{margin-top:-38px;position:relative;box-shadow:0 0 0 2px var(--bg-1),0 0 0 3px var(--bld-prof,var(--gn-mod))}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '@media (max-width:900px){' + P + ' .bld-hero{padding:14px}' + P + ' .bld-ico{width:44px;height:44px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.15rem}' + P + ' .bld-body{padding:12px}' +\n",
+     "text": "    '@media (max-width:900px){' + P + ' .bld-hero{padding:14px 12px 12px}' + P + ' .bld-tabs{margin:16px 12px 10px}' + P + ' .bld-body{padding:0 12px}' + P + ' .bld-ico{width:40px;height:40px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.05rem}' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var R = root.GNBldRef;\n    if (R && !ident() && typeof R.identity === 'function' && !st.identLoading) {\n      st.identLoading = true;\n      Promise.resolve().then(function () { return R.identity(); }).then(function () { st.identLoading = false; refreshHead(); }, function () { st.identLoading = false; });\n    }\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "    var h = byId('bldHero'), hs = heroStyle(ident());\n    if (h && hs && h.getAttribute && h.getAttribute('style') !== hs) h.setAttribute('style', hs);\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus, bgOf: bgOf, bandStyle: bandStyle, heroElite: heroElite, heroStyle: heroStyle }\n",
+     "text": "      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus, bgOf: bgOf, bandStyle: bandStyle, PROF_COLOR: PROF_COLOR }\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-view.test.cjs",
+   "base_sha": "0bcb3d4635a1a71af46fff16a33b0070a59903df",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.4\\.0 /);\n  assert.equal(V.version, '1.4.0');\n",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.5\\.0 /);\n  assert.equal(V.version, '1.5.0');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /<img class=\"bld-ico\" [^>]*width=\"60\"/);\n",
+     "text": "  assert.match(h, /<img class=\"bld-ico\" [^>]*width=\"56\"/);\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-ui.test.cjs",
+   "base_sha": "cba5acdaab6d3de469b3e1a3a77f15bbfaa8d203",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "// BUI-6 suma los fondos oficiales (cabecera y tarjetas): se mide el peor caso de la imagen debajo del velo.\n",
+     "text": "// BUI-6b: el marco de Cuentas (gradiente del módulo en el panel) y las tarjetas con el tinte de las 9 profesiones.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  hero: pct(VIEW, /radial-gradient\\(120% 100% at 0 0,color-mix\\(in srgb,var\\(--gn-mod\\) (\\d+)%,transparent\\)/, 'tinte del módulo en la cabecera'),\n  heroImg: op(VIEW, /\\.bld-hero::before\\{[^}]*opacity:\\.(\\d+)\\}/, 'opacidad del fondo de la cabecera'),\n  heroVeil: pct(VIEW, /\\.bld-hero::after\\{[^}]*linear-gradient\\(90deg,color-mix\\(in srgb,var\\(--bg-1\\) (\\d+)%,transparent\\)/, 'velo de la cabecera donde va el texto'),\n  cardImg: op(VIEW, /\\.bld-band::before\\{[^}]*opacity:\\.(\\d+);/, 'opacidad del fondo de la tarjeta'),\n  cardTop: pct(VIEW, /\\.bld-band::after\\{[^}]*linear-gradient\\(180deg,color-mix\\(in srgb,var\\(--bg-1\\) (\\d+)%,transparent\\) 0/, 'velo arriba de la tarjeta'),\n  cardBot: pct(VIEW, /\\.bld-band::after\\{[^}]*,color-mix\\(in srgb,var\\(--bg-1\\) (\\d+)%,transparent\\)\\)\\}/, 'velo del resto de la tarjeta'),\n",
+     "text": "  hero: pct(VIEW, /background:linear-gradient\\(180deg,color-mix\\(in srgb,' \\+ COLOR \\+ ' (\\d+)%,transparent\\),transparent 300px\\)/, 'gradiente del módulo en el panel'),\n  tint: pct(VIEW, /\\.bld-card\\.bld-band\\{[^}]*color-mix\\(in srgb,var\\(--bld-prof,var\\(--gn-mod\\)\\) (\\d+)%,var\\(--bg-1\\)\\) 56px/, 'tinte de la profesión detrás del texto'),\n  prof: (/var PROF_COLOR = \\{([^}]*)\\}/.exec(VIEW) || ['', ''])[1].match(/#[0-9A-Fa-f]{6}/g) || [],\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  // BUI-6: debajo del velo hay una imagen. Arriba de la tarjeta y en la cabecera, un gris medio; en el resto de la\n  // tarjeta, el peor caso: blanco puro en un tema oscuro, negro puro en uno claro.\n  const dark = lum(bg1) < 0.3, ext = dark ? [255, 255, 255, 1] : [0, 0, 0, 1], grey = [128, 128, 128, 1];\n  const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim),\n    'cabecera': mix(grey, mix(mod, bg1, CFG.hero), (1 - CFG.heroVeil) * CFG.heroImg),\n    'tarjeta arriba': mix(grey, bg1, (1 - CFG.cardTop) * CFG.cardImg), 'tarjeta (peor caso)': mix(ext, bg1, (1 - CFG.cardBot) * CFG.cardImg) };\n",
+     "text": "  // BUI-6b: la cabecera va sobre el gradiente del módulo (color crudo sobre la bandeja); el texto de las tarjetas, sobre el\n  // tinte de cada una de las 9 profesiones. El arte de la élite va en la franja de arriba, sin texto encima.\n  const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim),\n    'cabecera': mix(parse(CFG.color), bg0, CFG.hero) };\n  CFG.prof.forEach((p) => { surf['tarjeta ' + p] = mix(parse(p), bg1, CFG.tint); });\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  Object.assign(CFG, { cardTop: 0.4 });\n  const g = fails(od.t);\n  Object.assign(CFG, save);\n  assert.ok(g.some((x) => /tarjeta arriba/.test(x)), 'un velo flojo sobre el fondo de la élite no se lee en One Dark');\n",
+     "text": "  Object.assign(CFG, { tint: 0.18 });\n  const g = fails(od.t);\n  Object.assign(CFG, save);\n  assert.ok(g.some((x) => /tarjeta #FFD166/.test(x)), 'un tinte fuerte del Guerrero no se lee en One Dark');\n  assert.equal(CFG.prof.length, 9, 'los colores de las 9 profesiones');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('BUI-6 un solo marco y fondos oficiales: solo de render.guildwars2.com, el de la cabecera cambia por día', () => {\n",
+     "text": "test('BUI-6b el marco de Cuentas: gradiente del panel, cabecera sin fondo, pestañas debajo de la línea; tarjetas con franja de la élite', () => {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const idn = { elites: { 74: { background: ok }, 81: { background: 'https://evil.example/x.png' }, 40: { background: ok.replace('123', '456') } } };\n  assert.equal(P.bgOf(74, idn), ok);\n  assert.equal(P.bgOf(81, idn), '', 'otro dominio: nada');\n  assert.equal(P.bandStyle(74, idn), ' style=\"--bld-bg:url(' + ok + ')\"');\n  assert.equal(P.bandStyle(999, idn), '');\n  assert.equal(P.bandStyle(74, { elites: { 74: { background: ok + '\") ;x:url(\"' } } }), '', 'nada de comillas ni CSS colado');\n  assert.notEqual(P.heroElite(idn, 0), '81');\n  assert.equal(P.heroElite(idn, 0), P.heroElite(idn, 864e5 - 1), 'el mismo día, la misma élite');\n  assert.notEqual(P.heroElite(idn, 0), P.heroElite(idn, 864e5), 'al día siguiente, otra');\n  assert.equal(P.heroElite({ elites: {} }, 0), '');\n  const h = P.viewHTML({ tab: 'lib', ident: idn, now: 0 });\n  assert.match(h, /<div class=\"bld-hero\" id=\"bldHero\" style=\"--bld-spec:url\\(https:\\/\\/render\\.guildwars2\\.com\\//);\n  assert.match(P.viewHTML({ tab: 'lib', ident: null }), /<div class=\"bld-hero\" id=\"bldHero\"><div/, 'sin datos del juego: sin imagen');\n  assert.match(VIEW, /'\\{padding:0!important;overflow:hidden\\}'/, 'el panel no tiene relleno propio: un solo marco');\n  assert.doesNotMatch(VIEW, /\\.bld-hero\\{[^}]*border:/, 'la cabecera no tiene borde propio (no hay caja adentro de la caja)');\n  assert.match(LIB, /bld-lib-card bld-band/);\n  assert.match(SRC['bld-mine.js'], /bld-mine-row bld-band/);\n  assert.match(VIEW, /\\.bld-band::before\\{content:\"\";position:absolute;inset:0;/, 'el fondo de la élite cubre toda la tarjeta, de borde a borde');\n",
+     "text": "  const idn = { elites: { 74: { background: ok }, 81: { background: 'https://evil.example/x.png' } } };\n  assert.equal(P.bgOf(74, idn), ok);\n  assert.equal(P.bgOf(81, idn), '', 'otro dominio: nada');\n  assert.equal(P.bandStyle(74, idn, 2), ' style=\"--bld-bg:url(' + ok + ');--bld-prof:#FFD166\"');\n  assert.equal(P.bandStyle(81, idn, 1), ' style=\"--bld-prof:#72C1D9\"', 'sin arte: igual lleva el color de su profesión');\n  assert.equal(P.bandStyle(999, idn, 0), '');\n  assert.equal(P.bandStyle(74, { elites: { 74: { background: ok + '\") ;x:url(\"' } } }, 0), '', 'nada de comillas ni CSS colado');\n  const h = P.viewHTML({ tab: 'lib' });\n  assert.match(h, /<div class=\"bld-hero\" id=\"bldHero\"><div class=\"bld-row\">/, 'la cabecera no lleva imagen ni estilo propio');\n  assert.ok(h.indexOf('class=\"bld-hero\"') < h.indexOf('class=\"bld-tabs\"'), 'las pestañas van después de la cabecera');\n  assert.match(VIEW, /' \\.bld-hero\\{border-bottom:1px solid var\\(--bd-1\\);padding:20px 24px 18px\\}'/, 'como Cuentas: la cabecera la cierra una línea');\n  assert.doesNotMatch(VIEW, /\\.bld-hero::(before|after)/, 'sin capas propias en la cabecera');\n  assert.match(VIEW, /' \\.bld-tabs\\{display:flex;gap:4px;margin:16px 24px 10px;border-bottom:1px solid var\\(--bd-1\\)/, 'pestañas 16 px debajo de la línea, con la suya');\n  assert.match(VIEW, /transparent 300px\\),var\\(--gn-tray,var\\(--bg-1\\)\\)!important\\}/, 'el gradiente es del panel y se funde a los 300 px');\n  assert.match(VIEW, /\\.bld-card\\.bld-band::before\\{content:\"\";position:absolute;left:0;right:0;top:0;height:56px;/, 'la franja va de lado a lado');\n  assert.match(LIB, /V\\.bandStyle\\(b\\.elite, null, b\\.prof\\)/);\n  assert.match(SRC['bld-mine.js'], /V\\.bandStyle\\(eliteOf\\(b\\), null, b\\.profession\\)/);\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "af530353ec2a103a3e4f5501c9eb8fe3be7e42a8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.4.0\" },\n",
+     "text": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.5.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
