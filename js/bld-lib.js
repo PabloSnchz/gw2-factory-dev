@@ -21,10 +21,16 @@
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var ROLES = { dps: 'DPS', quickness: 'Celeridad', alacrity: 'Alacridad', heal: 'Curación', support: 'Apoyo', boon: 'Bendiciones', cc: 'Control' };
   var DAMAGE = { power: 'Poder', condition: 'Condición', hybrid: 'Híbrido' };
-  var st = { cat: null, watch: null, error: '', loading: false, f: { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' }, open: '', views: {}, checks: {} };
+  var st = { cat: null, watch: null, error: '', loading: false, f: { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' },
+    open: '', more: false, views: {}, checks: {}, viewErr: {} };
 
   function esc(s) { return root.GNBldShow ? root.GNBldShow.esc(s) : String(s == null ? '' : s); }
   function C() { return root.GNBldCode; }
+  function ident() { var R = root.GNBldRef; return R && typeof R.identitySync === 'function' ? R.identitySync() : null; }
+  function emblem(prof, elite, size, label) {
+    var S = root.GNBldShow;
+    return S && typeof S.emblem === 'function' ? S.emblem(prof, elite, size, { label: label }) : '';
+  }
 
   // ---------------------------------------------------------------- modelo (puro)
   function latestPatch(cat, watch) {
@@ -61,6 +67,8 @@
     return ISSUES + '?labels=' + encodeURIComponent('build-vieja') + '&title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
   }
   function fmtDate(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : (iso || '—'); }
+  // Cuántos filtros de «Más filtros» están puestos (para mostrarlo en el botón y abrirlo solo).
+  function moreCount(f) { return ['weapon', 'damage', 'state', 'q'].filter(function (k) { return f[k]; }).length; }
 
   // ---------------------------------------------------------------- vista
   function select(id, label, key, opts, cur) {
@@ -129,25 +137,50 @@
       '<p class="bld-muted" aria-live="polite">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + '</p>' +
       (list.length ? '<ul class="bld-lib">' + list.map(function (b) { return cardHTML(b, latest); }).join('') + '</ul>' : '<div class="bld-card bld-muted">Ninguna build con esos filtros. Probá sacando alguno.</div>') +
       '<p class="bld-muted"><small>Builds curadas por mí con datos de ' + (st.cat.sources || []).map(function (s) { return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.name) + '</a>'; }).join(', ') +
-      ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente. Si una fuente pide retirar algo, se retira.</small></p>';
+      ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente. Íconos: API oficial de Guild Wars 2. Si una fuente pide retirar algo, se retira.</small></p>';
   }
 
   var CSS = [
-    '#buildsPanel .bld-filters{display:flex;flex-wrap:wrap;gap:8px 12px;margin-bottom:10px;align-items:flex-end}',
-    '#buildsPanel .bld-f small,#buildsPanel .bld-pills small{display:block;color:var(--tx-2);font-size:.7rem;text-transform:uppercase}',
+    '#buildsPanel .bld-filters{display:grid;gap:10px;margin-bottom:12px}',
+    '#buildsPanel .bld-profs{display:flex;flex-wrap:wrap;gap:6px}',
+    '#buildsPanel .bld-pf{min-width:44px;height:44px;border-radius:10px;border:1px solid var(--bd-1);background:var(--bg-0);color:var(--tx-1);display:grid;place-items:center;padding:0 6px;cursor:pointer;opacity:.7;font:inherit;font-size:.8rem}',
+    '#buildsPanel .bld-pf .bld-emb{background:none;box-shadow:none;padding:0}',
+    '#buildsPanel .bld-pf:hover,#buildsPanel .bld-pf:focus-visible{opacity:1}',
+    '#buildsPanel .bld-pf[aria-pressed=true]{opacity:1;border-color:var(--gn-mod);box-shadow:0 0 0 1px var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-elites{display:flex;flex-wrap:wrap;gap:6px;align-items:center}#buildsPanel .bld-elites small{color:var(--tx-2)}',
+    '#buildsPanel .bld-el{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--bd-1);border-radius:999px;padding:2px 10px 2px 3px;font:inherit;font-size:.8rem;color:var(--tx-2);background:var(--bg-0);cursor:pointer;min-height:30px}',
+    '#buildsPanel .bld-el[data-lib-elite="0"]{padding-left:10px}#buildsPanel .bld-el .bld-emb{background:none;box-shadow:none;padding:0}',
+    '#buildsPanel .bld-el[aria-pressed=true]{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-chiprow{display:flex;flex-wrap:wrap;gap:6px;align-items:center}#buildsPanel .bld-sep{width:1px;height:20px;background:var(--bd-1);margin:0 4px}',
+    '#buildsPanel .bld-chips{display:flex;flex-wrap:wrap;gap:6px}',
+    '#buildsPanel .bld-chip{font:inherit;font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 11px;color:var(--tx-2);background:var(--bg-0);cursor:pointer;min-height:30px}',
+    '#buildsPanel .bld-chip[aria-pressed=true]{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 16%,var(--bg-0))}',
+    '#buildsPanel .bld-more>summary{cursor:pointer;color:var(--tx-1);font-size:.85rem;width:max-content;padding:4px 0}',
+    '#buildsPanel .bld-more-b{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;padding:8px 0 2px}',
+    '#buildsPanel .bld-f small{display:block;color:var(--tx-2);font-size:.7rem;text-transform:uppercase;margin-bottom:3px}',
     '#buildsPanel .bld-f select,#buildsPanel .bld-f input{background:var(--bg-0);color:var(--tx-1);border:1px solid var(--bd-1);border-radius:8px;padding:5px 8px;font:inherit}',
-    '#buildsPanel .bld-pills{display:flex;flex-wrap:wrap;gap:4px;align-items:center}#buildsPanel .bld-pills small{width:100%}',
-    '#buildsPanel [aria-pressed=true].bld-btn{border-color:var(--gn-mod);background:color-mix(in srgb,var(--gn-mod) 22%,var(--bg-2))}',
-    '#buildsPanel .bld-lib{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}',
-    '#buildsPanel .bld-lib-card{display:grid;gap:6px;align-content:start}#buildsPanel .bld-lib-card p{margin:0;font-size:.8rem}',
-    '#buildsPanel .bld-lib-card .bld-detail{grid-column:1/-1}',
+    '#buildsPanel .bld-count{margin:0 0 8px}',
+    '#buildsPanel .bld-lib{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:10px}',
+    '#buildsPanel .bld-lib-card{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 12px;align-content:start;cursor:pointer}',
+    '#buildsPanel .bld-lib-card.is-open{grid-column:1/-1;cursor:default}',
+    '#buildsPanel .bld-lib-emb{align-self:start}#buildsPanel .bld-lib-t{color:var(--tx-1)}',
+    '#buildsPanel .bld-lib-main{display:grid;gap:4px;min-width:0}#buildsPanel .bld-lib-main p{margin:0;font-size:.78rem}',
+    '#buildsPanel .bld-lib-card>.bld-acts,#buildsPanel .bld-lib-card>.bld-detail,#buildsPanel .bld-lib-card>p{grid-column:1/-1}',
+    '#buildsPanel .bld-lib-card>.bld-acts{align-items:center}',
+    '#buildsPanel .bld-btn.is-primary{background:color-mix(in srgb,var(--gn-mod) 38%,var(--bg-2));border-color:var(--gn-mod);color:var(--tx-1);font-weight:600}',
+    '#buildsPanel .bld-menu{position:relative;margin-left:auto}#buildsPanel .bld-menu>summary{list-style:none;cursor:pointer}#buildsPanel .bld-menu>summary::-webkit-details-marker{display:none}',
+    '#buildsPanel .bld-menu-l{position:absolute;right:0;top:calc(100% + 4px);z-index:5;display:grid;gap:4px;min-width:220px;padding:6px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35)}',
+    '#buildsPanel .bld-menu-l .bld-btn{text-align:left;justify-content:flex-start}',
     '#buildsPanel .bld-tags{display:flex;flex-wrap:wrap;gap:4px}#buildsPanel .bld-tag.is-ok{border-color:var(--color-green,#3fb950)}#buildsPanel .bld-tag.is-old{border-color:var(--color-amber,#F2B94B)}',
-    '#buildsPanel .bld-shv{border-left:3px solid var(--gn-mod);padding:6px 10px;background:var(--bg-1);border-radius:6px;color:var(--tx-1)}'
+    '#buildsPanel .bld-shv{border-left:3px solid var(--gn-mod);padding:6px 10px;background:var(--bg-1);border-radius:6px;color:var(--tx-1)}',
+    '@media (max-width:560px){#buildsPanel .bld-lib{grid-template-columns:1fr}#buildsPanel .bld-pf{min-width:40px;height:40px}}'
   ].join('\n');
   function ensureCss() {
     var d = root.document;
-    if (!d || !d.head || d.getElementById('bld-lib-css')) return;
-    var s = d.createElement('style'); s.id = 'bld-lib-css'; s.textContent = CSS; d.head.appendChild(s);
+    if (!d || !d.head) return;
+    var s = d.getElementById('bld-lib-css');
+    if (!s) { s = d.createElement('style'); s.id = 'bld-lib-css'; d.head.appendChild(s); }
+    if (s.textContent !== CSS) s.textContent = CSS;
   }
 
   // ---------------------------------------------------------------- datos y comportamiento
@@ -165,10 +198,26 @@
       paint(ctx);
     }, function (e) { st.loading = false; st.error = 'No pude cargar la biblioteca (' + (e && e.message || '') + ').'; paint(ctx); });
   }
+  // Los íconos llegan aparte: si fallan, la Biblioteca sigue con los nombres.
+  function loadIcons(ctx) {
+    var R = root.GNBldRef;
+    if (!R || typeof R.identity !== 'function' || ident()) return;
+    R.identity().then(function () { paint(ctx); }, function () {});
+  }
+  function focusKey(a) {
+    if (!a || !a.getAttribute) return '';
+    var ks = ['data-lib-prof', 'data-lib-elite'];
+    for (var i = 0; i < ks.length; i++) if (a.getAttribute(ks[i]) != null) return '[' + ks[i] + '="' + a.getAttribute(ks[i]) + '"]';
+    if (a.getAttribute('data-lib-p')) return '[data-lib-p="' + a.getAttribute('data-lib-p') + '"][data-v="' + a.getAttribute('data-v') + '"]';
+    var card = a.closest && a.closest('[data-id]');
+    if (card && a.getAttribute('data-lib') === 'toggle') return '[data-id="' + card.getAttribute('data-id') + '"] [data-lib="toggle"]';
+    return '';
+  }
   function paint(ctx, focus) {
     if (!ctx.host) return;
-    var a = root.document && root.document.activeElement, keep = focus || (a && a.id && ctx.host.contains && ctx.host.contains(a) ? '#' + a.id : '');
-    if (!keep && a && a.getAttribute && a.getAttribute('data-lib-p')) keep = '[data-lib-p="' + a.getAttribute('data-lib-p') + '"][data-v="' + a.getAttribute('data-v') + '"]';
+    var a = root.document && root.document.activeElement;
+    var inside = a && ctx.host.contains && ctx.host.contains(a);
+    var keep = focus || (inside ? (a.id ? '#' + a.id : focusKey(a)) : '');
     ctx.host.innerHTML = viewHTML();
     if (keep) { var el = ctx.host.querySelector(keep); if (el && el.focus) el.focus(); }
   }
@@ -181,41 +230,73 @@
       if (st.open === b.id) paint(ctx);
     }, function (e) { st.viewErr[b.id] = 'No pude traer los nombres del juego (' + (e && e.message || '') + ').'; if (st.open === b.id) paint(ctx); });
   }
-  st.viewErr = {};
+  function toggle(ctx, b) {
+    st.open = st.open === b.id ? '' : b.id;
+    if (st.open && !st.views[b.id]) { delete st.viewErr[b.id]; openView(ctx, b); }
+    paint(ctx);
+  }
+  function clearFilters() { st.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' }; st.more = false; }
+
+  // Un clic: devuelve qué hizo (para los tests). La tarjeta se abre tocándola, salvo en botones, enlaces y el menú.
+  function onClick(ctx, e) {
+    var t = e.target, near = function (sel) { return t && t.closest ? t.closest(sel) : null; };
+    var x = near('[data-lib-prof]');
+    if (x) { st.f.prof = Number(x.getAttribute('data-lib-prof')) || 0; st.f.elite = 0; paint(ctx); return 'prof'; }
+    x = near('[data-lib-elite]');
+    if (x) { st.f.elite = Number(x.getAttribute('data-lib-elite')) || 0; paint(ctx); return 'elite'; }
+    x = near('[data-lib-p]');
+    if (x) { st.f[x.getAttribute('data-lib-p')] = x.getAttribute('data-v'); paint(ctx); return 'chip'; }
+    x = near('[data-lib]');
+    if (x) {
+      var k = x.getAttribute('data-lib');
+      if (k === 'retry') { load(ctx); return 'retry'; }
+      if (k === 'clear') { clearFilters(); paint(ctx); return 'clear'; }
+      var row = x.closest('[data-id]'), b = row && byId(row.getAttribute('data-id'));
+      if (b) { toggle(ctx, b); return 'toggle'; }
+      return '';
+    }
+    if (near('button,a,summary,details,input,select,label,.bld-detail')) return '';
+    var card = near('.bld-lib-card');
+    if (card && !card.classList.contains('is-open')) { var c = byId(card.getAttribute('data-id')); if (c) { toggle(ctx, c); return 'card'; } }
+    return '';
+  }
 
   function render(host, ctx) {
     if (root.GNBldShow) root.GNBldShow.ensureCss();
     ensureCss();
     ctx.host = host;
-    host.addEventListener('change', function (e) {
-      var k = e.target && e.target.getAttribute && e.target.getAttribute('data-lib-f');
-      if (!k || k === 'q') return;
-      st.f[k] = k === 'prof' || k === 'elite' ? Number(e.target.value) || 0 : e.target.value;
-      if (k === 'prof') st.f.elite = 0;
-      paint(ctx);
-    });
-    host.addEventListener('input', function (e) {
-      if (e.target && e.target.getAttribute && e.target.getAttribute('data-lib-f') === 'q') {
-        st.f.q = e.target.value; clearTimeout(st.qT);
-        st.qT = setTimeout(function () { paint(ctx, '#bldLibQ'); var i = ctx.host.querySelector('#bldLibQ'); if (i && i.setSelectionRange) i.setSelectionRange(i.value.length, i.value.length); }, 200);
-      }
-    });
-    host.addEventListener('click', function (e) {
-      var p = e.target && e.target.closest ? e.target.closest('[data-lib-p]') : null;
-      if (p) { st.f[p.getAttribute('data-lib-p')] = p.getAttribute('data-v'); return paint(ctx); }
-      var t = e.target && e.target.closest ? e.target.closest('[data-lib]') : null;
-      if (!t) return;
-      if (t.getAttribute('data-lib') === 'retry') return load(ctx);
-      var row = t.closest('[data-id]'), b = row && byId(row.getAttribute('data-id'));
-      if (!b) return;
-      st.open = st.open === b.id ? '' : b.id;
-      if (st.open && !st.views[b.id]) openView(ctx, b);
-      paint(ctx);
-    });
-    if (root.GNBldShow) root.GNBldShow.wire(host, function (btn) {
-      var row = btn.closest('[data-id]'), b = row && byId(row.getAttribute('data-id'));
-      return b ? { code: b.code, title: b.name, source: b.source } : null;
-    }, ctx);
+    st.ctx = ctx;
+    // Si la pestaña se vuelve a dibujar sobre el mismo contenedor, no sumo otra vez los oyentes.
+    if (!host.__bldLib) {
+      host.__bldLib = true;
+      host.addEventListener('change', function (e) {
+        var k = e.target && e.target.getAttribute && e.target.getAttribute('data-lib-f');
+        if (!k || k === 'q') return;
+        st.f[k] = e.target.value;
+        paint(st.ctx);
+      });
+      host.addEventListener('input', function (e) {
+        if (e.target && e.target.getAttribute && e.target.getAttribute('data-lib-f') === 'q') {
+          st.f.q = e.target.value; clearTimeout(st.qT);
+          st.qT = setTimeout(function () { paint(st.ctx, '#bldLibQ'); var i = st.ctx.host.querySelector('#bldLibQ'); if (i && i.setSelectionRange) i.setSelectionRange(i.value.length, i.value.length); }, 200);
+        }
+      });
+      host.addEventListener('toggle', function (e) {
+        if (e.target && e.target.hasAttribute && e.target.hasAttribute('data-lib-more')) st.more = !!e.target.open;
+      }, true);
+      host.addEventListener('keydown', function (e) {
+        if (e.key !== 'Escape') return;
+        var m = e.target && e.target.closest ? e.target.closest('.bld-menu[open]') : null;
+        if (m) { m.open = false; var s = m.querySelector('summary'); if (s && s.focus) s.focus(); }
+      });
+      host.addEventListener('click', function (e) { onClick(st.ctx, e); });
+      if (root.GNBldShow) root.GNBldShow.wire(host, function (btn) {
+        var row = btn.closest('[data-id]'), b = row && byId(row.getAttribute('data-id'));
+        var m = btn.closest('.bld-menu'); if (m) m.open = false;
+        return b ? { code: b.code, title: b.name, source: b.source } : null;
+      }, ctx);
+    }
+    loadIcons(ctx);
     if (!st.cat) return load(ctx);
     paint(ctx);
   }
