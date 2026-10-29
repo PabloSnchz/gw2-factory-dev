@@ -37,8 +37,8 @@ function fakeFetch(log) {
 }
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\.1\.0 /);
-  assert.equal(R.version, '1.1.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\.2\.0 /);
+  assert.equal(R.version, '1.2.0');
 });
 
 test('normalize: paleta, líneas con los 3 rasgos de cada nivel en orden, barra y armas', () => {
@@ -135,4 +135,57 @@ test('1.1.0: si llega una página web, reintento sin caché y con marca; si sigu
   R._test.reset();
   const always = async (url) => ({ ok: true, status: 200, text: async () => (/\/v2\/build/.test(url) ? '{"id":1}' : '<!DOCTYPE html>') });
   await assert.rejects(R.load(3, { fetch: always }), /página web desde \/v2\/professions\/Engineer, también sin caché/);
+});
+
+// BUI-1: identidad oficial. Dos profesiones de mentira con la forma real de /v2/professions?ids=all y /v2/specializations.
+const R_ = 'https://render.guildwars2.com/file/';
+const IPROFS = [{ id: 'Guardian', name: 'Guardián', icon: R_ + 'g.png', icon_big: R_ + 'G.png', specializations: [16, 27, 62] },
+  { id: 'Warrior', name: 'Guerrero', icon: R_ + 'w.png', icon_big: R_ + 'W.png', specializations: [4, 74] },
+  { id: 'Commander', name: '?', specializations: [] }];
+const ISPECS = [{ id: 16, name: 'Celo', elite: false, icon: R_ + 's16.png' },
+  { id: 27, name: 'Cazadragones', elite: true, icon: R_ + 's27.png', profession_icon: R_ + 'e27.png', profession_icon_big: R_ + 'E27.png', background: R_ + 'b27.png' },
+  { id: 62, name: 'Abrasador', elite: true, icon: R_ + 's62.png', profession_icon: R_ + 'e62.png' },
+  { id: 4, name: 'Fuerza', elite: false }, { id: 74, name: 'Paragón', elite: true, profession_icon: R_ + 'e74.png', profession_icon_big: R_ + 'E74.png' }];
+
+test('BUI-1 normalizeIdentity: profesiones con su ícono grande y élites con su emblema, en el orden de la API', () => {
+  const x = R.normalizeIdentity(IPROFS, ISPECS);
+  assert.deepEqual(Object.keys(x.profs), ['1', '2'], 'lo que no es profesión se descarta');
+  assert.equal(x.profs[1].iconBig, R_ + 'G.png');
+  assert.deepEqual(x.profs[1].elites, [27, 62], 'solo élites');
+  assert.equal(x.elites[27].iconBig, R_ + 'E27.png');
+  assert.equal(x.elites[27].background, R_ + 'b27.png');
+  assert.equal(x.elites[62].iconBig, R_ + 'e62.png', 'sin ícono grande, el chico');
+  assert.equal(x.elites[74].prof, 2);
+});
+
+test('BUI-1 identity(): un pedido de profesiones y uno de especializaciones; la segunda vez, nada', async () => {
+  R._test.reset();
+  const log = [];
+  const f = async (url) => {
+    log.push(url);
+    const u = new URL(url);
+    const body = u.pathname === '/v2/build' ? { id: 209026 } : u.pathname === '/v2/professions' ? IPROFS
+      : u.pathname === '/v2/specializations' ? ISPECS.filter((s) => u.searchParams.get('ids').split(',').includes(String(s.id))) : null;
+    return { ok: !!body, status: body ? 200 : 404, text: async () => JSON.stringify(body) };
+  };
+  assert.equal(R.identitySync(), null);
+  const x = await R.identity({ fetch: f });
+  assert.equal(x.elites[74].name, 'Paragón');
+  assert.equal(x.gameBuild, 209026);
+  assert.match(log.find((u) => /\/v2\/professions\?/.test(u)), /ids=all&v=latest&lang=es/);
+  assert.equal(R.identitySync(), x, 'queda a mano para dibujar sin esperar');
+  const n = log.length;
+  await R.identity({ fetch: f });
+  assert.equal(log.length, n, 'sin pedidos nuevos');
+});
+
+test('BUI-1 la ficha lleva el emblema de su élite; lo guardado con el formato viejo se vuelve a pedir', () => {
+  const sp = SPECS.map((s) => (s.id === 27 ? Object.assign({}, s, { profession_icon: 'e.png', profession_icon_big: 'E.png' }) : s));
+  const ref = R.normalize({ prof: PROF, specs: sp, traits: TRAITS, skills: SKILLS });
+  assert.equal(ref.v, 2);
+  const b = C.empty(1);
+  b.specs = [{ id: 16, traits: [1, 1, 1] }, { id: 42, traits: [1, 1, 1] }, { id: 27, traits: [1, 1, 1] }];
+  const v = R.resolve(b, ref);
+  assert.equal(v.specs[2].profIconBig, 'E.png');
+  assert.equal(v.profIconBig, 'G.png');
 });

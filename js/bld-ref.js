@@ -1,6 +1,8 @@
 /*!
  * js/bld-ref.js — Builds: datos del juego para leer y armar builds (BL-082 BLD-3)
- * Versión: 1.1.0 (2026-10-28) · si llega una página web en vez de datos, reintento sin caché del navegador y el error
+ * Versión: 1.2.0 (2026-10-28) · BUI-1: identity() = las 9 profesiones y sus élites con nombre, ícono e ícono grande
+ *          oficiales (un pedido, guardado por versión del juego); la ficha guarda el emblema de cada élite · antes 1.1.0:
+ *          si llega una página web en vez de datos, reintento sin caché del navegador y el error
  *          dice qué pedido falló (Pablo lo vio en la Biblioteca y el Editor) · antes 1.0.0
  *
  * Trae de la API oficial (sin Key, en castellano) lo que hace falta para una profesión:
@@ -15,7 +17,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var API = 'https://api.guildwars2.com';
   var LANG = 'es';
   var KEY = 'gn:bld:ref:';
@@ -23,7 +25,9 @@
   var CHUNK = 150;
   var PROFS = ['', 'Guardian', 'Warrior', 'Engineer', 'Ranger', 'Thief', 'Elementalist', 'Mesmer', 'Necromancer', 'Revenant'];
   var SLOT_TYPE = ['Heal', 'Utility', 'Utility', 'Utility', 'Elite'];
-  var mem = {}, inflight = {}, buildInfo = { id: null, at: 0 };
+  var REF_V = 2; // 1.2.0: el ref guarda también el emblema de cada élite (lo de v1 se vuelve a pedir una vez)
+  var IDKEY = 'gn:bld:id:';
+  var mem = {}, inflight = {}, buildInfo = { id: null, at: 0 }, ident = null, identInflight = null;
 
   function profName(p) { return typeof p === 'number' ? PROFS[p] : String(p || ''); }
   function profCode(name) { var i = PROFS.indexOf(name); return i > 0 ? i : 0; }
@@ -98,6 +102,7 @@
       maj.forEach(function (id) { var t = traits[id]; var tier = t ? t.tier : 0; if (tier >= 1 && tier <= 3) tiers[tier - 1].push(id); });
       tiers.forEach(function (l) { l.sort(function (a, b) { return ((traits[a] || {}).order || 0) - ((traits[b] || {}).order || 0); }); });
       return { id: s.id, name: s.name, elite: !!s.elite, icon: s.icon, background: s.background, minor: s.minor_traits || [], major: tiers,
+        profIcon: s.profession_icon || '', profIconBig: s.profession_icon_big || '',
         weaponTrait: s.weapon_trait || 0 };
     });
     var bar = { Heal: [], Utility: [], Elite: [] };
@@ -108,7 +113,7 @@
     var legends = (raw.legends || []).map(function (l) {
       return { id: l.id, code: l.code, swap: l.swap, heal: l.heal, elite: l.elite, utilities: l.utilities || [], name: (skills[l.swap] || {}).name || l.id, icon: (skills[l.swap] || {}).icon || '' };
     });
-    return { v: 1, profession: profCode(p.id), name: p.name, icon: p.icon, iconBig: p.icon_big, palette: palette, bySkill: bySkill,
+    return { v: REF_V, profession: profCode(p.id), name: p.name, icon: p.icon, iconBig: p.icon_big, palette: palette, bySkill: bySkill,
       specs: specs, traits: traits, skills: skills, bar: bar, weapons: weapons, pets: pets, legends: legends };
   }
 
@@ -152,7 +157,7 @@
       var S = store();
       var ready = S && typeof S.ready === 'function' ? S.ready() : Promise.resolve();
       return Promise.resolve(ready).then(function () {
-        if (!opts.force && S) { var c = S.get(key); if (c && c.v === 1 && c.profession) { mem[key] = c; return c; } }
+        if (!opts.force && S) { var c = S.get(key); if (c && c.v === REF_V && c.profession) { mem[key] = c; return c; } }
         if (inflight[key]) return inflight[key];
         inflight[key] = fetchRaw(name, f).then(function (raw) {
           var ref = normalize(raw);
@@ -172,6 +177,58 @@
     S.keys().forEach(function (k) { if (k.indexOf(KEY + LANG + ':' + name + ':') === 0 && k !== keep) S.del(k); });
   }
 
+  // ---------------------------------------------------------------- identidad: profesiones y élites (BUI-1)
+  // profs = /v2/professions?ids=all, specs = sus /v2/specializations → { v, profs: { 1..9 }, elites: { id } } con los íconos
+  // oficiales: el de la profesión (icon, icon_big) y, por élite, su emblema (profession_icon, profession_icon_big).
+  function normalizeIdentity(profs, specs) {
+    var byId = {}, out = { v: 1, profs: {}, elites: {} };
+    (specs || []).forEach(function (s) { if (s && s.id) byId[s.id] = s; });
+    (profs || []).forEach(function (p) {
+      var code = profCode(p && p.id);
+      if (!code) return;
+      var elites = (p.specializations || []).map(function (id) { return byId[id]; }).filter(function (s) { return s && s.elite; });
+      elites.forEach(function (s) {
+        out.elites[s.id] = { id: s.id, name: s.name, prof: code, icon: s.profession_icon || s.icon || '',
+          iconBig: s.profession_icon_big || s.profession_icon || s.icon || '', specIcon: s.icon || '', background: s.background || '' };
+      });
+      out.profs[code] = { code: code, id: p.id, name: p.name, icon: p.icon || '', iconBig: p.icon_big || p.icon || '',
+        elites: elites.map(function (s) { return s.id; }) };
+    });
+    return out;
+  }
+  // identity(opts) → Promise<identidad>. Un pedido de profesiones y uno de especializaciones; se guarda por versión del juego.
+  function identity(opts) {
+    opts = opts || {};
+    var f = opts.fetch;
+    return gameBuild(f).then(function (bid) {
+      var key = IDKEY + LANG + ':' + (bid || 0);
+      if (!opts.force && ident && ident.key === key) return ident;
+      var S = store();
+      var ready = S && typeof S.ready === 'function' ? S.ready() : Promise.resolve();
+      return Promise.resolve(ready).then(function () {
+        if (!opts.force && S) { var c = S.get(key); if (c && c.v === 1 && c.profs && c.profs[1]) { ident = c; return c; } }
+        if (identInflight) return identInflight;
+        identInflight = getJSON(API + '/v2/professions?ids=all&v=latest&lang=' + LANG, f).then(function (profs) {
+          var ids = [];
+          (profs || []).forEach(function (p) { ids = ids.concat(p.specializations || []); });
+          return many('/v2/specializations', ids, f).then(function (specs) {
+            var x = normalizeIdentity(profs, specs);
+            x.key = key; x.gameBuild = bid || 0;
+            ident = x; identInflight = null;
+            if (S) { try { S.set(key, x); pruneIdent(S, key); } catch (_) {} }
+            return x;
+          });
+        }).then(null, function (e) { identInflight = null; throw e; });
+        return identInflight;
+      });
+    });
+  }
+  function identitySync() { return ident; }
+  function pruneIdent(S, keep) {
+    if (typeof S.keys !== 'function') return;
+    S.keys().forEach(function (k) { if (k.indexOf(IDKEY + LANG + ':') === 0 && k !== keep) S.del(k); });
+  }
+
   // ---------------------------------------------------------------- de números a nombres (puro)
   function specById(ref, id) { for (var i = 0; i < ref.specs.length; i++) if (ref.specs[i].id === id) return ref.specs[i]; return null; }
   function traitChoice(spec, tier, choice) { return spec && choice >= 1 && choice <= 3 ? (spec.major[tier] || [])[choice - 1] || 0 : 0; }
@@ -180,10 +237,11 @@
   function skillOf(ref, pid) { var id = ref.palette[pid]; return id ? (ref.skills[id] || { id: id, name: '#' + id, icon: '' }) : null; }
 
   function resolve(b, ref) {
-    var out = { profession: b.profession, profName: ref.name, profIcon: ref.icon, specs: [], land: [], water: [], pets: null, legends: null, weapons: [], overrides: [] };
+    var out = { profession: b.profession, profName: ref.name, profIcon: ref.icon, profIconBig: ref.iconBig || ref.icon, specs: [], land: [], water: [], pets: null, legends: null, weapons: [], overrides: [] };
     (b.specs || []).forEach(function (s) {
       var sp = specById(ref, s.id);
       out.specs.push({ id: s.id, name: sp ? sp.name : (s.id ? '#' + s.id : ''), icon: sp ? sp.icon : '', background: sp ? sp.background : '', elite: !!(sp && sp.elite),
+        profIcon: sp ? sp.profIcon || '' : '', profIconBig: sp ? sp.profIconBig || '' : '',
         traits: [0, 1, 2].map(function (tier) { var tid = traitChoice(sp, tier, s.traits[tier]); var t = ref.traits[tid]; return t ? { id: tid, name: t.name, icon: t.icon, description: t.description } : null; }),
         minor: sp ? sp.minor.map(function (id) { var t = ref.traits[id]; return t ? { id: id, name: t.name, icon: t.icon } : null; }).filter(Boolean) : [] });
     });
@@ -247,8 +305,9 @@
 
   var api = {
     version: VERSION, PROFS: PROFS, load: load, normalize: normalize, resolve: resolve, check: check,
+    identity: identity, identitySync: identitySync, normalizeIdentity: normalizeIdentity,
     specById: specById, traitChoice: traitChoice, choiceOf: choiceOf, skillOf: skillOf, profCode: profCode, profName: profName,
-    _test: { reset: function () { mem = {}; inflight = {}; buildInfo = { id: null, at: 0 }; } }
+    _test: { reset: function () { mem = {}; inflight = {}; buildInfo = { id: null, at: 0 }; ident = null; identInflight = null; } }
   };
   root.GNBldRef = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

@@ -1,6 +1,7 @@
 /*!
  * js/bld-show.js — Builds: cómo se ve una build (ficha) y las acciones comunes (BL-082 BLD-4)
- * Versión: 1.0.0 (2026-10-28)
+ * Versión: 1.1.0 (2026-10-28) · BUI-1: emblem() con los íconos oficiales de profesión y élite (GNBldRef.identity) y la
+ *          ficha encabezada por el emblema grande de su élite · antes 1.0.0 BLD-4
  *
  * Ficha de una build ya resuelta por js/bld-ref.js: profesión, las 3 líneas con sus rasgos, la barra de tierra
  * (y la de agua si tiene algo), mascotas o leyendas, armas y lo que dice la validación contra la API (D3).
@@ -11,7 +12,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var GW2SKILLS = 'https://en.gw2skills.net/editor/';
   var TIER = ['Adepto', 'Maestro', 'Gran maestro'];
   var SLOT = ['Curación', 'Utilidad', 'Utilidad', 'Utilidad', 'Élite'];
@@ -26,6 +27,23 @@
   function img(src, alt, size, cls) {
     if (!src || !/^https:\/\/render\.guildwars2\.com\/|^assets\//.test(src)) return '<span class="bld-ph ' + (cls || '') + '" style="width:' + size + 'px;height:' + size + 'px" aria-hidden="true"></span>';
     return '<img class="' + (cls || '') + '" src="' + esc(src) + '" width="' + size + '" height="' + size + '" alt="' + esc(alt || '') + '" loading="lazy">';
+  }
+
+  // BUI-1: emblema oficial. Con élite, el de la élite; si no, el de la profesión; sin datos, un hueco del mismo tamaño.
+  // ident = GNBldRef.identitySync() (o el que se pase). Más de 32 px usa el ícono grande. opts: { ident, label, cls }
+  function emblemOf(prof, elite, big, ident) {
+    var R = root.GNBldRef;
+    ident = ident || (R && typeof R.identitySync === 'function' ? R.identitySync() : null);
+    var e = ident && elite ? ident.elites[elite] : null, p = ident && prof ? ident.profs[prof] : null;
+    if (e) return { src: big ? e.iconBig : e.icon, name: e.name };
+    if (p) return { src: big ? p.iconBig : p.icon, name: p.name };
+    return { src: '', name: '' };
+  }
+  function emblem(prof, elite, size, opts) {
+    opts = opts || {};
+    var x = emblemOf(prof, elite, size > 32, opts.ident);
+    return '<span class="bld-emb' + (opts.cls ? ' ' + opts.cls : '') + '"' + (opts.label && x.name ? ' title="' + esc(x.name) + '"' : '') + '>' +
+      img(x.src, opts.label ? x.name : '', size, '') + '</span>';
   }
 
   function specHTML(s, i) {
@@ -79,7 +97,7 @@
     var label = { copy: 'Copiar código', share: 'Copiar enlace para compartir', gw2skills: 'Abrir en gw2skills ↗', save: 'Guardar en Mis builds', edit: 'Editar' };
     var elite = (v.specs || []).filter(function (s) { return s && s.elite; })[0];
     return '<article class="bld-card bld-detail" aria-label="' + esc(opts.title || 'Build') + '">' +
-      '<header class="bld-detail-h">' + img(v.profIcon, '', 32, 'bld-ic') + '<div><h3>' + esc(opts.title || ((elite ? elite.name : v.profName) + ' · build')) + '</h3>' +
+      '<header class="bld-detail-h"><span class="bld-emb is-big">' + img((elite && (elite.profIconBig || elite.profIcon)) || v.profIconBig || v.profIcon, '', 40, '') + '</span><div><h3>' + esc(opts.title || ((elite ? elite.name : v.profName) + ' · build')) + '</h3>' +
       '<p class="bld-muted">' + esc(v.profName) + (elite ? ' · ' + esc(elite.name) : '') + (opts.meta ? ' · ' + opts.meta : '') + '</p></div></header>' +
       '<div class="bld-specs">' + (v.specs || []).map(specHTML).join('') + '</div>' +
       barHTML(v.land, 'Barra') + barHTML(v.water, 'Bajo el agua') + extrasHTML(v) + (opts.extraHTML || '') +
@@ -140,6 +158,9 @@
 
   var CSS = [
     '#buildsPanel .bld-detail{display:grid;gap:10px}',
+    '#buildsPanel .bld-emb{display:inline-grid;place-items:center;flex:none;border-radius:10px;background:var(--bg-0);box-shadow:inset 0 0 0 1px var(--bd-1);padding:3px}',
+    '#buildsPanel .bld-emb.is-big{padding:6px;border-radius:12px;box-shadow:inset 0 0 0 1px var(--bd-1),0 0 0 2px color-mix(in srgb,var(--gn-mod) 45%,transparent)}',
+    '#buildsPanel .bld-emb img,#buildsPanel .bld-emb .bld-ph{display:block}',
     '#buildsPanel .bld-detail-h{display:flex;gap:10px;align-items:center}#buildsPanel .bld-detail-h h3{margin:0;font-size:1.05rem;color:var(--tx-1)}#buildsPanel .bld-detail-h p{margin:2px 0 0;font-size:.85rem}',
     '#buildsPanel .bld-specs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}',
     '#buildsPanel .bld-spec{border:1px solid var(--bd-1);border-radius:10px;padding:8px;background:var(--bg-2)}#buildsPanel .bld-spec.is-elite{border-color:var(--gn-mod)}',
@@ -162,6 +183,7 @@
   }
 
   root.GNBldShow = { version: VERSION, detailHTML: detailHTML, copy: copy, act: act, wire: wire, ensureCss: ensureCss, esc: esc, plain: plain, img: img,
+    emblem: emblem, emblemOf: emblemOf,
     GW2SKILLS: GW2SKILLS, _pure: { specHTML: specHTML, barHTML: barHTML, checksHTML: checksHTML, CSS: CSS } };
   if (typeof module !== 'undefined' && module.exports) module.exports = root.GNBldShow;
 })(typeof window !== 'undefined' ? window : globalThis);

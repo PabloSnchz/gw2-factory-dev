@@ -14,9 +14,9 @@ const THIEF = '[&DQUAAAAAAAAkDyQPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACLwB
 const GUARD = '[&DQEbNxAZKgoDAQMBihKKEv4S/hJ6FnoWtRIAAAAAAAAAAAAAAAAAAAAAAAA=]';
 
 test('versiones en la cabecera', () => {
-  for (const [f, m] of [['bld-show.js', S], ['bld-import.js', I], ['bld-store.js', T]]) {
-    assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), /Versión: 1\.0\.0 /, f);
-    assert.equal(m.version, '1.0.0');
+  for (const [f, m, v] of [['bld-show.js', S, '1.1.0'], ['bld-import.js', I, '1.0.0'], ['bld-store.js', T, '1.0.0']]) {
+    assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
+    assert.equal(m.version, v, f);
   }
 });
 
@@ -38,6 +38,20 @@ test('ficha: líneas, barra, armas, validación y acciones; todo escapado', () =
   assert.doesNotMatch(h, /Bajo el agua/, 'sin barra de agua si está vacía');
   for (const a of ['copy', 'share', 'gw2skills', 'save', 'edit']) assert.match(h, new RegExp('data-bld-act="' + a + '"'));
   assert.match(S.detailHTML(VIEW, { checks: [] }), /✓ Válida/);
+});
+
+test('BUI-1 emblema: élite, si no profesión, si no un hueco; grande por encima de 32 px; solo íconos oficiales', () => {
+  const RG = 'https://render.guildwars2.com/file/';
+  const ID = { profs: { 1: { name: 'Guardián', icon: RG + 'g.png', iconBig: RG + 'G.png' } },
+    elites: { 27: { name: 'Cazadragones', icon: RG + 'e.png', iconBig: RG + 'E.png' }, 99: { name: 'Mala', icon: 'javascript:x', iconBig: 'javascript:x' } } };
+  assert.match(S.emblem(1, 27, 44, { ident: ID }), /E\.png/);
+  assert.match(S.emblem(1, 27, 22, { ident: ID }), /e\.png/);
+  assert.match(S.emblem(1, 0, 44, { ident: ID, label: true }), /G\.png" width="44" height="44" alt="Guardián"/);
+  assert.match(S.emblem(1, 0, 44), /bld-ph/, 'sin identidad todavía: hueco del mismo tamaño');
+  assert.doesNotMatch(S.emblem(1, 99, 44, { ident: ID }), /javascript/);
+  const h = S.detailHTML(Object.assign({}, VIEW, { specs: [VIEW.specs[0], VIEW.specs[1], Object.assign({}, VIEW.specs[2], { profIconBig: RG + 'big.png' })] }), {});
+  assert.match(h, /class="bld-emb is-big"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/big\.png" width="40"/, 'la ficha abre con el emblema de su élite');
+  assert.match(S.detailHTML(VIEW, {}), /1\.png" width="40"/, 'sin emblema de élite, el de la profesión');
 });
 
 test('importar: acepta el código del juego y rechaza lo demás con un mensaje claro', () => {
