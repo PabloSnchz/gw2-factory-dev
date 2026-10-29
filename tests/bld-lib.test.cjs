@@ -13,13 +13,14 @@ const M = require('../js/bld-mine.js');
 const C = globalThis.GNBldCode, P = L._pure;
 const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
 const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));
+const BENCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/bench.json'), 'utf8'));
 // Las 36 élites (API oficial /v2/specializations, 2026-10-28) y su profesión.
 const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 4: [5, 55, 72, 78], 5: [7, 58, 71, 77],
   6: [48, 56, 67, 80], 7: [40, 59, 66, 73], 8: [34, 60, 64, 76], 9: [52, 63, 69, 79] };
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-lib.js', L, '1.5.0'], ['bld-mine.js', M, '1.3.0']]) {
+  for (const [f, m, v] of [['bld-lib.js', L, '1.6.0'], ['bld-mine.js', M, '1.3.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -228,17 +229,103 @@ test('BUI-4 preload: un solo pedido del catálogo y de la vigía, aunque lo pida
   const st = L._state, prev = { cat: st.cat, watch: st.watch, pre: st.pre, f: globalThis.fetch };
   st.cat = null; st.watch = null; st.pre = null;
   const urls = [];
-  globalThis.fetch = async (u) => { urls.push(u); return { ok: true, json: async () => (/catalog/.test(u) ? CAT : WATCH) }; };
+  globalThis.fetch = async (u) => { urls.push(u); return { ok: true, json: async () => (/catalog/.test(u) ? CAT : /bench/.test(u) ? BENCH : WATCH) }; };
   const [a, b] = await Promise.all([L.preload(), L.preload()]);
   assert.equal(a, b);
   assert.equal(st.cat, CAT);
-  assert.deepEqual(urls, ['assets/data/builds/catalog.json', 'assets/data/builds/watch.json']);
+  assert.deepEqual(urls, ['assets/data/builds/catalog.json', 'assets/data/builds/watch.json', 'assets/data/builds/bench.json']);
+  assert.ok(st.bidx.n > 100, 'bench indexado');
   await L.preload();
-  assert.equal(urls.length, 2, 'ya cargado: nada nuevo');
+  assert.equal(urls.length, 3, 'ya cargado: nada nuevo');
   st.cat = null; st.pre = null;
   globalThis.fetch = async () => ({ ok: false, status: 503 });
   await assert.rejects(L.preload(), /503/);
   assert.equal(st.pre, null, 'si falla se puede volver a pedir');
   Object.assign(st, { cat: prev.cat, watch: prev.watch, pre: prev.pre });
   if (prev.f) globalThis.fetch = prev.f; else delete globalThis.fetch;
+});
+
+// BENCH-1: el bench de Snow Crows en la Biblioteca.
+test('BENCH-1 bench.json: benchmarks de Snow Crows con forma fija, élite de su profesión y números sanos', () => {
+  assert.equal(BENCH.source.name, 'Snow Crows');
+  assert.match(BENCH.source.url, /^https:\/\/snowcrows\.com\//);
+  assert.match(BENCH.fetched, /^\d{4}-\d{2}-\d{2}$/);
+  assert.deepEqual(BENCH.fields, ['path', 'prof', 'elite', 'damage', 'boon', 'difficulty', 'max', 'avg', 'log']);
+  assert.ok(BENCH.rows.length >= 100, 'al menos 100 benchmarks');
+  const seen = new Set();
+  BENCH.rows.forEach((r) => {
+    const [p, prof, elite, dmg, boon, diff, max, avg, log] = r;
+    assert.match(p, /^[a-z]+\/[a-z0-9-]+$/, p); assert.ok(!seen.has(p), 'repetido ' + p); seen.add(p);
+    assert.ok(prof >= 1 && prof <= 9, p);
+    assert.ok(elite === 0 || ELITES[prof].includes(elite), p + ': élite de su profesión');
+    assert.ok(['power', 'condition', 'hybrid'].includes(dmg) && ['', 'quickness', 'alacrity', 'boon'].includes(boon), p);
+    assert.ok(diff >= 0 && diff <= 5, p);
+    assert.ok(max > 10000 && max < 80000 && avg > 10000 && Math.abs(max - avg) < 0.1 * max, p + ': DPS sano');
+    assert.match(log, /^[A-Za-z0-9_-]*$/, p);
+  });
+});
+
+test('BENCH-1 cruce: las builds de PvE de Snow Crows encuentran su bench por la dirección; WvW, PvP y MetaBattle no', () => {
+  const idx = P.benchIndex(BENCH);
+  assert.equal(idx.n, BENCH.rows.length);
+  assert.equal(idx.top, Math.max(...BENCH.rows.map((r) => r[6])));
+  assert.equal(P.benchKey('https://snowcrows.com/builds/raids/guardian/power-dragonhunter-radiance-spear-greatsword'), 'guardian/power-dragonhunter-radiance-spear-greatsword');
+  assert.equal(P.benchKey('https://snowcrows.com/en/builds/guardian/x-y'), 'guardian/x-y');
+  assert.equal(P.benchKey('https://metabattle.com/wiki/Build:x'), '');
+  const hits = CAT.builds.filter((b) => P.benchOf(b, idx));
+  assert.ok(hits.length >= 20, 'al menos 20 builds con bench (' + hits.length + ')');
+  hits.forEach((b) => {
+    const m = P.benchOf(b, idx);
+    assert.equal(b.mode, 'pve'); assert.equal(b.source.name, 'Snow Crows');
+    assert.equal(m.elite, b.elite, b.id + ': el bench es de su misma élite');
+    assert.equal(m.prof, b.prof, b.id);
+  });
+  CAT.builds.filter((b) => b.mode !== 'pve').forEach((b) => assert.equal(P.benchOf(b, idx), null, b.id));
+  assert.equal(P.benchIndex(null).n, 0); assert.equal(P.benchIndex({ fields: 'x' }).n, 0);
+  const evil = P.benchIndex({ fields: ['path', 'max', 'log'], rows: [['a/b', 40000, '"><x'], ['c/d', 0, ''], [7, 1, '']] });
+  assert.equal(evil.n, 1); assert.equal(evil.rows['a/b'].log, '', 'un registro raro no se enlaza');
+});
+
+test('BENCH-1 tarjeta: DPS máximo y promedio, % de la mejor, barra y registro; sin bench dice por qué', () => {
+  const idx = P.benchIndex(BENCH), b = CAT.builds.find((x) => P.benchOf(x, idx)), m = P.benchOf(b, idx);
+  assert.equal(P.fmtN(46309), '46.309'); assert.equal(P.fmtN(950), '950');
+  const h = P.benchHTML(b, idx), pct = Math.round(m.max / idx.top * 100);
+  assert.match(h, new RegExp('<b>' + P.fmtN(m.max).replace('.', '\\.') + ' DPS</b>'));
+  assert.match(h, new RegExp('promedio ' + P.fmtN(m.avg).replace('.', '\\.') + ' · ' + pct + ' % de la mejor'));
+  assert.match(h, new RegExp('<i style="width:' + pct + '%"></i>'));
+  assert.match(h, /aria-hidden="true"/, 'la barra es adorno: el número está en texto');
+  assert.match(h, /techo ideal/);
+  if (m.log) assert.match(h, /href="https:\/\/dps\.report\/[A-Za-z0-9_-]+" target="_blank" rel="noopener">registro ↗/);
+  const boon = CAT.builds.find((x) => P.benchOf(x, idx) && x.roles.some((r) => r !== 'dps'));
+  if (boon) assert.match(P.benchHTML(boon, idx), /además da bendiciones/);
+  const w = CAT.builds.find((x) => x.mode === 'wvw');
+  assert.match(P.benchHTML(w, idx), /Sin bench de daño: en WvW no hay golem/);
+  const heal = CAT.builds.find((x) => x.mode === 'pve' && !P.benchOf(x, idx));
+  assert.match(P.benchHTML(heal, idx), /Sin bench de daño: Snow Crows no publica bench de esta variante/);
+  L._state.bidx = idx; L._state.open = '';
+  assert.match(P.cardHTML(b, '2026-01-01'), /class="bld-bench"/, 'la tarjeta lo muestra');
+});
+
+test('BENCH-1 «Más DPS primero»: de mayor a menor, las sin bench al final y en su orden; el chip aparece si hay bench', () => {
+  const idx = P.benchIndex(BENCH);
+  const s = P.sortBuilds(CAT.builds, 'dps', idx);
+  assert.equal(s.length, CAT.builds.length);
+  const v = s.map((b) => (P.benchOf(b, idx) || { max: -1 }).max);
+  for (let i = 1; i < v.length; i++) assert.ok(v[i - 1] >= v[i], 'ordenado en ' + i);
+  const rest = s.filter((b) => !P.benchOf(b, idx)), orig = CAT.builds.filter((b) => !P.benchOf(b, idx));
+  assert.deepEqual(rest.map((b) => b.id), orig.map((b) => b.id), 'las sin bench quedan en el orden de la biblioteca');
+  assert.equal(P.sortBuilds(CAT.builds, '', idx), CAT.builds, 'sin orden pedido no toca la lista');
+  Object.assign(L._state, { cat: CAT, watch: WATCH, bench: BENCH, bidx: idx, loading: false, error: '', open: '' });
+  L._state.f = Object.assign({}, L._state.f, { prof: 0, elite: 0, mode: '', role: '', sort: 'dps' });
+  const h = P.viewHTML();
+  assert.match(h, /role="group" aria-label="Orden"/);
+  assert.match(h, /data-lib-p="sort" data-v="dps" aria-pressed="true">Más DPS primero/);
+  assert.match(h, / con bench de daño<\/p>/);
+  assert.match(h, /benchmarks de Snow Crows<\/a> \(DPS contra el golem/);
+  const first = /data-id="([^"]+)"/.exec(h)[1];
+  assert.equal(first, s[0].id, 'la primera tarjeta es la de más DPS');
+  L._state.f.sort = '';
+  L._state.bidx = P.benchIndex(null);
+  assert.doesNotMatch(P.viewHTML(), /aria-label="Orden"/, 'sin bench no hay chip de orden');
+  L._state.bidx = idx;
 });

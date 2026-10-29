@@ -1,6 +1,7 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.5.0 (2026-10-29) · BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
+ * Versión: 1.6.0 (2026-10-29) · BENCH-1: cada build de PvE con bench publicado muestra su DPS en el golem de Snow Crows
+ *          (máximo, promedio, % de la mejor y barra), «Más DPS primero» y, si no hay bench, por qué · antes 1.5.0 BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
  *          filo y tinte del color de la profesión) · antes 1.4.0 BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)
  *          y el emblema a 56 px · antes 1.3.0 BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones
  *          sin elegir se atenúan solo en el ícono (el texto queda entero) · antes 1.2.0 BUI-4: preload() trae el
@@ -15,20 +16,24 @@
  * (assets/data/builds/watch.json) detecta un parche de balance más nuevo, pasa a «revisar».
  * Cada build: copiar código, ver la ficha (con validación contra la API) y, en el menú ⋯, guardar en Mis builds,
  * abrir la fuente y «avisar que está vieja» (un issue de GitHub ya escrito, A6 sin servidor).
+ * Bench (BENCH-1): assets/data/builds/bench.json = benchmarks públicos de Snow Crows (DPS contra el golem, el techo
+ * ideal); se cruza por la dirección de la build en la fuente. WvW, PvP, curación y tanque no tienen golem: se dice.
  * Íconos: GNBldRef.identity() (API oficial); hasta que llegan, las profesiones se muestran con su nombre.
  */
 (function (root) {
   'use strict';
 
-  var VERSION = '1.5.0';
+  var VERSION = '1.6.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
+  var BENCH = 'assets/data/builds/bench.json';
   var ISSUES = 'https://github.com/PabloSnchz/gw2-factory-dev/issues/new';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var ROLES = { dps: 'DPS', quickness: 'Celeridad', alacrity: 'Alacridad', heal: 'Curación', support: 'Apoyo', boon: 'Bendiciones', cc: 'Control' };
   var DAMAGE = { power: 'Poder', condition: 'Condición', hybrid: 'Híbrido' };
-  var st = { cat: null, watch: null, error: '', loading: false, f: { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' },
+  var SORT = { '': 'Orden de la biblioteca', dps: 'Más DPS primero' };
+  var st = { cat: null, watch: null, bench: null, bidx: null, error: '', loading: false, f: { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: '' },
     open: '', more: false, views: {}, checks: {}, viewErr: {} };
 
   function esc(s) { return root.GNBldShow ? root.GNBldShow.esc(s) : String(s == null ? '' : s); }
@@ -72,6 +77,40 @@
     var body = 'Build de la Biblioteca: ' + b.id + '\nRevisada para el parche: ' + (b.patch || '?') + '\nÚltimo parche conocido: ' + (latest || '?') +
       '\nFuente: ' + (b.source && b.source.url || '') + '\n\n¿Qué cambió? (opcional)\n';
     return ISSUES + '?labels=' + encodeURIComponent('build-vieja') + '&title=' + encodeURIComponent(title) + '&body=' + encodeURIComponent(body);
+  }
+  // BENCH-1: bench de Snow Crows por la dirección de la build en la fuente (profesión/nombre, sin la sección).
+  function benchKey(url) { var m = /^https:\/\/snowcrows\.com\/(?:en\/)?builds\/(?:[a-z-]+\/)?([a-z]+\/[a-z0-9-]+)\/?$/.exec(String(url || '')); return m ? m[1] : ''; }
+  function benchIndex(bench) {
+    var idx = { top: 0, n: 0, rows: {} }, F = bench && bench.fields;
+    if (!Array.isArray(F) || !Array.isArray(bench.rows)) return idx;
+    bench.rows.forEach(function (r) {
+      var o = {}; F.forEach(function (k, i) { o[k] = r[i]; });
+      if (typeof o.path !== 'string' || !(o.max > 0)) return;
+      if (!/^[A-Za-z0-9_-]+$/.test(o.log || '')) o.log = '';
+      idx.rows[o.path] = o; idx.n++; if (o.max > idx.top) idx.top = o.max;
+    });
+    return idx;
+  }
+  function benchOf(b, idx) { return idx && b && b.mode === 'pve' && b.source && b.source.name === 'Snow Crows' ? idx.rows[benchKey(b.source.url)] || null : null; }
+  function fmtN(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  // «Más DPS primero»: las que tienen bench, de mayor a menor; después el resto en el orden de la biblioteca.
+  function sortBuilds(list, sort, idx) {
+    if (sort !== 'dps') return list;
+    return list.map(function (b, i) { var m = benchOf(b, idx); return { b: b, i: i, v: m ? m.max : -1 }; })
+      .sort(function (x, y) { return y.v - x.v || x.i - y.i; }).map(function (x) { return x.b; });
+  }
+  function benchHTML(b, idx) {
+    var m = benchOf(b, idx);
+    if (!m) {
+      var why = b.mode !== 'pve' ? 'en ' + (MODES[b.mode] || b.mode) + ' no hay golem que mida el daño' : 'Snow Crows no publica bench de esta variante (solo mide DPS; no curación ni tanque)';
+      return '<p class="bld-bench is-none bld-muted">Sin bench de daño: ' + esc(why) + '.</p>';
+    }
+    var pct = Math.max(1, Math.min(100, Math.round(m.max / idx.top * 100)));
+    var boon = (b.roles || []).some(function (r) { return r !== 'dps'; });
+    return '<div class="bld-bench" title="Bench de Snow Crows contra el golem: el techo ideal de la build; en una pelea real se hace menos.">' +
+      '<p class="bld-bench-t"><b>' + fmtN(m.max) + ' DPS</b><span class="bld-muted">promedio ' + fmtN(m.avg) + ' · ' + pct + ' % de la mejor' + (boon ? ' · además da bendiciones' : '') + '</span>' +
+      (m.log ? '<a class="bld-muted" href="https://dps.report/' + esc(m.log) + '" target="_blank" rel="noopener">registro ↗</a>' : '') + '</p>' +
+      '<span class="bld-bench-bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span></div>';
   }
   function fmtDate(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : (iso || '—'); }
   // Cuántos filtros de «Más filtros» están puestos (para mostrarlo en el botón y abrirlo solo).
@@ -127,7 +166,9 @@
   function filtersHTML(cat, f) {
     var id = ident();
     return '<div class="bld-filters">' + profsHTML(f, id) + elitesHTML(cat, f, id) +
-      '<div class="bld-chiprow">' + chips('Modo', 'mode', MODES, f.mode) + '<span class="bld-sep" aria-hidden="true"></span>' + chips('Rol', 'role', ROLES, f.role) + '</div>' +
+      '<div class="bld-chiprow">' + chips('Modo', 'mode', MODES, f.mode) + '<span class="bld-sep" aria-hidden="true"></span>' + chips('Rol', 'role', ROLES, f.role) +
+      (st.bidx && st.bidx.n ? '<span class="bld-sep" aria-hidden="true"></span><div class="bld-chips" role="group" aria-label="Orden">' + Object.keys(SORT).map(function (k) {
+        return '<button type="button" class="bld-chip" data-lib-p="sort" data-v="' + k + '" aria-pressed="' + ((f.sort || '') === k) + '">' + esc(SORT[k]) + '</button>'; }).join('') + '</div>' : '') + '</div>' +
       moreHTML(cat, f) + '</div>';
   }
   function cardHTML(b, latest) {
@@ -142,7 +183,7 @@
       '<div class="bld-lib-main"><b class="bld-lib-t">' + esc(b.name) + '</b>' +
       '<p class="bld-muted">' + esc(Cc.PROF_ES[b.prof]) + ' · ' + esc(MODES[b.mode] || b.mode) + (b.sub ? ' (' + esc(SUB[b.sub] || b.sub) + ')' : '') +
       ' · dificultad ' + (b.difficulty || '?') + '/5 · fuente actualizada ' + fmtDate(b.sourceUpdated) + '</p>' +
-      '<div class="bld-tags">' + tags.join(' ') + '</div></div>' +
+      '<div class="bld-tags">' + tags.join(' ') + '</div></div>' + benchHTML(b, st.bidx) +
       '<div class="bld-acts"><button type="button" class="bld-btn is-primary" data-bld-act="copy">Copiar código</button>' +
       '<button type="button" class="bld-btn" data-lib="toggle" aria-expanded="' + on + '">' + (on ? 'Cerrar ficha' : 'Ver ficha') + '</button>' +
       '<details class="bld-menu"><summary class="bld-btn" aria-label="Más acciones: ' + esc(b.name) + '" title="Más acciones">⋯</summary><div class="bld-menu-l">' +
@@ -161,7 +202,8 @@
     if (st.loading) return '<div class="bld-card" role="status">Cargando la biblioteca…</div>';
     if (st.error) return '<div class="bld-card bld-err" role="alert">' + esc(st.error) + ' <button type="button" class="bld-btn" data-lib="retry">Reintentar</button></div>';
     if (!st.cat) return '';
-    var latest = latestPatch(st.cat, st.watch), list = filter(st.cat.builds, st.f, latest);
+    var latest = latestPatch(st.cat, st.watch), list = sortBuilds(filter(st.cat.builds, st.f, latest), st.f.sort, st.bidx);
+    var nb = st.cat.builds.filter(function (b) { return benchOf(b, st.bidx); }).length;
     var old = st.cat.builds.filter(function (b) { return stateOf(b, latest) === 'revisar'; }).length;
     var cov = coverage(st.cat.builds, latest, true), ok = coverage(st.cat.builds, latest);
     var fresh = st.watch && st.watch.latestPatch && st.cat.patch && st.watch.latestPatch > st.cat.patch.latest;
@@ -171,11 +213,12 @@
       '). Las marco «para revisar»: sirven, pero conviene mirar la fuente. <small class="bld-muted">Lo sé por: la fecha que declara cada fuente</small></p>')
       : '<p class="bld-shv">Todas las builds están revisadas para el último parche de balance (' + fmtDate(latest) + '). <small class="bld-muted">Lo sé por: la biblioteca y la vigía semanal</small></p>';
     return line + filtersHTML(st.cat, st.f) +
-      '<p class="bld-muted bld-count" aria-live="polite">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + '</p>' +
+      '<p class="bld-muted bld-count" aria-live="polite">' + list.length + ' de ' + st.cat.builds.length + ' builds · élites cubiertas: ' + ['pve', 'wvw', 'pvp'].filter(function (m) { return cov[m]; }).map(function (m) { return MODES[m] + ' ' + cov[m] + '/36' + (ok[m] !== cov[m] ? ' (' + (ok[m] || 0) + ' vigentes)' : ''); }).join(', ') + (nb ? ' · ' + nb + ' con bench de daño' : '') + '</p>' +
       (list.length ? '<ul class="bld-lib">' + list.map(function (b) { return cardHTML(b, latest); }).join('') + '</ul>'
         : '<div class="bld-card bld-muted">Ninguna build con esos filtros. <button type="button" class="bld-btn" data-lib="clear">Sacar todos los filtros</button></div>') +
       '<p class="bld-muted"><small>Builds curadas por mí con datos de ' + (st.cat.sources || []).map(function (s) { return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.name) + '</a>'; }).join(', ') +
-      ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente. Íconos: API oficial de Guild Wars 2. Si una fuente pide retirar algo, se retira.</small></p>';
+      ': élite, modo, rol, armas, código y fecha; los textos, guías y rotaciones están en cada fuente.' +
+      (nb ? ' Bench de daño: <a href="' + esc(st.bench.source && st.bench.source.url || '') + '" target="_blank" rel="noopener">benchmarks de Snow Crows</a> (DPS contra el golem, ' + esc(fmtDate(st.bench.fetched)) + '): es el techo ideal, en una pelea real se hace menos.' : '') + ' Íconos: API oficial de Guild Wars 2. Si una fuente pide retirar algo, se retira.</small></p>';
   }
 
   var CSS = [
@@ -206,6 +249,10 @@
     '#buildsPanel .bld-lib-card>.bld-acts,#buildsPanel .bld-lib-card>.bld-detail,#buildsPanel .bld-lib-card>p{grid-column:1/-1}',
     '#buildsPanel .bld-lib-card>.bld-acts{align-items:center}',
     '#buildsPanel .bld-tags{display:flex;flex-wrap:wrap;gap:4px}#buildsPanel .bld-tag.is-ok{border-color:var(--color-green,#3fb950)}#buildsPanel .bld-tag.is-old{border-color:var(--color-amber,#F2B94B)}',
+    '#buildsPanel .bld-bench{grid-column:1/-1;display:grid;gap:5px;margin:0}#buildsPanel .bld-bench-t{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;margin:0;font-size:.78rem}',
+    '#buildsPanel .bld-bench-t b{color:var(--tx-1);font-size:.95rem}#buildsPanel .bld-bench-t a{margin-left:auto}',
+    '#buildsPanel .bld-bench-bar{display:block;height:6px;border-radius:999px;background:var(--bg-0);box-shadow:inset 0 0 0 1px var(--bd-1);overflow:hidden}',
+    '#buildsPanel .bld-bench-bar>i{display:block;height:100%;border-radius:999px;background:var(--bld-prof,var(--gn-mod))}#buildsPanel .bld-bench.is-none{font-size:.75rem}',
     '#buildsPanel .bld-shv{border-left:3px solid var(--gn-mod);padding:6px 10px;background:var(--bg-1);border-radius:6px;color:var(--tx-1)}',
     '@media (max-width:560px){#buildsPanel .bld-lib{grid-template-columns:1fr}#buildsPanel .bld-pf{min-width:40px;height:40px}}'
   ].join('\n');
@@ -227,8 +274,8 @@
   function preload() {
     if (st.cat) return Promise.resolve(st);
     if (!st.pre) {
-      st.pre = Promise.all([getJSON(CATALOG), getJSON(WATCH).catch(function () { return null; })]).then(function (r) {
-        st.cat = r[0]; st.watch = r[1]; return st;
+      st.pre = Promise.all([getJSON(CATALOG), getJSON(WATCH).catch(function () { return null; }), getJSON(BENCH).catch(function () { return null; })]).then(function (r) {
+        st.cat = r[0]; st.watch = r[1]; st.bench = r[2]; st.bidx = benchIndex(r[2]); return st;
       }, function (e) { st.pre = null; throw e; });
     }
     return st.pre;
@@ -279,7 +326,7 @@
     if (st.open && !st.views[b.id]) { delete st.viewErr[b.id]; openView(ctx, b); }
     paint(ctx);
   }
-  function clearFilters() { st.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '' }; st.more = false; }
+  function clearFilters() { st.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: st.f.sort || '' }; st.more = false; }
 
   // Un clic: devuelve qué hizo (para los tests). La tarjeta se abre tocándola, salvo en botones, enlaces y el menú.
   function onClick(ctx, e) {
@@ -346,7 +393,8 @@
   }
 
   var api = { version: VERSION, render: render, preload: preload, _pure: { filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML,
-    filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS }, _state: st };
+    filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS,
+    benchKey: benchKey, benchIndex: benchIndex, benchOf: benchOf, benchHTML: benchHTML, sortBuilds: sortBuilds, fmtN: fmtN }, _state: st };
   root.GNBldLib = api;
   if (root.GNBld && typeof root.GNBld.register === 'function') root.GNBld.register('lib', api);
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
