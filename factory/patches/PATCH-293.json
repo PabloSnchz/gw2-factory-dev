@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-293",
+ "summary": "BL-082 documentación de BUI-6, BENCH-1 y BENCH-2: status (tarea, próxima acción y validación pendiente de BENCH-2) y backlog (avance de BL-082). FEAT-025 y DEC-043 publicados aparte.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "765813b6ee54c62892ba6c7745315aa679c1f919",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-082 Builds, BUI-1 a BUI-5 HECHOS 2026-10-29 (PATCH-276 a 286, FEAT-025, DEC-040); espera la validación final de Pablo.",
+     "text": "Tarea actual: BL-082 Builds, BUI-1 a BUI-6, BENCH-1 y BENCH-2 HECHOS 2026-10-29 (PATCH-276 a 292, FEAT-025, DEC-040 a DEC-043); espera que Pablo mire BENCH-2 y después sigue CUR-1."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-29 18:15Z",
+     "text": "Última actualización: 2026-10-29 23:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Builds (BL-082) completo en DEV con BUI-1 a BUI-5 (FEAT-025, DEC-040): espera la validación final de Pablo en #/builds (Firefox = DEV). Con su OK, BL-082 a DONE. No toco producción.",
+     "text": "Próxima acción: BENCH-2 hecho en DEV (PATCH-292, js/bld-bench.js, DEC-043): espera que Pablo lo mire en #/builds (Firefox = DEV). Después CUR-1: re-curación del catálogo y del bench sola cada semana, en DEV y en PRD (DEC-041). No toco producción."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-082] Validación: Builds completo (BUI-1 a BUI-5, FEAT-025) en #/builds (Firefox = DEV): íconos oficiales de profesiones y élites en la Biblioteca y el Editor, cabecera con 4 indicadores y pestañas con tus íconos, Mis builds con la tarjeta nueva, menú ⋯ que se cierra tocando afuera, y un tema claro (Notion o macOS) y uno oscuro: todo se tiene que leer. Con tu OK cierro BL-082.",
+     "text": "- [BL-082] Validación: BENCH-2 en #/builds (Firefox = DEV): en la Biblioteca, una build de PvE sin bench propio muestra «Referencia» con el DPS medido más parecido y por qué se parece (nunca como su DPS); en Mis builds, una build guardada de la Biblioteca muestra su bench y una propia la referencia más parecida. Detalle y pasos en FEAT-025 (puntos 7 y 8). Con tu OK sigo con CUR-1."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "2107f2a409924513967415085a1a7d1502281628",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "20 sondas borradas (quedan las de curación, LES-041). Espera la validación final de Pablo. · DEC-018, DEC-035, DEC-024, DEC-040 — 2026-10-29",
+     "text": "20 sondas borradas (quedan las de curación, LES-041). Pablo pidió más (18:40Z) y aprobó el orden BUI-6 → BENCH-1 → BENCH-2 → CUR-1 (18:55Z, con DEC-041: la autoactualización corre sola también en PRD). BUI-6/6b HECHOS (PATCH-287 a 290: un solo marco como Cuentas, franja de la élite en cada tarjeta; bld-view 1.5.0). BENCH-1 HECHO 19:55Z (PATCH-291, bld-lib 1.6.0, bench.json con los 188 benchmarks de Snow Crows, «Más DPS primero»; DEC-042 corrige DEC-039). BENCH-2 HECHO 23:36Z (js/bld-bench.js 1.0.0 + tests/bld-bench.test.cjs, RUN-214 verde; PATCH-292: bld-lib 1.7.0, bld-mine 1.4.0): referencia de daño por parecido, nunca un DPS inventado (DEC-043). Sigue CUR-1. · DEC-018, DEC-035, DEC-024, DEC-040, DEC-041, DEC-042, DEC-043 — 2026-10-29"
+    }
+   ]
+  }
+ ]
+}
