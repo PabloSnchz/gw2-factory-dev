@@ -1,4 +1,5 @@
-// BL-082 BUI-5: guarda de Builds en los 19 temas, teclado, lector de pantalla, celular y rendimiento.
+// BL-082 BUI-5 y BUI-6: guarda de Builds en los 19 temas, teclado, lector de pantalla, celular y rendimiento.
+// BUI-6 suma los fondos oficiales (cabecera y tarjetas): se mide el peor caso de la imagen debajo del velo.
 // El contraste se calcula con los porcentajes que de verdad usa el CSS de bld-view/bld-lib/bld-editor y con los
 // tokens reales de css/themes/: si alguien sube una mezcla o agrega un tema que no llega a WCAG AA, falla acá.
 'use strict';
@@ -46,13 +47,19 @@ const THEMES = fs.readdirSync(DIR).filter((f) => f.endsWith('.css')).sort().map(
 
 // Lo que dice el CSS (si cambia la forma, el test lo avisa en vez de medir otra cosa).
 function pct(src, re, what) { const m = re.exec(src); assert.ok(m, 'encuentro en el CSS: ' + what); return Number(m[1]) / 100; }
+function op(src, re, what) { const m = re.exec(src); assert.ok(m, 'encuentro en el CSS: ' + what); return Number('0.' + m[1]); }
 const CFG = {
   color: /var COLOR = '(#[0-9A-Fa-f]{6})'/.exec(VIEW)[1],
   mod: pct(VIEW, /'\{--gn-mod:color-mix\(in srgb,' \+ COLOR \+ ' (\d+)%,var\(--tx-1\)\)/, '--gn-mod mezclado con el texto'),
   ok: pct(VIEW, /--bld-ok:color-mix\(in srgb,var\(--color-green,#3fb950\) (\d+)%,var\(--tx-1\)\)/, '--bld-ok'),
   err: pct(VIEW, /--bld-err:color-mix\(in srgb,var\(--color-red,#F47C7C\) (\d+)%,var\(--tx-1\)\)/, '--bld-err'),
   focus: pct(VIEW, /--bld-focus:color-mix\(in srgb,var\(--acc-1\) (\d+)%,var\(--tx-1\)\)/, '--bld-focus'),
-  hero: pct(VIEW, /\.bld-hero\{[^}]*color-mix\(in srgb,var\(--gn-mod\) (\d+)%,var\(--bg-1\)\)/, 'fondo de la cabecera'),
+  hero: pct(VIEW, /radial-gradient\(120% 100% at 0 0,color-mix\(in srgb,var\(--gn-mod\) (\d+)%,transparent\)/, 'tinte del módulo en la cabecera'),
+  heroImg: op(VIEW, /\.bld-hero::before\{[^}]*opacity:\.(\d+)\}/, 'opacidad del fondo de la cabecera'),
+  heroVeil: pct(VIEW, /\.bld-hero::after\{[^}]*linear-gradient\(90deg,color-mix\(in srgb,var\(--bg-1\) (\d+)%,transparent\)/, 'velo de la cabecera donde va el texto'),
+  cardImg: op(VIEW, /\.bld-band::before\{[^}]*opacity:\.(\d+);/, 'opacidad del fondo de la tarjeta'),
+  cardTop: pct(VIEW, /\.bld-band::after\{[^}]*linear-gradient\(180deg,color-mix\(in srgb,var\(--bg-1\) (\d+)%,transparent\) 0/, 'velo arriba de la tarjeta'),
+  cardBot: pct(VIEW, /\.bld-band::after\{[^}]*,color-mix\(in srgb,var\(--bg-1\) (\d+)%,transparent\)\)\}/, 'velo del resto de la tarjeta'),
   prim: pct(VIEW, /\.bld-btn\.is-primary\{background:color-mix\(in srgb,var\(--gn-mod\) (\d+)%,var\(--bg-0\)\)/, 'botón principal'),
   // El mayor porcentaje de acento detrás de texto elegido, en las 3 pestañas que lo usan.
   sel: Math.max.apply(null, [VIEW, LIB, ED].map((s) => Math.max.apply(null, [0].concat((s.match(/color-mix\(in srgb,var\(--gn-mod\) \d+%,var\(--bg-0\)\)/g) || [])
@@ -66,7 +73,12 @@ function fails(t) {
   const bg2 = over(c('--bg-2'), bg1);
   const tx1 = over(c('--tx-1'), bg1), tx2 = over(c('--tx-2'), bg1);
   const mod = mix(parse(CFG.color), tx1, CFG.mod);
-  const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim), 'cabecera': mix(mod, bg1, CFG.hero) };
+  // BUI-6: debajo del velo hay una imagen. Arriba de la tarjeta y en la cabecera, un gris medio; en el resto de la
+  // tarjeta, el peor caso: blanco puro en un tema oscuro, negro puro en uno claro.
+  const dark = lum(bg1) < 0.3, ext = dark ? [255, 255, 255, 1] : [0, 0, 0, 1], grey = [128, 128, 128, 1];
+  const surf = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2, 'elegido': mix(mod, bg0, CFG.sel), 'principal': mix(mod, bg0, CFG.prim),
+    'cabecera': mix(grey, mix(mod, bg1, CFG.hero), (1 - CFG.heroVeil) * CFG.heroImg),
+    'tarjeta arriba': mix(grey, bg1, (1 - CFG.cardTop) * CFG.cardImg), 'tarjeta (peor caso)': mix(ext, bg1, (1 - CFG.cardBot) * CFG.cardImg) };
   const out = [];
   const chk = (n, a, b, min) => { const r = ratio(a, b); if (r < min) out.push(n + ' ' + r.toFixed(2)); };
   [['--tx-1', tx1], ['--tx-2', tx2]].forEach(([n, x]) => Object.keys(surf).forEach((s) => chk(n + ' / ' + s, x, surf[s], 4.5)));
@@ -96,6 +108,11 @@ test('sin el arreglo de BUI-5 la guarda sí detecta el problema (no mide en el v
   Object.assign(CFG, save);
   assert.ok(f.some((x) => /--color-green/.test(x)), 'el verde puro sobre Notion no se lee');
   assert.ok(f.some((x) => /^acento/.test(x)), 'el lavanda puro sobre Notion no llega a 3:1');
+  const od = THEMES.find((x) => x.id === 'one-dark');
+  Object.assign(CFG, { cardTop: 0.4 });
+  const g = fails(od.t);
+  Object.assign(CFG, save);
+  assert.ok(g.some((x) => /tarjeta arriba/.test(x)), 'un velo flojo sobre el fondo de la élite no se lee en One Dark');
 });
 
 test('colores: nada fijo en el CSS de Builds salvo el acento del módulo y los respaldos de var()', () => {
@@ -157,4 +174,30 @@ test('rendimiento: la biblioteca filtra y dibuja las 104 builds muy por debajo d
   assert.ok(html.length > 0);
   assert.ok(ms < 200, 'filtrar y dibujar todo: ' + ms.toFixed(1) + ' ms');
   assert.equal((html.match(/<img\b/g) || []).filter((x) => x).length, (html.match(/<img\b[^>]*loading="lazy"/g) || []).length, 'los emblemas cargan a medida que se ven');
+});
+
+test('BUI-6 un solo marco y fondos oficiales: solo de render.guildwars2.com, el de la cabecera cambia por día', () => {
+  const sb = { console: { info() {}, warn() {} } };
+  sb.window = sb;
+  require('node:vm').runInNewContext(VIEW, sb, { filename: 'js/bld-view.js' });
+  const P = sb.GNBld._pure;
+  const ok = 'https://render.guildwars2.com/file/ABC/123.png';
+  const idn = { elites: { 74: { background: ok }, 81: { background: 'https://evil.example/x.png' }, 40: { background: ok.replace('123', '456') } } };
+  assert.equal(P.bgOf(74, idn), ok);
+  assert.equal(P.bgOf(81, idn), '', 'otro dominio: nada');
+  assert.equal(P.bandStyle(74, idn), ' style="--bld-bg:url(' + ok + ')"');
+  assert.equal(P.bandStyle(999, idn), '');
+  assert.equal(P.bandStyle(74, { elites: { 74: { background: ok + '") ;x:url("' } } }), '', 'nada de comillas ni CSS colado');
+  assert.notEqual(P.heroElite(idn, 0), '81');
+  assert.equal(P.heroElite(idn, 0), P.heroElite(idn, 864e5 - 1), 'el mismo día, la misma élite');
+  assert.notEqual(P.heroElite(idn, 0), P.heroElite(idn, 864e5), 'al día siguiente, otra');
+  assert.equal(P.heroElite({ elites: {} }, 0), '');
+  const h = P.viewHTML({ tab: 'lib', ident: idn, now: 0 });
+  assert.match(h, /<div class="bld-hero" id="bldHero" style="--bld-spec:url\(https:\/\/render\.guildwars2\.com\//);
+  assert.match(P.viewHTML({ tab: 'lib', ident: null }), /<div class="bld-hero" id="bldHero"><div/, 'sin datos del juego: sin imagen');
+  assert.match(VIEW, /'\{padding:0!important;overflow:hidden\}'/, 'el panel no tiene relleno propio: un solo marco');
+  assert.doesNotMatch(VIEW, /\.bld-hero\{[^}]*border:/, 'la cabecera no tiene borde propio (no hay caja adentro de la caja)');
+  assert.match(LIB, /bld-lib-card bld-band/);
+  assert.match(SRC['bld-mine.js'], /bld-mine-row bld-band/);
+  assert.match(VIEW, /\.bld-band::before\{content:"";position:absolute;inset:0;/, 'el fondo de la élite cubre toda la tarjeta, de borde a borde');
 });

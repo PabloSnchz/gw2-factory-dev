@@ -1,6 +1,8 @@
 /*!
  * js/bld-view.js — Builds: el panel, las pestañas y las rutas del módulo (BL-082)
- * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se
+ * Versión: 1.4.0 (2026-10-29) · BUI-6: un solo marco: la cabecera es el techo del panel, de borde a borde, con el fondo
+ *          oficial de una especialización élite (cambia cada día) bajo un velo que la funde; tarjetas con el fondo de su
+ *          élite de borde a borde (bandStyle) · antes 1.3.0 BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se
  *          mezclan con el texto del tema; seleccionados y botón principal sobre --bg-0 · antes 1.2.0 BUI-4: el marco
  *          de Raids y Cuentas: cabecera con ícono, subtítulo, píldora del último
  *          parche de balance y 4 indicadores; pestañas con contador; el menú ⋯ es común a todas las pestañas y se cierra
@@ -17,7 +19,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var LOG = '[GNBld]';
   var PANEL = 'buildsPanel';
   var ROUTE = '#/builds';
@@ -91,12 +93,24 @@
   }
   function heroHTML(m) {
     var s = m.stats || statsModel(null);
-    return '<div class="bld-hero"><div class="bld-row"><img class="bld-ico" src="' + ICON + '" alt="" width="56" height="56">' +
+    var hs = heroStyle(m.ident === undefined ? ident() : m.ident, m.now);
+    return '<div class="bld-hero" id="bldHero"' + (hs ? ' style="' + hs + '"' : '') + '><div class="bld-row"><img class="bld-ico" src="' + ICON + '" alt="" width="60" height="60">' +
       '<div class="bld-ttl"><h2 id="bldTitle">Builds</h2>' +
       '<p class="bld-sub" id="bldSub">' + esc(m.sub || 'Builds curadas, tu editor y tus códigos del juego, en castellano.') + '</p></div>' +
       '<div class="bld-pills" id="bldPills">' + pillsHTML(s) + '</div></div>' +
       '<div class="bld-stats" id="bldStats">' + statsHTML(s) + '</div></div>';
   }
+  // BUI-6: fondo oficial de una élite como variable CSS (solo de render.guildwars2.com; cualquier otra cosa, nada).
+  var RENDER = /^https:\/\/render\.guildwars2\.com\/[\w\/.-]+\.(png|jpg)$/;
+  function ident() { var R = root.GNBldRef; return R && typeof R.identitySync === 'function' ? R.identitySync() : null; }
+  function bgOf(elite, idn) { var e = (idn || ident() || { elites: {} }).elites || {}; e = e[elite]; return e && RENDER.test(e.background || '') ? e.background : ''; }
+  function bandStyle(elite, idn) { var u = bgOf(elite, idn); return u ? ' style="--bld-bg:url(' + u + ')"' : ''; }
+  // La élite de la cabecera: una por día, siempre la misma ese día (sin parpadeo entre pestañas).
+  function heroElite(idn, now) {
+    var ids = Object.keys((idn && idn.elites) || {}).filter(function (k) { return bgOf(k, idn); }).sort(function (a, b) { return a - b; });
+    return ids.length ? ids[Math.floor((now == null ? Date.now() : now) / 864e5) % ids.length] : '';
+  }
+  function heroStyle(idn, now) { var e = heroElite(idn, now), u = e ? bgOf(e, idn) : ''; return u ? '--bld-spec:url(' + u + ')' : ''; }
   function badge(id, s) {
     var v = id === 'lib' ? s.builds : id === 'mine' ? s.mine : null;
     return v == null ? '' : '<span class="bld-badge">' + v + '</span>';
@@ -127,21 +141,33 @@
     // BUI-5: el lavanda solo no llega a 3:1 en los temas claros; mezclado con el texto del tema, sí (y en los oscuros se aclara).
     P + '{--gn-mod:color-mix(in srgb,' + COLOR + ' 55%,var(--tx-1));--bld-ok:color-mix(in srgb,var(--color-green,#3fb950) 30%,var(--tx-1));' +
       '--bld-err:color-mix(in srgb,var(--color-red,#F47C7C) 40%,var(--tx-1));--bld-focus:color-mix(in srgb,var(--acc-1) 65%,var(--tx-1))}',
-    P + ' .bld-hero{border:1px solid var(--bd-1);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb,var(--gn-mod) 8%,var(--bg-1)),var(--bg-1) 70%);padding:16px 18px}',
+    // BUI-6: un solo marco. El panel no tiene relleno: la cabecera es su techo y el contenido lleva su propio margen.
+    P + '{padding:0!important;overflow:hidden}' + P + ' .bld-body{padding:14px 18px 20px}' + P + '>#bldToast{padding:0 18px 12px}',
+    P + ' .bld-hero{position:relative;isolation:isolate;padding:22px 22px 18px;background:var(--bg-1)}',
+    P + ' .bld-hero::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--bld-spec,none) right center/cover no-repeat;opacity:.55}',
+    // Velo: 92 % del fondo del panel donde va el texto (izquierda), la imagen se ve a la derecha y se funde abajo.
+    P + ' .bld-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,color-mix(in srgb,var(--bg-1) 92%,transparent) 0,color-mix(in srgb,var(--bg-1) 92%,transparent) 45%,color-mix(in srgb,var(--bg-1) 40%,transparent)),' +
+      'linear-gradient(180deg,transparent 45%,var(--bg-1)),radial-gradient(120% 100% at 0 0,color-mix(in srgb,var(--gn-mod) 6%,transparent),transparent 60%)}',
     P + ' .bld-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}',
-    P + ' .bld-ico{width:56px;height:56px;border-radius:12px;background:var(--bg-2);padding:6px;box-shadow:0 0 0 2px color-mix(in srgb,var(--gn-mod) 70%,transparent);flex-shrink:0;box-sizing:border-box}',
-    P + ' .bld-ttl h2{margin:0;font-size:1.3rem;font-weight:800;color:var(--tx-1)}',
+    P + ' .bld-ico{width:60px;height:60px;border-radius:14px;background:var(--bg-0);padding:6px;box-shadow:0 0 0 2px var(--gn-mod),0 0 20px color-mix(in srgb,var(--gn-mod) 40%,transparent);flex-shrink:0;box-sizing:border-box}',
+    P + ' .bld-ttl h2{margin:0;font-size:1.5rem;font-weight:800;letter-spacing:.01em;color:var(--tx-1)}',
     P + ' .bld-sub{margin:2px 0 0;color:var(--tx-2);font-size:.86rem}',
     P + ' .bld-pills{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap;align-items:center}',
-    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap}.bld-pill b{color:var(--tx-1)}',
-    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}',
-    P + ' .bld-st{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-0);padding:10px 12px;min-width:0}',
+    P + ' .bld-pill{font-size:.78rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 10px;color:var(--tx-2);background:var(--bg-0);white-space:nowrap;border-color:color-mix(in srgb,var(--gn-mod) 55%,var(--bd-1))}' + P + ' .bld-pill b{color:var(--tx-1)}',
+    P + ' .bld-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}',
+    P + ' .bld-st{border:1px solid var(--bd-1);border-top:2px solid var(--gn-mod);border-radius:12px;background:color-mix(in srgb,var(--bg-0) 92%,transparent);padding:10px 12px;min-width:0}',
     P + ' .bld-st small{display:block;font-size:.7rem;color:var(--tx-2);text-transform:uppercase;letter-spacing:.06em}',
-    P + ' .bld-st b{font-size:1.25rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',
+    P + ' .bld-st b{font-size:1.35rem;color:var(--tx-1)}' + P + ' .bld-st b span{font-size:.8rem;color:var(--tx-2);font-weight:500}',
     P + ' .bld-st em{display:block;font-style:normal;font-size:.74rem;color:var(--tx-2);margin-top:2px}',
-    P + ' .bld-tabs{display:flex;gap:4px;margin:16px 0 12px;border-bottom:1px solid var(--bd-1);overflow-x:auto}',
-    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:8px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:40px}',
-    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}',
+    P + ' .bld-tabs{display:flex;gap:4px;margin:0;padding:0 14px;border-bottom:1px solid var(--bd-1);overflow-x:auto;background:var(--bg-1)}',
+    P + ' .bld-tabs [role=tab]{display:inline-flex;align-items:center;background:none;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);padding:12px 14px;font:inherit;font-size:.92rem;cursor:pointer;white-space:nowrap;min-height:44px}',
+    P + ' .bld-tabs [role=tab][aria-selected=true]{color:var(--tx-1);font-weight:700;border-bottom:3px solid var(--gn-mod)}',
+    // BUI-6: tarjeta con el fondo de su élite de borde a borde. Velo 72 % arriba y 90 % desde los 72 px (AA en los 19 temas, ver bld-ui).
+    P + ' .bld-band{position:relative;isolation:isolate;overflow:hidden}',
+    P + ' .bld-band::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--bld-bg,none) center 30%/cover no-repeat;opacity:.6;border-radius:inherit}',
+    P + ' .bld-band::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:linear-gradient(180deg,color-mix(in srgb,var(--bg-1) 72%,transparent) 0,color-mix(in srgb,var(--bg-1) 90%,transparent) 72px,color-mix(in srgb,var(--bg-1) 90%,transparent))}',
+    P + ' .bld-band{transition:transform .15s,box-shadow .15s,border-color .15s}' + P + ' .bld-band:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gn-mod) 60%,var(--bd-1));box-shadow:0 10px 24px rgba(0,0,0,.28)}',
+    P + ' .bld-band.is-open:hover{transform:none}' + P + ' .bld-band .bld-emb{box-shadow:0 0 0 2px var(--bg-1),0 0 0 3px var(--gn-mod)}',
     P + ' .bld-badge{font-size:.72rem;color:var(--tx-2);margin-left:6px;font-weight:600;border:1px solid var(--bd-1);border-radius:999px;padding:0 6px}',
     P + ' .bld-btn.is-primary{background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0));border-color:var(--gn-mod);color:var(--tx-1);font-weight:700}',
     P + ' .bld-menu{position:relative;margin-left:auto}' + P + ' .bld-menu>summary{list-style:none;cursor:pointer}' + P + ' .bld-menu>summary::-webkit-details-marker{display:none}',
@@ -156,7 +182,7 @@
     P + ' .bld-ok{color:var(--bld-ok)}',
     P + ' :is(a,button,input,select,textarea,[tabindex]):focus-visible{outline:2px solid var(--bld-focus);outline-offset:2px}',
     '@media (prefers-reduced-motion:reduce){' + P + ' *{transition:none!important;animation:none!important}}',
-    '@media (max-width:900px){' + P + ' .bld-hero{padding:12px}' + P + ' .bld-ico{width:40px;height:40px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.05rem}' +
+    '@media (max-width:900px){' + P + ' .bld-hero{padding:14px}' + P + ' .bld-ico{width:44px;height:44px;padding:4px}' + P + ' .bld-ttl h2{font-size:1.15rem}' + P + ' .bld-body{padding:12px}' +
       P + ' .bld-pills{margin-left:0;width:100%}' + P + ' .bld-stats{grid-template-columns:1fr 1fr;gap:6px}' + P + ' .bld-st{padding:8px 10px}' + P + ' .bld-st b{font-size:1.05rem}}',
     '@media (max-width:720px){' + P + ' :is(button,.bld-btn,select,input,textarea){min-height:44px}}'
   ].join('\n');
@@ -243,6 +269,11 @@
       st.preloading = true;
       L.preload().then(function () { st.preloading = false; refreshHead(); }, function () { st.preloading = false; });
     }
+    var R = root.GNBldRef;
+    if (R && !ident() && typeof R.identity === 'function' && !st.identLoading) {
+      st.identLoading = true;
+      Promise.resolve().then(function () { return R.identity(); }).then(function () { st.identLoading = false; refreshHead(); }, function () { st.identLoading = false; });
+    }
     return { cat: ls && ls.cat, watch: ls && ls.watch, mine: mine, lib: L && L._pure };
   }
   function refreshHead() {
@@ -250,6 +281,8 @@
     if (a) a.innerHTML = statsHTML(s);
     if (b) b.innerHTML = pillsHTML(s);
     TABS.forEach(function (t) { var x = byId('bldBadge-' + t.id); if (x) x.innerHTML = badge(t.id, s); });
+    var h = byId('bldHero'), hs = heroStyle(ident());
+    if (h && hs && h.getAttribute && h.getAttribute('style') !== hs) h.setAttribute('style', hs);
     return s;
   }
 
@@ -330,9 +363,9 @@
   }
 
   root.GNBld = {
-    version: VERSION, register: register, go: go, render: render, toast: toast,
+    version: VERSION, register: register, go: go, render: render, toast: toast, bandStyle: bandStyle,
     _pure: { parseHash: parseHash, hashFor: hashFor, shareUrl: shareUrl, viewHTML: viewHTML, tabsHTML: tabsHTML, esc: esc, TABS: TABS, CSS: CSS, ROUTE: ROUTE, PANEL: PANEL,
-      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus }
+      statsModel: statsModel, statsHTML: statsHTML, closeMenus: closeMenus, bgOf: bgOf, bandStyle: bandStyle, heroElite: heroElite, heroStyle: heroStyle }
   };
 
   if (doc && doc.readyState === 'loading' && doc.addEventListener) doc.addEventListener('DOMContentLoaded', init);

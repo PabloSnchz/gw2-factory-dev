@@ -20,8 +20,8 @@ const P = V._pure;
 const same = (a, b, m) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, m);
 
 test('versión en la cabecera y en el código', () => {
-  assert.match(SRC, /\* Versión: 1\.3\.0 /);
-  assert.equal(V.version, '1.3.0');
+  assert.match(SRC, /\* Versión: 1\.4\.0 /);
+  assert.equal(V.version, '1.4.0');
 });
 
 test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
@@ -86,7 +86,7 @@ test('BUI-4 cabecera: marco de Raids con 4 indicadores, píldora del parche y co
   assert.ok(s.old >= 0 && s.old < s.builds);
   const h = P.viewHTML({ tab: 'mine', stats: s });
   assert.match(h, /class="bld-hero"/);
-  assert.match(h, /<img class="bld-ico" [^>]*width="56"/);
+  assert.match(h, /<img class="bld-ico" [^>]*width="60"/);
   assert.match(h, /<h2 id="bldTitle">Builds<\/h2>/);
   assert.equal((h.match(/class="bld-st"/g) || []).length, 4);
   assert.match(h, /Último parche de balance <b>29\/09\/2026<\/b>/);
