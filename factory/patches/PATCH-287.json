@@ -1,0 +1,80 @@
+{
+ "id": "PATCH-287",
+ "summary": "BL-082 BUI-6 (parte 1 de 2): tarjetas de la Biblioteca y Mis builds con el fondo oficial de su élite de borde a borde y emblema de 56 px (bld-lib 1.4.0, bld-mine 1.2.0; el fondo llega con el marco de la parte 2).",
+ "files": [
+  {
+   "path": "js/bld-lib.js",
+   "base_sha": "aaa1e54ead674f7cfe43f9696329c6c0f9c8fc32",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-29) · BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones\n",
+     "text": " * Versión: 1.4.0 (2026-10-29) · BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)\n *          y el emblema a 56 px · antes 1.3.0 BUI-5: contraste AA en los 19 temas: lo elegido sobre --bg-0 al 14 % y las profesiones\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.3.0';\n",
+     "text": "  var VERSION = '1.4.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var h = '<li class=\"bld-card bld-lib-card' + (on ? ' is-open' : '') + '\" data-id=\"' + esc(b.id) + '\">' +\n      emblem(b.prof, b.elite, 44, true).replace('class=\"bld-emb', 'class=\"bld-emb bld-lib-emb') +\n",
+     "text": "    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite) : '';\n    var h = '<li class=\"bld-card bld-lib-card bld-band' + (on ? ' is-open' : '') + '\" data-id=\"' + esc(b.id) + '\"' + band + '>' +\n      emblem(b.prof, b.elite, 56, true).replace('class=\"bld-emb', 'class=\"bld-emb bld-lib-emb') +\n"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-mine.js",
+   "base_sha": "a6107435e54c495c971299515e3d22bcfd81b4ce",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-29) · BUI-4: la misma tarjeta que la Biblioteca: emblema de la élite, «Copiar código»,\n",
+     "text": " * Versión: 1.2.0 (2026-10-29) · BUI-6: como la Biblioteca, la tarjeta lleva el fondo de su élite de borde a borde y el\n *          emblema a 56 px · antes 1.1.0 BUI-4: la misma tarjeta que la Biblioteca: emblema de la élite, «Copiar código»,\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';\n",
+     "text": "  var VERSION = '1.2.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var h = '<li class=\"bld-card bld-mine-row' + (on ? ' is-open' : '') + '\" data-id=\"' + esc(b.id) + '\">' +\n      '<div class=\"bld-mine-h\">' + emblem(b, 44) + '<div class=\"bld-mine-t\"><b>' + esc(b.title) + '</b><p class=\"bld-muted\">' + esc(C ? C.PROF_ES[b.profession] || '' : '') + ' · editada ' + fmt(b.updated) +\n",
+     "text": "    var V = root.GNBld, band = V && typeof V.bandStyle === 'function' ? V.bandStyle(eliteOf(b)) : '';\n    var h = '<li class=\"bld-card bld-mine-row bld-band' + (on ? ' is-open' : '') + '\" data-id=\"' + esc(b.id) + '\"' + band + '>' +\n      '<div class=\"bld-mine-h\">' + emblem(b, 56) + '<div class=\"bld-mine-t\"><b>' + esc(b.title) + '</b><p class=\"bld-muted\">' + esc(C ? C.PROF_ES[b.profession] || '' : '') + ' · editada ' + fmt(b.updated) +\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "9266b3c88e8e5ef5a7a1640d5009dcb3eb8e162e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  for (const [f, m, v] of [['bld-lib.js', L, '1.3.0'], ['bld-mine.js', M, '1.1.0']]) {\n",
+     "text": "  for (const [f, m, v] of [['bld-lib.js', L, '1.4.0'], ['bld-mine.js', M, '1.2.0']]) {\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /bld-emb bld-lib-emb\" title=\"E74\"><img class=\"\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/E74\\.png\" width=\"44\"/);\n",
+     "text": "  assert.match(h, /bld-emb bld-lib-emb\" title=\"E74\"><img class=\"\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/E74\\.png\" width=\"56\"/);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(h, /class=\"bld-emb bld-mine-emb\" title=\"Paragón\"><img class=\"\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/E74\\.png\" width=\"44\"/);\n",
+     "text": "  assert.match(h, /class=\"bld-emb bld-mine-emb\" title=\"Paragón\"><img class=\"\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/E74\\.png\" width=\"56\"/);\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "55c63e883e2c8346df36ff2572ea9125084ba76f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.3.0\" },\n      { \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-editor.js\", \"v\": \"1.3.0\" },\n      { \"src\": \"js/bld-mine.js\", \"v\": \"1.1.0\" }\n",
+     "text": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.4.0\" },\n      { \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-editor.js\", \"v\": \"1.3.0\" },\n      { \"src\": \"js/bld-mine.js\", \"v\": \"1.2.0\" }\n"
+    }
+   ]
+  }
+ ]
+}
