@@ -1,6 +1,8 @@
 /*!
  * js/bld-editor.js — Builds: pestaña Editor (BL-082 BLD-5: B1, B2, B3, B5, B6 y C2)
- * Versión: 1.1.0 (2026-10-28) · BLD-12/13: panel «Equipo y código AE2» (js/bld-gear.js) debajo de la ficha · antes 1.0.0 BLD-5
+ * Versión: 1.2.0 (2026-10-28) · BUI-3: como el panel del juego: profesiones con su ícono, cada línea con el fondo
+ *          oficial de su especialización y los rasgos como íconos (menores incluidos), barra de 5 casilleros con
+ *          ícono que abren un selector, y la barra del Retornado a la vista · antes 1.1.0 BLD-12/13 (equipo y AE2)
  *
  * Elegís profesión, las 3 líneas (la élite solo en la tercera), los 3 rasgos de cada una, la barra de tierra
  * (y la de agua), mascotas o leyendas y armas; a la derecha ves la ficha y el código del juego al instante
@@ -12,7 +14,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var TIER = ['Adepto', 'Maestro', 'Gran maestro'];
   var SLOT = ['Curación', 'Utilidad 1', 'Utilidad 2', 'Utilidad 3', 'Élite'];
   var SLOT_TYPE = ['Heal', 'Utility', 'Utility', 'Utility', 'Elite'];
@@ -117,13 +119,37 @@
     }
     return h + '</div>';
   }
+  // Barra: 5 casilleros con el ícono de la habilidad; tocar uno abre el selector debajo (st.pick).
+  function skillOf(ref, pid) { return pid ? root.GNBldRef.skillOf(ref, pid) : null; }
   function barHTML(b, ref, bar) {
-    if (b.profession === 9) return '';
-    var el = eliteId(b, ref);
-    return '<div class="bld-ed-bar">' + [0, 1, 2, 3, 4].map(function (i) {
-      var id = 'bldEdSk' + bar + i, cur = b.skills[bar][i];
-      return '<label for="' + id + '"><small>' + SLOT[i] + '</small><select id="' + id + '" data-ed="skill" data-bar="' + bar + '" data-slot="' + i + '"><option value="0">— vacío —</option>' +
-        options(ref, i, el).map(function (o) { return '<option value="' + o.pid + '"' + (o.pid === cur ? ' selected' : '') + '>' + esc(o.name) + '</option>'; }).join('') + '</select></label>';
+    if (b.profession === 9) return legendBarHTML(b, ref, bar);
+    var el = eliteId(b, ref), pick = st.pick && st.pick.bar === bar ? st.pick.slot : -1;
+    var h = '<div class="bld-ed-bar" role="group" aria-label="' + BAR[bar] + '">' + [0, 1, 2, 3, 4].map(function (i) {
+      var s = skillOf(ref, b.skills[bar][i]), open = pick === i;
+      return '<button type="button" class="bld-ed-sk' + (i === 0 ? ' is-heal' : i === 4 ? ' is-elite' : '') + (s ? '' : ' is-empty') + '" id="bldEdSk' + bar + i + '" data-ed="slot" data-bar="' + bar + '" data-slot="' + i + '"' +
+        ' aria-haspopup="true" aria-expanded="' + open + '" aria-label="' + SLOT[i] + ': ' + esc(s ? s.name : 'vacío') + '" title="' + esc(s ? s.name + (s.description ? ': ' + plain(s.description) : '') : SLOT[i] + ': vacío') + '">' +
+        (s ? img(s.icon, 44) : '<span class="bld-ed-plus" aria-hidden="true">+</span>') + '<small>' + SLOT[i] + '</small></button>';
+    }).join('') + '</div>';
+    if (pick >= 0) h += pickHTML(b, ref, bar, pick, el);
+    return h;
+  }
+  function pickHTML(b, ref, bar, slot, el) {
+    var cur = b.skills[bar][slot], opts = options(ref, slot, el);
+    return '<div class="bld-ed-pick" role="group" aria-label="Elegí ' + SLOT[slot].toLowerCase() + '" data-ed-pick>' +
+      '<div class="bld-ed-pick-h"><b>' + SLOT[slot] + '</b> <small class="bld-muted">' + opts.length + ' opciones · Escape para cerrar</small></div><div class="bld-ed-pick-l">' +
+      opts.map(function (o, k) {
+        var s = ref.skills[o.id] || {};
+        return '<button type="button" class="bld-ed-opt" id="bldEdOpt' + k + '" data-ed="pick" data-v="' + o.pid + '" aria-pressed="' + (o.pid === cur) + '" title="' + esc(plain(s.description)) + '">' +
+          img(o.icon, 32) + '<span>' + esc(o.name) + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="bld-ed-pick-a"><button type="button" class="bld-btn" data-ed="pick" data-v="0">Dejar vacío</button><button type="button" class="bld-btn" data-ed="pick-close">Cerrar</button></div></div>';
+  }
+  // Retornado: la barra la ponen las leyendas; se muestra para ver qué quedó, sin elegir.
+  function legendBarHTML(b, ref, bar) {
+    if (!b.skills[bar].some(Boolean)) return '';
+    return '<div class="bld-ed-bar is-ro" role="group" aria-label="' + BAR[bar] + ' (la ponen las leyendas)">' + [0, 1, 2, 3, 4].map(function (i) {
+      var s = skillOf(ref, b.skills[bar][i]);
+      return '<span class="bld-ed-sk' + (i === 0 ? ' is-heal' : i === 4 ? ' is-elite' : '') + '" title="' + esc(s ? s.name : '') + '">' + (s ? img(s.icon, 44) : '') + '<small>' + SLOT[i] + '</small></span>';
     }).join('') + '</div>';
   }
   function petsHTML(b, ref) {

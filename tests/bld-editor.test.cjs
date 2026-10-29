@@ -24,8 +24,8 @@ const SKILLS = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, name: 'H' + id }));
 const REF = R.normalize({ prof: PROF, specs: SPECS, traits: TRAITS, skills: SKILLS });
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.1\.0 /);
-  assert.equal(E.version, '1.1.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.2\.0 /);
+  assert.equal(E.version, '1.2.0');
 });
 
 test('opciones de la barra: por casillero y solo las de la élite elegida', () => {
@@ -80,7 +80,7 @@ test('vista: rasgos con aria-pressed y nombre, barra con etiquetas, ficha con c�
   const h = P.viewHTML();
   assert.equal((h.match(/class="bld-ed-tr"/g) || []).length, 27);
   assert.equal((h.match(/aria-pressed="true"/g) || []).filter(Boolean).length >= 9, true);
-  assert.match(h, /<label for="bldEdSkland0"><small>Curación<\/small>/);
+  assert.match(h, /id="bldEdSkland0" data-ed="slot" data-bar="land" data-slot="0" aria-haspopup="true" aria-expanded="false" aria-label="Curación: H2"/);
   assert.match(h, /value="&lt;t&gt;"/, 'el nombre se escapa');
   const code = C.encode(st.build);
   assert.ok(h.includes(GNBldShow.esc(code)), 'el código del juego aparece en la ficha');
@@ -106,4 +106,82 @@ test('BLD-12/13: con bld-gear cargado, la ficha suma el panel de equipo y un AE2
   assert.equal(d.gear.WeaponA1.weaponType, 'Greatsword');
   assert.equal(d.gear.Helm.statId, 1077, 'poder en PvE: Berserker');
   delete globalThis.GNBldGear; delete globalThis.GNBldAe2;
+});
+
+// BUI-3: elementos de mentira para simular clics sin navegador.
+function btn(attrs) {
+  const me = { tagName: 'BUTTON', id: attrs.id || '', getAttribute: (k) => (k in attrs ? attrs[k] : null), closest: (s) => (s === '[data-ed]' ? me : null) };
+  return me;
+}
+
+test('BUI-3 líneas: fondo oficial (solo render.guildwars2.com), rasgos como íconos con su nombre para el lector, menores y resumen', () => {
+  const RG = 'https://render.guildwars2.com/file/AB12/1012.png';
+  assert.equal(P.bgStyle(RG), ' style="background-image:url(\'' + RG + '\')"');
+  for (const bad of ['javascript:x', 'https://evil.com/a.png', RG + "');x:url('y", '']) assert.equal(P.bgStyle(bad), '', 'no entra: ' + bad);
+  const specs = SPECS.map((s) => Object.assign({}, s, { background: s.id === 27 ? RG : 'http://x/y.png', minor_traits: [s.id * 1000, s.id * 1000 + 1, s.id * 1000 + 2] }));
+  const traits = TRAITS.concat(specs.flatMap((s) => s.minor_traits.map((id, i) => ({ id, name: 'M' + id, tier: i + 1, slot: 'Minor', specialization: s.id, icon: 'https://render.guildwars2.com/file/m.png' }))));
+  const ref = R.normalize({ prof: PROF, specs, traits, skills: SKILLS });
+  const st = E._state;
+  st.build = P.fresh(1); st.ref = ref; st.loading = false; st.error = ''; st.pick = null;
+  P.setSpec(st.build, ref, 0, 16); P.setSpec(st.build, ref, 2, 27); P.setTrait(st.build, 2, 0, 2);
+  const h = P.viewHTML();
+  assert.match(h, /class="bld-ed-line has-spec is-elite" style="background-image:url\('https:\/\/render\.guildwars2\.com\/file\/AB12\/1012\.png'\)"/);
+  assert.doesNotMatch(h, /http:\/\/x\/y\.png/, 'un fondo que no es oficial no se usa');
+  const tr = h.match(/<button type="button" class="bld-ed-tr" id="bldEdTr201"[^>]*>/)[0];
+  assert.match(tr, /aria-pressed="true"/);
+  assert.match(tr, /aria-label="R2701"/, 'el lector dice el nombre del rasgo');
+  assert.equal((h.match(/class="bld-ed-mn"/g) || []).length, 6, '3 menores por línea elegida');
+  assert.match(h, /<p class="bld-ed-picked">R2701 · <span class="bld-muted">Maestro: sin elegir/);
+  assert.match(h, /<span>Línea 2<\/span>|data-line="1"/);
+});
+
+test('BUI-3 barra: casilleros con ícono que abren un selector; elegir, vaciar, cerrar y volver al casillero', () => {
+  const st = E._state;
+  st.build = P.fresh(1); st.ref = REF; st.loading = false; st.error = ''; st.pick = null;
+  P.setSpec(st.build, REF, 2, 27);
+  const ctx = { host: { innerHTML: '', contains: () => false, querySelector: () => null } };
+  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '0', id: 'bldEdSkland0' }) });
+  assert.deepEqual(st.pick, { bar: 'land', slot: 0 });
+  let h = ctx.host.innerHTML;
+  assert.match(h, /aria-expanded="true" aria-label="Curación: vacío"/);
+  assert.match(h, /role="group" aria-label="Elegí curación" data-ed-pick/);
+  assert.deepEqual([...h.matchAll(/data-ed="pick" data-v="(\d+)" aria-pressed/g)].map((m) => +m[1]), [11, 12], 'solo las de esa élite');
+  P.onClick(ctx, { target: btn({ 'data-ed': 'pick', 'data-v': '12' }) });
+  assert.equal(st.build.skills.land[0], 12);
+  assert.equal(st.pick, null, 'elegir cierra el selector');
+  assert.match(ctx.host.innerHTML, /aria-label="Curación: H2"/);
+  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'water', 'data-slot': '4' }) });
+  assert.match(ctx.host.innerHTML, /<details class="bld-ed-water" open>/, 'el selector de agua abre su sección');
+  P.onClick(ctx, { target: btn({ 'data-ed': 'pick', 'data-v': '17' }) });
+  assert.equal(st.build.skills.water[4], 17);
+  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '0' }) });
+  P.onClick(ctx, { target: btn({ 'data-ed': 'pick', 'data-v': '0' }) });
+  assert.equal(st.build.skills.land[0], 0, '«Dejar vacío»');
+  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '1' }) });
+  P.onClick(ctx, { target: btn({ 'data-ed': 'pick-close' }) });
+  assert.equal(st.pick, null);
+  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '1' }) });
+  P.onClick(ctx, { target: btn({ 'data-ed': 'slot', 'data-bar': 'land', 'data-slot': '1' }) });
+  assert.equal(st.pick, null, 'tocar el mismo casillero cierra');
+});
+
+test('BUI-3 profesiones con su ícono oficial; Retornado: la barra de la leyenda a la vista, sin selector', () => {
+  const RG = 'https://render.guildwars2.com/file/';
+  const id = { profs: {}, elites: {} };
+  for (let p = 1; p <= 9; p++) id.profs[p] = { name: 'P' + p, icon: RG + 'p' + p + '.png', iconBig: RG + 'P' + p + '.png', elites: [] };
+  const prev = R.identitySync;
+  R.identitySync = () => id;
+  const st = E._state;
+  st.build = P.fresh(1); st.ref = REF; st.pick = null;
+  let h = P.viewHTML();
+  assert.match(h, /class="bld-ed-pf" data-ed="prof" data-v="1" aria-pressed="true" title="P1"><span class="bld-emb"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/p1\.png" width="30"/);
+  R.identitySync = prev;
+  const ref9 = Object.assign({}, REF, { profession: 9, legends: [{ code: 1, heal: 1, elite: 7, utilities: [3, 4, 5], name: 'L1' }] });
+  st.build = P.fresh(9); st.ref = ref9;
+  st.build.legends.land = [1, 0];
+  P.legendBar(st.build, ref9);
+  h = P.viewHTML();
+  assert.match(h, /class="bld-ed-bar is-ro" role="group" aria-label="Barra \(la ponen las leyendas\)"/);
+  assert.doesNotMatch(h, /data-ed="slot"/, 'sin casilleros para elegir');
+  assert.doesNotMatch(h, /bld-ed-water/, 'sin barra de agua vacía');
 });
