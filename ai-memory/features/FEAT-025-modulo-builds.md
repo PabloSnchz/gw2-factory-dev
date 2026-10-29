@@ -1,41 +1,51 @@
 # FEAT-025 — Módulo Builds (BL-082)
 
-- Estado: EN DEV, completo (BLD-1 a BLD-15 y BUI-1 a BUI-5). Espera la validación final de Pablo (2026-10-29 18:15Z)
+- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6 y BENCH-1/BENCH-2). Espera que Pablo mire BENCH-2; después sigue CUR-1 (2026-10-29 23:40Z)
 - Dónde: https://pablosnchz.github.io/gw2-factory-dev/#/builds (Sidebar → Builds, antes de Cuentas)
-- Pedido: Pablo, 2026-10-28 03:41Z. Decisiones D1–D6 aprobadas 03:58Z («sí a todo»). Propuestas: docs/propuestas/propuesta-builds-bl082.html (módulo) y docs/propuestas/propuesta-builds-ui-bl082.html (interfaz BUI, U1 aprobado 2026-10-29 01:28Z)
+- Pedido: Pablo, 2026-10-28 03:41Z. Decisiones D1–D6 aprobadas 03:58Z («sí a todo»). Propuestas: docs/propuestas/propuesta-builds-bl082.html (módulo), docs/propuestas/propuesta-builds-ui-bl082.html (interfaz BUI, U1 aprobado 2026-10-29 01:28Z) y docs/propuestas/bui6-maqueta.html (BUI-6). Orden BUI-6 → BENCH-1 → BENCH-2 → CUR-1 aprobado 2026-10-29 18:55Z.
 
 ## Qué hace
 
-Marco común (js/bld-view.js 1.3.0), como Raids y Cuentas: cabecera con ícono, subtítulo, píldora del último parche de balance y 4 indicadores (builds curadas, élites cubiertas, para revisar, Mis builds); 4 pestañas con ícono elegido por Pablo (GNKit 1.4.0: Biblioteca 1228891, Editor 63127, Mis builds Cuentas/255373, Importar 155033) y contador; menú ⋯ común que se cierra tocando afuera o con Escape.
+Marco común (js/bld-view.js 1.5.0), como Cuentas y la Heredad (BUI-6/6b): un solo marco con el gradiente del módulo en el panel, cabecera sin caja propia cerrada por una línea, con ícono, subtítulo, píldora del último parche de balance y 4 indicadores (builds curadas, élites cubiertas, para revisar, Mis builds); 4 pestañas debajo de la línea con ícono elegido por Pablo (GNKit 1.4.0: Biblioteca 1228891, Editor 63127, Mis builds Cuentas/255373, Importar 155033) y contador; menú ⋯ común que se cierra tocando afuera o con Escape. Cada tarjeta lleva arriba una franja de 56 px de borde a borde con el arte oficial de su élite y el color de su profesión.
 
-1. **Biblioteca** (js/bld-lib.js 1.3.0, BLD-7/8/10/15, BUI-2): 104 builds curadas (assets/data/builds/catalog.json).
+1. **Biblioteca** (js/bld-lib.js 1.7.0, BLD-7/8/10/15, BUI-2, BENCH-1/2): 104 builds curadas (assets/data/builds/catalog.json).
    - Cobertura: PvE 36/36 élites, WvW 36/36 (29 vigentes + 7 «para revisar»), PvP 32/36.
-   - Filtros: las 9 profesiones como íconos oficiales y, al elegir una, sus 4 élites con emblema; modo y rol como chips; «Más filtros» con arma, daño, vigencia y texto. Profesión + modo + rol = 3 toques.
-   - Tarjeta: emblema de la élite, «Copiar código» (principal), «Ver ficha» (o tocar la tarjeta) y menú ⋯ con guardar, fuente y «Avisar que está vieja» (issue de GitHub ya escrito, A6 sin servidor).
+   - Filtros: las 9 profesiones como íconos oficiales y, al elegir una, sus 4 élites con emblema; modo y rol como chips; «Más filtros» con arma, daño, vigencia y texto. Profesión + modo + rol = 3 toques. Orden opcional «Más DPS primero».
+   - Tarjeta: emblema de la élite, bench de daño o referencia (ver abajo), «Copiar código» (principal), «Ver ficha» (o tocar la tarjeta) y menú ⋯ con guardar, fuente y «Avisar que está vieja» (issue de GitHub ya escrito, A6 sin servidor).
    - Vigencia (D4): cada build guarda el parche para el que fue revisada; si es anterior al último parche de balance (catálogo o vigía), queda «para revisar».
 2. **Editor** (js/bld-editor.js 1.3.0, BLD-5/12/13, BUI-3): profesiones con su emblema; cada línea con el fondo oficial de su especialización y los rasgos como íconos (el lector dice nombre y si está elegido); barra de 5 casilleros con ícono que abren un selector (tierra y agua; la del Retornado la ponen sus leyendas); mascotas del Guardabosques; código de plantilla en vivo; validación contra /v2 (D3); panel «Equipo y código AE2»: sugerencia de estadísticas, runa, reliquia y sigilos por reglas (D2, js/bld-gear.js), qué ya tenés en la Armería legendaria (si hay API key) y copiar el código AE2 (C3, js/bld-ae2.js).
-3. **Mis builds** (js/bld-mine.js 1.1.0 + js/bld-store.js, BLD-6/B7, BUI-4): la misma tarjeta de la Biblioteca; menú ⋯ con editar en el Editor, duplicar y borrar (con confirmación a la vista). Guardadas en este navegador, viajan en el respaldo (settings-manager 1.1.0).
+3. **Mis builds** (js/bld-mine.js 1.4.0 + js/bld-store.js, BLD-6/B7, BUI-4, BENCH-2): la misma tarjeta de la Biblioteca, con el bench de la build en que se basa o la referencia; menú ⋯ con editar en el Editor, duplicar y borrar (con confirmación a la vista). Guardadas en este navegador, viajan en el respaldo (settings-manager 1.1.0).
 4. **Importar** (js/bld-import.js 1.0.0, BLD-4/C1): pega un código [&DQ…] o AE2:… (sanitizado), muestra la ficha con el emblema, guarda o abre en el Editor.
 
 En toda ficha (js/bld-show.js 1.1.0): emblema grande de la élite, copiar código, enlace para compartir (#/builds/c/<código>, C4) y enlace a gw2skills.net (D5). Íconos y nombres oficiales desde la API (js/bld-ref.js 1.2.0, guardados en el navegador).
 
+## Bench de daño (BENCH-1 y BENCH-2, DEC-042 y DEC-043)
+
+- Datos: assets/data/builds/bench.json = los 188 benchmarks públicos de Snow Crows (DPS contra el golem, máximo y promedio, registro de dps.report), leídos el 2026-10-29. Es el techo ideal: en una pelea real se hace menos (lo dice el pie).
+- **Bench exacto** (BENCH-1, bld-lib 1.6.0): la build de PvE de Snow Crows cuya dirección coincide muestra máximo, promedio, «% de la mejor», barra y registro. Hoy 20 de las 36 builds de PvE del catálogo.
+- **Referencia por parecido** (BENCH-2, js/bld-bench.js 1.0.0): sin bench exacto no invento un número. Busco la build MEDIDA más parecida: misma profesión y élite (obligatorio), después tipo de daño (+4), rol de bendiciones (+2; «boon» genérico +1) y cada arma en común (+1); a igual puntaje, la de más DPS. Se muestra con la etiqueta «Referencia», barra rayada y la frase «No es el DPS de esta build: … es la medición más parecida (misma élite, mismo tipo de daño, …)».
+  - Biblioteca: solo PvE y solo si la build hace daño; curación y tanque siguen diciendo por qué no hay número.
+  - Mis builds: si el código o la fuente son de una build de la Biblioteca con bench, muestro ese bench («la build de la Biblioteca en que se basa»; si cambiaste el código, aviso que tu DPS puede ser otro). Si no, busco la build de la Biblioteca más parecida por líneas y rasgos (desde 50 %): si es de WvW/PvP o de curación lo digo sin número; si es de PvE, la referencia hereda su daño y rol y usa las armas de tu código. Si nada se parece, la referencia usa solo la élite (o el núcleo) y lo dice.
+  - Mis builds no necesita pasar por la Biblioteca: pide el catálogo y el bench una sola vez (GNBldLib.preload) y vuelve a dibujar.
+
 ## Temas, teclado, lector, celular y rendimiento (BUI-5, DEC-040)
 
-- Contraste WCAG AA en los 19 temas: texto 4.5:1, acento y foco 3:1. El acento, el verde, el rojo y el foco se mezclan con el texto de cada tema; lo elegido y el botón principal van sobre --bg-0 al 14 %. Guarda: tests/bld-ui.test.cjs (lee css/themes/ y el CSS real; falla si un tema nuevo o una mezcla no llega).
+- Contraste WCAG AA en los 19 temas: texto 4.5:1, acento y foco 3:1. El acento, el verde, el rojo y el foco se mezclan con el texto de cada tema; lo elegido y el botón principal van sobre --bg-0 al 14 %. Guarda: tests/bld-ui.test.cjs (lee css/themes/ y el CSS real; falla si un tema nuevo o una mezcla no llega; desde BUI-6b también mide el tinte de las 9 profesiones y el gradiente de la cabecera).
 - Teclado: pestañas con flechas, Inicio y Fin; foco visible; todo lo que se toca es un botón nativo; Escape cierra menú y selector y devuelve el foco.
-- Lector: grupos con nombre, aria-pressed en lo elegible, avisos con role=status/alert, «copiado» se lee.
+- Lector: grupos con nombre, aria-pressed en lo elegible, avisos con role=status/alert, «copiado» se lee. Las barras del bench son adorno (aria-hidden): el número va en texto.
 - Celular: controles de 44 px a 720 px, indicadores en 2 columnas a 900 px, tarjetas en 1 columna a 560 px, sin animaciones si el sistema lo pide.
-- Rendimiento: filtrar y dibujar las 104 builds ~2 ms (requisito: menos de 2 s; editor menos de 200 ms); catálogo 52 KB; los emblemas cargan a medida que se ven; los 11 módulos solo se cargan al entrar a #/builds.
+- Rendimiento: filtrar y dibujar las 104 builds ~2 ms (requisito: menos de 2 s; editor menos de 200 ms); catálogo 52 KB y bench 22 KB; los códigos del catálogo se leen una vez para el parecido; los emblemas cargan a medida que se ven; los 12 módulos solo se cargan al entrar a #/builds.
 
 ## Vigía semanal y Discord (BLD-10/14, D4/D6)
 
 - .github/workflows/builds-watch.yml: lunes 12:00 UTC, a mano o cuando cambia el catálogo.
 - .github/scripts/bld-watch.cjs: lee el parche declarado en páginas públicas de MetaBattle y /v2/build; actualiza assets/data/builds/watch.json y republica DEV.
 - Discord: solo si existe el secreto DISCORD_WEBHOOK_URL en el repo (opcional, lo configura Pablo). Sin @everyone.
+- Pendiente CUR-1 (DEC-041): re-curar el catálogo y renovar bench.json solos cada semana, en DEV y en PRD (el workflow de hoy no es portable: repo fijo y dev-pages).
 
 ## Archivos
 
-js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, bld-view.js, bld-lib.js, bld-import.js, bld-editor.js, bld-mine.js (ruta #/builds en js/modules.json, cargados solo al entrar: boot.js 1.2.0); gn-kit.js 1.4.0 (íconos de pestañas); router.js 2.22.0; sidebar-nav.js 2.3.0; settings-manager.js 1.1.0; assets/data/builds/catalog.json y watch.json. Tests: tests/bld-*.test.cjs (incluye bld-ui) y .github/scripts/bld-watch.test.cjs. Curación del catálogo (se corre a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.
+js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, bld-view.js, bld-bench.js, bld-lib.js, bld-import.js, bld-editor.js, bld-mine.js (ruta #/builds en js/modules.json, cargados solo al entrar: boot.js 1.2.0); gn-kit.js 1.4.0 (íconos de pestañas); router.js 2.22.0; sidebar-nav.js 2.3.0; settings-manager.js 1.1.0; assets/data/builds/catalog.json, bench.json y watch.json. Tests: tests/bld-*.test.cjs (incluye bld-ui y bld-bench) y .github/scripts/bld-watch.test.cjs. Curación del catálogo (se corre a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.
 
 ## Para validar
 
@@ -45,9 +55,13 @@ js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, 
 4. AE2: pegar el código del panel de equipo en el playground de Alter Ego.
 5. Mis builds: guardar, duplicar, borrar; exportar el respaldo e importarlo.
 6. Interfaz: cabecera con 4 indicadores, pestañas con sus íconos, menú ⋯ que se cierra tocando afuera; cambiar a un tema claro (Notion o macOS) y a uno oscuro: todo se lee.
+7. Bench: PvE + «Más DPS primero»; una build con bench exacto muestra su DPS; una de PvE sin bench muestra «Referencia» con su porqué; una de curación dice que no se mide.
+8. Mis builds: guardar una build de la Biblioteca con bench (muestra ese bench), cambiarle algo en el Editor y guardarla (avisa que tu DPS puede ser otro), e importar un código propio (muestra la referencia más parecida).
 
 ## Límites conocidos
 
-- D1 (comparador DPS/APM): Snow Crows no publica datos del simulador; queda como enlace a la fuente, sin números propios.
+- D1 (comparador DPS/APM): el simulador de Snow Crows no tiene datos públicos; el bench sale de sus benchmarks publicados (DEC-042, corrige DEC-039). Mi referencia nunca es un DPS calculado de tu build.
+- La referencia elige, a igual parecido, la medición de más DPS: es un techo de esa forma de jugar, no un promedio (DEC-043).
 - 7 builds de WvW (MetaBattle) declaran un parche anterior: se muestran «para revisar» (DEC-039).
 - En los temas claros el verde de «válida» se ve más oscuro que en los oscuros: es a propósito para que se lea (DEC-040).
+- Deuda BAJA: las reglas CSS de .bld-bench están en bld-lib y en bld-bench (Mis builds puede abrirse sola); bld-mine suma su oyente de clic en cada render (heredado de BLD-6).
