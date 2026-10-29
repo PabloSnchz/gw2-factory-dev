@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta BUI-6 — Builds que luce (BL-082)</title>
+<style>
+/* ---- página de la propuesta ---- */
+body{margin:0;font-family:system-ui,Segoe UI,Arial,sans-serif;background:#07090e;color:#e8e2d4;line-height:1.5}
+.doc{max-width:1120px;margin:0 auto;padding:24px 16px 80px}
+.doc h1{color:#e0b84c;font-size:1.4rem;margin:0 0 4px}.doc h2{color:#e0b84c;font-size:1.05rem;margin:28px 0 8px}
+.doc p,.doc li{color:#c9d0da;font-size:.92rem}.doc small{color:#8e96a3}
+.ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:14px 0}
+.ctl button{font:inherit;font-size:.85rem;border:1px solid #2a3142;border-radius:999px;padding:6px 14px;background:#141925;color:#e8e2d4;cursor:pointer}
+.ctl button[aria-pressed=true]{border-color:#e0b84c;color:#e0b84c}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media (max-width:820px){.cmp{grid-template-columns:1fr}}
+.cmp .box{border:1px dashed #2a3142;border-radius:12px;padding:10px 14px;font-size:.88rem;color:#c9d0da}
+.cmp b{color:#f4f6fa}
+
+/* ---- escenario: tokens de la Bóveda (cambian con el tema) ---- */
+.stage{--bg-0:#0F1117;--bg-1:#1A1F2B;--bg-2:#1A1F2B;--bd-1:#2E3649;--tx-1:#F4F6FA;--tx-2:#C9D0DA;--acc-1:#A896FF;--color-green:#3CC48A;--color-amber:#F2B94B;
+  --gn-mod:color-mix(in srgb,#C9B6FF 55%,var(--tx-1));padding:18px;border-radius:18px;background:var(--bg-0);transition:background .2s}
+.stage.light{--bg-0:#ffffff;--bg-1:#f7f7f5;--bg-2:#f7f7f5;--bd-1:#e9e9e7;--tx-1:#37352f;--tx-2:#37352f;--acc-1:#e16259;--color-green:#a0ffc8;--color-amber:#ffd36b}
+.ok{color:color-mix(in srgb,var(--color-green) 30%,var(--tx-1))}.old{color:color-mix(in srgb,var(--color-amber) 30%,var(--tx-1))}
+
+/* UN solo marco: el panel. La cabecera es su parte de arriba, de borde a borde. */
+.pn{border:1px solid var(--bd-1);border-radius:16px;background:var(--bg-1);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.hero{position:relative;padding:22px 22px 16px;background:var(--bg-1);isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-2;background:var(--spec) right center/cover no-repeat;opacity:.55}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,var(--bg-1) 18%,color-mix(in srgb,var(--bg-1) 80%,transparent) 50%,color-mix(in srgb,var(--bg-1) 35%,transparent)),
+  linear-gradient(180deg,transparent 40%,var(--bg-1) 100%),radial-gradient(120% 90% at 0 0,color-mix(in srgb,var(--gn-mod) 22%,transparent),transparent 60%)}
+.row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ico{width:60px;height:60px;border-radius:14px;padding:6px;box-sizing:border-box;background:var(--bg-0);box-shadow:0 0 0 2px var(--gn-mod),0 0 22px color-mix(in srgb,var(--gn-mod) 45%,transparent)}
+.ttl h2{margin:0;font-size:1.5rem;font-weight:800;color:var(--tx-1);letter-spacing:.01em}.ttl p{margin:2px 0 0;color:var(--tx-2);font-size:.88rem}
+.pill{margin-left:auto;font-size:.78rem;border:1px solid color-mix(in srgb,var(--gn-mod) 60%,var(--bd-1));border-radius:999px;padding:5px 12px;color:var(--tx-2);background:color-mix(in srgb,var(--bg-0) 80%,transparent);backdrop-filter:blur(4px)}
+.pill b{color:var(--tx-1)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:18px}@media (max-width:720px){.stats{grid-template-columns:1fr 1fr}}
+.st{border-radius:12px;padding:10px 12px;background:color-mix(in srgb,var(--bg-0) 78%,transparent);backdrop-filter:blur(6px);border:1px solid color-mix(in srgb,var(--bd-1) 70%,transparent);border-top:2px solid var(--gn-mod)}
+.st small{display:block;font-size:.68rem;text-transform:uppercase;letter-spacing:.07em;color:var(--tx-2)}.st b{font-size:1.35rem;color:var(--tx-1)}.st b span{font-size:.78rem;color:var(--tx-2);font-weight:500}
+.st em{display:block;font-style:normal;font-size:.72rem;color:var(--tx-2)}
+.tabs{display:flex;gap:2px;padding:0 14px;border-bottom:1px solid var(--bd-1);background:var(--bg-1);overflow-x:auto}
+.tab{display:flex;gap:8px;align-items:center;padding:12px 14px;color:var(--tx-2);font-size:.92rem;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tab img{width:20px;height:20px}.tab.on{color:var(--tx-1);font-weight:700;border-bottom-color:var(--gn-mod)}
+.tab .bd{font-size:.72rem;border:1px solid var(--bd-1);border-radius:999px;padding:0 7px;color:var(--tx-2)}
+.body{padding:16px 18px 20px}
+.profs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.pf{width:46px;height:46px;border-radius:12px;border:1px solid var(--bd-1);background:var(--bg-0);display:grid;place-items:center}
+.pf img{width:32px;height:32px;opacity:.7}.pf.on{border-color:var(--gn-mod);box-shadow:0 0 0 1px var(--gn-mod),0 0 14px color-mix(in srgb,var(--gn-mod) 40%,transparent)}.pf.on img{opacity:1}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;align-items:center}
+.chip{font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 12px;color:var(--tx-2);background:var(--bg-0)}
+.chip.on{border-color:var(--gn-mod);color:var(--tx-1);background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0));font-weight:600}
+.sort{margin-left:auto;font-size:.8rem;color:var(--tx-2)}.sort b{color:var(--tx-1)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+/* Tarjeta: franja con el fondo de su élite, emblema grande que sobresale, bench y acciones */
+.card{position:relative;border:1px solid var(--bd-1);border-radius:14px;background:var(--bg-2);overflow:hidden;transition:transform .15s,box-shadow .15s,border-color .15s}
+.card:hover{transform:translateY(-2px);border-color:color-mix(in srgb,var(--gn-mod) 60%,var(--bd-1));box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.band{height:64px;background:var(--bg) center 40%/cover no-repeat;position:relative}
+.band::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent,var(--bg-2))}
+.emb{position:absolute;left:14px;top:26px;width:60px;height:60px;border-radius:14px;background:var(--bg-0);display:grid;place-items:center;box-shadow:0 0 0 2px var(--bg-2),0 0 0 3px var(--gn-mod)}
+.emb img{width:48px;height:48px}
+.cin{padding:6px 14px 14px 88px;min-height:40px}
+.cin b{display:block;color:var(--tx-1);font-size:.98rem}.meta{font-size:.76rem;color:var(--tx-2);margin-top:1px}
+.tags{display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px 0}.tg{font-size:.7rem;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px;color:var(--tx-2)}
+.tg.ok{border-color:color-mix(in srgb,var(--color-green) 55%,var(--bd-1))}.tg.old{border-color:color-mix(in srgb,var(--color-amber) 55%,var(--bd-1))}
+.bench{padding:10px 14px 0}
+.bench .lbl{display:flex;justify-content:space-between;font-size:.74rem;color:var(--tx-2)}.bench .lbl b{color:var(--tx-1);font-size:.86rem}
+.bar{height:8px;border-radius:8px;background:var(--bg-0);overflow:hidden;margin-top:4px;box-shadow:inset 0 0 0 1px var(--bd-1)}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,color-mix(in srgb,var(--gn-mod) 70%,var(--bg-0)),var(--gn-mod))}
+.bar i.avg{opacity:.45;margin-top:-8px}
+.nob{padding:10px 14px 0;font-size:.74rem;color:var(--tx-2)}
+.acts{display:flex;gap:6px;align-items:center;padding:12px 14px 14px}
+.btn{font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:5px 13px;color:var(--tx-1);background:var(--bg-1)}
+.btn.p{background:color-mix(in srgb,var(--gn-mod) 14%,var(--bg-0));border-color:var(--gn-mod);font-weight:700}.dots{margin-left:auto;color:var(--tx-2);padding:0 6px}
+.mine .band{height:44px}.ref{margin:10px 14px 0;padding:8px 10px;border-radius:10px;border:1px dashed color-mix(in srgb,var(--gn-mod) 50%,var(--bd-1));font-size:.76rem;color:var(--tx-2)}
+.ref b{color:var(--tx-1)}
+</style>
+</head>
+<body>
+<div class="doc">
+<h1>Maqueta BUI-6 — Builds que luce</h1>
+<p><small>BL-082 · pedido de Pablo 2026-10-29 18:36Z · Shiruvana. Los íconos y fondos son los oficiales (la API del juego, en vivo); los DPS son los benchmarks públicos de Snow Crows (con crédito). Probá el botón de tema: tiene que leerse igual en uno oscuro y en uno claro.</small></p>
+
+<div class="cmp">
+  <div class="box"><b>Hoy</b>: dos marcos (el panel y otra caja adentro para la cabecera) y el gradiente encerrado arriba; las tarjetas son planas.</div>
+  <div class="box"><b>BUI-6</b>: un solo marco. La cabecera es el techo del panel, de borde a borde, con el fondo oficial de una especialización que se funde hacia abajo. Tarjetas con franja de su élite, emblema grande, bench de DPS (BENCH-1) y un leve realce al pasar el mouse.</div>
+</div>
+
+<div class="ctl" role="group" aria-label="Tema de la maqueta">
+  <button type="button" data-th="dark" aria-pressed="true">Tema oscuro (Gato Negro)</button>
+  <button type="button" data-th="light" aria-pressed="false">Tema claro (Notion)</button>
+  <button type="button" id="rot">Cambiar el fondo de la cabecera</button>
+</div>
+
+<div class="stage" id="stage">
+ <section class="pn">
+  <div class="hero" id="hero">
+   <div class="row">
+    <img class="ico" src="../../assets/icons/professions/2163510.png" alt="" width="60" height="60">
+    <div class="ttl"><h2>Builds</h2><p>Builds curadas, tu editor y tus códigos del juego, en castellano.</p></div>
+    <span class="pill">Último parche de balance <b>29/09/2026</b></span>
+   </div>
+   <div class="stats">
+    <div class="st"><small>Builds curadas</small><b>104</b><em>Snow Crows y MetaBattle, con crédito</em></div>
+    <div class="st"><small>Élites cubiertas</small><b>36 <span>PvE</span> · 36 <span>WvW</span></b><em>de 36 por modo · PvP 32/36</em></div>
+    <div class="st"><small>Para revisar</small><b>7</b><em>de un parche anterior al 29/09/2026</em></div>
+    <div class="st"><small>Mis builds</small><b>3</b><em>en este navegador · viajan en tu respaldo</em></div>
+   </div>
+  </div>
+  <div class="tabs">
+   <span class="tab on"><img src="../../assets/icons/1228891.png" alt="">Biblioteca <span class="bd">104</span></span>
+   <span class="tab"><img src="../../assets/icons/63127.png" alt="">Editor</span>
+   <span class="tab"><img src="../../assets/icons/Cuentas/255373.png" alt="">Mis builds <span class="bd">3</span></span>
+   <span class="tab"><img src="../../assets/icons/155033.png" alt="">Importar</span>
+  </div>
+  <div class="body">
+   <div class="profs" id="profs"></div>
+   <div class="chips"><span class="chip">Todos los modos</span><span class="chip on">PvE</span><span class="chip">WvW</span><span class="chip">PvP</span>
+    <span class="chip on">DPS</span><span class="chip">Celeridad</span><span class="chip">Alacridad</span><span class="chip">Curación</span><span class="chip">Más filtros ▾</span>
+    <span class="sort">Ordenar: <b>más DPS ▾</b></span></div>
+   <div class="grid" id="cards"></div>
+   <h3 style="color:var(--tx-1);font-size:.95rem;margin:22px 0 8px">Mis builds (con la referencia de BENCH-2)</h3>
+   <div class="grid" id="mine"></div>
+  </div>
+ </section>
+</div>
+
+<h2>Qué cambia en el código (cuando la apruebes)</h2>
+<ul>
+ <li><b>bld-view</b>: el panel deja de tener una caja interna; la cabecera ocupa el techo con el fondo oficial de una especialización (rota al entrar) y un velo que la funde con el panel, en los 19 temas. Indicadores translúcidos con la franja del módulo arriba.</li>
+ <li><b>bld-lib / bld-mine</b>: tarjeta con franja del fondo de su élite, emblema de 60 px, bench con barra (máximo y promedio) y orden «más DPS».</li>
+ <li><b>Contraste</b>: la guarda de BUI-5 se amplía al texto sobre el velo y a la barra de DPS (3:1). Sin animación si el sistema pide movimiento reducido.</li>
+</ul>
+<p><small>Los números de DPS son del golem en condiciones ideales (así lo aclara Snow Crows); las builds de curación y las de PvP y WvW no tienen benchmark y lo dicen. BENCH-2 nunca inventa un DPS: compara tu build con la más parecida que sí tiene.</small></p>
+</div>
+
+<script>
+(function () {
+  var A = 'https://api.guildwars2.com';
+  function j(u) { return fetch(A + u).then(function (r) { return r.json(); }); }
+  function img(src, s) { return '<img src="' + src + '" width="' + s + '" height="' + s + '" alt="" loading="lazy">'; }
+  var TOP = 46309;
+  var CARDS = [
+    { prof: 'Mesmer', elite: 40, t: 'Chronomancer de condición', meta: 'PvE · raids y encuentros · dificultad 4/5', tags: [['ok', 'vigente · parche 29/09/2026'], ['', 'Condición'], ['', 'Bastón · Cetro y Pistola']], max: 46309, avg: 46000 },
+    { prof: 'Elementalist', elite: 56, t: 'Weaver de condición', meta: 'PvE · raids y encuentros · dificultad 3/5', tags: [['ok', 'vigente · parche 29/09/2026'], ['', 'Condición'], ['', 'Pistola y Cuerno de guerra']], max: 45711, avg: 45300 },
+    { prof: 'Mesmer', elite: 40, t: 'Chronomancer de poder', meta: 'PvE · raids y encuentros · dificultad 3/5', tags: [['ok', 'vigente · parche 29/09/2026'], ['', 'Poder'], ['', 'Mandoble · Daga y Espada']], max: 43075, avg: 42800 },
+    { prof: 'Guardian', elite: 81, t: 'Luminary de curación con alacridad', meta: 'PvE · fractales · dificultad 3/5', tags: [['old', 'revisar · era del parche 15/09/2026'], ['', 'Curación'], ['', 'Alacridad']], max: 0 }
+  ];
+  var MINE = [{ prof: 'Mesmer', elite: 40, t: 'Mi Chrono de poder (con Ilusiones)', meta: 'Guardada el 28/10/2026 · tu Editor', ref: 'Se parece un <b>78 %</b> a «Chronomancer de poder» (mismas líneas, 6 de 9 rasgos y 4 de 5 habilidades), que rinde <b>43.075</b> en el golem. <u>Probala en el simulador de Snow Crows ↗</u>' }];
+  var BGS = [];
+  function fmt(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+  function card(c, s, p, mine) {
+    var e = s[c.elite] || {}, pr = p[c.prof] || {};
+    var bench = mine ? '<div class="ref">' + c.ref + '</div>' : c.max ?
+      '<div class="bench"><div class="lbl"><span>DPS en el golem (Snow Crows)</span><b>' + fmt(c.max) + '</b></div>' +
+      '<div class="bar" title="Máximo ' + fmt(c.max) + ' · promedio ' + fmt(c.avg) + '"><i style="width:' + Math.round(c.max * 100 / TOP) + '%"></i></div>' +
+      '<div class="lbl" style="margin-top:3px"><span>promedio ' + fmt(c.avg) + '</span><span>' + Math.round(c.max * 100 / TOP) + ' % de la mejor</span></div></div>' :
+      '<div class="nob">Sin benchmark de daño: es una build de curación (Snow Crows no las mide).</div>';
+    return '<article class="card' + (mine ? ' mine' : '') + '"><div class="band" style="--bg:url(' + (e.background || '') + ')"></div>' +
+      '<span class="emb">' + img(e.profession_icon_big || pr.icon_big, 48) + '</span>' +
+      '<div class="cin"><b>' + c.t + '</b><div class="meta">' + (pr.name || '') + ' · ' + c.meta + '</div></div>' +
+      (c.tags ? '<div class="tags">' + c.tags.map(function (t) { return '<span class="tg ' + t[0] + '">' + t[1] + '</span>'; }).join('') + '</div>' : '') +
+      bench + '<div class="acts"><span class="btn p">Copiar código</span><span class="btn">Ver ficha</span><span class="dots">⋯</span></div></article>';
+  }
+  Promise.all([j('/v2/professions?ids=all&lang=es&v=latest'), j('/v2/specializations?ids=all&lang=es')]).then(function (r) {
+    var p = {}, s = {};
+    r[0].forEach(function (x) { p[x.id] = x; });
+    r[1].forEach(function (x) { s[x.id] = x; if (x.elite) BGS.push(x.background); });
+    document.getElementById('profs').innerHTML = r[0].map(function (x) {
+      return '<span class="pf' + (x.id === 'Mesmer' ? ' on' : '') + '" title="' + x.name + '">' + img(x.icon_big, 32) + '</span>';
+    }).join('');
+    document.getElementById('cards').innerHTML = CARDS.map(function (c) { return card(c, s, p); }).join('');
+    document.getElementById('mine').innerHTML = MINE.map(function (c) { return card(c, s, p, true); }).join('');
+    var i = 0, hero = document.getElementById('hero');
+    function set() { hero.style.setProperty('--spec', 'url(' + (s[74] && i === 0 ? s[74].background : BGS[i % BGS.length]) + ')'); }
+    set();
+    document.getElementById('rot').addEventListener('click', function () { i = (i + 7) % BGS.length || 1; set(); });
+  }).catch(function () { document.getElementById('cards').innerHTML = '<p>No pude traer los íconos de la API ahora: recargá la página.</p>'; });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-th]'), function (b) {
+    b.addEventListener('click', function () {
+      document.getElementById('stage').classList.toggle('light', b.getAttribute('data-th') === 'light');
+      Array.prototype.forEach.call(document.querySelectorAll('[data-th]'), function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    });
+  });
+})();
+</script>
+</body>
+</html>
