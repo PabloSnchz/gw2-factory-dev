@@ -1,6 +1,7 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.1.0 (2026-10-28) · BUI-2: las 9 profesiones y sus élites como íconos oficiales, modo y rol como chips,
+ * Versión: 1.2.0 (2026-10-29) · BUI-4: preload() trae el catálogo sin dibujar (para la cabecera de Builds); el estilo del
+ *          menú ⋯ y del botón principal pasa al marco común (js/bld-view.js) · antes 1.1.0 (2026-10-28) · BUI-2: las 9 profesiones y sus élites como íconos oficiales, modo y rol como chips,
  *          «Más filtros» (arma, daño, vigencia, búsqueda) y tarjeta con emblema, «Copiar código» y menú ⋯ · antes 1.0.0
  *
  * Builds curadas por mí (assets/data/builds/catalog.json): solo datos factuales (élite, modo, rol, armas, código,
@@ -15,7 +16,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
   var ISSUES = 'https://github.com/PabloSnchz/gw2-factory-dev/issues/new';
@@ -199,10 +200,6 @@
     '#buildsPanel .bld-lib-main{display:grid;gap:4px;min-width:0}#buildsPanel .bld-lib-main p{margin:0;font-size:.78rem}',
     '#buildsPanel .bld-lib-card>.bld-acts,#buildsPanel .bld-lib-card>.bld-detail,#buildsPanel .bld-lib-card>p{grid-column:1/-1}',
     '#buildsPanel .bld-lib-card>.bld-acts{align-items:center}',
-    '#buildsPanel .bld-btn.is-primary{background:color-mix(in srgb,var(--gn-mod) 38%,var(--bg-2));border-color:var(--gn-mod);color:var(--tx-1);font-weight:600}',
-    '#buildsPanel .bld-menu{position:relative;margin-left:auto}#buildsPanel .bld-menu>summary{list-style:none;cursor:pointer}#buildsPanel .bld-menu>summary::-webkit-details-marker{display:none}',
-    '#buildsPanel .bld-menu-l{position:absolute;right:0;top:calc(100% + 4px);z-index:5;display:grid;gap:4px;min-width:220px;padding:6px;background:var(--bg-1);border:1px solid var(--bd-1);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.35)}',
-    '#buildsPanel .bld-menu-l .bld-btn{text-align:left;justify-content:flex-start}',
     '#buildsPanel .bld-tags{display:flex;flex-wrap:wrap;gap:4px}#buildsPanel .bld-tag.is-ok{border-color:var(--color-green,#3fb950)}#buildsPanel .bld-tag.is-old{border-color:var(--color-amber,#F2B94B)}',
     '#buildsPanel .bld-shv{border-left:3px solid var(--gn-mod);padding:6px 10px;background:var(--bg-1);border-radius:6px;color:var(--tx-1)}',
     '@media (max-width:560px){#buildsPanel .bld-lib{grid-template-columns:1fr}#buildsPanel .bld-pf{min-width:40px;height:40px}}'
@@ -221,10 +218,20 @@
     if (typeof f !== 'function') return Promise.reject(new Error('sin red'));
     return f(url, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error('respondió ' + r.status); return r.json(); });
   }
+  // BUI-4: catálogo y vigía una sola vez (lo usan la Biblioteca y la cabecera de Builds). Si falla, se puede volver a pedir.
+  function preload() {
+    if (st.cat) return Promise.resolve(st);
+    if (!st.pre) {
+      st.pre = Promise.all([getJSON(CATALOG), getJSON(WATCH).catch(function () { return null; })]).then(function (r) {
+        st.cat = r[0]; st.watch = r[1]; return st;
+      }, function (e) { st.pre = null; throw e; });
+    }
+    return st.pre;
+  }
   function load(ctx) {
     st.loading = true; st.error = ''; paint(ctx);
-    return Promise.all([getJSON(CATALOG), getJSON(WATCH).catch(function () { return null; })]).then(function (r) {
-      st.cat = r[0]; st.watch = r[1]; st.loading = false;
+    return preload().then(function () {
+      st.loading = false;
       var latest = latestPatch(st.cat, st.watch), old = st.cat.builds.filter(function (b) { return stateOf(b, latest) === 'revisar'; }).length;
       if (ctx.setSub) ctx.setSub(st.cat.builds.length + ' builds curadas · último parche de balance ' + fmtDate(latest) + (old ? ' · ' + old + ' para revisar' : ''));
       paint(ctx);
@@ -333,7 +340,7 @@
     paint(ctx);
   }
 
-  var api = { version: VERSION, render: render, _pure: { filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML,
+  var api = { version: VERSION, render: render, preload: preload, _pure: { filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML,
     filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS }, _state: st };
   root.GNBldLib = api;
   if (root.GNBld && typeof root.GNBld.register === 'function') root.GNBld.register('lib', api);

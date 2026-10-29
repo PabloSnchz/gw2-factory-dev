@@ -19,7 +19,7 @@ const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-lib.js', L, '1.1.0'], ['bld-mine.js', M, '1.0.0']]) {
+  for (const [f, m, v] of [['bld-lib.js', L, '1.2.0'], ['bld-mine.js', M, '1.1.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -202,4 +202,43 @@ test('Mis builds: lista vacía con caminos, filas con acciones y confirmación a
   h = M._pure.viewHTML([b]);
   assert.match(h, /data-mine="del-yes"/);
   M._state.confirm = '';
+});
+
+test('BUI-4 Mis builds con la tarjeta de la Biblioteca: emblema de su élite, «Copiar código» principal y el resto en ⋯', () => {
+  const src = CAT.builds.find((x) => x.elite === 74);
+  const b = { id: 'b2', code: src.code, title: 'Mi Paragón', profession: src.prof, updated: Date.UTC(2026, 9, 29) };
+  assert.equal(M._pure.eliteOf(b), 74, 'la élite sale del código');
+  assert.equal(M._pure.eliteOf({ code: 'roto' }), 0);
+  globalThis.GNBldRef = { identitySync: () => ({ profs: { 2: { name: 'Guerrero', icon: RG + 'p2.png', iconBig: RG + 'P2.png' } }, elites: { 74: { name: 'Paragón', icon: RG + 'e74.png', iconBig: RG + 'E74.png' } } }) };
+  M._state.confirm = ''; M._state.open = '';
+  let h = M._pure.rowHTML(b);
+  assert.match(h, /class="bld-emb bld-mine-emb" title="Paragón"><img class="" src="https:\/\/render\.guildwars2\.com\/file\/E74\.png" width="44"/);
+  assert.match(h, /class="bld-btn is-primary" data-mine="copy">Copiar código/);
+  assert.match(h, /data-mine="toggle" aria-expanded="false">Ver ficha/);
+  const menu = h.slice(h.indexOf('<details class="bld-menu">'));
+  for (const a of ['edit', 'dup', 'del']) assert.match(menu, new RegExp('data-mine="' + a + '"'), a + ' va en el menú');
+  M._state.confirm = 'b2';
+  h = M._pure.rowHTML(b);
+  assert.match(h, /class="bld-mine-ask" role="alert"><span>¿Borro «Mi Paragón»\?/, 'la confirmación queda a la vista, fuera del menú');
+  M._state.confirm = '';
+  delete globalThis.GNBldRef;
+});
+
+test('BUI-4 preload: un solo pedido del catálogo y de la vigía, aunque lo pidan la cabecera y la Biblioteca a la vez', async () => {
+  const st = L._state, prev = { cat: st.cat, watch: st.watch, pre: st.pre, f: globalThis.fetch };
+  st.cat = null; st.watch = null; st.pre = null;
+  const urls = [];
+  globalThis.fetch = async (u) => { urls.push(u); return { ok: true, json: async () => (/catalog/.test(u) ? CAT : WATCH) }; };
+  const [a, b] = await Promise.all([L.preload(), L.preload()]);
+  assert.equal(a, b);
+  assert.equal(st.cat, CAT);
+  assert.deepEqual(urls, ['assets/data/builds/catalog.json', 'assets/data/builds/watch.json']);
+  await L.preload();
+  assert.equal(urls.length, 2, 'ya cargado: nada nuevo');
+  st.cat = null; st.pre = null;
+  globalThis.fetch = async () => ({ ok: false, status: 503 });
+  await assert.rejects(L.preload(), /503/);
+  assert.equal(st.pre, null, 'si falla se puede volver a pedir');
+  Object.assign(st, { cat: prev.cat, watch: prev.watch, pre: prev.pre });
+  if (prev.f) globalThis.fetch = prev.f; else delete globalThis.fetch;
 });
