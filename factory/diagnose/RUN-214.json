@@ -1,0 +1,1 @@
+{"id": "RUN-214", "summary": "BL-082 BENCH-2: js/bld-bench.js 1.0.0 (referencia por parecido) contra el catálogo y el bench reales, y la guarda bld-ui con el módulo nuevo", "tests": ["tests/bld-bench.test.cjs", "tests/bld-ui.test.cjs", "tests/bld-lib.test.cjs", "tests/size-budget.test.cjs"]}
