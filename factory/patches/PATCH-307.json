@@ -1,0 +1,64 @@
+{
+ "id": "PATCH-307",
+ "summary": "BL-084: documentación de EQ-3b (1/2), la Biblioteca en filas agrupadas por profesión y élite, en status.md, backlog.md y el plan.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "24f5a8ac921d6ff637e9ebb59720ab40a510675d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "bld-view 1.6.0, bld-lib 1.8.0). Sigue EQ-3b. Antes: BL-083",
+     "text": "bld-view 1.6.0, bld-lib 1.8.0). EQ-3b (1/2) HECHO 2026-10-30 05:50Z (js/bld-rows.js 1.0.0 + bld-lib 1.9.0: la Biblioteca en filas agrupadas por profesión y élite, cada fila abre su ficha, DPS a la vista, filtros en una sola barra con búsqueda). Sigue EQ-3b (2/2): Mis builds. Antes: BL-083"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 05:25Z\n",
+     "text": "Última actualización: 2026-10-30 05:50Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-3b: restyle de la Biblioteca (barra de filtros única, grupos profesión → élite, una fila por build con DPS; Mis builds con las mismas filas); después",
+     "text": "Próxima acción: BL-084 EQ-3b (2/2): Mis builds con las mismas filas y su ficha en pantalla propia (con Editar, Duplicar y Borrar); después"
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-084 EQ-3 — la ficha de cada build en su pantalla (#/builds/ver/<id>). HECHO.\nArchivos:\n",
+     "text": "Micro-ciclo:\nBL-084 EQ-3b (1/2) — la Biblioteca en filas agrupadas por profesión y élite. HECHO.\nArchivos:\n- js/bld-rows.js (`d7415aa`, 1.0.0)\n- tests/bld-rows.test.cjs (`24e5120`, 7 pruebas)\n- js/modules.json (`5127643`, PATCH-306)\n\nAdemás: PATCH-306 (bld-lib 1.9.0 `b4f4c53`: una sola barra con profesión, modo, rol y búsqueda; «Orden: Por profesión / Más DPS primero»; la lista usa bld-rows; al tocar una fila la recuerda y al volver le devuelve el foco). RUN-240 verde: bld-rows 7, bld-lib 19, bld-sheet 8, bld-view 10, bld-ui 9 (19 temas AA), boot 11, index-versions 5, size-budget 6.\n\nAntes: BL-084 EQ-3 — la ficha de cada build en su pantalla (#/builds/ver/<id>). HECHO.\nArchivos:\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "(EQ-1 a EQ-3 hechos). Ya se ve en DEV: Builds → Biblioteca → «Ver ficha» abre la ficha en su pantalla con el equipo en castellano.",
+     "text": "(EQ-1 a EQ-3b 1/2 hechos). Ya se ve en DEV: Builds → Biblioteca muestra la lista nueva por profesión y élite, y cada fila abre la ficha en su pantalla con el equipo en castellano."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "f58fe5eb7f6328026d7e1d66e30c80165a2c868a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "(PATCH-304, RUN-239 verde). Sigue EQ-3b. BL-083",
+     "text": "(PATCH-304, RUN-239 verde). EQ-3b (1/2) HECHO 05:50Z: js/bld-rows.js 1.0.0 y bld-lib 1.9.0, la Biblioteca en filas agrupadas por profesión → élite con el DPS a la vista, filtros en una sola barra con búsqueda, «Más DPS primero» en lista plana (PATCH-306, RUN-240 verde). Sigue EQ-3b (2/2), Mis builds. BL-083"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "af3dc94c55778789c9ec88efc039575ca95257b2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "«están perfectas ok arranca»). EQ-1, EQ-2 y EQ-3 hechos.\n",
+     "text": "«están perfectas ok arranca»). EQ-1, EQ-2, EQ-3 y EQ-3b (1/2) hechos.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-3b (1/2) | HECHO 2026-10-30 05:50Z | `js/bld-rows.js` 1.0.0 (puro): grupos por profesión con su color, columna por élite y una fila por build (nombre, armas, modo, dificultad, etiquetas, DPS con barra); la fila entera es un enlace a su ficha. `bld-lib` 1.9.0: una sola barra de filtros con búsqueda, «Orden: Por profesión / Más DPS primero» (plana), foco de vuelta en la fila. RUN-240: 75 tests verdes. Falta (2/2): Mis builds. |\n"
+    }
+   ]
+  }
+ ]
+}
