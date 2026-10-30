@@ -1,6 +1,8 @@
 /*!
  * js/bld-lib.js — Builds: pestaña Biblioteca (BL-082 BLD-7, BLD-8, BLD-10 y BLD-15: A1–A6, C2, D4)
- * Versión: 1.7.0 (2026-10-29) · BENCH-2: sin bench exacto, la build de PvE que hace daño muestra la «Referencia» medida más
+ * Versión: 1.8.0 (2026-10-30) · EQ-3: «Ver ficha» y tocar la tarjeta abren la ficha en su pantalla (#/builds/ver/<id>,
+ *          js/bld-sheet.js); al volver, la Biblioteca sigue igual y el foco vuelve a esa build; list() da lo que se ve
+ *          · antes 1.7.0 (2026-10-29) · BENCH-2: sin bench exacto, la build de PvE que hace daño muestra la «Referencia» medida más
  *          parecida (js/bld-bench.js), diciendo en qué se parece y que no es su DPS · antes 1.6.0 BENCH-1: cada build de PvE con bench publicado muestra su DPS en el golem de Snow Crows
  *          (máximo, promedio, % de la mejor y barra), «Más DPS primero» y, si no hay bench, por qué · antes 1.5.0 BUI-6b: la tarjeta pasa su profesión al marco (franja con el arte de su élite,
  *          filo y tinte del color de la profesión) · antes 1.4.0 BUI-6: la tarjeta lleva el fondo oficial de su élite de borde a borde (GNBld.bandStyle)
@@ -24,7 +26,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.7.0';
+  var VERSION = '1.8.0';
   var CATALOG = 'assets/data/builds/catalog.json';
   var WATCH = 'assets/data/builds/watch.json';
   var BENCH = 'assets/data/builds/bench.json';
@@ -325,10 +327,25 @@
       if (st.open === b.id) paint(ctx);
     }, function (e) { st.viewErr[b.id] = 'No pude traer los nombres del juego (' + (e && e.message || '') + ').'; if (st.open === b.id) paint(ctx); });
   }
+  // EQ-3: con el marco de Builds (ctx.go) la ficha se abre en su pantalla; sin él, adentro de la tarjeta como antes.
   function toggle(ctx, b) {
+    if (ctx.go) { st.last = b.id; st.back = true; ctx.go('sheet', b.id); return; }
     st.open = st.open === b.id ? '' : b.id;
     if (st.open && !st.views[b.id]) { delete st.viewErr[b.id]; openView(ctx, b); }
     paint(ctx);
+  }
+  // EQ-3: lo que la Biblioteca está mostrando, en su orden (la ficha lo usa para «anterior / siguiente»).
+  function list() { return st.cat ? sortBuilds(filter(st.cat.builds, st.f, latestPatch(st.cat, st.watch)), st.f.sort, st.bidx) : []; }
+  // Al volver de la ficha, el foco va a «Ver ficha» de esa build (y se la muestra), una sola vez.
+  function remember(id) { st.last = String(id || ''); st.back = !!id; }
+  function focusBack(ctx) {
+    if (!st.back || !st.last || !ctx || !ctx.host || !ctx.host.querySelector) return false;
+    st.back = false;
+    var x = ctx.host.querySelector('[data-id="' + st.last.replace(/["\\\]]/g, '') + '"] [data-lib="toggle"]');
+    if (!x) return false;
+    if (x.scrollIntoView) x.scrollIntoView({ block: 'center' });
+    if (x.focus) x.focus({ preventScroll: true });
+    return true;
   }
   function clearFilters() { st.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: st.f.sort || '' }; st.more = false; }
 
@@ -395,9 +412,10 @@
     loadIcons(ctx);
     if (!st.cat) return load(ctx);
     paint(ctx);
+    focusBack(ctx);
   }
 
-  var api = { version: VERSION, render: render, preload: preload, _pure: { filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML,
+  var api = { version: VERSION, render: render, preload: preload, list: list, byId: byId, remember: remember, _pure: { focusBack: focusBack, filter: filter, stateOf: stateOf, latestPatch: latestPatch, coverage: coverage, issueUrl: issueUrl, cardHTML: cardHTML, viewHTML: viewHTML,
     filtersHTML: filtersHTML, moreCount: moreCount, onClick: onClick, MODES: MODES, ROLES: ROLES, CSS: CSS,
     benchKey: benchKey, benchIndex: benchIndex, benchOf: benchOf, benchHTML: benchHTML, sortBuilds: sortBuilds, fmtN: fmtN }, _state: st };
   root.GNBldLib = api;

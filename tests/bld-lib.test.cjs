@@ -20,7 +20,7 @@ const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-lib.js', L, '1.7.0'], ['bld-mine.js', M, '1.4.0']]) {
+  for (const [f, m, v] of [['bld-lib.js', L, '1.8.0'], ['bld-mine.js', M, '1.4.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -353,4 +353,32 @@ test('BENCH-2 Mis builds: la tarjeta lleva el bench de la build de la Biblioteca
   L._state.cat = CAT;
   delete globalThis.GNBldBench;
   assert.doesNotMatch(M._pure.rowHTML(item), /bld-bench/, 'sin bld-bench: nada');
+});
+
+// EQ-3: la ficha vive en su pantalla (js/bld-sheet.js, tests/bld-sheet.test.cjs).
+test('EQ-3 «Ver ficha» y tocar la tarjeta van a #/builds/ver/<id>; list() da lo que se ve y al volver el foco vuelve a esa build', () => {
+  Object.assign(L._state, { cat: CAT, watch: WATCH, loading: false, error: '', open: '' });
+  L._state.f = { prof: 1, elite: 0, mode: 'pve', role: '', weapon: '', damage: '', state: '', q: '', sort: '' };
+  const list = L.list();
+  assert.ok(list.length >= 4 && list.every((b) => b.prof === 1 && b.mode === 'pve'), 'lo filtrado, en orden');
+  assert.equal(L.byId(list[0].id), list[0]);
+  const went = [];
+  let focused = 0, scrolled = 0;
+  const target = { focus: () => { focused++; }, scrollIntoView: () => { scrolled++; } };
+  const want = '[data-id="' + list[1].id + '"] [data-lib="toggle"]';
+  const host = { innerHTML: '', contains: () => false, querySelector: (sel) => (sel === want ? target : null) };
+  const ctx = { host, go: (t, a) => went.push(t + ':' + a), ref: {} };
+  const card = el({ 'data-id': list[1].id }, { match: ['.bld-lib-card', '[data-id]'] });
+  assert.equal(P.onClick(ctx, { target: el({}, { parent: card }) }), 'card');
+  assert.deepEqual(went, ['sheet:' + list[1].id]);
+  assert.equal(L._state.open, '', 'ya no se abre adentro de la tarjeta');
+  assert.equal(P.focusBack(ctx), true);
+  assert.deepEqual([focused, scrolled], [1, 1], 'al volver, foco en «Ver ficha» de esa build y a la vista');
+  assert.equal(P.focusBack(ctx), false, 'una sola vez');
+  L.remember(list[1].id);
+  assert.equal(P.focusBack(ctx), true, 'la ficha también puede pedirlo');
+  L._state.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: '' };
+  L._state.cat = null;
+  assert.deepEqual(L.list(), [], 'sin catálogo, lista vacía');
+  L._state.cat = CAT;
 });

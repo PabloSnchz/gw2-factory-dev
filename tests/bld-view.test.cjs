@@ -20,8 +20,8 @@ const P = V._pure;
 const same = (a, b, m) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, m);
 
 test('versión en la cabecera y en el código', () => {
-  assert.match(SRC, /\* Versión: 1\.5\.1 /);
-  assert.equal(V.version, '1.5.1');
+  assert.match(SRC, /\* Versión: 1\.6\.0 /);
+  assert.equal(V.version, '1.6.0');
 });
 
 test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
@@ -31,6 +31,10 @@ test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
   same(P.parseHash('#/builds/importar'), { tab: 'import', arg: '' });
   same(P.parseHash('#/builds/c/DQUA%2BAA%3D'), { tab: 'import', arg: 'DQUA+AA=' });
   same(P.parseHash('#/builds/raro'), { tab: 'lib', arg: '' });
+  same(P.parseHash('#/builds/ver/sc-raids-x'), { tab: 'sheet', arg: 'sc-raids-x' }, 'EQ-3: la ficha en su pantalla');
+  assert.equal(P.hashFor('sheet', 'sc-raids-x'), '#/builds/ver/sc-raids-x');
+  assert.equal(P.shown('sheet'), 'lib', 'en la ficha queda marcada la Biblioteca');
+  assert.equal(P.shown('editor'), 'editor');
   assert.equal(P.parseHash('#/buildsx'), null);
   assert.equal(P.parseHash('#/cards'), null);
   assert.equal(P.parseHash(''), null);
