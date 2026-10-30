@@ -1,0 +1,89 @@
+{
+ "id": "PATCH-294",
+ "summary": "BL-082 CUR-1 documentado: status (tarea, próxima acción, info del primer ciclo), backlog (avance de BL-082) y FEAT-025 (vigía y curación semanal, archivos, paso 9, límites). DEC-044 y LES-042 publicados aparte.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "8c457dd85dc6be69f5e92883ef89e8c7689efd80",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-082 Builds, BUI-1 a BUI-6, BENCH-1 y BENCH-2 HECHOS 2026-10-29 (PATCH-276 a 292, FEAT-025, DEC-040 a DEC-043); espera que Pablo mire BENCH-2 y después sigue CUR-1.",
+     "text": "Tarea actual: BL-082 Builds, BUI-1 a BUI-6, BENCH-1, BENCH-2 y CUR-1 HECHOS (2026-10-29/30; PATCH-276 a 292, FEAT-025, DEC-040 a DEC-044); CUR-1 corre sola cada lunes 12:00 UTC (primera vez 2026-11-02); espera la validación de Pablo."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-29 23:40Z",
+     "text": "Última actualización: 2026-10-30 00:35Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BENCH-2 hecho en DEV (PATCH-292, js/bld-bench.js, DEC-043): espera que Pablo lo mire en #/builds (Firefox = DEV). Después CUR-1: re-curación del catálogo y del bench sola cada semana, en DEV y en PRD (DEC-041). No toco producción.",
+     "text": "Próxima acción: CUR-1 hecho en DEV (DEC-044): .github/scripts/bld-curate.cjs + builds-watch.yml portátil rehacen bench.json y re-curan catalog.json solos cada lunes 12:00 UTC, en el repo donde estén (DEV hoy; PRD cuando Pablo pida el pasaje: necesita Actions con permiso de escritura). Prueba en seco RUN-216 verde. El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» y su resumen; con el OK de Pablo a BENCH-2, BL-082 a DONE. No toco producción."
+    },
+    {
+     "op": "replace",
+     "anchor": "Detalle y pasos en FEAT-025 (puntos 7 y 8). Con tu OK sigo con CUR-1.",
+     "text": "Detalle y pasos en FEAT-025 (puntos 7 y 8).\n- [BL-082] Info: CUR-1 listo: desde el lunes 2026-11-02 (09:00 en Argentina) el bench y el catálogo de builds se actualizan solos cada semana; lo que no puedo resolver sola queda anotado para revisarlo yo. Si querés verlo antes: GitHub → gw2-factory-dev → Actions → builds-watch → Run workflow (opcional)."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "923deea7a576eb91ee4b3e5830022202530c00ad",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "referencia de daño por parecido, nunca un DPS inventado (DEC-043). Sigue CUR-1. · DEC-018, DEC-035, DEC-024, DEC-040, DEC-041, DEC-042, DEC-043 — 2026-10-29",
+     "text": "referencia de daño por parecido, nunca un DPS inventado (DEC-043). CUR-1 HECHO 2026-10-30 00:30Z (DEC-044, LES-042): .github/scripts/bld-curate.cjs + tests (11/11 con la vigía), builds-watch.yml portátil (sin repo ni rama fijos; republica con dev-pages solo si existe; commitea solo watch/bench/catalog), cada lunes 12:00 UTC rehace bench.json y re-cura catalog.json (código y armas si la fuente cambió para la misma élite, fecha de la fuente, parche solo si la fuente se actualizó después; lo demás a catalog.review); frenos si la fuente cambia de forma. La vigía no leía el parche de MetaBattle (fecha partida por etiquetas): corregida. RUN-215 (HTML real) y RUN-216 (en seco: 188 filas idénticas al bench curado, 25 fichas sin diferencias). Espera validación de BENCH-2 y el primer ciclo real (2026-11-02). · DEC-018, DEC-035, DEC-024, DEC-040, DEC-041, DEC-042, DEC-043, DEC-044 — 2026-10-30"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/features/FEAT-025-modulo-builds.md",
+   "base_sha": "8c174bf28ef37971f0c516fdcc8429cd74635e27",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6 y BENCH-1/BENCH-2). Espera que Pablo mire BENCH-2; después sigue CUR-1 (2026-10-29 23:40Z)",
+     "text": "- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/BENCH-2 y CUR-1). Espera que Pablo mire BENCH-2; la curación semanal corre sola desde el 2026-11-02 (2026-10-30 00:35Z)"
+    },
+    {
+     "op": "replace",
+     "anchor": "## Vigía semanal y Discord (BLD-10/14, D4/D6)",
+     "text": "## Vigía y curación semanal, y Discord (BLD-10/14, CUR-1, D4/D6, DEC-041, DEC-044)"
+    },
+    {
+     "op": "replace",
+     "anchor": "- .github/workflows/builds-watch.yml: lunes 12:00 UTC, a mano o cuando cambia el catálogo.",
+     "text": "- .github/workflows/builds-watch.yml: lunes 12:00 UTC (09:00 en Argentina) o a mano. Portátil: corre igual en DEV y en PRD (rama por defecto, se saltea en forks, republica con dev-pages.yml solo si existe; en PRD alcanza el push). Commitea solo watch.json, bench.json y catalog.json, y solo si cambiaron. Requisito en PRD: Actions con permiso de escritura."
+    },
+    {
+     "op": "replace",
+     "anchor": "- .github/scripts/bld-watch.cjs: lee el parche declarado en páginas públicas de MetaBattle y /v2/build; actualiza assets/data/builds/watch.json y republica DEV.",
+     "text": "- .github/scripts/bld-watch.cjs (vigía): lee el parche declarado en páginas públicas de MetaBattle (también partido por etiquetas, LES-042) y /v2/build; actualiza watch.json.\n- .github/scripts/bld-curate.cjs (CUR-1, DEC-044): rehace bench.json desde los benchmarks de Snow Crows y relee la página de origen de cada build del catálogo. Cambia sola: código y armas (si la fuente muestra otro código válido de la misma élite), fecha de la fuente y parche (MetaBattle: el declarado; Snow Crows: el último solo si la fuente se actualizó después). Lo que no puede resolver (404, sin código, otra élite, varios códigos) queda igual y anotado en catalog.review. Nunca borra ni agrega builds. Frenos: no pisa el bench si trae menos de 20 filas o menos del 60 %; no toca el catálogo si responde menos del 70 % de las páginas. Resumen de cada corrida en Actions."
+    },
+    {
+     "op": "replace",
+     "anchor": "- Pendiente CUR-1 (DEC-041): re-curar el catálogo y renovar bench.json solos cada semana, en DEV y en PRD (el workflow de hoy no es portable: repo fijo y dev-pages).",
+     "text": "- Probado en seco contra las fuentes reales (RUN-216): las 188 filas del bench leídas coinciden con las curadas a mano en BENCH-1; 25 fichas sin diferencias."
+    },
+    {
+     "op": "replace",
+     "anchor": "y .github/scripts/bld-watch.test.cjs. Curación del catálogo (se corre a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.",
+     "text": "y .github/scripts/bld-watch.test.cjs y bld-curate.test.cjs. Curación semanal: .github/scripts/bld-curate.cjs. Para sumar builds nuevas (curación con criterio, a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs."
+    },
+    {
+     "op": "replace",
+     "anchor": "(muestra la referencia más parecida).\n\n## Límites conocidos",
+     "text": "(muestra la referencia más parecida).\n9. Curación semanal (opcional, antes del lunes): GitHub → gw2-factory-dev → Actions → builds-watch → Run workflow; el resumen dice qué leyó y qué cambió.\n\n## Límites conocidos"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "- 7 builds de WvW (MetaBattle) declaran un parche anterior: se muestran «para revisar» (DEC-039).",
+     "text": "\n- La curación semanal no agrega builds nuevas ni élites que falten (PvP 32/36): eso sigue siendo curación con criterio. Si Snow Crows o MetaBattle cambian la forma de sus páginas, los frenos evitan pisar datos buenos y la corrida lo dice en su resumen."
+    }
+   ]
+  }
+ ]
+}
