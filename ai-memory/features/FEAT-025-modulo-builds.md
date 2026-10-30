@@ -8,6 +8,8 @@
 
 Marco común (js/bld-view.js 1.5.0), como Cuentas y la Heredad (BUI-6/6b): un solo marco con el gradiente del módulo en el panel, cabecera sin caja propia cerrada por una línea, con ícono, subtítulo, píldora del último parche de balance y 4 indicadores (builds curadas, élites cubiertas, para revisar, Mis builds); 4 pestañas debajo de la línea con ícono elegido por Pablo (GNKit 1.4.0: Biblioteca 1228891, Editor 63127, Mis builds Cuentas/255373, Importar 155033) y contador; menú ⋯ común que se cierra tocando afuera o con Escape. Cada tarjeta lleva arriba una franja de 56 px de borde a borde con el arte oficial de su élite y el color de su profesión.
 
+Ícono del módulo (BLD-ICON, pedido de Pablo 2026-10-30): el oficial de la pestaña Build del Panel del héroe, textura 156720 del juego (assets/icons/156720.png, 32×32), en la Sidebar, la hoja «Más» y la cabecera. No está en la API oficial: lo bajó el canal de recursos (DEC-045, ASSET-001).
+
 1. **Biblioteca** (js/bld-lib.js 1.7.0, BLD-7/8/10/15, BUI-2, BENCH-1/2): 104 builds curadas (assets/data/builds/catalog.json).
    - Cobertura: PvE 36/36 élites, WvW 36/36 (29 vigentes + 7 «para revisar»), PvP 32/36.
    - Filtros: las 9 profesiones como íconos oficiales y, al elegir una, sus 4 élites con emblema; modo y rol como chips; «Más filtros» con arma, daño, vigencia y texto. Profesión + modo + rol = 3 toques. Orden opcional «Más DPS primero».

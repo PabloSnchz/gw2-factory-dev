@@ -6,7 +6,7 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-10-30 00:35Z
+Última actualización: 2026-10-30 01:37Z
 Próxima acción: CUR-1 hecho en DEV (DEC-044): .github/scripts/bld-curate.cjs + builds-watch.yml portátil rehacen bench.json y re-curan catalog.json solos cada lunes 12:00 UTC, en el repo donde estén (DEV hoy; PRD cuando Pablo pida el pasaje: necesita Actions con permiso de escritura). Prueba en seco RUN-216 verde. El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» y su resumen; con el OK de Pablo a BENCH-2, BL-082 a DONE. No toco producción.
 
 Micro-ciclo:
@@ -185,6 +185,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 ## Esperando a Pablo
 
 - [BL-082] Validación: BENCH-2 en #/builds (Firefox = DEV): en la Biblioteca, una build de PvE sin bench propio muestra «Referencia» con el DPS medido más parecido y por qué se parece (nunca como su DPS); en Mis builds, una build guardada de la Biblioteca muestra su bench y una propia la referencia más parecida. Detalle y pasos en FEAT-025 (puntos 7 y 8).
+- [BL-082] Validación: BLD-ICON en DEV (Firefox): Builds en la Sidebar (y en la hoja «Más» del celular) y en la cabecera de #/builds lleva el ícono oficial de la pestaña Build del Panel del héroe (textura 156720, la de tu captura). PATCH-295, ASSET-001, DEC-045.
 - [BL-082] Info: CUR-1 listo: desde el lunes 2026-11-02 (09:00 en Argentina) el bench y el catálogo de builds se actualizan solos cada semana; lo que no puedo resolver sola queda anotado para revisarlo yo. Si querés verlo antes: GitHub → gw2-factory-dev → Actions → builds-watch → Run workflow (opcional).
 - [DISC-009] Decisión: respaldo en la nube. Recomiendo empezar por «Guardar copia» con el menú Compartir del celular y dejar la sincronización automática con Google Drive para después: necesita un proyecto tuyo en Google Cloud.
 - [RSK-019] Acción: Revocá el token de Twitch que está en `la-guarida/js/widgets.js` (dev.twitch.tv → Console) y restringí la API key de YouTube a `pablosnchz.github.io` en Google Cloud (o regenerala). Avisame cuando esté y saco los valores del código.
