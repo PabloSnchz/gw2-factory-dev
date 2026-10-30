@@ -28,6 +28,7 @@
 ## 4. Arquitectura
 - `catalog.json`: campo nuevo `gear` por build, solo con ids:
   `{armor:[{slot,stat,rune}], trinkets:[...], relic, weapons:[{set,slot,type,stat,sigils:[..]}], food, utility, jade, enrich}`.
+  - En PvP: `{amulet, rune, relic, sigils}` (equipo de PvP).
 - `assets/data/builds/notes.json` (nuevo): mis notas por build, con las secciones `skills`, `traits`, `gear`, `relic`, `concepts`, `opener`, `loop` y `cc`.
   - El texto hace referencia a ids (`{s:6161}` o `{t:2279}`), y la app pone el ícono y el nombre oficial en castellano.
 - `.github/scripts/bld-curate.cjs` lee también el equipo (ids) de cada ficha de Snow Crows.
@@ -41,7 +42,7 @@
 ## 5. Micro-ciclos (uno por vez, suite verde en cada uno)
 | MC | Qué | Resultado visible |
 |---|---|---|
-| EQ-1 | Curación del equipo: el script lee los ids de Snow Crows → `gear` en las 69 builds de Snow Crows, más tests | (datos) |
+| EQ-1 | Curación del equipo: el script lee los ids de Snow Crows → `gear` en las 96 builds de Snow Crows (PvE, WvW y PvP), más tests | (datos) |
 | EQ-2 | Referencias en castellano: objetos, estadísticas, runas, sellos, reliquias, comida (API `lang=es`), en lote y con caché | (motor) |
 | EQ-3 | Nueva ficha `bld-sheet.js`: cabecera con bench, navegación de secciones y secciones plegables | ficha nueva |
 | EQ-4 | **Equipo**: 3 tablas como Snow Crows, con íconos oficiales, tooltips accesibles (cursor, foco y toque) y resumen de estadística | ficha de equipo |
@@ -52,9 +53,9 @@
 | EQ-9 | AE2 con el equipo real + Mis builds y Editor con la misma ficha | exportar |
 | EQ-10 | Revisión: 19 temas AA, teclado, celular, rendimiento < 200 ms, docs y dashboard | cierre |
 
-Builds de MetaBattle (WvW): su equipo se carga a mano en EQ-8 (son 8), sin leer su página automáticamente.
+Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8, sin leer su página automáticamente.
 
 ## 6. Riesgos
 - **MEDIO:** si Snow Crows cambia el formato de su página, la curación se rompe. Mitigación: el test del script falla y la build queda «para revisar»; no se muestra equipo viejo como si estuviera vigente.
-- **MEDIO:** el volumen de notas. Mitigación: las escribo por tandas y la ficha funciona igual sin ellas (datos más descripciones oficiales).
+- **MEDIO:** el volumen de notas (104 builds). Mitigación: las escribo por tandas y la ficha funciona igual sin ellas (datos más descripciones oficiales).
 - **BAJO:** muchos pedidos a la API. Mitigación: lotes de 200 ids y caché por sesión.
