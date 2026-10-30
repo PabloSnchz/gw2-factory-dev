@@ -6,6 +6,7 @@
 // - Discord (D6): si existe el secreto DISCORD_WEBHOOK_URL, avisa cuando sale un parche o cambia la biblioteca.
 //   El webhook nunca llega al navegador: vive solo en los secretos de GitHub Actions.
 // Solo lee páginas públicas, una por vez, con un User-Agent que dice quién es.
+// CUR-1: la fecha puede venir partida por etiquetas («the <b> September 15, 2026 </b> patch»): se lee sobre el texto.
 'use strict';
 const fs = require('fs');
 const crypto = require('crypto');
@@ -18,9 +19,10 @@ const MONTHS = { january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, j
 
 // «up to date for the September 29, 2026 patch» → '2026-09-29' (la más nueva de la página).
 function parsePatch(html) {
+  const t = String(html || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ');
   const re = /up to date for the ([A-Z][a-z]+) (\d{1,2}), (\d{4}) patch/g;
   let m, best = '';
-  while ((m = re.exec(String(html || '')))) {
+  while ((m = re.exec(t))) {
     const mo = MONTHS[m[1].toLowerCase()];
     if (!mo) continue;
     const iso = m[3] + '-' + String(mo).padStart(2, '0') + '-' + String(m[2]).padStart(2, '0');
