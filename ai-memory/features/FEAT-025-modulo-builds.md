@@ -1,6 +1,6 @@
 # FEAT-025 — Módulo Builds (BL-082)
 
-- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/BENCH-2 y CUR-1). Espera que Pablo mire BENCH-2; la curación semanal corre sola desde el 2026-11-02 (2026-10-30 00:35Z)
+- Estado: CERRADA en DEV 2026-10-30 01:56Z (BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/BENCH-2, CUR-1 y BLD-ICON; ícono validado por Pablo). Pasaje a PRD en curso: BL-083 (manifiesto factory/promote/BL-083.txt, 28 movimientos). La curación semanal corre sola desde el 2026-11-02
 - Dónde: https://pablosnchz.github.io/gw2-factory-dev/#/builds (Sidebar → Builds, antes de Cuentas)
 - Pedido: Pablo, 2026-10-28 03:41Z. Decisiones D1–D6 aprobadas 03:58Z («sí a todo»). Propuestas: docs/propuestas/propuesta-builds-bl082.html (módulo), docs/propuestas/propuesta-builds-ui-bl082.html (interfaz BUI, U1 aprobado 2026-10-29 01:28Z) y docs/propuestas/bui6-maqueta.html (BUI-6). Orden BUI-6 → BENCH-1 → BENCH-2 → CUR-1 aprobado 2026-10-29 18:55Z.
 
@@ -48,7 +48,7 @@ En toda ficha (js/bld-show.js 1.1.0): emblema grande de la élite, copiar códig
 
 ## Archivos
 
-js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, bld-view.js, bld-bench.js, bld-lib.js, bld-import.js, bld-editor.js, bld-mine.js (ruta #/builds en js/modules.json, cargados solo al entrar: boot.js 1.2.0); gn-kit.js 1.4.0 (íconos de pestañas); router.js 2.22.0; sidebar-nav.js 2.3.0; settings-manager.js 1.1.0; assets/data/builds/catalog.json, bench.json y watch.json. Tests: tests/bld-*.test.cjs (incluye bld-ui y bld-bench) y .github/scripts/bld-watch.test.cjs y bld-curate.test.cjs. Curación semanal: .github/scripts/bld-curate.cjs. Para sumar builds nuevas (curación con criterio, a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.
+js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, bld-view.js, bld-bench.js, bld-lib.js, bld-import.js, bld-editor.js, bld-mine.js (ruta #/builds en js/modules.json, cargados solo al entrar: boot.js 1.2.0); gn-kit.js 1.4.0 (íconos de pestañas); router.js 2.22.0; sidebar-nav.js 2.3.1; assets/icons/156720.png (BLD-ICON); settings-manager.js 1.1.0; assets/data/builds/catalog.json, bench.json y watch.json. Tests: tests/bld-*.test.cjs (incluye bld-ui y bld-bench) y .github/scripts/bld-watch.test.cjs y bld-curate.test.cjs. Curación semanal: .github/scripts/bld-curate.cjs. Para sumar builds nuevas (curación con criterio, a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.
 
 ## Para validar
 
