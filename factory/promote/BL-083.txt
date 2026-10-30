@@ -1,0 +1,52 @@
+# BL-083: promoción de BL-082 (módulo Builds, FEAT-025: BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/2, CUR-1, BLD-ICON) a producción (gw2-wallet-ligero)
+# Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
+# Base de producción esperada: a501bea (BL-081). Comparación blob a blob de DEV contra producción a501bea:
+#   css/, privacy.html, docs/user-guide*.html, assets/previews/, el resto de assets/data/, assets/icons/ (salvo 156720.png)
+#   y los otros 73 archivos de js/ son idénticos: no se tocan.
+# No se tocan: js/analytics.js y assets/meta-drops.json (versión PROD), README/CHANGELOG, docs internos y docs/propuestas,
+#   tests/, tools/, factory/, ai-memory/ y los workflows propios de DEV (dev-pages, factory-*, decision-response, app-checks).
+# index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006).
+# Autoactualización (DEC-041/DEC-044): la vigía y la curación semanal van con sus tests y corren solas en PRD (lunes 12:00 UTC),
+#   commitean solo assets/data/builds/{watch,bench,catalog}.json en la rama por defecto. El workflow es portátil: en PRD no
+#   busca dev-pages.yml. El mismo pasaje (cambia catalog.json) dispara una primera vigía en PRD que puede sumar un commit «builds-watch».
+# Totales: 12 JS nuevos + 6 de js/ modificados + 3 datos + 1 ícono + 1 página + 5 de automatización = 28 copias; 0 bajas; 28 movimientos.
+
+# JS nuevos (12): el módulo Builds, se cargan solo al entrar a #/builds (js/modules.json → routes)
+C js/bld-code.js
+C js/bld-ref.js
+C js/bld-show.js
+C js/bld-store.js
+C js/bld-ae2.js
+C js/bld-gear.js
+C js/bld-view.js
+C js/bld-bench.js
+C js/bld-lib.js
+C js/bld-import.js
+C js/bld-editor.js
+C js/bld-mine.js
+
+# js/ modificados (6)
+C js/boot.js
+C js/router.js
+C js/sidebar-nav.js
+C js/gn-kit.js
+C js/settings-manager.js
+C js/modules.json
+
+# Datos (3)
+C assets/data/builds/catalog.json
+C assets/data/builds/bench.json
+C assets/data/builds/watch.json
+
+# Ícono (1): pestaña Build del Panel del héroe (ASSET-001, DEC-045)
+C assets/icons/156720.png
+
+# Páginas (1)
+C index.html
+
+# Automatización (5): vigía y curación semanal, solas en PRD
+C .github/workflows/builds-watch.yml
+C .github/scripts/bld-watch.cjs
+C .github/scripts/bld-watch.test.cjs
+C .github/scripts/bld-curate.cjs
+C .github/scripts/bld-curate.test.cjs
