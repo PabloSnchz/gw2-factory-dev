@@ -1,0 +1,1 @@
+{"id": "RUN-223", "summary": "BL-082 BLD-ICON: texturas chicas 2208280-2208440 (lote de plantillas) en ASCII, buscando la pestaña del Almacén de builds", "tests": ["tests/bld-icon-probe.smoke.cjs"]}
