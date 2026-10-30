@@ -38,14 +38,15 @@ function el(attrs, parent) {
 
 test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
-  assert.match(src, /Versión: 1\.4\.0 /);
-  assert.equal(SH.version, '1.4.0');
+  assert.match(src, /Versión: 1\.5\.0 /);
+  assert.equal(SH.version, '1.5.0');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-gearview.js') && mods.indexOf('js/bld-gearview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-4: el equipo antes que la ficha');
   assert.ok(mods.indexOf('js/bld-ref.js') < mods.indexOf('js/bld-traitview.js') && mods.indexOf('js/bld-traitview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-5: rasgos antes que la ficha');
   assert.ok(mods.indexOf('js/bld-notes.js') >= 0 && mods.indexOf('js/bld-notes.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-6: notas antes que la ficha');
+  assert.ok(mods.indexOf('js/bld-play.js') > mods.indexOf('js/bld-notes.js') && mods.indexOf('js/bld-play.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-7: cómo se juega antes que la ficha');
   const sb = { console: { info() {}, warn() {} } };
   sb.window = sb;
   require('node:vm').runInNewContext(fs.readFileSync(path.join(ROOT, 'js', 'bld-view.js'), 'utf8'), sb, { filename: 'js/bld-view.js' });
@@ -250,6 +251,24 @@ test('EQ-6: notas de equipo y reliquia al pie de «Equipo», de habilidades y ra
   globalThis.GNBldItems = saveI;
   delete globalThis.GNBldNotes;
   assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /bld-nts/, 'sin el módulo, la ficha sigue igual');
+  delete globalThis.GNBldLib;
+});
+
+test('EQ-7: «Cómo se juega» lo pinta bld-play con la nota, si ya cargó, el ref, el equipo y la fuente; sin el módulo, el aviso de antes', () => {
+  const b = CAT.builds.find((x) => GEAR[x.id] && x.mode === 'pve');
+  globalThis.GNBldLib = fakeLib([b]);
+  const seen = [];
+  globalThis.GNBldNotes = { loaded: () => true, noteSync: (id) => (id === b.id ? { loop: ['x'] } : null), ensureCss() {}, load: async () => ({}), html: () => '' };
+  globalThis.GNBldPlay = { ensureCss() {}, html: (m) => { seen.push(m); return '<div class="bld-play">PLAY</div>'; } };
+  const h = P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null });
+  assert.match(h, /data-sheet-sec="play"[\s\S]*<div class="bld-play">PLAY<\/div>/);
+  assert.equal(seen.length, 1);
+  assert.deepEqual(seen[0].note, { loop: ['x'] });
+  assert.equal(seen[0].loaded, true);
+  assert.equal(seen[0].source, b.source || null);
+  delete globalThis.GNBldPlay;
+  assert.match(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /están en preparación/, 'sin el módulo, el aviso de antes');
+  delete globalThis.GNBldNotes;
   delete globalThis.GNBldLib;
 });
 

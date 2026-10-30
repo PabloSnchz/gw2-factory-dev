@@ -1,6 +1,7 @@
 /*!
  * js/bld-notes.js — Builds: desplegables de notas de la ficha (BL-084 EQ-6)
- * Versión: 1.0.0 (2026-10-30)
+ * Versión: 1.1.0 (2026-10-30) · EQ-7: inline(texto, ref, equipo) para que «Cómo se juega» (js/bld-play.js) use las mismas
+ *          referencias con ícono y nombre oficial · antes 1.0.0
  *
  * Cuatro desplegables como en Snow Crows: notas de habilidades y de rasgos (bajo «Rasgos y habilidades») y notas de
  * equipo y de la reliquia (bajo «Equipo»). Arriba va mi nota, escrita con palabras propias (DEC-046), y debajo la
@@ -13,7 +14,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var URL = 'assets/data/builds/notes.json';
   var KEYS = { skills: 'Notas de habilidades', traits: 'Notas de rasgos', gear: 'Notas de equipo', relic: 'Notas de la reliquia' };
   var OFFICIAL = 'Descripción oficial · API de Guild Wars 2 en castellano';
@@ -70,12 +71,15 @@
     };
   }
   // Un párrafo de la nota: texto escapado; {s:ID}/{t:ID}/{i:ID} pasan a ícono y nombre oficial.
-  function para(text, look) {
-    return '<p>' + esc(text).replace(TOKEN, function (_, k, id) {
+  function inlineWith(text, look) {
+    return esc(text).replace(TOKEN, function (_, k, id) {
       var x = look ? look(k, Number(id)) : null;
       return x ? '<span class="bld-ntr">' + img(x.icon, 20) + '<b>' + esc(x.name) + '</b></span>' : '<b>#' + id + '</b>';
-    }) + '</p>';
+    });
   }
+  function para(text, look) { return '<p>' + inlineWith(text, look) + '</p>'; }
+  // EQ-7: un texto con {s|t|i:ID}, sin párrafo (lo usa js/bld-play.js).
+  function inline(text, ref, gear) { return inlineWith(text, lookup(ref, gear)); }
 
   // Lo oficial que va debajo de cada desplegable: [{ name, icon, lines }]
   function itemLines(x) {
@@ -154,7 +158,7 @@
     if (s.textContent !== CSS) s.textContent = CSS;
   }
 
-  var api = { version: VERSION, URL: URL, KEYS: KEYS, load: load, loaded: loaded, noteSync: noteSync, html: html, ensureCss: ensureCss,
+  var api = { version: VERSION, URL: URL, KEYS: KEYS, load: load, loaded: loaded, noteSync: noteSync, html: html, inline: inline, ensureCss: ensureCss,
     _pure: { itemsOf: itemsOf, lookup: lookup, para: para, official: official, blockHTML: blockHTML, CSS: CSS, TOKEN: TOKEN },
     _test: { reset: function () { st = { data: null, p: null, err: false }; } } };
   root.GNBldNotes = api;

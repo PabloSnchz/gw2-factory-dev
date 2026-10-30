@@ -25,8 +25,8 @@ const GEAR = { rune: { id: 24836, name: 'Runa del erudito', icon: RG + 'r.png', 
 
 test('versión en la cabecera, en modules.json antes de la ficha; sin estado guardado', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-notes.js'), 'utf8');
-  assert.match(src, /Versión: 1\.0\.0 /);
-  assert.equal(N.version, '1.0.0');
+  assert.match(src, /Versión: 1\.1\.0 /);
+  assert.equal(N.version, '1.1.0');
   assert.doesNotMatch(src, /localStorage\./);
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-notes.js') >= 0 && mods.indexOf('js/bld-notes.js') < mods.indexOf('js/bld-sheet.js'));
@@ -56,6 +56,15 @@ test('párrafo: texto escapado y {s|t|i:ID} con ícono y nombre oficial; lo desc
   assert.match(h, /<b>Runa del erudito<\/b>/);
   assert.match(h, /<b>#77<\/b> &lt;x&gt;<\/p>$/);
   assert.equal(P.itemsOf(GEAR)[9], undefined, 'lo que la API no tiene no se usa');
+});
+
+test('EQ-7: inline() es el párrafo sin <p>, con las mismas referencias', () => {
+  const t = 'Usá {s:13021} y {i:24836} <y>';
+  const h = N.inline(t, REF, GEAR);
+  assert.equal('<p>' + h + '</p>', P.para(t, P.lookup(REF, GEAR)));
+  assert.match(h, /<b>Runa del erudito<\/b>/);
+  assert.doesNotMatch(h, /<p>/);
+  assert.equal(N.inline('{s:1}', null, null), '<b>#1</b>');
 });
 
 test('descripción oficial: barra, rasgos elegidos sin repetir, runa con bonos numerados y sigilos, amuleto, reliquia', () => {
