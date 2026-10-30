@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maqueta BL-084 · Ficha de build (equipo y notas) · La Bóveda del Gato Negro</title>
+<style>
+:root{--bg-0:#0d0f13;--bg-1:#10131a;--bg-2:#111216;--bd-1:#23252b;--tx-1:#e9e9f1;--tx-2:#cfd2d8;--tx-3:#a0a0a6;--acc-1:#5276ff;--gold:#FFA928;
+  --mod:color-mix(in srgb,#C9B6FF 55%,var(--tx-1));--prof:#D09C59;--tray:#0b0d11}
+*{box-sizing:border-box}
+body{margin:0;background:var(--tray);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--mod)}
+.note{max-width:1180px;margin:14px auto 0;padding:8px 14px;border:1px dashed var(--bd-1);border-radius:10px;color:var(--tx-3);font-size:.82rem}
+.panel{max-width:1180px;margin:10px auto 40px;border:1px solid var(--bd-1);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,color-mix(in srgb,#C9B6FF 12%,transparent),transparent 300px),var(--tray);padding:0 0 22px}
+/* ---------- cabecera de la ficha */
+.hero{position:relative;padding:22px 24px 18px;border-bottom:1px solid var(--bd-1);display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,color-mix(in srgb,var(--prof) 22%,transparent),transparent 60%);pointer-events:none}
+.emb{width:72px;height:72px;border-radius:16px;display:grid;place-items:center;font-weight:700;color:#1a1206;background:var(--prof);box-shadow:0 0 0 3px color-mix(in srgb,var(--prof) 40%,transparent)}
+.hero h1{margin:0;font-size:1.45rem}.hero h1 small{font-weight:400;color:var(--tx-2);font-size:1rem}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.tag{font-size:.75rem;border:1px solid var(--bd-1);border-radius:999px;padding:2px 9px;color:var(--tx-2);background:var(--bg-0)}
+.tag.ok{border-color:#3fb950}
+.bench{margin-top:10px;max-width:460px}.bench b{font-size:1.05rem}.bench small{color:var(--tx-2)}
+.bar{display:block;height:7px;border-radius:999px;background:var(--bg-0);box-shadow:inset 0 0 0 1px var(--bd-1);overflow:hidden;margin-top:4px}
+.bar i{display:block;height:100%;width:83%;background:var(--prof);border-radius:999px}
+.acts{display:grid;gap:6px;position:relative}
+.btn{font:inherit;font-size:.85rem;border:1px solid var(--bd-1);background:var(--bg-0);color:var(--tx-1);border-radius:10px;padding:7px 12px;cursor:pointer;text-align:center;text-decoration:none}
+.btn.pri{background:color-mix(in srgb,var(--mod) 14%,var(--bg-0));border-color:var(--mod)}
+/* ---------- navegación de secciones */
+.nav{position:sticky;top:0;z-index:2;display:flex;gap:4px;margin:16px 24px 0;border-bottom:1px solid var(--bd-1);background:var(--tray)}
+.nav a{padding:8px 14px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);text-decoration:none;font-size:.9rem}
+.nav a.on{border-color:var(--mod);color:var(--tx-1)}
+/* ---------- secciones plegables (como Snow Crows: «— EQUIPO») */
+details.sec{margin:18px 24px 0;border-top:1px dashed var(--bd-1);padding-top:10px}
+details.sec>summary{list-style:none;cursor:pointer;font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.85rem;padding:6px 0;display:flex;gap:12px;align-items:center}
+details.sec>summary::-webkit-details-marker{display:none}
+details.sec>summary:before{content:"+";width:14px;color:var(--mod);font-size:1.1rem}
+details.sec[open]>summary:before{content:"—"}
+details.sec>summary small{font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx-3)}
+/* ---------- equipo: tres tablas */
+.gear{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:10px}
+.tbl{border:1px solid var(--bd-1);border-radius:12px;overflow:hidden;background:var(--bg-1)}
+.tbl h4{margin:0;padding:9px 14px;font-size:.8rem;color:var(--gold);background:var(--bg-2);border-bottom:1px solid var(--bd-1);display:flex;justify-content:space-between}
+.tbl h4 span{color:var(--tx-3);font-weight:400}
+.row{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--bd-1);position:relative}
+.row:last-child{border-bottom:0}
+.ic{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;font-size:.62rem;color:var(--tx-3);text-align:center;line-height:1.1;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--prof) 35%,var(--bg-0)),var(--bg-0));border:1px solid var(--bd-1)}
+.ic.s{width:20px;height:20px;border-radius:4px;font-size:0;display:inline-block;vertical-align:-4px;margin-right:6px;background:linear-gradient(135deg,#8a6cff,#2b2550)}
+.ic.r{background:linear-gradient(135deg,#ff9b58,#3a1f10)}
+.it b{font-weight:500}.it small{color:var(--tx-3);margin-left:6px}
+.it .up{display:block;font-size:.88rem;color:var(--tx-2)}
+.stats{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.stats .tag b{color:var(--tx-1)}
+/* tooltip con la descripción oficial */
+.tip{display:none;position:absolute;left:66px;top:100%;z-index:5;width:300px;padding:10px 12px;border-radius:10px;background:var(--bg-0);border:1px solid var(--mod);
+  box-shadow:0 10px 30px #000a;font-size:.82rem;color:var(--tx-2)}
+.tip b{display:block;color:var(--tx-1);margin-bottom:4px}.tip em{display:block;margin-top:6px;color:var(--tx-3);font-style:normal;font-size:.72rem}
+.row:hover .tip,.row:focus-within .tip,.row.demo .tip{display:block}
+/* ---------- rasgos y habilidades */
+.ts{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:14px;margin-top:10px}
+.band{position:relative;border-radius:14px;overflow:hidden;border:1px solid var(--bd-1);margin-bottom:10px;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--prof) 40%,var(--bg-0)),color-mix(in srgb,var(--prof) 12%,var(--bg-1)) 45%,var(--bg-1))}
+.skills{display:flex;align-items:center;gap:6px;padding:16px}.skills .ic{width:50px;height:50px}
+.skills .lbl{margin-left:auto;font-size:1.35rem;color:var(--tx-1);opacity:.9}
+.spec{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:8px;padding:12px 16px}
+.hex{width:96px;height:96px;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);display:grid;place-items:center;font-size:.72rem;text-align:center;
+  background:color-mix(in srgb,var(--prof) 55%,var(--bg-0));color:#1a1206;font-weight:700}
+.tr{display:grid;grid-template-columns:repeat(6,1fr);align-items:center;justify-items:center;gap:4px}
+.col{display:grid;gap:4px}
+.min{width:34px;height:34px;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%);background:var(--tx-2)}
+.maj{width:38px;height:38px;border-radius:6px;background:var(--bg-0);border:1px solid var(--bd-1);opacity:.35}
+.maj.on{opacity:1;border-color:var(--gold);box-shadow:0 0 0 1px var(--gold);background:color-mix(in srgb,var(--gold) 30%,var(--bg-0))}
+.spec h5{margin:4px 0 0;font-size:.78rem;color:var(--tx-2);text-align:center}
+.wkeys{display:flex;gap:6px;padding:0 16px 16px}.wkeys div{display:grid;justify-items:center;gap:2px;font-size:.7rem;color:var(--tx-3)}.wkeys .ic{width:40px;height:40px}
+details.acc{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);margin-bottom:10px}
+details.acc>summary{list-style:none;cursor:pointer;padding:16px 18px;font-size:1.05rem;display:flex;gap:14px;align-items:center}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary:before{content:"+";color:var(--mod);font-size:1.3rem;width:14px}
+details.acc[open]>summary:before{content:"—"}
+details.acc>summary small{margin-left:auto;color:var(--tx-3);font-size:.75rem}
+.accb{padding:0 18px 16px 46px;color:var(--tx-2);font-size:.92rem}
+.accb p{margin:0 0 8px}.k{color:var(--gold);white-space:nowrap}.k.t{color:#7cc7ff}
+.off{display:block;margin-top:6px;padding:8px 10px;border-left:3px solid var(--bd-1);background:var(--bg-0);border-radius:6px;font-size:.8rem;color:var(--tx-3)}
+table.keys{width:100%;border-collapse:collapse;font-size:.88rem}table.keys td{padding:5px 6px;border-bottom:1px solid var(--bd-1)}table.keys td:last-child{text-align:right;color:var(--tx-3)}
+/* ---------- cómo se juega */
+.play{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:10px}
+.card{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:14px 16px}
+.card h3{margin:0 0 8px;font-size:1.1rem}
+.card ol,.card ul{margin:0;padding-left:20px;color:var(--tx-2)}.card li{margin:4px 0}
+.who{display:inline-block;margin:10px 24px 0;font-size:.75rem;color:var(--tx-3)}
+.foot{margin:18px 24px 0;font-size:.78rem;color:var(--tx-3);border-top:1px solid var(--bd-1);padding-top:10px}
+@media (max-width:900px){.gear{grid-template-columns:1fr}.ts,.play{grid-template-columns:1fr}.hero{grid-template-columns:auto 1fr}.acts{grid-column:1/-1;grid-auto-flow:column}}
+</style>
+</head>
+<body>
+<p class="note"><b>Maqueta BL-084</b> (no es la app): así quedaría la ficha de una build de la Biblioteca con <b>equipo</b> y <b>notas en castellano</b>,
+con la estructura de Snow Crows y el estilo de la Bóveda (marco, gradiente, colores de profesión y temas). Ejemplo: Mechanista · DPS de poder · Rifle (raids).
+Los cuadraditos son lugares de íconos: en la app van los oficiales de la API. Nombres y descripciones en castellano tomados de la API oficial (/v2/items, /v2/skills, /v2/traits con <code>lang=es</code>).</p>
+
+<section class="panel" aria-label="Ficha de build">
+  <header class="hero">
+    <div class="emb" aria-hidden="true">MEC</div>
+    <div>
+      <h1>Mechanista · DPS de poder <small>Rifle</small></h1>
+      <div class="meta">
+        <span class="tag">Ingeniero</span><span class="tag">PvE · raids y strikes</span><span class="tag">Dificultad 2/5</span>
+        <span class="tag ok">vigente · parche 29/09/2026</span><span class="tag">Requiere End of Dragons</span>
+      </div>
+      <div class="bench"><b>38.473 DPS</b> <small>promedio 38.100 · 83 % de la mejor · bench de Snow Crows contra el golem</small>
+        <span class="bar" aria-hidden="true"><i></i></span></div>
+    </div>
+    <div class="acts">
+      <button class="btn pri" type="button">Copiar código</button>
+      <button class="btn" type="button">Copiar AE2 (con equipo)</button>
+      <button class="btn" type="button">Guardar en Mis builds</button>
+      <a class="btn" href="https://snowcrows.com/builds/raids/engineer/power-mechanist-rifle" target="_blank" rel="noopener">Guía en Snow Crows ↗</a>
+    </div>
+  </header>
+
+  <nav class="nav" aria-label="Secciones de la ficha">
+    <a class="on" href="#equipo">Equipo</a><a href="#rasgos">Rasgos y habilidades</a><a href="#juego">Cómo se juega</a><a href="#fuente">Fuente</a>
+  </nav>
+
+  <!-- ============ EQUIPO ============ -->
+  <details class="sec" id="equipo" open>
+    <summary>Equipo <small>estadísticas, runas, reliquia, armas y consumibles</small></summary>
+    <div class="gear">
+      <div class="tbl"><h4>Armadura <span>6 piezas</span></h4>
+        <div class="row"><span class="ic">casco</span><span class="it"><b>De berserker</b><small>Casco</small><span class="up"><span class="ic s"></span>Runa superior del cazadragones</span></span></div>
+        <div class="row"><span class="ic">homb.</span><span class="it"><b>De berserker</b><small>Hombreras</small><span class="up"><span class="ic s"></span>Runa superior del cazadragones</span></span></div>
+        <div class="row demo" tabindex="0"><span class="ic">pecho</span><span class="it"><b>De berserker</b><small>Pecho</small><span class="up"><span class="ic s"></span>Runa superior del cazadragones</span></span>
+          <span class="tip" role="tooltip"><b>Runa superior del cazadragones</b>(1) +25 de ferocidad · (2) +35 de potencia · (3) +50 de ferocidad · (4) +65 de potencia · (5) +100 de ferocidad · (6) +125 de ferocidad
+            <em>Descripción oficial · API de Guild Wars 2 en castellano</em></span></div>
+        <div class="row"><span class="ic">guant.</span><span class="it"><b>De berserker</b><small>Guantes</small><span class="up"><span class="ic s"></span>Runa superior del cazadragones</span></span></div>
+        <div class="row"><span class="ic">grebas</span><span class="it"><b>De berserker</b><small>Grebas</small><span class="up"><span class="ic s"></span>Runa superior del cazadragones</span></span></div>
+        <div class="row"><span class="ic">botas</span><span class="it"><b>De berserker</b><small>Botas</small><span class="up"><span class="ic s"></span>Runa superior del cazadragones</span></span></div>
+      </div>
+      <div class="tbl"><h4>Abalorios y reliquia <span>7 piezas</span></h4>
+        <div class="row"><span class="ic">espalda</span><span class="it"><b>De berserker</b><small>Espalda</small></span></div>
+        <div class="row"><span class="ic">acc.</span><span class="it"><b>De berserker</b><small>Accesorio</small></span></div>
+        <div class="row"><span class="ic">acc.</span><span class="it"><b>De berserker</b><small>Accesorio</small></span></div>
+        <div class="row"><span class="ic">amul.</span><span class="it"><b>De berserker</b><small>Amuleto</small></span></div>
+        <div class="row"><span class="ic">anillo</span><span class="it"><b>De berserker</b><small>Anillo</small></span></div>
+        <div class="row"><span class="ic">anillo</span><span class="it"><b>De berserker</b><small>Anillo</small></span></div>
+        <div class="row"><span class="ic r">rel.</span><span class="it"><b>Reliquia del ladrón</b><small>Reliquia</small></span>
+          <span class="tip" role="tooltip"><b>Reliquia del ladrón</b>Al golpear a un enemigo con una habilidad de arma con recarga o coste de recursos, tu daño de golpe aumenta.<em>Descripción oficial · API de Guild Wars 2 en castellano</em></span></div>
+      </div>
+      <div class="tbl"><h4>Armas</h4>
+        <div class="row"><span class="ic">rifle</span><span class="it"><b>De berserker</b><small>Rifle · dos manos</small>
+          <span class="up"><span class="ic s r"></span>Sello superior de fuerza</span><span class="up"><span class="ic s r"></span>Sello superior de impacto</span></span>
+          <span class="tip" role="tooltip"><b>Sello superior de fuerza</b>+5 % de daño.<em>Descripción oficial · API de Guild Wars 2 en castellano</em></span></div>
+        <h4>Otros</h4>
+        <div class="row"><span class="ic">comida</span><span class="it"><b>Comida</b><span class="up">nombre oficial desde la API</span></span></div>
+        <div class="row"><span class="ic">útil</span><span class="it"><b>Utilidad</b><span class="up">Piedra de afilar superior</span></span></div>
+        <div class="row"><span class="ic">jade</span><span class="it"><b>Núcleo de robot de jade</b><span class="up">Nivel 10</span></span></div>
+      </div>
+    </div>
+    <div class="stats" aria-label="Estadística principal">
+      <span class="tag">Estadística: <b>De berserker</b> = potencia, precisión y ferocidad</span>
+      <span class="tag">Pasá el cursor (o tocá) un objeto para ver su descripción oficial</span>
+      <span class="tag">«Copiar AE2» lleva todo este equipo al complemento Alter Ego</span>
+    </div>
+  </details>
+
+  <!-- ============ RASGOS Y HABILIDADES ============ -->
+  <details class="sec" id="rasgos" open>
+    <summary>Rasgos y habilidades <small>lo que carga el código de plantilla</small></summary>
+    <div class="ts">
+      <div>
+        <div class="band">
+          <div class="skills"><span class="ic">cur.</span><span class="ic">kit gran.</span><span class="ic">mina</span><span class="ic">util.</span><span class="ic">élite</span><span class="lbl">Habilidades</span></div>
+          <div class="wkeys" aria-label="Armas"><div><span class="ic">1</span>1</div><div><span class="ic">2</span>2</div><div><span class="ic">3</span>3</div><div><span class="ic">4</span>4</div><div><span class="ic">5</span>5</div>
+            <div><span class="ic">F1</span>F1</div><div><span class="ic">F2</span>F2</div><div><span class="ic">F3</span>F3</div></div>
+        </div>
+        <div class="band"><div class="spec"><div><div class="hex">Explosivos</div></div><div class="tr">
+          <span class="min"></span><div class="col"><span class="maj"></span><span class="maj on"></span><span class="maj"></span></div>
+          <span class="min"></span><div class="col"><span class="maj on"></span><span class="maj"></span><span class="maj"></span></div>
+          <span class="min"></span><div class="col"><span class="maj"></span><span class="maj"></span><span class="maj on"></span></div></div></div></div>
+        <div class="band"><div class="spec"><div><div class="hex">Armas de fuego</div></div><div class="tr">
+          <span class="min"></span><div class="col"><span class="maj on"></span><span class="maj"></span><span class="maj"></span></div>
+          <span class="min"></span><div class="col"><span class="maj"></span><span class="maj on"></span><span class="maj"></span></div>
+          <span class="min"></span><div class="col"><span class="maj"></span><span class="maj"></span><span class="maj on"></span></div></div></div></div>
+        <div class="band"><div class="spec"><div><div class="hex">Mechanista</div></div><div class="tr">
+          <span class="min"></span><div class="col"><span class="maj on"></span><span class="maj"></span><span class="maj"></span></div>
+          <span class="min"></span><div class="col"><span class="maj"></span><span class="maj on"></span><span class="maj"></span></div>
+          <span class="min"></span><div class="col"><span class="maj on"></span><span class="maj"></span><span class="maj"></span></div></div></div></div>
+      </div>
+      <div>
+        <details class="acc" open><summary>Notas de habilidades <small>Shiruvana</small></summary><div class="accb">
+          <p><span class="k">Kit de granadas</span>: entrás al kit, tirás las granadas que más pegan y volvés al rifle. Es el mayor aporte de daño después del rifle.</p>
+          <p><span class="k">Lanzar mina</span>: además de dañar y empujar, le saca una bendición al enemigo. Guardala para jefes que se ponen bendiciones.</p>
+          <span class="off"><b>Lanzar mina</b> (oficial): Lanzas una mina terrestre de control remoto que daña, rechaza y elimina una bendición de los enemigos cercanos.</span>
+        </div></details>
+        <details class="acc"><summary>Guía de teclas <small>armas y mech</small></summary><div class="accb">
+          <table class="keys"><tr><td><span class="ic s"></span>Habilidad 1 del rifle</td><td>1</td></tr><tr><td><span class="ic s"></span>Habilidad 2 del rifle</td><td>2</td></tr>
+            <tr><td><span class="ic s"></span>Habilidades del mech</td><td>F1–F3</td></tr></table>
+          <span class="off">En la app: nombre oficial en castellano y tecla por defecto de cada habilidad, sacados del código de la build y de la API.</span>
+        </div></details>
+        <details class="acc"><summary>Notas de rasgos</summary><div class="accb">
+          <p><span class="k t">Brazos del mech: Cañones de jade</span>: tu mech pega a distancia. Si lo ves lejos del jefe, está bien: así rinde más.</p>
+          <span class="off"><b>Brazos del mech: Cañones de jade</b> (oficial): Los ataques cuerpo a cuerpo pasan a ser a distancia, tienen una probabilidad aumentada de infligir un golpe crítico y aplican vulnerabilidad.</span>
+        </div></details>
+        <details class="acc"><summary>Notas de equipo</summary><div class="accb">
+          <p><b>De berserker</b> en todo: potencia, precisión y ferocidad. Es lo estándar para DPS de poder; si recién empezás, exótico alcanza.</p>
+          <p><b>Sello superior de fuerza</b> (+5 % de daño) va siempre; el segundo sello cambia según el encuentro.</p>
+        </div></details>
+        <details class="acc"><summary>Notas de reliquia</summary><div class="accb">
+          <p><b>Reliquia del ladrón</b>: se activa con habilidades de arma que tienen recarga. Por eso conviene abrir con las habilidades 2 a 5 del rifle y no con el ataque automático.</p>
+        </div></details>
+      </div>
+    </div>
+  </details>
+
+  <!-- ============ CÓMO SE JUEGA ============ -->
+  <details class="sec" id="juego" open>
+    <summary>Cómo se juega <small>conceptos, apertura y bucle</small></summary>
+    <div class="play">
+      <div class="card"><h3>Conceptos clave</h3><ul>
+        <li>Tu <span class="k">mech</span> pelea solo: dejá sus habilidades <b>F1–F3</b> en automático y concentrate en tus armas.</li>
+        <li>Usá las habilidades con recarga apenas estén listas: eso mantiene activa la <span class="k">Reliquia del ladrón</span>.</li></ul></div>
+      <div class="card"><h3>Apertura</h3><ol>
+        <li><span class="ic s"></span>Habilidades del rifle que más pegan</li><li><span class="ic s"></span>Kit de granadas</li><li><span class="ic s"></span>Lanzar mina</li></ol></div>
+      <div class="card"><h3>Bucle</h3><ol><li>Todo lo que esté listo, del más fuerte al más débil.</li><li>Si no queda nada, ataque automático.</li></ol></div>
+      <div class="card"><h3>Romper la barra de desafío</h3><ul><li><span class="k">Lanzar mina</span> y las habilidades de control del rifle.</li></ul></div>
+    </div>
+    <span class="who">Notas de Shiruvana, en castellano y con palabras propias · revisadas para el parche 29/09/2026 · la rotación completa y detallada está en la fuente.</span>
+  </details>
+
+  <p class="foot" id="fuente">Equipo, rasgos y habilidades: datos de <a href="https://snowcrows.com/builds/raids/engineer/power-mechanist-rifle" target="_blank" rel="noopener">Snow Crows ↗</a> (solo los datos: qué pieza, qué estadística, qué runa).
+  Nombres, íconos y descripciones: API oficial de Guild Wars 2 en castellano. Notas: propias de la Bóveda. Bench: Snow Crows, contra el golem (el techo ideal).</p>
+</section>
+</body>
+</html>
