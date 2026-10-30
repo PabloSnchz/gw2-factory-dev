@@ -1,6 +1,6 @@
 # FEAT-025 — Módulo Builds (BL-082)
 
-- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6 y BENCH-1/BENCH-2). Espera que Pablo mire BENCH-2; después sigue CUR-1 (2026-10-29 23:40Z)
+- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/BENCH-2 y CUR-1). Espera que Pablo mire BENCH-2; la curación semanal corre sola desde el 2026-11-02 (2026-10-30 00:35Z)
 - Dónde: https://pablosnchz.github.io/gw2-factory-dev/#/builds (Sidebar → Builds, antes de Cuentas)
 - Pedido: Pablo, 2026-10-28 03:41Z. Decisiones D1–D6 aprobadas 03:58Z («sí a todo»). Propuestas: docs/propuestas/propuesta-builds-bl082.html (módulo), docs/propuestas/propuesta-builds-ui-bl082.html (interfaz BUI, U1 aprobado 2026-10-29 01:28Z) y docs/propuestas/bui6-maqueta.html (BUI-6). Orden BUI-6 → BENCH-1 → BENCH-2 → CUR-1 aprobado 2026-10-29 18:55Z.
 
@@ -36,16 +36,17 @@ En toda ficha (js/bld-show.js 1.1.0): emblema grande de la élite, copiar códig
 - Celular: controles de 44 px a 720 px, indicadores en 2 columnas a 900 px, tarjetas en 1 columna a 560 px, sin animaciones si el sistema lo pide.
 - Rendimiento: filtrar y dibujar las 104 builds ~2 ms (requisito: menos de 2 s; editor menos de 200 ms); catálogo 52 KB y bench 22 KB; los códigos del catálogo se leen una vez para el parecido; los emblemas cargan a medida que se ven; los 12 módulos solo se cargan al entrar a #/builds.
 
-## Vigía semanal y Discord (BLD-10/14, D4/D6)
+## Vigía y curación semanal, y Discord (BLD-10/14, CUR-1, D4/D6, DEC-041, DEC-044)
 
-- .github/workflows/builds-watch.yml: lunes 12:00 UTC, a mano o cuando cambia el catálogo.
-- .github/scripts/bld-watch.cjs: lee el parche declarado en páginas públicas de MetaBattle y /v2/build; actualiza assets/data/builds/watch.json y republica DEV.
+- .github/workflows/builds-watch.yml: lunes 12:00 UTC (09:00 en Argentina) o a mano. Portátil: corre igual en DEV y en PRD (rama por defecto, se saltea en forks, republica con dev-pages.yml solo si existe; en PRD alcanza el push). Commitea solo watch.json, bench.json y catalog.json, y solo si cambiaron. Requisito en PRD: Actions con permiso de escritura.
+- .github/scripts/bld-watch.cjs (vigía): lee el parche declarado en páginas públicas de MetaBattle (también partido por etiquetas, LES-042) y /v2/build; actualiza watch.json.
+- .github/scripts/bld-curate.cjs (CUR-1, DEC-044): rehace bench.json desde los benchmarks de Snow Crows y relee la página de origen de cada build del catálogo. Cambia sola: código y armas (si la fuente muestra otro código válido de la misma élite), fecha de la fuente y parche (MetaBattle: el declarado; Snow Crows: el último solo si la fuente se actualizó después). Lo que no puede resolver (404, sin código, otra élite, varios códigos) queda igual y anotado en catalog.review. Nunca borra ni agrega builds. Frenos: no pisa el bench si trae menos de 20 filas o menos del 60 %; no toca el catálogo si responde menos del 70 % de las páginas. Resumen de cada corrida en Actions.
 - Discord: solo si existe el secreto DISCORD_WEBHOOK_URL en el repo (opcional, lo configura Pablo). Sin @everyone.
-- Pendiente CUR-1 (DEC-041): re-curar el catálogo y renovar bench.json solos cada semana, en DEV y en PRD (el workflow de hoy no es portable: repo fijo y dev-pages).
+- Probado en seco contra las fuentes reales (RUN-216): las 188 filas del bench leídas coinciden con las curadas a mano en BENCH-1; 25 fichas sin diferencias.
 
 ## Archivos
 
-js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, bld-view.js, bld-bench.js, bld-lib.js, bld-import.js, bld-editor.js, bld-mine.js (ruta #/builds en js/modules.json, cargados solo al entrar: boot.js 1.2.0); gn-kit.js 1.4.0 (íconos de pestañas); router.js 2.22.0; sidebar-nav.js 2.3.0; settings-manager.js 1.1.0; assets/data/builds/catalog.json, bench.json y watch.json. Tests: tests/bld-*.test.cjs (incluye bld-ui y bld-bench) y .github/scripts/bld-watch.test.cjs. Curación del catálogo (se corre a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.
+js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, bld-view.js, bld-bench.js, bld-lib.js, bld-import.js, bld-editor.js, bld-mine.js (ruta #/builds en js/modules.json, cargados solo al entrar: boot.js 1.2.0); gn-kit.js 1.4.0 (íconos de pestañas); router.js 2.22.0; sidebar-nav.js 2.3.0; settings-manager.js 1.1.0; assets/data/builds/catalog.json, bench.json y watch.json. Tests: tests/bld-*.test.cjs (incluye bld-ui y bld-bench) y .github/scripts/bld-watch.test.cjs y bld-curate.test.cjs. Curación semanal: .github/scripts/bld-curate.cjs. Para sumar builds nuevas (curación con criterio, a mano por diagnóstico): tests/bld-curate*.smoke.cjs y tests/bld-curate-lib.cjs.
 
 ## Para validar
 
@@ -57,11 +58,13 @@ js/bld-code.js, bld-ref.js, bld-show.js, bld-store.js, bld-ae2.js, bld-gear.js, 
 6. Interfaz: cabecera con 4 indicadores, pestañas con sus íconos, menú ⋯ que se cierra tocando afuera; cambiar a un tema claro (Notion o macOS) y a uno oscuro: todo se lee.
 7. Bench: PvE + «Más DPS primero»; una build con bench exacto muestra su DPS; una de PvE sin bench muestra «Referencia» con su porqué; una de curación dice que no se mide.
 8. Mis builds: guardar una build de la Biblioteca con bench (muestra ese bench), cambiarle algo en el Editor y guardarla (avisa que tu DPS puede ser otro), e importar un código propio (muestra la referencia más parecida).
+9. Curación semanal (opcional, antes del lunes): GitHub → gw2-factory-dev → Actions → builds-watch → Run workflow; el resumen dice qué leyó y qué cambió.
 
 ## Límites conocidos
 
 - D1 (comparador DPS/APM): el simulador de Snow Crows no tiene datos públicos; el bench sale de sus benchmarks publicados (DEC-042, corrige DEC-039). Mi referencia nunca es un DPS calculado de tu build.
 - La referencia elige, a igual parecido, la medición de más DPS: es un techo de esa forma de jugar, no un promedio (DEC-043).
 - 7 builds de WvW (MetaBattle) declaran un parche anterior: se muestran «para revisar» (DEC-039).
+- La curación semanal no agrega builds nuevas ni élites que falten (PvP 32/36): eso sigue siendo curación con criterio. Si Snow Crows o MetaBattle cambian la forma de sus páginas, los frenos evitan pisar datos buenos y la corrida lo dice en su resumen.
 - En los temas claros el verde de «válida» se ve más oscuro que en los oscuros: es a propósito para que se lea (DEC-040).
 - Deuda BAJA: las reglas CSS de .bld-bench están en bld-lib y en bld-bench (Mis builds puede abrirse sola); bld-mine suma su oyente de clic en cada render (heredado de BLD-6).
