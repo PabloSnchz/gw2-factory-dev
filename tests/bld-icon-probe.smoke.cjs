@@ -1,6 +1,6 @@
-// BLD-ICON sonda (se borra al cerrar). Pasada 6: texturas chicas del lote de las plantillas (2208345/7, que usa el módulo
-// BuildsManager de Blish HUD, son del 2019-10-29), dibujadas en ASCII (alfa y brillo) para compararlas con la captura de Pablo:
-// pestaña del Almacén de builds = un cuadrado detrás y un hexágono claro delante.
+// BLD-ICON sonda (se borra al cerrar). Pasada 7: 156720/156721 (ícono de esquina del módulo BuildsManager de Blish HUD,
+// probable pestaña «Build» del Panel del héroe) y sus vecinos chicos, en ASCII (alfa y brillo), contra la captura de Pablo:
+// un cuadrado detrás y un hexágono claro delante. Imprime el base64 de 156720 si mide 64 px o menos.
 'use strict';
 const zlib = require('zlib');
 const UA = { headers: { 'User-Agent': 'LaBovedaDelGatoNegro/1.0 (+https://github.com/PabloSnchz/gw2-factory-dev; sonda de icono)' } };
@@ -43,22 +43,17 @@ function art(im, cols) {
 }
 async function get(u) { try { const r = await fetch(u, UA); return { st: r.status, b: r.ok ? Buffer.from(await r.arrayBuffer()) : null }; } catch (e) { return { st: 'ERR', b: null }; } }
 (async () => {
-  const ids = []; for (let id = 2208280; id <= 2208440; id++) ids.push(id);
+  const ids = [156720, 156721]; for (let id = 156700; id <= 156745; id++) if (ids.indexOf(id) < 0) ids.push(id);
   const res = {};
   for (let k = 0; k < ids.length; k += 8) {
     await Promise.all(ids.slice(k, k + 8).map(async (id) => { res[id] = await get('https://assets.gw2dat.com/' + id + '.png'); }));
   }
-  const small = [];
   ids.forEach((id) => {
     const r = res[id]; let im = null; try { im = r.b && png(r.b); } catch (_) {}
-    if (!im || !im.px) return;
-    if (im.w > 64 || im.h > 64) return;
-    let t = 0, n = 0;
-    for (let y = 0; y < im.h; y += 2) for (let x = 0; x < im.w; x += 2) { n++; if (im.px(x, y)[3] < 40) t++; }
-    if (t / n < 0.3) return;
-    small.push(id);
-    console.log('ID', id, im.w + 'x' + im.h, 'ct' + im.ct, 'transp ' + Math.round(100 * t / n) + '%');
-    console.log(art(im, 16));
+    if (!im || !im.px) { if (id < 156722 && id > 156719) console.log('ID', id, r.st, 'sin imagen'); return; }
+    if (id !== 156720 && id !== 156721 && (im.w > 64 || im.h > 64)) return;
+    console.log('ID', id, im.w + 'x' + im.h, 'ct' + im.ct, r.b.length + ' B');
+    console.log(art(im, id === 156720 || id === 156721 ? 32 : 16));
+    if (id === 156720 && r.b.length < 6000) console.log('B64 156720 ' + r.b.toString('base64'));
   });
-  console.log('TOTAL', Object.keys(res).filter((k) => res[k].b).length, 'chicas', small.join(' '));
 })();
