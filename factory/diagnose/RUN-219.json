@@ -1,0 +1,1 @@
+{"id": "RUN-219", "summary": "BL-082 BLD-ICON: ícono de plantillas de build en la wiki oficial por wiki-en (segunda pasada; RUN-218 corrió la sonda vieja)", "tests": ["tests/bld-icon-probe.smoke.cjs"]}
