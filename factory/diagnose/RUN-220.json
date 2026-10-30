@@ -1,0 +1,1 @@
+{"id": "RUN-220", "summary": "BL-082 BLD-ICON: íconos oficiales de los objetos de plantillas (Build Storage Expansion y vecinos) por /v2/items", "tests": ["tests/bld-icon-probe.smoke.cjs"]}
