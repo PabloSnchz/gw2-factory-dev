@@ -13,6 +13,8 @@ a{color:var(--mod)}
 .note{max-width:1180px;margin:14px auto 0;padding:8px 14px;border:1px dashed var(--bd-1);border-radius:10px;color:var(--tx-3);font-size:.82rem}
 .panel{max-width:1180px;margin:10px auto 40px;border:1px solid var(--bd-1);border-radius:16px;overflow:hidden;
   background:linear-gradient(180deg,color-mix(in srgb,#C9B6FF 12%,transparent),transparent 300px),var(--tray);padding:0 0 22px}
+.crumb{display:flex;gap:14px;align-items:center;padding:10px 24px;border-bottom:1px solid var(--bd-1);font-size:.85rem;color:var(--tx-3)}
+.crumb a{text-decoration:none}.crumb .nx{margin-left:auto}
 /* ---------- cabecera de la ficha */
 .hero{position:relative;padding:22px 24px 18px;border-bottom:1px solid var(--bd-1);display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center}
 .hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,color-mix(in srgb,var(--prof) 22%,transparent),transparent 60%);pointer-events:none}
@@ -97,9 +99,10 @@ table.keys{width:100%;border-collapse:collapse;font-size:.88rem}table.keys td{pa
 <body>
 <p class="note"><b>Maqueta BL-084</b> (no es la app): así quedaría la ficha de una build de la Biblioteca con <b>equipo</b> y <b>notas en castellano</b>,
 con la estructura de Snow Crows y el estilo de la Bóveda (marco, gradiente, colores de profesión y temas). Ejemplo: Mechanista · DPS de poder · Rifle (raids).
-Los cuadraditos son lugares de íconos: en la app van los oficiales de la API. Nombres y descripciones en castellano tomados de la API oficial (/v2/items, /v2/skills, /v2/traits con <code>lang=es</code>).</p>
+Se llega desde la <a href="bld2-biblioteca.html">Biblioteca</a>. Los cuadraditos son lugares de íconos: en la app van los oficiales de la API. Nombres y descripciones en castellano tomados de la API oficial (/v2/items, /v2/skills, /v2/traits con <code>lang=es</code>).</p>
 
 <section class="panel" aria-label="Ficha de build">
+  <nav class="crumb" aria-label="Volver"><a href="bld2-biblioteca.html">← Biblioteca</a><span>PvE · Ingeniero · Mechanista</span><span class="nx"><a href="bld2-biblioteca.html">‹ anterior</a> · <a href="bld2-biblioteca.html">siguiente ›</a></span></nav>
   <header class="hero">
     <div class="emb" aria-hidden="true">MEC</div>
     <div>
