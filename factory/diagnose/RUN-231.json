@@ -1,0 +1,1 @@
+{"id": "RUN-231", "summary": "BL-084 EQ-1: tests del lector de equipo y equipo real de las 96 builds de Snow Crows (de a una, con reintento)", "tests": [".github/scripts/bld-gear-scrape.test.cjs", "tests/bld-eq1all.smoke.cjs"]}
