@@ -1,0 +1,1 @@
+{"id": "RUN-241", "summary": "BL-084 EQ-4: tests del equipo en 3 tarjetas (bld-gearview) y vecinos", "tests": ["tests/bld-gearview.test.cjs", "tests/bld-items.test.cjs", "tests/bld-sheet.test.cjs", "tests/size-budget.test.cjs"]}
