@@ -1,0 +1,69 @@
+{
+ "id": "PATCH-300",
+ "summary": "BL-084 EQ-2: js/bld-items.js (equipo de cada build en castellano desde la API oficial) entra en la ruta #/builds; boot.js 1.3.0 sube el tope de módulos por ruta de 12 a 20 (index.html pide ?v=1.3.0).",
+ "files": [
+  {
+   "path": "js/boot.js",
+   "base_sha": "05f6b34ed248daafa810a03a7bb191174d0f376e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-28) · BL-082 BLD-1: módulos «por ruta» (ver abajo)\n",
+     "text": " * Versión: 1.3.0 (2026-10-30) · BL-084 EQ-2: hasta 20 módulos por ruta (Builds llegó a 12 y suma la ficha con equipo)\n *          · antes 1.2.0: BL-082 BLD-1: módulos «por ruta» (ver abajo)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.2.0';\n",
+     "text": "  var VERSION = '1.3.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var ROUTE_MAX = 12, ROUTES_MAX = 10; // módulos por ruta y rutas\n",
+     "text": "  var ROUTE_MAX = 20, ROUTES_MAX = 10; // módulos por ruta y rutas (1.3.0: de 12 a 20; juntar módulos iría contra DEC-035)\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/boot.test.cjs",
+   "base_sha": "2b64e5dcb4c352d29914c2fb7f4fb7c0ff62fe5d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(B.version, '1.2.0');\n",
+     "text": "  assert.equal(B.version, '1.3.0');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.2\\.0 /);\n",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.3\\.0 /);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const many = Array.from({ length: 13 }, (_, i) => ({ src: 'js/r' + i + '.js', v: '1.0.0' }));\n  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many } }).errors, ['routes[#/x]: más de 12 módulos']);\n",
+     "text": "  const many = Array.from({ length: 21 }, (_, i) => ({ src: 'js/r' + i + '.js', v: '1.0.0' }));\n  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many } }).errors, ['routes[#/x]: más de 20 módulos']);\n  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many.slice(0, 20) } }).errors, [], '1.3.0: 20 entran');\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "a77e82a385e188bdb1b9db3d8c6f989c5e72a6a9",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "      { \"src\": \"js/bld-gear.js\", \"v\": \"1.0.0\" },\n",
+     "text": "      { \"src\": \"js/bld-items.js\", \"v\": \"1.0.0\" },\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/boot.js?v=1.2.0",
+     "text": "js/boot.js?v=1.3.0"
+    }
+   ]
+  }
+ ]
+}
