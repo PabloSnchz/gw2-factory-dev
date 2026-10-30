@@ -1,0 +1,1 @@
+{"id": "RUN-232", "summary": "BL-084 EQ-1: equipo real de las 96 builds de Snow Crows (de a una, con reintento)", "tests": ["tests/bld-eq1all.smoke.cjs"]}
