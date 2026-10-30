@@ -1,0 +1,78 @@
+{
+ "id": "PATCH-299",
+ "summary": "BL-084 EQ-1: la curación semanal (DEV y PRD) también lee el equipo de cada ficha de Snow Crows como ids oficiales y mantiene assets/data/builds/gear.json (freno si la página cambia de forma; ficha sin equipo conserva el anterior). Pausa 2,5 s y espera ante 429. builds-watch commitea gear.json y corre los tests del lector.",
+ "files": [
+  {
+   "path": ".github/scripts/bld-curate.cjs",
+   "base_sha": "15f10f4b72b09a3fd47ec70ae97700744530c228",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "//    Nunca borra builds ni inventa datos: lo que no puede resolver solo queda en catalog.review para que lo mire yo.\n",
+     "text": "//    Nunca borra builds ni inventa datos: lo que no puede resolver solo queda en catalog.review para que lo mire yo.\n// 3) Equipo (BL-084): de cada ficha de Snow Crows lee el equipo como ids oficiales (bld-gear-scrape.cjs) y rehace\n//    assets/data/builds/gear.json (una build por línea). Si una ficha deja de mostrarlo, queda el anterior y se avisa.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "const C = require(path.join(__dirname, '..', '..', 'js', 'bld-code.js'));\n",
+     "text": "const C = require(path.join(__dirname, '..', '..', 'js', 'bld-code.js'));\nconst GS = require(path.join(__dirname, 'bld-gear-scrape.cjs'));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "const FILES = { catalog: DIR + 'catalog.json', bench: DIR + 'bench.json', watch: DIR + 'watch.json' };\n",
+     "text": "const FILES = { catalog: DIR + 'catalog.json', bench: DIR + 'bench.json', watch: DIR + 'watch.json', gear: DIR + 'gear.json' };\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "const PAUSE = 1200;\n",
+     "text": "const PAUSE = 2500; // BL-084: con 1,2 s Snow Crows responde 429 (demasiados pedidos)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      if (r.status === 404 || r.status === 410) return { status: 404, html: '' };\n",
+     "text": "      if (r.status === 404 || r.status === 410) return { status: 404, html: '' };\n      if (r.status === 429) { await sleep(20000); continue; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  for (let i = 0; i < 2; i++) {\n    try {\n      const ctl = new AbortController();",
+     "text": "  for (let i = 0; i < 3; i++) {\n    try {\n      const ctl = new AbortController();"
+    },
+    {
+     "op": "replace",
+     "anchor": "// ---------------------------------------------------------------- red\n",
+     "text": "// ---------------------------------------------------------------- equipo (BL-084)\n// found: { [id]: equipo leído | null } de las fichas de Snow Crows que respondieron; ids: builds del catálogo en orden.\n// Freno: si menos del 70 % de las fichas que respondieron trae un equipo sano, la página cambió de forma: no se toca nada.\n// Una ficha sin equipo sano conserva el anterior (y se avisa); las builds que ya no están en el catálogo se van.\nfunction mergeGear(prev, found, ids, today) {\n  const keys = Object.keys(found || {});\n  const good = new Set(keys.filter((k) => found[k] && !GS.gearProblems(found[k]).length));\n  if (keys.length && good.size < keys.length * 0.7) return { next: prev, changed: false, missing: [], refused: 'equipo sano en ' + good.size + ' de ' + keys.length + ' fichas: no toqué gear.json' };\n  const old = (prev && prev.gear) || {}, gear = {}, missing = [];\n  (ids || []).forEach((id) => {\n    if (good.has(id)) gear[id] = found[id];\n    else if (old[id]) { gear[id] = old[id]; if (keys.indexOf(id) >= 0) missing.push(id); }\n  });\n  const updated = Object.keys(gear).filter((id) => JSON.stringify(old[id]) !== JSON.stringify(gear[id])).length;\n  if (JSON.stringify(gear) === JSON.stringify(old)) return { next: prev, changed: false, missing, updated: 0 };\n  const next = Object.assign({ version: 1, fetched: today, source: { name: 'Snow Crows', url: 'https://snowcrows.com/' },\n    about: 'Equipo de cada build como ids oficiales de la API de Guild Wars 2, leído de su ficha en Snow Crows. Nombres, íconos y descripciones: la API en castellano.' },\n  prev || {}, { fetched: today, gear });\n  return { next, changed: true, missing, updated };\n}\n// Cabecera en una línea y una build por línea (diffs legibles).\nfunction gearText(g) {\n  const head = Object.assign({}, g); delete head.gear;\n  const ks = Object.keys(g.gear || {});\n  return JSON.stringify(head).slice(0, -1) + ',\"gear\":{\\n' + ks.map((k) => JSON.stringify(k) + ':' + JSON.stringify(g.gear[k])).join(',\\n') + '\\n}}\\n';\n}\n// ---------------------------------------------------------------- red\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    const results = {};\n",
+     "text": "    const results = {}, gears = {};\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      results[b.id] = p.status === 200 ? Object.assign({ status: 200 }, kind === 'sc' ? parseSc(p.html) : parseMb(p.html)) : { status: p.status };\n",
+     "text": "      results[b.id] = p.status === 200 ? Object.assign({ status: 200 }, kind === 'sc' ? parseSc(p.html) : parseMb(p.html)) : { status: p.status };\n      if (kind === 'sc' && p.status === 200) gears[b.id] = GS.parseGear(p.html);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (cc.changed) { fs.writeFileSync(FILES.catalog, catalogText(cc.next)); changed = true; }\n",
+     "text": "    if (cc.changed) { fs.writeFileSync(FILES.catalog, catalogText(cc.next)); changed = true; }\n    const mg = mergeGear(read(FILES.gear), gears, (cc.next.builds || []).map((b) => b.id), today);\n    summary.push('- Equipo: ' + Object.keys(gears).length + ' fichas · ' + (mg.refused || (mg.changed ? mg.updated + ' builds con equipo nuevo o distinto' : 'sin cambios')));\n    (mg.missing || []).forEach((id) => summary.push('  - para revisar a mano: ' + id + ' — la ficha no muestra el equipo (quedó el anterior)'));\n    if (mg.changed) { fs.writeFileSync(FILES.gear, gearText(mg.next)); changed = true; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "module.exports = { toIso, parseBench, mergeBench, benchText, catalogText, parseSc, parseMb, curateBuild, curateCatalog, ELITES };\n",
+     "text": "module.exports = { toIso, parseBench, mergeBench, benchText, catalogText, parseSc, parseMb, curateBuild, curateCatalog, mergeGear, gearText, ELITES };\n"
+    }
+   ]
+  },
+  {
+   "path": ".github/scripts/bld-curate.test.cjs",
+   "base_sha": "d14b377eaf3b43e1a6c6021641eec161ebb7bdd7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.deepEqual(JSON.parse(txt), r.next);\n});\n",
+     "text": "  assert.deepEqual(JSON.parse(txt), r.next);\n});\n\n// BL-084 EQ-1: equipo (gear.json).\nconst GOOD = { armor: [[48087, 1077], [48089, 1077], [48085, 1077], [48086, 1077], [48088, 1077], [48084, 1077]], rune: 74978,\n  trinkets: [[79837, 1077], [79745, 1077], [79444, 1077], [81169, 1077], [79710, 1077], [81167, 1077]], relic: 100916, weapons: [[1, 'm', 46768, 1077, [24615, 24554]]] };\nconst PVP = { rune: 21210, relic: 100090, amulet: 8, weapons: [[1, 'm', 31283, 0, [21152, 81254]]] };\n\ntest('equipo: arma gear.json en el orden del catálogo, conserva el anterior si una ficha no lo muestra y avisa', () => {\n  const r = K.mergeGear(null, { a: GOOD, b: PVP }, ['b', 'a', 'z'], '2026-10-30');\n  assert.equal(r.changed, true);\n  assert.deepEqual(Object.keys(r.next.gear), ['b', 'a']);\n  assert.equal(r.next.fetched, '2026-10-30');\n  assert.equal(r.next.source.name, 'Snow Crows');\n  const txt = K.gearText(r.next);\n  assert.deepEqual(JSON.parse(txt), r.next);\n  assert.equal(txt.split('\\n').length, 1 + 2 + 2, 'cabecera, una build por línea y cierre');\n  const same = K.mergeGear(r.next, { a: GOOD, b: PVP }, ['b', 'a'], '2026-11-06');\n  assert.equal(same.changed, false, 'sin novedades no reescribe');\n  const lost = K.mergeGear(r.next, { a: null, b: PVP, c: PVP, d: PVP }, ['b', 'a', 'c', 'd'], '2026-11-06');\n  assert.deepEqual(lost.missing, ['a']);\n  assert.deepEqual(lost.next.gear.a, GOOD, 'la ficha sin equipo deja el que había');\n  assert.equal(lost.updated, 2);\n  const gone = K.mergeGear(r.next, { a: GOOD }, ['a'], '2026-11-06');\n  assert.deepEqual(Object.keys(gone.next.gear), ['a'], 'la build que salió del catálogo se va');\n});\n\ntest('equipo: freno si la página cambió de forma (menos del 70 % sano) y equipo raro no entra', () => {\n  const prev = K.mergeGear(null, { a: GOOD, b: PVP }, ['a', 'b'], '2026-10-30').next;\n  const r = K.mergeGear(prev, { a: null, b: { weapons: [] }, c: GOOD }, ['a', 'b', 'c'], '2026-11-06');\n  assert.match(r.refused, /1 de 3/);\n  assert.equal(r.next, prev);\n  const raro = K.mergeGear(prev, { a: GOOD, b: PVP, c: GOOD, d: { armor: [[1, 1]], weapons: [[1, 'm', 2, 0, []]] } }, ['a', 'b', 'c', 'd'], '2026-11-06');\n  assert.equal(raro.next.gear.d, undefined, 'un equipo con 1 pieza de armadura no se guarda');\n  assert.deepEqual(K.mergeGear(prev, {}, ['a', 'b'], '2026-11-06').changed, false, 'si no respondió ninguna ficha, nada cambia');\n});\n"
+    }
+   ]
+  }
+ ]
+}
