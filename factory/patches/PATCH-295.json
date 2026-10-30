@@ -1,0 +1,92 @@
+{
+ "id": "PATCH-295",
+ "summary": "BL-082 BLD-ICON (pedido de Pablo): la Sidebar y la cabecera de Builds usan el ícono oficial de la pestaña Build del Panel del héroe (assets/icons/156720.png, ASSET-001). sidebar-nav 2.3.1 (index ?v), bld-view 1.5.1 (modules.json), tests de versión y uno nuevo que fija el ícono.",
+ "files": [
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "c33d8cddc57d1c0ddb9ee7d81b3b3b992af3b2d1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.3.0 (2026-10-28) · BL-082 BLD-1: Builds en la lista, antes de Cuentas (EXTRA)",
+     "text": " * Versión: 2.3.1 (2026-10-30) · BL-082 BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720)\n *          2.3.0 (2026-10-28) · BL-082 BLD-1: Builds en la lista, antes de Cuentas (EXTRA)"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.3.0';",
+     "text": "var VERSION = '2.3.1';"
+    },
+    {
+     "op": "replace",
+     "anchor": "href: '#/builds', icon: 'assets/icons/professions/2163510.png', color: '#C9B6FF' }];",
+     "text": "href: '#/builds', icon: 'assets/icons/156720.png', color: '#C9B6FF' }];"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-view.js",
+   "base_sha": "4bc1d0477ca14b660a8b2f167707c051b2ff2df9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.0 (2026-10-29) · BUI-6b:",
+     "text": " * Versión: 1.5.1 (2026-10-30) · BLD-ICON: cabecera con el ícono oficial de la pestaña Build del Panel del héroe (156720),\n *          el mismo de la Sidebar · antes 1.5.0 (2026-10-29) · BUI-6b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.5.0';",
+     "text": "var VERSION = '1.5.1';"
+    },
+    {
+     "op": "replace",
+     "anchor": "var ICON = 'assets/icons/professions/2163510.png';",
+     "text": "var ICON = 'assets/icons/156720.png';"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "f6493eeb29c17b8e1a33cf5808a1ddf5bde252bd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/sidebar-nav.js?v=2.3.0",
+     "text": "js/sidebar-nav.js?v=2.3.1"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "a6d8c10cb09a5bffe54d0a0209c259db2110f33f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-view.js\", \"v\": \"1.5.0\" }",
+     "text": "{ \"src\": \"js/bld-view.js\", \"v\": \"1.5.1\" }"
+    }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "f2c4328973432961916698310b68c664d53fcfdd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.3.0', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.3\\.0/);\n  assert.equal(x.S().version, '2.3.0');\n});",
+     "text": "test('versión 2.3.1', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.3\\.1/);\n  assert.equal(x.S().version, '2.3.1');\n});\n\ntest('BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720), el mismo que la cabecera', () => {\n  const x = ready(setup());\n  assert.equal(x.document.getElementById('nav-builds').children[0].getAttribute('src'), 'assets/icons/156720.png');\n  assert.match(fs.readFileSync(path.join(ROOT, 'js', 'bld-view.js'), 'utf8'), /var ICON = 'assets\\/icons\\/156720\\.png';/);\n  assert.ok(fs.existsSync(path.join(ROOT, 'assets', 'icons', '156720.png')), 'el archivo está en el repo (ASSET-001)');\n});"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-view.test.cjs",
+   "base_sha": "7a831376963e95639170c4158d63362bda4e20f6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.5\\.0 /);\n  assert.equal(V.version, '1.5.0');",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.5\\.1 /);\n  assert.equal(V.version, '1.5.1');"
+    }
+   ]
+  }
+ ]
+}
