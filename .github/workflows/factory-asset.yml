@@ -1,0 +1,65 @@
+# Canal de recursos de la Factory (BL-082 BLD-ICON).
+# La Factory no puede subir binarios. Pide un ícono oficial con factory/assets/ASSET-NNN.json y este workflow lo baja
+# de un host de recursos de Guild Wars 2, verifica que sea una imagen real, lo deja en assets/icons/ y escribe
+# factory/assets/ASSET-NNN.md con el resultado. Reglas en .github/scripts/factory-asset.cjs (todo o nada, no pisa archivos).
+#
+# Seguridad: solo en gw2-factory-dev y solo con pushes del dueño; solo commitea los archivos que el script declara,
+# verificados por ruta antes del commit; nada del evento entra a un comando.
+
+name: factory-asset
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'factory/assets/ASSET-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: factory-asset
+  cancel-in-progress: false
+
+jobs:
+  run:
+    if: >-
+      github.repository == 'PabloSnchz/gw2-factory-dev' &&
+      github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tests del canal
+        run: node --test .github/scripts/factory-asset.test.cjs
+
+      - name: Bajar y verificar
+        id: asset
+        run: node .github/scripts/factory-asset.cjs
+
+      - name: Commit del resultado
+        id: commit
+        if: steps.asset.outputs.count != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          xargs -r -d '\n' git add -- < "$RUNNER_TEMP/factory-asset-files.txt"
+          if git diff --cached --name-only | grep -vE '^(factory/assets/ASSET-[0-9]{3,}\.md|assets/icons/[A-Za-z0-9_./-]+\.(png|webp|gif|jpg))$'; then echo "Cambios no esperados"; exit 1; fi
+          git commit -m "factory-asset: recursos en assets/icons"
+          git push origin HEAD:main || { git pull --rebase origin main && git push origin HEAD:main; }
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Republicar DEV
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run dev-pages.yml --ref main
