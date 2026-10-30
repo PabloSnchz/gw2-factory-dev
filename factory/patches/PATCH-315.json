@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-315",
+ "summary": "BL-084 EQ-5 hecho: status y plan",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "558b8149ae514563e14c469c2a8be2578e80423c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-5 (rasgos y habilidades como en el juego).",
+     "text": "EQ-5 HECHO 2026-10-30 15:40Z (js/bld-traitview.js 1.0.0: «Rasgos y habilidades» como en el juego —barra con armas 1–5 de cada juego, curación, utilidades, élite y mecánica F1–F5 con sus teclas; las 3 líneas con su fondo oficial, menores y mayores con el elegido encendido; guía de teclas—, descripción oficial con Tab, toque o cursor; bld-ref 1.3.0, bld-sheet 1.3.0, PATCH-314). Sigue EQ-6 (desplegables de notas)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 11:46Z",
+     "text": "Última actualización: 2026-10-30 15:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-5 (rasgos y habilidades como en el juego: banda de habilidades, armas 1–5 y F1–F3, las 3 líneas con su fondo oficial y sus 9 rasgos, guía de teclas); después EQ-6 (desplegables de notas).",
+     "text": "Próxima acción: BL-084 EQ-6 (desplegables de notas: habilidades, rasgos, equipo y reliquia, con la descripción oficial debajo); después EQ-7 (Cómo se juega)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-4 — el equipo de la ficha en 3 tarjetas, con íconos oficiales y su descripción accesible. HECHO.",
+     "text": "BL-084 EQ-5 — rasgos y habilidades como en el juego. HECHO.\nArchivos:\n- js/bld-traitview.js (`2b060ee`, 1.0.0, nuevo) y tests/bld-traitview.test.cjs (8 pruebas)\n- js/bld-ref.js (`a4db2ae`, 1.3.0), js/bld-sheet.js (`aaaeb8c`, 1.3.0), js/modules.json (`31e2caf`) y sus tests\n\nAdemás: bld-ref 1.3.0 guarda las habilidades de cada arma por tecla (con la mano secundaria del Ladrón y el atributo del Elementalista) y la mecánica de la profesión; lo guardado antes se vuelve a pedir una vez. La ficha arma la barra con las armas del equipo (o del código si no hay equipo); el Elementalista se muestra en Fuego; la mecánica solo aparece cuando la élite deja una sola opción por tecla (no adivino). Las 3 líneas llevan su fondo oficial, el emblema, los menores y las 3 columnas de mayores: el elegido encendido y los otros apagados (el lector los nombra como «otras opciones»). Guía de teclas en un desplegable. Si el ref es viejo, se ve la vista anterior. Sonda RUN-244 (forma real de la API) borrada. RUN-245 rechazado (más de 10 tests); RUN-246: traitview 8, ref 10, sheet 11, gearview 10, items 9, mods 7, lib 19, view 10, boot 11 y size-budget 6 verdes (101).\n\nAntes: "
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "37fb78474e4f8ba5b1d816357f5148446fc1626c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-1, EQ-2, EQ-3, EQ-3b y EQ-4 hechos.",
+     "text": "EQ-1, EQ-2, EQ-3, EQ-3b, EQ-4 y EQ-5 hechos."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-5 | HECHO 2026-10-30 15:40Z | `js/bld-traitview.js` 1.0.0, módulo propio: barra como en el juego (armas 1–5 de cada juego desde el equipo o el código, curación, utilidades, élite y la mecánica F1–F5 cuando la élite deja una sola opción), las 3 líneas con su fondo oficial, menores y mayores con el elegido encendido, guía de teclas por defecto; descripción oficial con Tab, toque o cursor (Escape la cierra). `bld-ref` 1.3.0 guarda habilidades de arma y mecánica; `bld-sheet` 1.3.0 la usa (con un ref viejo, la vista anterior). PATCH-314, RUN-246: 101 tests verdes. |\n"
+    }
+   ]
+  }
+ ]
+}
