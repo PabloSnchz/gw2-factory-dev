@@ -1,0 +1,156 @@
+{
+ "id": "PATCH-304",
+ "summary": "BL-084 EQ-3: la ficha de cada build en su pantalla #/builds/ver/<id> (js/bld-sheet.js 1.0.0, ya publicado): bld-view 1.6.0 (ruta y pestaña Biblioteca marcada), bld-lib 1.8.0 («Ver ficha» y la tarjeta van a la ficha; list() para anterior/siguiente; al volver, foco en esa build) y modules.json.",
+ "files": [
+  {
+   "path": "js/bld-view.js",
+   "base_sha": "13c1a7322f33418d7bb1dac05d6f2eb3f1d66d09",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.1 (2026-10-30) · BLD-ICON:",
+     "text": " * Versión: 1.6.0 (2026-10-30) · EQ-3: la ficha de una build de la Biblioteca tiene su ruta, #/builds/ver/<id> (js/bld-sheet.js),\n *          y ahí queda marcada la pestaña Biblioteca · antes 1.5.1 (2026-10-30) · BLD-ICON:"
+    },
+    {
+     "op": "replace",
+     "anchor": " · #/builds/c/<código> (enlace\n",
+     "text": " · #/builds/ver/<id> (ficha de una build, js/bld-sheet.js) · #/builds/c/<código> (enlace\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.5.1';\n",
+     "text": "  var VERSION = '1.6.0';\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "    if (head === 'c') return { tab: 'import', arg: safeDecode(parts.join('/')) };\n",
+     "text": "    if (head === 'ver') return { tab: 'sheet', arg: safeDecode(parts.join('/')) };\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function safeDecode(s) { try { return decodeURIComponent(s || ''); } catch (_) { return ''; } }\n",
+     "text": "  // EQ-3: la ficha no es una pestaña; mientras se ve, la pestaña marcada es la Biblioteca.\n  function shown(tab) { return tab === 'sheet' ? 'lib' : tab; }\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  function hashFor(tab, arg) {\n",
+     "text": "    if (tab === 'sheet') return ROUTE + '/ver/' + encodeURIComponent(arg || '');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      var on = t.id === active;\n",
+     "text": "      var on = t.id === shown(active);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "aria-labelledby=\"bldTab-' + esc(m.tab) + '\"",
+     "text": "aria-labelledby=\"bldTab-' + esc(shown(m.tab)) + '\""
+    },
+    {
+     "op": "replace",
+     "anchor": "        var on = t.id === st.tab;\n",
+     "text": "        var on = t.id === shown(st.tab);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      byId('bldBody').setAttribute('aria-labelledby', 'bldTab-' + st.tab);\n",
+     "text": "      byId('bldBody').setAttribute('aria-labelledby', 'bldTab-' + shown(st.tab));\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var label = (TABS.filter(function (t) { return t.id === st.tab; })[0] || {}).label;\n",
+     "text": "    var label = (TABS.filter(function (t) { return t.id === st.tab; })[0] || { label: 'la ficha' }).label;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "statsModel: statsModel, statsHTML: statsHTML,",
+     "text": "shown: shown, statsModel: statsModel, statsHTML: statsHTML,"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-view.test.cjs",
+   "base_sha": "37fbe02e4fe966be9467b5bf7e1fa62d73aeac34",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(SRC, /\\* Versión: 1\\.5\\.1 /);\n  assert.equal(V.version, '1.5.1');\n",
+     "text": "  assert.match(SRC, /\\* Versión: 1\\.6\\.0 /);\n  assert.equal(V.version, '1.6.0');\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  same(P.parseHash('#/builds/raro'), { tab: 'lib', arg: '' });\n",
+     "text": "  same(P.parseHash('#/builds/ver/sc-raids-x'), { tab: 'sheet', arg: 'sc-raids-x' }, 'EQ-3: la ficha en su pantalla');\n  assert.equal(P.hashFor('sheet', 'sc-raids-x'), '#/builds/ver/sc-raids-x');\n  assert.equal(P.shown('sheet'), 'lib', 'en la ficha queda marcada la Biblioteca');\n  assert.equal(P.shown('editor'), 'editor');\n"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-lib.js",
+   "base_sha": "92918d88e3c724a6158c1d09aacdbd2b514801d1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.7.0 (2026-10-29) · BENCH-2:",
+     "text": " * Versión: 1.8.0 (2026-10-30) · EQ-3: «Ver ficha» y tocar la tarjeta abren la ficha en su pantalla (#/builds/ver/<id>,\n *          js/bld-sheet.js); al volver, la Biblioteca sigue igual y el foco vuelve a esa build; list() da lo que se ve\n *          · antes 1.7.0 (2026-10-29) · BENCH-2:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.7.0';\n",
+     "text": "  var VERSION = '1.8.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function toggle(ctx, b) {\n",
+     "text": "  // EQ-3: con el marco de Builds (ctx.go) la ficha se abre en su pantalla; sin él, adentro de la tarjeta como antes.\n  function toggle(ctx, b) {\n    if (ctx.go) { st.last = b.id; st.back = true; ctx.go('sheet', b.id); return; }\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function clearFilters() {",
+     "text": "  // EQ-3: lo que la Biblioteca está mostrando, en su orden (la ficha lo usa para «anterior / siguiente»).\n  function list() { return st.cat ? sortBuilds(filter(st.cat.builds, st.f, latestPatch(st.cat, st.watch)), st.f.sort, st.bidx) : []; }\n  // Al volver de la ficha, el foco va a «Ver ficha» de esa build (y se la muestra), una sola vez.\n  function remember(id) { st.last = String(id || ''); st.back = !!id; }\n  function focusBack(ctx) {\n    if (!st.back || !st.last || !ctx || !ctx.host || !ctx.host.querySelector) return false;\n    st.back = false;\n    var x = ctx.host.querySelector('[data-id=\"' + st.last.replace(/[\"\\\\\\]]/g, '') + '\"] [data-lib=\"toggle\"]');\n    if (!x) return false;\n    if (x.scrollIntoView) x.scrollIntoView({ block: 'center' });\n    if (x.focus) x.focus({ preventScroll: true });\n    return true;\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (!st.cat) return load(ctx);\n    paint(ctx);\n",
+     "text": "    if (!st.cat) return load(ctx);\n    paint(ctx);\n    focusBack(ctx);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "preload: preload, _pure: { filter: filter,",
+     "text": "preload: preload, list: list, byId: byId, remember: remember, _pure: { focusBack: focusBack, filter: filter,"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "1f3f6454d1b3a5cf6c116e891930bfda0b86fe98",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "[['bld-lib.js', L, '1.7.0'], ['bld-mine.js', M, '1.4.0']]",
+     "text": "[['bld-lib.js', L, '1.8.0'], ['bld-mine.js', M, '1.4.0']]"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "  assert.doesNotMatch(M._pure.rowHTML(item), /bld-bench/, 'sin bld-bench: nada');\n});\n",
+     "text": "\n// EQ-3: la ficha vive en su pantalla (js/bld-sheet.js, tests/bld-sheet.test.cjs).\ntest('EQ-3 «Ver ficha» y tocar la tarjeta van a #/builds/ver/<id>; list() da lo que se ve y al volver el foco vuelve a esa build', () => {\n  Object.assign(L._state, { cat: CAT, watch: WATCH, loading: false, error: '', open: '' });\n  L._state.f = { prof: 1, elite: 0, mode: 'pve', role: '', weapon: '', damage: '', state: '', q: '', sort: '' };\n  const list = L.list();\n  assert.ok(list.length >= 4 && list.every((b) => b.prof === 1 && b.mode === 'pve'), 'lo filtrado, en orden');\n  assert.equal(L.byId(list[0].id), list[0]);\n  const went = [];\n  let focused = 0, scrolled = 0;\n  const target = { focus: () => { focused++; }, scrollIntoView: () => { scrolled++; } };\n  const want = '[data-id=\"' + list[1].id + '\"] [data-lib=\"toggle\"]';\n  const host = { innerHTML: '', contains: () => false, querySelector: (sel) => (sel === want ? target : null) };\n  const ctx = { host, go: (t, a) => went.push(t + ':' + a), ref: {} };\n  const card = el({ 'data-id': list[1].id }, { match: ['.bld-lib-card', '[data-id]'] });\n  assert.equal(P.onClick(ctx, { target: el({}, { parent: card }) }), 'card');\n  assert.deepEqual(went, ['sheet:' + list[1].id]);\n  assert.equal(L._state.open, '', 'ya no se abre adentro de la tarjeta');\n  assert.equal(P.focusBack(ctx), true);\n  assert.deepEqual([focused, scrolled], [1, 1], 'al volver, foco en «Ver ficha» de esa build y a la vista');\n  assert.equal(P.focusBack(ctx), false, 'una sola vez');\n  L.remember(list[1].id);\n  assert.equal(P.focusBack(ctx), true, 'la ficha también puede pedirlo');\n  L._state.f = { prof: 0, elite: 0, mode: '', role: '', weapon: '', damage: '', state: '', q: '', sort: '' };\n  L._state.cat = null;\n  assert.deepEqual(L.list(), [], 'sin catálogo, lista vacía');\n  L._state.cat = CAT;\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "1b326c8671b59b015b9537f4543f5a9c5d9ef4c0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.5.1\" },\n",
+     "text": "      { \"src\": \"js/bld-view.js\", \"v\": \"1.6.0\" },\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.7.0\" },\n",
+     "text": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.8.0\" },\n      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.0.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
