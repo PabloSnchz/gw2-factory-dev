@@ -1,0 +1,271 @@
+/*!
+ * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
+ * Versión: 1.0.0 (2026-10-30)
+ *
+ * Ruta #/builds/ver/<id> (js/bld-view.js 1.6.0 la manda acá; la pestaña Biblioteca queda marcada).
+ * Arriba: «← Biblioteca» (vuelve con los mismos filtros, orden y foco en la build), el camino modo · profesión · élite
+ * y «anterior / siguiente» dentro de lo que la Biblioteca está mostrando (GNBldLib.list()).
+ * La ficha: franja con el arte de la élite, emblema, nombre, datos, bench de daño y acciones; después secciones plegables
+ * como en Snow Crows: Equipo (js/bld-items.js, en castellano desde la API oficial), Rasgos y habilidades (el código de
+ * la build resuelto con js/bld-ref.js y validado contra la API) y Cómo se juega (mis notas llegan en EQ-6 a EQ-8).
+ * Lo que se abre o se cierra se recuerda mientras dure la visita (en memoria, sin localStorage). Los textos son los del
+ * juego o míos (DEC-046); de cada fuente, solo datos y el enlace.
+ */
+(function (root) {
+  'use strict';
+
+  var VERSION = '1.0.0';
+  var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
+  var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
+  var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
+  var st = { id: '', ctx: null, gear: {}, gearErr: {}, views: {}, checks: {}, viewErr: {}, closed: {}, focusTitle: false };
+
+  function S() { return root.GNBldShow; }
+  function esc(s) { return S() ? S().esc(s) : String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function img(src, alt, size) { return S() ? S().img(src, alt, size, 'bld-ic') : ''; }
+  function Lib() { return root.GNBldLib; }
+  function profName(p) { var C = root.GNBldCode; return (C && C.PROF_ES && C.PROF_ES[p]) || ''; }
+  function fmtDate(iso) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : (iso || '—'); }
+
+  // ---------------------------------------------------------------- modelo (puro)
+  // Dónde está la build dentro de lo que muestra la Biblioteca: { i, n, prev, next } (null si no está en la lista).
+  function navOf(list, id) {
+    var ids = (list || []).map(function (b) { return b.id; }), i = ids.indexOf(id);
+    if (i < 0) return { i: -1, n: ids.length, prev: null, next: null };
+    return { i: i, n: ids.length, prev: i > 0 ? list[i - 1] : null, next: i < ids.length - 1 ? list[i + 1] : null };
+  }
+  function crumb(b) {
+    return [(MODES[b.mode] || b.mode) + (b.sub ? ' (' + (SUB[b.sub] || b.sub) + ')' : ''), profName(b.prof), b.eliteName || ''].filter(Boolean);
+  }
+
+  // ---------------------------------------------------------------- vista (pura)
+  function navHTML(b, nav) {
+    var pn = function (dir, x) {
+      var lab = dir === 'prev' ? '‹ Anterior' : 'Siguiente ›';
+      return x ? '<button type="button" class="bld-btn" data-sheet="' + dir + '" aria-label="' + (dir === 'prev' ? 'Build anterior: ' : 'Build siguiente: ') + esc(x.name) + '">' + lab + '</button>'
+        : '<button type="button" class="bld-btn" disabled>' + lab + '</button>';
+    };
+    return '<nav class="bld-sh-nav" aria-label="Navegación de la ficha">' +
+      '<button type="button" class="bld-btn" data-sheet="back">← Biblioteca</button>' +
+      '<ol class="bld-crumb">' + crumb(b).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol>' +
+      (nav && nav.i >= 0 ? '<span class="bld-sh-pn">' + pn('prev', nav.prev) + '<small class="bld-muted">' + (nav.i + 1) + ' de ' + nav.n + '</small>' + pn('next', nav.next) + '</span>' : '') +
+      '</nav>';
+  }
+  function tagsHTML(b, latest) {
+    var L = Lib(), P = L && L._pure, C = root.GNBldCode, t = [];
+    var s = P && P.stateOf ? P.stateOf(b, latest) : 'vigente';
+    t.push('<span class="bld-tag ' + (s === 'vigente' ? 'is-ok' : 'is-old') + '">' + (s === 'vigente' ? 'vigente · parche ' : 'revisar · era del parche ') + fmtDate(b.patch) + '</span>');
+    var roles = P && P.ROLES || {}, dmg = { power: 'Poder', condition: 'Condición', hybrid: 'Híbrido' };
+    if (b.damage) t.push('<span class="bld-tag">' + esc(dmg[b.damage] || b.damage) + '</span>');
+    (b.roles || []).forEach(function (r) { if (r !== 'dps' || (b.roles || []).length === 1) t.push('<span class="bld-tag">' + esc(roles[r] || r) + '</span>'); });
+    (b.weapons || []).forEach(function (w) { t.push('<span class="bld-tag">' + esc((C && C.WEAPONS_ES[w]) || w) + '</span>'); });
+    return '<div class="bld-tags">' + t.join(' ') + '</div>';
+  }
+
+  // Equipo. v = GNBldItems.sheet(); null = la build no tiene equipo cargado; undefined = todavía buscando.
+  function itemCell(x, extra) {
+    if (!x) return '<span class="bld-muted">—</span>';
+    var tip = [x.desc, x.buff, x.effect].concat(x.bonuses || []).filter(Boolean).join('\n');
+    return '<span class="bld-gi"' + (tip ? ' title="' + esc(tip) + '"' : '') + '>' + img(x.icon, '', 24) + '<span>' + esc(x.name) + (extra || '') + '</span></span>';
+  }
+  function statCell(s) { return s ? '<span class="bld-gs">' + esc(s.name) + '</span>' : '<span class="bld-muted">—</span>'; }
+  function gearHTML(v, b) {
+    if (v === undefined) return '<p class="bld-muted" role="status">Buscando el equipo en la API del juego…</p>';
+    if (v === null) {
+      return '<p class="bld-muted">Todavía no tengo el equipo de esta build' + (b && b.source ? ' (viene de ' + esc(b.source.name) + ')' : '') +
+        '. Lo sumo con sus notas; mientras, está en la guía original.</p>';
+    }
+    var h = [], rows = function (list) {
+      return list.map(function (r) { return '<tr><th scope="row">' + esc(r.slot) + '</th><td>' + itemCell(r.item) + '</td><td>' + statCell(r.stat) + '</td></tr>'; }).join('');
+    };
+    if (v.armor.length) {
+      h.push('<table class="bld-gtab"><caption>Armadura' + (v.rune ? '' : v.runeMixed ? ' (runas distintas por pieza)' : '') + '</caption><thead><tr><th scope="col">Pieza</th><th scope="col">Objeto</th><th scope="col">Estadística</th></tr></thead><tbody>' +
+        rows(v.armor) + (v.rune ? '<tr><th scope="row">Runa</th><td colspan="2">' + itemCell(v.rune) + '</td></tr>' : '') + '</tbody></table>');
+    } else if (v.rune) {
+      h.push('<table class="bld-gtab"><caption>Armadura</caption><tbody><tr><th scope="row">Runa</th><td>' + itemCell(v.rune) + '</td></tr></tbody></table>');
+    }
+    if (v.trinkets.length || v.relic || v.amulet) {
+      h.push('<table class="bld-gtab"><caption>' + (v.amulet ? 'Amuleto y reliquia' : 'Abalorios y reliquia') + '</caption><tbody>' + rows(v.trinkets) +
+        (v.amulet ? '<tr><th scope="row">Amuleto</th><td colspan="2">' + itemCell(v.amulet, v.amulet.attrs && v.amulet.attrs.length ? '<small class="bld-muted"> · ' +
+          v.amulet.attrs.map(function (a) { return esc(root.GNBldItems ? root.GNBldItems.attrName(a[0]) : a[0]) + ' ' + a[1]; }).join(', ') + '</small>' : '') + '</td></tr>' : '') +
+        (v.relic ? '<tr><th scope="row">Reliquia</th><td colspan="2">' + itemCell(v.relic) + '</td></tr>' : '') + '</tbody></table>');
+    }
+    if (v.sets.length) {
+      h.push('<table class="bld-gtab"><caption>Armas</caption><tbody>' + v.sets.map(function (s) {
+        return s.hands.map(function (x, k) {
+          return '<tr><th scope="row">' + (k ? '' : esc(s.label) + '<br>') + '<small>' + esc(x.handLabel) + (x.type ? ' · ' + esc(x.type) : '') + '</small></th><td>' + itemCell(x.item) +
+            (x.sigils.length ? '<div class="bld-sig">' + x.sigils.map(function (g) { return itemCell(g); }).join('') + '</div>' : '') + '</td><td>' + statCell(x.stat) + '</td></tr>';
+        }).join('');
+      }).join('') + '</tbody></table>');
+    }
+    if (v.extras.length) {
+      h.push('<table class="bld-gtab"><caption>Otros</caption><tbody>' + v.extras.map(function (x) {
+        return '<tr><th scope="row">' + esc(x.label) + '</th><td colspan="2">' + itemCell(x.item, x.count ? ' ×' + x.count : '') + '</td></tr>';
+      }).join('') + '</tbody></table>');
+    }
+    var sum = v.stats.length ? '<p class="bld-muted bld-gsum"><b>Estadísticas:</b> ' + v.stats.map(function (s) { return esc(s.stat.name) + ' ×' + s.pieces; }).join(' · ') + '</p>' : '';
+    return sum + '<div class="bld-gear">' + h.join('') + '</div>';
+  }
+  function traitsHTML(id, b) {
+    if (st.viewErr[id]) return '<p class="bld-err" role="alert">' + esc(st.viewErr[id]) + '</p>';
+    if (!st.views[id] || !S()) return '<p class="bld-muted" role="status">Buscando los rasgos y las habilidades en la API del juego…</p>';
+    return S().detailHTML(st.views[id], { code: b.code, checks: st.checks[id], title: b.name, actions: ['share', 'gw2skills', 'edit'] });
+  }
+  function playHTML(b) {
+    return '<p class="bld-muted">Mis notas para jugar esta build (conceptos, apertura y rotación) están en preparación.' +
+      (b.source ? ' Mientras, la rotación completa está en la guía original: <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>.' : '') + '</p>';
+  }
+  function sectionHTML(key, label, body) {
+    return '<details class="bld-sec" data-sheet-sec="' + key + '"' + (st.closed[key] ? '' : ' open') + '><summary><h4>' + esc(label) + '</h4></summary><div class="bld-sec-b">' + body + '</div></details>';
+  }
+  // m = { b, nav, latest, bidx, gear }
+  function sheetHTML(m) {
+    var b = m.b, L = Lib(), P = L && L._pure, V = root.GNBld;
+    var band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite, null, b.prof) : '';
+    var emb = S() && S().emblem ? S().emblem(b.prof, b.elite, 56, { label: true }) : '';
+    var bench = P && P.benchHTML ? P.benchHTML(b, m.bidx) : '';
+    var issue = P && P.issueUrl ? P.issueUrl(b, m.latest) : '';
+    var body = { gear: gearHTML(m.gear, b), traits: traitsHTML(b.id, b), play: playHTML(b) };
+    return navHTML(b, m.nav) +
+      '<article class="bld-card bld-band bld-sheet" aria-labelledby="bldSheetTitle"' + band + '>' +
+      '<header class="bld-sheet-h">' + emb + '<div class="bld-sheet-t"><h3 id="bldSheetTitle" tabindex="-1">' + esc(b.name) + '</h3>' +
+      '<p class="bld-muted">' + esc(crumb(b).join(' · ')) + ' · dificultad ' + (b.difficulty || '?') + '/5 · fuente actualizada ' + fmtDate(b.sourceUpdated) +
+      (b.source ? ' · <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>' : '') + '</p>' + tagsHTML(b, m.latest) + '</div></header>' +
+      bench +
+      '<div class="bld-acts"><button type="button" class="bld-btn is-primary" data-bld-act="copy">Copiar código</button>' +
+      '<button type="button" class="bld-btn" data-bld-act="save">Guardar en Mis builds</button>' +
+      '<button type="button" class="bld-btn" data-bld-act="share">Copiar enlace</button>' +
+      (issue ? '<a class="bld-btn" href="' + esc(issue) + '" target="_blank" rel="noopener" title="Abre un aviso en GitHub ya escrito">Avisar que está vieja ↗</a>' : '') + '</div>' +
+      SECTIONS.map(function (s) { return sectionHTML(s[0], s[1], body[s[0]]); }).join('') +
+      '<p class="bld-muted"><small>Datos de la build: ' + (b.source ? esc(b.source.name) : 'la Biblioteca') + ' (élite, armas, equipo, código y fecha). Nombres, íconos y descripciones: API oficial de Guild Wars 2, en castellano.</small></p>' +
+      '</article>';
+  }
+  function missingHTML(id) {
+    return '<nav class="bld-sh-nav" aria-label="Navegación de la ficha"><button type="button" class="bld-btn" data-sheet="back">← Biblioteca</button></nav>' +
+      '<div class="bld-card" role="alert"><h3 id="bldSheetTitle" tabindex="-1">No encontré esa build</h3><p class="bld-muted">«' + esc(id) +
+      '» no está en la Biblioteca: puede que la haya retirado o renombrado. Volvé a la Biblioteca para buscarla.</p></div>';
+  }
+
+  // ---------------------------------------------------------------- CSS (tokens de los 19 temas; el marco lo da bld-view)
+  var P_ = '#buildsPanel ';
+  var CSS = [
+    P_ + '.bld-sh-nav{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin:0 0 10px}',
+    P_ + '.bld-crumb{display:flex;flex-wrap:wrap;gap:4px;list-style:none;margin:0;padding:0;color:var(--tx-2);font-size:.85rem}',
+    P_ + '.bld-crumb li+li::before{content:"›";margin-right:4px;color:var(--tx-2)}',
+    P_ + '.bld-sh-pn{margin-left:auto;display:flex;gap:6px;align-items:center}',
+    P_ + '.bld-sheet{display:grid;gap:12px;cursor:default}' + P_ + '.bld-card.bld-band.bld-sheet:hover{transform:none}',
+    P_ + '.bld-sheet-h{display:flex;gap:12px;align-items:flex-start}' + P_ + '.bld-sheet-h .bld-emb{margin-top:-38px;position:relative;box-shadow:0 0 0 2px var(--bg-1),0 0 0 3px var(--bld-prof,var(--gn-mod))}',
+    P_ + '.bld-sheet-t{display:grid;gap:4px;min-width:0}' + P_ + '.bld-sheet-t h3{margin:0;font-size:1.2rem;color:var(--tx-1)}' + P_ + '.bld-sheet-t p{margin:0;font-size:.82rem}',
+    P_ + '.bld-sec{border:1px solid var(--bd-1);border-radius:10px;background:var(--bg-1)}',
+    P_ + '.bld-sec>summary{cursor:pointer;padding:10px 12px;list-style:none;display:flex;align-items:center;gap:8px}' + P_ + '.bld-sec>summary::-webkit-details-marker{display:none}',
+    P_ + '.bld-sec>summary::before{content:"+";font-weight:800;color:var(--gn-mod);width:1em;text-align:center}' + P_ + '.bld-sec[open]>summary::before{content:"—"}',
+    P_ + '.bld-sec>summary h4{margin:0;font-size:1rem;color:var(--tx-1)}' + P_ + '.bld-sec[open]>summary{border-bottom:1px solid var(--bd-1)}',
+    P_ + '.bld-sec-b{padding:10px 12px;display:grid;gap:10px}',
+    P_ + '.bld-sec-b>.bld-detail{border:0;padding:0;background:none;box-shadow:none}' + P_ + '.bld-sec-b>.bld-detail>.bld-detail-h{display:none}',
+    P_ + '.bld-gear{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;align-items:start}',
+    P_ + '.bld-gtab{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:8px}',
+    P_ + '.bld-gtab caption{text-align:left;font-weight:700;color:var(--tx-1);padding:0 0 4px}',
+    P_ + '.bld-gtab th,' + P_ + '.bld-gtab td{padding:5px 8px;border-top:1px solid var(--bd-1);text-align:left;vertical-align:middle;color:var(--tx-1)}',
+    P_ + '.bld-gtab th{font-weight:600;color:var(--tx-2);white-space:nowrap}' + P_ + '.bld-gtab thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;border-top:0}',
+    P_ + '.bld-gi{display:inline-flex;align-items:center;gap:6px}' + P_ + '.bld-gs{white-space:nowrap}' + P_ + '.bld-sig{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:.8rem}',
+    P_ + '.bld-gsum{margin:0}',
+    '@media (max-width:720px){' + P_ + '.bld-sh-pn{margin-left:0;width:100%;justify-content:space-between}' + P_ + '.bld-gear{grid-template-columns:1fr}' + P_ + '.bld-gtab th{white-space:normal}}'
+  ].join('\n');
+  function ensureCss() {
+    var d = root.document;
+    if (!d || !d.head) return;
+    var s = d.getElementById('bld-sheet-css');
+    if (!s) { s = d.createElement('style'); s.id = 'bld-sheet-css'; d.head.appendChild(s); }
+    if (s.textContent !== CSS) s.textContent = CSS;
+  }
+
+  // ---------------------------------------------------------------- datos y comportamiento
+  function current() { var L = Lib(); return L && typeof L.byId === 'function' ? L.byId(st.id) : null; }
+  function model(b) {
+    var L = Lib(), ls = (L && L._state) || {}, P = L && L._pure;
+    var latest = P && P.latestPatch ? P.latestPatch(ls.cat, ls.watch) : '';
+    return { b: b, nav: navOf(L && typeof L.list === 'function' ? L.list() : [], b.id), latest: latest, bidx: ls.bidx,
+      gear: Object.prototype.hasOwnProperty.call(st.gear, b.id) ? st.gear[b.id] : (st.gearErr[b.id] ? null : undefined) };
+  }
+  function paint(ctx) {
+    if (!ctx || !ctx.host) return;
+    var b = current();
+    var L = Lib(), ls = L && L._state;
+    if (!b) ctx.host.innerHTML = ls && ls.cat ? missingHTML(st.id) : '<div class="bld-card" role="status">Cargando la ficha…</div>';
+    else ctx.host.innerHTML = sheetHTML(model(b));
+    if (st.focusTitle) {
+      var t = ctx.host.querySelector && ctx.host.querySelector('#bldSheetTitle');
+      if (t && t.focus) { st.focusTitle = false; t.focus(); }
+    }
+  }
+  function loadParts(ctx, b) {
+    var I = root.GNBldItems;
+    if (I && !Object.prototype.hasOwnProperty.call(st.gear, b.id) && !st.gearErr[b.id]) {
+      I.load(b.id).then(function (r) { st.gear[b.id] = r.view; if (st.id === b.id) paint(ctx); },
+        function () { st.gearErr[b.id] = true; if (st.id === b.id) paint(ctx); });
+    } else if (!I) st.gearErr[b.id] = true;
+    var C = root.GNBldCode, R = ctx.ref;
+    if (st.views[b.id] || st.viewErr[b.id] || !C || !R) return;
+    var r = C.parse(b.code);
+    if (!r.ok) { st.viewErr[b.id] = r.error; return; }
+    R.load(r.build.profession).then(function (ref) {
+      st.views[b.id] = R.resolve(r.build, ref); st.checks[b.id] = R.check(r.build, ref);
+      if (st.id === b.id) paint(ctx);
+    }, function (e) { st.viewErr[b.id] = 'No pude traer los nombres del juego (' + (e && e.message || '') + ').'; if (st.id === b.id) paint(ctx); });
+  }
+  function show(ctx) {
+    var b = current();
+    paint(ctx);
+    if (b) loadParts(ctx, b);
+  }
+  // Un clic: devuelve qué hizo (para los tests).
+  function onClick(ctx, e) {
+    var t = e.target, x = t && t.closest ? t.closest('[data-sheet]') : null;
+    if (!x) return '';
+    var k = x.getAttribute('data-sheet'), L = Lib();
+    if (k === 'back') {
+      if (L && typeof L.remember === 'function' && st.id) L.remember(st.id);
+      ctx.go('lib');
+      return 'back';
+    }
+    if (k === 'prev' || k === 'next') {
+      var b = current(), nav = navOf(L && typeof L.list === 'function' ? L.list() : [], b ? b.id : '');
+      var to = k === 'prev' ? nav.prev : nav.next;
+      if (to) { st.focusTitle = true; ctx.go('sheet', to.id); return k; }
+    }
+    return '';
+  }
+
+  function render(host, ctx) {
+    if (S()) S().ensureCss();
+    if (root.GNBldBench) root.GNBldBench.ensureCss();
+    ensureCss();
+    ctx.host = host;
+    st.ctx = ctx;
+    if (st.id !== ctx.arg) { st.id = ctx.arg || ''; st.focusTitle = true; }
+    if (!host.__bldSheet) {
+      host.__bldSheet = true;
+      host.addEventListener('click', function (e) { onClick(st.ctx, e); });
+      host.addEventListener('toggle', function (e) {
+        var d = e.target, k = d && d.getAttribute && d.getAttribute('data-sheet-sec');
+        if (k) st.closed[k] = !d.open;
+      }, true);
+      if (S()) S().wire(host, function () { var b = current(); return b ? { code: b.code, title: b.name, source: b.source } : null; }, ctx);
+    }
+    var L = Lib();
+    if (L && typeof L.preload === 'function' && !(L._state && L._state.cat)) {
+      paint(ctx);
+      return L.preload().then(function () { if (st.ctx === ctx) show(ctx); }, function (e) {
+        host.innerHTML = '<div class="bld-card bld-err" role="alert">No pude cargar la Biblioteca (' + esc(e && e.message || '') + ').</div>';
+      });
+    }
+    show(ctx);
+  }
+
+  var api = { version: VERSION, render: render,
+    _pure: { navOf: navOf, crumb: crumb, sheetHTML: sheetHTML, gearHTML: gearHTML, navHTML: navHTML, missingHTML: missingHTML, onClick: onClick, CSS: CSS, SECTIONS: SECTIONS },
+    _state: st };
+  root.GNBldSheet = api;
+  if (root.GNBld && typeof root.GNBld.register === 'function') root.GNBld.register('sheet', api);
+  if (typeof module !== 'undefined' && module.exports) module.exports = api;
+})(typeof window !== 'undefined' ? window : globalThis);
