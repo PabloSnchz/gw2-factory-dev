@@ -1,0 +1,64 @@
+{
+ "id": "PATCH-305",
+ "summary": "BL-084: documentación de EQ-3 (la ficha en su pantalla #/builds/ver/<id>) en status.md, backlog.md y el plan.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "109ddd6f8b0cdfcb82895aa5d24a9ed4b0fcc8ff",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "boot.js 1.3.0 admite 20 módulos por ruta). Sigue EQ-3. Antes: BL-083",
+     "text": "boot.js 1.3.0 admite 20 módulos por ruta). EQ-3 HECHO 2026-10-30 05:25Z (js/bld-sheet.js 1.0.0: la ficha en su pantalla #/builds/ver/<id> con «← Biblioteca», camino, anterior/siguiente y secciones plegables Equipo / Rasgos y habilidades / Cómo se juega; bld-view 1.6.0, bld-lib 1.8.0). Sigue EQ-3b. Antes: BL-083"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 05:05Z\n",
+     "text": "Última actualización: 2026-10-30 05:25Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-3: la ficha pasa a su pantalla #/builds/ver/<id> (js/bld-sheet.js) con «← Biblioteca», anterior/siguiente y secciones plegables; después EQ-3b (restyle de la Biblioteca) y EQ-4 (tablas de equipo con js/bld-items.js).",
+     "text": "Próxima acción: BL-084 EQ-3b: restyle de la Biblioteca (barra de filtros única, grupos profesión → élite, una fila por build con DPS; Mis builds con las mismas filas); después EQ-4 (íconos y tooltips del equipo) y EQ-5 (rasgos y habilidades como en el juego)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-084 EQ-2 — el equipo de cada build en castellano desde la API oficial. HECHO.\nArchivos:\n- js/bld-items.js (`4156c84`, 1.0.1)\n- tests/bld-items.test.cjs (`db56f38`, 9 pruebas)\n- js/modules.json (`1b326c8`, PATCH-301/302)\n",
+     "text": "Micro-ciclo:\nBL-084 EQ-3 — la ficha de cada build en su pantalla (#/builds/ver/<id>). HECHO.\nArchivos:\n- js/bld-sheet.js (`266733c`, 1.0.0)\n- tests/bld-sheet.test.cjs (`e9e826e`, 8 pruebas)\n- js/modules.json (`189a7f1`, PATCH-304)\n\nAdemás: PATCH-304 (bld-view 1.6.0 `b173bda`: ruta «ver» y la pestaña Biblioteca marcada en la ficha; bld-lib 1.8.0 `3167ebb`: «Ver ficha» y la tarjeta van a la ficha, list() para anterior/siguiente, al volver el foco vuelve a esa build; sus tests). RUN-239 verde: bld-sheet 8, bld-view 10, bld-lib 19, bld-ui 9 (19 temas AA), bld-items 9, boot 11, index-versions 5. Hubo un corte del chat (MCS-4035) a las 05:21Z: RECOVERY sin pérdida (PATCH-304 ya estaba aplicado).\n\nAntes: BL-084 EQ-2 — el equipo de cada build en castellano desde la API oficial. HECHO.\nArchivos:\n- js/bld-items.js (`4156c84`, 1.0.1)\n- tests/bld-items.test.cjs (`db56f38`, 9 pruebas)\n- js/modules.json (`1b326c8`, PATCH-301/302)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-084] Info: estoy armando la ficha nueva de Builds con equipo y notas (EQ-1 y EQ-2 hechos: datos y motor). Lo vas a ver en DEV desde EQ-3/EQ-4; te aviso al terminar para que valides todo junto.\n",
+     "text": "- [BL-084] Info: estoy armando la ficha nueva de Builds con equipo y notas (EQ-1 a EQ-3 hechos). Ya se ve en DEV: Builds → Biblioteca → «Ver ficha» abre la ficha en su pantalla con el equipo en castellano. Te aviso al terminar para que valides todo junto.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "d39bfb192b1f60b9af6f88a4bfc39b58a9d28ba8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "boot.js 1.3.0 (20 módulos por ruta). Sigue EQ-3. BL-083",
+     "text": "boot.js 1.3.0 (20 módulos por ruta). EQ-3 HECHO 05:25Z: js/bld-sheet.js 1.0.0, la ficha en su pantalla #/builds/ver/<id> («← Biblioteca» conserva filtros y foco, anterior/siguiente, secciones plegables; equipo en tablas), bld-view 1.6.0, bld-lib 1.8.0 (PATCH-304, RUN-239 verde). Sigue EQ-3b. BL-083"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "49ee588f78090be0e81204e6f5c9087d10b6d291",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "«están perfectas ok arranca»). EQ-1 y EQ-2 hechos.\n",
+     "text": "«están perfectas ok arranca»). EQ-1, EQ-2 y EQ-3 hechos.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-3 | HECHO 2026-10-30 05:25Z | `js/bld-sheet.js` 1.0.0: ruta `#/builds/ver/<id>` (la pestaña Biblioteca queda marcada); «← Biblioteca» vuelve con los mismos filtros y el foco en esa build; camino modo · profesión · élite; anterior/siguiente sobre lo filtrado; franja de la élite, bench y acciones; secciones plegables Equipo (tablas con `bld-items`), Rasgos y habilidades (código validado) y Cómo se juega (aviso hasta EQ-6/8). `bld-view` 1.6.0, `bld-lib` 1.8.0. RUN-239: 71 tests verdes. |\n"
+    }
+   ]
+  }
+ ]
+}
