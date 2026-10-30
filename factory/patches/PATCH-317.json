@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-317",
+ "summary": "BL-084 EQ-6 hecho: status y plan",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "aecdf72cd60113c15e6f5582cd5520e482e16c35",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-6 (desplegables de notas).",
+     "text": "EQ-6 HECHO 2026-10-30 17:40Z (js/bld-notes.js 1.0.0: desplegables de notas como en Snow Crows —habilidades y rasgos al pie de «Rasgos y habilidades», equipo y reliquia al pie de «Equipo»—, cerrados; arriba mi nota con íconos y nombres oficiales en línea, debajo la descripción oficial en castellano; sin nota, «en preparación»; assets/data/builds/notes.json vacío hasta EQ-8; bld-sheet 1.4.0, PATCH-316). Sigue EQ-7 (Cómo se juega)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 15:40Z",
+     "text": "Última actualización: 2026-10-30 17:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-6 (desplegables de notas: habilidades, rasgos, equipo y reliquia, con la descripción oficial debajo); después EQ-7 (Cómo se juega).",
+     "text": "Próxima acción: BL-084 EQ-7 (Cómo se juega: conceptos, apertura, bucle y control, con íconos en línea); después EQ-8 (las notas escritas)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-5 — rasgos y habilidades como en el juego. HECHO.",
+     "text": "BL-084 EQ-6 — desplegables de notas con la descripción oficial debajo. HECHO.\nArchivos:\n- js/bld-notes.js (`539d4b0`, 1.0.0, nuevo), assets/data/builds/notes.json (`3d2b195`, vacío) y tests/bld-notes.test.cjs (7 pruebas)\n- js/bld-sheet.js (`000ead3`, 1.4.0), js/modules.json (`33e615d`), tests/bld-sheet.test.cjs (`21869a7`)\n\nAdemás: 4 desplegables cerrados (Notas de habilidades, de rasgos, de equipo y de la reliquia). Mi nota dice «Notas de Shiruvana · revisadas para el parche…» y, si la build cambió, «para revisar»; en el texto, {s:ID}, {t:ID} e {i:ID} se ven con su ícono y su nombre oficial. Debajo, la descripción oficial de lo que usa la build: habilidades de la barra, rasgos elegidos (sin repetir), runa con sus bonos numerados, sigilos o amuleto de PvP, y reliquia. notes.json se lee una vez por visita y en memoria; si falla, la ficha dice «en preparación» y no se queda esperando. Solo en la Biblioteca: las propias ya tienen tus notas arriba. RUN-247: notes 7, sheet 12, traitview 8, gearview 10, ref 10, items 9, lib 19, view 10, boot 11 y size-budget 6 verdes (102).\n\nAntes: "
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "4b13945af98ec7acb67d55b5f8f10f0afe4528a5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-1, EQ-2, EQ-3, EQ-3b, EQ-4 y EQ-5 hechos.",
+     "text": "EQ-1 a EQ-6 hechos (con EQ-3b)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-6 | HECHO 2026-10-30 17:40Z | `js/bld-notes.js` 1.0.0, módulo propio: 4 desplegables cerrados (habilidades y rasgos al pie de «Rasgos y habilidades», equipo y reliquia al pie de «Equipo»). Arriba mi nota (parche revisado, aviso «para revisar», {s|t|i:ID} con ícono y nombre oficial); sin nota, «en preparación». Debajo, la descripción oficial: barra, rasgos elegidos, runa con bonos numerados, sigilos o amuleto, reliquia. `assets/data/builds/notes.json` arranca vacío (EQ-8 lo llena). `bld-sheet` 1.4.0, PATCH-316, RUN-247: 102 tests verdes. |\n"
+    }
+   ]
+  }
+ ]
+}
