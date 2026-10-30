@@ -1,6 +1,7 @@
 /*!
  * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
- * Versión: 1.3.0 (2026-10-30) · EQ-5: «Rasgos y habilidades» como en el juego con js/bld-traitview.js (barra de armas y
+ * Versión: 1.4.0 (2026-10-30) · EQ-6: desplegables de notas con js/bld-notes.js (habilidades y rasgos al pie de «Rasgos y
+ *          habilidades», equipo y reliquia al pie de «Equipo»), con la descripción oficial debajo · antes 1.3.0 EQ-5: «Rasgos y habilidades» como en el juego con js/bld-traitview.js (barra de armas y
  *          habilidades con sus teclas, 3 líneas con su fondo oficial, guía de teclas); con un ref viejo, la vista anterior
  *          · antes 1.2.0 EQ-4: el equipo lo pinta js/bld-gearview.js (3 tarjetas como Snow Crows, íconos con su
  *          rareza, descripción oficial con Tab, toque o cursor; Escape la cierra) · antes 1.1.0 EQ-3b: también la ficha de Mis builds (#/builds/ver/m:<id>): nombre y notas, Editar, Duplicar
@@ -18,7 +19,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.3.0';
+  var VERSION = '1.4.0';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
@@ -109,6 +110,12 @@
     return '<p class="bld-muted">Mis notas para jugar esta build (conceptos, apertura y rotación) están en preparación.' +
       (b.source ? ' Mientras, la rotación completa está en la guía original: <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>.' : '') + '</p>';
   }
+  // EQ-6: los desplegables de notas (js/bld-notes.js) van al pie de su sección; las propias tienen sus notas arriba.
+  function notesHTML(b, keys) {
+    var N = root.GNBldNotes;
+    if (!N || b.mine) return '';
+    return N.html({ keys: keys, note: N.noteSync(b.id), loaded: N.loaded(), ref: st.refs[b.id] || null, view: st.views[b.id] || null, gear: st.gear[b.id] || null });
+  }
   function sectionHTML(key, label, body) {
     return '<details class="bld-sec" data-sheet-sec="' + key + '"' + (st.closed[key] ? '' : ' open') + '><summary><h4>' + esc(label) + '</h4></summary><div class="bld-sec-b">' + body + '</div></details>';
   }
@@ -147,7 +154,7 @@
     var emb = S() && S().emblem ? S().emblem(b.prof, b.elite, 56, { label: true }) : '';
     var bench = P && P.benchHTML ? P.benchHTML(b, m.bidx) : '';
     var issue = P && P.issueUrl ? P.issueUrl(b, m.latest) : '';
-    var body = { gear: gearHTML(m.gear, b), traits: traitsHTML(b.id, b), play: playHTML(b) };
+    var body = { gear: gearHTML(m.gear, b) + notesHTML(b, ['gear', 'relic']), traits: traitsHTML(b.id, b) + notesHTML(b, ['skills', 'traits']), play: playHTML(b) };
     return navHTML(b, m.nav) +
       '<article class="bld-card bld-band bld-sheet" aria-labelledby="bldSheetTitle"' + band + '>' +
       '<header class="bld-sheet-h">' + emb + '<div class="bld-sheet-t"><h3 id="bldSheetTitle" tabindex="-1">' + esc(b.name) + '</h3>' +
@@ -240,6 +247,12 @@
       I.load(gid).then(function (r) { st.gear[b.id] = r.view; if (st.id === b.id) paint(ctx); },
         function () { st.gearErr[b.id] = true; if (st.id === b.id) paint(ctx); });
     } else if (!I && !b.mine) st.gearErr[b.id] = true;
+    var N = root.GNBldNotes;
+    if (N && !N.loaded() && !st.notesAsk) {
+      st.notesAsk = true;
+      var again = function () { st.notesAsk = false; if (st.id === b.id) paint(ctx); };
+      N.load().then(again, again);
+    }
     var C = root.GNBldCode, R = ctx.ref;
     if (st.views[b.id] || st.viewErr[b.id] || !C || !R) return;
     var r = C.parse(b.code);
@@ -312,6 +325,7 @@
     ensureCss();
     if (root.GNBldGearView) root.GNBldGearView.ensureCss();
     if (root.GNBldTraitView) root.GNBldTraitView.ensureCss();
+    if (root.GNBldNotes) root.GNBldNotes.ensureCss();
     ctx.host = host;
     st.ctx = ctx;
     if (st.id !== ctx.arg) { st.id = ctx.arg || ''; st.focusTitle = true; st.confirm = ''; }
