@@ -1,0 +1,1 @@
+{"id": "RUN-227", "summary": "BL-084 EQ-1: forma del bloque de equipo en fichas de Snow Crows (raids, PvP, WvW, mundo abierto)", "tests": ["tests/bld-eq1.smoke.cjs"]}
