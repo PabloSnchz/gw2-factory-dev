@@ -1,6 +1,7 @@
 /*!
  * js/bld-view.js — Builds: el panel, las pestañas y las rutas del módulo (BL-082)
- * Versión: 1.6.0 (2026-10-30) · EQ-3: la ficha de una build de la Biblioteca tiene su ruta, #/builds/ver/<id> (js/bld-sheet.js),
+ * Versión: 1.6.1 (2026-10-30) · EQ-3b: en la ficha de una build propia (#/builds/ver/m:<id>) queda marcada la pestaña Mis builds
+ *          · antes 1.6.0 (2026-10-30) · EQ-3: la ficha de una build de la Biblioteca tiene su ruta, #/builds/ver/<id> (js/bld-sheet.js),
  *          y ahí queda marcada la pestaña Biblioteca · antes 1.5.1 (2026-10-30) · BLD-ICON: cabecera con el ícono oficial de la pestaña Build del Panel del héroe (156720),
  *          el mismo de la Sidebar · antes 1.5.0 (2026-10-29) · BUI-6b: el marco exacto de Cuentas y Heredad: el gradiente del módulo es del panel (baja
  *          300 px y se funde, no se corta), la cabecera sin fondo propio cerrada por una línea y las pestañas debajo de esa
@@ -22,7 +23,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.6.0';
+  var VERSION = '1.6.1';
   var LOG = '[GNBld]';
   var PANEL = 'buildsPanel';
   var ROUTE = '#/builds';
@@ -55,8 +56,8 @@
     return { tab: 'lib', arg: '' };
   }
   function safeDecode(s) { try { return decodeURIComponent(s || ''); } catch (_) { return ''; } }
-  // EQ-3: la ficha no es una pestaña; mientras se ve, la pestaña marcada es la Biblioteca.
-  function shown(tab) { return tab === 'sheet' ? 'lib' : tab; }
+  // EQ-3: la ficha no es una pestaña; mientras se ve, la pestaña marcada es la Biblioteca (EQ-3b: o Mis builds si es una propia, m:<id>).
+  function shown(tab, arg) { return tab === 'sheet' ? (/^m:/.test(arg || '') ? 'mine' : 'lib') : tab; }
   function hashFor(tab, arg) {
     if (tab === 'sheet') return ROUTE + '/ver/' + encodeURIComponent(arg || '');
     var t = TABS.filter(function (x) { return x.id === tab; })[0] || TABS[0];
@@ -120,11 +121,11 @@
     var v = id === 'lib' ? s.builds : id === 'mine' ? s.mine : null;
     return v == null ? '' : '<span class="bld-badge">' + v + '</span>';
   }
-  function tabsHTML(active, kit, stats) {
+  function tabsHTML(active, kit, stats, arg) {
     var s = stats || statsModel(null);
     var h = ['<div class="bld-tabs" role="tablist" aria-label="Secciones de Builds">'];
     TABS.forEach(function (t) {
-      var on = t.id === shown(active);
+      var on = t.id === shown(active, arg);
       var ic = kit && typeof kit.icon === 'function' ? kit.icon('tab.bld.' + t.id, 18) : '';
       h.push('<button type="button" role="tab" id="bldTab-' + t.id + '" data-bld-tab="' + t.id + '" aria-selected="' + on +
         '" aria-controls="bldBody" tabindex="' + (on ? '0' : '-1') + '">' + ic + esc(t.label) + '<span id="bldBadge-' + t.id + '">' + badge(t.id, s) + '</span></button>');
@@ -133,8 +134,8 @@
     return h.join('');
   }
   function viewHTML(m) {
-    return heroHTML(m) + tabsHTML(m.tab, m.kit, m.stats) +
-      '<div id="bldBody" class="bld-body" role="tabpanel" aria-labelledby="bldTab-' + esc(shown(m.tab)) + '" tabindex="-1"></div>';
+    return heroHTML(m) + tabsHTML(m.tab, m.kit, m.stats, m.arg) +
+      '<div id="bldBody" class="bld-body" role="tabpanel" aria-labelledby="bldTab-' + esc(shown(m.tab, m.arg)) + '" tabindex="-1"></div>';
   }
   function waitingHTML(label) {
     return '<div class="bld-card bld-wait"><p>Cargando ' + esc(label) + '…</p></div>';
@@ -303,14 +304,14 @@
     ensureCss();
     var keep = byId('bldSub') ? byId('bldSub').textContent : '';
     if (!byId('bldBody') || st.renderedTab !== st.tab) {
-      p.innerHTML = viewHTML({ tab: st.tab, kit: root.GNKit, sub: keep, stats: statsModel(info()) });
+      p.innerHTML = viewHTML({ tab: st.tab, arg: st.arg, kit: root.GNKit, sub: keep, stats: statsModel(info()) });
     } else {
       TABS.forEach(function (t) {
         var b = byId('bldTab-' + t.id); if (!b) return;
-        var on = t.id === shown(st.tab);
+        var on = t.id === shown(st.tab, st.arg);
         b.setAttribute('aria-selected', String(on)); b.setAttribute('tabindex', on ? '0' : '-1');
       });
-      byId('bldBody').setAttribute('aria-labelledby', 'bldTab-' + shown(st.tab));
+      byId('bldBody').setAttribute('aria-labelledby', 'bldTab-' + shown(st.tab, st.arg));
     }
     var body = byId('bldBody'), impl = st.impl[st.tab];
     var label = (TABS.filter(function (t) { return t.id === st.tab; })[0] || { label: 'la ficha' }).label;

@@ -1,6 +1,7 @@
 /*!
  * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
- * Versión: 1.0.0 (2026-10-30)
+ * Versión: 1.1.0 (2026-10-30) · EQ-3b: también la ficha de Mis builds (#/builds/ver/m:<id>): nombre y notas, Editar, Duplicar
+ *          y Borrar (con confirmación); si se basa en una build de la Biblioteca, su equipo y su bench · antes 1.0.0
  *
  * Ruta #/builds/ver/<id> (js/bld-view.js 1.6.0 la manda acá; la pestaña Biblioteca queda marcada).
  * Arriba: «← Biblioteca» (vuelve con los mismos filtros, orden y foco en la build), el camino modo · profesión · élite
@@ -14,11 +15,12 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.1.0';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
-  var st = { id: '', ctx: null, gear: {}, gearErr: {}, views: {}, checks: {}, viewErr: {}, closed: {}, focusTitle: false };
+  var MINE_SECTIONS = [['notes', 'Nombre y notas'], ['gear', 'Equipo'], ['traits', 'Rasgos y habilidades']];
+  var st = { id: '', ctx: null, gear: {}, gearErr: {}, views: {}, checks: {}, viewErr: {}, closed: {}, focusTitle: false, confirm: '' };
 
   function S() { return root.GNBldShow; }
   function esc(s) { return S() ? S().esc(s) : String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -34,7 +36,19 @@
     if (i < 0) return { i: -1, n: ids.length, prev: null, next: null };
     return { i: i, n: ids.length, prev: i > 0 ? list[i - 1] : null, next: i < ids.length - 1 ? list[i + 1] : null };
   }
+  // EQ-3b: las de Mis builds se abren con «m:<id>»; se arman con la forma de las de la Biblioteca.
+  function isMine(id) { return /^m:/.test(String(id || '')); }
+  function mineB(raw) {
+    var T = root.GNBldStore, x = T && typeof T.get === 'function' ? T.get(raw) : null;
+    if (!x) return null;
+    var M = root.GNBldMine, MP = M && M._pure, base = MP && MP.baseOf ? MP.baseOf(x) : null;
+    var elite = MP && MP.eliteOf ? MP.eliteOf(x) : 0, R = root.GNBldRef, idn = R && typeof R.identitySync === 'function' ? R.identitySync() : null;
+    return { id: 'm:' + x.id, raw: x.id, mine: x, base: base, name: x.title, prof: x.profession, elite: elite,
+      eliteName: (idn && idn.elites && idn.elites[elite] && idn.elites[elite].name) || (base && base.eliteName) || '',
+      code: x.code, source: x.source || null, mode: base ? base.mode : '', sub: base ? base.sub : '', difficulty: base ? base.difficulty : 0 };
+  }
   function crumb(b) {
+    if (b.mine) return ['Mis builds', profName(b.prof), b.eliteName || ''].filter(Boolean);
     return [(MODES[b.mode] || b.mode) + (b.sub ? ' (' + (SUB[b.sub] || b.sub) + ')' : ''), profName(b.prof), b.eliteName || ''].filter(Boolean);
   }
 
@@ -46,7 +60,7 @@
         : '<button type="button" class="bld-btn" disabled>' + lab + '</button>';
     };
     return '<nav class="bld-sh-nav" aria-label="Navegación de la ficha">' +
-      '<button type="button" class="bld-btn" data-sheet="back">← Biblioteca</button>' +
+      '<button type="button" class="bld-btn" data-sheet="back">' + (b.mine ? '← Mis builds' : '← Biblioteca') + '</button>' +
       '<ol class="bld-crumb">' + crumb(b).map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol>' +
       (nav && nav.i >= 0 ? '<span class="bld-sh-pn">' + pn('prev', nav.prev) + '<small class="bld-muted">' + (nav.i + 1) + ' de ' + nav.n + '</small>' + pn('next', nav.next) + '</span>' : '') +
       '</nav>';
@@ -71,6 +85,10 @@
   function statCell(s) { return s ? '<span class="bld-gs">' + esc(s.name) + '</span>' : '<span class="bld-muted">—</span>'; }
   function gearHTML(v, b) {
     if (v === undefined) return '<p class="bld-muted" role="status">Buscando el equipo en la API del juego…</p>';
+    if (v === null && b && b.mine) {
+      return '<p class="bld-muted">Esta build es tuya: el equipo lo elegís en el Editor (sección «Equipo y código AE2»).' +
+        (b.source ? ' Se basa en una build que no está en la Biblioteca.' : '') + '</p>';
+    }
     if (v === null) {
       return '<p class="bld-muted">Todavía no tengo el equipo de esta build' + (b && b.source ? ' (viene de ' + esc(b.source.name) + ')' : '') +
         '. Lo sumo con sus notas; mientras, está en la guía original.</p>';
@@ -103,8 +121,9 @@
         return '<tr><th scope="row">' + esc(x.label) + '</th><td colspan="2">' + itemCell(x.item, x.count ? ' ×' + x.count : '') + '</td></tr>';
       }).join('') + '</tbody></table>');
     }
+    var base = b && b.mine && b.base ? '<p class="bld-muted bld-gsum">Equipo de la build en que se basa: <b>' + esc(b.base.name) + '</b>. Si cambiaste rasgos o armas, revisalo en el Editor.</p>' : '';
     var sum = v.stats.length ? '<p class="bld-muted bld-gsum"><b>Estadísticas:</b> ' + v.stats.map(function (s) { return esc(s.stat.name) + ' ×' + s.pieces; }).join(' · ') + '</p>' : '';
-    return sum + '<div class="bld-gear">' + h.join('') + '</div>';
+    return base + sum + '<div class="bld-gear">' + h.join('') + '</div>';
   }
   function traitsHTML(id, b) {
     if (st.viewErr[id]) return '<p class="bld-err" role="alert">' + esc(st.viewErr[id]) + '</p>';
@@ -118,8 +137,36 @@
   function sectionHTML(key, label, body) {
     return '<details class="bld-sec" data-sheet-sec="' + key + '"' + (st.closed[key] ? '' : ' open') + '><summary><h4>' + esc(label) + '</h4></summary><div class="bld-sec-b">' + body + '</div></details>';
   }
+  function fmtTime(t) { try { return t ? new Date(t).toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : ''; } catch (_) { return ''; } }
+  // EQ-3b: la ficha de una build de Mis builds. Encabezado con «editada», tus acciones y tu nombre y notas.
+  function mineHTML(m) {
+    var b = m.b, x = b.mine, L = Lib(), P = L && L._pure, V = root.GNBld;
+    var band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite, null, b.prof) : '';
+    var emb = S() && S().emblem ? S().emblem(b.prof, b.elite, 56, { label: true }) : '';
+    var bench = b.base && P && P.benchHTML ? P.benchHTML(b.base, m.bidx) : '';
+    var ask = st.confirm === b.id ? '<div class="bld-mine-ask" role="alert"><span>¿Borro «' + esc(b.name) + '»? No se puede deshacer (salvo desde tu respaldo).</span>' +
+      '<button type="button" class="bld-btn bld-err" data-sheet="del-yes">Sí, borrar</button><button type="button" class="bld-btn" data-sheet="del-no">No</button></div>' : '';
+    var notes = '<div class="bld-sh-notes"><label for="bldShTitle"><small>Nombre</small></label><input id="bldShTitle" maxlength="80" value="' + esc(x.title) + '">' +
+      '<label for="bldShNotes"><small>Tus notas</small></label><textarea id="bldShNotes" rows="3" maxlength="1000">' + esc(x.notes || '') + '</textarea>' +
+      '<p><button type="button" class="bld-btn" data-sheet="savemeta">Guardar nombre y notas</button> <small class="bld-muted">Quedan en este navegador y viajan en tu respaldo.</small></p></div>';
+    var body = { notes: notes, gear: gearHTML(m.gear, b), traits: traitsHTML(b.id, b) };
+    return navHTML(b, m.nav) +
+      '<article class="bld-card bld-band bld-sheet" aria-labelledby="bldSheetTitle"' + band + '>' +
+      '<header class="bld-sheet-h">' + emb + '<div class="bld-sheet-t"><h3 id="bldSheetTitle" tabindex="-1">' + esc(b.name) + '</h3>' +
+      '<p class="bld-muted">' + esc(crumb(b).join(' · ')) + (x.updated ? ' · editada ' + esc(fmtTime(x.updated)) : '') +
+      (b.source && b.source.url ? ' · basada en <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name || 'la fuente') + ' ↗</a>' : '') + '</p></div></header>' +
+      bench +
+      '<div class="bld-acts"><button type="button" class="bld-btn is-primary" data-bld-act="copy">Copiar código</button>' +
+      '<button type="button" class="bld-btn" data-bld-act="share">Copiar enlace</button>' +
+      '<button type="button" class="bld-btn" data-sheet="edit">Editar en el Editor</button>' +
+      '<button type="button" class="bld-btn" data-sheet="dup">Duplicar</button>' +
+      '<button type="button" class="bld-btn" data-sheet="del">Borrar…</button></div>' + ask +
+      MINE_SECTIONS.map(function (s) { return sectionHTML(s[0], s[1], body[s[0]]); }).join('') +
+      '</article>';
+  }
   // m = { b, nav, latest, bidx, gear }
   function sheetHTML(m) {
+    if (m.b && m.b.mine) return mineHTML(m);
     var b = m.b, L = Lib(), P = L && L._pure, V = root.GNBld;
     var band = V && typeof V.bandStyle === 'function' ? V.bandStyle(b.elite, null, b.prof) : '';
     var emb = S() && S().emblem ? S().emblem(b.prof, b.elite, 56, { label: true }) : '';
@@ -141,6 +188,11 @@
       '</article>';
   }
   function missingHTML(id) {
+    if (isMine(id)) {
+      return '<nav class="bld-sh-nav" aria-label="Navegación de la ficha"><button type="button" class="bld-btn" data-sheet="back">← Mis builds</button></nav>' +
+        '<div class="bld-card" role="alert"><h3 id="bldSheetTitle" tabindex="-1">No encontré esa build en Mis builds</h3><p class="bld-muted">Puede que la hayas borrado ' +
+        'o que esté guardada en otro navegador. Tus builds viajan en tu archivo de respaldo.</p></div>';
+    }
     return '<nav class="bld-sh-nav" aria-label="Navegación de la ficha"><button type="button" class="bld-btn" data-sheet="back">← Biblioteca</button></nav>' +
       '<div class="bld-card" role="alert"><h3 id="bldSheetTitle" tabindex="-1">No encontré esa build</h3><p class="bld-muted">«' + esc(id) +
       '» no está en la Biblioteca: puede que la haya retirado o renombrado. Volvé a la Biblioteca para buscarla.</p></div>';
@@ -169,6 +221,9 @@
     P_ + '.bld-gtab th{font-weight:600;color:var(--tx-2);white-space:nowrap}' + P_ + '.bld-gtab thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;border-top:0}',
     P_ + '.bld-gi{display:inline-flex;align-items:center;gap:6px}' + P_ + '.bld-gs{white-space:nowrap}' + P_ + '.bld-sig{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:.8rem}',
     P_ + '.bld-gsum{margin:0}',
+    P_ + '.bld-sh-notes{display:grid;gap:4px;max-width:640px}' + P_ + '.bld-sh-notes small{color:var(--tx-2);font-size:.7rem;text-transform:uppercase}' + P_ + '.bld-sh-notes p{margin:4px 0 0}',
+    P_ + '.bld-sh-notes input,' + P_ + '.bld-sh-notes textarea{width:100%;box-sizing:border-box;background:var(--bg-0);color:var(--tx-1);border:1px solid var(--bd-1);border-radius:8px;padding:6px 8px;font:inherit}',
+    P_ + '.bld-sheet>.bld-mine-ask{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border:1px solid var(--bld-err);border-radius:10px;font-size:.85rem;color:var(--tx-1)}',
     '@media (max-width:720px){' + P_ + '.bld-sh-pn{margin-left:0;width:100%;justify-content:space-between}' + P_ + '.bld-gear{grid-template-columns:1fr}' + P_ + '.bld-gtab th{white-space:normal}}'
   ].join('\n');
   function ensureCss() {
@@ -180,18 +235,29 @@
   }
 
   // ---------------------------------------------------------------- datos y comportamiento
-  function current() { var L = Lib(); return L && typeof L.byId === 'function' ? L.byId(st.id) : null; }
+  function current() {
+    if (isMine(st.id)) return mineB(st.id.slice(2));
+    var L = Lib(); return L && typeof L.byId === 'function' ? L.byId(st.id) : null;
+  }
+  // Lo que recorren «anterior / siguiente»: lo filtrado en la Biblioteca o, en una propia, Mis builds.
+  function listFor(id) {
+    if (isMine(id)) {
+      var T = root.GNBldStore, xs = T && typeof T.list === 'function' ? T.list() : [];
+      return xs.map(function (x) { return { id: 'm:' + x.id, name: x.title }; });
+    }
+    var L = Lib(); return L && typeof L.list === 'function' ? L.list() : [];
+  }
   function model(b) {
     var L = Lib(), ls = (L && L._state) || {}, P = L && L._pure;
     var latest = P && P.latestPatch ? P.latestPatch(ls.cat, ls.watch) : '';
-    return { b: b, nav: navOf(L && typeof L.list === 'function' ? L.list() : [], b.id), latest: latest, bidx: ls.bidx,
+    return { b: b, nav: navOf(listFor(b.id), b.id), latest: latest, bidx: ls.bidx,
       gear: Object.prototype.hasOwnProperty.call(st.gear, b.id) ? st.gear[b.id] : (st.gearErr[b.id] ? null : undefined) };
   }
   function paint(ctx) {
     if (!ctx || !ctx.host) return;
     var b = current();
     var L = Lib(), ls = L && L._state;
-    if (!b) ctx.host.innerHTML = ls && ls.cat ? missingHTML(st.id) : '<div class="bld-card" role="status">Cargando la ficha…</div>';
+    if (!b) ctx.host.innerHTML = (ls && ls.cat) || isMine(st.id) ? missingHTML(st.id) : '<div class="bld-card" role="status">Cargando la ficha…</div>';
     else ctx.host.innerHTML = sheetHTML(model(b));
     if (st.focusTitle) {
       var t = ctx.host.querySelector && ctx.host.querySelector('#bldSheetTitle');
@@ -199,11 +265,12 @@
     }
   }
   function loadParts(ctx, b) {
-    var I = root.GNBldItems;
+    var I = root.GNBldItems, gid = b.mine ? (b.base && b.base.id) : b.id;
+    if (b.mine && !gid) { st.gear[b.id] = null; I = null; }
     if (I && !Object.prototype.hasOwnProperty.call(st.gear, b.id) && !st.gearErr[b.id]) {
-      I.load(b.id).then(function (r) { st.gear[b.id] = r.view; if (st.id === b.id) paint(ctx); },
+      I.load(gid).then(function (r) { st.gear[b.id] = r.view; if (st.id === b.id) paint(ctx); },
         function () { st.gearErr[b.id] = true; if (st.id === b.id) paint(ctx); });
-    } else if (!I) st.gearErr[b.id] = true;
+    } else if (!I && !b.mine) st.gearErr[b.id] = true;
     var C = root.GNBldCode, R = ctx.ref;
     if (st.views[b.id] || st.viewErr[b.id] || !C || !R) return;
     var r = C.parse(b.code);
@@ -222,19 +289,53 @@
   function onClick(ctx, e) {
     var t = e.target, x = t && t.closest ? t.closest('[data-sheet]') : null;
     if (!x) return '';
-    var k = x.getAttribute('data-sheet'), L = Lib();
+    var k = x.getAttribute('data-sheet'), L = Lib(), mine = isMine(st.id);
     if (k === 'back') {
-      if (L && typeof L.remember === 'function' && st.id) L.remember(st.id);
-      ctx.go('lib');
+      var M = root.GNBldMine, back = mine ? M : L;
+      if (back && typeof back.remember === 'function' && st.id) back.remember(mine ? st.id.slice(2) : st.id);
+      ctx.go(mine ? 'mine' : 'lib');
       return 'back';
     }
     if (k === 'prev' || k === 'next') {
-      var b = current(), nav = navOf(L && typeof L.list === 'function' ? L.list() : [], b ? b.id : '');
+      var nav = navOf(listFor(st.id), st.id);
       var to = k === 'prev' ? nav.prev : nav.next;
-      if (to) { st.focusTitle = true; ctx.go('sheet', to.id); return k; }
+      if (to) { st.focusTitle = true; st.confirm = ''; ctx.go('sheet', to.id); return k; }
+      return '';
+    }
+    if (mine) return mineAct(ctx, k);
+    return '';
+  }
+  // EQ-3b: acciones de una build propia (Mis builds, js/bld-store.js).
+  function mineAct(ctx, k) {
+    var T = ctx.store || root.GNBldStore, raw = st.id.slice(2), b = current();
+    var toast = function (m, kind) { if (ctx.toast) ctx.toast(m, kind); };
+    if (!T || !b) return '';
+    if (k === 'edit') { ctx.go('editor', 'm:' + raw); return 'edit'; }
+    if (k === 'dup') {
+      var d = T.duplicate(raw);
+      toast(d && d.ok ? 'Duplicada: ahora estás en la copia.' : (d && d.error) || 'No pude duplicarla.', d && d.ok ? 'ok' : 'err');
+      if (d && d.ok) { st.focusTitle = true; ctx.go('sheet', 'm:' + d.id); }
+      return 'dup';
+    }
+    if (k === 'del') { st.confirm = b.id; paint(ctx); focusIn(ctx, '[data-sheet="del-yes"]'); return 'del'; }
+    if (k === 'del-no') { st.confirm = ''; paint(ctx); focusIn(ctx, '[data-sheet="del"]'); return 'del-no'; }
+    if (k === 'del-yes') {
+      st.confirm = '';
+      var r = T.remove(raw);
+      toast(r && r.ok ? 'Borrada.' : (r && r.error) || 'No pude borrarla.', r && r.ok ? 'ok' : 'err');
+      if (r && r.ok) ctx.go('mine');
+      return 'del-yes';
+    }
+    if (k === 'savemeta') {
+      var h = ctx.host, ti = h && h.querySelector && h.querySelector('#bldShTitle'), no = h && h.querySelector && h.querySelector('#bldShNotes');
+      var u = T.update(raw, { title: ti ? ti.value : null, notes: no ? no.value : null });
+      toast(u && u.ok ? 'Guardado.' : (u && u.error) || 'No pude guardarlo.', u && u.ok ? 'ok' : 'err');
+      paint(ctx);
+      return 'savemeta';
     }
     return '';
   }
+  function focusIn(ctx, sel) { var e = ctx.host && ctx.host.querySelector && ctx.host.querySelector(sel); if (e && e.focus) e.focus(); }
 
   function render(host, ctx) {
     if (S()) S().ensureCss();
@@ -242,7 +343,7 @@
     ensureCss();
     ctx.host = host;
     st.ctx = ctx;
-    if (st.id !== ctx.arg) { st.id = ctx.arg || ''; st.focusTitle = true; }
+    if (st.id !== ctx.arg) { st.id = ctx.arg || ''; st.focusTitle = true; st.confirm = ''; }
     if (!host.__bldSheet) {
       host.__bldSheet = true;
       host.addEventListener('click', function (e) { onClick(st.ctx, e); });
@@ -263,7 +364,8 @@
   }
 
   var api = { version: VERSION, render: render,
-    _pure: { navOf: navOf, crumb: crumb, sheetHTML: sheetHTML, gearHTML: gearHTML, navHTML: navHTML, missingHTML: missingHTML, onClick: onClick, CSS: CSS, SECTIONS: SECTIONS },
+    _pure: { navOf: navOf, crumb: crumb, sheetHTML: sheetHTML, gearHTML: gearHTML, navHTML: navHTML, missingHTML: missingHTML, onClick: onClick, CSS: CSS, SECTIONS: SECTIONS,
+      isMine: isMine, mineB: mineB, listFor: listFor, MINE_SECTIONS: MINE_SECTIONS },
     _state: st };
   root.GNBldSheet = api;
   if (root.GNBld && typeof root.GNBld.register === 'function') root.GNBld.register('sheet', api);

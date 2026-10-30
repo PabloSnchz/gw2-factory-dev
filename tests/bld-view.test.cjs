@@ -20,8 +20,8 @@ const P = V._pure;
 const same = (a, b, m) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, m);
 
 test('versión en la cabecera y en el código', () => {
-  assert.match(SRC, /\* Versión: 1\.6\.0 /);
-  assert.equal(V.version, '1.6.0');
+  assert.match(SRC, /\* Versión: 1\.6\.1 /);
+  assert.equal(V.version, '1.6.1');
 });
 
 test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
@@ -35,6 +35,8 @@ test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {
   assert.equal(P.hashFor('sheet', 'sc-raids-x'), '#/builds/ver/sc-raids-x');
   assert.equal(P.shown('sheet'), 'lib', 'en la ficha queda marcada la Biblioteca');
   assert.equal(P.shown('editor'), 'editor');
+  assert.equal(P.shown('sheet', 'm:abc'), 'mine', 'EQ-3b: en la ficha de una propia queda marcada Mis builds');
+  assert.equal(P.shown('sheet', 'sc-x'), 'lib');
   assert.equal(P.parseHash('#/buildsx'), null);
   assert.equal(P.parseHash('#/cards'), null);
   assert.equal(P.parseHash(''), null);

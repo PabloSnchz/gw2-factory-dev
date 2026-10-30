@@ -115,6 +115,38 @@ test('Biblioteca 1.9.0: filtros en una barra (con búsqueda), filas agrupadas, �
   delete globalThis.GNBldRows;
 });
 
+test('Mis builds 1.5.0: las mismas filas en lista plana; cada una abre su ficha (m:<id>); bench de la build en que se basa; foco de vuelta', () => {
+  globalThis.GNBldRows = R;
+  const L = require('../js/bld-lib.js'), M = require('../js/bld-mine.js'), MP = M._pure;
+  assert.equal(M.version, '1.5.0');
+  const idx = L._pure.benchIndex(BENCH);
+  Object.assign(L._state, { cat: CAT, bidx: idx });
+  const src = CAT.builds.find((b) => L._pure.benchOf(b, idx));
+  const mine = [{ id: 'a1', code: src.code, title: 'Mi <i>', profession: src.prof, updated: Date.UTC(2026, 9, 30), notes: 'x' },
+    { id: 'a2', code: CAT.builds[1].code + 'x', title: 'Propia', profession: CAT.builds[1].prof, updated: 0 }];
+  assert.equal(MP.baseOf(mine[0]).id, src.id, 'mismo código: se basa en esa build');
+  assert.equal(MP.baseOf(mine[1]), null);
+  const h = MP.viewHTML(mine);
+  assert.match(h, /^<p class="bld-muted">2 builds guardadas/);
+  assert.match(h, /<div class="bld-rlist is-flat">/);
+  assert.doesNotMatch(h, /<ul class="bld-mine">/, 'ya no son tarjetas');
+  assert.match(h, /<a class="bld-row is-flat is-mine" href="#\/builds\/ver\/m%3Aa1" data-id="a1" style="--bld-prof:#[0-9A-F]{6}">/);
+  assert.match(h, /<b>Mi &lt;i&gt;<\/b><small>[^<]*editada \d{2}\/\d{2}\/\d{4}<\/small>/);
+  assert.match(h, /basada en la Biblioteca<\/span><span class="bld-tag is-boon">con notas/);
+  assert.match(h, new RegExp('<b>' + L._pure.fmtN(L._pure.benchOf(src, idx).max).replace('.', '\\.') + '</b> DPS'), 'DPS de la build en que se basa');
+  assert.match(h, /Tuya · sin bench propio[\s\S]*<span class="bld-tag">propia<\/span>|<span class="bld-tag">propia<\/span>[\s\S]*Tuya · sin bench propio/);
+  const row = { getAttribute: (k) => (k === 'data-id' ? 'a2' : null), closest: (s) => (s === 'a.bld-row' ? row : null) };
+  assert.equal(MP.onClick({}, { target: row }), 'row');
+  let f = 0;
+  const host = { querySelector: (s) => (s === 'a.bld-row[data-id="a2"]' ? { focus: () => { f++; } } : null) };
+  assert.equal(MP.focusBack({ host }), true);
+  assert.equal(f, 1);
+  M.remember('a1');
+  assert.equal(MP.focusBack({ host }), false, 'si la fila no está, no rompe');
+  delete globalThis.GNBldRows;
+  assert.match(MP.viewHTML(mine), /<ul class="bld-mine">/, 'sin bld-rows: las tarjetas de antes');
+});
+
 test('CSS: tokens de los temas, tinte de la profesión al 8 % (como las tarjetas medidas en bld-ui), celular a una columna', () => {
   const css = RP.CSS;
   assert.doesNotMatch(css.replace(/var\(--[\w-]+,#[0-9a-fA-F]{3,8}\)/g, ''), /#[0-9a-fA-F]{3,8}\b/, 'sin colores fijos');

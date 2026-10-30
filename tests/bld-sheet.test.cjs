@@ -35,8 +35,8 @@ function el(attrs, parent) {
 
 test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
-  assert.match(src, /Versión: 1\.0\.0 /);
-  assert.equal(SH.version, '1.0.0');
+  assert.match(src, /Versión: 1\.1\.0 /);
+  assert.equal(SH.version, '1.1.0');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
@@ -51,6 +51,10 @@ test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/
   assert.match(h, /id="bldTab-lib"[^>]*aria-selected="true"/, 'en la ficha queda marcada la Biblioteca');
   assert.equal((h.match(/aria-selected="true"/g) || []).length, 1);
   assert.match(h, /role="tabpanel" aria-labelledby="bldTab-lib"/);
+  const hm = V.viewHTML({ tab: 'sheet', arg: 'm:abc' });
+  assert.match(hm, /id="bldTab-mine"[^>]*aria-selected="true"/, 'en la ficha de una propia queda marcada Mis builds');
+  assert.match(hm, /role="tabpanel" aria-labelledby="bldTab-mine"/);
+  assert.equal(V.shown('sheet', 'm:abc'), 'mine');
 });
 
 test('cada build de Snow Crows de la Biblioteca tiene su equipo en gear.json (y nada sobra)', () => {
@@ -185,4 +189,91 @@ test('CSS: tokens de los temas, sin colores fijos, celular a una columna; contro
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
   (src.match(/<button\b[^>]*/g) || []).forEach((x) => assert.match(x, /type="button"/));
   assert.doesNotMatch(src, /localStorage\./, 'nada se guarda fuera de la visita');
+});
+
+// EQ-3b: la ficha de Mis builds (#/builds/ver/m:<id>).
+function fakeStore(items) {
+  const xs = items.map((x) => Object.assign({}, x));
+  const log = [];
+  return {
+    log, xs,
+    list: () => xs,
+    get: (id) => xs.find((x) => x.id === id) || null,
+    update: (id, p) => { const x = xs.find((y) => y.id === id); if (!x) return { ok: false, error: 'no' }; log.push('update:' + id); Object.assign(x, { title: p.title || x.title, notes: p.notes == null ? x.notes : p.notes }); return { ok: true }; },
+    duplicate: (id) => { log.push('dup:' + id); const c = Object.assign({}, xs.find((y) => y.id === id), { id: id + 'c' }); xs.push(c); return { ok: true, id: c.id }; },
+    remove: (id) => { log.push('del:' + id); const i = xs.findIndex((y) => y.id === id); if (i < 0) return { ok: false, error: 'no' }; xs.splice(i, 1); return { ok: true }; }
+  };
+}
+
+test('Mis builds: la ficha propia (m:<id>) con nombre y notas, acciones propias, equipo de la build en que se basa y sin «Guardar»', () => {
+  const src = CAT.builds.find((b) => b.source.name === 'Snow Crows' && GEAR[b.id]);
+  globalThis.GNBldLib = fakeLib(CAT.builds);
+  globalThis.GNBldMine = { _pure: { baseOf: (x) => CAT.builds.find((b) => b.code === x.code) || null, eliteOf: () => src.elite }, remember() {} };
+  globalThis.GNBldStore = fakeStore([{ id: 'a1', code: src.code, title: 'Mi <b>build</b>', profession: src.prof, updated: Date.UTC(2026, 9, 30), notes: 'ojo', source: src.source },
+    { id: 'a2', code: '[&x]', title: 'Otra', profession: 1, updated: 0 }]);
+  assert.equal(P.isMine('m:a1'), true);
+  assert.equal(P.isMine('sc-x'), false);
+  const b = P.mineB('a1');
+  assert.equal(b.id, 'm:a1');
+  assert.equal(b.base.id, src.id, 'se basa en la build de la Biblioteca con su mismo código');
+  assert.deepEqual(P.crumb(b).slice(0, 1), ['Mis builds']);
+  assert.equal(P.mineB('nada'), null);
+  assert.deepEqual(P.listFor('m:a1').map((x) => x.id), ['m:a1', 'm:a2'], 'anterior/siguiente recorre Mis builds');
+  const h = P.sheetHTML({ b, nav: P.navOf(P.listFor('m:a1'), 'm:a1'), gear: undefined });
+  assert.match(h, /data-sheet="back">← Mis builds<\/button>/);
+  assert.match(h, /<h3 id="bldSheetTitle" tabindex="-1">Mi &lt;b&gt;build&lt;\/b&gt;<\/h3>/);
+  assert.match(h, / · editada \d{2}\/\d{2}\/\d{4}/);
+  for (const a of ['edit', 'dup', 'del']) assert.match(h, new RegExp('data-sheet="' + a + '"'));
+  assert.doesNotMatch(h, /data-bld-act="save"/, 'ya está guardada');
+  assert.doesNotMatch(h, /Avisar que está vieja/);
+  assert.deepEqual([...h.matchAll(/<summary><h4>([^<]+)<\/h4>/g)].map((m) => m[1]), ['Nombre y notas', 'Equipo', 'Rasgos y habilidades']);
+  assert.match(h, /<label for="bldShTitle"><small>Nombre<\/small><\/label><input id="bldShTitle" maxlength="80" value="Mi &lt;b&gt;build&lt;\/b&gt;">/);
+  assert.match(h, /<textarea id="bldShNotes" rows="3" maxlength="1000">ojo<\/textarea>/);
+  assert.match(h, /BENCH/, 'el bench de la build en que se basa');
+  const v = globalThis.GNBldItems.sheet(GEAR[src.id], null);
+  assert.match(P.gearHTML(v, b), /^<p class="bld-muted bld-gsum">Equipo de la build en que se basa: <b>/);
+  const own = P.mineB('a2');
+  assert.equal(own.base, null);
+  assert.match(P.gearHTML(null, own), /Esta build es tuya: el equipo lo elegís en el Editor/);
+  assert.match(P.missingHTML('m:zz'), /No encontré esa build en Mis builds/);
+  assert.match(P.missingHTML('m:zz'), /← Mis builds/);
+  delete globalThis.GNBldLib; delete globalThis.GNBldMine; delete globalThis.GNBldStore;
+});
+
+test('Mis builds: editar, duplicar, borrar con confirmación, guardar nombre y notas; «← Mis builds» vuelve a la fila', () => {
+  const src = CAT.builds[0];
+  globalThis.GNBldLib = fakeLib(CAT.builds);
+  const remembered = [];
+  globalThis.GNBldMine = { _pure: { baseOf: () => null, eliteOf: () => 0 }, remember: (id) => remembered.push(id) };
+  const store = fakeStore([{ id: 'a1', code: src.code, title: 'Una', profession: src.prof, updated: 0 }, { id: 'a2', code: src.code, title: 'Dos', profession: src.prof, updated: 0 }]);
+  globalThis.GNBldStore = store;
+  const went = [], toasts = [];
+  const inputs = { '#bldShTitle': { value: 'Nueva' }, '#bldShNotes': { value: 'notas mías' } };
+  const host = { innerHTML: '', querySelector: (s) => inputs[s] || (s.startsWith('[data-sheet') ? { focus() {} } : null) };
+  const ctx = { host, store, go: (t, a) => went.push(t + (a ? ':' + a : '')), toast: (m, k) => toasts.push(k + ':' + m) };
+  SH._state.id = 'm:a1';
+  const click = (k) => P.onClick(ctx, { target: el({ 'data-sheet': k }) });
+  assert.equal(click('next'), 'next');
+  assert.equal(went.pop(), 'sheet:m:a2', 'siguiente de Mis builds');
+  assert.equal(click('edit'), 'edit');
+  assert.equal(went.pop(), 'editor:m:a1');
+  assert.equal(click('savemeta'), 'savemeta');
+  assert.equal(store.get('a1').title, 'Nueva');
+  assert.equal(store.get('a1').notes, 'notas mías');
+  assert.match(toasts.pop(), /^ok:Guardado/);
+  assert.equal(click('del'), 'del');
+  assert.equal(SH._state.confirm, 'm:a1');
+  assert.match(host.innerHTML, /role="alert"><span>¿Borro «Nueva»\?[\s\S]*data-sheet="del-yes"/, 'confirmación a la vista');
+  assert.equal(click('del-no'), 'del-no');
+  assert.equal(SH._state.confirm, '');
+  assert.equal(click('dup'), 'dup');
+  assert.equal(went.pop(), 'sheet:m:a1c', 'va a la copia');
+  click('del'); assert.equal(click('del-yes'), 'del-yes');
+  assert.equal(store.get('a1'), null);
+  assert.equal(went.pop(), 'mine', 'borrada: vuelve a Mis builds');
+  SH._state.id = 'm:a2';
+  assert.equal(click('back'), 'back');
+  assert.equal(went.pop(), 'mine');
+  assert.deepEqual(remembered, ['a2'], 'Mis builds sabe a qué fila devolver el foco');
+  delete globalThis.GNBldLib; delete globalThis.GNBldMine; delete globalThis.GNBldStore;
 });
