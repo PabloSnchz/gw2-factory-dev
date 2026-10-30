@@ -11,7 +11,7 @@ const C = globalThis.GNBldCode;
 
 // Una profesión de mentira con la forma real de la API (v=latest).
 const PROF = { id: 'Guardian', name: 'Guardián', code: 1, icon: 'g.png', icon_big: 'G.png', specializations: [16, 42, 27],
-  weapons: { Greatsword: { flags: ['TwoHand'] }, Longbow: { specialization: 27, flags: ['TwoHand'] } },
+  weapons: { Greatsword: { flags: ['TwoHand'], skills: [{ id: 9137, slot: 'Weapon_1' }] }, Longbow: { specialization: 27, flags: ['TwoHand'] } },
   skills: [{ id: 9083, slot: 'Heal', type: 'Heal' }, { id: 9085, slot: 'Utility', type: 'Utility' }, { id: 9150, slot: 'Utility', type: 'Utility' },
     { id: 9153, slot: 'Utility', type: 'Utility' }, { id: 30039, slot: 'Utility', type: 'Utility', specialization: 27 }, { id: 9175, slot: 'Elite', type: 'Elite' }],
   skills_by_palette: [[127, 9083], [138, 9085], [254, 9150], [255, 9153], [4746, 30039], [262, 9175]] };
@@ -37,8 +37,8 @@ function fakeFetch(log) {
 }
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\.2\.0 /);
-  assert.equal(R.version, '1.2.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\.3\.0 /);
+  assert.equal(R.version, '1.3.0');
 });
 
 test('normalize: paleta, líneas con los 3 rasgos de cada nivel en orden, barra y armas', () => {
@@ -52,6 +52,8 @@ test('normalize: paleta, líneas con los 3 rasgos de cada nivel en orden, barra 
   assert.equal(R.specById(ref, 27).elite, true);
   assert.equal(ref.weapons.Longbow.spec, 27);
   assert.equal(ref.bar.Utility.length, 4);
+  assert.deepEqual(ref.weapons.Greatsword.skills, [[9137, 'Weapon_1', '', '']], '1.3.0: habilidades del arma por tecla');
+  assert.deepEqual(ref.prof, [], 'este guardián de mentira no trae mecánica');
 });
 
 test('resolve: nombres de líneas, rasgos y habilidades desde un código', () => {
@@ -98,6 +100,7 @@ test('load: pide la API una sola vez por versión del juego y guarda en GNIdb', 
   assert.equal(ref.gameBuild, 209026);
   assert.ok(log.some((u) => /\/v2\/professions\/Guardian\?v=latest&lang=es$/.test(u)), 'paletas con v=latest');
   assert.ok(log.every((u) => !/ids=.*ids=/.test(u)));
+  assert.ok(log.some((u) => /\/v2\/skills\?ids=[^&]*\b9137\b/.test(u)), '1.3.0: también las habilidades de cada arma');
   assert.ok(saved.has('gn:bld:ref:es:Guardian:209026'));
   assert.ok(!saved.has('gn:bld:ref:es:Guardian:1'), 'lo del parche anterior se borra');
   const n = log.length;
@@ -182,7 +185,7 @@ test('BUI-1 identity(): un pedido de profesiones y uno de especializaciones; la 
 test('BUI-1 la ficha lleva el emblema de su élite; lo guardado con el formato viejo se vuelve a pedir', () => {
   const sp = SPECS.map((s) => (s.id === 27 ? Object.assign({}, s, { profession_icon: 'e.png', profession_icon_big: 'E.png' }) : s));
   const ref = R.normalize({ prof: PROF, specs: sp, traits: TRAITS, skills: SKILLS });
-  assert.equal(ref.v, 2);
+  assert.equal(ref.v, 3);
   const b = C.empty(1);
   b.specs = [{ id: 16, traits: [1, 1, 1] }, { id: 42, traits: [1, 1, 1] }, { id: 27, traits: [1, 1, 1] }];
   const v = R.resolve(b, ref);

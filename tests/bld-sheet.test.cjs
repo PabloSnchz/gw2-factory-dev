@@ -10,6 +10,8 @@ globalThis.GNBldCode = require('../js/bld-code.js');
 globalThis.GNBldShow = require('../js/bld-show.js');
 globalThis.GNBldItems = require('../js/bld-items.js');
 globalThis.GNBldGearView = require('../js/bld-gearview.js');
+globalThis.GNBldRef = require('../js/bld-ref.js');
+globalThis.GNBldTraitView = require('../js/bld-traitview.js');
 const SH = require('../js/bld-sheet.js');
 const P = SH._pure;
 const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
@@ -36,12 +38,13 @@ function el(attrs, parent) {
 
 test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
-  assert.match(src, /Versión: 1\.2\.0 /);
-  assert.equal(SH.version, '1.2.0');
+  assert.match(src, /Versión: 1\.3\.0 /);
+  assert.equal(SH.version, '1.3.0');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-gearview.js') && mods.indexOf('js/bld-gearview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-4: el equipo antes que la ficha');
+  assert.ok(mods.indexOf('js/bld-ref.js') < mods.indexOf('js/bld-traitview.js') && mods.indexOf('js/bld-traitview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-5: rasgos antes que la ficha');
   const sb = { console: { info() {}, warn() {} } };
   sb.window = sb;
   require('node:vm').runInNewContext(fs.readFileSync(path.join(ROOT, 'js', 'bld-view.js'), 'utf8'), sb, { filename: 'js/bld-view.js' });
@@ -193,6 +196,30 @@ test('CSS: tokens de los temas, sin colores fijos, celular a una columna; contro
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
   (src.match(/<button\b[^>]*/g) || []).forEach((x) => assert.match(x, /type="button"/));
   assert.doesNotMatch(src, /localStorage\./, 'nada se guarda fuera de la visita');
+});
+
+test('EQ-5: con el ref nuevo, «Rasgos y habilidades» lo pinta bld-traitview (con el equipo); con uno viejo, la vista de siempre', () => {
+  const b = CAT.builds.find((x) => GEAR[x.id]);
+  globalThis.GNBldLib = fakeLib([b]);
+  const TVsave = globalThis.GNBldTraitView, seen = [];
+  globalThis.GNBldTraitView = { ready: (r) => !!(r && r.ok), html: (m) => { seen.push(m); return '<div class="bld-tv">TV</div>'; } };
+  const st = SH._state;
+  st.views[b.id] = { specs: [], land: [], water: [], profName: 'x' }; st.checks[b.id] = []; st.viewErr = {};
+  st.refs[b.id] = { ok: 1 }; st.builds[b.id] = { profession: b.prof }; st.gear[b.id] = { sets: [] };
+  const h = P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null });
+  assert.match(h, /<div class="bld-tv">TV<\/div>/);
+  assert.equal(seen[0].code, b.code);
+  assert.deepEqual(seen[0].gear, { sets: [] }, 'las armas salen del equipo');
+  assert.deepEqual(seen[0].build, { profession: b.prof });
+  assert.deepEqual(seen[0].actions, ['share', 'gw2skills', 'edit']);
+  st.refs[b.id] = { v: 2 };
+  const old = P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null });
+  assert.match(old, /class="bld-card bld-detail"/, 'ref viejo: la vista anterior');
+  assert.doesNotMatch(old, /bld-tv/);
+  globalThis.GNBldTraitView = TVsave;
+  assert.equal(TVsave.ready({ v: 2 }), false, 'el módulo real tampoco acepta un ref viejo');
+  delete st.refs[b.id]; delete st.builds[b.id]; delete st.views[b.id]; delete st.gear[b.id];
+  delete globalThis.GNBldLib;
 });
 
 // EQ-3b: la ficha de Mis builds (#/builds/ver/m:<id>).

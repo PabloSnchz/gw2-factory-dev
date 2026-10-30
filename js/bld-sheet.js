@@ -1,6 +1,8 @@
 /*!
  * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
- * Versión: 1.2.0 (2026-10-30) · EQ-4: el equipo lo pinta js/bld-gearview.js (3 tarjetas como Snow Crows, íconos con su
+ * Versión: 1.3.0 (2026-10-30) · EQ-5: «Rasgos y habilidades» como en el juego con js/bld-traitview.js (barra de armas y
+ *          habilidades con sus teclas, 3 líneas con su fondo oficial, guía de teclas); con un ref viejo, la vista anterior
+ *          · antes 1.2.0 EQ-4: el equipo lo pinta js/bld-gearview.js (3 tarjetas como Snow Crows, íconos con su
  *          rareza, descripción oficial con Tab, toque o cursor; Escape la cierra) · antes 1.1.0 EQ-3b: también la ficha de Mis builds (#/builds/ver/m:<id>): nombre y notas, Editar, Duplicar
  *          y Borrar (con confirmación); si se basa en una build de la Biblioteca, su equipo y su bench · antes 1.0.0
  *
@@ -16,12 +18,12 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.2.0';
+  var VERSION = '1.3.0';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
   var MINE_SECTIONS = [['notes', 'Nombre y notas'], ['gear', 'Equipo'], ['traits', 'Rasgos y habilidades']];
-  var st = { id: '', ctx: null, gear: {}, gearErr: {}, views: {}, checks: {}, viewErr: {}, closed: {}, focusTitle: false, confirm: '' };
+  var st = { id: '', ctx: null, gear: {}, gearErr: {}, views: {}, checks: {}, refs: {}, builds: {}, viewErr: {}, closed: {}, focusTitle: false, confirm: '' };
 
   function S() { return root.GNBldShow; }
   function esc(s) { return S() ? S().esc(s) : String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
@@ -95,6 +97,12 @@
   function traitsHTML(id, b) {
     if (st.viewErr[id]) return '<p class="bld-err" role="alert">' + esc(st.viewErr[id]) + '</p>';
     if (!st.views[id] || !S()) return '<p class="bld-muted" role="status">Buscando los rasgos y las habilidades en la API del juego…</p>';
+    // EQ-5: con el ref de bld-ref 1.3.0, como en el juego (js/bld-traitview.js); las armas salen del equipo si ya llegó.
+    var TV = root.GNBldTraitView, ref = st.refs[id];
+    if (TV && ref && st.builds[id] && TV.ready(ref)) {
+      return TV.html({ build: st.builds[id], ref: ref, view: st.views[id], checks: st.checks[id], code: b.code, gear: st.gear[id] || null,
+        title: b.name, actions: ['share', 'gw2skills', 'edit'] });
+    }
     return S().detailHTML(st.views[id], { code: b.code, checks: st.checks[id], title: b.name, actions: ['share', 'gw2skills', 'edit'] });
   }
   function playHTML(b) {
@@ -237,7 +245,7 @@
     var r = C.parse(b.code);
     if (!r.ok) { st.viewErr[b.id] = r.error; return; }
     R.load(r.build.profession).then(function (ref) {
-      st.views[b.id] = R.resolve(r.build, ref); st.checks[b.id] = R.check(r.build, ref);
+      st.views[b.id] = R.resolve(r.build, ref); st.checks[b.id] = R.check(r.build, ref); st.refs[b.id] = ref; st.builds[b.id] = r.build;
       if (st.id === b.id) paint(ctx);
     }, function (e) { st.viewErr[b.id] = 'No pude traer los nombres del juego (' + (e && e.message || '') + ').'; if (st.id === b.id) paint(ctx); });
   }
@@ -303,6 +311,7 @@
     if (root.GNBldBench) root.GNBldBench.ensureCss();
     ensureCss();
     if (root.GNBldGearView) root.GNBldGearView.ensureCss();
+    if (root.GNBldTraitView) root.GNBldTraitView.ensureCss();
     ctx.host = host;
     st.ctx = ctx;
     if (st.id !== ctx.arg) { st.id = ctx.arg || ''; st.focusTitle = true; st.confirm = ''; }
@@ -310,6 +319,7 @@
       host.__bldSheet = true;
       host.addEventListener('click', function (e) { onClick(st.ctx, e); });
       if (root.GNBldGearView) root.GNBldGearView.wire(host);
+      if (root.GNBldTraitView) root.GNBldTraitView.wire(host);
       host.addEventListener('toggle', function (e) {
         var d = e.target, k = d && d.getAttribute && d.getAttribute('data-sheet-sec');
         if (k) st.closed[k] = !d.open;
