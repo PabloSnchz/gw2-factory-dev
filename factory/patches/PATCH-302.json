@@ -1,0 +1,54 @@
+{
+ "id": "PATCH-302",
+ "summary": "BL-084 EQ-2: bld-items 1.0.1 — el resumen de estadísticas junta las que tienen el mismo nombre (RUN-236 mostró «Dragón ×1, Dragón ×1» en el Catalizador de WvW).",
+ "files": [
+  {
+   "path": "js/bld-items.js",
+   "base_sha": "96776b7e5bdefa7c3dd119bbca9ae9d516f97727",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-30)\n",
+     "text": " * Versión: 1.0.1 (2026-10-30) · el resumen junta estadísticas con el mismo nombre (RUN-236: «Dragón ×1, Dragón ×1»)\n *          · antes 1.0.0\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';\n",
+     "text": "  var VERSION = '1.0.1';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var tally = function (s) { if (s && !s.missing) { count[s.id] = count[s.id] || { stat: s, pieces: 0 }; count[s.id].pieces++; } };\n",
+     "text": "    // 1.0.1: por nombre: la API tiene ids distintos para la misma estadística (p. ej. 1697 y 1681 son «Dragón»).\n    var tally = function (s) { if (s && !s.missing) { count[s.name] = count[s.name] || { stat: s, pieces: 0 }; count[s.name].pieces++; } };\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-items.test.cjs",
+   "base_sha": "0e8a6566eaef6a776994db241714bbb720e6408c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(src, /Versión: 1\\.0\\.0 /);\n  assert.equal(X.version, '1.0.0');\n",
+     "text": "  assert.match(src, /Versión: 1\\.0\\.1 /);\n  assert.equal(X.version, '1.0.1');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(v.stats[0].pieces, 5 + 5 + 3, '5 de armadura, 5 abalorios y 3 armas');\n",
+     "text": "  assert.equal(v.stats[0].pieces, 5 + 5 + 3, '5 de armadura, 5 abalorios y 3 armas');\n  assert.deepEqual(v.stats.map((s) => s.stat.name + ' ×' + s.pieces), ['Berserker ×13', 'Dragón ×2'], '1.0.1: 1697 y 1681 se juntan como «Dragón»');\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "0daaf50afc0bef663adb2c793c5c57a9fb50c959",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-items.js\", \"v\": \"1.0.0\" },\n",
+     "text": "      { \"src\": \"js/bld-items.js\", \"v\": \"1.0.1\" },\n"
+    }
+   ]
+  }
+ ]
+}
