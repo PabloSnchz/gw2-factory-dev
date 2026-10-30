@@ -1,0 +1,33 @@
+{
+ "id": "PATCH-296",
+ "summary": "BL-082 BLD-ICON documentado: validación pendiente en status y FEAT-025 (ícono oficial 156720 en Sidebar y cabecera; canal de recursos DEC-045).",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "0d9af37691bcf0404cdc18f9427d13abf4e55a6c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 00:35Z",
+     "text": "Última actualización: 2026-10-30 01:37Z"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-082] Info: CUR-1 listo:",
+     "text": "- [BL-082] Validación: BLD-ICON en DEV (Firefox): Builds en la Sidebar (y en la hoja «Más» del celular) y en la cabecera de #/builds lleva el ícono oficial de la pestaña Build del Panel del héroe (textura 156720, la de tu captura). PATCH-295, ASSET-001, DEC-045.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/features/FEAT-025-modulo-builds.md",
+   "base_sha": "91fc4e08ad86c18f5c9547efb6297806d4fd4e65",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "1. **Biblioteca**",
+     "text": "Ícono del módulo (BLD-ICON, pedido de Pablo 2026-10-30): el oficial de la pestaña Build del Panel del héroe, textura 156720 del juego (assets/icons/156720.png, 32×32), en la Sidebar, la hoja «Más» y la cabecera. No está en la API oficial: lo bajó el canal de recursos (DEC-045, ASSET-001).\n\n"
+    }
+   ]
+  }
+ ]
+}
