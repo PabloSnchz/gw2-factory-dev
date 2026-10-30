@@ -1,6 +1,7 @@
 /*!
  * js/bld-items.js — Builds: el equipo de cada build en castellano (BL-084 EQ-2)
- * Versión: 1.0.0 (2026-10-30)
+ * Versión: 1.0.1 (2026-10-30) · el resumen junta estadísticas con el mismo nombre (RUN-236: «Dragón ×1, Dragón ×1»)
+ *          · antes 1.0.0
  *
  * assets/data/builds/gear.json guarda el equipo de cada build como ids oficiales (EQ-1, lo actualiza la curación
  * semanal). Este módulo lo carga solo cuando se abre una ficha y trae de la API oficial, en castellano y por tandas:
@@ -14,7 +15,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var API = 'https://api.guildwars2.com';
   var LANG = 'es';
   var GEAR = 'assets/data/builds/gear.json';
@@ -210,7 +211,8 @@
     var out = { pvp: !e.armor && !e.trinkets, armor: [], rune: null, runeMixed: false, trinkets: [], relic: itemOf(R, e.relic), amulet: null,
       sets: [], extras: [], stats: [] };
     var count = {};
-    var tally = function (s) { if (s && !s.missing) { count[s.id] = count[s.id] || { stat: s, pieces: 0 }; count[s.id].pieces++; } };
+    // 1.0.1: por nombre: la API tiene ids distintos para la misma estadística (p. ej. 1697 y 1681 son «Dragón»).
+    var tally = function (s) { if (s && !s.missing) { count[s.name] = count[s.name] || { stat: s, pieces: 0 }; count[s.name].pieces++; } };
     (e.armor || []).forEach(function (a, i) {
       var it = itemOf(R, a[0]), s = statOf(R, a[1], it);
       out.armor.push({ slot: slotOf(it, ARMOR_ORDER[i]), item: it, stat: s, rune: a[2] ? itemOf(R, a[2]) : null });

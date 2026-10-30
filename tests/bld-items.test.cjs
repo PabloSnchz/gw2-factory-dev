@@ -67,8 +67,8 @@ function fakeFetch(log, opts) {
 
 test('versión en la cabecera y en modules.json, después de bld-code y antes de las vistas', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-items.js'), 'utf8');
-  assert.match(src, /Versión: 1\.0\.0 /);
-  assert.equal(X.version, '1.0.0');
+  assert.match(src, /Versión: 1\.0\.1 /);
+  assert.equal(X.version, '1.0.1');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.includes('js/bld-items.js'), 'se carga con la ruta #/builds');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-view.js'));
@@ -142,6 +142,7 @@ test('load: ficha PvE completa en castellano; pide por tandas y solo lo que falt
   assert.equal(v.extras[0].count, 18);
   assert.equal(v.stats[0].stat.name, 'Berserker');
   assert.equal(v.stats[0].pieces, 5 + 5 + 3, '5 de armadura, 5 abalorios y 3 armas');
+  assert.deepEqual(v.stats.map((s) => s.stat.name + ' ×' + s.pieces), ['Berserker ×13', 'Dragón ×2'], '1.0.1: 1697 y 1681 se juntan como «Dragón»');
   const calls = log.filter((u) => u.startsWith('https://')).length;
   assert.ok(calls <= 3, 'items, estadísticas (y amuletos solo si hace falta): ' + calls);
   log.length = 0;
