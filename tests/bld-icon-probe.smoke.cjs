@@ -1,33 +1,27 @@
-// BLD-ICON sonda (se borra al cerrar): ícono oficial de la pestaña de plantillas/almacén de builds del Panel del héroe.
-// Pasada 2: la wiki por wiki-en.guildwars2.com (la otra dirección devolvió HTML) y la búsqueda de archivos.
+// BLD-ICON sonda (se borra al cerrar): la wiki no responde a Actions (RUN-217/219). Pasada 3: los objetos oficiales de
+// plantillas (Build Storage Expansion 92206 y sus vecinos del 2019-10-29) traen ícono por la API (render.guildwars2.com).
+// Imprime nombre e ícono, y la versión 32 px en base64 (para mirarla yo antes de proponerla).
 'use strict';
-const UA = { headers: { 'User-Agent': 'LaBovedaDelGatoNegro/1.0 (+https://github.com/PabloSnchz/gw2-factory-dev; sonda de icono)', Accept: 'application/json' } };
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-async function json(u) { try { const r = await fetch(u, UA); const t = await r.text(); try { return { st: r.status, j: JSON.parse(t) }; } catch (_) { return { st: r.status, j: null, t: t.replace(/\s+/g, ' ').slice(0, 160) }; } } catch (e) { return { st: 'ERR ' + e.message }; } }
+const UA = { headers: { 'User-Agent': 'LaBovedaDelGatoNegro/1.0 (+https://github.com/PabloSnchz/gw2-factory-dev; sonda de icono)' } };
 (async () => {
-  for (const host of ['https://wiki-en.guildwars2.com', 'https://wiki.guildwars2.com']) {
-    const W = host + '/api.php?format=json&formatversion=2&action=query';
-    const seen = new Set();
-    for (const q of ['build storage', 'build template', 'hero panel', 'template']) {
-      await sleep(900);
-      const r = await json(W + '&list=search&srnamespace=6&srlimit=30&srwhat=title&srsearch=' + encodeURIComponent(q));
-      const hits = (r.j && r.j.query && r.j.query.search || []).map((s) => s.title);
-      console.log('WIKI', host, q, r.st, r.t || '', hits.join(' | '));
-      hits.forEach((h) => seen.add(h));
-    }
-    for (const pg of ['Hero panel', 'Template', 'Build Storage Expansion', 'Build Template Expansion', 'Build template']) {
-      await sleep(900);
-      const r = await json(W + '&prop=images&imlimit=200&titles=' + encodeURIComponent(pg));
-      const ims = (r.j && r.j.query && r.j.query.pages || []).flatMap((p) => (p.images || []).map((x) => x.title));
-      console.log('PAGEIMG', pg, r.st, r.t || '', ims.join(' | '));
-      ims.filter((t) => /build|template|storage|hero/i.test(t)).forEach((t) => seen.add(t));
-    }
-    const titles = [...seen].filter((t) => /\.(png|webp|gif|jpg)$/i.test(t)).slice(0, 60);
-    for (let i = 0; i < titles.length; i += 25) {
-      await sleep(900);
-      const r = await json(W + '&prop=imageinfo&iiprop=url|size&titles=' + encodeURIComponent(titles.slice(i, i + 25).join('|')));
-      (r.j && r.j.query && r.j.query.pages || []).forEach((p) => { const ii = (p.imageinfo || [])[0] || {}; console.log('IMG', p.title, ii.width + 'x' + ii.height, ii.url); });
-    }
-    if (seen.size) break;
+  const ids = []; for (let i = 92190; i <= 92225; i++) ids.push(i);
+  const r = await fetch('https://api.guildwars2.com/v2/items?lang=en&ids=' + ids.join(','), UA);
+  const items = r.ok ? await r.json() : [];
+  console.log('ITEMS', r.status, items.length);
+  const pick = [];
+  items.forEach((it) => {
+    console.log('IT', it.id, it.name, it.type, it.icon);
+    if (/template|storage|build/i.test(it.name)) pick.push(it);
+  });
+  const done = new Set();
+  for (const it of pick) {
+    const m = /render\.guildwars2\.com\/file\/([0-9A-F]+)\/(\d+)\.png/.exec(it.icon || '');
+    if (!m || done.has(m[2])) continue;
+    done.add(m[2]);
+    try {
+      const x = await fetch('https://icons-gw2.darthmaim-cdn.com/' + m[1] + '/' + m[2] + '-32px.png', UA);
+      const b = Buffer.from(await x.arrayBuffer());
+      console.log('B64', it.id, m[2], x.status, b.length, b.toString('base64'));
+    } catch (e) { console.log('B64', it.id, 'ERR', e.message); }
   }
 })();
