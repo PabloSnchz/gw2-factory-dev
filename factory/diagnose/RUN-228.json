@@ -1,0 +1,1 @@
+{"id": "RUN-228", "summary": "BL-084 EQ-1: equipo real de las builds de Snow Crows (parte 1 de 3)", "tests": ["tests/bld-eq1a.smoke.cjs"]}
