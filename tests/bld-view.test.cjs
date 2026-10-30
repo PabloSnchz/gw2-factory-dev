@@ -20,8 +20,8 @@ const P = V._pure;
 const same = (a, b, m) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, m);
 
 test('versión en la cabecera y en el código', () => {
-  assert.match(SRC, /\* Versión: 1\.5\.0 /);
-  assert.equal(V.version, '1.5.0');
+  assert.match(SRC, /\* Versión: 1\.5\.1 /);
+  assert.equal(V.version, '1.5.1');
 });
 
 test('rutas: pestañas, enlace para compartir y rutas ajenas', () => {

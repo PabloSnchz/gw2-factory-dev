@@ -1,6 +1,7 @@
 /*!
  * js/bld-view.js — Builds: el panel, las pestañas y las rutas del módulo (BL-082)
- * Versión: 1.5.0 (2026-10-29) · BUI-6b: el marco exacto de Cuentas y Heredad: el gradiente del módulo es del panel (baja
+ * Versión: 1.5.1 (2026-10-30) · BLD-ICON: cabecera con el ícono oficial de la pestaña Build del Panel del héroe (156720),
+ *          el mismo de la Sidebar · antes 1.5.0 (2026-10-29) · BUI-6b: el marco exacto de Cuentas y Heredad: el gradiente del módulo es del panel (baja
  *          300 px y se funde, no se corta), la cabecera sin fondo propio cerrada por una línea y las pestañas debajo de esa
  *          línea; tarjetas con franja de lado a lado con el arte de su élite, filo y tinte del color de su profesión
  *          (bandStyle) · antes 1.4.0 BUI-6: un solo marco con imagen en la cabecera · antes 1.3.0 BUI-5: contraste AA (WCAG) en los 19 temas: el acento, el verde, el rojo y el foco se
@@ -20,12 +21,12 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.5.0';
+  var VERSION = '1.5.1';
   var LOG = '[GNBld]';
   var PANEL = 'buildsPanel';
   var ROUTE = '#/builds';
   var COLOR = '#C9B6FF';
-  var ICON = 'assets/icons/professions/2163510.png';
+  var ICON = 'assets/icons/156720.png';
   var TABS = [
     { id: 'lib', label: 'Biblioteca', path: '' },
     { id: 'editor', label: 'Editor', path: 'editor' },

@@ -1,6 +1,7 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.3.0 (2026-10-28) · BL-082 BLD-1: Builds en la lista, antes de Cuentas (EXTRA)
+ * Versión: 2.3.1 (2026-10-30) · BL-082 BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720)
+ *          2.3.0 (2026-10-28) · BL-082 BLD-1: Builds en la lista, antes de Cuentas (EXTRA)
  *          2.2.6 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
  * La Sidebar es solo navegación (como la Bienvenida, DEC-032: no muestra contenido de ningún módulo).
@@ -46,7 +47,7 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.3.0';
+  var VERSION = '2.3.1';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
@@ -171,7 +172,7 @@
 
   // BL-082 BLD-1: módulos que la Bienvenida todavía no lista (welcome-panel.js no tiene lugar: 48 KB).
   // Van antes de Cuentas y una sola vez: si algún día la Bienvenida los suma, no se repiten.
-  var EXTRA = [{ id: 'builds', name: 'Builds', href: '#/builds', icon: 'assets/icons/professions/2163510.png', color: '#C9B6FF' }];
+  var EXTRA = [{ id: 'builds', name: 'Builds', href: '#/builds', icon: 'assets/icons/156720.png', color: '#C9B6FF' }];
   function withExtra(list) {
     var out = list.filter(function (m) { return m.id !== 'accounts'; }), tail = list.filter(function (m) { return m.id === 'accounts'; });
     EXTRA.forEach(function (x) { if (!list.some(function (m) { return m.id === x.id; })) out.push(x); });

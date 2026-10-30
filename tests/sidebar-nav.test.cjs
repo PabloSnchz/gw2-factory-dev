@@ -128,10 +128,17 @@ const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.3.0', () => {
+test('versión 2.3.1', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.3\.0/);
-  assert.equal(x.S().version, '2.3.0');
+  assert.match(SRC, /Versión: 2\.3\.1/);
+  assert.equal(x.S().version, '2.3.1');
+});
+
+test('BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720), el mismo que la cabecera', () => {
+  const x = ready(setup());
+  assert.equal(x.document.getElementById('nav-builds').children[0].getAttribute('src'), 'assets/icons/156720.png');
+  assert.match(fs.readFileSync(path.join(ROOT, 'js', 'bld-view.js'), 'utf8'), /var ICON = 'assets\/icons\/156720\.png';/);
+  assert.ok(fs.existsSync(path.join(ROOT, 'assets', 'icons', '156720.png')), 'el archivo está en el repo (ASSET-001)');
 });
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
