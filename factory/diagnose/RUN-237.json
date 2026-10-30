@@ -1,0 +1,1 @@
+{"id": "RUN-237", "summary": "BL-084: cabecera de status.md y líneas BL-083/BL-084 de status y backlog, para registrar EQ-1 y EQ-2", "tests": ["tests/docs-peek.smoke.cjs"]}
