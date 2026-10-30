@@ -1,0 +1,1 @@
+{"id": "RUN-215", "summary": "BL-082 CUR-1: forma real del HTML de Snow Crows (bench y ficha) y MetaBattle para el lector semanal", "tests": ["tests/bld-cur1-probe.smoke.cjs"]}
