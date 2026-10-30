@@ -1,0 +1,1 @@
+{"id": "RUN-242", "summary": "BL-084 EQ-4: suite de Builds después de PATCH-312", "tests": ["tests/bld-gearview.test.cjs", "tests/bld-sheet.test.cjs", "tests/bld-items.test.cjs", "tests/bld-lib.test.cjs", "tests/bld-view.test.cjs", "tests/bld-ui.test.cjs", "tests/bld-mods.test.cjs", "tests/boot.test.cjs", "tests/index-versions.test.cjs", "tests/size-budget.test.cjs"]}
