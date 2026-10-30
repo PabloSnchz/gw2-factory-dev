@@ -1,0 +1,75 @@
+{
+ "id": "PATCH-313",
+ "summary": "BL-084 EQ-4 hecho: corrige el test de gearview (la cabecera dice «sin localStorage.») y documenta status, backlog y plan",
+ "files": [
+  {
+   "path": "tests/bld-gearview.test.cjs",
+   "base_sha": "0bbab841cc8603290d0c63007a43fc33f2b31876",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.doesNotMatch(src, /localStorage\\./, 'sin estado guardado (la cabecera puede nombrarlo)');",
+     "text": "assert.doesNotMatch(src, /localStorage\\.(get|set|remove)Item/, 'sin estado guardado (la cabecera puede nombrarlo)');"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "4a27ebd0d3c4fa4d84b626cbe8685ba03a848813",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-4 (íconos y tooltips del equipo).",
+     "text": "EQ-4 HECHO 2026-10-30 11:45Z (js/bld-gearview.js 1.0.0: el equipo de la ficha en 3 tarjetas como Snow Crows —Armadura, Abalorios y reliquia, Armas con «Otros»—, ícono oficial con el borde de su rareza, descripción oficial en castellano al pasar el cursor, tocar o llegar con Tab, Escape la cierra; resumen de estadísticas con sus atributos; bld-sheet 1.2.0, PATCH-312/313). Sigue EQ-5 (rasgos y habilidades como en el juego)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 05:50Z",
+     "text": "Última actualización: 2026-10-30 11:46Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-4 (equipo con íconos oficiales y tooltips accesibles, como las 3 tablas de Snow Crows); después EQ-5 (rasgos y habilidades como en el juego).",
+     "text": "Próxima acción: BL-084 EQ-5 (rasgos y habilidades como en el juego: banda de habilidades, armas 1–5 y F1–F3, las 3 líneas con su fondo oficial y sus 9 rasgos, guía de teclas); después EQ-6 (desplegables de notas)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-084 EQ-3b (2/2) — Mis builds en filas y con su ficha propia. HECHO.\n",
+     "text": "Micro-ciclo:\nBL-084 EQ-4 — el equipo de la ficha en 3 tarjetas, con íconos oficiales y su descripción accesible. HECHO.\nArchivos:\n- js/bld-gearview.js (`ed791ef`, 1.0.0, nuevo) y tests/bld-gearview.test.cjs (10 pruebas)\n- js/bld-sheet.js (`1aeeb1c`, 1.2.0: delega el equipo; se fueron las tablas y su CSS), js/modules.json (`911d945`), tests/bld-sheet.test.cjs (`6af09c8`)\n\nAdemás: tarjetas Armadura (6 piezas: estadística, pieza y runa), Abalorios y reliquia (7; en PvP Amuleto y reliquia) y Armas por juego (mano, tipo y sigilos) con «Otros» (infusiones ×N, comida, mejora, núcleo de jade, enriquecimiento). Cada ícono lleva el borde de su rareza (ascendido, legendario…). Cada objeto con descripción es alcanzable con Tab y la abre al pasar el cursor, tocarlo o enfocarlo (role=tooltip + aria-describedby: el lector la lee); Escape la cierra sin mover el foco. Arriba, el resumen «Berserker ×14 = potencia, precisión y ferocidad». 3 columnas, 2 a 1100 px y 1 en el celular. RUN-242: sheet 10, items 9, lib 19, view 10, ui 9 (19 temas AA), mods 7, boot 11, index-versions 5 y size-budget 6 verdes; gearview 9 de 10. Mi error: esa prueba buscaba «localStorage.» y la cabecera dice «sin localStorage.»; la corregí en PATCH-313.\n\nAntes: BL-084 EQ-3b (2/2) — Mis builds en filas y con su ficha propia. HECHO.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "(EQ-1 a EQ-3b 1/2 hechos)",
+     "text": "(EQ-1 a EQ-4 hechos; el equipo ya se ve en 3 tarjetas con íconos y su descripción oficial)"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "495e719273f9535be11b0216ab568ed1ecc441fa",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-3b (2/2), Mis builds.",
+     "text": "EQ-3b (2/2) HECHO 09:33Z: Mis builds en las mismas filas y con su ficha propia #/builds/ver/m:<id> (PATCH-310). EQ-4 HECHO 2026-10-30 11:45Z (js/bld-gearview.js 1.0.0: el equipo de la ficha en 3 tarjetas como Snow Crows —Armadura, Abalorios y reliquia, Armas con «Otros»—, ícono oficial con el borde de su rareza, descripción oficial en castellano al pasar el cursor, tocar o llegar con Tab, Escape la cierra; resumen de estadísticas con sus atributos; bld-sheet 1.2.0, PATCH-312/313). Sigue EQ-5."
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "3e3c5b7a59bb3b757f71be5f6021748b188ccba5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-1, EQ-2, EQ-3 y EQ-3b hechos.",
+     "text": "EQ-1, EQ-2, EQ-3, EQ-3b y EQ-4 hechos."
+    },
+    {
+     "op": "insert_after",
+     "anchor": "ahí queda marcada la pestaña Mis builds. Suite completa verde. |",
+     "text": "\n| EQ-4 | HECHO 2026-10-30 11:45Z | `js/bld-gearview.js` 1.0.0, módulo propio (la ficha solo lo llama): 3 tarjetas como Snow Crows —Armadura (estadística, pieza y runa de cada una), Abalorios y reliquia (en PvP, amuleto y reliquia) y Armas por juego con mano, tipo y sigilos, más «Otros»—. Ícono oficial con el borde de su rareza; la descripción oficial (bonos de la runa numerados, efecto del sigilo, reliquia o comida, atributos de la estadística) se abre con cursor, toque o Tab, el lector la lee por `aria-describedby` y Escape la cierra. Resumen de estadísticas con sus atributos. `bld-sheet` 1.2.0 sin tablas. PATCH-312/313. |"
+    }
+   ]
+  }
+ ]
+}
