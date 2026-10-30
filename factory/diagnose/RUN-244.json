@@ -1,0 +1,1 @@
+{"id": "RUN-244", "summary": "BL-084 EQ-5: sonda de la API (armas por habilidad y mecánica de profesión)", "tests": ["tests/bld-eq5.smoke.cjs"]}
