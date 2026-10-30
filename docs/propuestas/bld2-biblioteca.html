@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maqueta BL-084 · Biblioteca → Ficha · La Bóveda del Gato Negro</title>
+<style>
+:root{--bg-0:#0d0f13;--bg-1:#10131a;--bg-2:#111216;--bd-1:#23252b;--tx-1:#e9e9f1;--tx-2:#cfd2d8;--tx-3:#a0a0a6;--gold:#FFA928;
+  --mod:color-mix(in srgb,#C9B6FF 55%,var(--tx-1));--tray:#0b0d11}
+*{box-sizing:border-box}
+body{margin:0;background:var(--tray);color:var(--tx-1);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+a{color:var(--mod)}
+.note{max-width:1180px;margin:14px auto 0;padding:8px 14px;border:1px dashed var(--bd-1);border-radius:10px;color:var(--tx-3);font-size:.82rem}
+.panel{max-width:1180px;margin:10px auto 40px;border:1px solid var(--bd-1);border-radius:16px;overflow:hidden;
+  background:linear-gradient(180deg,color-mix(in srgb,#C9B6FF 12%,transparent),transparent 300px),var(--tray);padding:0 0 22px}
+.hero{padding:20px 24px 18px;border-bottom:1px solid var(--bd-1);display:flex;gap:16px;align-items:center}
+.hero .ic{width:56px;height:56px;border-radius:14px;background:color-mix(in srgb,#C9B6FF 30%,var(--bg-0));border:1px solid var(--bd-1)}
+.hero h2{margin:0;font-size:1.3rem}.hero p{margin:2px 0 0;color:var(--tx-2);font-size:.85rem}
+.kpis{margin-left:auto;display:flex;gap:8px}.kpi{background:var(--bg-0);border:1px solid var(--bd-1);border-radius:10px;padding:6px 12px;text-align:center}
+.kpi b{display:block;font-size:1.1rem}.kpi small{color:var(--tx-3);font-size:.7rem}
+.tabs{display:flex;gap:4px;margin:16px 24px 10px;border-bottom:1px solid var(--bd-1)}
+.tabs a{padding:8px 14px;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--tx-2);text-decoration:none;font-size:.9rem}
+.tabs a.on{border-color:var(--mod);color:var(--tx-1)}
+/* ---------- filtros compactos (como Snow Crows: una barra) */
+.filters{margin:0 24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1)}
+.pf{width:38px;height:38px;border-radius:10px;border:1px solid var(--bd-1);background:var(--bg-0);display:grid;place-items:center;font-size:.6rem;color:var(--tx-3);cursor:pointer}
+.pf.on{border-color:var(--mod);box-shadow:0 0 0 1px var(--mod)}
+.sep{width:1px;height:26px;background:var(--bd-1)}
+.chip{font:inherit;font-size:.8rem;border:1px solid var(--bd-1);border-radius:999px;padding:4px 11px;color:var(--tx-2);background:var(--bg-0);cursor:pointer}
+.chip.on{border-color:var(--mod);color:var(--tx-1);background:color-mix(in srgb,var(--mod) 14%,var(--bg-0))}
+.search{margin-left:auto;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:8px;color:var(--tx-1);padding:6px 10px;font:inherit;font-size:.85rem;width:200px}
+.count{margin:10px 24px 0;color:var(--tx-3);font-size:.8rem;display:flex;justify-content:space-between}
+/* ---------- grupos por profesión → élite (estructura de Snow Crows) */
+.grp{margin:16px 24px 0;border:1px solid var(--bd-1);border-radius:14px;overflow:hidden;background:var(--bg-1)}
+.grp>h3{margin:0;padding:10px 16px;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;display:flex;gap:10px;align-items:center;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--p) 30%,var(--bg-2)),var(--bg-2) 60%);border-bottom:1px solid var(--bd-1)}
+.grp>h3 i{width:22px;height:22px;border-radius:6px;background:var(--p)}
+.grp>h3 small{margin-left:auto;font-weight:400;text-transform:none;letter-spacing:0;color:var(--tx-3)}
+.el{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid var(--bd-1)}
+.el:last-child{border-bottom:0}
+.eln{padding:12px 14px;display:flex;gap:10px;align-items:center;border-right:1px solid var(--bd-1);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--p) 14%,transparent),transparent)}
+.eln i{width:34px;height:34px;border-radius:50%;box-shadow:0 0 0 2px var(--p);background:color-mix(in srgb,var(--p) 45%,var(--bg-0))}
+.eln b{font-size:.9rem}
+.rows{display:grid}
+a.bld{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 150px 28px;gap:12px;align-items:center;padding:10px 14px;text-decoration:none;color:var(--tx-1);
+  border-bottom:1px solid color-mix(in srgb,var(--bd-1) 60%,transparent);position:relative}
+a.bld:last-child{border-bottom:0}
+a.bld:hover,a.bld:focus-visible{background:color-mix(in srgb,var(--p) 9%,var(--bg-1));outline:none}
+a.bld:hover:before,a.bld:focus-visible:before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:3px;border-radius:3px;background:var(--p)}
+.t b{display:block;font-weight:600}.t small{color:var(--tx-3);font-size:.78rem}
+.tags{display:flex;flex-wrap:wrap;gap:4px}.tag{font-size:.7rem;border:1px solid var(--bd-1);border-radius:999px;padding:1px 8px;color:var(--tx-2);background:var(--bg-0)}
+.tag.boon{border-color:var(--gold);color:var(--gold)}.tag.ok{border-color:#3fb950}
+.dps{font-size:.78rem;color:var(--tx-2)}.dps b{color:var(--tx-1)}
+.bar{display:block;height:5px;border-radius:999px;background:var(--bg-0);box-shadow:inset 0 0 0 1px var(--bd-1);overflow:hidden;margin-top:3px}
+.bar i{display:block;height:100%;background:var(--p);border-radius:999px}
+.dps.none{color:var(--tx-3);font-size:.72rem}
+.go{color:var(--tx-3);font-size:1.1rem;text-align:right}
+.flow{margin:22px 24px 0;display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center}
+.box{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:12px 14px;font-size:.85rem;color:var(--tx-2)}
+.box b{color:var(--tx-1);display:block;margin-bottom:4px}
+.arrow{color:var(--mod);font-size:1.4rem}
+@media (max-width:820px){a.bld{grid-template-columns:1fr 24px}.tags,.dps{grid-column:1}.el{grid-template-columns:1fr}.eln{border-right:0;border-bottom:1px solid var(--bd-1)}
+  .flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}.kpis{display:none}}
+</style>
+</head>
+<body>
+<p class="note"><b>Maqueta BL-084 · Biblioteca</b> (no es la app): la lista que lleva a la ficha. Se toca una build → abre su ficha
+(<a href="bld2-maqueta.html">ver la maqueta de la ficha</a>). Mismo marco que el resto de la Bóveda; la lista toma la estructura de Snow Crows
+(agrupada por profesión y élite, una fila por build) en vez de tarjetas grandes.</p>
+
+<section class="panel" aria-label="Builds">
+  <header class="hero"><span class="ic" aria-hidden="true"></span>
+    <div><h2>Builds</h2><p>104 builds curadas · último parche de balance 29/09/2026</p></div>
+    <div class="kpis"><div class="kpi"><b>104</b><small>builds</small></div><div class="kpi"><b>36/36</b><small>élites</small></div><div class="kpi"><b>20</b><small>con bench</small></div><div class="kpi"><b>3</b><small>mías</small></div></div>
+  </header>
+  <nav class="tabs" aria-label="Pestañas"><a class="on" href="#">Biblioteca</a><a href="#">Editor</a><a href="#">Mis builds</a><a href="#">Importar</a></nav>
+
+  <div class="filters" role="group" aria-label="Filtros">
+    <span class="pf on">Todas</span><span class="pf">Gua</span><span class="pf">Gue</span><span class="pf">Ing</span><span class="pf">Exp</span><span class="pf">Lad</span>
+    <span class="pf">Ele</span><span class="pf">Hip</span><span class="pf">Nig</span><span class="pf">Ret</span>
+    <span class="sep"></span><button class="chip on">PvE</button><button class="chip">WvW</button><button class="chip">PvP</button>
+    <span class="sep"></span><button class="chip">DPS</button><button class="chip">Celeridad</button><button class="chip">Alacridad</button><button class="chip">Curación</button>
+    <input class="search" type="search" placeholder="Buscar build o élite" aria-label="Buscar">
+  </div>
+  <p class="count"><span>36 builds de PvE · ordenadas por profesión</span><span><button class="chip on">Por profesión</button> <button class="chip">Más DPS primero</button></span></p>
+
+  <section class="grp" style="--p:#D09C59" aria-label="Ingeniero">
+    <h3><i></i>Ingeniero <small>4 élites · 4 builds</small></h3>
+    <div class="el"><div class="eln"><i></i><b>Mechanista</b></div><div class="rows">
+      <a class="bld" href="bld2-maqueta.html"><span class="t"><b>DPS de poder</b><small>Rifle · raids y strikes · dificultad 2/5</small></span>
+        <span class="tags"><span class="tag ok">vigente</span><span class="tag">Poder</span></span>
+        <span class="dps"><b>38.473</b> DPS · 83 %<span class="bar"><i style="width:83%"></i></span></span><span class="go">›</span></a>
+      <a class="bld" href="bld2-maqueta.html"><span class="t"><b>DPS de condición con alacridad</b><small>Un kit · Lanza · raids y strikes · 1/5</small></span>
+        <span class="tags"><span class="tag ok">vigente</span><span class="tag boon">Alacridad</span></span>
+        <span class="dps"><b>30.849</b> DPS · 67 %<span class="bar"><i style="width:67%"></i></span></span><span class="go">›</span></a>
+    </div></div>
+    <div class="el"><div class="eln"><i></i><b>Chatarrero</b></div><div class="rows">
+      <a class="bld" href="bld2-maqueta.html"><span class="t"><b>DPS de condición con celeridad</b><small>Lanza · raids y strikes · 4/5</small></span>
+        <span class="tags"><span class="tag ok">vigente</span><span class="tag boon">Celeridad</span></span>
+        <span class="dps"><b>34.765</b> DPS · 75 %<span class="bar"><i style="width:75%"></i></span></span><span class="go">›</span></a>
+    </div></div>
+    <div class="el"><div class="eln"><i></i><b>Holoartesano</b></div><div class="rows">
+      <a class="bld" href="bld2-maqueta.html"><span class="t"><b>DPS de condición</b><small>Pistola y pistola · raids y strikes · 5/5</small></span>
+        <span class="tags"><span class="tag ok">vigente</span><span class="tag">Condición</span></span>
+        <span class="dps"><b>43.198</b> DPS · 93 %<span class="bar"><i style="width:93%"></i></span></span><span class="go">›</span></a>
+    </div></div>
+  </section>
+
+  <section class="grp" style="--p:#C08F95" aria-label="Ladrón">
+    <h3><i></i>Ladrón <small>4 élites · 4 builds</small></h3>
+    <div class="el"><div class="eln"><i></i><b>Especter</b></div><div class="rows">
+      <a class="bld" href="bld2-maqueta.html"><span class="t"><b>DPS celestial con alacridad</b><small>Cetro y pistola · raids y strikes · 2/5</small></span>
+        <span class="tags"><span class="tag ok">vigente</span><span class="tag boon">Alacridad</span></span>
+        <span class="dps none">Sin bench: Snow Crows no mide esta variante</span><span class="go">›</span></a>
+    </div></div>
+  </section>
+
+  <div class="flow" aria-label="Cómo encaja">
+    <div class="box"><b>1 · Biblioteca</b>Encontrás la build: filtros en una barra, lista por profesión y élite, DPS a la vista.</div><span class="arrow">→</span>
+    <div class="box"><b>2 · Ficha</b>Se abre en su propia pantalla (#/builds/ver/&lt;id&gt;) con «← Biblioteca» arriba: equipo, rasgos, notas, cómo se juega.</div><span class="arrow">→</span>
+    <div class="box"><b>3 · Volver</b>«← Biblioteca» te deja en el mismo lugar, con los mismos filtros y en la misma fila.</div>
+  </div>
+</section>
+</body>
+</html>
