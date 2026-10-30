@@ -20,7 +20,7 @@ const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 
 const SOURCES = /^https:\/\/(snowcrows\.com|metabattle\.com|hardstuck\.gg|guildjen\.com)\//;
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-lib.js', L, '1.8.0'], ['bld-mine.js', M, '1.4.0']]) {
+  for (const [f, m, v] of [['bld-lib.js', L, '1.9.0'], ['bld-mine.js', M, '1.4.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -148,7 +148,7 @@ test('BUI-2 filtros: profesiones con su ícono oficial (o su nombre mientras car
   h = P.filtersHTML(CAT, Object.assign({}, f0, { weapon: 'Spear', state: 'revisar' }));
   assert.match(h, /data-lib-more open><summary>Más filtros \(2\)/, 'se abre solo y cuenta lo que hay puesto');
   assert.match(h, /data-lib="clear"/);
-  assert.equal(P.moreCount({ q: 'x', damage: 'power' }), 2);
+  assert.equal(P.moreCount({ q: 'x', damage: 'power', weapon: 'Spear' }), 2, 'EQ-3b: la búsqueda va en la barra, no cuenta en «Más filtros»');
   delete globalThis.GNBldRef;
   assert.ok(B.length > 0);
 });
