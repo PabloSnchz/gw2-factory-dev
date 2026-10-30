@@ -1,0 +1,188 @@
+// BL-084 EQ-3: la ficha de una build en su pantalla (js/bld-sheet.js) y su ruta #/builds/ver/<id>. Sin red ni navegador.
+'use strict';
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const ROOT = path.join(__dirname, '..');
+globalThis.GNBldCode = require('../js/bld-code.js');
+globalThis.GNBldShow = require('../js/bld-show.js');
+globalThis.GNBldItems = require('../js/bld-items.js');
+const SH = require('../js/bld-sheet.js');
+const P = SH._pure;
+const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
+const GEAR = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/gear.json'), 'utf8')).gear;
+
+// Biblioteca de mentira: la misma interfaz que GNBldLib 1.8.0 (list, byId, remember, _state, _pure).
+function fakeLib(list) {
+  const rem = [];
+  return {
+    rem,
+    _state: { cat: CAT, watch: null, bidx: null },
+    _pure: { stateOf: () => 'vigente', latestPatch: () => '2026-09-29', ROLES: { dps: 'DPS', quickness: 'Celeridad', alacrity: 'Alacridad' },
+      benchHTML: () => '<div class="bld-bench">BENCH</div>', issueUrl: () => 'https://github.com/x/issues/new?t=1' },
+    list: () => list,
+    byId: (id) => CAT.builds.find((b) => b.id === id) || null,
+    remember: (id) => rem.push(id),
+    preload: async () => {}
+  };
+}
+function el(attrs, parent) {
+  const me = { getAttribute: (k) => (k in attrs ? attrs[k] : null), closest: (sel) => (sel === '[data-sheet]' && 'data-sheet' in attrs ? me : parent ? parent.closest(sel) : null) };
+  return me;
+}
+
+test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
+  const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
+  assert.match(src, /Versión: 1\.0\.0 /);
+  assert.equal(SH.version, '1.0.0');
+  const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
+  assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
+  assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
+  const sb = { console: { info() {}, warn() {} } };
+  sb.window = sb;
+  require('node:vm').runInNewContext(fs.readFileSync(path.join(ROOT, 'js', 'bld-view.js'), 'utf8'), sb, { filename: 'js/bld-view.js' });
+  const V = sb.GNBld._pure;
+  assert.deepEqual(JSON.parse(JSON.stringify(V.parseHash('#/builds/ver/sc-raids-x'))), { tab: 'sheet', arg: 'sc-raids-x' });
+  assert.equal(V.hashFor('sheet', 'a b'), '#/builds/ver/a%20b');
+  assert.equal(V.parseHash(V.hashFor('sheet', 'sc-pvp-y')).arg, 'sc-pvp-y', 'ida y vuelta');
+  const h = V.viewHTML({ tab: 'sheet' });
+  assert.match(h, /id="bldTab-lib"[^>]*aria-selected="true"/, 'en la ficha queda marcada la Biblioteca');
+  assert.equal((h.match(/aria-selected="true"/g) || []).length, 1);
+  assert.match(h, /role="tabpanel" aria-labelledby="bldTab-lib"/);
+});
+
+test('cada build de Snow Crows de la Biblioteca tiene su equipo en gear.json (y nada sobra)', () => {
+  const sc = CAT.builds.filter((b) => b.source && b.source.name === 'Snow Crows').map((b) => b.id);
+  const miss = sc.filter((id) => !GEAR[id]);
+  assert.deepEqual(miss, [], 'sin equipo');
+  const ids = new Set(CAT.builds.map((b) => b.id));
+  assert.deepEqual(Object.keys(GEAR).filter((id) => !ids.has(id)), [], 'equipo de builds que no están');
+});
+
+test('navOf y crumb: anterior/siguiente dentro de lo que muestra la Biblioteca; el camino modo · profesión · élite', () => {
+  const L = CAT.builds.slice(0, 3);
+  assert.deepEqual(JSON.parse(JSON.stringify(P.navOf(L, L[1].id))), { i: 1, n: 3, prev: L[0], next: L[2] });
+  assert.equal(P.navOf(L, L[0].id).prev, null);
+  assert.equal(P.navOf(L, L[2].id).next, null);
+  assert.equal(P.navOf(L, 'nada').i, -1);
+  const b = CAT.builds.find((x) => x.mode === 'pve' && x.sub === 'raids');
+  const c = P.crumb(b);
+  assert.equal(c[0], 'PvE (raids y strikes)');
+  assert.equal(c[1], globalThis.GNBldCode.PROF_ES[b.prof]);
+  assert.equal(c[2], b.eliteName);
+});
+
+test('ficha: navegación, encabezado con franja, acciones, 3 secciones plegables y todo escapado', () => {
+  const b = Object.assign({}, CAT.builds.filter((x) => x.source.name === 'Snow Crows')[5], { name: '<img onerror=x>' });
+  const L = [CAT.builds[0], b, CAT.builds[2]];
+  globalThis.GNBldLib = fakeLib(L);
+  const h = P.sheetHTML({ b, nav: P.navOf(L, b.id), latest: '2026-09-29', gear: undefined });
+  assert.match(h, /<nav class="bld-sh-nav" aria-label="Navegación de la ficha"><button type="button" class="bld-btn" data-sheet="back">← Biblioteca<\/button>/);
+  assert.match(h, /data-sheet="prev" aria-label="Build anterior: /);
+  assert.match(h, /<small class="bld-muted">2 de 3<\/small>/);
+  assert.match(h, /data-sheet="next"/);
+  assert.match(h, /<h3 id="bldSheetTitle" tabindex="-1">&lt;img onerror=x&gt;<\/h3>/);
+  assert.doesNotMatch(h, /<img onerror/);
+  assert.match(h, /class="bld-card bld-band bld-sheet" aria-labelledby="bldSheetTitle"/);
+  assert.match(h, /class="bld-btn is-primary" data-bld-act="copy">Copiar código/);
+  for (const a of ['save', 'share']) assert.match(h, new RegExp('data-bld-act="' + a + '"'));
+  assert.match(h, /BENCH/, 'el bench de la Biblioteca');
+  assert.deepEqual([...h.matchAll(/data-sheet-sec="(\w+)" open><summary><h4>([^<]+)<\/h4>/g)].map((m) => m[2]), ['Equipo', 'Rasgos y habilidades', 'Cómo se juega']);
+  assert.match(h, /Buscando el equipo en la API del juego…/);
+  assert.match(h, /están en preparación/);
+  assert.match(h, /target="_blank" rel="noopener">Snow Crows ↗/);
+  const first = P.sheetHTML({ b, nav: P.navOf(L, L[0].id), gear: null });
+  assert.match(first, /<button type="button" class="bld-btn" disabled>‹ Anterior<\/button>/, 'en la primera, «Anterior» desactivado');
+  assert.match(first, /Todavía no tengo el equipo de esta build/);
+  assert.match(P.navHTML(b, { i: -1 }), /data-sheet="back"/);
+  assert.doesNotMatch(P.navHTML(b, { i: -1 }), /data-sheet="prev"/, 'si no está en la lista filtrada, sin anterior/siguiente');
+  assert.match(P.missingHTML('<x>'), /No encontré esa build[\s\S]*«&lt;x&gt;»/);
+  delete globalThis.GNBldLib;
+});
+
+test('equipo: tablas de armadura, abalorios y reliquia, armas con sigilos, otros y resumen; PvP con amuleto', async () => {
+  const I = globalThis.GNBldItems;
+  const id = Object.keys(GEAR).find((k) => GEAR[k].armor && GEAR[k].rune && GEAR[k].infusion);
+  const v = I.sheet(GEAR[id], { items: { [GEAR[id].armor[0][0]]: { id: 1, name: 'Visor', icon: 'https://render.guildwars2.com/file/A/1.png', desc: 'x' } },
+    stats: { [GEAR[id].armor[0][1]]: { id: GEAR[id].armor[0][1], name: 'Berserker', attrs: [] } }, amulets: {} });
+  const h = P.gearHTML(v, CAT.builds[0]);
+  assert.match(h, /<caption>Armadura<\/caption><thead><tr><th scope="col">Pieza<\/th>/);
+  assert.match(h, /<th scope="row">Casco<\/th><td><span class="bld-gi" title="x"><img class="bld-ic" src="https:\/\/render\.guildwars2\.com\/file\/A\/1\.png" width="24"/);
+  assert.match(h, /<span class="bld-gs">Berserker<\/span>/);
+  assert.match(h, /<th scope="row">Runa<\/th>/);
+  assert.match(h, /<caption>Abalorios y reliquia<\/caption>/);
+  assert.match(h, /<th scope="row">Reliquia<\/th>/);
+  assert.match(h, /<caption>Armas<\/caption>/);
+  assert.match(h, /Juego de armas 1<br><small>/);
+  assert.match(h, /<caption>Otros<\/caption>[\s\S]*Infusiones[\s\S]*×\d+/);
+  assert.match(h, /<p class="bld-muted bld-gsum"><b>Estadísticas:<\/b> Berserker ×\d+/);
+  assert.doesNotMatch(h, /· <\/small>/, 'sin tipo de arma conocido no queda un punto suelto');
+  const pid = Object.keys(GEAR).find((k) => GEAR[k].amulet);
+  const pv = I.sheet(GEAR[pid], { items: {}, stats: {}, amulets: { [GEAR[pid].amulet]: { id: 8, name: 'Amuleto de berserker', icon: '', attrs: [['Power', 1200]] } } });
+  const ph = P.gearHTML(pv, null);
+  assert.match(ph, /<caption>Amuleto y reliquia<\/caption>/);
+  assert.match(ph, /Amuleto de berserker<small class="bld-muted"> · Potencia 1200<\/small>/);
+  assert.doesNotMatch(ph, /<caption>Armadura<\/caption><thead>/, 'en PvP no hay piezas de armadura');
+});
+
+test('clics: «← Biblioteca» recuerda la build y vuelve; anterior/siguiente van a la vecina y ponen el foco en el título', () => {
+  const L = CAT.builds.slice(0, 3);
+  const lib = fakeLib(L);
+  globalThis.GNBldLib = lib;
+  SH._state.id = L[1].id;
+  const went = [];
+  const ctx = { go: (t, a) => went.push(t + (a ? ':' + a : '')) };
+  assert.equal(P.onClick(ctx, { target: el({ 'data-sheet': 'next' }) }), 'next');
+  assert.equal(P.onClick(ctx, { target: el({ 'data-sheet': 'prev' }) }), 'prev');
+  assert.equal(SH._state.focusTitle, true);
+  assert.equal(P.onClick(ctx, { target: el({ 'data-sheet': 'back' }) }), 'back');
+  assert.deepEqual(went, ['sheet:' + L[2].id, 'sheet:' + L[0].id, 'lib']);
+  assert.deepEqual(lib.rem, [L[1].id], 'la Biblioteca sabe a qué build devolver el foco');
+  SH._state.id = L[0].id;
+  assert.equal(P.onClick(ctx, { target: el({ 'data-sheet': 'prev' }) }), '', 'en la primera no hay anterior');
+  assert.equal(P.onClick(ctx, { target: el({}) }), '');
+  delete globalThis.GNBldLib;
+});
+
+test('render: dibuja, trae equipo y rasgos una sola vez, recuerda las secciones cerradas y no suma oyentes de más', async () => {
+  const b = CAT.builds.find((x) => GEAR[x.id] && x.mode === 'pve');
+  globalThis.GNBldLib = fakeLib([b]);
+  const calls = { items: 0, ref: 0 };
+  const saveI = globalThis.GNBldItems;
+  globalThis.GNBldItems = Object.assign({}, saveI, { load: async (id) => { calls.items++; return { entry: GEAR[id], view: saveI.sheet(GEAR[id], null) }; } });
+  let listeners = 0, focused = 0;
+  const host = { innerHTML: '', addEventListener: () => { listeners++; }, querySelector: (s) => (s === '#bldSheetTitle' ? { focus: () => { focused++; } } : null) };
+  const ref = { load: async () => { calls.ref++; return {}; }, resolve: () => ({ specs: [], land: [], water: [], profName: 'x' }), check: () => [] };
+  const ctx = { arg: b.id, ref, go() {}, toast() {} };
+  SH._state.id = ''; SH._state.gear = {}; SH._state.views = {};
+  await SH.render(host, ctx);
+  await new Promise((r) => setTimeout(r, 0));
+  await new Promise((r) => setTimeout(r, 0));
+  assert.match(host.innerHTML, /<caption>Armadura<\/caption>/, 'el equipo llegó');
+  assert.match(host.innerHTML, /class="bld-card bld-detail"/, 'rasgos y habilidades');
+  assert.equal(focused, 1, 'al abrir, el foco va al título de la ficha');
+  const n = listeners;
+  await SH.render(host, ctx);
+  assert.equal(listeners, n, 'mismo contenedor: no suma oyentes');
+  assert.deepEqual(calls, { items: 1, ref: 1 }, 'lo traído se reusa');
+  SH._state.closed.gear = true;
+  SH.render(host, ctx);
+  assert.match(host.innerHTML, /data-sheet-sec="gear"><summary>/, 'cerrada queda cerrada');
+  SH._state.closed = {};
+  ctx.arg = 'no-existe';
+  SH.render(host, ctx);
+  assert.match(host.innerHTML, /No encontré esa build/);
+  globalThis.GNBldItems = saveI;
+  delete globalThis.GNBldLib;
+});
+
+test('CSS: tokens de los temas, sin colores fijos, celular a una columna; controles nativos', () => {
+  assert.doesNotMatch(P.CSS, /:\s*#[0-9a-fA-F]{3,8}/, 'sin colores fijos');
+  assert.match(P.CSS, /@media \(max-width:720px\)\{[\s\S]*\.bld-gear\{grid-template-columns:1fr\}/);
+  assert.match(P.CSS, /\.bld-card\.bld-band\.bld-sheet:hover\{transform:none\}/, 'la ficha no salta al pasar el mouse');
+  const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
+  (src.match(/<button\b[^>]*/g) || []).forEach((x) => assert.match(x, /type="button"/));
+  assert.doesNotMatch(src, /localStorage\./, 'nada se guarda fuera de la visita');
+});
