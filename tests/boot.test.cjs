@@ -32,8 +32,8 @@ const B = load().GNBoot;
 const res = (status, body) => ({ ok: status === 200, status, json: async () => (typeof body === 'string' ? JSON.parse(body) : body) });
 
 test('versión y manifiesto', () => {
-  assert.equal(B.version, '1.2.0');
-  assert.match(SRC, /\* Versión: 1\.2\.0 /);
+  assert.equal(B.version, '1.3.0');
+  assert.match(SRC, /\* Versión: 1\.3\.0 /);
   assert.equal(B.manifest, 'js/modules.json');
 });
 
@@ -159,8 +159,9 @@ test('planRoutes: rutas válidas, sin repetir módulos de "modules" ni entre rut
   ]);
   assert.deepEqual(B.planRoutes({ modules: [] }), { routes: {}, errors: [] }, 'sin routes no hay nada que hacer');
   assert.deepEqual(B.planRoutes({ modules: [], routes: [] }).errors, ['"routes" no es un objeto']);
-  const many = Array.from({ length: 13 }, (_, i) => ({ src: 'js/r' + i + '.js', v: '1.0.0' }));
-  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many } }).errors, ['routes[#/x]: más de 12 módulos']);
+  const many = Array.from({ length: 21 }, (_, i) => ({ src: 'js/r' + i + '.js', v: '1.0.0' }));
+  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many } }).errors, ['routes[#/x]: más de 20 módulos']);
+  assert.deepEqual(B.planRoutes({ modules: [], routes: { '#/x': many.slice(0, 20) } }).errors, [], '1.3.0: 20 entran');
 });
 
 test('routeFor: la ruta o una sub-ruta; nunca un prefijo de otra palabra', () => {
