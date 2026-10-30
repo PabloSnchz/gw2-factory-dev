@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: propuesta; a Pablo le gusta la ficha, falta su OK a la Biblioteca
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 y EQ-2 hechos.
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -66,6 +66,14 @@ Hoy la ficha se abre **dentro** de la tarjeta (ocupa todo el ancho y empuja la l
 | EQ-10 | Revisión: 19 temas AA, teclado, celular, rendimiento < 200 ms, docs y dashboard | cierre |
 
 Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
+
+## 5b. Avance
+| MC | Estado | Qué quedó |
+|---|---|---|
+| EQ-1 | HECHO 04:15Z | `assets/data/builds/gear.json` (96 builds, ids oficiales) aparte de `catalog.json` para que la lista siga liviana; lo mantiene la curación semanal (`bld-curate.cjs` + `bld-gear-scrape.cjs`). DEC-046. |
+| EQ-2 | HECHO 2026-10-30 05:05Z | `js/bld-items.js` 1.0.1, módulo propio (no en `bld-ref.js`): carga `gear.json` al abrir una ficha y trae objetos, estadísticas y amuletos en castellano por tandas de 150, con caché semanal en IndexedDB (no `localStorage`). `sheet()` arma armadura, abalorios, reliquia o amuleto, juegos de armas con sigilos, extras y resumen. RUN-236: 96/96 resueltas. `boot.js` 1.3.0: hasta 20 módulos por ruta. |
+
+Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
 ## 6. Riesgos
 - **MEDIO:** si Snow Crows cambia el formato de su página, la curación se rompe. Mitigación: el test falla y la build queda «para revisar».
