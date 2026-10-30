@@ -47,7 +47,7 @@ test('versión en la cabecera y en el objeto', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-gearview.js'), 'utf8');
   assert.match(src, /Versión: 1\.0\.0 /);
   assert.equal(GV.version, '1.0.0');
-  assert.doesNotMatch(src, /localStorage\./, 'sin estado guardado (la cabecera puede nombrarlo)');
+  assert.doesNotMatch(src, /localStorage\.(get|set|remove)Item/, 'sin estado guardado (la cabecera puede nombrarlo)');
 });
 
 test('textos: lista con «y», atributos de la estadística y líneas oficiales (bonos numerados, efecto, descripción)', () => {
