@@ -1,0 +1,1 @@
+{"id": "RUN-221", "summary": "BL-082 BLD-ICON: dibujar en ASCII los íconos de plantillas de la API y texturas de interfaz cercanas en gw2dat", "tests": ["tests/bld-icon-probe.smoke.cjs"]}
