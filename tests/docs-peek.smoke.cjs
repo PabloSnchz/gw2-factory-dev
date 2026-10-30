@@ -1,26 +1,17 @@
-// Sonda (borrar después): cabecera de status.md y las líneas de BL-084 / BL-083 en status, backlog y features.
+// Sonda (borrar después): líneas completas de status.md y backlog.md que voy a tocar, y las reglas de tests/ai-memory.test.cjs.
 'use strict';
 const { test } = require('node:test');
 const fs = require('node:fs');
 const path = require('node:path');
-const crypto = require('node:crypto');
 const ROOT = path.join(__dirname, '..');
-const blob = (b) => crypto.createHash('sha1').update(Buffer.concat([Buffer.from('blob ' + b.length + '\0'), b])).digest('hex');
 
-test('docs peek', () => {
-  for (const f of ['ai-memory/status.md', 'ai-memory/backlog.md']) {
-    const b = fs.readFileSync(path.join(ROOT, f));
-    const L = b.toString('utf8').split('\n');
-    console.log('==== ' + f + ' blob ' + blob(b) + ' líneas ' + L.length);
-    const head = f.endsWith('status.md') ? 45 : 12;
-    L.slice(0, head).forEach((l, i) => console.log((i + 1) + ': ' + l.slice(0, 400)));
-    L.forEach((l, i) => { if (i >= head && /BL-084|BL-083/.test(l)) console.log((i + 1) + ': ' + l.slice(0, 600)); });
-  }
-  const fd = path.join(ROOT, 'ai-memory', 'features');
-  const fs2 = fs.readdirSync(fd).sort();
-  console.log('features: ' + fs2.slice(-4).join(', '));
-  const last = fs.readFileSync(path.join(fd, fs2[fs2.length - 1]), 'utf8');
-  console.log(last.slice(0, 1500));
-  const ld = path.join(ROOT, 'ai-memory', 'lessons');
-  console.log('lessons: ' + fs.readdirSync(ld).sort().slice(-3).join(', '));
+test('docs peek 2', () => {
+  const S = fs.readFileSync(path.join(ROOT, 'ai-memory/status.md'), 'utf8').split('\n');
+  [3, 4, 5, 6, 7, 8, 9, 10].forEach((n) => console.log('S' + n + ': ' + JSON.stringify(S[n - 1])));
+  S.forEach((l, i) => { if (i > 150) console.log('S' + (i + 1) + ': ' + JSON.stringify(l.slice(0, 260))); });
+  const B = fs.readFileSync(path.join(ROOT, 'ai-memory/backlog.md'), 'utf8').split('\n');
+  B.forEach((l, i) => { if (/^- \[BL-08[2-4]\]/.test(l)) console.log('B' + (i + 1) + ' (' + l.length + '): ' + JSON.stringify(l)); });
+  B.forEach((l, i) => { if (/^## /.test(l)) console.log('B' + (i + 1) + ': ' + l); });
+  const T = fs.readFileSync(path.join(ROOT, 'tests/ai-memory.test.cjs'), 'utf8');
+  T.split('\n').forEach((l, i) => { if (/status|Próxima|CLASS_RE|Esperando|manifiesto|Archivos/.test(l)) console.log('T' + (i + 1) + ': ' + l.slice(0, 300)); });
 });
