@@ -1,0 +1,1 @@
+{"id": "RUN-240", "summary": "BL-084 EQ-3b: tests de Builds con la Biblioteca en filas", "tests": ["tests/bld-rows.test.cjs", "tests/bld-lib.test.cjs", "tests/bld-sheet.test.cjs", "tests/bld-view.test.cjs", "tests/bld-ui.test.cjs", "tests/boot.test.cjs", "tests/index-versions.test.cjs", "tests/size-budget.test.cjs"]}
