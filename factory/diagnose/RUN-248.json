@@ -1,0 +1,1 @@
+{"id": "RUN-248", "summary": "BL-084 EQ-7: suite de Builds después de PATCH-318", "tests": ["tests/bld-play.test.cjs", "tests/bld-notes.test.cjs", "tests/bld-sheet.test.cjs", "tests/bld-traitview.test.cjs", "tests/bld-gearview.test.cjs", "tests/bld-items.test.cjs", "tests/bld-lib.test.cjs", "tests/bld-view.test.cjs", "tests/boot.test.cjs", "tests/size-budget.test.cjs"]}
