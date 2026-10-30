@@ -1,0 +1,1 @@
+{"id": "RUN-216", "summary": "BL-082 CUR-1: tests de vigía y curación con el bld-code real, y prueba en seco (no escribe) del bench completo y 25 builds contra las fuentes reales", "tests": ["tests/bld-cur1-run.smoke.cjs"]}
