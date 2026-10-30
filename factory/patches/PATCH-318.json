@@ -1,0 +1,111 @@
+{
+ "id": "PATCH-318",
+ "summary": "BL-084 EQ-7: «Cómo se juega» con js/bld-play.js (conceptos, apertura, bucle y control con íconos en línea); bld-notes 1.1.0 inline(); bld-sheet 1.5.0; modules.json; tests",
+ "files": [
+  {
+   "path": "js/bld-notes.js",
+   "base_sha": "539d4b069cf3f8850d2d45c0e988939caf8c88ae",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-30)\n",
+     "text": " * Versión: 1.1.0 (2026-10-30) · EQ-7: inline(texto, ref, equipo) para que «Cómo se juega» (js/bld-play.js) use las mismas\n *          referencias con ícono y nombre oficial · antes 1.0.0\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.0.0';",
+     "text": "  var VERSION = '1.1.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function para(text, look) {\n    return '<p>' + esc(text).replace(TOKEN, function (_, k, id) {",
+     "text": "  function inlineWith(text, look) {\n    return esc(text).replace(TOKEN, function (_, k, id) {"
+    },
+    {
+     "op": "replace",
+     "anchor": "    }) + '</p>';\n  }",
+     "text": "    });\n  }\n  function para(text, look) { return '<p>' + inlineWith(text, look) + '</p>'; }\n  // EQ-7: un texto con {s|t|i:ID}, sin párrafo (lo usa js/bld-play.js).\n  function inline(text, ref, gear) { return inlineWith(text, lookup(ref, gear)); }"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var api = { version: VERSION, URL: URL, KEYS: KEYS, load: load, loaded: loaded, noteSync: noteSync, html: html, ensureCss: ensureCss,",
+     "text": "  var api = { version: VERSION, URL: URL, KEYS: KEYS, load: load, loaded: loaded, noteSync: noteSync, html: html, inline: inline, ensureCss: ensureCss,"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-notes.test.cjs",
+   "base_sha": "e788d0bc6befd172771e258de2483d9038b6f7e9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(src, /Versión: 1\\.0\\.0 /);\n  assert.equal(N.version, '1.0.0');",
+     "text": "  assert.match(src, /Versión: 1\\.1\\.0 /);\n  assert.equal(N.version, '1.1.0');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "test('descripción oficial:",
+     "text": "test('EQ-7: inline() es el párrafo sin <p>, con las mismas referencias', () => {\n  const t = 'Usá {s:13021} y {i:24836} <y>';\n  const h = N.inline(t, REF, GEAR);\n  assert.equal('<p>' + h + '</p>', P.para(t, P.lookup(REF, GEAR)));\n  assert.match(h, /<b>Runa del erudito<\\/b>/);\n  assert.doesNotMatch(h, /<p>/);\n  assert.equal(N.inline('{s:1}', null, null), '<b>#1</b>');\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-sheet.js",
+   "base_sha": "000ead390ac9a74feca49cd074d75938e87b8273",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.4.0 (2026-10-30) · EQ-6:",
+     "text": " * Versión: 1.5.0 (2026-10-30) · EQ-7: «Cómo se juega» con js/bld-play.js (conceptos, apertura, bucle y control, con íconos\n *          en línea; sin nota, el enlace a la guía original) · antes 1.4.0 EQ-6:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.4.0';",
+     "text": "  var VERSION = '1.5.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function playHTML(b) {\n",
+     "text": "  function playHTML(b) {\n    // EQ-7: con js/bld-play.js, mis notas para jugarla (las lee bld-notes); sin el módulo, el aviso de antes.\n    var PL = root.GNBldPlay, N = root.GNBldNotes;\n    if (PL) return PL.html({ note: N ? N.noteSync(b.id) : null, loaded: N ? N.loaded() : true, ref: st.refs[b.id] || null, gear: st.gear[b.id] || null, source: b.source || null });\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (root.GNBldNotes) root.GNBldNotes.ensureCss();",
+     "text": "    if (root.GNBldNotes) root.GNBldNotes.ensureCss();\n    if (root.GNBldPlay) root.GNBldPlay.ensureCss();"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-sheet.test.cjs",
+   "base_sha": "21869a725ffbb1acbc9e2cded446dc3e693ea2da",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(src, /Versión: 1\\.4\\.0 /);\n  assert.equal(SH.version, '1.4.0');",
+     "text": "  assert.match(src, /Versión: 1\\.5\\.0 /);\n  assert.equal(SH.version, '1.5.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "'EQ-6: notas antes que la ficha');",
+     "text": "'EQ-6: notas antes que la ficha');\n  assert.ok(mods.indexOf('js/bld-play.js') > mods.indexOf('js/bld-notes.js') && mods.indexOf('js/bld-play.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-7: cómo se juega antes que la ficha');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "// EQ-3b: la ficha de Mis builds (#/builds/ver/m:<id>).",
+     "text": "test('EQ-7: «Cómo se juega» lo pinta bld-play con la nota, si ya cargó, el ref, el equipo y la fuente; sin el módulo, el aviso de antes', () => {\n  const b = CAT.builds.find((x) => GEAR[x.id] && x.mode === 'pve');\n  globalThis.GNBldLib = fakeLib([b]);\n  const seen = [];\n  globalThis.GNBldNotes = { loaded: () => true, noteSync: (id) => (id === b.id ? { loop: ['x'] } : null), ensureCss() {}, load: async () => ({}), html: () => '' };\n  globalThis.GNBldPlay = { ensureCss() {}, html: (m) => { seen.push(m); return '<div class=\"bld-play\">PLAY</div>'; } };\n  const h = P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null });\n  assert.match(h, /data-sheet-sec=\"play\"[\\s\\S]*<div class=\"bld-play\">PLAY<\\/div>/);\n  assert.equal(seen.length, 1);\n  assert.deepEqual(seen[0].note, { loop: ['x'] });\n  assert.equal(seen[0].loaded, true);\n  assert.equal(seen[0].source, b.source || null);\n  delete globalThis.GNBldPlay;\n  assert.match(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /están en preparación/, 'sin el módulo, el aviso de antes');\n  delete globalThis.GNBldNotes;\n  delete globalThis.GNBldLib;\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "33e615d109e7480ec60429650cdc40948f160c3e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-notes.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.4.0\" },",
+     "text": "      { \"src\": \"js/bld-notes.js\", \"v\": \"1.1.0\" },\n      { \"src\": \"js/bld-play.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.5.0\" },"
+    }
+   ]
+  }
+ ]
+}
