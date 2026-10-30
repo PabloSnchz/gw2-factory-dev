@@ -1,0 +1,64 @@
+{
+ "id": "PATCH-303",
+ "summary": "BL-084: documentación de EQ-1 y EQ-2 (status.md, backlog.md con BL-084 en curso, avance en el plan).",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "8a2b7ce3b79ea2d0fd01777bbfc1f4409b8670b8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: ESPERANDO A PABLO\nTarea actual: BL-083 pasaje a PRD de BL-082 (Builds) vía PowerShell: manifiesto factory/promote/BL-083.txt (28 copias, 0 bajas), commit DEV 048a278, base PRD a501bea; espera que Pablo corra la línea.",
+     "text": "Estado: EN CURSO\nTarea actual: BL-084 ficha de build con equipo y notas en castellano (estilo Snow Crows), aprobada por Pablo 2026-10-30 00:47Z («están perfectas ok arranca»). EQ-1 HECHO 04:15Z (assets/data/builds/gear.json con el equipo de las 96 builds de Snow Crows; la curación semanal lo mantiene; DEC-046). EQ-2 HECHO 2026-10-30 05:05Z (js/bld-items.js 1.0.1: el equipo en castellano desde la API oficial, con caché; boot.js 1.3.0 admite 20 módulos por ruta). Sigue EQ-3. Antes: BL-083 pasaje a PRD de BL-082 (Builds) vía PowerShell: Pablo lo corrió, producción = 2adaada (28 archivos = manifiesto)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 01:58Z\n",
+     "text": "Última actualización: 2026-10-30 05:05Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-083 preparado (DEC-036): Pablo corre la línea de PowerShell (promote.ps1 desde el commit DEV 048a278, base PRD a501bea, manifiesto factory/promote/BL-083.txt, 28 | 28 | 0 esperado) y responde SI. Con el SHA de producción controlo blob a blob, escribo ai-memory/missions/BL-083-informe-promocion.md y cierro BL-083 cuando Pablo valide #/builds en PRD (Chrome). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (y si Pages de PRD se republicó).\n",
+     "text": "Próxima acción: BL-084 EQ-3: la ficha pasa a su pantalla #/builds/ver/<id> (js/bld-sheet.js) con «← Biblioteca», anterior/siguiente y secciones plegables; después EQ-3b (restyle de la Biblioteca) y EQ-4 (tablas de equipo con js/bld-items.js). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Micro-ciclo:\nBL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.\nArchivos:\n",
+     "text": "Micro-ciclo:\nBL-084 EQ-2 — el equipo de cada build en castellano desde la API oficial. HECHO.\nArchivos:\n- js/bld-items.js (`4156c84`, 1.0.1)\n- tests/bld-items.test.cjs (`db56f38`, 9 pruebas)\n- js/modules.json (`1b326c8`, PATCH-301/302)\n\nAdemás: PATCH-301 (boot.js 1.3.0 `d58b41b`: hasta 20 módulos por ruta, Builds tenía 12; tests/boot.test.cjs; index.html ?v=1.3.0), PATCH-302 (el resumen junta estadísticas con el mismo nombre). RUN-234/235 (forma real de la API; Snow Crows marcó la estadística 1967, que no existe: uso la de la pieza), RUN-236 (las 96 fichas resueltas contra la API real, 0 sin resolver, 103 pedidos; bld-items, boot e index-versions verdes). Sondas borradas.\n\nAntes: BL-084 EQ-1 — equipo de las 96 builds de Snow Crows como ids oficiales. HECHO.\nArchivos:\n- assets/data/builds/gear.json (`2d27d14`)\n- .github/scripts/bld-gear-scrape.cjs (`346e28f`) y su test\n- .github/scripts/bld-curate.cjs (`0c29ba0`) y builds-watch.yml (`3150361`)\n\nAntes: BL-070 ACT-2 — vista nueva de Actividades (relojes, 4 indicadores, Hoy y Semana). HECHO.\nArchivos:\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-083] Acción: corré la línea de PowerShell del pasaje a PRD del módulo Builds (te la dejé en el chat; 28 copias, 0 bajas) y respondé SI al final. Después pasame el SHA de producción y lo controlo blob a blob.\n",
+     "text": "- [BL-084] Info: estoy armando la ficha nueva de Builds con equipo y notas (EQ-1 y EQ-2 hechos: datos y motor). Lo vas a ver en DEV desde EQ-3/EQ-4; te aviso al terminar para que valides todo junto.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "427441a956c1d31da32dbcf2e958b772e0fa64eb",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-084] [ALTO] Ficha de build con equipo y notas en castellano, estilo Snow Crows — pedido de Pablo (2026-10-30 00:21Z, con capturas). Plan y maquetas aprobados 00:47Z: docs/propuestas/BL-084-ficha-equipo-y-notas.md, bld2-maqueta.html y bld2-biblioteca.html (EQ-1 a EQ-10, con EQ-3b restyle de la Biblioteca). DEC-046: de terceros solo datos; las notas las escribo yo. EQ-1 HECHO 04:15Z: assets/data/builds/gear.json (96 builds de Snow Crows, ids oficiales; la curación semanal lo mantiene en DEV y PRD). EQ-2 HECHO 2026-10-30 05:05Z: js/bld-items.js 1.0.1 (equipo en castellano desde /v2/items, /v2/itemstats y /v2/pvp/amulets, caché semanal en IndexedDB; 96/96 resueltas en RUN-236), boot.js 1.3.0 (20 módulos por ruta). Sigue EQ-3. BL-083 (pasaje a PRD de BL-082) quedó hecho por Pablo (producción 2adaada); falta su cierre formal. · DEC-041, DEC-044, DEC-046 — 2026-10-30\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "61c8f1ac51cc941096a6bc3334c7577738937934",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: propuesta; a Pablo le gusta la ficha, falta su OK a la Biblioteca\n",
+     "text": "- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 y EQ-2 hechos.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "## 6. Riesgos\n",
+     "text": "## 5b. Avance\n| MC | Estado | Qué quedó |\n|---|---|---|\n| EQ-1 | HECHO 04:15Z | `assets/data/builds/gear.json` (96 builds, ids oficiales) aparte de `catalog.json` para que la lista siga liviana; lo mantiene la curación semanal (`bld-curate.cjs` + `bld-gear-scrape.cjs`). DEC-046. |\n| EQ-2 | HECHO 2026-10-30 05:05Z | `js/bld-items.js` 1.0.1, módulo propio (no en `bld-ref.js`): carga `gear.json` al abrir una ficha y trae objetos, estadísticas y amuletos en castellano por tandas de 150, con caché semanal en IndexedDB (no `localStorage`). `sheet()` arma armadura, abalorios, reliquia o amuleto, juegos de armas con sigilos, extras y resumen. RUN-236: 96/96 resueltas. `boot.js` 1.3.0: hasta 20 módulos por ruta. |\n\nCambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.\n\n"
+    }
+   ]
+  }
+ ]
+}
