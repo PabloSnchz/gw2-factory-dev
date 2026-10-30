@@ -1,0 +1,113 @@
+{
+ "id": "PATCH-306",
+ "summary": "BL-084 EQ-3b (1/2): la Biblioteca en filas agrupadas por profesión y élite (js/bld-rows.js 1.0.0, ya publicado) con el DPS a la vista y filtros en una sola barra con búsqueda; cada fila abre su ficha; bld-lib 1.9.0 y modules.json.",
+ "files": [
+  {
+   "path": "js/bld-lib.js",
+   "base_sha": "3167ebb309985523733ffb213a1b1f4f05119aae",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.8.0 (2026-10-30) · EQ-3:",
+     "text": " * Versión: 1.9.0 (2026-10-30) · EQ-3b: la lista en filas agrupadas por profesión y élite (js/bld-rows.js; «Más DPS primero»\n *          plano) y los filtros en una sola barra con la búsqueda; cada fila es un enlace a su ficha · antes 1.8.0 (2026-10-30) · EQ-3:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.8.0';\n",
+     "text": "  var VERSION = '1.9.0';\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var SORT = { '': 'Orden de la biblioteca', dps: 'Más DPS primero' };",
+     "text": "var SORT = { '': 'Por profesión', dps: 'Más DPS primero' };"
+    },
+    {
+     "op": "replace",
+     "anchor": "  function moreCount(f) { return ['weapon', 'damage', 'state', 'q'].filter(",
+     "text": "  function moreCount(f) { return ['weapon', 'damage', 'state'].filter("
+    },
+    {
+     "op": "delete",
+     "anchor": "      '<label class=\"bld-f\" for=\"bldLibQ\"><small>Buscar</small><input id=\"bldLibQ\" type=\"search\" data-lib-f=\"q\" value=\"' + esc(f.q) + '\" placeholder=\"nombre o élite\"></label>' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "(n || f.prof || f.mode || f.role ?",
+     "text": "(n || f.q || f.prof || f.mode || f.role ?"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return '<div class=\"bld-filters\">' + profsHTML(f, id) + elitesHTML(cat, f, id) +\n      '<div class=\"bld-chiprow\">' + chips('Modo', 'mode', MODES, f.mode) + '<span class=\"bld-sep\" aria-hidden=\"true\"></span>' + chips('Rol', 'role', ROLES, f.role) +\n",
+     "text": "    // EQ-3b: una sola barra (profesión, modo, rol y búsqueda), como Snow Crows; debajo las élites, el orden y «Más filtros».\n    return '<div class=\"bld-filters\"><div class=\"bld-bar1\">' + profsHTML(f, id) + '<span class=\"bld-sep\" aria-hidden=\"true\"></span>' + chips('Modo', 'mode', MODES, f.mode) +\n      '<span class=\"bld-sep\" aria-hidden=\"true\"></span>' + chips('Rol', 'role', ROLES, f.role) +\n      '<input id=\"bldLibQ\" class=\"bld-q\" type=\"search\" data-lib-f=\"q\" value=\"' + esc(f.q) + '\" placeholder=\"Buscar build o élite\" aria-label=\"Buscar build o élite\"></div>' +\n      elitesHTML(cat, f, id) + '<div class=\"bld-chiprow\">' +\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "(st.bidx && st.bidx.n ? '<span class=\"bld-sep\" aria-hidden=\"true\"></span><div class=\"bld-chips\" role=\"group\" aria-label=\"Orden\">'",
+     "text": "(st.bidx && st.bidx.n ? '<div class=\"bld-chips\" role=\"group\" aria-label=\"Orden\"><small class=\"bld-muted\">Orden:</small>'"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function viewHTML() {\n",
+     "text": "  // EQ-3b: con js/bld-rows.js, filas agrupadas por profesión y élite (planas con «Más DPS primero»); sin él, las tarjetas.\n  function listHTML(list, latest) {\n    var R = root.GNBldRows;\n    if (R && typeof R.listHTML === 'function' && !st.open) return R.listHTML(list, { lib: api._pure, latest: latest, idx: st.bidx, flat: st.f.sort === 'dps' });\n    return '<ul class=\"bld-lib\">' + list.map(function (b) { return cardHTML(b, latest); }).join('') + '</ul>';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      (list.length ? '<ul class=\"bld-lib\">' + list.map(function (b) { return cardHTML(b, latest); }).join('') + '</ul>'",
+     "text": "      (list.length ? listHTML(list, latest)"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "    if (near('button,a,summary,details,input,select,label,.bld-detail')) return '';\n",
+     "text": "    // EQ-3b: la fila es un enlace a su ficha (navega sola); me acuerdo de cuál era para devolverle el foco al volver.\n    x = near('a.bld-row');\n    if (x) { remember(x.getAttribute('data-id')); return 'row'; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (!x) return false;\n    if (x.scrollIntoView)",
+     "text": "    if (!x) x = ctx.host.querySelector('a.bld-row[data-id=\"' + st.last.replace(/[\"\\\\\\]]/g, '') + '\"]');\n    if (!x) return false;\n    if (x.scrollIntoView)"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (root.GNBldBench) root.GNBldBench.ensureCss();\n    ensureCss();\n    ctx.host = host;\n    st.ctx = ctx;\n",
+     "text": "    if (root.GNBldBench) root.GNBldBench.ensureCss();\n    if (root.GNBldRows) root.GNBldRows.ensureCss();\n    ensureCss();\n    ctx.host = host;\n    st.ctx = ctx;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "MODES: MODES, ROLES: ROLES, CSS: CSS,",
+     "text": "MODES: MODES, ROLES: ROLES, SUB: SUB, DAMAGE: DAMAGE, SORT: SORT, listHTML: listHTML, CSS: CSS,"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "    '#buildsPanel .bld-filters{display:grid;gap:10px;margin-bottom:12px}',\n",
+     "text": "    '#buildsPanel .bld-bar1{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1)}',\n    '#buildsPanel .bld-q{margin-left:auto;flex:0 1 230px;min-width:170px;background:var(--bg-0);color:var(--tx-1);border:1px solid var(--bd-1);border-radius:8px;padding:6px 10px;font:inherit;font-size:.85rem}',\n    '#buildsPanel .bld-chips>small{align-self:center;margin-right:2px}@media (max-width:560px){#buildsPanel .bld-q{margin-left:0;flex:1 1 100%}}',\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "82ace4c0d57219b6cf044b4bc2338293d5824f9c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "[['bld-lib.js', L, '1.8.0'], ['bld-mine.js', M, '1.4.0']]",
+     "text": "[['bld-lib.js', L, '1.9.0'], ['bld-mine.js', M, '1.4.0']]"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(P.moreCount({ q: 'x', damage: 'power' }), 2);\n",
+     "text": "  assert.equal(P.moreCount({ q: 'x', damage: 'power', weapon: 'Spear' }), 2, 'EQ-3b: la búsqueda va en la barra, no cuenta en «Más filtros»');\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "189a7f121d1827e5e439e3a39b26192782aa4456",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-lib.js\", \"v\": \"1.8.0\" },\n",
+     "text": "      { \"src\": \"js/bld-rows.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-lib.js\", \"v\": \"1.9.0\" },\n"
+    }
+   ]
+  }
+ ]
+}
