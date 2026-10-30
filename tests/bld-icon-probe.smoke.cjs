@@ -1,11 +1,8 @@
-// BLD-ICON sonda (se borra al cerrar). Pasada 4: lo veo en texto. Decodifica PNG (8 bits, sin entrelazado) y dibuja cada
-// ícono como arte ASCII (alfa y brillo), para comparar con la captura de Pablo (pestaña del Almacén de builds).
-// A) los 3 íconos de objetos de plantillas (API). B) texturas de interfaz por id en assets.gw2dat.com cerca de esos ids
-// (la pestaña salió el mismo día, 2019-10-29): solo las chicas y con transparencia.
+// BLD-ICON sonda (se borra al cerrar). Pasada 5: emblema 156020 que usa el módulo BuildsManager de Blish HUD, sus vecinos
+// (pestañas del Panel del héroe) y 2208345/7, dibujados como arte ASCII (alfa y brillo) para compararlos con la captura de Pablo.
 'use strict';
 const zlib = require('zlib');
 const UA = { headers: { 'User-Agent': 'LaBovedaDelGatoNegro/1.0 (+https://github.com/PabloSnchz/gw2-factory-dev; sonda de icono)' } };
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function png(buf) {
   if (buf.length < 8 || buf.readUInt32BE(0) !== 0x89504e47) return null;
   let p = 8, w = 0, h = 0, bd = 0, ct = 0, il = 0; const idat = [];
@@ -33,42 +30,23 @@ function png(buf) {
 }
 function art(im, cols) {
   const sx = im.w / cols, rows = Math.round(im.h / sx / 2), sy = im.h / rows, L = ' .:-=+*#%@', lines = [];
-  let trans = 0, n = 0;
   for (let y = 0; y < rows; y++) {
     let s = '';
     for (let x = 0; x < cols; x++) {
       const [r, g, b, a] = im.px(Math.min(im.w - 1, Math.floor(x * sx + sx / 2)), Math.min(im.h - 1, Math.floor(y * sy + sy / 2)));
-      const v = ((r + g + b) / 3) * (a / 255); n++; if (a < 40) trans++;
-      s += L[Math.min(9, Math.floor(v / 25.6))];
+      s += L[Math.min(9, Math.floor(((r + g + b) / 3) * (a / 255) / 25.6))];
     }
     lines.push('|' + s + '|');
   }
-  return { text: lines.join('\n'), trans: trans / n };
+  return lines.join('\n');
 }
 async function get(u) { try { const r = await fetch(u, UA); return { st: r.status, b: r.ok ? Buffer.from(await r.arrayBuffer()) : null }; } catch (e) { return { st: 'ERR', b: null }; } }
 (async () => {
-  const A = { 2215699: 'https://render.guildwars2.com/file/A7C0D0FAA827F5FA014DEE499FA71676093E29C4/2215699.png',
-    2215700: 'https://render.guildwars2.com/file/DA2B54C2B7F9F1804DAEB0F4A8E44A4459A20B04/2215700.png',
-    2215701: 'https://render.guildwars2.com/file/A615CE6395B4345715EEFA5BD242F54CE3E72EAA/2215701.png' };
-  for (const id of Object.keys(A)) {
-    const r = await get(A[id]); const im = r.b && png(r.b);
-    console.log('API', id, r.st, im ? im.w + 'x' + im.h + ' ct' + im.ct : '-');
-    if (im && im.px) console.log(art(im, 32).text);
-  }
-  const t0 = await get('https://assets.gw2dat.com/2215700.png');
-  console.log('GW2DAT prueba', t0.st, t0.b ? t0.b.length : 0);
-  if (!t0.b) return;
-  const hits = [];
-  for (let id = 2215560; id <= 2215840; id++) {
+  const ids = [156020, 2208345, 2208347, 156013, 156014, 156015, 156016, 156017, 156018, 156019, 156021, 156022, 156023, 156024];
+  for (const id of ids) {
     const r = await get('https://assets.gw2dat.com/' + id + '.png');
-    if (!r.b) continue;
-    let im = null; try { im = png(r.b); } catch (_) {}
-    if (!im || !im.px || im.w > 64 || im.h > 64 || im.w < 16) continue;
-    const a = art(im, 24);
-    if (a.trans < 0.25) continue;
-    hits.push({ id, im, a });
-    await sleep(40);
+    let im = null; try { im = r.b && png(r.b); } catch (_) {}
+    console.log('ID', id, r.st, im ? im.w + 'x' + im.h + ' ct' + im.ct : '-');
+    if (im && im.px) console.log(art(im, 28));
   }
-  console.log('CANDIDATOS', hits.length, hits.map((h) => h.id + '(' + h.im.w + ')').join(' '));
-  hits.slice(0, 14).forEach((h) => console.log('ID', h.id, h.im.w + 'x' + h.im.h, 'transp ' + Math.round(h.a.trans * 100) + '%\n' + h.a.text));
 })();
