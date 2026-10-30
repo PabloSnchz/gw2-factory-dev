@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1, EQ-2, EQ-3 y EQ-3b (1/2) hechos.
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1, EQ-2, EQ-3 y EQ-3b hechos.
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -73,7 +73,8 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-1 | HECHO 04:15Z | `assets/data/builds/gear.json` (96 builds, ids oficiales) aparte de `catalog.json` para que la lista siga liviana; lo mantiene la curación semanal (`bld-curate.cjs` + `bld-gear-scrape.cjs`). DEC-046. |
 | EQ-2 | HECHO 2026-10-30 05:05Z | `js/bld-items.js` 1.0.1, módulo propio (no en `bld-ref.js`): carga `gear.json` al abrir una ficha y trae objetos, estadísticas y amuletos en castellano por tandas de 150, con caché semanal en IndexedDB (no `localStorage`). `sheet()` arma armadura, abalorios, reliquia o amuleto, juegos de armas con sigilos, extras y resumen. RUN-236: 96/96 resueltas. `boot.js` 1.3.0: hasta 20 módulos por ruta. |
 | EQ-3 | HECHO 2026-10-30 05:25Z | `js/bld-sheet.js` 1.0.0: ruta `#/builds/ver/<id>` (la pestaña Biblioteca queda marcada); «← Biblioteca» vuelve con los mismos filtros y el foco en esa build; camino modo · profesión · élite; anterior/siguiente sobre lo filtrado; franja de la élite, bench y acciones; secciones plegables Equipo (tablas con `bld-items`), Rasgos y habilidades (código validado) y Cómo se juega (aviso hasta EQ-6/8). `bld-view` 1.6.0, `bld-lib` 1.8.0. RUN-239: 71 tests verdes. |
-| EQ-3b (1/2) | HECHO 2026-10-30 05:50Z | `js/bld-rows.js` 1.0.0 (puro): grupos por profesión con su color, columna por élite y una fila por build (nombre, armas, modo, dificultad, etiquetas, DPS con barra); la fila entera es un enlace a su ficha. `bld-lib` 1.9.0: una sola barra de filtros con búsqueda, «Orden: Por profesión / Más DPS primero» (plana), foco de vuelta en la fila. RUN-240: 75 tests verdes. Falta (2/2): Mis builds. |
+| EQ-3b (1/2) | HECHO 2026-10-30 05:50Z | `js/bld-rows.js` 1.0.0 (puro): grupos por profesión con su color, columna por élite y una fila por build (nombre, armas, modo, dificultad, etiquetas, DPS con barra); la fila entera es un enlace a su ficha. `bld-lib` 1.9.0: una sola barra de filtros con búsqueda, «Orden: Por profesión / Más DPS primero» (plana), foco de vuelta en la fila. RUN-240: 75 tests verdes. |
+| EQ-3b (2/2) | HECHO 2026-10-30 09:33Z | PATCH-310. `bld-mine` 1.5.0: las mismas filas (lista plana), etiquetas «basada en…/propia/con notas» y el DPS de la build de la Biblioteca en que se basa (mismo código o misma fuente) o «Tuya · sin bench propio». `bld-sheet` 1.1.0: ficha propia `#/builds/ver/m:<id>` con «← Mis builds», anterior/siguiente por Mis builds, secciones Nombre y notas (editables) / Equipo (de la build base, o aviso) / Rasgos y habilidades, y Editar, Duplicar, Borrar con confirmación. `bld-view` 1.6.1: ahí queda marcada la pestaña Mis builds. Suite completa verde. |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
