@@ -1,0 +1,1 @@
+{"id": "RUN-234", "summary": "BL-084 EQ-2: forma de /v2/items, /v2/itemstats y /v2/pvp/amulets (es) para los ids de gear.json; ¿existen todos?", "tests": ["tests/bld-eq2.smoke.cjs"]}
