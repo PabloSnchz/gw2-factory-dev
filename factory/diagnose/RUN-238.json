@@ -1,0 +1,1 @@
+{"id": "RUN-238", "summary": "BL-084: líneas completas de status.md y backlog.md a actualizar, y reglas de tests/ai-memory.test.cjs", "tests": ["tests/docs-peek.smoke.cjs"]}
