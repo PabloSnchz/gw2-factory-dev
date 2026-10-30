@@ -1,0 +1,156 @@
+{
+ "id": "PATCH-314",
+ "summary": "BL-084 EQ-5: bld-ref 1.3.0 (habilidades de arma y mecánica F1–F5) + la ficha pinta «Rasgos y habilidades» con bld-traitview; bld-sheet 1.3.0; modules.json; tests",
+ "files": [
+  {
+   "path": "js/bld-ref.js",
+   "base_sha": "528e82cc876e7ded852e27f61fdd9bed0f74ab4f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-28) · BUI-1:",
+     "text": " * Versión: 1.3.0 (2026-10-30) · EQ-5: cada arma guarda sus habilidades por tecla ([id, casillero, mano secundaria,\n *          atributo]) y la profesión su mecánica (F1–F5); se piden también esas habilidades (lo guardado antes se vuelve\n *          a pedir una vez) · antes 1.2.0 BUI-1:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.2.0';",
+     "text": "  var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var REF_V = 2; // 1.2.0: el ref guarda también el emblema de cada élite (lo de v1 se vuelve a pedir una vez)",
+     "text": "  var REF_V = 3; // 1.3.0: habilidades de cada arma y mecánica de la profesión (2: emblema de cada élite; lo viejo se vuelve a pedir)"
+    },
+    {
+     "op": "replace",
+     "anchor": "weapons[w] = { spec: x.specialization || 0, flags: x.flags || [] }; });",
+     "text": "weapons[w] = { spec: x.specialization || 0, flags: x.flags || [],\n      skills: (x.skills || []).map(function (s) { return [s.id, s.slot || '', s.offhand || '', s.attunement || '']; }) }; });\n    // 1.3.0: mecánica de la profesión (F1–F5), en el orden de la API; la ficha elige la de la élite o la base.\n    var prof = (p.skills || []).filter(function (s) { return s.type === 'Profession' && /^Profession_\\d$/.test(s.slot || ''); })\n      .map(function (s) { return [s.id, s.slot]; });"
+    },
+    {
+     "op": "replace",
+     "anchor": "bar: bar, weapons: weapons, pets: pets, legends: legends };",
+     "text": "bar: bar, weapons: weapons, prof: prof, pets: pets, legends: legends };"
+    },
+    {
+     "op": "replace",
+     "anchor": "        .concat((raw.prof.skills_by_palette || []).map(function (x) { return x[1]; }));",
+     "text": "        .concat((raw.prof.skills_by_palette || []).map(function (x) { return x[1]; }));\n      // 1.3.0: también las habilidades de cada arma (1–5), para la barra de la ficha.\n      Object.keys(raw.prof.weapons || {}).forEach(function (w) { ((raw.prof.weapons[w] || {}).skills || []).forEach(function (s) { sids.push(s.id); }); });"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-ref.test.cjs",
+   "base_sha": "4d3baa967f240e6da653bcb3d303ce74744f27fd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\\.2\\.0 /);\n  assert.equal(R.version, '1.2.0');",
+     "text": "  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ref.js'), 'utf8'), /Versión: 1\\.3\\.0 /);\n  assert.equal(R.version, '1.3.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "weapons: { Greatsword: { flags: ['TwoHand'] },",
+     "text": "weapons: { Greatsword: { flags: ['TwoHand'], skills: [{ id: 9137, slot: 'Weapon_1' }] },"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(ref.bar.Utility.length, 4);",
+     "text": "  assert.equal(ref.bar.Utility.length, 4);\n  assert.deepEqual(ref.weapons.Greatsword.skills, [[9137, 'Weapon_1', '', '']], '1.3.0: habilidades del arma por tecla');\n  assert.deepEqual(ref.prof, [], 'este guardián de mentira no trae mecánica');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.ok(log.every((u) => !/ids=.*ids=/.test(u)));",
+     "text": "  assert.ok(log.every((u) => !/ids=.*ids=/.test(u)));\n  assert.ok(log.some((u) => /\\/v2\\/skills\\?ids=[^&]*\\b9137\\b/.test(u)), '1.3.0: también las habilidades de cada arma');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.equal(ref.v, 2);",
+     "text": "  assert.equal(ref.v, 3);"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-sheet.js",
+   "base_sha": "1aeeb1cf08542943d79c909542e2d3053b503193",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.2.0 (2026-10-30) · EQ-4:",
+     "text": " * Versión: 1.3.0 (2026-10-30) · EQ-5: «Rasgos y habilidades» como en el juego con js/bld-traitview.js (barra de armas y\n *          habilidades con sus teclas, 3 líneas con su fondo oficial, guía de teclas); con un ref viejo, la vista anterior\n *          · antes 1.2.0 EQ-4:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.2.0';",
+     "text": "  var VERSION = '1.3.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "views: {}, checks: {}, viewErr: {},",
+     "text": "views: {}, checks: {}, refs: {}, builds: {}, viewErr: {},"
+    },
+    {
+     "op": "replace",
+     "anchor": "    return S().detailHTML(st.views[id], { code: b.code, checks: st.checks[id], title: b.name, actions: ['share', 'gw2skills', 'edit'] });",
+     "text": "    // EQ-5: con el ref de bld-ref 1.3.0, como en el juego (js/bld-traitview.js); las armas salen del equipo si ya llegó.\n    var TV = root.GNBldTraitView, ref = st.refs[id];\n    if (TV && ref && st.builds[id] && TV.ready(ref)) {\n      return TV.html({ build: st.builds[id], ref: ref, view: st.views[id], checks: st.checks[id], code: b.code, gear: st.gear[id] || null,\n        title: b.name, actions: ['share', 'gw2skills', 'edit'] });\n    }\n    return S().detailHTML(st.views[id], { code: b.code, checks: st.checks[id], title: b.name, actions: ['share', 'gw2skills', 'edit'] });"
+    },
+    {
+     "op": "replace",
+     "anchor": "      st.views[b.id] = R.resolve(r.build, ref); st.checks[b.id] = R.check(r.build, ref);",
+     "text": "      st.views[b.id] = R.resolve(r.build, ref); st.checks[b.id] = R.check(r.build, ref); st.refs[b.id] = ref; st.builds[b.id] = r.build;"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (root.GNBldGearView) root.GNBldGearView.ensureCss();",
+     "text": "    if (root.GNBldGearView) root.GNBldGearView.ensureCss();\n    if (root.GNBldTraitView) root.GNBldTraitView.ensureCss();"
+    },
+    {
+     "op": "replace",
+     "anchor": "      if (root.GNBldGearView) root.GNBldGearView.wire(host);",
+     "text": "      if (root.GNBldGearView) root.GNBldGearView.wire(host);\n      if (root.GNBldTraitView) root.GNBldTraitView.wire(host);"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-sheet.test.cjs",
+   "base_sha": "6af09c837ef1677e24976c95b3637502371280b3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "globalThis.GNBldGearView = require('../js/bld-gearview.js');\n",
+     "text": "globalThis.GNBldGearView = require('../js/bld-gearview.js');\nglobalThis.GNBldRef = require('../js/bld-ref.js');\nglobalThis.GNBldTraitView = require('../js/bld-traitview.js');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(src, /Versión: 1\\.2\\.0 /);\n  assert.equal(SH.version, '1.2.0');",
+     "text": "  assert.match(src, /Versión: 1\\.3\\.0 /);\n  assert.equal(SH.version, '1.3.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "'EQ-4: el equipo antes que la ficha');",
+     "text": "'EQ-4: el equipo antes que la ficha');\n  assert.ok(mods.indexOf('js/bld-ref.js') < mods.indexOf('js/bld-traitview.js') && mods.indexOf('js/bld-traitview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-5: rasgos antes que la ficha');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "// EQ-3b: la ficha de Mis builds (#/builds/ver/m:<id>).",
+     "text": "test('EQ-5: con el ref nuevo, «Rasgos y habilidades» lo pinta bld-traitview (con el equipo); con uno viejo, la vista de siempre', () => {\n  const b = CAT.builds.find((x) => GEAR[x.id]);\n  globalThis.GNBldLib = fakeLib([b]);\n  const TVsave = globalThis.GNBldTraitView, seen = [];\n  globalThis.GNBldTraitView = { ready: (r) => !!(r && r.ok), html: (m) => { seen.push(m); return '<div class=\"bld-tv\">TV</div>'; } };\n  const st = SH._state;\n  st.views[b.id] = { specs: [], land: [], water: [], profName: 'x' }; st.checks[b.id] = []; st.viewErr = {};\n  st.refs[b.id] = { ok: 1 }; st.builds[b.id] = { profession: b.prof }; st.gear[b.id] = { sets: [] };\n  const h = P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null });\n  assert.match(h, /<div class=\"bld-tv\">TV<\\/div>/);\n  assert.equal(seen[0].code, b.code);\n  assert.deepEqual(seen[0].gear, { sets: [] }, 'las armas salen del equipo');\n  assert.deepEqual(seen[0].build, { profession: b.prof });\n  assert.deepEqual(seen[0].actions, ['share', 'gw2skills', 'edit']);\n  st.refs[b.id] = { v: 2 };\n  const old = P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null });\n  assert.match(old, /class=\"bld-card bld-detail\"/, 'ref viejo: la vista anterior');\n  assert.doesNotMatch(old, /bld-tv/);\n  globalThis.GNBldTraitView = TVsave;\n  assert.equal(TVsave.ready({ v: 2 }), false, 'el módulo real tampoco acepta un ref viejo');\n  delete st.refs[b.id]; delete st.builds[b.id]; delete st.views[b.id]; delete st.gear[b.id];\n  delete globalThis.GNBldLib;\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "911d94570e33eb934a0c89b4cc26e2ed991fa142",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-ref.js\", \"v\": \"1.2.0\" },",
+     "text": "      { \"src\": \"js/bld-ref.js\", \"v\": \"1.3.0\" },"
+    },
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.2.0\" },",
+     "text": "      { \"src\": \"js/bld-traitview.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.3.0\" },"
+    }
+   ]
+  }
+ ]
+}
