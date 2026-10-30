@@ -1,0 +1,170 @@
+{
+ "id": "PATCH-312",
+ "summary": "BL-084 EQ-4: la ficha pinta el equipo con js/bld-gearview.js (3 tarjetas, rareza, descripción oficial accesible); bld-sheet 1.2.0",
+ "files": [
+  {
+   "path": "js/bld-sheet.js",
+   "base_sha": "2b794e75927b2d25deed9e2f1aab43cd45a9dbd8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-30) · EQ-3b:",
+     "text": " * Versión: 1.2.0 (2026-10-30) · EQ-4: el equipo lo pinta js/bld-gearview.js (3 tarjetas como Snow Crows, íconos con su\n *          rareza, descripción oficial con Tab, toque o cursor; Escape la cierra) · antes 1.1.0 EQ-3b:"
+    },
+    {
+     "op": "replace",
+     "anchor": "  var VERSION = '1.1.0';",
+     "text": "  var VERSION = '1.2.0';"
+    },
+    {
+     "op": "delete",
+     "anchor": "  function itemCell(x, extra) {\n    if (!x) return '<span class=\"bld-muted\">—</span>';\n    var tip = [x.desc, x.buff, x.effect].concat(x.bonuses || []).filter(Boolean).join('\\n');\n    return '<span class=\"bld-gi\"' + (tip ? ' title=\"' + esc(tip) + '\"' : '') + '>' + img(x.icon, '', 24) + '<span>' + esc(x.name) + (extra || '') + '</span></span>';\n  }\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "  function statCell(s) { return s ? '<span class=\"bld-gs\">' + esc(s.name) + '</span>' : '<span class=\"bld-muted\">—</span>'; }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var h = [], rows = function (list) {\n      return list.map(function (r) { return '<tr><th scope=\"row\">' + esc(r.slot) + '</th><td>' + itemCell(r.item) + '</td><td>' + statCell(r.stat) + '</td></tr>'; }).join('');\n    };\n",
+     "text": "    // EQ-4: el equipo lo pinta js/bld-gearview.js (se carga antes que esta ficha, js/modules.json).\n    var GV = root.GNBldGearView;\n    return GV ? GV.html(v, b) : '<p class=\"bld-muted\">No pude mostrar el equipo: recargá la página.</p>';\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    if (v.armor.length) {\n      h.push('<table class=\"bld-gtab\"><caption>Armadura' + (v.rune ? '' : v.runeMixed ? ' (runas distintas por pieza)' : '') + '</caption><thead><tr><th scope=\"col\">Pieza</th><th scope=\"col\">Objeto</th><th scope=\"col\">Estadística</th></tr></thead><tbody>' +\n        rows(v.armor) + (v.rune ? '<tr><th scope=\"row\">Runa</th><td colspan=\"2\">' + itemCell(v.rune) + '</td></tr>' : '') + '</tbody></table>');\n    } else if (v.rune) {\n      h.push('<table class=\"bld-gtab\"><caption>Armadura</caption><tbody><tr><th scope=\"row\">Runa</th><td>' + itemCell(v.rune) + '</td></tr></tbody></table>');\n    }\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    if (v.trinkets.length || v.relic || v.amulet) {\n      h.push('<table class=\"bld-gtab\"><caption>' + (v.amulet ? 'Amuleto y reliquia' : 'Abalorios y reliquia') + '</caption><tbody>' + rows(v.trinkets) +\n        (v.amulet ? '<tr><th scope=\"row\">Amuleto</th><td colspan=\"2\">' + itemCell(v.amulet, v.amulet.attrs && v.amulet.attrs.length ? '<small class=\"bld-muted\"> · ' +\n          v.amulet.attrs.map(function (a) { return esc(root.GNBldItems ? root.GNBldItems.attrName(a[0]) : a[0]) + ' ' + a[1]; }).join(', ') + '</small>' : '') + '</td></tr>' : '') +\n        (v.relic ? '<tr><th scope=\"row\">Reliquia</th><td colspan=\"2\">' + itemCell(v.relic) + '</td></tr>' : '') + '</tbody></table>');\n    }\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    if (v.sets.length) {\n      h.push('<table class=\"bld-gtab\"><caption>Armas</caption><tbody>' + v.sets.map(function (s) {\n        return s.hands.map(function (x, k) {\n          return '<tr><th scope=\"row\">' + (k ? '' : esc(s.label) + '<br>') + '<small>' + esc(x.handLabel) + (x.type ? ' · ' + esc(x.type) : '') + '</small></th><td>' + itemCell(x.item) +\n            (x.sigils.length ? '<div class=\"bld-sig\">' + x.sigils.map(function (g) { return itemCell(g); }).join('') + '</div>' : '') + '</td><td>' + statCell(x.stat) + '</td></tr>';\n        }).join('');\n      }).join('') + '</tbody></table>');\n    }\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    if (v.extras.length) {\n      h.push('<table class=\"bld-gtab\"><caption>Otros</caption><tbody>' + v.extras.map(function (x) {\n        return '<tr><th scope=\"row\">' + esc(x.label) + '</th><td colspan=\"2\">' + itemCell(x.item, x.count ? ' ×' + x.count : '') + '</td></tr>';\n      }).join('') + '</tbody></table>');\n    }\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    var base = b && b.mine && b.base ? '<p class=\"bld-muted bld-gsum\">Equipo de la build en que se basa: <b>' + esc(b.base.name) + '</b>. Si cambiaste rasgos o armas, revisalo en el Editor.</p>' : '';\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    var sum = v.stats.length ? '<p class=\"bld-muted bld-gsum\"><b>Estadísticas:</b> ' + v.stats.map(function (s) { return esc(s.stat.name) + ' ×' + s.pieces; }).join(' · ') + '</p>' : '';\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    return base + sum + '<div class=\"bld-gear\">' + h.join('') + '</div>';\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    P_ + '.bld-gear{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;align-items:start}',\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    P_ + '.bld-gtab{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:8px}',\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    P_ + '.bld-gtab caption{text-align:left;font-weight:700;color:var(--tx-1);padding:0 0 4px}',\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    P_ + '.bld-gtab th,' + P_ + '.bld-gtab td{padding:5px 8px;border-top:1px solid var(--bd-1);text-align:left;vertical-align:middle;color:var(--tx-1)}',\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    P_ + '.bld-gtab th{font-weight:600;color:var(--tx-2);white-space:nowrap}' + P_ + '.bld-gtab thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;border-top:0}',\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "    P_ + '.bld-gi{display:inline-flex;align-items:center;gap:6px}' + P_ + '.bld-gs{white-space:nowrap}' + P_ + '.bld-sig{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:.8rem}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": " + P_ + '.bld-gear{grid-template-columns:1fr}' + P_ + '.bld-gtab th{white-space:normal}}'",
+     "text": " + '}'"
+    },
+    {
+     "op": "replace",
+     "anchor": "    ensureCss();\n    ctx.host = host;",
+     "text": "    ensureCss();\n    if (root.GNBldGearView) root.GNBldGearView.ensureCss();\n    ctx.host = host;"
+    },
+    {
+     "op": "replace",
+     "anchor": "      host.addEventListener('click', function (e) { onClick(st.ctx, e); });",
+     "text": "      host.addEventListener('click', function (e) { onClick(st.ctx, e); });\n      if (root.GNBldGearView) root.GNBldGearView.wire(host);"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-sheet.test.cjs",
+   "base_sha": "02a91fe293b2cb2a79159990f64e4fc5717f465b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "globalThis.GNBldItems = require('../js/bld-items.js');\n",
+     "text": "globalThis.GNBldItems = require('../js/bld-items.js');\nglobalThis.GNBldGearView = require('../js/bld-gearview.js');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(src, /Versión: 1\\.1\\.0 /);\n  assert.equal(SH.version, '1.1.0');",
+     "text": "  assert.match(src, /Versión: 1\\.2\\.0 /);\n  assert.equal(SH.version, '1.2.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));",
+     "text": "  assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));\n  assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-gearview.js') && mods.indexOf('js/bld-gearview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-4: el equipo antes que la ficha');"
+    },
+    {
+     "op": "replace",
+     "anchor": "test('equipo: tablas de armadura, abalorios y reliquia, armas con sigilos, otros y resumen; PvP con amuleto', async () => {\n  const I = globalThis.GNBldItems;\n  const id = Object.keys(GEAR).find((k) => GEAR[k].armor && GEAR[k].rune && GEAR[k].infusion);\n",
+     "text": "test('equipo (EQ-4): la ficha lo delega en bld-gearview (3 tarjetas); sin ese módulo lo dice; PvP con amuleto', async () => {\n  const I = globalThis.GNBldItems;\n  const id = Object.keys(GEAR).find((k) => GEAR[k].armor && GEAR[k].rune && GEAR[k].infusion);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  const h = P.gearHTML(v, CAT.builds[0]);\n  assert.match(h, /<caption>Armadura<\\/caption><thead><tr><th scope=\"col\">Pieza<\\/th>/);\n  assert.match(h, /<th scope=\"row\">Casco<\\/th><td><span class=\"bld-gi\" title=\"x\"><img class=\"bld-ic\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/A\\/1\\.png\" width=\"24\"/);\n  assert.match(h, /<span class=\"bld-gs\">Berserker<\\/span>/);\n  assert.match(h, /<th scope=\"row\">Runa<\\/th>/);\n  assert.match(h, /<caption>Abalorios y reliquia<\\/caption>/);\n  assert.match(h, /<th scope=\"row\">Reliquia<\\/th>/);\n  assert.match(h, /<caption>Armas<\\/caption>/);\n  assert.match(h, /Juego de armas 1<br><small>/);\n  assert.match(h, /<caption>Otros<\\/caption>[\\s\\S]*Infusiones[\\s\\S]*×\\d+/);\n  assert.match(h, /<p class=\"bld-muted bld-gsum\"><b>Estadísticas:<\\/b> Berserker ×\\d+/);\n  assert.doesNotMatch(h, /· <\\/small>/, 'sin tipo de arma conocido no queda un punto suelto');\n",
+     "text": "  const h = P.gearHTML(v, CAT.builds[0]);\n  assert.equal(h, globalThis.GNBldGearView.html(v, CAT.builds[0]), 'lo pinta bld-gearview');\n  assert.match(h, /<h5 id=\"bldG-armor\">Armadura <span>6 piezas<\\/span>/);\n  assert.match(h, /class=\"bld-gico[^\"]*\"[^>]*><img class=\"bld-gic\" src=\"https:\\/\\/render\\.guildwars2\\.com\\/file\\/A\\/1\\.png\" width=\"40\"/);\n  assert.match(h, /<b>Berserker<\\/b><small>Casco<\\/small>/);\n  assert.match(h, /<h5 id=\"bldG-trinkets\">Abalorios y reliquia/);\n  assert.match(h, /<h6>Otros<\\/h6>[\\s\\S]*Infusiones ×\\d+/);\n  assert.match(h, /<li class=\"bld-gchip\"><b>Berserker<\\/b> ×\\d+/);\n  assert.doesNotMatch(h, /<table/);\n  const GVsave = globalThis.GNBldGearView;\n  delete globalThis.GNBldGearView;\n  assert.match(P.gearHTML(v, null), /No pude mostrar el equipo: recargá la página\\./);\n  globalThis.GNBldGearView = GVsave;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(ph, /<caption>Amuleto y reliquia<\\/caption>/);\n  assert.match(ph, /Amuleto de berserker<small class=\"bld-muted\"> · Potencia 1200<\\/small>/);\n  assert.doesNotMatch(ph, /<caption>Armadura<\\/caption><thead>/, 'en PvP no hay piezas de armadura');\n",
+     "text": "  assert.match(ph, /<h5 id=\"bldG-trinkets\">Amuleto y reliquia<\\/h5>/);\n  assert.match(ph, /<b>Amuleto de berserker<\\/b><small>Amuleto · Potencia 1200<\\/small>/);\n  assert.doesNotMatch(ph, /piezas<\\/span>/, 'en PvP no hay piezas de armadura');\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(host.innerHTML, /<caption>Armadura<\\/caption>/, 'el equipo llegó');",
+     "text": "  assert.match(host.innerHTML, /<h5 id=\"bldG-armor\">Armadura/, 'el equipo llegó');"
+    },
+    {
+     "op": "replace",
+     "anchor": "  assert.match(P.CSS, /@media \\(max-width:720px\\)\\{[\\s\\S]*\\.bld-gear\\{grid-template-columns:1fr\\}/);",
+     "text": "  assert.doesNotMatch(P.CSS, /\\.bld-gtab|\\.bld-gear\\{/, 'EQ-4: el CSS del equipo vive en bld-gearview');\n  assert.match(P.CSS, /@media \\(max-width:720px\\)\\{[\\s\\S]*\\.bld-sh-pn\\{margin-left:0/);"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "b432b6952ca2b6fba735303d86e80120d68efc92",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.1.0\" },",
+     "text": "      { \"src\": \"js/bld-gearview.js\", \"v\": \"1.0.0\" },\n      { \"src\": \"js/bld-sheet.js\", \"v\": \"1.2.0\" },"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-gearview.test.cjs",
+   "base_sha": "81da16313d60ce5867a4b7bee3d5a341897eb19b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.doesNotMatch(src, /localStorage/, 'sin estado guardado');",
+     "text": "assert.doesNotMatch(src, /localStorage\\./, 'sin estado guardado (la cabecera puede nombrarlo)');"
+    }
+   ]
+  }
+ ]
+}
