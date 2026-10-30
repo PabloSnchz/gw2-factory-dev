@@ -2,7 +2,7 @@
 # Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
 # Base de producción esperada: a501bea (BL-081). Comparación blob a blob de DEV contra producción a501bea:
 #   css/, privacy.html, docs/user-guide*.html, assets/previews/, el resto de assets/data/, assets/icons/ (salvo 156720.png)
-#   y los otros 73 archivos de js/ son idénticos: no se tocan.
+#   y los otros 71 archivos de js/ que ya están en producción son idénticos: no se tocan.
 # No se tocan: js/analytics.js y assets/meta-drops.json (versión PROD), README/CHANGELOG, docs internos y docs/propuestas,
 #   tests/, tools/, factory/, ai-memory/ y los workflows propios de DEV (dev-pages, factory-*, decision-response, app-checks).
 # index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006).
