@@ -1,0 +1,1 @@
+{"id": "RUN-233", "summary": "BL-084 EQ-1: equipo de las 10 fichas de Snow Crows que faltaron por 429", "tests": ["tests/bld-eq1all.smoke.cjs"]}
