@@ -1,6 +1,7 @@
 /*!
  * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
- * Versión: 1.1.0 (2026-10-30) · EQ-3b: también la ficha de Mis builds (#/builds/ver/m:<id>): nombre y notas, Editar, Duplicar
+ * Versión: 1.2.0 (2026-10-30) · EQ-4: el equipo lo pinta js/bld-gearview.js (3 tarjetas como Snow Crows, íconos con su
+ *          rareza, descripción oficial con Tab, toque o cursor; Escape la cierra) · antes 1.1.0 EQ-3b: también la ficha de Mis builds (#/builds/ver/m:<id>): nombre y notas, Editar, Duplicar
  *          y Borrar (con confirmación); si se basa en una build de la Biblioteca, su equipo y su bench · antes 1.0.0
  *
  * Ruta #/builds/ver/<id> (js/bld-view.js 1.6.0 la manda acá; la pestaña Biblioteca queda marcada).
@@ -15,7 +16,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
@@ -77,12 +78,6 @@
   }
 
   // Equipo. v = GNBldItems.sheet(); null = la build no tiene equipo cargado; undefined = todavía buscando.
-  function itemCell(x, extra) {
-    if (!x) return '<span class="bld-muted">—</span>';
-    var tip = [x.desc, x.buff, x.effect].concat(x.bonuses || []).filter(Boolean).join('\n');
-    return '<span class="bld-gi"' + (tip ? ' title="' + esc(tip) + '"' : '') + '>' + img(x.icon, '', 24) + '<span>' + esc(x.name) + (extra || '') + '</span></span>';
-  }
-  function statCell(s) { return s ? '<span class="bld-gs">' + esc(s.name) + '</span>' : '<span class="bld-muted">—</span>'; }
   function gearHTML(v, b) {
     if (v === undefined) return '<p class="bld-muted" role="status">Buscando el equipo en la API del juego…</p>';
     if (v === null && b && b.mine) {
@@ -93,37 +88,9 @@
       return '<p class="bld-muted">Todavía no tengo el equipo de esta build' + (b && b.source ? ' (viene de ' + esc(b.source.name) + ')' : '') +
         '. Lo sumo con sus notas; mientras, está en la guía original.</p>';
     }
-    var h = [], rows = function (list) {
-      return list.map(function (r) { return '<tr><th scope="row">' + esc(r.slot) + '</th><td>' + itemCell(r.item) + '</td><td>' + statCell(r.stat) + '</td></tr>'; }).join('');
-    };
-    if (v.armor.length) {
-      h.push('<table class="bld-gtab"><caption>Armadura' + (v.rune ? '' : v.runeMixed ? ' (runas distintas por pieza)' : '') + '</caption><thead><tr><th scope="col">Pieza</th><th scope="col">Objeto</th><th scope="col">Estadística</th></tr></thead><tbody>' +
-        rows(v.armor) + (v.rune ? '<tr><th scope="row">Runa</th><td colspan="2">' + itemCell(v.rune) + '</td></tr>' : '') + '</tbody></table>');
-    } else if (v.rune) {
-      h.push('<table class="bld-gtab"><caption>Armadura</caption><tbody><tr><th scope="row">Runa</th><td>' + itemCell(v.rune) + '</td></tr></tbody></table>');
-    }
-    if (v.trinkets.length || v.relic || v.amulet) {
-      h.push('<table class="bld-gtab"><caption>' + (v.amulet ? 'Amuleto y reliquia' : 'Abalorios y reliquia') + '</caption><tbody>' + rows(v.trinkets) +
-        (v.amulet ? '<tr><th scope="row">Amuleto</th><td colspan="2">' + itemCell(v.amulet, v.amulet.attrs && v.amulet.attrs.length ? '<small class="bld-muted"> · ' +
-          v.amulet.attrs.map(function (a) { return esc(root.GNBldItems ? root.GNBldItems.attrName(a[0]) : a[0]) + ' ' + a[1]; }).join(', ') + '</small>' : '') + '</td></tr>' : '') +
-        (v.relic ? '<tr><th scope="row">Reliquia</th><td colspan="2">' + itemCell(v.relic) + '</td></tr>' : '') + '</tbody></table>');
-    }
-    if (v.sets.length) {
-      h.push('<table class="bld-gtab"><caption>Armas</caption><tbody>' + v.sets.map(function (s) {
-        return s.hands.map(function (x, k) {
-          return '<tr><th scope="row">' + (k ? '' : esc(s.label) + '<br>') + '<small>' + esc(x.handLabel) + (x.type ? ' · ' + esc(x.type) : '') + '</small></th><td>' + itemCell(x.item) +
-            (x.sigils.length ? '<div class="bld-sig">' + x.sigils.map(function (g) { return itemCell(g); }).join('') + '</div>' : '') + '</td><td>' + statCell(x.stat) + '</td></tr>';
-        }).join('');
-      }).join('') + '</tbody></table>');
-    }
-    if (v.extras.length) {
-      h.push('<table class="bld-gtab"><caption>Otros</caption><tbody>' + v.extras.map(function (x) {
-        return '<tr><th scope="row">' + esc(x.label) + '</th><td colspan="2">' + itemCell(x.item, x.count ? ' ×' + x.count : '') + '</td></tr>';
-      }).join('') + '</tbody></table>');
-    }
-    var base = b && b.mine && b.base ? '<p class="bld-muted bld-gsum">Equipo de la build en que se basa: <b>' + esc(b.base.name) + '</b>. Si cambiaste rasgos o armas, revisalo en el Editor.</p>' : '';
-    var sum = v.stats.length ? '<p class="bld-muted bld-gsum"><b>Estadísticas:</b> ' + v.stats.map(function (s) { return esc(s.stat.name) + ' ×' + s.pieces; }).join(' · ') + '</p>' : '';
-    return base + sum + '<div class="bld-gear">' + h.join('') + '</div>';
+    // EQ-4: el equipo lo pinta js/bld-gearview.js (se carga antes que esta ficha, js/modules.json).
+    var GV = root.GNBldGearView;
+    return GV ? GV.html(v, b) : '<p class="bld-muted">No pude mostrar el equipo: recargá la página.</p>';
   }
   function traitsHTML(id, b) {
     if (st.viewErr[id]) return '<p class="bld-err" role="alert">' + esc(st.viewErr[id]) + '</p>';
@@ -214,17 +181,11 @@
     P_ + '.bld-sec>summary h4{margin:0;font-size:1rem;color:var(--tx-1)}' + P_ + '.bld-sec[open]>summary{border-bottom:1px solid var(--bd-1)}',
     P_ + '.bld-sec-b{padding:10px 12px;display:grid;gap:10px}',
     P_ + '.bld-sec-b>.bld-detail{border:0;padding:0;background:none;box-shadow:none}' + P_ + '.bld-sec-b>.bld-detail>.bld-detail-h{display:none}',
-    P_ + '.bld-gear{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;align-items:start}',
-    P_ + '.bld-gtab{width:100%;border-collapse:collapse;font-size:.85rem;background:var(--bg-0);border:1px solid var(--bd-1);border-radius:8px}',
-    P_ + '.bld-gtab caption{text-align:left;font-weight:700;color:var(--tx-1);padding:0 0 4px}',
-    P_ + '.bld-gtab th,' + P_ + '.bld-gtab td{padding:5px 8px;border-top:1px solid var(--bd-1);text-align:left;vertical-align:middle;color:var(--tx-1)}',
-    P_ + '.bld-gtab th{font-weight:600;color:var(--tx-2);white-space:nowrap}' + P_ + '.bld-gtab thead th{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;border-top:0}',
-    P_ + '.bld-gi{display:inline-flex;align-items:center;gap:6px}' + P_ + '.bld-gs{white-space:nowrap}' + P_ + '.bld-sig{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:4px;font-size:.8rem}',
     P_ + '.bld-gsum{margin:0}',
     P_ + '.bld-sh-notes{display:grid;gap:4px;max-width:640px}' + P_ + '.bld-sh-notes small{color:var(--tx-2);font-size:.7rem;text-transform:uppercase}' + P_ + '.bld-sh-notes p{margin:4px 0 0}',
     P_ + '.bld-sh-notes input,' + P_ + '.bld-sh-notes textarea{width:100%;box-sizing:border-box;background:var(--bg-0);color:var(--tx-1);border:1px solid var(--bd-1);border-radius:8px;padding:6px 8px;font:inherit}',
     P_ + '.bld-sheet>.bld-mine-ask{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:8px 10px;border:1px solid var(--bld-err);border-radius:10px;font-size:.85rem;color:var(--tx-1)}',
-    '@media (max-width:720px){' + P_ + '.bld-sh-pn{margin-left:0;width:100%;justify-content:space-between}' + P_ + '.bld-gear{grid-template-columns:1fr}' + P_ + '.bld-gtab th{white-space:normal}}'
+    '@media (max-width:720px){' + P_ + '.bld-sh-pn{margin-left:0;width:100%;justify-content:space-between}' + '}'
   ].join('\n');
   function ensureCss() {
     var d = root.document;
@@ -341,12 +302,14 @@
     if (S()) S().ensureCss();
     if (root.GNBldBench) root.GNBldBench.ensureCss();
     ensureCss();
+    if (root.GNBldGearView) root.GNBldGearView.ensureCss();
     ctx.host = host;
     st.ctx = ctx;
     if (st.id !== ctx.arg) { st.id = ctx.arg || ''; st.focusTitle = true; st.confirm = ''; }
     if (!host.__bldSheet) {
       host.__bldSheet = true;
       host.addEventListener('click', function (e) { onClick(st.ctx, e); });
+      if (root.GNBldGearView) root.GNBldGearView.wire(host);
       host.addEventListener('toggle', function (e) {
         var d = e.target, k = d && d.getAttribute && d.getAttribute('data-sheet-sec');
         if (k) st.closed[k] = !d.open;

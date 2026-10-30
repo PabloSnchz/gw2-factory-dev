@@ -9,6 +9,7 @@ const ROOT = path.join(__dirname, '..');
 globalThis.GNBldCode = require('../js/bld-code.js');
 globalThis.GNBldShow = require('../js/bld-show.js');
 globalThis.GNBldItems = require('../js/bld-items.js');
+globalThis.GNBldGearView = require('../js/bld-gearview.js');
 const SH = require('../js/bld-sheet.js');
 const P = SH._pure;
 const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
@@ -35,11 +36,12 @@ function el(attrs, parent) {
 
 test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
-  assert.match(src, /Versión: 1\.1\.0 /);
-  assert.equal(SH.version, '1.1.0');
+  assert.match(src, /Versión: 1\.2\.0 /);
+  assert.equal(SH.version, '1.2.0');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
+  assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-gearview.js') && mods.indexOf('js/bld-gearview.js') < mods.indexOf('js/bld-sheet.js'), 'EQ-4: el equipo antes que la ficha');
   const sb = { console: { info() {}, warn() {} } };
   sb.window = sb;
   require('node:vm').runInNewContext(fs.readFileSync(path.join(ROOT, 'js', 'bld-view.js'), 'utf8'), sb, { filename: 'js/bld-view.js' });
@@ -106,29 +108,30 @@ test('ficha: navegación, encabezado con franja, acciones, 3 secciones plegables
   delete globalThis.GNBldLib;
 });
 
-test('equipo: tablas de armadura, abalorios y reliquia, armas con sigilos, otros y resumen; PvP con amuleto', async () => {
+test('equipo (EQ-4): la ficha lo delega en bld-gearview (3 tarjetas); sin ese módulo lo dice; PvP con amuleto', async () => {
   const I = globalThis.GNBldItems;
   const id = Object.keys(GEAR).find((k) => GEAR[k].armor && GEAR[k].rune && GEAR[k].infusion);
   const v = I.sheet(GEAR[id], { items: { [GEAR[id].armor[0][0]]: { id: 1, name: 'Visor', icon: 'https://render.guildwars2.com/file/A/1.png', desc: 'x' } },
     stats: { [GEAR[id].armor[0][1]]: { id: GEAR[id].armor[0][1], name: 'Berserker', attrs: [] } }, amulets: {} });
   const h = P.gearHTML(v, CAT.builds[0]);
-  assert.match(h, /<caption>Armadura<\/caption><thead><tr><th scope="col">Pieza<\/th>/);
-  assert.match(h, /<th scope="row">Casco<\/th><td><span class="bld-gi" title="x"><img class="bld-ic" src="https:\/\/render\.guildwars2\.com\/file\/A\/1\.png" width="24"/);
-  assert.match(h, /<span class="bld-gs">Berserker<\/span>/);
-  assert.match(h, /<th scope="row">Runa<\/th>/);
-  assert.match(h, /<caption>Abalorios y reliquia<\/caption>/);
-  assert.match(h, /<th scope="row">Reliquia<\/th>/);
-  assert.match(h, /<caption>Armas<\/caption>/);
-  assert.match(h, /Juego de armas 1<br><small>/);
-  assert.match(h, /<caption>Otros<\/caption>[\s\S]*Infusiones[\s\S]*×\d+/);
-  assert.match(h, /<p class="bld-muted bld-gsum"><b>Estadísticas:<\/b> Berserker ×\d+/);
-  assert.doesNotMatch(h, /· <\/small>/, 'sin tipo de arma conocido no queda un punto suelto');
+  assert.equal(h, globalThis.GNBldGearView.html(v, CAT.builds[0]), 'lo pinta bld-gearview');
+  assert.match(h, /<h5 id="bldG-armor">Armadura <span>6 piezas<\/span>/);
+  assert.match(h, /class="bld-gico[^"]*"[^>]*><img class="bld-gic" src="https:\/\/render\.guildwars2\.com\/file\/A\/1\.png" width="40"/);
+  assert.match(h, /<b>Berserker<\/b><small>Casco<\/small>/);
+  assert.match(h, /<h5 id="bldG-trinkets">Abalorios y reliquia/);
+  assert.match(h, /<h6>Otros<\/h6>[\s\S]*Infusiones ×\d+/);
+  assert.match(h, /<li class="bld-gchip"><b>Berserker<\/b> ×\d+/);
+  assert.doesNotMatch(h, /<table/);
+  const GVsave = globalThis.GNBldGearView;
+  delete globalThis.GNBldGearView;
+  assert.match(P.gearHTML(v, null), /No pude mostrar el equipo: recargá la página\./);
+  globalThis.GNBldGearView = GVsave;
   const pid = Object.keys(GEAR).find((k) => GEAR[k].amulet);
   const pv = I.sheet(GEAR[pid], { items: {}, stats: {}, amulets: { [GEAR[pid].amulet]: { id: 8, name: 'Amuleto de berserker', icon: '', attrs: [['Power', 1200]] } } });
   const ph = P.gearHTML(pv, null);
-  assert.match(ph, /<caption>Amuleto y reliquia<\/caption>/);
-  assert.match(ph, /Amuleto de berserker<small class="bld-muted"> · Potencia 1200<\/small>/);
-  assert.doesNotMatch(ph, /<caption>Armadura<\/caption><thead>/, 'en PvP no hay piezas de armadura');
+  assert.match(ph, /<h5 id="bldG-trinkets">Amuleto y reliquia<\/h5>/);
+  assert.match(ph, /<b>Amuleto de berserker<\/b><small>Amuleto · Potencia 1200<\/small>/);
+  assert.doesNotMatch(ph, /piezas<\/span>/, 'en PvP no hay piezas de armadura');
 });
 
 test('clics: «← Biblioteca» recuerda la build y vuelve; anterior/siguiente van a la vecina y ponen el foco en el título', () => {
@@ -164,7 +167,7 @@ test('render: dibuja, trae equipo y rasgos una sola vez, recuerda las secciones 
   await SH.render(host, ctx);
   await new Promise((r) => setTimeout(r, 0));
   await new Promise((r) => setTimeout(r, 0));
-  assert.match(host.innerHTML, /<caption>Armadura<\/caption>/, 'el equipo llegó');
+  assert.match(host.innerHTML, /<h5 id="bldG-armor">Armadura/, 'el equipo llegó');
   assert.match(host.innerHTML, /class="bld-card bld-detail"/, 'rasgos y habilidades');
   assert.equal(focused, 1, 'al abrir, el foco va al título de la ficha');
   const n = listeners;
@@ -184,7 +187,8 @@ test('render: dibuja, trae equipo y rasgos una sola vez, recuerda las secciones 
 
 test('CSS: tokens de los temas, sin colores fijos, celular a una columna; controles nativos', () => {
   assert.doesNotMatch(P.CSS, /:\s*#[0-9a-fA-F]{3,8}/, 'sin colores fijos');
-  assert.match(P.CSS, /@media \(max-width:720px\)\{[\s\S]*\.bld-gear\{grid-template-columns:1fr\}/);
+  assert.doesNotMatch(P.CSS, /\.bld-gtab|\.bld-gear\{/, 'EQ-4: el CSS del equipo vive en bld-gearview');
+  assert.match(P.CSS, /@media \(max-width:720px\)\{[\s\S]*\.bld-sh-pn\{margin-left:0/);
   assert.match(P.CSS, /\.bld-card\.bld-band\.bld-sheet:hover\{transform:none\}/, 'la ficha no salta al pasar el mouse');
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
   (src.match(/<button\b[^>]*/g) || []).forEach((x) => assert.match(x, /type="button"/));
