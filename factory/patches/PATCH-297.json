@@ -1,0 +1,69 @@
+{
+ "id": "PATCH-297",
+ "summary": "BL-082 cerrada (BLD-ICON validado) y BL-083 pasaje a PRD vía PowerShell preparado",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "84c1c9ed485d6748c6ea436dd1691b380d6a3882",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera validación de BENCH-2 y el primer ciclo real (2026-11-02). · ",
+     "text": "BLD-ICON (2026-10-30, PATCH-295, ASSET-001, DEC-045): ícono oficial de la pestaña Build del Panel del héroe (textura 156720) en Sidebar, hoja «Más» y cabecera. CERRADA 2026-10-30 01:56Z: Pablo validó el ícono («sirve el icono») y pidió los cierres y el pasaje a PRD vía PowerShell (BL-083). La curación semanal corre sola desde el lunes 2026-11-02 12:00 UTC (en DEV y, tras el pasaje, en PRD). · "
+    },
+    {
+     "op": "replace",
+     "anchor": "## IN_PROGRESS\n\n- [BL-082] [ALTO] Módulo Builds",
+     "text": "## IN_PROGRESS\n\n- [BL-083] [ALTO] Promoción a producción de BL-082 (módulo Builds, FEAT-025) — pedido de Pablo (2026-10-30 01:52Z: «sirve el icono, prepara los cierres y además prepara el pasaje prd via powershell»). «Vía PowerShell» (DEC-036): comparé blob a blob DEV con producción a501bea (HEAD = BL-081, sin commits posteriores). Manifiesto factory/promote/BL-083.txt: 28 movimientos (12 JS nuevos bld-*; 6 de js/ modificados: boot, router, sidebar-nav, gn-kit, settings-manager, modules.json; assets/data/builds/catalog.json, bench.json, watch.json; assets/icons/156720.png; index.html; y la automatización de DEC-041/DEC-044: .github/workflows/builds-watch.yml, .github/scripts/bld-watch.cjs, bld-watch.test.cjs, bld-curate.cjs, bld-curate.test.cjs; 0 bajas). No van js/analytics.js ni assets/meta-drops.json (versión PROD), ni factory-asset/dev-pages ni nada de factory/, tests/ o ai-memory/; css/, privacy.html, las guías y los otros 71 archivos de js/ ya son iguales. Commit DEV fijo 048a278. Revisión: MEDIO sin probar si el commit de la vigía con GITHUB_TOKEN dispara la publicación de Pages en PRD (se verifica en la primera corrida); BAJO el pasaje cambia catalog.json y dispara una primera vigía en PRD que puede sumar un commit «builds-watch»; BAJO «Avisar que está vieja» abre el issue en gw2-factory-dev (a propósito: lo curo yo). Rollback: el script crea rollback/pre-bl-083 = a501bea. Espera que Pablo corra promote.ps1. · DEC-036, DEC-041, DEC-044, DEC-045 — 2026-10-30\n\n## DONE\n\n- [BL-082] [ALTO] Módulo Builds"
+    },
+    {
+     "op": "replace",
+     "anchor": "\n\n## DONE\n\n- [BL-081] [ALTO] Promoción a producción de BL-078",
+     "text": "\n- [BL-081] [ALTO] Promoción a producción de BL-078"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "a49ac3349cf911d80523e5f52204eb92250e2dc0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-082 Builds, BUI-1 a BUI-6, BENCH-1, BENCH-2 y CUR-1 HECHOS (2026-10-29/30; PATCH-276 a 292, FEAT-025, DEC-040 a DEC-044); CUR-1 corre sola cada lunes 12:00 UTC (primera vez 2026-11-02); espera la validación de Pablo.",
+     "text": "Tarea actual: BL-083 pasaje a PRD de BL-082 (Builds) vía PowerShell: manifiesto factory/promote/BL-083.txt (28 copias, 0 bajas), commit DEV 048a278, base PRD a501bea; espera que Pablo corra la línea. BL-082 CERRADA 2026-10-30 01:56Z (FEAT-025; BLD-ICON validado por Pablo)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-30 01:37Z",
+     "text": "Última actualización: 2026-10-30 01:58Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: CUR-1 hecho en DEV (DEC-044): .github/scripts/bld-curate.cjs + builds-watch.yml portátil rehacen bench.json y re-curan catalog.json solos cada lunes 12:00 UTC, en el repo donde estén (DEV hoy; PRD cuando Pablo pida el pasaje: necesita Actions con permiso de escritura). Prueba en seco RUN-216 verde. El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» y su resumen; con el OK de Pablo a BENCH-2, BL-082 a DONE. No toco producción.",
+     "text": "Próxima acción: BL-083 preparado (DEC-036): Pablo corre la línea de PowerShell (promote.ps1 desde el commit DEV 048a278, base PRD a501bea, manifiesto factory/promote/BL-083.txt, 28 | 28 | 0 esperado) y responde SI. Con el SHA de producción controlo blob a blob, escribo ai-memory/missions/BL-083-informe-promocion.md y cierro BL-083 cuando Pablo valide #/builds en PRD (Chrome). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (y si Pages de PRD se republicó)."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-082] Validación: BENCH-2 en #/builds (Firefox = DEV): en la Biblioteca, una build de PvE sin bench propio muestra «Referencia» con el DPS medido más parecido y por qué se parece (nunca como su DPS); en Mis builds, una build guardada de la Biblioteca muestra su bench y una propia la referencia más parecida. Detalle y pasos en FEAT-025 (puntos 7 y 8).\n- [BL-082] Validación: BLD-ICON en DEV (Firefox): Builds en la Sidebar (y en la hoja «Más» del celular) y en la cabecera de #/builds lleva el ícono oficial de la pestaña Build del Panel del héroe (textura 156720, la de tu captura). PATCH-295, ASSET-001, DEC-045.\n- [BL-082] Info: CUR-1 listo: desde el lunes 2026-11-02 (09:00 en Argentina) el bench y el catálogo de builds se actualizan solos cada semana; lo que no puedo resolver sola queda anotado para revisarlo yo. Si querés verlo antes: GitHub → gw2-factory-dev → Actions → builds-watch → Run workflow (opcional).",
+     "text": "- [BL-083] Acción: corré la línea de PowerShell del pasaje a PRD del módulo Builds (te la dejé en el chat; 28 copias, 0 bajas) y respondé SI al final. Después pasame el SHA de producción y lo controlo blob a blob.\n- [BL-083] Info: en PRD la curación semanal de builds pide su propio permiso de escritura; no hace falta tocar nada. Solo si la primera corrida (lunes 2026-11-02, 09:00 en Argentina) fallara por permisos: gw2-wallet-ligero → Settings → Actions → General → «Read and write permissions». El aviso a Discord es opcional (secreto DISCORD_WEBHOOK_URL)."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/features/FEAT-025-modulo-builds.md",
+   "base_sha": "5835876d535f3a2e028bccea173ee8d1c751b39a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- Estado: EN DEV, completo (BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/BENCH-2 y CUR-1). Espera que Pablo mire BENCH-2; la curación semanal corre sola desde el 2026-11-02 (2026-10-30 00:35Z)",
+     "text": "- Estado: CERRADA en DEV 2026-10-30 01:56Z (BLD-1 a BLD-15, BUI-1 a BUI-6, BENCH-1/BENCH-2, CUR-1 y BLD-ICON; ícono validado por Pablo). Pasaje a PRD en curso: BL-083 (manifiesto factory/promote/BL-083.txt, 28 movimientos). La curación semanal corre sola desde el 2026-11-02"
+    },
+    {
+     "op": "replace",
+     "anchor": "router.js 2.22.0; sidebar-nav.js 2.3.0;",
+     "text": "router.js 2.22.0; sidebar-nav.js 2.3.1; assets/icons/156720.png (BLD-ICON);"
+    }
+   ]
+  }
+ ]
+}
