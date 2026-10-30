@@ -1,7 +1,7 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: propuesta, espera OK
-- Maqueta: `docs/propuestas/bld2-maqueta.html` (DEV Pages: /gw2-factory-dev/docs/propuestas/bld2-maqueta.html)
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: propuesta; a Pablo le gusta la ficha, falta su OK a la Biblioteca
+- Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
 ## 1. Producto
@@ -12,50 +12,63 @@
 ## 2. Lo que investigué
 | Fuente | Qué ofrece | Cómo lo usamos |
 |---|---|---|
-| Snow Crows (ficha de build) | Secciones plegables «— Gear», «— Traits & Skills», «— Rotation & Extras». Desplegables: Skill Notes, Skill Reference Guide, Trait Notes, Equipment Notes, Relic Notes, listas de prioridad. El equipo va en 3 tablas: armadura, abalorios + reliquia, juegos de armas + «Other Items» (comida, utilidad, núcleo de robot de jade, enriquecimiento). | Copiamos la **estructura**. El equipo se marca con ids oficiales (GW2 Armory: `data-armory-ids`, `-stat`, `-upgrades`), así que tomamos **solo datos**: pieza, estadística, runa y sellos. |
+| Snow Crows (ficha de build) | Secciones plegables «— Gear», «— Traits & Skills», «— Rotation & Extras». Desplegables: Skill Notes, Skill Reference Guide, Trait Notes, Equipment Notes, Relic Notes, listas de prioridad. El equipo va en 3 tablas: armadura, abalorios + reliquia, juegos de armas + «Other Items». | Copiamos la **estructura**. El equipo se marca con ids oficiales (GW2 Armory: `data-armory-ids`, `-stat`, `-upgrades`), así que tomamos **solo datos**. |
+| Snow Crows (lista de builds) | Una barra de filtros. Lista agrupada por profesión y élite, una fila por build (armas, fecha, rol). Se toca y abre la ficha en su página. | Misma estructura para la Biblioteca (sección 4b). |
 | API oficial (`lang=es`) | Nombres, íconos y descripciones **en castellano** de objetos, estadísticas, runas (bonos 1–6), sellos, reliquias, habilidades y rasgos. Verificado en RUN-226. | Todo lo que se ve y los tooltips. |
-| MetaBattle | Variantes de armas, habilidades y equipo, y uso. | Fuente de builds de WvW. Solo datos (estadística por pieza). |
-| Hardstuck / Discretize | Builds y guías, y el optimizador de equipo de Discretize (GPL). | Referencia de diseño. Ya enlazamos el simulador y el optimizador. |
+| MetaBattle | Variantes de armas, habilidades y equipo, y uso. | Fuente de builds de WvW. Solo datos. |
+| Hardstuck / Discretize | Builds y guías, y el optimizador de equipo de Discretize (GPL). | Referencia de diseño. |
 
 ## 3. Decisión de contenido (DEC-046, la publico al empezar)
 - **Datos** (qué pieza, estadística, runa, sello, reliquia y comida): sí, con crédito y enlace a la fuente.
-- **Textos de Snow Crows, MetaBattle y Discretize: NO los traduzco ni los copio.** Son obra de sus autores (las guías de Discretize ni siquiera tienen licencia). Traducirlos también es copiarlos.
-- **Notas en castellano: las escribo yo, con palabras propias**, apoyadas en dos cosas:
-  - la descripción **oficial** de cada pieza, que sale de la API en castellano y va en el tooltip;
-  - los datos de la build.
-- Cada nota dice «Notas de Shiruvana · revisadas para el parche X». La rotación completa y detallada queda enlazada en la fuente.
+- **Textos de Snow Crows, MetaBattle y Discretize: NO los traduzco ni los copio.** Traducirlos también es copiarlos.
+- **Notas en castellano: las escribo yo, con palabras propias**, apoyadas en la descripción **oficial** de la API (en el tooltip) y en los datos de la build.
+- Cada nota dice «Notas de Shiruvana · revisadas para el parche X». La rotación completa queda enlazada en la fuente.
 
 ## 4. Arquitectura
 - `catalog.json`: campo nuevo `gear` por build, solo con ids:
   `{armor:[{slot,stat,rune}], trinkets:[...], relic, weapons:[{set,slot,type,stat,sigils:[..]}], food, utility, jade, enrich}`.
-  - En PvP: `{amulet, rune, relic, sigils}` (equipo de PvP).
+  - En PvP: `{amulet, rune, relic, sigils}`.
 - `assets/data/builds/notes.json` (nuevo): mis notas por build, con las secciones `skills`, `traits`, `gear`, `relic`, `concepts`, `opener`, `loop` y `cc`.
   - El texto hace referencia a ids (`{s:6161}` o `{t:2279}`), y la app pone el ícono y el nombre oficial en castellano.
 - `.github/scripts/bld-curate.cjs` lee también el equipo (ids) de cada ficha de Snow Crows.
   - Corre solo cada semana en **DEV y en PRD** (DEC-041).
-  - Si cambia el equipo, la nota queda «para revisar»: el aviso no se ve como si estuviera al día.
-- `js/bld-sheet.js` (nuevo): la ficha completa (cabecera, navegación de secciones, Equipo, Rasgos y habilidades, Cómo se juega), desacoplada de la Biblioteca.
-  - La usan la Biblioteca, Mis builds y el enlace para compartir.
-- `js/bld-ref.js` suma `items`, `itemstats` y `skills` en castellano, pedidos en lote y guardados en memoria (sin `localStorage` nuevo).
-- El equipo entra en el **AE2** (bld-ae2.js ya existe) con los ids reales de la build, no con la sugerencia por reglas.
+  - Si cambia el equipo, la nota queda «para revisar».
+- `js/bld-sheet.js` (nuevo): la ficha completa, desacoplada. La usan la Biblioteca, Mis builds, el Importar y el enlace para compartir.
+- `js/bld-ref.js` suma `items`, `itemstats` y `skills` en castellano, en lote y en memoria (sin `localStorage` nuevo).
+- El equipo entra en el **AE2** con los ids reales de la build.
+
+## 4b. Cómo encaja con la Biblioteca (restyle, sí)
+Hoy la ficha se abre **dentro** de la tarjeta (ocupa todo el ancho y empuja la lista). Con equipo y notas sería una página enorme metida en una tarjeta, así que eso cambia:
+- **La ficha pasa a ser su propia pantalla**: `#/builds/ver/<id>`. Arriba lleva «← Biblioteca», el camino (modo · profesión · élite) y «anterior / siguiente» dentro de los filtros actuales.
+- **Volver** deja la Biblioteca como estaba: mismos filtros, mismo orden, misma fila con foco. El estado ya vive en memoria: no se agrega `localStorage`.
+- **Enlace para compartir:** `#/builds/b/<código>` sigue funcionando y abre la misma ficha (para builds que no son de la Biblioteca).
+- **Restyle de la Biblioteca** (el marco, la cabecera y las pestañas no cambian):
+  - **filtros en una sola barra** (profesiones, modo, rol y búsqueda); «Más filtros» queda para arma, daño y vigencia;
+  - **lista agrupada por profesión → élite**, una **fila** por build: nombre, armas, modo y sub, dificultad, etiquetas (vigente, rol, bendición) y DPS con barra. Al pasar el cursor, filo del color de la profesión. Se toca y abre la ficha;
+  - «Por profesión» / «Más DPS primero» (este último en lista plana);
+  - en el celular la fila pasa a dos líneas.
+- **Mis builds:** mismas filas, en un solo grupo «Mis builds». Abren la misma ficha con «Editar» y «Borrar».
+- Se pierde la vista de tarjetas grandes con la franja de élite (BUI-6b). La identidad de la élite pasa a la columna de élite del grupo y a la cabecera de la ficha.
 
 ## 5. Micro-ciclos (uno por vez, suite verde en cada uno)
 | MC | Qué | Resultado visible |
 |---|---|---|
-| EQ-1 | Curación del equipo: el script lee los ids de Snow Crows → `gear` en las 96 builds de Snow Crows (PvE, WvW y PvP), más tests | (datos) |
+| EQ-1 | Curación del equipo: el script lee los ids de Snow Crows → `gear` en las 96 builds de Snow Crows, más tests | (datos) |
 | EQ-2 | Referencias en castellano: objetos, estadísticas, runas, sellos, reliquias, comida (API `lang=es`), en lote y con caché | (motor) |
-| EQ-3 | Nueva ficha `bld-sheet.js`: cabecera con bench, navegación de secciones y secciones plegables | ficha nueva |
-| EQ-4 | **Equipo**: 3 tablas como Snow Crows, con íconos oficiales, tooltips accesibles (cursor, foco y toque) y resumen de estadística | ficha de equipo |
-| EQ-5 | **Rasgos y habilidades**: banda de habilidades + armas 1–5/F1–F3; 3 líneas con su fondo oficial y los 9 rasgos (elegidos resaltados); guía de teclas | como la captura 1 |
+| EQ-3 | Nueva ficha `bld-sheet.js` en su ruta `#/builds/ver/<id>`, con «← Biblioteca», anterior/siguiente y secciones plegables | ficha en su pantalla |
+| EQ-3b | **Restyle de la Biblioteca**: barra de filtros, grupos profesión → élite, filas con DPS; volver conserva filtros y foco; Mis builds con las mismas filas | lista nueva |
+| EQ-4 | **Equipo**: 3 tablas como Snow Crows, con íconos oficiales, tooltips accesibles y resumen de estadística | ficha de equipo |
+| EQ-5 | **Rasgos y habilidades**: banda de habilidades + armas 1–5/F1–F3; 3 líneas con su fondo oficial y los 9 rasgos; guía de teclas | como la captura 1 |
 | EQ-6 | **Desplegables de notas** (habilidades, rasgos, equipo, reliquia), con la descripción oficial debajo | notas |
 | EQ-7 | **Cómo se juega**: conceptos, apertura, bucle y control, con íconos en línea | como la captura 3 |
-| EQ-8 | Notas escritas: primero las 36 de PvE, después WvW y PvP. Las que todavía no tengan nota muestran equipo y descripciones oficiales y «nota en preparación» | contenido |
-| EQ-9 | AE2 con el equipo real + Mis builds y Editor con la misma ficha | exportar |
+| EQ-8 | Notas escritas: primero las 36 de PvE, después WvW y PvP. Las que no tengan nota muestran «nota en preparación» | contenido |
+| EQ-9 | AE2 con el equipo real + Editor e Importar con la misma ficha | exportar |
 | EQ-10 | Revisión: 19 temas AA, teclado, celular, rendimiento < 200 ms, docs y dashboard | cierre |
 
-Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8, sin leer su página automáticamente.
+Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 
 ## 6. Riesgos
-- **MEDIO:** si Snow Crows cambia el formato de su página, la curación se rompe. Mitigación: el test del script falla y la build queda «para revisar»; no se muestra equipo viejo como si estuviera vigente.
-- **MEDIO:** el volumen de notas (104 builds). Mitigación: las escribo por tandas y la ficha funciona igual sin ellas (datos más descripciones oficiales).
+- **MEDIO:** si Snow Crows cambia el formato de su página, la curación se rompe. Mitigación: el test falla y la build queda «para revisar».
+- **MEDIO:** el volumen de notas (104 builds). Mitigación: van por tandas; la ficha sirve igual sin ellas.
+- **MEDIO:** la ruta nueva de la ficha toca el router de Builds. Mitigación: tests de ida y vuelta de rutas, y el enlace para compartir viejo sigue funcionando.
 - **BAJO:** muchos pedidos a la API. Mitigación: lotes de 200 ids y caché por sesión.
