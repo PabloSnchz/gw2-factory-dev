@@ -1,0 +1,1 @@
+{"id": "RUN-217", "summary": "BL-082 BLD-ICON: buscar el ícono oficial de la pestaña de plantillas de build en /v2/files y en la wiki oficial", "tests": ["tests/bld-icon-probe.smoke.cjs"]}
