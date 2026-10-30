@@ -1,0 +1,1 @@
+{"id": "RUN-224", "summary": "BL-082 BLD-ICON: 156720/156721 (ícono de esquina de BuildsManager, probable pestaña Build del Panel del héroe) y vecinos chicos en ASCII", "tests": ["tests/bld-icon-probe.smoke.cjs"]}
