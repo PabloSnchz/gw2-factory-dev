@@ -1,0 +1,1 @@
+{"id": "RUN-225", "summary": "BL-084 EQ-0: estructura de una ficha de build de Snow Crows (equipo con ids, desplegables de notas)", "tests": ["tests/bld-eq0.smoke.cjs"]}
