@@ -1,0 +1,1 @@
+{"id": "RUN-239", "summary": "BL-084 EQ-3: tests de Builds tras la ficha en su pantalla", "tests": ["tests/bld-sheet.test.cjs", "tests/bld-view.test.cjs", "tests/bld-lib.test.cjs", "tests/bld-ui.test.cjs", "tests/bld-items.test.cjs", "tests/boot.test.cjs", "tests/index-versions.test.cjs"]}
