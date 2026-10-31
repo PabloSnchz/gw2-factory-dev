@@ -1753,6 +1753,112 @@
    "relic": [
     "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
    ]
+  },
+  "sc-wvw-revenant-power-herald": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el heraldo. El catálogo nombra arco corto y martillo, pero el equipo trae mandoble en un juego y lanza en el otro: la nota sigue al equipo.",
+    "Alternás dos leyendas: la dragona ({s:28085}) y el enano ({s:28419}). La dragona trae las facetas ({s:29371}) que se rematan con Verdadera naturaleza ({s:51675}); {t:1806} mejora ese remate y {t:1803} sube tu daño mientras mantengas facetas activas.",
+    "{t:1738} da poder a los aliados cercanos cada vez que le das una bendición a alguien."
+   ],
+   "cc": [
+    "Con el enano, {s:28516} te da estabilidad 3 s (recarga 10 s), {s:26679} provoca a los enemigos 4 s (recarga 15 s) y la élite {s:27975} rompe aturdimiento.",
+    "{s:51675} te da 2 de estabilidad por 4 s (recarga 20 s)."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. La ficha muestra las del código; cuándo usar cada una está en la guía original."
+   ],
+   "traits": [
+    "Invocación: {t:1761} (más daño con la salud alta), {t:1781} (poder al darte furia) y {t:1719} (más crítico con furia). Devastación: {t:1767} (más daño a enemigos con la salud alta), {t:1765} (el poder te da más potencia; ganás poder al usar una postura legendaria) y {t:1715} (rapidez al cambiar de arma y más daño a enemigos con estabilidad o protección).",
+    "Heraldo: {t:1806}, {t:1738} y {t:1803}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en las dos armas, con {i:24575} (potencia por cada enemigo que matás) en el mandoble y {i:24548} (descarga de llamas al hacer crítico) en la lanza."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "sc-wvw-revenant-boon-renegade": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder que también reparte bendiciones al grupo, con el renegado: lanza en un juego y arco corto en el otro.",
+    "Alternás dos leyendas: la renegada ({s:46409}) y el enano ({s:28419}). La renegada manda órdenes: F2 {s:44076}, F3 {s:42836} y F4 {s:45537}. {t:2100} hace que el fervor de Kalla dure más y que {s:44076} dé más poder.",
+    "{t:1774} da bendiciones a los cercanos cada vez que invocás una leyenda, y {t:2166} te da poder, resistencia y fervor de Kalla al curarte."
+   ],
+   "cc": [
+    "Con el enano, {s:28516} te da estabilidad 3 s (recarga 10 s), {s:26679} provoca a los enemigos 4 s (recarga 15 s) y la élite {s:27975} rompe aturdimiento. En el arco corto, {s:41820} derriba 2 s (recarga 12 s).",
+    "Con la renegada, {s:41220} rompe aturdimiento (recarga 12 s)."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. La ficha muestra las del código; cuándo usar cada una está en la guía original."
+   ],
+   "traits": [
+    "Invocación: {t:1761} (más daño con la salud alta), {t:1774} y {t:1791} (energía extra al invocar con poca energía). Devastación: {t:1767} (más daño a enemigos con la salud alta), {t:1765} (el poder te da más potencia; ganás poder al usar una postura legendaria) y {t:1715} (rapidez al cambiar de arma y más daño a enemigos con estabilidad o protección).",
+    "Renegado: {t:2166}, {t:2108} (energía y menos recarga al activar Agrupamiento) y {t:2100}."
+   ],
+   "gear": [
+    "La {i:89999} suma potencia y duración de bendición.",
+    "Sigilos: {i:72339} (+10 % de duración de bendición) en las dos armas, con {i:24575} (potencia por cada enemigo que matás) en la lanza y {i:24548} (descarga de llamas al hacer crítico) en el arco corto."
+   ],
+   "relic": [
+    "La {i:100219} te da concentración cada vez que le das una bendición a un aliado: más duración para todo lo que repartís."
+   ]
+  },
+  "sc-wvw-revenant-power-vindicator": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el justiciero. El catálogo nombra arco corto y martillo, pero el equipo trae mandoble en un juego y lanza en el otro: la nota sigue al equipo.",
+    "Alternás la alianza ({s:62891}) y el asesino ({s:28134}). {s:62757} (F2) fusiona las energías; con {t:2243} no cuesta energía y te devuelve energía en combate.",
+    "Tu esquiva es ataque: {t:2257} la hace pegar más fuerte en un área más chica y sube tu daño un rato después. {t:2258} pega más mientras tu aguante no esté lleno."
+   ],
+   "cc": [
+    "Con la alianza, {s:62878} rompe aturdimiento, te da estabilidad y atonta 2 s (recarga 10 s).",
+    "Con el asesino, {s:29209} rompe aturdimiento."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. La ficha muestra las del código; cuándo usar cada una está en la guía original.",
+    "{s:62719} es la curación de la alianza (4 usos, recarga 10 s)."
+   ],
+   "traits": [
+    "Invocación: {t:1761} (más daño con la salud alta), {t:1781} (poder al darte furia) y {t:1719} (más crítico con furia). Devastación: {t:1767} (más daño a enemigos con la salud alta), {t:1765} (el poder te da más potencia; ganás poder al usar una postura legendaria) y {t:1715} (rapidez al cambiar de arma y más daño a enemigos con estabilidad o protección).",
+    "Justiciero: {t:2258}, {t:2243} y {t:2257}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: en el mandoble, {i:24607} (la mitad del aguante al cambiar a esa arma, cada 9 s) y {i:24592} (recuperás aguante al matar): más esquivas para {t:2257}. En la lanza, {i:24548} (descarga de llamas al hacer crítico) y {i:24575} (potencia por cada enemigo que matás)."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "sc-wvw-revenant-power-conduit": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el conductor: mandoble en un juego y lanza en el otro.",
+    "Alternás la entidad ({s:76610}) y el asesino ({s:28134}). {t:2390} te da afinidad al usar habilidades de arma que cuestan energía; {t:2358} te cura y te da aguante al ganarla, y energía al llegar al máximo.",
+    "{s:77371} (F3) es la sabiduría cósmica: con {t:2379} invocar leyendas mientras está activa la estira. El F2, Liberar potencial, cambia con la leyenda."
+   ],
+   "cc": [
+    "Una de las versiones de Liberar potencial, {s:78615}, atonta 2 s (recarga 10 s).",
+    "Con la entidad, {s:77291} rompe aturdimiento (recarga 5 s); con el asesino, {s:29209} también."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. La ficha muestra las del código; cuándo usar cada una está en la guía original.",
+    "Con la entidad: {s:77043} te cura y reduce el daño que recibís mientras canalizás, {s:77243} te quita condiciones y se las tira a enemigos, y {s:76805} manda un fragmento imbloqueable de Razah."
+   ],
+   "traits": [
+    "Invocación: {t:1761} (más daño con la salud alta), {t:1781} (poder al darte furia) y {t:1719} (más crítico con furia). Devastación: {t:1767} (más daño a enemigos con la salud alta), {t:1765} (el poder te da más potencia; ganás poder al usar una postura legendaria) y {t:1715} (rapidez al cambiar de arma y más daño a enemigos con estabilidad o protección).",
+    "Conductor: {t:2390}, {t:2358} y {t:2379}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: en el mandoble, {i:24615} (+5 % de daño) y {i:24868} (+7 % de daño de golpe contra aturdidos o derribados, +3 % siempre); en la lanza, {i:24548} (descarga de llamas al hacer crítico) y {i:24575} (potencia por cada enemigo que matás)."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
   }
  }
 }
