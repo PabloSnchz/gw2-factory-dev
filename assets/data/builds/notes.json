@@ -424,6 +424,215 @@
    "relic": [
     "La {i:103574} sube tu daño de golpe por un rato después de incapacitar a un enemigo; tus empujes y lanzamientos la activan."
    ]
+  },
+  "sc-raids-thief-condition-daredevil-dagger-only": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición puro (no reparte bendiciones al grupo): veneno, hemorragia y tormento.",
+    "Esquivar es parte del daño: con {t:1833} cada esquiva lanza dagas a los cercanos y te sube el daño de condición un rato. {t:1949} te devuelve aguante con las habilidades físicas, como {s:30400}.",
+    "La barra pone condiciones sola: {s:13037} envenena tus próximos ataques, {s:13028} deja abrojos con hemorragia y {s:13026} prepara una zona que envenena."
+   ],
+   "cc": [
+    "Según la API, esta barra no trae control para la barra de desafío: ahí dependés del grupo. {t:1190} suma tormento cada vez que interrumpís."
+   ],
+   "skills": [
+    "{s:30400} canaliza aguante y salud por pulsos, y cura más si tu aguante está lleno. {s:13082} llama a otros ladrones para que peleen con vos."
+   ],
+   "traits": [
+    "Artes mortales: {t:1164} (veneno con los ataques con dos armas y más daño de condición), {t:1292} (inmovilizar envenena; con suficientes condiciones distintas el objetivo queda inmovilizado) y {t:1291} (veneno más fuerte y largo).",
+    "Argucia: {t:1159} (abrojos menores al esquivar), {t:1190} y {t:1706} (robar causa hemorragia y la hemorragia pega más).",
+    "Temerario: {t:1949}, {t:1893} (más daño de golpe con el aguante sin llenar) y {t:1833}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:24612} (hemorragia 20 % más larga) y {i:24609} (veneno al cambiar a esa arma, cada 9 s)."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta."
+   ]
+  },
+  "sc-raids-thief-condition-quickness-deadeye-spear-only": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición que da rapidez (quickness) al grupo; el detalle de cómo se reparte está en la guía original.",
+    "El certero juega con sortilegios y robos: {t:2136} te da una habilidad robada nueva cada vez que lanzás un sortilegio, y con {t:2146} la habilidad robada siempre es Robo de tiempo y da bendiciones a los aliados de alrededor.",
+    "Robar también ayuda al grupo: {t:1163} da furia, poder y celeridad a los cercanos y {t:1277} les pasa las bendiciones que le quitás al objetivo."
+   ],
+   "cc": [
+    "Con la lanza, {s:72927} atonta 2 s."
+   ],
+   "skills": [
+    "{s:45088} pasa tus condiciones al objetivo marcado y después te cura. {s:41372} rompe aturdimiento, reinicia Marca de certero y te da iniciativa.",
+    "{s:13037} envenena tus próximos ataques y {s:13026} prepara una zona que envenena. {s:45508} te deja en sigilo."
+   ],
+   "traits": [
+    "Artes mortales: {t:1164} (veneno con los ataques con dos armas y más daño de condición), {t:1292} (inmovilizar envenena; con suficientes condiciones distintas el objetivo queda inmovilizado) y {t:1291} (veneno más fuerte y largo).",
+    "Argucia: {t:1163} (al robar, vos y los aliados cercanos ganan furia, poder y celeridad durante 10 s), {t:1277} (robar da vigor a los cercanos y les pasa las bendiciones que le quitás al objetivo) y {t:1706} (robar causa hemorragia y la hemorragia pega más).",
+    "Certero: {t:2136}, {t:2160} (más daño de golpe por cada bendición distinta que tengas) y {t:2146}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos en la lanza: {i:48911} (tormento con críticos) y {i:24560} (hemorragia con críticos, cada 2 s)."
+   ],
+   "relic": [
+    "La {i:102199} junta acumulaciones cada vez que envenenás; al llegar al máximo, el siguiente veneno suma más condiciones. Con {s:13037} y {t:1164} se llena rápido."
+   ]
+  },
+  "sc-raids-thief-celestial-alacrity-specter-scepter-pistol-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Aporta presteza (alacrity) al grupo con estadísticas celestiales (todas a la vez): daño de condición y algo de curación. El detalle de cómo se reparte está en la guía original.",
+    "El espectro trabaja con pozos: los tres de la barra te llevan con un paso sombrío al lugar elegido. {t:2285} cura a los aliados alrededor cada vez que das un paso sombrío y te da fuerza sombría por cada uno.",
+    "{t:2284} pasa parte de tu daño de condición a poder de curación y te da más daño de condición con cetro; {t:2289} hace que el Sudario sombrío dé apoyo extra a los cercanos y a tu aliado atado."
+   ],
+   "cc": [
+    "Con la pistola secundaria, {s:13012} atonta 2 s. {s:63292} incapacita a los enemigos dentro del pozo. La élite {s:13132} hace que tus ataques conviertan a los enemigos en piedra."
+   ],
+   "skills": [
+    "{s:63292} cura a los aliados e incapacita a los enemigos; {s:63323} da bendiciones a los aliados; {s:63276} pone condiciones a los enemigos.",
+    "{s:13037} envenena tus próximos ataques; {s:13132} hace tus ataques imbloqueables y petrifica."
+   ],
+   "traits": [
+    "Artes mortales: {t:1164} (veneno con los ataques con dos armas y más daño de condición), {t:1292} (inmovilizar envenena; con suficientes condiciones distintas el objetivo queda inmovilizado) y {t:1291} (veneno más fuerte y largo).",
+    "Argucia: {t:1163} (al robar, vos y los aliados cercanos ganan furia, poder y celeridad durante 10 s), {t:1277} (robar da vigor a los cercanos y les pasa las bendiciones que le quitás al objetivo) y {t:1706} (robar causa hemorragia y la hemorragia pega más).",
+    "Espectro: {t:2284}, {t:2285} y {t:2289}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:74326} (+10 % de curación a otros aliados) en el cetro y {i:24560} (hemorragia con críticos) en la pistola y en la daga."
+   ],
+   "relic": [
+    "La {i:101268} cura a los aliados cercanos cuando combinás un campo de agua con un remate de explosión."
+   ]
+  },
+  "sc-open-world-thief-champion-hunter-antiquary": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Para mundo abierto y cazar campeones: daño y comodidad (la fuente le da dificultad 1).",
+    "El anticuario hurta artefactos: {t:2346} te da una ranura de artefacto más, {t:2431} los hace más efectivos y {t:2393} hace que den bendiciones a los aliados al usarlos.",
+    "Robar es tu motor: {t:1167} hace que uses dos veces cada habilidad robada y baja la recarga de las habilidades de apoyo; {t:1158} hace que robar atonte y tenga menos recarga."
+   ],
+   "cc": [
+    "Robar atonta al objetivo gracias a {t:1158}. Con la {i:106221}, cada vez que inhabilitás a un enemigo ganás rapidez."
+   ],
+   "skills": [
+    "{s:13050} te cura al atacar (pasiva) y de golpe al activarlo. {s:13026} prepara una zona que envenena. {s:76879} rompe aturdimiento.",
+    "La API todavía no trae en castellano la descripción de {s:76725}, {s:76879} y {s:77255}: está en la guía original."
+   ],
+   "traits": [
+    "Artes mortales: {t:1164}, {t:1292} y {t:1167}.",
+    "Argucia: {t:1163} (furia, poder y celeridad a los cercanos al robar), {t:1277} y {t:1158}. Anticuario: {t:2346}, {t:2431} y {t:2393}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:44950} (+10 % de duración de condición), {i:24560} (hemorragia con críticos) y {i:24578}, que suma daño de condición por cada enemigo que matás: sirve en mundo abierto."
+   ],
+   "relic": [
+    "La {i:106221} te da rapidez cada vez que inhabilitás a un enemigo; con el atontamiento de Robar la activás seguido."
+   ]
+  },
+  "sc-raids-elementalist-celestial-alacrity-tempest-scepter-warhorn": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Aporta presteza (alacrity) al grupo con estadísticas celestiales (todas a la vez): quemadura y algo de curación. El detalle de cómo se reparte está en la guía original.",
+    "Las auras son el centro: {t:1886} te da un aura según tu sintonía cada vez que hacés una sobrecarga, {t:361} comparte con los cercanos toda aura que te das, {t:2015} suma regeneración y vigor a esas auras y {t:1986} cura a quien se la das.",
+    "Los gritos también ayudan: {s:30662} daña y da aura de fuego a los aliados, y {s:29535} cura y limpia condiciones."
+   ],
+   "cc": [
+    "Con el cetro, {s:40794} (en aire) aturde 2 s y {s:45742} (en agua) atonta 2 s, los dos con recarga de 15 s. En el cuerno de guerra, {s:30864} (en agua) rechaza (recarga 30 s)."
+   ],
+   "skills": [
+    "{s:5542} sube tu probabilidad de crítico en pasivo; su activa quema al objetivo y a los cercanos. {s:5502} y {s:5666} invocan un elemental según tu sintonía."
+   ],
+   "traits": [
+    "Fuego: {t:296} (quemaduras más largas y más chances de quemar con críticos), {t:325} (más daño de condición y Mancha solar quema) y {t:1510} (campos de fuego de arma más largos y más daño de golpe al quemar).",
+    "Agua: {t:363} (vulnerabilidad más larga y más daño contra enemigos vulnerables), {t:349} (más daño con la salud alta; te curás al bloquear o evadir) y {t:361}. Tempestad: {t:1886}, {t:2015} y {t:1986}."
+   ],
+   "gear": [
+    "La {i:24732} suma a todas las estadísticas en cada bono: acompaña a las celestiales.",
+    "Sellos: {i:24624} (quemadura 20 % más larga) en el cetro y {i:48911} (tormento con críticos) en el cuerno de guerra."
+   ],
+   "relic": [
+    "La {i:101268} cura a los aliados cercanos cuando combinás un campo de agua con un remate de explosión."
+   ]
+  },
+  "sc-raids-elementalist-condition-weaver-pistol-warhorn": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición puro (no reparte bendiciones al grupo): quemadura y hemorragia con pistola y cuerno de guerra.",
+    "El tejedor combina dos sintonías; {t:2131} te da más daño un rato si estás en una sola y te habilita {s:80231}. {t:2177} hace que los ataques dobles debiliten y que pegues más críticos a los debilitados.",
+    "Los sellos rinden doble: con {t:287} siguen dando su pasiva mientras se recargan y te dan un aura al usarlos. {s:5542} sube tu crítico y {s:5571} reduce el daño que recibís."
+   ],
+   "cc": [
+    "En el cuerno de guerra, {s:30864} (en agua) rechaza (recarga 30 s). {s:5571} inmoviliza, pero no rompe la barra."
+   ],
+   "skills": [
+    "{s:5503} te cura cada vez que lanzás un hechizo. {s:5571} inmoviliza y causa hemorragia; {s:5542} quema al objetivo y a los cercanos.",
+    "{s:40183} pega según tu sintonía actual y {s:43638} baja la recarga de las sintonías un rato."
+   ],
+   "traits": [
+    "Fuego: {t:296} (quemaduras más largas y más chances de quemar con críticos), {t:325} (más daño de condición y Mancha solar quema) y {t:294} (poder al usar habilidades en fuego).",
+    "Tierra: {t:1507} (hemorragia más larga y más daño a enemigos con hemorragia), {t:275} (daño de condición según tu dureza; inmovilizar causa hemorragia) y {t:287}. Tejedor: {t:2177}, {t:2180} (barrera al esquivar) y {t:2131}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:44944} (+5 % de daño de condición) y {i:44950} (+10 % de duración de condición)."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta. {t:1507} y {s:5571} ayudan a sostener las hemorragias."
+   ]
+  },
+  "sc-open-world-elementalist-champion-hunter-catalyst": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Para mundo abierto y cazar campeones: daño y comodidad (la fuente le da dificultad 1).",
+    "El catalizador despliega la esfera de jade ({s:62940}): con {t:2234} es más grande y da rapidez y otra bendición a los aliados cercanos según tu sintonía, y con {t:2251} esas bendiciones duran más.",
+    "{t:2252} te da Potenciación elemental y poder cada vez que inhabilitás o inmovilizás: {s:5571} inmoviliza a los enemigos."
+   ],
+   "cc": [
+    "Según la API, esta barra no trae control para la barra de desafío; {s:5571} inmoviliza, pero no la rompe."
+   ],
+   "skills": [
+    "{s:5639} rompe aturdimiento, te da protección y estabilidad y después barrera por cada bendición distinta que tengas.",
+    "{s:5503} te cura con cada hechizo. {s:5542} quema al objetivo y a los cercanos. {s:5666} invoca un elemental según tu sintonía."
+   ],
+   "traits": [
+    "Fuego: {t:296} (quemaduras más largas y más chances de quemar con críticos), {t:325} (más daño de condición y Mancha solar quema) y {t:1510}.",
+    "Tierra: {t:1507}, {t:275} y {t:287} (los sellos mantienen su pasiva en recarga). Catalizador: {t:2252}, {t:2234} y {t:2251}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:24560} (hemorragia con críticos), {i:24567} (vulnerabilidad al pegar por la espalda o el flanco) y {i:24578}, que suma daño de condición por cada enemigo que matás."
+   ],
+   "relic": [
+    "La {i:106206} te roba salud con tus golpes: comodidad para jugar solo."
+   ]
+  },
+  "sc-open-world-elementalist-champion-hunter-evoker-fox": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Para mundo abierto y cazar campeones, con el zorro de fuego como familiar: daño y comodidad (la fuente le da dificultad 1).",
+    "Con {t:2437} no podés dejar la sintonía elegida, pero la habilidad básica del familiar ({s:76643}) se carga más rápido y recarga un poco tus armas. {t:2380} da bendiciones a los aliados cercanos cada vez que usás una habilidad del familiar.",
+    "Todo apunta a la quemadura: {t:2391} pega más a los quemados y {s:76711} da bendiciones a los cercanos y quema a tu objetivo según tu poder."
+   ],
+   "cc": [
+    "Según la API, esta barra no trae control para la barra de desafío."
+   ],
+   "skills": [
+    "{s:5535} rompe aturdimiento, te limpia condiciones, quema a los enemigos y te da poder por cada condición que quita.",
+    "{s:5503} te cura con cada hechizo. {s:5542} quema al objetivo y a los cercanos."
+   ],
+   "traits": [
+    "Fuego: {t:296} (quemaduras más largas y más chances de quemar con críticos), {t:325} (más daño de condición y Mancha solar quema) y {t:1510}.",
+    "Tierra: {t:289} (las auras que das también dan protección), {t:275} y {t:1508} (los combos de campo con salto o explosión limpian condiciones). Evocador: {t:2391}, {t:2380} y {t:2437}."
+   ],
+   "gear": [
+    "La {i:83338} da daño de condición y alarga la rapidez y las bendiciones.",
+    "Sellos: {i:24624} (quemadura 20 % más larga) y {i:24567} (vulnerabilidad al pegar por la espalda o el flanco)."
+   ],
+   "relic": [
+    "La {i:109664} junta acumulaciones con tus condiciones dañinas; al llegar al máximo, por un rato el daño de condición que hacés te cura."
+   ]
   }
  }
 }
