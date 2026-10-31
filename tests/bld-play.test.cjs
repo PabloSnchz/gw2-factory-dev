@@ -24,8 +24,8 @@ const NOTE = { patch: '2026-09-29', concepts: ['Vivís de {t:1510}: pegá de fla
 
 test('versión en la cabecera, en modules.json después de las notas y antes de la ficha; sin estado guardado', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-play.js'), 'utf8');
-  assert.match(src, /Versión: 1\.0\.0 /);
-  assert.equal(PL.version, '1.0.0');
+  assert.match(src, /Versión: 1\.1\.0 /);
+  assert.equal(PL.version, '1.1.0');
   assert.doesNotMatch(src, /localStorage\./);
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   const i = mods.indexOf('js/bld-play.js');
@@ -65,6 +65,15 @@ test('partes vacías no se muestran; sin nada para jugar, «en preparación» co
   assert.match(none, /están en preparación\.<\/p><p class="bld-muted bld-pl-src">Mientras, la rotación completa está en la guía original: <a /);
   assert.match(PL.html({ note: null, loaded: true }), /en preparación\.<\/p>$/, 'sin fuente, sin enlace');
   assert.match(PL.html({ loaded: false }), /role="status">Buscando mis notas para jugarla…/);
+});
+
+test('EQ-8: en WvW y PvP el control es contra jugadores; en PvE (o sin modo), la barra de desafío', () => {
+  const t = (mode) => (PL.html({ note: NOTE, loaded: true, ref: REF, gear: GEAR, source: SRC, mode }).match(/<h5 id="bldPl-cc">([^<]+)<\/h5>/) || [])[1];
+  assert.equal(t('pve'), 'Control (barra de desafío)');
+  assert.equal(t(undefined), 'Control (barra de desafío)', 'sin modo, como antes');
+  assert.equal(t('wvw'), 'Control (contra jugadores)');
+  assert.equal(t('pvp'), 'Control (contra jugadores)');
+  assert.equal(P.titleOf(P.PARTS[0], 'pvp'), 'Conceptos', 'los demás títulos no cambian');
 });
 
 test('sin bld-notes, el texto sigue escapado y las referencias quedan como #ID', () => {

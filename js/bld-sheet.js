@@ -1,6 +1,7 @@
 /*!
  * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
- * Versión: 1.5.0 (2026-10-30) · EQ-7: «Cómo se juega» con js/bld-play.js (conceptos, apertura, bucle y control, con íconos
+ * Versión: 1.5.1 (2026-10-31) · EQ-8: le pasa el modo a «Cómo se juega» (en WvW y PvP el control es contra jugadores)
+ *          · antes 1.5.0 EQ-7: «Cómo se juega» con js/bld-play.js (conceptos, apertura, bucle y control, con íconos
  *          en línea; sin nota, el enlace a la guía original) · antes 1.4.0 EQ-6: desplegables de notas con js/bld-notes.js (habilidades y rasgos al pie de «Rasgos y
  *          habilidades», equipo y reliquia al pie de «Equipo»), con la descripción oficial debajo · antes 1.3.0 EQ-5: «Rasgos y habilidades» como en el juego con js/bld-traitview.js (barra de armas y
  *          habilidades con sus teclas, 3 líneas con su fondo oficial, guía de teclas); con un ref viejo, la vista anterior
@@ -20,7 +21,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.5.0';
+  var VERSION = '1.5.1';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
@@ -110,7 +111,7 @@
   function playHTML(b) {
     // EQ-7: con js/bld-play.js, mis notas para jugarla (las lee bld-notes); sin el módulo, el aviso de antes.
     var PL = root.GNBldPlay, N = root.GNBldNotes;
-    if (PL) return PL.html({ note: N ? N.noteSync(b.id) : null, loaded: N ? N.loaded() : true, ref: st.refs[b.id] || null, gear: st.gear[b.id] || null, source: b.source || null });
+    if (PL) return PL.html({ note: N ? N.noteSync(b.id) : null, loaded: N ? N.loaded() : true, ref: st.refs[b.id] || null, gear: st.gear[b.id] || null, source: b.source || null, mode: b.mode || '' });
     return '<p class="bld-muted">Mis notas para jugar esta build (conceptos, apertura y rotación) están en preparación.' +
       (b.source ? ' Mientras, la rotación completa está en la guía original: <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>.' : '') + '</p>';
   }

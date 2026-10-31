@@ -38,8 +38,8 @@ function el(attrs, parent) {
 
 test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
-  assert.match(src, /Versión: 1\.5\.0 /);
-  assert.equal(SH.version, '1.5.0');
+  assert.match(src, /Versión: 1\.5\.1 /);
+  assert.equal(SH.version, '1.5.1');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
@@ -266,6 +266,7 @@ test('EQ-7: «Cómo se juega» lo pinta bld-play con la nota, si ya cargó, el r
   assert.deepEqual(seen[0].note, { loop: ['x'] });
   assert.equal(seen[0].loaded, true);
   assert.equal(seen[0].source, b.source || null);
+  assert.equal(seen[0].mode, b.mode, 'EQ-8: el modo, para titular el control');
   delete globalThis.GNBldPlay;
   assert.match(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /están en preparación/, 'sin el módulo, el aviso de antes');
   delete globalThis.GNBldNotes;
