@@ -1145,6 +1145,212 @@
    "relic": [
     "La {i:99965}: después de tu curación, cura a vos y a los aliados cercanos, y lo que sobra se vuelve barrera. Combina con {s:76755}."
    ]
+  },
+  "sc-wvw-engineer-power-scrapper": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con rifle en los dos juegos de armas y dos kits.",
+    "El chatarrero pega más mientras se mueve protegido: {t:1860} sube tu daño si tenés estabilidad, celeridad o supervelocidad, y {t:1849} te da estabilidad cuando llegás al umbral de poder.",
+    "Los giroscopios son pozos: {s:30357} cura a los aliados de la zona y {s:29921} ataca a los enemigos y usa remates de rotación. Con {t:1917} cubren más área y dan supervelocidad a los cercanos en el primer pulso."
+   ],
+   "cc": [
+    "En el rifle, {s:6154} lanza al enemigo (recarga 14 s). Los kits tienen su propio control: está en la descripción oficial de cada uno.",
+    "Tu estabilidad sale de {t:1849}: mantené el poder alto para no quedar controlado."
+   ],
+   "skills": [
+    "{s:5933} y {s:5927} son kits: reemplazan tus habilidades de arma mientras los tenés puestos. Cuándo entrar y salir de cada uno está en la guía original."
+   ],
+   "traits": [
+    "Explosivos: {t:1882} (más daño con la salud alta), {t:1892} (ferocidad acumulable cuando tus explosiones pegan) y {t:1947} (más daño a quien tiene menos salud que vos; tus explosiones te curan).",
+    "Armas de fuego: {t:1914} (más crítico de cerca), {t:1923} (tus críticos de cerca pueden darte furia, y la furia ferocidad) y {t:510} (más crítico contra enemigos con poca salud).",
+    "Chatarrero: {t:1917}, {t:1860} y {t:1849}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en los dos rifles, con {i:24575} (potencia por cada enemigo que matás) en uno y {i:24868} (+7 % de daño de golpe contra aturdidos o derribados, +3 % siempre) en el otro."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "sc-wvw-engineer-power-holosmith": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con rifle en los dos juegos de armas, dos kits y la Forja fotónica ({s:42938}, F5).",
+    "{t:2106} hace que tus primeros ataques después de entrar o salir de la forja quemen y peguen más: entrar y salir tiene premio. {t:2137} sube el calor máximo y te da poder cuando pasás del 100 % de calor.",
+    "Los excesos ({s:42842} y {s:42009}) son tu daño grande. {s:42009} cambia si lo usás por encima del límite de calor."
+   ],
+   "cc": [
+    "{s:42009} lanza a los enemigos (recarga 60 s). En el rifle, {s:6154} lanza al enemigo (recarga 14 s).",
+    "Con {t:2091}, el Holosalto incapacita, te da supervelocidad y te quita las condiciones que frenan el movimiento."
+   ],
+   "skills": [
+    "{s:5933} y {s:5927} son kits: reemplazan tus habilidades de arma mientras los tenés puestos. Cuándo entrar y salir de cada uno está en la guía original.",
+    "{s:21659} te cura después de un momento y, si recibís un golpe letal mientras está activo, te salva."
+   ],
+   "traits": [
+    "Explosivos: {t:1882} (más daño con la salud alta), {t:1892} (ferocidad acumulable cuando tus explosiones pegan) y {t:1947} (más daño a quien tiene menos salud que vos; tus explosiones te curan).",
+    "Armas de fuego: {t:1914} (más crítico de cerca), {t:1923} (tus críticos de cerca pueden darte furia, y la furia ferocidad) y {t:510} (más crítico contra enemigos con poca salud).",
+    "Holoartesano: {t:2106}, {t:2091} y {t:2137}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en los dos rifles, con {i:24575} (potencia por cada enemigo que matás) en uno y {i:24868} (+7 % de daño de golpe contra aturdidos o derribados, +3 % siempre) en el otro."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "mb-wiki-build-mechanist-condition-mecha-roamer": {
+   "patch": "2026-09-15",
+   "concepts": [
+    "Build de roaming de condición con el mechanista y la lanza: vos y tu mech pelean juntos.",
+    "Tu daño es la quemadura: {t:2006} sube tu daño de condición cuando quemás, y {t:433} hace que tus críticos quemen y que la quemadura dure más.",
+    "Los sellos son tu barra: {s:63049} te cura a vos y al mech, {s:63111} acelera y copia tus bendiciones al mech, {s:63113} suma daño de condición y {s:63095} baja la recarga de los otros sellos (su activa dispara el arma definitiva del mech).",
+    "El equipo de esta build (viene de MetaBattle) todavía no está cargado en la ficha: runa, reliquia y sigilos están en la guía original."
+   ],
+   "cc": [
+    "En la lanza, {s:72977} aturde 2 s y lanza (recarga 15 s). {s:63050} (F4) lanza (recarga 50 s).",
+    "{s:63111} rompe aturdimiento (recarga 25 s); {s:5910} te impulsa hacia adelante y te quita las condiciones que frenan. {t:445} te da resistencia al esquivar."
+   ],
+   "skills": [
+    "Las órdenes del mech cambian con los tres rasgos de mechanista: {t:2296}, {t:2276} y {t:2298}. Cuándo usar cada una está en la guía original."
+   ],
+   "traits": [
+    "Armas de fuego: {t:1878} (más daño de condición), {t:2006} y {t:433}. Invenciones: {t:394} (protección a los cercanos con las habilidades de escudo), {t:445} y {t:472} (dar protección limpia condiciones).",
+    "Mechanista: {t:2296}, {t:2276} y {t:2298}."
+   ]
+  },
+  "sc-wvw-engineer-power-amalgam": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con la amalgama: martillo en los dos juegos de armas y dos kits.",
+    "Evolucionar ({s:76642}, F5) es la mecánica: {t:2406} hace que recargue tus habilidades de transformación y que estas peguen más, y {t:2366} convierte tus condiciones en bendiciones cada vez que evolucionás o usás una postura.",
+    "Las posturas son {s:77209} (quema a los que alcanzás) y tu élite {s:76993}, que gira a tu alrededor y atrae a los enemigos cercanos."
+   ],
+   "cc": [
+    "En el martillo, {s:30713} aturde 1 s (recarga 20 s). {s:76993} atrae a los enemigos cercanos.",
+    "No tenés estabilidad propia en esta barra: {t:2366} te limpia condiciones, pero el control lo esquivás o lo aguantás."
+   ],
+   "skills": [
+    "{s:5933} y {s:5927} son kits: reemplazan tus habilidades de arma mientras los tenés puestos. Cuándo entrar y salir de cada uno está en la guía original.",
+    "{s:21659} te cura después de un momento y, si recibís un golpe letal mientras está activo, te salva."
+   ],
+   "traits": [
+    "Explosivos: {t:1882} (más daño con la salud alta), {t:1892} (ferocidad acumulable cuando tus explosiones pegan) y {t:1947} (más daño a quien tiene menos salud que vos; tus explosiones te curan).",
+    "Armas de fuego: {t:1914} (más crítico de cerca), {t:1923} (tus críticos de cerca pueden darte furia, y la furia ferocidad) y {t:510} (más crítico contra enemigos con poca salud).",
+    "Amalgama: {t:2366}, {t:2349} (las transformaciones dan su bonificación de esfuerzo) y {t:2406}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en los dos martillos, con {i:24575} (potencia por cada enemigo que matás) en uno y {i:24868} (+7 % de daño de golpe contra aturdidos o derribados, +3 % siempre) en el otro."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "sc-wvw-ranger-support-druid": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Apoyo de curación para WvW con el druida: maza con cuerno en un juego y báculo en el otro. Contra jugadores tu trabajo es que tu grupo no quede controlado: la estabilidad es lo que más importa.",
+    "El Avatar celestial ({s:31869}, F5) es tu momento de curación fuerte: {t:1868} limpia condiciones a vos y a los cercanos al entrar y {t:2001} da bendiciones a los aliados en el radio de sus habilidades.",
+    "Campos de agua: con {t:2057}, tu curación crea un campo acuático junto a tu mascota; combinarlo con un remate explosivo cura más, y la reliquia también cura en ese momento."
+   ],
+   "cc": [
+    "En la maza, {s:71963} aturde 3 s (recarga 12 s) y {s:71841} atonta 2 s (recarga 20 s). En el cuerno, {s:12621} atonta (recarga 24 s).",
+    "Tu estabilidad es poca: {s:71903} da 1 de estabilidad 1 s (recarga 12 s). {s:12631} quita el aturdimiento a tus aliados y te da protección y barrera (recarga 24 s)."
+   ],
+   "skills": [
+    "{s:12489} es una trampa: te cura a vos y a tu mascota, y deja regeneración y limpieza para los aliados. {s:31322} cura y limpia a los aliados o daña a los enemigos.",
+    "Espíritus: {s:12497} da resistencia a los aliados cercanos y {s:12569} convierte las condiciones de los aliados en bendiciones.",
+    "Las mascotas y sus habilidades F1 y F2 cambian con la que elijas: cuáles usa la build está en la guía original."
+   ],
+   "traits": [
+    "Escaramuzas: {t:1075} (las trampas duran más), {t:1016} y {t:1064} (rapidez al cambiar de arma). Magia de la naturaleza: {t:978} (regeneración a los cercanos al curarte), {t:964} (regeneración y curación con el cuerno) y {t:1038} (los espíritus vuelven a actuar).",
+    "Druida: {t:1868}, {t:2001} y {t:2057}."
+   ],
+   "gear": [
+    "La {i:24842} suma curación y duración de bendición.",
+    "Sigilos: {i:74326} (+10 % de curación a aliados) en la maza y en el báculo, {i:24584} en el cuerno (curación a aliados acumulable por cada enemigo que muere) y {i:24607} en el báculo (recuperás la mitad del aguante al cambiar a esa arma, cada 9 s)."
+   ],
+   "relic": [
+    "La {i:101268} cura a los aliados cuando combinás un campo de agua con un remate explosivo: va de la mano con {t:2057}."
+   ]
+  },
+  "sc-wvw-ranger-power-soulbeast": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el bestialma: dos mazas en un juego y lanza en el otro.",
+    "Te fusionás con tu mascota con {s:42944} (F5) y usás sus habilidades como propias: {t:2071} te da bendiciones ofensivas con cada habilidad de bestia, {t:2085} estira tus bendiciones cada vez que ganás rapidez y {t:2155} te cura al usar una habilidad fusionada.",
+    "Las mascotas y sus habilidades F1 y F2 cambian con la que elijas: cuáles usa la build está en la guía original."
+   ],
+   "cc": [
+    "En la maza, {s:71963} aturde 3 s (recarga 12 s) y {s:71841} atonta 2 s (recarga 20 s). Las mascotas suman control propio (derribos, atontamientos o miedo, según cuál): está en la descripción de cada habilidad.",
+    "{s:45789} rompe aturdimiento y te da 6 de estabilidad por 6 s (recarga 25 s); además te quita las condiciones que frenan el movimiento."
+   ],
+   "skills": [
+    "{s:44948} te cura a vos y a tu mascota, y mientras dura perdés condiciones y te curás por cada una.",
+    "{s:12491} suma ferocidad de forma pasiva. {s:12493} y {s:12569} son espíritus: el de tormenta deja vulnerabilidad a los enemigos cercanos y el de la naturaleza convierte condiciones de los aliados en bendiciones."
+   ],
+   "traits": [
+    "Escaramuzas: {t:1067} (vigor al evadir), {t:1700} (poder para vos y tu mascota, más con espada, y al evadir) y {t:1888} (la furia te da ferocidad y crítico).",
+    "Dominio de las bestias: {t:1072} (tu mascota se cura sola), {t:970} (ferocidad para los dos) y {t:1066} (las habilidades de bestia lanzan un ataque menor). Bestialma: {t:2071}, {t:2085} y {t:2155}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en la maza principal y {i:24548} (descarga de llamas al hacer crítico) en la secundaria; en la lanza, {i:24615} y {i:24575} (potencia por cada enemigo que matás)."
+   ],
+   "relic": [
+    "La {i:100947} sube tu daño de golpe un rato cada vez que pegás con una habilidad de arma de 20 s de recarga o más; cada acumulación renueva la duración."
+   ]
+  },
+  "sc-wvw-ranger-power-untamed": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el indómito: mandoble en un juego y lanza en el otro.",
+    "Desatás al guardabosques ({s:63147}) o a la mascota ({s:63344}) con F5. Desatado tenés emboscadas: F1 {s:63209}, F2 {s:63258} y F3 {s:63094}. {t:2278} hace que tus emboscadas quiten bendiciones y que las hiedras las conviertan en condiciones.",
+    "Toda tu barra son sortilegios: cada uno activa la reliquia. Las mascotas y sus habilidades F1 y F2 cambian con la que elijas: cuáles usa la build está en la guía original."
+   ],
+   "cc": [
+    "En el mandoble, {s:12475} atonta y aturde 2 s (recarga 20 s). {s:63157} derriba 2 s (recarga 25 s) y {s:63130} encierra a los enemigos cercanos en una jaula.",
+    "Estabilidad: {s:63163} te da 10 por 6 s (recarga 90 s) y {s:63319} 1 por 3 s (recarga 30 s). {s:63256} rompe aturdimiento (recarga 20 s)."
+   ],
+   "skills": [
+    "{s:63319}: mientras dura, no recibís daño de ataques ni condiciones, y al terminar te curás. {s:63256} convierte todas tus condiciones en vulnerabilidad."
+   ],
+   "traits": [
+    "Puntería: {t:1021} (al usar la élite lanzás un sello de piedra menor; los sellos te dan poder y furia), {t:1000} (tus armas pegan más, y más a distancia) y {t:996} (más daño a enemigos inhabilitados o frenados).",
+    "Escaramuzas: {t:1067} (vigor al evadir), {t:1700} (poder para vos y tu mascota, más con espada, y al evadir) y {t:1888} (la furia te da ferocidad y crítico).",
+    "Indómito: {t:2301} (la reacción venenosa pega más y ciega), {t:2278} y {t:2271} (las emboscadas dan bendiciones a los cercanos)."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: en el mandoble, {i:24615} (+5 % de daño) y {i:24597} (daña y congela 2 s a los cercanos al cambiar a esa arma); en la lanza, {i:24548} (descarga de llamas al hacer crítico) y {i:24575} (potencia por cada enemigo que matás)."
+   ],
+   "relic": [
+    "La {i:100924} sube tu daño de golpe un rato cada vez que usás un sortilegio: con esta barra, casi todo el tiempo."
+   ]
+  },
+  "mb-wiki-build-galeshot-galeburst-roamer": {
+   "patch": "2026-09-15",
+   "concepts": [
+    "Build de roaming de poder con el vendaval: lanza, espada y maza.",
+    "Invocás el arco ciclónico con {s:76787} (F5). Las borrascas ({s:77271}, {s:76619} y {s:76979}) son tu barra: con {t:2402} cada una te quita las condiciones que frenan y una condición dañina.",
+    "Con {t:2425}, dos habilidades del arco reinician el bombardeo, y el bombardeo da bendiciones a los aliados. Las mascotas y sus habilidades F1 y F2 cambian con la que elijas: cuáles usa la build está en la guía original.",
+    "El equipo de esta build (viene de MetaBattle) todavía no está cargado en la ficha: runa, reliquia y sigilos están en la guía original."
+   ],
+   "cc": [
+    "En la maza, {s:71963} aturde 3 s (recarga 12 s) y {s:71841} atonta 2 s (recarga 20 s). {s:76979} libera un tornado que lanza a los enemigos que toca (recarga 50 s).",
+    "{s:76619} te propulsa hacia adelante y rompe aturdimiento; {s:12631} también rompe aturdimiento a tus aliados (recarga 24 s)."
+   ],
+   "skills": [
+    "{s:77271} te cura y te da supervelocidad a vos y a tu mascota. {s:12500} suma dureza de forma pasiva; su activa evita el daño de los ataques a vos y a tu mascota."
+   ],
+   "traits": [
+    "Puntería: {t:986} (al cambiar de mascota lanzás una llamada menor), {t:1000} (tus armas pegan más) y {t:1015} (la furia recupera el golpe de apertura, que pega más).",
+    "Escaramuzas: {t:1067} (vigor al evadir), {t:1700} (poder para vos y tu mascota, más con espada, y al evadir) y {t:1888} (la furia te da ferocidad y crítico).",
+    "Vendaval: {t:2402}, {t:2413} y {t:2425}."
+   ]
   }
  }
 }
