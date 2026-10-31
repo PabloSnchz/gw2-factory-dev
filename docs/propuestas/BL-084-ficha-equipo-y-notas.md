@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 en curso (1/5 hecho).
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 en curso (2/5 hechos).
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -80,6 +80,7 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-6 | HECHO 2026-10-30 17:40Z | `js/bld-notes.js` 1.0.0, módulo propio: 4 desplegables cerrados (habilidades y rasgos al pie de «Rasgos y habilidades», equipo y reliquia al pie de «Equipo»). Arriba mi nota (parche revisado, aviso «para revisar», {s|t|i:ID} con ícono y nombre oficial); sin nota, «en preparación». Debajo, la descripción oficial: barra, rasgos elegidos, runa con bonos numerados, sigilos o amuleto, reliquia. `assets/data/builds/notes.json` arranca vacío (EQ-8 lo llena). `bld-sheet` 1.4.0, PATCH-316, RUN-247: 102 tests verdes. |
 | EQ-7 | HECHO 2026-10-31 00:05Z | `js/bld-play.js` 1.0.0, módulo propio: «Cómo se juega» con Conceptos, Apertura (pasos numerados), Bucle (pasos numerados) y Control (barra de desafío), desde las claves `concepts`, `opener`, `loop` y `cc` de `notes.json`; íconos y nombres oficiales en línea con `inline()` de `bld-notes` 1.1.0; al pie, el enlace a la rotación completa de la guía. Sin nota, «en preparación». `bld-sheet` 1.5.0, PATCH-318, RUN-248: 100 tests verdes. |
 | EQ-8 (1/5) | HECHO 2026-10-31 16:10Z | `notes.json` con las 8 builds PvE de Guardián y Guerrero: Conceptos y Control en «Cómo se juega» y los cuatro desplegables, con mis palabras sobre la descripción oficial (sondas RUN-249 a 253 con la API en castellano). Sin Apertura ni Bucle: no invento rotaciones (DEC-047), la ficha enlaza la de la guía. Guardián `tests/bld-notes-refs.smoke.cjs` (con red): RUN-254, 169 referencias, 0 sin resolver. Tandas siguientes: Ingeniero y Guardabosques; Ladrón y Elementalista; Hipnotizador y Nigromante; Retornado. |
+| EQ-8 (2/5) | HECHO 2026-10-31 16:52Z | 8 notas más (Ingeniero y Guardabosques PvE), 16 en total. RUN-255: 333 referencias, 0 sin resolver. |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
