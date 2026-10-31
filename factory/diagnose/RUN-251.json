@@ -1,0 +1,1 @@
+{"id": "RUN-251", "summary": "BL-084 EQ-8: control (barra de desafío) y habilidades de arma de las 36 builds PvE (sonda)", "tests": ["tests/bld-eq8cc-0.smoke.cjs", "tests/bld-eq8cc-1.smoke.cjs", "tests/bld-eq8cc-2.smoke.cjs", "tests/bld-eq8cc-3.smoke.cjs", "tests/bld-eq8cc-4.smoke.cjs", "tests/bld-eq8cc-5.smoke.cjs"]}
