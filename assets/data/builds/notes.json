@@ -1539,6 +1539,220 @@
    "relic": [
     "La {i:109942} acumula furia de tirano cada vez que quemás a un enemigo; al llegar al máximo, la próxima quemadura explota. Va de la mano con {t:2391}."
    ]
+  },
+  "sc-wvw-mesmer-power-chronomancer": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el cronomante: mandoble en un juego y lanza en el otro.",
+    "Tu daño sale de los destrozos: {t:681} sube tu daño (y más contra enemigos sin bendiciones), {t:693} hace que cada destrozo quite una bendición y {t:1995} pega más a enemigos frenados.",
+    "Los pozos son tu daño en área: {s:30525} debilita e incapacita, {s:29856} congela y al terminar quita bendiciones, y {s:30359} es tu élite de control. {s:29830} es tu F5."
+   ],
+   "cc": [
+    "{s:30359} derriba 2 s y hace flotar (recarga 60 s); {s:29856} atonta 2 s (recarga 20 s). En el mandoble, {s:10220} rechaza (recarga 20 s). En la lanza, {s:72957} (5) aturde 2 s (recarga 20 s).",
+    "{s:56873} (F3) atonta 1 s (recarga 38 s). No hay estabilidad en esta barra: {s:10192} (F4) te da distorsión para evitar los golpes."
+   ],
+   "skills": [
+    "{s:21750} te cura cada vez que invocás una ilusión de forma pasiva; su activa te cura más. {s:10247} crea clones de forma pasiva y su activa recarga los destrozos.",
+    "Los destrozos del cronomante son F1 {s:56930}, F2 {s:56928} y F3 {s:56873}."
+   ],
+   "traits": [
+    "Dominación: {t:686} (mandoble mejorado), {t:693} y {t:681}. Ilusiones: {t:721} (el destrozo 1 pasa a tener cargas), {t:722} (tus fantasmas nacen con distorsión) y {t:2035} (destrozos mejorados).",
+    "Cronomante: {t:1995}, {t:1978} (bomba de relojería a los enemigos de {s:56873}) y {t:1890} (el primer fantasma que iba a volverse clon ataca de nuevo)."
+   ],
+   "gear": [
+    "La {i:24703} suma potencia y precisión.",
+    "Sigilos: en el mandoble, {i:24548} (descarga de llamas al hacer crítico) y {i:24575} (potencia por cada enemigo que matás); en la lanza, {i:24615} (+5 % de daño) y {i:24868} (+7 % de daño de golpe contra aturdidos o derribados, +3 % siempre)."
+   ],
+   "relic": [
+    "La {i:100947} sube tu daño de golpe un rato cada vez que pegás con una habilidad de arma de 20 s de recarga o más; cada acumulación renueva la duración."
+   ]
+  },
+  "sc-wvw-mesmer-power-mirage": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el quimérico: rifle en un juego y lanza en el otro.",
+    "Destrozar es tu golpe fuerte: {t:2098} sube tu daño con cada destrozo y más por cada clon, y {t:2169} te da capa quimérica si tenés clones suficientes. {t:2141} crea un clon al usar un engaño.",
+    "{s:10203} quita bendiciones a los enemigos y limpia a los aliados. {s:29578} acorta la recarga de la próxima habilidad de apoyo."
+   ],
+   "cc": [
+    "En el rifle, {s:72007} aturde 2 s (recarga 20 s). En la lanza, {s:72957} (5) aturde 2 s (recarga 20 s). {s:10287} (F3) atonta 1 s (recarga 38 s).",
+    "No hay estabilidad en esta barra: {s:10192} (F4) te da distorsión y {s:45449} te saca del medio con un paso sombrío."
+   ],
+   "skills": [
+    "{s:21750} te cura cada vez que invocás una ilusión de forma pasiva; su activa te cura más. {s:10247} crea clones de forma pasiva y su activa recarga los destrozos."
+   ],
+   "traits": [
+    "Dominación: {t:682} (tus ilusiones pegan más), {t:693} (cada destrozo quita una bendición) y {t:681} (más daño, y más contra enemigos sin bendiciones). Ilusiones: {t:721} (el destrozo 1 pasa a tener cargas), {t:722} (tus fantasmas nacen con distorsión) y {t:2035} (destrozos mejorados).",
+    "Quimérico: {t:2141}, {t:2098} y {t:2169}."
+   ],
+   "gear": [
+    "La {i:24703} suma potencia y precisión.",
+    "Sigilos: en el rifle, {i:24607} (la mitad del aguante al cambiar a esa arma, cada 9 s) y {i:24575} (potencia por cada enemigo que matás); en la lanza, {i:24615} (+5 % de daño) y {i:24592} (recuperás aguante al matar)."
+   ],
+   "relic": [
+    "La {i:99997}: después de evadir un ataque, los enemigos quedan marcados un rato y les hacés más daño de golpe. Esquivá antes de destrozar."
+   ]
+  },
+  "sc-wvw-mesmer-power-virtuoso": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el virtuoso: mandoble en un juego y lanza en el otro.",
+    "El virtuoso no destroza ilusiones: usa filos. {t:2206} te los carga solo en combate y los cánticos de los filos (F1 {s:62617}, F2 {s:62616}, F3 {s:62602}, F5 {s:62597}) los gastan.",
+    "{t:2208} pega más a enemigos cercanos y {t:680} hace que tus cánticos peguen más, el doble si el enemigo no está activando nada. {t:2215} te da bendiciones al bloquear o esquivar."
+   ],
+   "cc": [
+    "{s:62602} atonta 1 s por cada filo (recarga 30 s). En el mandoble, {s:10220} rechaza (recarga 20 s). En la lanza, {s:72957} (5) aturde 2 s (recarga 20 s). {s:35637} inmoviliza a los enemigos donde cae.",
+    "{s:10237} tiene 2 cargas (recarga 15 s): rompe aturdimiento y da 4 de estabilidad por 5 s a vos y a los aliados cercanos."
+   ],
+   "skills": [
+    "{s:21750} te cura cada vez que invocás una ilusión de forma pasiva; su activa te cura más. {s:62573} daña a los enemigos cercanos y potencia tu próximo cántico.",
+    "{s:10311} da rapidez a vos y a tus aliados y frena a los enemigos en el área."
+   ],
+   "traits": [
+    "Dominación: {t:686} (mandoble mejorado), {t:693} (las habilidades de destrozar quitan una bendición) y {t:680}. Ilusiones: {t:721} (el destrozo 1 pasa a tener cargas), {t:722} (tus fantasmas nacen con distorsión) y {t:2035} (destrozos mejorados).",
+    "Virtuoso: {t:2208}, {t:2215} y {t:2206}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24607} (la mitad del aguante al cambiar a esa arma, cada 9 s) en las dos armas; con {i:24548} (descarga de llamas al hacer crítico) en el mandoble y {i:24575} (potencia por cada enemigo que matás) en la lanza."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "sc-wvw-mesmer-support-troubadour": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Apoyo de grupo para WvW con el trovador: curación, protección y bendiciones. El catálogo nombra rifle y lanza, pero el equipo trae rifle en un juego y espada con escudo en el otro: la nota sigue al equipo. Contra jugadores tu trabajo es que tu grupo no quede controlado: la estabilidad es lo que más importa.",
+    "Tus instrumentos son las F: F1 {s:76552}, F2 {s:76746}, F3 {s:77079}, F4 {s:76960} y F5 {s:76931}. {t:2367} hace que el laúd y el crescendo den bendiciones, y {t:2441} hace que el crescendo potencie al último instrumento que tocaste.",
+    "Los relatos ({s:76695}, {s:76850} y {s:76971}) son tu barra: con {t:2326} curan y dan protección a los aliados cercanos."
+   ],
+   "cc": [
+    "{s:10237} tiene 2 cargas (recarga 15 s): rompe aturdimiento y da 4 de estabilidad por 5 s a los aliados cercanos. {s:76960} rompe aturdimiento (recarga 25 s).",
+    "{s:77079} atonta o aturde según la distancia (recarga 25 s) y {s:76746} atonta 1 s en el centro (recarga 20 s). En el rifle, {s:72007} aturde 2 s (recarga 20 s); en el escudo, {s:30643} aturde 1 s (recarga 35 s)."
+   ],
+   "skills": [
+    "{s:10244} deja que los aliados en el área se levanten si caen abatidos: guardala para el choque.",
+    "{s:76850} da bendiciones ofensivas a los aliados y {s:76971} les da distorsión."
+   ],
+   "traits": [
+    "Caos: {t:675} (el destrozo 2 da protección a los cercanos), {t:668} (el aura de caos da bendiciones a los cercanos) y {t:1687} (estabilidad al destrozar y una bendición más para los cercanos). Inspiración: {t:738} (cada carga de mantra cura a los cercanos), {t:740} (clon al curarte) y {t:2005} (el destrozo 4 saca a los aliados del aturdimiento).",
+    "Trovador: {t:2326}, {t:2367} y {t:2441}."
+   ],
+   "gear": [
+    "La {i:24839} suma curación y duración de bendición.",
+    "Sigilos: en el rifle, {i:24582} (curación acumulable por cada enemigo que muere) y {i:74326} (+10 % de curación a aliados); en la espada, {i:24607} (la mitad del aguante al cambiar a esa arma, cada 9 s); en el escudo, {i:74326}."
+   ],
+   "relic": [
+    "La {i:99965}: después de tu curación, cura a vos y a los aliados cercanos, y lo que sobra se vuelve barrera. Va con {s:76695}."
+   ]
+  },
+  "sc-wvw-necromancer-power-reaper": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el segador. El catálogo nombra hacha, foco, cetro y daga; el equipo trae hacha con foco en un juego y mandoble en el otro: la nota sigue al equipo.",
+    "El Sudario del segador ({s:30792}, F1) es tu daño grande: {t:2021} te da ferocidad y rapidez adentro y {t:1969} pega más de cerca y te cura una parte. Las habilidades del sudario reemplazan a las de arma mientras estás adentro: están en la descripción oficial.",
+    "Romper bendiciones es parte del juego: {s:29666} convierte las bendiciones de los enemigos cercanos en vulnerabilidad y {s:10545} las vuelve condiciones."
+   ],
+   "cc": [
+    "{s:30105} aturde 2 s (3 s cuerpo a cuerpo) a los enemigos a tu alrededor y te da 2 de estabilidad por 10 s (recarga 30 s).",
+    "Con {t:1922} perdés condiciones al entrar al sudario y mientras estás adentro."
+   ],
+   "skills": [
+    "{s:10547} invoca un demonio que te pasa salud con cada ataque; con {t:916}, curarte también lanza un enjambre de langostas menor.",
+    "{s:10546} es un pozo de daño que deja vulnerabilidad."
+   ],
+   "traits": [
+    "Rencor: {t:916}, {t:909} (tus sellos roban salud y quitan bendiciones) y {t:903} (golpeás alrededor al entrar al sudario). Magia de muerte: {t:1922}, {t:855} (el caparazón te da potencia) y {t:1940} (caparazón al infligir condiciones y menos daño recibido).",
+    "Segador: {t:2020} (los críticos a congelados explotan y congelan a los de al lado), {t:1969} y {t:2021}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en el hacha y {i:24548} (descarga de llamas al hacer crítico) en el foco; en el mandoble, {i:24615} y {i:24575} (potencia por cada enemigo que matás)."
+   ],
+   "relic": [
+    "La {i:100947} sube tu daño de golpe un rato cada vez que pegás con una habilidad de arma de 20 s de recarga o más; cada acumulación renueva la duración."
+   ]
+  },
+  "sc-wvw-necromancer-power-scourge": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el azotador: hacha con foco en un juego y mandoble en el otro.",
+    "El azotador no entra al sudario: lo reemplaza con las sombras de arena ({s:44946}, F1) y sus castigos F2 {s:40813}, F3 {s:43448}, F4 {s:44428} y F5 {s:44663}.",
+    "También das barrera: {t:2080} la da a los cercanos al manifestar sombras, {t:2059} te la da al quitar o corromper bendiciones y {t:2167} hace que limpie condiciones y dé poder."
+   ],
+   "cc": [
+    "{s:44428} (F4) asusta 1 s (recarga 15 s).",
+    "{s:40274} rompe aturdimiento y te da 1 de estabilidad por 6 s (recarga 25 s); además deja un rastro que da bendiciones a los aliados y quema a los enemigos."
+   ],
+   "skills": [
+    "{s:10547} invoca un demonio que te pasa salud con cada ataque; con {t:916}, curarte también lanza un enjambre de langostas menor.",
+    "{s:10546} y {s:10545} son pozos: daño con vulnerabilidad, y bendiciones del enemigo convertidas en condiciones. {s:42355} da poder a los aliados y ralentiza a los enemigos."
+   ],
+   "traits": [
+    "Rencor: {t:916}, {t:909} y {t:903}. Cosecha de almas: {t:888} (celeridad al entrar al sudario), {t:894} (más daño al entrar o salir) y {t:893} (más crítico).",
+    "Azotador: {t:2167}, {t:2059} y {t:2080}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24548} (descarga de llamas al hacer crítico) en el hacha y {i:24575} (potencia por cada enemigo que matás) en el foco; en el mandoble, {i:24548} y {i:24607} (la mitad del aguante al cambiar a esa arma, cada 9 s)."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
+  },
+  "sc-wvw-necromancer-support-harbinger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Apoyo de grupo para WvW con el augurador: báculo en un juego y mandoble en el otro. Contra jugadores tu trabajo es que tu grupo no quede controlado: la estabilidad es lo que más importa.",
+    "Tus elixires apoyan al grupo: con {t:2220} sus bendiciones llegan a los aliados en el área del elixir y con {t:2219} además dan protección. {t:2194} da bendiciones a los cercanos al entrar al Sudario de presagio ({s:62567}).",
+    "Magia de sangre cura: {t:789} cura a los aliados al salir del sudario y {t:778} deja que tus aliados activen tus marcas para curarse."
+   ],
+   "cc": [
+    "{s:62646} rompe aturdimiento (recarga 20 s) y te da resistencia y protección. En el báculo, {s:19115} asusta 1 s (recarga 18 s).",
+    "En los datos oficiales que revisé, esta barra no da estabilidad a los aliados: el resto del grupo la tiene que traer."
+   ],
+   "skills": [
+    "{s:21762} roba salud a los enemigos cercanos de forma pasiva; su activa te cura y marca a un enemigo. {s:10544} da poder a los aliados alrededor.",
+    "{s:62655} te da todas las bendiciones y lanza el elixir. {s:10545} convierte las bendiciones de los enemigos en condiciones."
+   ],
+   "traits": [
+    "Rencor: {t:916} (curarte lanza un enjambre de langostas menor), {t:909} y {t:903}. Magia de sangre: {t:780} (los pozos de sangre reviven aliados), {t:789} y {t:778}.",
+    "Augurador: {t:2219}, {t:2220} y {t:2194}."
+   ],
+   "gear": [
+    "La {i:24839} suma curación y duración de bendición.",
+    "Sigilos: en el báculo, {i:74326} (+10 % de curación a aliados) y {i:72339} (+10 % de duración de bendición); en el mandoble, {i:24582} (curación acumulable por cada enemigo que muere) y {i:72339}."
+   ],
+   "relic": [
+    "La {i:100388}: después de usar un sello te deja un sello astral; el próximo sello lo consume y limpia condiciones a los aliados cercanos. Tu único sello es {s:21762}."
+   ]
+  },
+  "sc-wvw-necromancer-power-ritualist": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para WvW con el ritualista. El catálogo nombra mandoble, hacha y espada; el equipo trae hacha con foco en un juego y mandoble en el otro: la nota sigue al equipo.",
+    "Tu barra son conjuros de arma: {s:77259} reduce el daño que recibís y te cura, {s:76975} hace que tus ataques peguen también a los cercanos y {s:76941} te cura cuando recibís un golpe grande.",
+    "El Sudario de ritualista ({s:77238}, F1): con {t:2392} la primera habilidad espiritual al entrar se recarga al instante. {t:894} sube tu daño al entrar o salir del sudario. Las habilidades del sudario reemplazan a las de arma mientras estás adentro: están en la descripción oficial."
+   ],
+   "cc": [
+    "En los datos oficiales que revisé, tu barra casi no tiene control duro: lo tuyo es pegar y aguantar.",
+    "{s:76941} rompe aturdimiento y te da 1 de estabilidad por 4 s (recarga 75 s). Con {t:888}, entrar al sudario te da celeridad y te quita las condiciones que frenan."
+   ],
+   "skills": [
+    "{s:10545} convierte las bendiciones de los enemigos en condiciones y {s:10546} los daña y deja vulnerabilidad."
+   ],
+   "traits": [
+    "Rencor: {t:914} (más daño de golpe, y más contra enemigos sin bendiciones), {t:829} (vitalidad según tu potencia) y {t:903} (golpeás alrededor al entrar al sudario). Cosecha de almas: {t:888}, {t:894} y {t:893} (más crítico).",
+    "Ritualista: {t:2339} (invocar una criatura daña a los enemigos alrededor), {t:2421} (tus criaturas pegan y curan más) y {t:2392}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sigilos: {i:24615} (+5 % de daño) en el hacha y {i:24548} (descarga de llamas al hacer crítico) en el foco; en el mandoble, {i:24615} y {i:24575} (potencia por cada enemigo que matás)."
+   ],
+   "relic": [
+    "La {i:100916} sube tu daño de golpe cada vez que pegás con una habilidad de arma que tenga recarga o coste: casi todo lo que no sea el ataque 1. Cada golpe así renueva las acumulaciones."
+   ]
   }
  }
 }
