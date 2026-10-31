@@ -25,7 +25,22 @@ async function get(kind, ids) {
   return m;
 }
 
-module.exports = async function (ids) {
+// El tipo de arma de cada pieza del equipo ([juego, mano, item, stat, sigilos]) sale de /v2/items.
+const WT = { LongBow: 'Longbow', ShortBow: 'Shortbow', Harpoon: 'Spear' };
+async function gearWeapons(g, ref) {
+  const out = [];
+  if (!g || !g.weapons) return out;
+  const it = await get('items', g.weapons.map((w) => w[2]));
+  g.weapons.forEach((w) => {
+    const t = it[w[2]] && it[w[2]].details && it[w[2]].details.type;
+    const k = ref.weapons[t] ? t : ref.weapons[WT[t]] ? WT[t] : Object.keys(ref.weapons).find((x) => x.toLowerCase() === String(t).toLowerCase());
+    out.push({ set: w[0], hand: w[1], type: t, key: k });
+  });
+  return out;
+}
+
+module.exports = async function (ids, opt) {
+  opt = opt || {};
   const cat = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
   const gear = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/gear.json'), 'utf8')).gear;
   for (const id of ids) {
@@ -56,13 +71,27 @@ module.exports = async function (ids) {
       if (mech.length) L.push('MEC ' + mech.map((p) => p[1].replace('Profession_', 'F') + ' s' + p[0] + ' ' + ref.skills[p[0]].name).join(' · '));
       const g = gear[id];
       const wk = new Set((b.weapons || []).concat(v.weapons.map((w) => w.key)));
-      if (g && g.weapons) g.weapons.forEach((w) => w.forEach((x) => { if (typeof x === 'string' && ref.weapons[x]) wk.add(x); }));
+      const gw = await gearWeapons(g, ref);
+      gw.forEach((w) => { if (w.key) wk.add(w.key); });
+      if (gw.length) L.push('ARMAS-EQ ' + gw.map((w) => 'J' + w.set + w.hand + ' ' + w.type + (w.key ? '' : '(?)')).join(' · '));
       wk.forEach((k) => {
         const x = ref.weapons[k];
         if (!x) return;
         x.skills.forEach((s) => sids.push(s[0]));
         L.push('ARMA ' + k + ': ' + x.skills.map((s) => s[1].replace('Weapon_', '') + (s[3] ? s[3].slice(0, 2) : '') + (s[2] ? '(' + s[2].slice(0, 3) + ')' : '') + ' s' + s[0] + ' ' + ((ref.skills[s[0]] || {}).name || '?')).join(' · '));
       });
+      if (opt.only === 'weapons') {
+        const sk0 = await get('skills', [...wk].filter((k) => ref.weapons[k]).flatMap((k) => ref.weapons[k].skills.map((s) => s[0])));
+        const cc0 = [];
+        Object.values(sk0).forEach((s) => {
+          const fx = (s.facts || []).filter((f) => f.type === 'Defiance_Break' || CC.test(String(f.text || '') + ' ' + String(f.status || '')));
+          if (fx.length) cc0.push('s' + s.id + ' ' + s.name + ': ' + fx.map((f) => (f.status || f.text || f.type) + (f.apply_count ? ' x' + f.apply_count : '') + (f.duration != null ? ' ' + f.duration + 's' : '')).join(', '));
+        });
+        if (cc0.length) L.push('CC-ARMAS ' + cc0.join(' | '));
+        L.splice(1, L.length, ...L.filter((x) => /^(ARMA|CC-ARMAS)/.test(x)));
+        console.log(L.join('\n'));
+        continue;
+      }
       if (g) {
         L.push('GEAR ' + JSON.stringify({ weapons: g.weapons, rune: g.rune, relic: g.relic, amulet: g.amulet, food: g.food, utility: g.utility }));
         const sig = [];
