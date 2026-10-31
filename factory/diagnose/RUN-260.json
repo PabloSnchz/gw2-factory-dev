@@ -1,0 +1,1 @@
+{"id": "RUN-260", "summary": "BL-084 EQ-8 WvW (1/5): datos oficiales de Guardián y Guerrero WvW", "tests": ["tests/bld-eq8w-0.smoke.cjs", "tests/bld-eq8w-1.smoke.cjs", "tests/bld-eq8w-2.smoke.cjs", "tests/bld-eq8w-3.smoke.cjs"]}
