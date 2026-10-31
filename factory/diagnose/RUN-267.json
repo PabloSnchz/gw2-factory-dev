@@ -1,0 +1,1 @@
+{"id": "RUN-267", "summary": "BL-084 EQ-8 WvW (4/5): datos oficiales de Hipnotizador y Nigromante WvW", "tests": ["tests/bld-eq8w-13.smoke.cjs", "tests/bld-eq8w-14.smoke.cjs", "tests/bld-eq8w-15.smoke.cjs", "tests/bld-eq8w-16.smoke.cjs"]}
