@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 en curso (4/5 hechos).
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); faltan WvW y PvP.
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -83,6 +83,7 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-8 (2/5) | HECHO 2026-10-31 16:52Z | 8 notas más (Ingeniero y Guardabosques PvE), 16 en total. RUN-255: 333 referencias, 0 sin resolver. |
 | EQ-8 (3/5) | HECHO 2026-10-31 17:25Z | 8 notas más (Ladrón y Elementalista PvE), 24 en total, por PATCH-322. RUN-256: 487 referencias, 0 sin resolver. |
 | EQ-8 (4/5) | HECHO 2026-10-31 17:41Z | 8 notas más (Hipnotizador y Nigromante PvE), 32 en total, por PATCH-324. RUN-257: 655 referencias, 0 sin resolver. |
+| EQ-8 (5/5) | HECHO 2026-10-31 18:10Z | 4 notas más (Heraldo, Renegado, Justiciero y Conductor de mundo abierto): las 36 PvE completas, por PATCH-326 (`304219a`, 70752 B). RUN-259: 741 referencias, 0 sin resolver. Siguen WvW y PvP. |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
