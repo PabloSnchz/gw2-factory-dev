@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-321",
+ "summary": "BL-084 EQ-8 (2/5) hecho: status y plan",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "fb136f6ccb41fc54177dcab543a3a160935619e4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 (2/5): Ingeniero y Guardabosques.",
+     "text": "EQ-8 (2/5) HECHO 2026-10-31 16:52Z (Chatarrero, Holoartesano, Mechanista, Amalgama, Druida, Bestialma, Indómito y Vendaval: 16 notas PvE en total). Sigue EQ-8 (3/5): Ladrón y Elementalista."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-31 16:15Z",
+     "text": "Última actualización: 2026-10-31 16:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 (2/5): notas de Ingeniero y Guardabosques PvE; después (3/5) Ladrón y Elementalista,",
+     "text": "Próxima acción: BL-084 EQ-8 (3/5): notas de Ladrón y Elementalista PvE; después"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 (1/5) — notas de Guardián y Guerrero PvE. HECHO.",
+     "text": "BL-084 EQ-8 (2/5) — notas de Ingeniero y Guardabosques PvE. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`3d349aa`, 33137 B: 16 notas; nuevas Chatarrero, Holoartesano, Mechanista, Amalgama de fractales, Druida, Bestialma, Indómito y Vendaval)\n\nAdemás: mismo criterio que la tanda 1 (DEC-047: conceptos, control y los cuatro desplegables; sin apertura ni bucle). Donde la API no dice de dónde sale la bendición del grupo, lo digo y remito a la guía; las habilidades de los kits del Ingeniero también quedan en la guía. RUN-255: 333 referencias, 0 sin resolver; notes 8, play 6 y sheet 13 verdes.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "0e2a2d52504fc4b7e4122f50074ead1a2b1955f4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-8 en curso (1/5 hecho).",
+     "text": "EQ-8 en curso (2/5 hechos)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-8 (2/5) | HECHO 2026-10-31 16:52Z | 8 notas más (Ingeniero y Guardabosques PvE), 16 en total. RUN-255: 333 referencias, 0 sin resolver. |\n"
+    }
+   ]
+  }
+ ]
+}
