@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-320",
+ "summary": "BL-084 EQ-8 (1/5) hecho: status y plan",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "997d6d0c7fd61aa79b26f6f731fd83f2227ee890",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 (las notas escritas).",
+     "text": "EQ-8 (1/5) HECHO 2026-10-31 16:10Z (notas de las 8 builds PvE de Guardián y Guerrero en assets/data/builds/notes.json: conceptos, control y los cuatro desplegables; sin apertura ni bucle hasta verificarlos, DEC-047; guardián tests/bld-notes-refs.smoke.cjs). Sigue EQ-8 (2/5): Ingeniero y Guardabosques."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-31 00:05Z",
+     "text": "Última actualización: 2026-10-31 16:15Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 (las notas escritas: primero las 36 de PvE, después WvW y PvP); después EQ-9 (AE2 con el equipo real).",
+     "text": "Próxima acción: BL-084 EQ-8 (2/5): notas de Ingeniero y Guardabosques PvE; después (3/5) Ladrón y Elementalista, (4/5) Hipnotizador y Nigromante, (5/5) Retornado; WvW y PvP después; luego EQ-9 (AE2 con el equipo real)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-7 — «Cómo se juega» con conceptos, apertura, bucle y control. HECHO.",
+     "text": "BL-084 EQ-8 (1/5) — notas de Guardián y Guerrero PvE. HECHO.\nArchivos:\n- assets/data/builds/notes.json (8 notas: Cazadragones, Abrasador celestial, Subyugador, Luminaria kite, Berserker, Rompehechizos kite, Jurafilos y Paragón de mundo abierto)\n- tests/bld-notes-refs.smoke.cjs (nuevo, con red: cada {s|t|i:ID} de las notas existe en la API para esa build) y DEC-047\n\nAdemás: cada nota tiene Conceptos y Control (barra de desafío) en «Cómo se juega» y los cuatro desplegables (habilidades, rasgos, equipo, reliquia), escritos con mis palabras sobre la descripción oficial en castellano (RUN-249/250: rasgos, barra, armas, runa, reliquia y sellos de las 36 PvE; RUN-251: qué habilidades controlan, con su duración y recarga; RUN-253: glosario de bendiciones de la API: Quickness = Rapidez, Swiftness = Celeridad). DEC-047: no escribo Apertura ni Bucle hasta poder verificarlos en el juego; la rotación queda enlazada a la guía original. RUN-254: 169 referencias, 0 sin resolver; notes 8, play 6 y sheet 13 verdes.\n\nAntes: "
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "ceb281be03eca332c30cd09d75993c3249eb6b81",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-1 a EQ-7 hechos (con EQ-3b).",
+     "text": "EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 en curso (1/5 hecho)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-8 (1/5) | HECHO 2026-10-31 16:10Z | `notes.json` con las 8 builds PvE de Guardián y Guerrero: Conceptos y Control en «Cómo se juega» y los cuatro desplegables, con mis palabras sobre la descripción oficial (sondas RUN-249 a 253 con la API en castellano). Sin Apertura ni Bucle: no invento rotaciones (DEC-047), la ficha enlaza la de la guía. Guardián `tests/bld-notes-refs.smoke.cjs` (con red): RUN-254, 169 referencias, 0 sin resolver. Tandas siguientes: Ingeniero y Guardabosques; Ladrón y Elementalista; Hipnotizador y Nigromante; Retornado. |\n"
+    }
+   ]
+  }
+ ]
+}
