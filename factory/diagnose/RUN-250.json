@@ -1,0 +1,1 @@
+{"id": "RUN-250", "summary": "BL-084 EQ-8: datos oficiales en castellano de las builds PvE 31-36 (sonda)", "tests": ["tests/bld-eq8-10.smoke.cjs", "tests/bld-eq8-11.smoke.cjs"]}
