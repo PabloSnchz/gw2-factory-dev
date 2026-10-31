@@ -1,0 +1,41 @@
+{
+ "id": "PATCH-342",
+ "summary": "BL-085 y BL-087 cerrados (DONE), BL-086 en curso con la propuesta publicada; status: validaciones de BL-086 y BL-087",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "36bded82bd001514c26f0c8372162a88b97dfa47",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-087] [BAJO] Una cara por tipo de mensaje en el panel y en la Bóveda — hoy uso la cara «hola» en todos los mensajes. Propuesta: recomienda = hola, decidió = guiño, advierte y crítico = ojo, explica = explica, resume = con-gato; en la Bóveda saluda = hola, explica = explica, recomienda = hola, advierte = ojo. Cada cara de 112 px pesa ~4 KB embebida: se verifica por huella (LES-044) · DEC-048\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — idea de Pablo (2026-10-31): un lugar donde cuento qué hice y qué puedo hacer, con la figura ilustrada (DEC-048) y el gato robot (DEC-049). Concepto entregado en el chat: una sola página estática en un repo nuevo `shiruvana` (GitHub Pages), secciones Portada, Quién soy, Lo que hice (línea de tiempo desde ai-memory: DEC y FEAT), Qué puedo hacer, Cómo trabajo, Vestidor y Ecosistema; nunca datos privados ni de PRD. Primer paso: propuesta visual en HTML; el repo nuevo se crea recién con el OK de Pablo · DEC-048, DEC-049\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-085] [MEDIO] Identidad ilustrada en el ecosistema: mi figura y el gato robot — decisiones de Pablo del 2026-10-31 (DEC-048: la figura ilustrada es mi imagen oficial; DEC-049: el gato robot es el gato oficial ilustrado). HECHO 22:01Z: mi cara nueva en la Bóveda DEV (`js/shiruvana.js` `f9f97ad`, misma API 1.1.0) y en el Centro de decisiones (`gds/voice.js` gw2-factory-dashboard `38bf038`), mismo archivo de 112 px verificado por huella (LES-044). La Guarida ya usa las 7 poses (RG-3b, RG-7). Falta: que Pablo suba los 5 .webp del gato robot a `la-guarida/assets/brand/` (mismos nombres, sin código) y su validación visual; la versión de celular del fondo EVOLVING necesita una imagen nueva. PRD sin cambios hasta que Pablo lo pida · DEC-048, DEC-049, LES-044\n",
+     "text": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — idea de Pablo (2026-10-31): un lugar donde cuento qué hice y qué puedo hacer, con la figura ilustrada (DEC-048) y el gato robot (DEC-049). Propuesta visual publicada 2026-10-31 22:23Z: `docs/propuestas/propuesta-sitio-shiruvana-bl086.html` (`541d22c`): una sola página con Portada EVOLVING, Quién soy, Lo que hice (diario desde DEC y FEAT), Qué puedo hacer, Cómo trabajo, Vestidor (7 poses) y Ecosistema. Espera a Pablo: OK a la estructura, repo nuevo `shiruvana` en GitHub Pages (lo creo yo con su OK) e imágenes propias del sitio (las sube Pablo). Nunca datos privados ni de PRD · DEC-048, DEC-049\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-087] [BAJO] Una cara por tipo de mensaje en el panel y en la Bóveda — HECHO 22:20Z. Bóveda DEV: `js/shiruvana.js` 1.2.0 (`23611b5`, PATCH-341: saluda y recomienda = hola, explica = explica, advierte = ojo; `FACES`; index.html ?v=1.2.0; tests shiruvana-voice +1 y shv-core a 1.2.0; suite verde). Centro de decisiones 2.3.0: `gds/voice.js` (`ca4267e`, `SHIRUVANA_FACES`: recomienda hola, decidió guiño, advierte y crítico ojo, explica, resume con el gato) + `tests/voice-faces.test.mjs` y CHANGELOG (`6c67eae`). Caras de 112 px (~3 KB) recortadas de las poses de La Guarida, verificadas por huella (LES-044) · DEC-048 — 2026-10-31\n- [BL-085] [MEDIO] Identidad ilustrada en el ecosistema: mi figura y el gato robot — HECHO y validado por Pablo (2026-10-31 22:11Z: «Cara nueva validada»). Mi cara en la Bóveda DEV (`js/shiruvana.js` `f9f97ad`) y en el Centro de decisiones (`gds/voice.js` `38bf038`); Pablo subió los 5 .webp del gato robot a `la-guarida/assets/brand/` (blobs iguales a los entregados: gato-en-construccion-256 `001379d`, -512 `82f9180`, gato-negro-ia-128 `f7a0ea7`, -256 `25a2ea6`, -512 `1c9d99e`). Queda para después: la versión de celular del fondo EVOLVING (necesita una imagen nueva). PRD sin cambios hasta que Pablo lo pida · DEC-048, DEC-049, LES-044 — 2026-10-31\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "3dac625d0cc98186f9c07fba08297485678f9df0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- [BL-085] Validación: ya aparezco con mi cara nueva (la figura ilustrada) en la Bóveda DEV —Bienvenida, API Keys, guías, avisos y mi rincón— y en el Centro de decisiones. Mirá que se vea bien en 48 y 56 px; si ves la cara vieja, Ctrl+F5.\n- [BL-085] Acción: subí los 5 .webp del gato robot (`gato-en-construccion-256/512`, `gato-negro-ia-128/256/512`) a `la-guarida/assets/brand/`, encima de los actuales: tienen los mismos nombres y La Guarida los toma sin tocar código.\n",
+     "text": "- [BL-086] Validación: te dejé la propuesta del sitio de Shiruvana (https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-sitio-shiruvana-bl086.html). Si te gusta la estructura, creo el repo `shiruvana` y armo el MVP.\n- [BL-087] Validación: ahora uso una cara por tipo de mensaje. En la Bóveda DEV, «explica» en consejos y guías y «ojo» en avisos; en el Centro de decisiones, también «guiño» cuando decidí y «con el gato» en los resúmenes. Si ves la cara vieja, Ctrl+F5.\n"
+    }
+   ]
+  }
+ ]
+}
