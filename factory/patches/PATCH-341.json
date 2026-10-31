@@ -1,0 +1,70 @@
+{
+ "id": "PATCH-341",
+ "summary": "BL-087: una cara por tipo de mensaje en la Bóveda (shiruvana.js 1.2.0: explica y advierte con su pose), su test, la versión en shv-core.test e index.html ?v=1.2.0",
+ "files": [
+  {
+   "path": "js/shiruvana.js",
+   "base_sha": "90e43f79a8259f1198c899bcf6d215018cdba76f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0\n",
+     "text": " * Versión: 1.2.0\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": " * 2026-10-31 (BL-085, DEC-048): mi cara nueva, la figura ilustrada oficial. Solo cambia la imagen; la API es la misma.\n",
+     "text": " * 1.2.0 (BL-087): una cara por tipo de mensaje (FACES): saluda y recomienda = hola, explica = explica, advierte = ojo.\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  /** Tipo de mensaje → rótulo visible. */",
+     "text": "  /** Una cara por tipo de mensaje (BL-087): misma figura, otra pose; 112 px, WebP. */\n  var FACE_EXPLICA = 'data:image/webp;base64,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';\n  var FACE_OJO = 'data:image/webp;base64,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';\n  var FACES = { saluda: AVATAR, recomienda: AVATAR, explica: FACE_EXPLICA, advierte: FACE_OJO };\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      img.src = AVATAR;\n",
+     "text": "      img.src = FACES[kind] || AVATAR;\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "root.Shiruvana = { voice: voice, KINDS: KINDS, AVATAR: AVATAR, CSS: CSS, version: '1.1.0' };",
+     "text": "root.Shiruvana = { voice: voice, KINDS: KINDS, AVATAR: AVATAR, FACES: FACES, CSS: CSS, version: '1.2.0' };"
+    }
+   ]
+  },
+  {
+   "path": "tests/shiruvana-voice.test.cjs",
+   "base_sha": "dac90aa7b71d66921ac763c32a38c31c97cbeddd",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "test('un avatar por sección: los mensajes siguientes van sin imagen'",
+     "text": "test('una cara por tipo de mensaje (BL-087): saluda y recomienda con la principal, explica y advierte con la suya', () => {\n  const S = load();\n  const src = (kind) => find(S.voice({ kind, text: 'x', doc: makeDoc() }), 'shv-voice__avatar').src;\n  assert.equal(src('saluda'), S.AVATAR);\n  assert.equal(src('recomienda'), S.AVATAR);\n  assert.equal(src('explica'), S.FACES.explica);\n  assert.equal(src('advierte'), S.FACES.advierte);\n  assert.equal(src('cualquiera'), S.FACES.explica, 'tipo desconocido: la cara de explica');\n  const all = Object.values(S.FACES);\n  assert.equal(new Set(all).size, 3, 'tres caras distintas');\n  for (const f of all) {\n    assert.match(f, /^data:image\\/webp;base64,UklGR[A-Za-z0-9+/]+=*$/);\n    assert.ok(f.length < 8000, 'cada cara pesa menos de 8 KB embebida');\n  }\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-core.test.cjs",
+   "base_sha": "93eeffd7874c85f574d08f65a46398a33ef7b7e9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.equal(w.Shiruvana.version, '1.1.0');",
+     "text": "assert.equal(w.Shiruvana.version, '1.2.0');"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "5a49e8d194be59fb013cf146c069ee18bb4daf4f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "js/shiruvana.js?v=1.1.0",
+     "text": "js/shiruvana.js?v=1.2.0"
+    }
+   ]
+  }
+ ]
+}
