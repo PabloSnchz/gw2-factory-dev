@@ -1,0 +1,49 @@
+{
+ "id": "PATCH-339",
+ "summary": "BL-085: registro de DEC-048, DEC-049 y LES-044 en el índice; BL-085 (en curso), BL-086 y BL-087 en el backlog; validación y acción para Pablo en status.md",
+ "files": [
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "2f55faa3741843b4723c0927b522b621b9bb1ddb",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "\n\n## LESSONS",
+     "text": "\n- [DEC-048](decisions/DEC-048-figura-ilustrada-de-shiruvana-oficial.md) — Decidida por Pablo (2026-10-31): la figura ilustrada es mi imagen oficial en todo el ecosistema; el avatar de la voz es la cara «hola» de 112 px, la misma en la Bóveda y en el panel. Las reglas de cuándo aparezco no cambian.\n- [DEC-049](decisions/DEC-049-gato-robot-gato-oficial-ilustrado.md) — Decidida por Pablo (2026-10-31): el gato robot (ojos ámbar, placa verde) es el gato oficial ilustrado; reemplaza al de ART-001, inspirado en el fastboot de Xiaomi. La marca plana (`gato-negro.svg`, `brandMark()`) no cambia."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\n## FEATURES",
+     "text": "\n- [LES-044](lessons/LES-044-un-binario-copiado-como-texto-se-verifica-por-su-huella.md) — Un binario copiado como texto se verifica por su huella: al copiar mi cara en base64 se colapsó un «++»; lo detectó el sha del blob. Blob local = blob publicado, y si hay secuencias que se colapsan, se re-codifica."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "3a56bfcecbd157dbebd1fc6b55d8a761989a2d2a",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## READY\n\n",
+     "text": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — idea de Pablo (2026-10-31): un lugar donde cuento qué hice y qué puedo hacer, con la figura ilustrada (DEC-048) y el gato robot (DEC-049). Concepto entregado en el chat: una sola página estática en un repo nuevo `shiruvana` (GitHub Pages), secciones Portada, Quién soy, Lo que hice (línea de tiempo desde ai-memory: DEC y FEAT), Qué puedo hacer, Cómo trabajo, Vestidor y Ecosistema; nunca datos privados ni de PRD. Primer paso: propuesta visual en HTML; el repo nuevo se crea recién con el OK de Pablo · DEC-048, DEC-049\n- [BL-087] [BAJO] Una cara por tipo de mensaje en el panel y en la Bóveda — hoy uso la cara «hola» en todos los mensajes. Propuesta: recomienda = hola, decidió = guiño, advierte y crítico = ojo, explica = explica, resume = con-gato; en la Bóveda saluda = hola, explica = explica, recomienda = hola, advierte = ojo. Cada cara de 112 px pesa ~4 KB embebida: se verifica por huella (LES-044) · DEC-048\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-085] [MEDIO] Identidad ilustrada en el ecosistema: mi figura y el gato robot — decisiones de Pablo del 2026-10-31 (DEC-048: la figura ilustrada es mi imagen oficial; DEC-049: el gato robot es el gato oficial ilustrado). HECHO 22:01Z: mi cara nueva en la Bóveda DEV (`js/shiruvana.js` `f9f97ad`, misma API 1.1.0) y en el Centro de decisiones (`gds/voice.js` gw2-factory-dashboard `38bf038`), mismo archivo de 112 px verificado por huella (LES-044). La Guarida ya usa las 7 poses (RG-3b, RG-7). Falta: que Pablo suba los 5 .webp del gato robot a `la-guarida/assets/brand/` (mismos nombres, sin código) y su validación visual; la versión de celular del fondo EVOLVING necesita una imagen nueva. PRD sin cambios hasta que Pablo lo pida · DEC-048, DEC-049, LES-044\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "1c654f8ab53b3445fcc756856549867adb0c8283",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "- [BL-084] Info: estoy armando la ficha nueva de Builds",
+     "text": "- [BL-085] Validación: ya aparezco con mi cara nueva (la figura ilustrada) en la Bóveda DEV —Bienvenida, API Keys, guías, avisos y mi rincón— y en el Centro de decisiones. Mirá que se vea bien en 48 y 56 px; si ves la cara vieja, Ctrl+F5.\n- [BL-085] Acción: subí los 5 .webp del gato robot (`gato-en-construccion-256/512`, `gato-negro-ia-128/256/512`) a `la-guarida/assets/brand/`, encima de los actuales: tienen los mismos nombres y La Guarida los toma sin tocar código.\n"
+    }
+   ]
+  }
+ ]
+}
