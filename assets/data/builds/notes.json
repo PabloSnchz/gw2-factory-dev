@@ -1,6 +1,215 @@
 {
-  "version": 1,
-  "author": "Shiruvana",
-  "about": "Notas propias en castellano por build (DEC-046). Párrafos por sección: skills, traits, gear, relic. {s:ID} habilidad, {t:ID} rasgo, {i:ID} objeto. patch = parche para el que están revisadas; review = la build cambió y hay que revisarlas.",
-  "notes": {}
+ "version": 1,
+ "author": "Shiruvana",
+ "about": "Notas propias en castellano por build (DEC-046). Párrafos por sección: skills, traits, gear, relic; y para «Cómo se juega»: concepts, opener, loop, cc. {s:ID} habilidad, {t:ID} rasgo, {i:ID} objeto del equipo. patch = parche para el que están revisadas; review = la build cambió y hay que revisarlas. No invento rotaciones: apertura y bucle quedan en la guía original hasta poder verificarlos (DEC-047).",
+ "notes": {
+  "sc-raids-guardian-power-dragonhunter-radiance-spear-greatsword": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder puro: no reparte bendiciones al grupo. Tu daño crece según el estado del objetivo: {t:634} pega más a enemigos con quemadura, {t:1835} pega más a los incapacitados y {t:1955} castiga al enemigo atado por la Lanza de la justicia.",
+    "Las trampas son el centro de la build: la {i:100090} deja «cazado» a todo enemigo que pisa una (más daño de golpe contra él) y {t:1898} te da égida cada vez que ponés una. Ponelas debajo del jefe.",
+    "Con resolución tu daño sube ({t:565}) y también tu crítico y tu poder ({t:1683}). {t:574} te la da cada vez que usás la curación {s:30025}: por eso la curación se usa también para pegar."
+   ],
+   "cc": [
+    "{s:9093} derriba 3 s (recarga 20 s) y el 5 de lanza, {s:73132}, rechaza (recarga 20 s). {s:30273} atrae a los enemigos y los encierra en una barrera: sirve para juntar enemigos sueltos."
+   ],
+   "skills": [
+    "{s:30364} y {s:30273} son trampas: además de su daño, activan la reliquia y {t:1898}. {s:30025} también es trampa: cura, y al activarla un enemigo lo daña y lo ciega.",
+    "{s:9168} es un arma espiritual que ataca sola junto a tu objetivo. {s:9093} suma potencia de forma pasiva; su activa es tu derribo."
+   ],
+   "traits": [
+    "Entusiasmo: {t:653} suma potencia y baja las recargas del mandoble (por eso es tu segundo juego de armas) y {t:2017} sube tu daño mientras tengas furia; además, activar la virtud 1 crea un símbolo menor.",
+    "Resplandor da la resolución y lo que gana con ella ({t:574}, {t:565}, {t:1683}). Cazadragones: {t:1898}, {t:1835} y {t:1955}, los tres de daño o de trampas."
+   ],
+   "gear": [
+    "La {i:74978} alterna ferocidad y potencia en sus bonos: es la runa de daño de golpe de esta élite.",
+    "Sellos: {i:24615} (+5 % de daño, siempre) y {i:24868} (+7 % de daño de golpe contra aturdidos o derribados y +3 % siempre). El derribo de {s:9093} y el control del grupo lo aprovechan."
+   ],
+   "relic": [
+    "La {i:100090} es la reliquia de esta élite: todo enemigo alcanzado por tus trampas queda cazado y le hacés más daño de golpe (y tus condiciones duran más). Si las trampas no tocan al jefe, se pierde."
+   ]
+  },
+  "sc-raids-guardian-celestial-quickness-firebrand-staff-axe-torch": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Das rapidez (quickness) al grupo y, con estadísticas celestiales (todas a la vez), aportás daño de quemadura y algo de curación.",
+    "Tus fuentes de rapidez: {s:40915} (cada carga te la da a vos y a tus aliados), {s:29965} (furia y rapidez a los cercanos) y {t:2101}, que la da cada vez que usás la curación {s:41714}. Con {t:2179}, esa rapidez lleva también Cenizas de los justos.",
+    "Los mantras se usan por cargas y la última es la más fuerte. {t:2063} hace que esa carga final ralentice a los enemigos cercanos y te dé páginas para los tomos ({s:44364}, {s:41780}, {s:42259})."
+   ],
+   "cc": [
+    "Tenés poco control: el 2 del hacha, {s:40624}, atonta 1 s (recarga 8 s). Usalo apenas aparezca la barra de desafío."
+   ],
+   "skills": [
+    "{s:46148} es tu mantra de daño. {s:9187} quema con cada pulso y limpia condiciones a los aliados dentro del anillo.",
+    "{s:29965} da furia y rapidez a los cercanos y duplica la rapidez que te das a vos: usalo con el grupo junto."
+   ],
+   "traits": [
+    "Honor: {t:654} lanza un Símbolo de protección menor al usar la curación, {t:562} reparte poder con tus críticos y {t:558} mejora los símbolos y hace que curen.",
+    "Resplandor es tu daño: {t:566} (precisión y potencia con arma de una mano), {t:567} (quemaduras más largas y antorcha con menos recarga) y {t:1686} (quemadura más fuerte)."
+   ],
+   "gear": [
+    "La {i:70600} suma a todas las estadísticas y a la duración de bendición: justo lo que pide una build celestial que da rapidez.",
+    "Sellos: en el báculo, {i:74326} y {i:24551} mejoran la curación a los aliados; en el hacha, {i:24624} alarga la quemadura; en la antorcha, {i:48911} suma tormento con los críticos."
+   ],
+   "relic": [
+    "La {i:99965} cura a tu alrededor después de cada habilidad de curación y lo que sobra se vuelve barrera. Como {t:2101} ya te pide usar la curación seguido, la reliquia se activa sola."
+   ]
+  },
+  "sc-raids-guardian-condition-alacrity-willbender-pistol-pistol-axe-torch": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición (quemadura) que además aporta presteza (alacrity) al grupo; el detalle de cómo se reparte está en la guía original enlazada abajo.",
+    "Tus virtudes son el motor: {t:603} sube tu daño de golpe al activar una, {t:2210} da poder a los aliados al activarlas (y furia con Justicia impetuosa) y {t:554} comparte con los cercanos el efecto pasivo de la virtud 2.",
+    "La quemadura viene de todos lados: {t:2191} te da daño de condición y hace que las Llamas del subyugador quemen, {t:567} y {t:1686} la alargan y la refuerzan, y {s:9151} suma daño de condición con su pasiva."
+   ],
+   "cc": [
+    "{s:71817} (pistola 5) aturde 2 s (recarga 20 s), {s:40624} (hacha 2) atonta 1 s (recarga 8 s) y la élite {s:62561} derriba 4 s al objetivo marcado (recarga 20 s)."
+   ],
+   "skills": [
+    "{s:9151}: la pasiva sube tu daño de condición y la activa inmoviliza y quema. {s:9187} quema con cada pulso. {s:62565} embiste y deja debilidad y quemadura en el camino.",
+    "{s:21664} te cura un poco por cada golpe durante un rato: usala mientras pegás, no cuando ya estás lejos."
+   ],
+   "traits": [
+    "Resplandor: {t:566}, {t:567} y {t:1686}, todo para la quemadura. Virtudes: {t:617} hace que {s:9187} dure más, más {t:603} y {t:554}.",
+    "Subyugador: {t:2191} (daño de condición), {t:2210} (poder a los aliados) y {t:2195}, que te da bendiciones cuando se activa Determinación pero deja de curarte."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos en los dos juegos: {i:44944} (+5 % de daño de condición) y {i:24624} (quemadura 20 % más larga)."
+   ],
+   "relic": [
+    "La {i:100153}: cuando el objetivo tiene 6 o más hemorragias, cada hemorragia nueva también quema y atormenta. Depende de que el grupo mantenga hemorragias en el jefe."
+   ]
+  },
+  "sc-raids-guardian-hand-kite-luminary-mace-shield-mace-focus": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "No es una build de daño: es para un rol de kite (llevar y sostener enemigos aparte del grupo). Prioriza aguantar: vitalidad con la {i:24857}, bloqueos y curación propia.",
+    "Los bloqueos son tu defensa y tu curación: {s:9102} bloquea mientras te cura, {t:549} hace que la égida cure al bloquear, {t:1899} sube tu curación a otros con cada bloqueo y la {i:100934} te cura al bloquear.",
+    "Luminaria: con {s:77073} entrás en Forja radiante. {t:2330} da bendiciones a los cercanos al equipar un arma radiante, {t:2368} reduce la carga de las virtudes y {t:2329} reinicia tu bendición de luminaria al salir de la forja."
+   ],
+   "cc": [
+    "Tu control es {s:9091} (escudo 5): rechaza (recarga 24 s)."
+   ],
+   "skills": [
+    "Cuatro de tus habilidades rompen aturdimiento: {s:77321} (también a los aliados cercanos, y reduce el daño que recibís), {s:9150}, {s:30461} y la virtud {s:9118}.",
+    "{s:9246} te lleva hasta un aliado y cura alrededor. {s:9150} reduce el daño que recibís de forma pasiva; su activa da resolución y protección. {s:30461} cura en área de forma pasiva."
+   ],
+   "traits": [
+    "Valor: {t:581} (Castigar condición menor al curarte), {t:580} (dureza con escudo y escudo con menos recarga) y {t:586} (las meditaciones como {s:9246} te curan y dan furia).",
+    "Honor: {t:1899} (maza con menos recarga y bendiciones más largas), {t:549} y {t:558} (símbolos mejores que curan)."
+   ],
+   "gear": [
+    "La {i:24857} da vitalidad y duración de bendición.",
+    "Sellos: {i:72339} (+10 % de duración de bendición) y {i:44947} (cura a los cercanos al cambiar de arma, cada 9 s)."
+   ],
+   "relic": [
+    "La {i:100934} te cura un porcentaje de tu salud máxima al bloquear; si volvés a bloquear dentro de 5 s cura cada vez menos (hasta 1 %). Rinde más con bloqueos espaciados."
+   ]
+  },
+  "sc-raids-warrior-condition-berserker-longbow-sword-torch": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición: quemadura y hemorragia. Todo gira alrededor del modo cólera ({s:30185}): tus habilidades de rabia lo alargan y {t:2039} hace que además quemen a los cercanos.",
+    "{t:2011} pasa parte de tu potencia a daño de condición y parte de tu precisión a ferocidad; {t:2038} alarga tu quemadura y te da Aura de fuego con los críticos, que tus habilidades de berserker detonan.",
+    "La adrenalina manda: {t:1346} te da más con los críticos y daño de condición acumulable, y {s:30189} te la devuelve toda y recarga tus habilidades de estallido."
+   ],
+   "cc": [
+    "Tu control es la élite {s:30343}: aturde 3 s al objetivo (y a vos 1 s), recarga 20 s."
+   ],
+   "skills": [
+    "Toda la barra son rabias: {s:30074} bloquea y después lanza fragmentos con hemorragia, {s:29613} salta y deja condiciones en el área (y alarga el modo cólera si impacta) y {s:30258} rompe aturdimiento y alarga el modo cólera.",
+    "{s:30189} cura, devuelve la adrenalina y recarga los estallidos: es curación y daño a la vez."
+   ],
+   "traits": [
+    "Armas: {t:1455} (pericia según tu precisión), {t:1315} (más crítico contra enemigos inhabilitados o con barra de desafío) y {t:1346}.",
+    "Fuerza: {t:1444} (más daño de golpe), {t:1449} (vitalidad y ferocidad según tu poder) y {t:1437} (más daño al usar un estallido, según tu adrenalina)."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: en el arco largo, {i:24609} (veneno al cambiar a esa arma) y {i:24560} (hemorragia con críticos); en la espada, {i:24605} (hemorragia al cambiar de arma); en la antorcha, {i:48911} (tormento con críticos)."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta. Esta build pone muchas hemorragias, así que la reliquia trabaja sola."
+   ]
+  },
+  "sc-raids-warrior-hand-kite-spellbreaker-staff-mace-shield": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "No busca daño: es para un rol de kite (llevar y sostener enemigos aparte del grupo). Aguantás, bloqueás y controlás.",
+    "{s:44165} (Contraataque total) es la mecánica del rompehechizos y los tres rasgos de la élite la vuelven defensiva: {t:2153} da protección, {t:2097} resistencia y {t:2168} te cura y limpia condiciones al acertarlo.",
+    "Estandartes: {s:14528} da barrera y bendiciones al colocarlo y {s:14419} reanima aliados caídos. {t:1484} hace que den resolución al retirarlos y que sus bendiciones por pulsos duren más."
+   ],
+   "cc": [
+    "{s:14361} (escudo 4) aturde 2 s (recarga 20 s), {s:14503} (maza 3) atonta 1 s (recarga 10 s) y {s:44165} atonta al acertarlo. {s:14354} inmoviliza, pero no rompe la barra."
+   ],
+   "skills": [
+    "{s:14392} hace que los ataques no te dañen por un rato (las condiciones y el control sí te afectan). {s:21815} cura y absorbe los ataques que recibís.",
+    "{s:14354} inmoviliza a un enemigo: útil para que no te siga mientras lo llevás."
+   ],
+   "traits": [
+    "Defensa: {t:1376} refleja proyectiles al bloquear y te da adrenalina, {t:1368} lanza un Soportar el dolor menor con la élite y {t:1649} te da adrenalina al recibir golpes y limpia condiciones con los estallidos.",
+    "Disciplina: {t:1381} (más curación recibida y a otros), {t:1484} y {t:1657} (estallidos más fuertes que devuelven adrenalina)."
+   ],
+   "gear": [
+    "La {i:24839} da curación y duración de bendición.",
+    "Sellos: {i:44947} y {i:44946} curan a los cercanos al cambiar de arma (cada 9 s); {i:24607} te devuelve 50 % del aguante al cambiar a esa arma, o sea más esquivas."
+   ],
+   "relic": [
+    "La {i:109522} reduce el daño de golpe que recibís mientras tengas resolución; {t:1484} te la da al retirar los estandartes."
+   ]
+  },
+  "sc-raids-warrior-condition-alacrity-bladesworn-sword-pistol": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición que también reparte bendiciones al grupo (la variante con presteza, alacrity). El golpe grande es el Tajo dracónico desde la pistosable ({s:62745}); la fluidez que juntás define su carga.",
+    "{t:2245} baja el nivel máximo de carga del Tajo dracónico pero hace más efectiva cada carga, y además otorga bendiciones a los aliados.",
+    "{t:2260} carga tu pistosable con munición que inflige condiciones y quema a los cercanos; {t:2302} sube tu daño por cada proyectil gastado y {s:62901} recarga la munición de todas tus habilidades de jurafilos."
+   ],
+   "cc": [
+    "Según la API, esta barra no trae control para la barra de desafío: ahí dependés del grupo."
+   ],
+   "skills": [
+    "Todas las utilidades son armamentos: {s:62967} sube tu fluidez y te da furia, {s:68085} hace que tus explosiones dañen más y quemen, y {s:62960} te hace evadir hacia atrás con una explosión y recarga {s:62803}.",
+    "{s:14402} te cura, te devuelve toda la adrenalina y da aguante a los aliados cercanos."
+   ],
+   "traits": [
+    "Fuerza: {t:1447} (las habilidades de movimiento dan bendiciones y adrenalina), {t:1449} y {t:1437}.",
+    "Armas: {t:1455} (pericia según tu precisión), {t:1315} (más crítico contra enemigos inhabilitados o con barra) y {t:1346} (más adrenalina con críticos y daño de condición acumulable)."
+   ],
+   "gear": [
+    "La {i:24765} da daño de condición y alarga la quemadura, que es el centro de esta élite.",
+    "Sellos: {i:24560} (hemorragia con críticos) en la espada y {i:44944} (+5 % de daño de condición) en la pistola."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta."
+   ]
+  },
+  "sc-open-world-warrior-champion-hunter-paragon": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Para mundo abierto y cazar campeones: daño de poder y comodidad (la fuente le da dificultad 1).",
+    "Paragón juega con motivación y estribillos: {t:2345} te da motivación al entrar en combate y activa el cántico de acción ({s:77342}) si no hay estribillos activos; {t:2385} te da bonificaciones mientras haya estribillos y {t:2375} sube tu daño según tu motivación.",
+    "Sellos: con {t:1344} cada sello que usás te da ferocidad acumulable. {s:14355} da furia, poder y celeridad, y {s:14410} adrenalina con más precisión y ferocidad."
+   ],
+   "cc": [
+    "{s:72959} (lanza 3) atonta 3 s (recarga 10 s), {s:73009} (lanza 5) rechaza y lanza (recarga 20 s) y {s:14516} derriba 3 s (recarga 24 s). Controlar además te da rapidez con la {i:106221}."
+   ],
+   "skills": [
+    "{s:14403} da furia y poder a vos y a los aliados. {s:14389} te regenera de forma pasiva; su activa cura y te da resistencia.",
+    "{s:77155} rompe aturdimiento."
+   ],
+   "traits": [
+    "Defensa: {t:1372} (más daño a enemigos debilitados; tus estallidos debilitan), {t:1367} (adrenalina al inhabilitar) y {t:1708} (estabilidad al inhabilitar y más daño mientras la tengas).",
+    "Armas: {t:1344}, {t:1315} (más crítico contra inhabilitados) y {t:1707} (más velocidad de ataque con un arma de mano principal en la secundaria)."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sellos: {i:24615} (+5 % de daño) y {i:84505} (+250 de precisión y ferocidad por 4 s después de interrumpir a un enemigo)."
+   ],
+   "relic": [
+    "La {i:106221} te da rapidez cada vez que inhabilitás a un enemigo: con tus derribos y atontamientos la tenés casi siempre."
+   ]
+  }
+ }
 }
