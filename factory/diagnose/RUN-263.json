@@ -1,0 +1,1 @@
+{"id": "RUN-263", "summary": "BL-084 EQ-8 WvW (2/5): datos oficiales de Ingeniero y Guardabosques WvW", "tests": ["tests/bld-eq8w-5.smoke.cjs", "tests/bld-eq8w-6.smoke.cjs", "tests/bld-eq8w-7.smoke.cjs", "tests/bld-eq8w-8.smoke.cjs"]}
