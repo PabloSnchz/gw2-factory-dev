@@ -1,0 +1,1 @@
+{"id": "RUN-264", "summary": "BL-084 EQ-8 WvW (2/5): referencias de las notas WvW contra la API, más notas y cómo se juega", "tests": ["tests/bld-notes-refs-wvw.smoke.cjs", "tests/bld-notes.test.cjs", "tests/bld-play.test.cjs"]}
