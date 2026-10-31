@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-325",
+ "summary": "BL-084 EQ-8 (4/5) hecho: status y plan",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "44c875ea3b2084806a0975bd75d7737078dcb0c4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 (4/5): Hipnotizador y Nigromante.",
+     "text": "EQ-8 (4/5) HECHO 2026-10-31 17:41Z (Cronomante, Quimérico, Virtuoso, Trovador, Segador, Azotador, Augurador y Ritualista: 32 notas PvE en total). Sigue EQ-8 (5/5): Retornado."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-31 17:25Z",
+     "text": "Última actualización: 2026-10-31 17:41Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 (4/5): notas de Hipnotizador y Nigromante PvE; después",
+     "text": "Próxima acción: BL-084 EQ-8 (5/5): notas de Retornado PvE (las 4 que faltan para las 36); después"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 (3/5) — notas de Ladrón y Elementalista PvE. HECHO.",
+     "text": "BL-084 EQ-8 (4/5) — notas de Hipnotizador y Nigromante PvE. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`c234d3e`, 62969 B: 32 notas; nuevas Cronomante, Quimérico, Virtuoso, Trovador, Segador, Azotador, Augurador y Ritualista)\n\nAdemás: entró por PATCH-324 (agregado, insert_after); RESULT-324 dio el blob esperado y la suite verde. En Trovador, Azotador y Ritualista el código de la build deja casilleros de utilidad vacíos: la nota lo dice y remite a la guía. En el Segador no afirmo el control del segundo juego de armas porque no pude confirmar qué arma va en cada mano. RUN-257: 655 referencias, 0 sin resolver.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "958f0e3f8bac45056365de5791305f11b2f97778",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-8 en curso (3/5 hechos).",
+     "text": "EQ-8 en curso (4/5 hechos)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-8 (4/5) | HECHO 2026-10-31 17:41Z | 8 notas más (Hipnotizador y Nigromante PvE), 32 en total, por PATCH-324. RUN-257: 655 referencias, 0 sin resolver. |\n"
+    }
+   ]
+  }
+ ]
+}
