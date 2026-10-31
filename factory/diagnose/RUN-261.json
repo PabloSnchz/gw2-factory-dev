@@ -1,0 +1,1 @@
+{"id": "RUN-261", "summary": "BL-084 EQ-8 WvW (1/5): armas del equipo y su control (Guardián y Guerrero WvW)", "tests": ["tests/bld-eq8w-4.smoke.cjs"]}
