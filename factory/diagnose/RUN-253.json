@@ -1,0 +1,1 @@
+{"id": "RUN-253", "summary": "BL-084 EQ-8: glosario de bendiciones y estados inglés → castellano según la API (sonda; RUN-252 corrió sin el archivo)", "tests": ["tests/bld-eq8-boons.smoke.cjs"]}
