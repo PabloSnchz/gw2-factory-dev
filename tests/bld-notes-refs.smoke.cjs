@@ -26,10 +26,14 @@ function gearIds(g) {
   const gear = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/gear.json'), 'utf8')).gear;
   const byId = {};
   cat.builds.forEach((b) => { byId[b.id] = b; });
+  // Con muchas notas la corrida completa pasa los 120 s del diagnóstico: BLD_REFS_MODE=pve|wvw|pvp revisa solo ese modo
+  // (tests/bld-notes-refs-<modo>.smoke.cjs).
+  const MODE = process.env.BLD_REFS_MODE || '';
   let bad = 0, total = 0;
   for (const [id, n] of Object.entries(notes)) {
     const b = byId[id];
     if (!b) { console.log('✗ ' + id + ': no está en el catálogo'); bad++; continue; }
+    if (MODE && b.mode !== MODE) continue;
     const ref = await R.load(GNBldCode.decode(b.code).profession);
     const gi = gearIds(gear[id]);
     const seen = {};
