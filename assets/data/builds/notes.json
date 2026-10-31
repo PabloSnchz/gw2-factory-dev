@@ -210,6 +210,220 @@
    "relic": [
     "La {i:106221} te da rapidez cada vez que inhabilitás a un enemigo: con tus derribos y atontamientos la tenés casi siempre."
    ]
+  },
+  "sc-raids-engineer-condition-quickness-scrapper-spear": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición que da rapidez (quickness) al grupo. La pieza clave es {t:2052}: das bendiciones a los aliados cercanos cada vez que combinás un campo con un remate de explosión, salto o rotación, y tu giroscopio funcional pasa a ser un remate.",
+    "{t:1917} agranda los pozos y les da supervelocidad a los aliados en el primer pulso; {t:1860} sube tu daño de golpe si tenés estabilidad, celeridad o supervelocidad.",
+    "La quemadura sostiene el daño: {t:2006} y {t:433} la refuerzan, y la {i:104022} quema a los cercanos cuando combinás un campo acuático con un remate de salto o explosión."
+   ],
+   "cc": [
+    "Con la lanza, {s:72977} aturde 2 s y lanza (recarga 15 s). Los kits traen más control: está en la guía."
+   ],
+   "skills": [
+    "{s:5805}, {s:5812} y {s:5927} son kits: cada uno reemplaza tus armas por sus propias habilidades (granadas, bombas, lanzallamas). Las habilidades de cada kit están en la guía original.",
+    "{s:30357} es un pozo que cura a los aliados de la zona; con {t:1917} da supervelocidad en el primer pulso."
+   ],
+   "traits": [
+    "Explosivos: {t:1882} (más daño de golpe con la salud alta), {t:482} (los proyectiles lanzan cohetes y, cada tanto, un Golpe orbital) y {t:505} (las explosiones causan hemorragia y pueden incapacitar).",
+    "Armas de fuego es la línea de condición: {t:1878} (daño de condición y condiciones de pistola más largas), {t:2006} (pericia y más daño de condición al quemar) y {t:433} (quemaduras más largas y tus críticos queman).",
+    "Chatarrero: {t:1917}, {t:1860} y {t:2052}, el rasgo que hace de los remates de combo tu fuente de bendiciones."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos en la lanza: {i:44944} (+5 % de daño de condición) y {i:24605} (hemorragia a los cercanos al cambiar a esa arma, cada 9 s)."
+   ],
+   "relic": [
+    "La {i:104022} quema a los enemigos cercanos cuando combinás un campo acuático con un remate de salto o explosión. Encaja con {t:2052}, que ya te pide hacer combos."
+   ]
+  },
+  "sc-raids-engineer-condition-holosmith-pistol-pistol": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición puro (sin bendiciones para el grupo) con pistola y pistola, quemadura y hemorragia.",
+    "El holoartesano maneja calor: {s:42938} te mete en la Forja fotónica. {t:2106} hace que tus primeros ataques al entrar o salir de la forja (o al sobrecalentarte) quemen y peguen más; {t:2103} cambia la habilidad 1 de la forja por proyectiles explosivos que generan más calor.",
+    "Con {t:2064} sobrecalentarte deja de dañarte al principio y pasa a dañar a los enemigos cercanos."
+   ],
+   "cc": [
+    "La élite {s:42009} lanza a los enemigos (recarga 60 s). Los kits traen más control: está en la guía."
+   ],
+   "skills": [
+    "{s:5805}, {s:5812} y {s:5927} son kits: cada uno reemplaza tus armas por sus propias habilidades (granadas, bombas, lanzallamas). Las habilidades de cada kit están en la guía original.",
+    "{s:21659} te cura después de un momento. {s:42009} es un rayo explosivo frente a vos; si lo usás pasado el límite de calor, deja además un campo."
+   ],
+   "traits": [
+    "Explosivos: {t:1882} (más daño de golpe con la salud alta), {t:482} (los proyectiles lanzan cohetes y, cada tanto, un Golpe orbital) y {t:505} (las explosiones causan hemorragia y pueden incapacitar).",
+    "Armas de fuego es la línea de condición: {t:1878} (daño de condición y condiciones de pistola más largas), {t:2006} (pericia y más daño de condición al quemar) y {t:433} (quemaduras más largas y tus críticos queman).",
+    "Holoartesano: {t:2106}, {t:2103} y {t:2064}, los tres alrededor de la forja y el calor."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:24560} (hemorragia con críticos, cada 2 s) en la pistola principal y {i:44944} (+5 % de daño de condición) en la secundaria."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta. Con {t:505} y {i:24560} ponés hemorragias seguido."
+   ]
+  },
+  "sc-raids-engineer-condition-alacrity-mechanist-one-kit-spear": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición que aporta presteza (alacrity) al grupo; el detalle de cómo se reparte está en la guía original. Peleás junto a tu mech, que recibe tus órdenes.",
+    "Los rasgos del mechanista definen al mech: {t:2282} hace que sus ataques causen hemorragia, {t:2276} que la barrera que dan vos o tu mech otorgue también una bendición y {t:2281} que el mech dé barrera a los aliados cercanos de forma automática.",
+    "Los sellos hacen el resto: {s:63113} sube tu daño de condición con su pasiva y {s:63095} baja la recarga de los otros sellos; su activa hace disparar al mech el cañón devastador de jade."
+   ],
+   "cc": [
+    "Con la lanza, {s:72977} aturde 2 s y lanza (recarga 15 s). {s:63050} lanza a los enemigos donde aterriza el mech (recarga 50 s)."
+   ],
+   "skills": [
+    "{s:63049} los cura a vos y al mech cada segundo y, al activarlo, de golpe. {s:63111} rompe aturdimiento y, en pasivo, copia al mech las bendiciones que ganás.",
+    "{s:5805} es un kit: cambia tus armas por granadas; sus habilidades están en la guía original."
+   ],
+   "traits": [
+    "Explosivos: {t:1882} (más daño de golpe con la salud alta), {t:482} (los proyectiles lanzan cohetes y, cada tanto, un Golpe orbital) y {t:505} (las explosiones causan hemorragia y pueden incapacitar).",
+    "Armas de fuego es la línea de condición: {t:1878} (daño de condición y condiciones de pistola más largas), {t:2006} (pericia y más daño de condición al quemar) y {t:433} (quemaduras más largas y tus críticos queman).",
+    "Mechanista: {t:2282}, {t:2276} y {t:2281}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos en la lanza: {i:24605} (hemorragia a los cercanos al cambiar a esa arma) y {i:24560} (hemorragia con críticos)."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta. Tu mech también causa hemorragia con {t:2282}."
+   ]
+  },
+  "sc-fractals-engineer-power-alacrity-amalgam": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Build de fractales: daño de poder y presteza (alacrity) para el grupo. Con {t:2387} tus habilidades de transformación dan bendiciones a los aliados, más una extra según cuál uses.",
+    "{t:2349} hace que las habilidades de transformación den su bonificación de esfuerzo y que Evolucionar ({s:76642}) ya no la herede; {t:2395} te cura mientras tengas barrera y al evolucionar.",
+    "El crítico viene de Armas de fuego: {t:1914} y {t:1923} piden estar cerca del objetivo, y {t:510} sube crítico y daño crítico contra enemigos con poca salud."
+   ],
+   "cc": [
+    "{s:6161} aturde 2 s, rechaza y quita una bendición (recarga 12 s). En el rifle, {s:6154} lanza (recarga 14 s); en el martillo, {s:30713} aturde 1 s (recarga 20 s). La élite {s:76993} atrae a los enemigos cercanos."
+   ],
+   "skills": [
+    "{s:5805} y {s:5812} son kits (granadas y bombas): sus habilidades están en la guía original. {s:6161} es tu control más rápido.",
+    "{s:21659} te cura después de un momento."
+   ],
+   "traits": [
+    "Armas de fuego: {t:1914}, {t:1923} (furia con críticos de cerca; la furia te da ferocidad) y {t:510}.",
+    "Explosivos: {t:1882} (más daño con la salud alta), {t:1892} (las explosiones te dan ferocidad acumulable) y {t:1947} (más daño a enemigos con menos porcentaje de salud que vos; las explosiones te curan)."
+   ],
+   "gear": [
+    "La {i:74978} alterna ferocidad y potencia: runa de daño de golpe.",
+    "Sellos: {i:24615} (+5 % de daño) en los dos juegos, {i:24868} (+7 % de daño de golpe contra aturdidos o derribados y +3 % siempre) y {i:67341}, que suma ferocidad por cada enemigo que matás: sirve en fractales, con muchos enemigos chicos."
+   ],
+   "relic": [
+    "La {i:104800} te da volatilidad cuando combinás un campo con un remate de explosión; al llegar al tope, explota y tu daño sube. Las bombas y granadas son explosiones."
+   ]
+  },
+  "sc-raids-ranger-condition-alacrity-druid-dagger-torch-axe-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición que aporta presteza (alacrity) al grupo; el detalle de cómo se reparte está en la guía original. {t:2001} da bendiciones a los aliados dentro del radio de tus habilidades de avatar celestial ({s:31869}).",
+    "{t:2055} vuelve ofensivas las habilidades del avatar celestial y te da más fuerza astral al pegar. {t:1935} causa hemorragia a todo enemigo que inmovilizás o incapacitás: {s:12580} inmoviliza a todos los de alrededor.",
+    "Tu daño es hemorragia, veneno y quemadura: {t:1846} refuerza la hemorragia, {t:1701} suma veneno con la mascota y la antorcha quema."
+   ],
+   "cc": [
+    "Según la API, esta barra no trae control para la barra de desafío: {s:12580} inmoviliza, pero no la rompe. Ahí dependés del grupo y de tu mascota."
+   ],
+   "skills": [
+    "{s:12537} hace que tus próximos ataques causen hemorragia; {s:12496} es una trampa que envenena; {s:12498} ciega a los cercanos al invocarse y después pelea a tu lado.",
+    "{s:31914} los cura a vos y a tu mascota, y cada uno copia las bendiciones del otro."
+   ],
+   "traits": [
+    "Escaramuzas: {t:1069} (vos y tu mascota causan hemorragia con críticos) y {t:1846} (la hemorragia hace más daño). {t:1912}: más daño y duración de condición después de esquivar.",
+    "Supervivencia: {t:1099} (pericia para vos y tu mascota; tormento extra de arañas y devoradores), {t:1101} (daño de condición, más con antorcha, daga o maza, y esas armas con menos recarga) y {t:1701} (después de una habilidad de bestia, el siguiente ataque de la mascota envenena).",
+    "Druida: {t:1935}, {t:2001} y {t:2055}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:44944} (+5 % de daño de condición) en las dos armas principales, {i:24609} (veneno al cambiar a esa arma) en la antorcha y {i:24605} (hemorragia a los cercanos al cambiar a esa arma) en la daga secundaria."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta. Con {t:1069} y {t:1935} la hemorragia no falta."
+   ]
+  },
+  "sc-raids-ranger-condition-soulbeast-shortbow-dagger-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición puro (no reparte bendiciones al grupo): la bestialma se fusiona con su mascota con {s:42944} y gana sus habilidades de bestia.",
+    "{t:2071} te da bendiciones ofensivas al usar una habilidad de bestia, {t:2161} te cura un poco al envenenar y {t:2128} hace que tus posturas ({s:40498}, {s:45717}) también alcancen a los aliados cercanos, más cortas.",
+    "Esquivar te da más daño y duración de condición ({t:1912}), que además hace perforar al arco corto."
+   ],
+   "cc": [
+    "En el arco corto, {s:12508} atonta y aturde 2 s (recarga 20 s). {s:12476} lanza a los enemigos (recarga 25 s). Las habilidades de bestia de tu mascota suman control según cuál lleves: está en la guía."
+   ],
+   "skills": [
+    "{s:40498}: mientras dura, pegar te da poder y envenena. {s:45717}: mientras dura, tus golpes lanzan un segundo ataque.",
+    "{s:12537} hace que tus próximos ataques causen hemorragia; {s:12476} es una trampa que causa hemorragia y lanza. {s:31914} los cura a vos y a tu mascota."
+   ],
+   "traits": [
+    "Escaramuzas: {t:1069} (vos y tu mascota causan hemorragia con críticos) y {t:1846} (la hemorragia hace más daño). {t:1912} (más condición al esquivar).",
+    "Supervivencia: {t:1099} (pericia para vos y tu mascota; tormento extra de arañas y devoradores), {t:1101} (daño de condición, más con antorcha, daga o maza, y esas armas con menos recarga) y {t:1701} (después de una habilidad de bestia, el siguiente ataque de la mascota envenena).",
+    "Bestialma: {t:2071}, {t:2161} y {t:2128}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: en el arco corto, {i:24560} (hemorragia con críticos) y {i:44950} (+10 % de duración de condición); en las dagas, {i:44944} (+5 % de daño de condición) y {i:44950}."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta."
+   ]
+  },
+  "sc-raids-ranger-condition-quickness-untamed-axe-dagger-dagger-torch": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición que da rapidez (quickness) al grupo. {t:2271} hace que tus habilidades de emboscada desatada den bendiciones a los aliados cercanos y reinicia Potencia desatada al cambiar de arma.",
+    "El indómito alterna quién está desatado: vos ({s:63147}) o tu mascota ({s:63344}). Sus órdenes son {s:63209}, {s:63258} y {s:63094}; {t:2301} hace que {s:63209} pegue más y ciegue.",
+    "{t:1064} te da rapidez a vos al cambiar de arma y acelera la siguiente habilidad de arma."
+   ],
+   "cc": [
+    "Según la API, esta barra no trae control para la barra de desafío: {s:12580} inmoviliza, pero no la rompe. Ahí dependés del grupo y de tu mascota."
+   ],
+   "skills": [
+    "{s:12537} hace que tus próximos ataques causen hemorragia; {s:12496} es una trampa que envenena; {s:12498} ciega a los cercanos al invocarse.",
+    "{s:12580} atrapa a los enemigos de alrededor con hiedras: hemorragia e inmovilización. {s:31914} los cura a vos y a tu mascota."
+   ],
+   "traits": [
+    "Escaramuzas: {t:1069} (vos y tu mascota causan hemorragia con críticos) y {t:1846} (la hemorragia hace más daño). {t:1064} (rapidez al cambiar de arma).",
+    "Supervivencia: {t:1099} (pericia para vos y tu mascota; tormento extra de arañas y devoradores), {t:1101} (daño de condición, más con antorcha, daga o maza, y esas armas con menos recarga) y {t:1701} (después de una habilidad de bestia, el siguiente ataque de la mascota envenena).",
+    "Indómito: {t:2301}, {t:2278} (con {s:63258} convertís bendiciones enemigas en condiciones y la emboscada desatada quita bendiciones) y {t:2271}."
+   ],
+   "gear": [
+    "La {i:67339} es la runa de condición: daño de condición y duración de condición.",
+    "Sellos: {i:44944} (+5 % de daño de condición) y {i:44950} (+10 % de duración de condición)."
+   ],
+   "relic": [
+    "La {i:100153}: con 6 o más hemorragias en el objetivo, cada hemorragia nueva también quema y atormenta."
+   ]
+  },
+  "sc-raids-ranger-power-galeshot-longbow-axe-axe": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder puro con arco largo y dos hachas. El vendaval juega con su arco ciclónico ({s:76787}) y con borrascas en la barra.",
+    "{t:2336} hace que Fuerza del viento acumule velocidad y daño, y Ojodehalcón convierte eso en una bonificación mayor por un rato. {t:2396} te devuelve flechas cada vez que vos o tu mascota inhabilitan a un enemigo.",
+    "Controlar paga: {t:996} sube tu daño de golpe contra enemigos inhabilitados o con barra de desafío y la {i:103574} sube tu daño después de incapacitar."
+   ],
+   "cc": [
+    "En el arco largo, {s:12511} rechaza (recarga 15 s). La élite {s:76979} lanza a los enemigos a su paso (recarga 50 s)."
+   ],
+   "skills": [
+    "Borrascas: {s:77264} atraviesa a tu objetivo y pega más a enemigos vulnerables; {s:76757} congela los proyectiles que la cruzan; {s:76979} es un tornado que arrastra enemigos.",
+    "{s:12491} sube tu ferocidad y la de tu mascota en pasivo; su activa enraíza a los cercanos. {s:77271} cura y les da supervelocidad a vos y a tu mascota."
+   ],
+   "traits": [
+    "Puntería: {t:1014} (poder según la salud del enemigo), {t:1001} (más daño contra enemigos vulnerables) y {t:996}.",
+    "Escaramuzas: {t:1069}, {t:1700} (poder para vos y la mascota) y {t:1888} (la furia te da ferocidad y crítico). Vendaval: {t:2360}, {t:2396} y {t:2336}."
+   ],
+   "gear": [
+    "La {i:24836} es la runa de poder: potencia y ferocidad.",
+    "Sellos: en el arco largo, {i:24615} (+5 % de daño) y {i:24868} (+7 % contra aturdidos o derribados y +3 % siempre); en las hachas, {i:24615} y {i:24597} (daño y congelación a los cercanos al cambiar a esa arma)."
+   ],
+   "relic": [
+    "La {i:103574} sube tu daño de golpe por un rato después de incapacitar a un enemigo; tus empujes y lanzamientos la activan."
+   ]
   }
  }
 }
