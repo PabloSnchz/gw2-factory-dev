@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-338",
+ "summary": "BL-084 EQ-8 WvW (5/5): docs (status y plan) — WvW completo, 72 notas; sigue PvP",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "231b48962591ac4313e6c21c5d8d069b662b68ef",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 WvW (5/5): Retornado.",
+     "text": "EQ-8 WvW (5/5) HECHO 2026-10-31 21:45Z (Heraldo, Renegado, Justiciero y Conductor de WvW: 72 notas en total, las 36 de WvW completas). Sigue EQ-8 PvP (32 notas)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-31 21:10Z",
+     "text": "Última actualización: 2026-10-31 21:45Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 WvW (5/5): notas de Retornado WvW (las 4 que faltan para las 36 de WvW); después (4/5) Hipnotizador y Nigromante, (5/5) Retornado; luego PvP (32) y EQ-9 (AE2 con el equipo real).",
+     "text": "Próxima acción: BL-084 EQ-8 PvP: las 32 notas de PvP (Snow Crows, todas con equipo: amuleto, runa, reliquia y sigilos), por tandas de 8; después EQ-9 (AE2 con el equipo real)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 WvW (4/5) — notas de Hipnotizador y Nigromante WvW. HECHO.",
+     "text": "BL-084 EQ-8 WvW (5/5) — notas de Retornado WvW. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`d05c057`, 141507 B: 72 notas; nuevas Heraldo, Renegado, Justiciero y Conductor de WvW; las 36 de WvW completas), por PATCH-337.\n\nAdemás: RUN-270: 792 referencias WvW (36 notas), 0 sin resolver; notes, play y size-budget verdes. Sondas RUN-269 (tests/bld-eq8w-17..18.smoke.cjs). Borradas las 19 sondas WvW (tests/bld-eq8w-0..18.smoke.cjs); queda tests/bld-eq8w-lib.cjs para las sondas de PvP. En Heraldo y Justiciero el catálogo dice arco corto y martillo, pero el equipo es mandoble y lanza: las notas siguen al equipo. Las utilidades de cada leyenda salen de la línea LEY de la sonda (la paleta de la barra resuelve a Razah). De la lanza cité solo las habilidades en tierra.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "a4cc1d215f28a09f30c00c1918675d9fb9d958dc",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "WvW en curso (4/5); falta PvP.",
+     "text": "EQ-8 WvW hecho (36 notas, 72 en total); falta PvP."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-8 WvW (5/5) | HECHO 2026-10-31 21:45Z | 4 notas de Retornado WvW (Heraldo, Renegado, Justiciero y Conductor): las 36 de WvW completas, 72 en total, PATCH-337 (`d05c057`, 141507 B). RUN-270: 792 referencias WvW, 0 sin resolver. Sondas WvW borradas. Sigue PvP (32). |"
+    }
+   ]
+  }
+ ]
+}
