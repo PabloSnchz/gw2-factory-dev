@@ -1,0 +1,1 @@
+{"id": "RUN-265", "summary": "BL-084 EQ-8 WvW (3/5): datos oficiales de Ladrón y Elementalista WvW", "tests": ["tests/bld-eq8w-9.smoke.cjs", "tests/bld-eq8w-10.smoke.cjs", "tests/bld-eq8w-11.smoke.cjs", "tests/bld-eq8w-12.smoke.cjs"]}
