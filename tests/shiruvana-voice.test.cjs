@@ -53,6 +53,22 @@ test('es el mismo avatar que aprobó Pablo para el panel', () => {
   assert.equal(S.AVATAR, m[1]);
 });
 
+test('una cara por tipo de mensaje (BL-087): saluda y recomienda con la principal, explica y advierte con la suya', () => {
+  const S = load();
+  const src = (kind) => find(S.voice({ kind, text: 'x', doc: makeDoc() }), 'shv-voice__avatar').src;
+  assert.equal(src('saluda'), S.AVATAR);
+  assert.equal(src('recomienda'), S.AVATAR);
+  assert.equal(src('explica'), S.FACES.explica);
+  assert.equal(src('advierte'), S.FACES.advierte);
+  assert.equal(src('cualquiera'), S.FACES.explica, 'tipo desconocido: la cara de explica');
+  const all = Object.values(S.FACES);
+  assert.equal(new Set(all).size, 3, 'tres caras distintas');
+  for (const f of all) {
+    assert.match(f, /^data:image\/webp;base64,UklGR[A-Za-z0-9+/]+=*$/);
+    assert.ok(f.length < 8000, 'cada cara pesa menos de 8 KB embebida');
+  }
+});
+
 test('un avatar por sección: los mensajes siguientes van sin imagen', () => {
   const S = load();
   const box = S.voice({ kind: 'explica', text: 'Segundo', avatar: false, doc: makeDoc() });

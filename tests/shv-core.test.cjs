@@ -87,7 +87,7 @@ test('mi voz dibuja «Lo sé por: …» como texto, y sin basis no agrega la lí
   assert.equal(find(box, 'shv-voice__basis').textContent, 'Lo sé por: <b>tu Cartera</b> · hoy 14:05');
   assert.equal(find(w.Shiruvana.voice({ kind: 'explica', text: 'x', doc }), 'shv-voice__basis'), undefined);
   assert.match(w.Shiruvana.CSS, /\.shv-voice__basis\{[^}]*color:var\(--tx-2/);
-  assert.equal(w.Shiruvana.version, '1.1.0');
+  assert.equal(w.Shiruvana.version, '1.2.0');
 });
 
 test('render: voz + fundamento + botón que atiende el módulo dueño (o enlace)', () => {
