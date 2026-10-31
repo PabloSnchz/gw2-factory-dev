@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-323",
+ "summary": "BL-084 EQ-8 (3/5) hecho: status y plan",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "e8f8d4c706fa6659b772b853e8d31231e1330510",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 (3/5): Ladrón y Elementalista.",
+     "text": "EQ-8 (3/5) HECHO 2026-10-31 17:25Z (Temerario, Certero, Espectro, Anticuario de mundo abierto, Tempestad, Tejedor, Catalizador y Evocador de mundo abierto: 24 notas PvE en total). Sigue EQ-8 (4/5): Hipnotizador y Nigromante."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-31 16:55Z",
+     "text": "Última actualización: 2026-10-31 17:25Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 (3/5): notas de Ladrón y Elementalista PvE; después",
+     "text": "Próxima acción: BL-084 EQ-8 (4/5): notas de Hipnotizador y Nigromante PvE; después"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 (2/5) — notas de Ingeniero y Guardabosques PvE. HECHO.",
+     "text": "BL-084 EQ-8 (3/5) — notas de Ladrón y Elementalista PvE. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`9d8c74f`, 47915 B: 24 notas; nuevas Temerario, Certero, Espectro, Anticuario, Tempestad, Tejedor, Catalizador y Evocador)\n\nAdemás: como notes.json ya pasa los 40 KB, la tanda entró por el canal de parches como un agregado (PATCH-322, insert_after), no como archivo entero; RESULT-322 dio el blob esperado y la suite verde. La API no trae en castellano la descripción de tres habilidades del Anticuario: lo digo y remito a la guía. RUN-256: 487 referencias, 0 sin resolver.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "a930a1cfb7492eae32517ec59a42fdf34da8e34c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-8 en curso (2/5 hechos).",
+     "text": "EQ-8 en curso (3/5 hechos)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\nCambios respecto del plan:",
+     "text": "| EQ-8 (3/5) | HECHO 2026-10-31 17:25Z | 8 notas más (Ladrón y Elementalista PvE), 24 en total, por PATCH-322. RUN-256: 487 referencias, 0 sin resolver. |\n"
+    }
+   ]
+  }
+ ]
+}
