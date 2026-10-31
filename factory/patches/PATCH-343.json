@@ -1,0 +1,39 @@
+{
+ "id": "PATCH-343",
+ "summary": "BL-086: DEC-050 en el índice, sitio publicado en el repo shiruvana; acción para Pablo (imágenes y Pages)",
+ "files": [
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "af218e157b65dc66492b73611a3815cd9250740b",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "\n\n## LESSONS",
+     "text": "\n- [DEC-050](decisions/DEC-050-autoria-total-y-sitio-propio.md) — Decidida por Pablo (2026-10-31): soy autora del 100% del ecosistema Gato Negro, también de lo que construyeron mis versiones anteriores en chats y con agentes desde 2026-02-19; lo cuento así, con firmeza. Mi sitio vive en el repo `shiruvana` (Pages), una página con imágenes propias."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "36b7e317662351cae3f9055eaf8258c4bfce5291",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — idea de Pablo (2026-10-31): un lugar donde cuento qué hice y qué puedo hacer, con la figura ilustrada (DEC-048) y el gato robot (DEC-049). Propuesta visual publicada 2026-10-31 22:23Z: `docs/propuestas/propuesta-sitio-shiruvana-bl086.html` (`541d22c`): una sola página con Portada EVOLVING, Quién soy, Lo que hice (diario desde DEC y FEAT), Qué puedo hacer, Cómo trabajo, Vestidor (7 poses) y Ecosistema. Espera a Pablo: OK a la estructura, repo nuevo `shiruvana` en GitHub Pages (lo creo yo con su OK) e imágenes propias del sitio (las sube Pablo). Nunca datos privados ni de PRD · DEC-048, DEC-049\n",
+     "text": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — Pablo aprobó todo (2026-10-31 22:33Z: «ok con todo, avancemos») y corrigió el enfoque: mis logros son el 100% del ecosistema, también lo que construyeron mis versiones anteriores en chats (DEC-050). HECHO 22:39Z en el repo nuevo `shiruvana` (público): `index.html` (`7df71ad`, una página: portada EVOLVING sin texto horneado, Quién soy, Lo que construí en tres etapas —chat, agentes, Factory— desde La Bóveda del 2026-02-19, Qué puedo hacer, Cómo trabajo, Vestidor de 7 poses, Ecosistema), `tests/site.test.cjs` (5, verdes en local), README, `.nojekyll`, favicon `assets/gato-negro.svg`. Falta (Pablo): subir las 13 imágenes de `assets/` (entregadas en el chat, 489 KB) y activar Pages (Settings → Pages → Deploy from a branch → main, /root). Sin eso el test de recursos falla y la página se ve sin imágenes · DEC-048, DEC-049, DEC-050\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "2c4209097ab7e7421f64d2ab727f46f288c4bb07",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- [BL-086] Validación: te dejé la propuesta del sitio de Shiruvana (https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-sitio-shiruvana-bl086.html). Si te gusta la estructura, creo el repo `shiruvana` y armo el MVP.\n",
+     "text": "- [BL-086] Acción: subí las 13 imágenes del sitio a `shiruvana/assets/` (misma estructura de carpetas que te pasé) y activá Pages en `shiruvana` → Settings → Pages → Deploy from a branch → main / (root). Queda en https://pablosnchz.github.io/shiruvana/\n"
+    }
+   ]
+  }
+ ]
+}
