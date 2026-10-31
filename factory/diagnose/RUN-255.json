@@ -1,0 +1,1 @@
+{"id": "RUN-255", "summary": "BL-084 EQ-8 (2/5): referencias de las notas contra la API y suite de la ficha", "tests": ["tests/bld-notes-refs.smoke.cjs", "tests/bld-notes.test.cjs", "tests/bld-play.test.cjs", "tests/bld-sheet.test.cjs"]}
