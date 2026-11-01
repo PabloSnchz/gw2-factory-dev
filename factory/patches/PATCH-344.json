@@ -1,0 +1,28 @@
+{
+ "id": "PATCH-344",
+ "summary": "BL-086: Vestidor de cuerpo entero validado; cuerpo entero en Quién soy y Cómo trabajo; status con la validación pendiente",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "27b7b1ac018a585e78f314b4c2f4006c414719b9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — Pablo aprobó todo (2026-10-31 22:33Z: «ok con todo, avancemos») y corrigió el enfoque: mis logros son el 100% del ecosistema, también lo que construyeron mis versiones anteriores en chats (DEC-050). HECHO 22:39Z en el repo nuevo `shiruvana` (público): `index.html` (`7df71ad`, una página: portada EVOLVING sin texto horneado, Quién soy, Lo que construí en tres etapas —chat, agentes, Factory— desde La Bóveda del 2026-02-19, Qué puedo hacer, Cómo trabajo, Vestidor de 7 poses, Ecosistema), `tests/site.test.cjs` (5, verdes en local), README, `.nojekyll`, favicon `assets/gato-negro.svg`. Falta (Pablo): subir las 13 imágenes de `assets/` (entregadas en el chat, 489 KB) y activar Pages (Settings → Pages → Deploy from a branch → main, /root). Sin eso el test de recursos falla y la página se ve sin imágenes · DEC-048, DEC-049, DEC-050\n",
+     "text": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — Pablo aprobó todo (2026-10-31 22:33Z) y corrigió el enfoque: mis logros son el 100% del ecosistema (DEC-050). Repo público `shiruvana` en Pages: https://pablosnchz.github.io/shiruvana/ (Pablo subió imágenes y activó Pages 23:01Z). 2026-11-01: Pablo generó en Gemini 18 imágenes de cuerpo entero (9 poses de trabajo con la ropa oficial + 9 vestuarios: overol, analista, streamer, ingeniera de fantasía, gala, neón, Halloween, pijama, playa); las revisé y procesé (webp 640x954, fondo negro, correcciones de fondo y manos), él las subió a `assets/shiruvana/`. Vestidor nuevo publicado 00:33Z (`8dd2fcf`): tres filas —De trabajo, Vestuarios (2:3 sin recorte, clic amplía) y Mis caras en las apps—; Pablo lo VALIDÓ 00:35Z («ok vestidor»). 00:40Z (`12967de`): cuerpo entero también fuera del Vestidor —«Me presento» en Quién soy y «En camino» en Cómo trabajo—. `tests/site.test.cjs` 8 verdes, mutaciones detectadas (5/5 y 5/5). Espera validación visual de Pablo del último cambio · DEC-048, DEC-049, DEC-050\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "581bc6c74143db4e77dc0412e2c5f0ef4348b936",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- [BL-086] Acción: subí las 13 imágenes del sitio a `shiruvana/assets/` (misma estructura de carpetas que te pasé) y activá Pages en `shiruvana` → Settings → Pages → Deploy from a branch → main / (root). Queda en https://pablosnchz.github.io/shiruvana/\n",
+     "text": "- [BL-086] Validación: en https://pablosnchz.github.io/shiruvana/ ahora «Quién soy» muestra «Me presento» y «Cómo trabajo» muestra «En camino», de cuerpo entero y sin recortes (el Vestidor ya lo validaste). Miralo también en el celular.\n"
+    }
+   ]
+  }
+ ]
+}
