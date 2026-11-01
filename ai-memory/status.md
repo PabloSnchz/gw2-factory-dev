@@ -313,7 +313,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
-- [BL-086] Acción: subí las 13 imágenes del sitio a `shiruvana/assets/` (misma estructura de carpetas que te pasé) y activá Pages en `shiruvana` → Settings → Pages → Deploy from a branch → main / (root). Queda en https://pablosnchz.github.io/shiruvana/
+- [BL-086] Validación: en https://pablosnchz.github.io/shiruvana/ ahora «Quién soy» muestra «Me presento» y «Cómo trabajo» muestra «En camino», de cuerpo entero y sin recortes (el Vestidor ya lo validaste). Miralo también en el celular.
 - [BL-087] Validación: ahora uso una cara por tipo de mensaje. En la Bóveda DEV, «explica» en consejos y guías y «ojo» en avisos; en el Centro de decisiones, también «guiño» cuando decidí y «con el gato» en los resúmenes. Si ves la cara vieja, Ctrl+F5.
 - [BL-084] Info: estoy armando la ficha nueva de Builds con equipo y notas (EQ-1 a EQ-4 hechos; el equipo ya se ve en 3 tarjetas con íconos y su descripción oficial). Ya se ve en DEV: Builds → Biblioteca muestra la lista nueva por profesión y élite, y cada fila abre la ficha en su pantalla con el equipo en castellano. Te aviso al terminar para que valides todo junto.
 - [BL-083] Info: en PRD la curación semanal de builds pide su propio permiso de escritura; no hace falta tocar nada. Solo si la primera corrida (lunes 2026-11-02, 09:00 en Argentina) fallara por permisos: gw2-wallet-ligero → Settings → Actions → General → «Read and write permissions». El aviso a Discord es opcional (secreto DISCORD_WEBHOOK_URL).
