@@ -1,6 +1,7 @@
 /*!
  * js/bld-play.js — Builds: «Cómo se juega» en la ficha (BL-084 EQ-7)
- * Versión: 1.1.0 (2026-10-31) · EQ-8: en WvW y PvP el control se titula «Control (contra jugadores)», porque la barra de
+ * Versión: 1.2.0 (2026-11-02) · EQ-8 PvP: fuera de PvE, el control avisa al pie que duraciones y recargas son las de
+ *          PvE (la API oficial no separa los valores por modo) · 1.1.0 (2026-10-31) · EQ-8: en WvW y PvP el control se titula «Control (contra jugadores)», porque la barra de
  *          desafío es solo de PvE; el modo llega de la ficha (m.mode) · antes 1.0.0 (2026-10-30)
  *
  * La tercera sección de la ficha, como «Rotation & Extras» de Snow Crows pero con mis palabras (DEC-046):
@@ -14,13 +15,16 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.1.0';
+  var VERSION = '1.2.0';
   // [clave, título, lista numerada]
   var PARTS = [['concepts', 'Conceptos', false], ['opener', 'Apertura', true], ['loop', 'Bucle', true], ['cc', 'Control (barra de desafío)', false]];
   var KEYS = PARTS.map(function (p) { return p[0]; });
   var TOKEN = /\{([sti]):(\d+)\}/g;
   // EQ-8: contra jugadores (WvW y PvP) no hay barra de desafío: el control se titula distinto.
   var CC_PVP = 'Control (contra jugadores)';
+  // La API publica los valores de PvE y no los separa por modo: en WvW y PvP lo aviso al pie del control.
+  var CC_SPLIT = 'Duraciones y recargas: las de la API oficial, que publica los valores de PvE; en WvW y PvP algunas son distintas.';
+  function vsPlayers(mode) { return mode === 'wvw' || mode === 'pvp'; }
   function titleOf(p, mode) { return p[0] === 'cc' && (mode === 'wvw' || mode === 'pvp') ? CC_PVP : p[1]; }
 
   function S() { return root.GNBldShow; }
@@ -53,7 +57,8 @@
     var items = xs.map(function (x) { return inline(x, m.ref, m.gear); });
     var body = p[2] ? '<ol class="bld-pl-seq">' + items.map(function (h) { return '<li>' + h + '</li>'; }).join('') + '</ol>'
       : items.map(function (h) { return '<p>' + h + '</p>'; }).join('');
-    return '<section class="bld-pl" data-play="' + p[0] + '" aria-labelledby="bldPl-' + p[0] + '"><h5 id="bldPl-' + p[0] + '">' + esc(titleOf(p, m.mode)) + '</h5>' + body + '</section>';
+    return '<section class="bld-pl" data-play="' + p[0] + '" aria-labelledby="bldPl-' + p[0] + '"><h5 id="bldPl-' + p[0] + '">' + esc(titleOf(p, m.mode)) + '</h5>' + body +
+      (p[0] === 'cc' && vsPlayers(m.mode) ? '<p class="bld-muted bld-pl-split"><small>' + esc(CC_SPLIT) + '</small></p>' : '') + '</section>';
   }
   function sourceHTML(src, has) {
     if (!src || !src.url) return '';
@@ -95,7 +100,7 @@
   }
 
   var api = { version: VERSION, KEYS: KEYS, html: html, hasPlay: hasPlay, ensureCss: ensureCss,
-    _pure: { PARTS: PARTS, titleOf: titleOf, CC_PVP: CC_PVP, partOf: partOf, inline: inline, partHTML: partHTML, sourceHTML: sourceHTML, CSS: CSS, TOKEN: TOKEN } };
+    _pure: { PARTS: PARTS, titleOf: titleOf, CC_PVP: CC_PVP, CC_SPLIT: CC_SPLIT, vsPlayers: vsPlayers, partOf: partOf, inline: inline, partHTML: partHTML, sourceHTML: sourceHTML, CSS: CSS, TOKEN: TOKEN } };
   root.GNBldPlay = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);

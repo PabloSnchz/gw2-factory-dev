@@ -24,8 +24,8 @@ const NOTE = { patch: '2026-09-29', concepts: ['Vivís de {t:1510}: pegá de fla
 
 test('versión en la cabecera, en modules.json después de las notas y antes de la ficha; sin estado guardado', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-play.js'), 'utf8');
-  assert.match(src, /Versión: 1\.1\.0 /);
-  assert.equal(PL.version, '1.1.0');
+  assert.match(src, /Versión: 1\.2\.0 /);
+  assert.equal(PL.version, '1.2.0');
   assert.doesNotMatch(src, /localStorage\./);
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   const i = mods.indexOf('js/bld-play.js');
@@ -74,6 +74,14 @@ test('EQ-8: en WvW y PvP el control es contra jugadores; en PvE (o sin modo), la
   assert.equal(t('wvw'), 'Control (contra jugadores)');
   assert.equal(t('pvp'), 'Control (contra jugadores)');
   assert.equal(P.titleOf(P.PARTS[0], 'pvp'), 'Conceptos', 'los demás títulos no cambian');
+});
+
+test('EQ-8 PvP: en WvW y PvP el control avisa que duraciones y recargas son las de PvE; en PvE no', () => {
+  const h = (mode) => PL.html({ note: NOTE, loaded: true, ref: REF, gear: GEAR, source: SRC, mode });
+  ['wvw', 'pvp'].forEach((m) => assert.match(h(m), /data-play="cc"[\s\S]*<p class="bld-muted bld-pl-split"><small>Duraciones y recargas: las de la API oficial, que publica los valores de PvE; en WvW y PvP algunas son distintas\.<\/small><\/p><\/section>/, m));
+  ['pve', undefined].forEach((m) => assert.doesNotMatch(h(m), /bld-pl-split/, String(m)));
+  assert.doesNotMatch(PL.html({ note: { concepts: ['x'] }, loaded: true, mode: 'pvp' }), /bld-pl-split/, 'sin control, sin aviso');
+  assert.equal(P.vsPlayers('pvp') && P.vsPlayers('wvw') && !P.vsPlayers('pve'), true);
 });
 
 test('sin bld-notes, el texto sigue escapado y las referencias quedan como #ID', () => {
