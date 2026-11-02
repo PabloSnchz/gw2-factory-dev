@@ -2064,6 +2064,213 @@
    "relic": [
     "La {i:104994} te da poder extra cada vez que te das poder a vos mismo y más crítico cuando llegás al umbral de poder."
    ]
+  },
+  "sc-pvp-engineer-power-scrapper-hammer": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el chatarrero, con martillo. El catálogo nombra rifle, pero el equipo trae martillo: la nota sigue al equipo.",
+    "Casi toda la barra son giroscopios, que son pozos: la curación {s:30357}, {s:31248}, {s:29921} y la élite {s:30815}, que da sigilo a los aliados de la zona. Con {t:1917} los pozos son más grandes y dan supervelocidad a los aliados en el primer pulso, y la {i:100450} te da rapidez cada vez que usás uno.",
+    "{t:2052} da bendiciones a los aliados cercanos cuando combinás un campo con una descarga, un salto o un remate de rotación. {t:1947} pega más a los enemigos con menos porcentaje de salud que vos.",
+    "El {s:5805} cambia tu arma por granadas; qué granadas usar y cuándo está en la guía original."
+   ],
+   "cc": [
+    "{s:31248} aturde a los enemigos cuando explota, y en el martillo {s:30713} también aturde.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Cuatro giroscopios y un kit. Tu mecánica es el giroscopio funcional ({s:56920}, F5)."
+   ],
+   "traits": [
+    "Explosivos: {t:514} (granadas más grandes, y una salva menor al curarte), {t:1892} (las explosiones te dan ferocidad) y {t:1947}.",
+    "Herramientas: {t:1997} (al curarte activás unas gafas de apoyo menores), {t:1832} (más daño cuando tu aguante no está lleno) y {t:523} (más regeneración de aguante, y esquivar recarga el cinturón).",
+    "Chatarrero: {t:1917}, {t:1954} (regenerás salud con celeridad o supervelocidad) y {t:2052}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:85527} suma potencia, precisión y vitalidad.",
+    "Un solo juego de armas, el martillo, con {i:21152} (aguante al cambiar de arma) y {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:100450} te da rapidez cada vez que usás un pozo: encaja con los cuatro giroscopios."
+   ]
+  },
+  "sc-pvp-engineer-power-holosmith-shortbow": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el holoartesano, con arco corto.",
+    "{s:42938} (F5) te mete en la forja fotónica, que acumula calor. Con {t:2157}, al salir de la forja tus condiciones se vuelven bendiciones según tu temperatura. La curación {s:40507}, {s:43739} y la élite {s:42009} son habilidades de exceso.",
+    "Esquivar es parte del daño: {t:2066} ataca con calor a los cercanos y te da vigor al esquivar, y la {i:100345} asegura un crítico en el siguiente golpe tras esquivar o evadir."
+   ],
+   "cc": [
+    "{s:5825} derriba con el aceite que dejás atrás; la élite {s:42009} lanza a los enemigos; en el arco corto, {s:71888} aturde.",
+    "Contra el control: {s:5865} rompe aturdimiento, te da resistencia y te quita la ceguera y las condiciones de daño.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:40507} (te curás y congelás a los enemigos cercanos), {s:5865}, {s:5825}, {s:43739} (una barrera que bloquea los ataques contra vos y tus aliados) y la élite {s:42009}."
+   ],
+   "traits": [
+    "Explosivos: {t:525} (furia al pegar con una explosión), {t:1944} (barrera, y vitalidad según tu poder) y {t:1947} (más daño a enemigos con menos porcentaje de salud que vos).",
+    "Herramientas: {t:532} (un rayo con cada habilidad del cinturón), {t:1832} (más daño cuando tu aguante no está lleno) y {t:523} (más regeneración de aguante, y esquivar recarga el cinturón).",
+    "Holoartesano: {t:2157}, {t:2091} (el holosalto quita condiciones de movimiento, da supervelocidad e incapacita) y {t:2066}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:71490} suma potencia, dureza y vitalidad.",
+    "Un solo juego de armas, el arco corto, con {i:21152} (aguante al cambiar de arma) y {i:81222} (poder al golpear)."
+   ],
+   "relic": [
+    "La {i:100345}: después de esquivar en combate o evadir un ataque, tu siguiente golpe es crítico seguro."
+   ]
+  },
+  "sc-pvp-engineer-hybrid-amalgam-spear": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS híbrido (golpe y condiciones) para PvP con la amalgama, con lanza.",
+    "Las posturas de la amalgama son casi toda la barra: la curación {s:76738}, {s:76908}, {s:77018} y la élite {s:76993}. Tu mecánica es {s:76642} (F5); con {t:2334} tiene dos cargas y da más atributos.",
+    "{t:2366} convierte tus condiciones en bendiciones al usar una postura o evolucionar, y {t:2383} hace que las habilidades de amalgama envenenen. La {i:106206} te cura con cada golpe."
+   ],
+   "cc": [
+    "En la lanza, {s:72977} aturde y lanza. La élite {s:76993} atrae a los enemigos cercanos.",
+    "Contra el control: {s:77018} rompe aturdimiento y quita las condiciones de movimiento; {s:76908} te hace evadir todos los ataques un rato.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Tres posturas de amalgama, la élite {s:76993} y el {s:5805}; qué granadas usar y cuándo está en la guía original."
+   ],
+   "traits": [
+    "Armas de fuego: {t:1930} (poder al causar hemorragia), {t:1923} (furia con críticos a corta distancia; la furia da ferocidad) y {t:433} (quemaduras más largas y quemadura con críticos).",
+    "Explosivos: {t:514} (granadas más grandes), {t:1944} (barrera, y vitalidad según tu poder) y {t:505} (las explosiones pueden incapacitar y causar hemorragia).",
+    "Amalgama: {t:2366}, {t:2383} y {t:2334}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (tirano: 1000 de potencia, 1000 de daño de condición, 500 de dureza y 500 de precisión), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:79983} suma potencia, daño de condición y 25 % de velocidad de movimiento.",
+    "Un solo juego de armas, la lanza, con {i:21152} (aguante al cambiar de arma) y {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:106206} succiona salud cada vez que golpeás a un enemigo."
+   ]
+  },
+  "sc-pvp-ranger-cc-druid-hammer-mace-mace": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Druida de poder y control para PvP: martillo en un juego y dos mazas en el otro. Tu valor es inhabilitar al rival una y otra vez.",
+    "Cada inhabilitación paga: {t:1094} te hace robar salud cuando vos o tu mascota inhabilitan a un enemigo, {t:1935} causa hemorragia al que inmovilizás o incapacitás, y la {i:102245} sube ese robo de vida y tu curación. {i:81221} te da poder cada vez que interrumpís.",
+    "{s:31869} (F5) te pasa a la forma de avatar celestial; con {t:2055} sus habilidades pegan más, y con {t:2053} al salir das supervelocidad y sigilo a los aliados cercanos.",
+    "Las mascotas de la build están en la ficha; cuándo cambiar de una a otra lo explica la guía original."
+   ],
+   "cc": [
+    "Mucho control con las armas: en la maza, {s:71963} aturde y {s:71841} atonta; en el martillo, {s:69212} derriba y {s:69262} atonta. {s:31746} atonta a los enemigos.",
+    "Contra el control: {s:12631} rompe el aturdimiento de tus aliados y te da protección y barrera; {s:31746} también puede romper el aturdimiento de los aliados; en la maza, {s:71903} te da estabilidad.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:12489} (una trampa que da regeneración y quita condiciones), {s:31746}, {s:12631}, {s:12500} (ni vos ni tu mascota reciben daño de los ataques un rato) y la élite {s:31677}, que deja a tus aliados sin recibir daño."
+   ],
+   "traits": [
+    "Supervivencia: {t:1086} (regeneración al recibir hemorragia, veneno o quemadura), {t:2032} (más daño dado y menos recibido) y {t:1094}.",
+    "Magia de la naturaleza: {t:978} (regeneración a los cercanos al curarte), {t:1054} (esquivar te quita una condición y te cura) y {t:1697} (las habilidades de bestia curan a los aliados cercanos).",
+    "Druida: {t:1935}, {t:2053} y {t:2055}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (hereje: 1000 de potencia, 1000 de precisión, 500 de ferocidad y 500 de curación), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21214} suma potencia y dureza.",
+    "En el martillo, {i:81221} (poder al interrumpir) y {i:81254} (quitás una condición al cambiar); en las mazas, {i:21152} (aguante al cambiar) y {i:81268} (vulnerabilidad en el siguiente golpe)."
+   ],
+   "relic": [
+    "La {i:102245} sube tu daño por robo de vida y tu curación: va con {t:1094}, que te hace robar salud con cada inhabilitación."
+   ]
+  },
+  "sc-pvp-ranger-condition-soulbeast-shortbow-dagger-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condiciones para PvP con el bestialma: arco corto en un juego y dos dagas en el otro.",
+    "{s:42944} (F5) te fusiona con tu mascota; con {t:2155} te curás al usar una habilidad fusionada y podés cambiar de mascota sin salir de la fusión. {t:2071} te da bendiciones ofensivas con cada habilidad de bestia.",
+    "El veneno es tu eje: {t:1701} hace que el siguiente ataque de la mascota envenene después de una habilidad de bestia, y {t:2161} te hace robar salud cada vez que envenenás.",
+    "Las mascotas de la build están en la ficha; cuándo cambiar de una a otra lo explica la guía original."
+   ],
+   "cc": [
+    "En el arco corto, {s:12508} atonta y aturde. Las habilidades de bestia de cada mascota tienen su propio control: están en la ficha.",
+    "Contra el control: {s:12631} y {s:45789} rompen aturdimiento, y {s:45789} te da estabilidad; la élite {s:12516} te da estabilidad, furia y celeridad.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Tres posturas: la curación {s:44948} (perdés condiciones y te curás por cada una), {s:45789} y {s:45142} (esquivás y ganás aguante). Más {s:12631} y la élite {s:12516}."
+   ],
+   "traits": [
+    "Supervivencia: {t:1099} (más tormento y pericia), {t:1101} (más daño de condición, y más aún con daga) y {t:1701}.",
+    "Magia de la naturaleza: {t:978} (regeneración a los cercanos al curarte), {t:1054} (esquivar te quita una condición y te cura) y {t:1697} (las habilidades de bestia curan a los aliados cercanos).",
+    "Bestialma: {t:2071}, {t:2161} y {t:2155}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (rabioso: 1200 de daño de condición, 900 de precisión y 900 de dureza), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:85602} suma daño de condición, dureza y vitalidad.",
+    "En el arco corto, {i:21152} (aguante al cambiar de arma) y {i:21150} (veneno en el siguiente golpe); en las dagas, {i:21152} y {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:101198} te cura cada vez que te quitás una condición: va con {s:44948}, {t:1054} y {i:81254}."
+   ]
+  },
+  "sc-pvp-ranger-power-untamed-hammer-mace-mace": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el indómito: martillo en un juego y dos mazas en el otro.",
+    "Tu mecánica es desatar: {s:63147} desata al guardabosques y {s:63344} a la mascota, con sus habilidades {s:63209} (F1), {s:63258} (F2) y {s:63094} (F3). {t:2287} te quita condiciones cada vez que vos o tu mascota se desatan, y con {t:2271} las emboscadas desatadas dan bendiciones a los aliados.",
+    "{t:1064} te da rapidez al cambiar de arma y {t:1700} te da poder a vos y a tu mascota.",
+    "Las mascotas de la build están en la ficha; cuándo cambiar de una a otra lo explica la guía original."
+   ],
+   "cc": [
+    "Mucho control con las armas: en la maza, {s:71963} aturde y {s:71841} atonta; en el martillo, {s:69212} derriba y {s:69262} atonta. {i:81237} alarga tus aturdimientos y pega más a los aturdidos.",
+    "Contra el control: {s:12631} y {s:12550} rompen aturdimiento; la élite {s:63163} te da estabilidad; en la maza, {s:71903} también.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:12483} (regenera tu salud y la de tu mascota), {s:12631}, {s:12500} (ni vos ni tu mascota reciben daño de los ataques un rato), {s:12550} (rapidez y supervelocidad) y la élite {s:63163} (bendiciones defensivas y menos daño recibido)."
+   ],
+   "traits": [
+    "Escaramuzas: {t:1067} (vigor al evadir), {t:1700} y {t:1064}.",
+    "Supervivencia: {t:1098} (terreno fangoso al curarte), {t:1100} (quitás condiciones al cambiar de mascota) y {t:1699} (las habilidades de supervivencia dan furia y quitan condiciones).",
+    "Indómito: {t:2301} (Reacción venenosa pega más y ciega), {t:2287} y {t:2271}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:71490} suma potencia, dureza y vitalidad.",
+    "En el martillo, {i:21152} (aguante al cambiar de arma) y {i:81254} (quitás una condición al cambiar); en las mazas, {i:21152} y {i:81237}."
+   ],
+   "relic": [
+    "La {i:101943} te da más velocidad de movimiento, más aún fuera de combate, y un estallido de velocidad al entrar en combate: en PvP te ayuda a llegar antes a los puntos."
+   ]
+  },
+  "sc-pvp-ranger-power-galeshot-spear-sword-mace": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el vendaval: lanza en un juego y espada con maza en el otro.",
+    "{s:76787} (F5) invoca el arco ciclónico. Las borrascas ({s:77271} y {s:76619}) son parte de la barra; con {t:2402} quitan las condiciones de movimiento y una condición dañina.",
+    "Esquivar te da daño: la {i:99997} marca a los rivales con el Ojo de Isgarren cuando evadís un ataque, y ellos reciben más daño de golpe. {t:1067} te da vigor y {t:1700} te da poder al evadir.",
+    "Las mascotas de la build están en la ficha; cuándo cambiar de una a otra lo explica la guía original."
+   ],
+   "cc": [
+    "En la maza, {s:71963} aturde y {s:71841} atonta.",
+    "Contra el control: {s:12631} y {s:76619} rompen aturdimiento; en la maza, {s:71903} te da estabilidad.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:77271} (cura y da supervelocidad a vos y a tu mascota), {s:12631}, {s:76619} (te propulsa hacia adelante), {s:12500} (ni vos ni tu mascota reciben daño de los ataques un rato) y la élite {s:12569}, que convierte las condiciones de los aliados en bendiciones."
+   ],
+   "traits": [
+    "Puntería: {t:986} (Llamada de la naturaleza menor al cambiar de mascota), {t:1000} (más daño con las armas, y más aún de lejos) y {t:1015} (Golpe de apertura vuelve con la furia y pega más).",
+    "Escaramuzas: {t:1067}, {t:1700} y {t:1888} (la furia te da ferocidad y crítico).",
+    "Vendaval: {t:2402}, {t:2413} y {t:2425}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21202} suma potencia y vitalidad.",
+    "{i:81244} (+5 % de daño a objetivos a más de 500 de distancia) en la lanza y en la espada; además, {i:81254} (quitás una condición al cambiar) en la lanza y {i:21152} (aguante al cambiar) en la maza."
+   ],
+   "relic": [
+    "La {i:99997}: después de evadir un ataque, los rivales quedan con el Ojo de Isgarren y reciben más daño de golpe y más duración de condición."
+   ]
   }
  }
 }
