@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-347",
+ "summary": "BL-084 EQ-8 PvP (1/5): docs (status y plan) — 7 notas PvP, aviso de valores PvE; sigue PvP 2/5",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "23f92b228131459790c3ec7b4bf63ef21080a9ec",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 PvP (32 notas).",
+     "text": "EQ-8 PvP (1/5) HECHO 2026-11-02 03:10Z (Cazadragones, Abrasador, Juramentado, Luminaria, Berserker, Rompehechizos y Paragón de PvP: 79 notas en total; en WvW y PvP el control avisa que duraciones y recargas son las de PvE). Sigue EQ-8 PvP (2/5): Ingeniero y Guardabosques."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-10-31 21:45Z",
+     "text": "Última actualización: 2026-11-02 03:10Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 PvP: las 32 notas de PvP (Snow Crows, todas con equipo: amuleto, runa, reliquia y sigilos), por tandas de 8; después EQ-9 (AE2 con el equipo real).",
+     "text": "Próxima acción: BL-084 EQ-8 PvP (2/5): notas de Ingeniero y Guardabosques PvP (7); después Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4); luego EQ-9 (AE2 con el equipo real)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 WvW (5/5) — notas de Retornado WvW. HECHO.",
+     "text": "BL-084 EQ-8 PvP (1/5) — notas de Guardián y Guerrero PvP. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`e686038`, 157665 B: 79 notas; nuevas Cazadragones, Abrasador, Juramentado, Luminaria, Berserker, Rompehechizos y Paragón de PvP), por PATCH-346.\n- js/bld-play.js 1.2.0 (`d265ecf`), tests/bld-play.test.cjs y js/modules.json, por PATCH-345: en WvW y PvP, al pie de «Control (contra jugadores)», el aviso «Duraciones y recargas: las de la API oficial, que publica los valores de PvE; en WvW y PvP algunas son distintas.»\n\nAdemás: la API oficial no separa los valores de habilidades por modo (gw2-api/issues #40): publica los de PvE. Por eso las notas de PvP no dan segundos ni recargas, solo efectos; las de WvW ya publicadas quedan con el aviso. Las estadísticas del amuleto sí van con números (salen de /v2/pvp/amulets, que es solo de PvP). Saqué de las notas los efectos de habilidades de arma que la sonda no trajo con descripción. En el Rompehechizos el catálogo dice báculo, maza y cuerno, pero el equipo es lanza y báculo: la nota sigue al equipo. RUN-273: 163 referencias PvP (7 notas), 0 sin resolver; notes, play y size-budget verdes. Sondas RUN-271/272 (tests/bld-eq8p-0..4.smoke.cjs), ya borradas. Otras sesiones usaron PATCH-339 a 344 (BL-085/086/087): el canal de parches es compartido, verificar siempre el número libre.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "0736b2fc19f2cc615a5aabd4bfbee6c6546ae8d2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-8 WvW hecho (36 notas, 72 en total); falta PvP.",
+     "text": "EQ-8 WvW hecho (36 notas, 72 en total); PvP en curso (1/5, 79 notas en total)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-8 PvP (1/5) | HECHO 2026-11-02 03:10Z | 7 notas de Guardián y Guerrero PvP (79 en total), PATCH-346 (`e686038`, 157665 B). RUN-273: 163 referencias PvP, 0 sin resolver. La API no separa valores por modo: en PvP las notas no dan segundos ni recargas, y bld-play 1.2.0 (PATCH-345) avisa al pie del control en WvW y PvP que esos valores son de PvE. Siguen Ingeniero y Guardabosques (7), Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4). |"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "- **BAJO:** muchos pedidos a la API. Mitigación: lotes de 200 ids y caché por sesión.",
+     "text": "\n- **MEDIO:** la API oficial publica los valores de habilidades de PvE y no los separa por modo. Mitigación: en PvP, notas sin segundos ni recargas; en WvW y PvP, aviso al pie del control (bld-play 1.2.0)."
+    }
+   ]
+  }
+ ]
+}
