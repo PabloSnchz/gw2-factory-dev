@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-349",
+ "summary": "BL-084 EQ-8 PvP (2/5): docs (status y plan) — 86 notas; sigue PvP 3/5",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "553692e8a55b277165a143064ae297c5c76b2473",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 PvP (2/5): Ingeniero y Guardabosques.",
+     "text": "EQ-8 PvP (2/5) HECHO 2026-11-02 03:30Z (Chatarrero, Holoartesano, Amalgama, Druida, Bestialma, Indómito y Vendaval de PvP: 86 notas en total). Sigue EQ-8 PvP (3/5): Ladrón y Elementalista."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-02 03:10Z",
+     "text": "Última actualización: 2026-11-02 03:30Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 PvP (2/5): notas de Ingeniero y Guardabosques PvP (7); después Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4);",
+     "text": "Próxima acción: BL-084 EQ-8 PvP (3/5): notas de Ladrón y Elementalista PvP (8); después Hipnotizador y Nigromante (6) y Retornado (4);"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 PvP (1/5) — notas de Guardián y Guerrero PvP. HECHO.",
+     "text": "BL-084 EQ-8 PvP (2/5) — notas de Ingeniero y Guardabosques PvP. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`fa0e611`, 174005 B: 86 notas; nuevas Chatarrero, Holoartesano, Amalgama, Druida, Bestialma, Indómito y Vendaval de PvP), por PATCH-348.\n\nAdemás: RUN-275: 322 referencias PvP (14 notas), 0 sin resolver; notes, play y size-budget verdes. Sondas RUN-274 (tests/bld-eq8p-5..11.smoke.cjs, una build por archivo), ya borradas. En el Chatarrero el catálogo dice rifle, pero el equipo trae martillo: la nota sigue al equipo. Mascotas y granadas remiten a la guía original. De la lanza del Vendaval cité solo habilidades en tierra.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "68020597763e0710f185b10497a7efd613f20fb8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "PvP en curso (1/5, 79 notas en total).",
+     "text": "PvP en curso (2/5, 86 notas en total)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-8 PvP (2/5) | HECHO 2026-11-02 03:30Z | 7 notas de Ingeniero y Guardabosques PvP (86 en total), PATCH-348 (`fa0e611`, 174005 B). RUN-275: 322 referencias PvP, 0 sin resolver. Siguen Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4). |"
+    }
+   ]
+  }
+ ]
+}
