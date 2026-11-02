@@ -1,0 +1,5 @@
+{
+ "id": "RUN-275",
+ "summary": "BL-084 EQ-8 PvP (2/5): referencias de las 14 notas PvP contra la API, más notas, cómo se juega y tamaño",
+ "tests": ["tests/bld-notes-refs-pvp.smoke.cjs", "tests/bld-notes.test.cjs", "tests/bld-play.test.cjs", "tests/size-budget.test.cjs"]
+}
