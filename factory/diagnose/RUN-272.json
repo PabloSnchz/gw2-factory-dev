@@ -1,0 +1,5 @@
+{
+ "id": "RUN-272",
+ "summary": "BL-084 EQ-8 PvP (1/5): sondas de una build cada una (Abrasador, Juramentado y Rompehechizos PvP), porque en RUN-271 la salida se recortó",
+ "tests": ["tests/bld-eq8p-2.smoke.cjs", "tests/bld-eq8p-3.smoke.cjs", "tests/bld-eq8p-4.smoke.cjs"]
+}
