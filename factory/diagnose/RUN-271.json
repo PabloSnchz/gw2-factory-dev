@@ -1,0 +1,5 @@
+{
+ "id": "RUN-271",
+ "summary": "BL-084 EQ-8 PvP (1/5): sondas de Guardián y Guerrero PvP (rasgos, barra, armas, amuleto, runa, reliquia, sigilos y control desde la API en castellano)",
+ "tests": ["tests/bld-eq8p-0.smoke.cjs", "tests/bld-eq8p-1.smoke.cjs"]
+}
