@@ -1,0 +1,69 @@
+{
+ "id": "PATCH-345",
+ "summary": "BL-084 EQ-8 PvP: bld-play 1.2.0 — en WvW y PvP, aviso al pie del control: duraciones y recargas son las de PvE (la API no separa por modo)",
+ "files": [
+  {
+   "path": "js/bld-play.js",
+   "base_sha": "ea070777189c3120a7aea9119dc766c161e9c998",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.1.0 (2026-10-31) · EQ-8:",
+     "text": " * Versión: 1.2.0 (2026-11-02) · EQ-8 PvP: fuera de PvE, el control avisa al pie que duraciones y recargas son las de\n *          PvE (la API oficial no separa los valores por modo) · 1.1.0 (2026-10-31) · EQ-8:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.1.0';",
+     "text": "var VERSION = '1.2.0';"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "var CC_PVP = 'Control (contra jugadores)';",
+     "text": "\n  // La API publica los valores de PvE y no los separa por modo: en WvW y PvP lo aviso al pie del control.\n  var CC_SPLIT = 'Duraciones y recargas: las de la API oficial, que publica los valores de PvE; en WvW y PvP algunas son distintas.';\n  function vsPlayers(mode) { return mode === 'wvw' || mode === 'pvp'; }"
+    },
+    {
+     "op": "replace",
+     "anchor": "+ body + '</section>';",
+     "text": "+ body +\n      (p[0] === 'cc' && vsPlayers(m.mode) ? '<p class=\"bld-muted bld-pl-split\"><small>' + esc(CC_SPLIT) + '</small></p>' : '') + '</section>';"
+    },
+    {
+     "op": "replace",
+     "anchor": "CC_PVP: CC_PVP,",
+     "text": "CC_PVP: CC_PVP, CC_SPLIT: CC_SPLIT, vsPlayers: vsPlayers,"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-play.test.cjs",
+   "base_sha": "66211fc32df6899ef2a338a1b7411707a82f40f5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.match(src, /Versión: 1\\.1\\.0 /);",
+     "text": "assert.match(src, /Versión: 1\\.2\\.0 /);"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.equal(PL.version, '1.1.0');",
+     "text": "assert.equal(PL.version, '1.2.0');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "test('sin bld-notes,",
+     "text": "test('EQ-8 PvP: en WvW y PvP el control avisa que duraciones y recargas son las de PvE; en PvE no', () => {\n  const h = (mode) => PL.html({ note: NOTE, loaded: true, ref: REF, gear: GEAR, source: SRC, mode });\n  ['wvw', 'pvp'].forEach((m) => assert.match(h(m), /data-play=\"cc\"[\\s\\S]*<p class=\"bld-muted bld-pl-split\"><small>Duraciones y recargas: las de la API oficial, que publica los valores de PvE; en WvW y PvP algunas son distintas\\.<\\/small><\\/p><\\/section>/, m));\n  ['pve', undefined].forEach((m) => assert.doesNotMatch(h(m), /bld-pl-split/, String(m)));\n  assert.doesNotMatch(PL.html({ note: { concepts: ['x'] }, loaded: true, mode: 'pvp' }), /bld-pl-split/, 'sin control, sin aviso');\n  assert.equal(P.vsPlayers('pvp') && P.vsPlayers('wvw') && !P.vsPlayers('pve'), true);\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "60a6c76d394f5e09e4434ed5a2fce0f5c3530d80",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-play.js\", \"v\": \"1.1.0\" }",
+     "text": "{ \"src\": \"js/bld-play.js\", \"v\": \"1.2.0\" }"
+    }
+   ]
+  }
+ ]
+}
