@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); PvP en curso (1/5, 79 notas en total).
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); PvP en curso (2/5, 86 notas en total).
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -90,6 +90,7 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-8 WvW (4/5) | HECHO 2026-10-31 21:10Z | 8 notas de Hipnotizador y Nigromante WvW (68 en total), PATCH-335 (`fe70013`). RUN-268: 702 referencias WvW, 0 sin resolver. |
 | EQ-8 WvW (5/5) | HECHO 2026-10-31 21:45Z | 4 notas de Retornado WvW (Heraldo, Renegado, Justiciero y Conductor): las 36 de WvW completas, 72 en total, PATCH-337 (`d05c057`, 141507 B). RUN-270: 792 referencias WvW, 0 sin resolver. Sondas WvW borradas. Sigue PvP (32). |
 | EQ-8 PvP (1/5) | HECHO 2026-11-02 03:10Z | 7 notas de Guardián y Guerrero PvP (79 en total), PATCH-346 (`e686038`, 157665 B). RUN-273: 163 referencias PvP, 0 sin resolver. La API no separa valores por modo: en PvP las notas no dan segundos ni recargas, y bld-play 1.2.0 (PATCH-345) avisa al pie del control en WvW y PvP que esos valores son de PvE. Siguen Ingeniero y Guardabosques (7), Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4). |
+| EQ-8 PvP (2/5) | HECHO 2026-11-02 03:30Z | 7 notas de Ingeniero y Guardabosques PvP (86 en total), PATCH-348 (`fa0e611`, 174005 B). RUN-275: 322 referencias PvP, 0 sin resolver. Siguen Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4). |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
