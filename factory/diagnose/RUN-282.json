@@ -1,0 +1,5 @@
+{
+ "id": "RUN-282",
+ "summary": "BL-084 EQ-9b: sonda (tests de Importar, códigos de la Biblioteca, baseOf)",
+ "tests": ["tests/eq9-probe.smoke.cjs"]
+}
