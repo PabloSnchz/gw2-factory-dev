@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-357",
+ "summary": "BL-084 EQ-9a: docs (status y plan) — Copiar AE2 (Alter Ego) con el equipo real; siguen EQ-9b y EQ-9c",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "0d7dfec18a65c6c4097e4d99e9ceb9fb3dce3c44",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-9: AE2 con el equipo real.",
+     "text": "EQ-9a HECHO 2026-11-15 23:40Z: «Copiar AE2 (Alter Ego)» en la ficha de la Biblioteca (y en las propias basadas en una de ella) con el equipo real: estadísticas por casillero, runa (con runas mezcladas, la de más piezas), reliquia, armas y sigilos; modo Raid/Fractal/PvE/WvW/PvP; en PvP solo armas y sigilos (el amuleto se elige en el juego). PATCH-356: js/bld-ae2.js 1.1.0 (`e3762e5`, fromSheet/fromSheetCode/modeOf), js/bld-sheet.js 1.6.0 (`979ea9f`), tests bld-ae2 (`42754d6`) y bld-sheet (`775ef99`), modules.json (`69b262d`); suite verde. Review: BAJO — en una propia, el equipo es el de su build de base aunque se haya cambiado el código; BAJO — si el portapapeles falla no hay copia a mano (el aviso lo dice). Sigue EQ-9b: Importar con la misma ficha."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-15 23:30Z",
+     "text": "Última actualización: 2026-11-15 23:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-9: AE2 con el equipo real de la build, y Editor e Importar con la misma ficha;",
+     "text": "Próxima acción: BL-084 EQ-9b: Importar muestra la build con la misma ficha (rasgos como en el juego y equipo); después EQ-9c: el Editor con la misma ficha;"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "5949247f6973b4a35811fabb626c1088b402e3eb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-8 completo, 104 notas en total. Sigue EQ-9.",
+     "text": "EQ-8 completo, 104 notas en total. EQ-9 en curso (9a hecho; siguen 9b Importar y 9c Editor con la misma ficha)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-9a | HECHO 2026-11-15 23:40Z | «Copiar AE2 (Alter Ego)» en la ficha con el equipo real (estadísticas, runa, reliquia, armas y sigilos; en PvP solo armas y sigilos). PATCH-356: bld-ae2 1.1.0 (`e3762e5`, fromSheet), bld-sheet 1.6.0 (`979ea9f`), tests y modules.json; suite verde. EQ-9 se partió en 9a (AE2), 9b (Importar) y 9c (Editor). |"
+    }
+   ]
+  }
+ ]
+}
