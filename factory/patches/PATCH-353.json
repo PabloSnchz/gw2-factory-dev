@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-353",
+ "summary": "BL-084 EQ-8 PvP (4/5): docs (status y plan) — 100 notas; sigue PvP 5/5",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "574265b0cc4215a3d11737856456e9c2071db6e6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 PvP (4/5): Hipnotizador y Nigromante.",
+     "text": "EQ-8 PvP (4/5) HECHO 2026-11-15 23:20Z (Cronomante, Quimérico, Virtuoso, Trovador, Segador y Ritualista de PvP: 100 notas en total). Sigue EQ-8 PvP (5/5): Retornado."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-15 21:20Z",
+     "text": "Última actualización: 2026-11-15 23:20Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 PvP (4/5): notas de Hipnotizador y Nigromante PvP (6); después Retornado (4);",
+     "text": "Próxima acción: BL-084 EQ-8 PvP (5/5): notas de Retornado PvP (4), las últimas de EQ-8;"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 PvP (3/5) — notas de Ladrón y Elementalista PvP. HECHO.",
+     "text": "BL-084 EQ-8 PvP (4/5) — notas de Hipnotizador y Nigromante PvP. HECHO.\nArchivos:\n- assets/data/builds/notes.json (`df924fa`, 208305 B: 100 notas; nuevas Cronomante, Quimérico, Virtuoso, Trovador, Segador y Ritualista de PvP), por PATCH-352.\n\nAdemás: RUN-279: 658 referencias PvP (28 notas), 0 sin resolver; notes, play y size-budget verdes. Sondas RUN-278 (tests/bld-eq8p-20..25.smoke.cjs, una build por archivo), ya borradas. En el Virtuoso el catálogo dice lanza y mandoble, pero el equipo trae lanza y daga con escudo: la nota sigue al equipo. En el Trovador no afirmo cómo actúan los rasgos de destrozo con los instrumentos: la nota remite a la guía.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "449fa30ce4f11d12bb4a545bc7b9f11e035edd34",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "PvP en curso (3/5, 94 notas en total).",
+     "text": "PvP en curso (4/5, 100 notas en total)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-8 PvP (4/5) | HECHO 2026-11-15 23:20Z | 6 notas de Hipnotizador y Nigromante PvP (100 en total), PATCH-352 (`df924fa`, 208305 B). RUN-279: 658 referencias PvP, 0 sin resolver. Falta Retornado (4). |"
+    }
+   ]
+  }
+ ]
+}
