@@ -1,0 +1,5 @@
+{
+ "id": "RUN-284",
+ "summary": "BL-084 EQ-10: sonda (mezclas de color y contraste en los 19 temas, medias, letra, foco)",
+ "tests": ["tests/eq10-probe.smoke.cjs"]
+}
