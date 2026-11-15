@@ -2685,6 +2685,129 @@
    "relic": [
     "La {i:101943} te da más velocidad de movimiento, más aún fuera de combate, y un estallido de velocidad al entrar en combate: en PvP te ayuda a llegar antes a los puntos."
    ]
+  },
+  "sc-pvp-revenant-condition-herald-spear-mace-shield": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición para PvP con el heraldo: lanza en un juego, maza y escudo en el otro.",
+    "Alternás dos leyendas: la dragona ({s:28085}) y el demonio ({s:28494}). La dragona trae las facetas ({s:29371}) que se rematan con Verdadera naturaleza ({s:51675}); con {t:1772}, sus pasivas siguen un rato después de consumirlas.",
+    "El tormento es tu daño: {t:1793} lo hace pegar más, {t:1727} lo aplica al congelar y {t:1795} suma veneno y quemadura cuando invocás tormento.",
+    "Mantener facetas te sostiene: {t:1716} te da velocidad y {t:1730} reduce el daño de golpe por cada punto de mantenimiento; con escudo, además, sus habilidades te quitan condiciones."
+   ],
+   "cc": [
+    "{s:51675} te da estabilidad. Con el demonio, {s:27322} rompe aturdimiento.",
+    "{t:1732} te quita una condición cada vez que invocás una leyenda.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. Cuándo usar cada una está en la guía original.",
+    "{t:1760} te cura y te da celeridad cada vez que usás una habilidad que cuesta energía, y {t:1749} lanza una habilidad propia de la leyenda que invocás."
+   ],
+   "traits": [
+    "Corrupción: {t:1793}, {t:1727} y {t:1795}.",
+    "Invocación: {t:1732}, {t:1760} y {t:1749}.",
+    "Heraldo: {t:1716}, {t:1730} y {t:1772}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (rabioso: 1200 de daño de condición, 900 de precisión y 900 de dureza), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21204} suma daño de condición y vitalidad.",
+    "En la lanza, {i:21150} (veneno en el siguiente ataque al cambiar de arma) y {i:81227} (al impactar elimina una condición); en la maza, {i:21152} (aguante al cambiar), y en el escudo, {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:100435}: después de usar tu élite, los aliados ganan protección y aura magnética."
+   ]
+  },
+  "sc-pvp-revenant-power-renegade-hammer-sword-shield": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el renegado: martillo en un juego, espada y escudo en el otro.",
+    "Alternás el asesino ({s:28134}) y la renegada ({s:46409}). La renegada manda órdenes: F2 {s:44076}, F3 {s:42836} y F4 {s:45537}; con {t:2108}, Agrupamiento te devuelve energía y baja la recarga de la habilidad mejorada.",
+    "La resolución es tu daño: la ganás al invocar una leyenda ({t:1810}) y al esquivar ({t:1782}), y con {t:1779} pegás más y ganás poder mientras la tengas.",
+    "Evadir también suma: con {t:2120} te da el fervor de Kalla y bendiciones a los aliados cercanos, y con {t:2094} el fervor te cura según el daño que hacés."
+   ],
+   "cc": [
+    "En el martillo, {s:28110} derriba. Con {t:2094}, {s:42836} atonta a los enemigos la primera vez que los alcanza.",
+    "Contra el control: con el asesino, {s:29209} rompe aturdimiento; con la renegada, {s:41220}.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. Cuándo usar cada una está en la guía original.",
+    "{t:1760} te cura y te da celeridad cada vez que usás una habilidad que cuesta energía, y {t:1732} te quita una condición al invocar una leyenda."
+   ],
+   "traits": [
+    "Retribución: {t:1810}, {t:1782} y {t:1779}.",
+    "Invocación: {t:1732}, {t:1760} y {t:1719} (más crítico con furia, y parte del daño crítico se vuelve curación).",
+    "Renegado: {t:2120}, {t:2108} y {t:2094}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:71490} suma potencia, dureza y vitalidad.",
+    "En el martillo, {i:81222} (poder al golpear) y {i:81227} (al impactar elimina una condición); en la espada, {i:21152} (aguante al cambiar de arma), y en el escudo, {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:101955}: mientras tengas furia, parte del daño crítico que hacés se vuelve curación. Va de la mano con {t:1719}."
+   ]
+  },
+  "sc-pvp-revenant-power-vindicator-hammer-sword-shield": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el justiciero: martillo en un juego, espada y escudo en el otro.",
+    "Alternás el asesino ({s:28134}) y la alianza ({s:62891}). {s:62757} (F2) fusiona las energías; con {t:2258} recarga antes y potencia tu próxima esquiva.",
+    "Tu esquiva es ataque: con {t:2243} da bendiciones a los aliados y golpea a los enemigos al caer, y la {i:100345} asegura un crítico en el siguiente golpe. Con {t:2257} tenés {s:81369} y pegás más después de usar una habilidad de Luxon.",
+    "{t:1776} te da resistencia al invocar una leyenda, y {t:1765} te da poder con cada postura legendaria."
+   ],
+   "cc": [
+    "En el martillo, {s:28110} derriba; {s:81369} también derriba.",
+    "Contra el control: con la alianza, {s:62878} rompe aturdimiento, te da estabilidad y atonta; con el asesino, {s:29209} rompe aturdimiento.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. Cuándo usar cada una está en la guía original.",
+    "{s:62719} es la curación de la alianza, con varios usos. {t:1760} te cura y te da celeridad cada vez que usás una habilidad que cuesta energía."
+   ],
+   "traits": [
+    "Devastación: {t:1776}, {t:1765} y {t:1715} (rapidez al cambiar de arma y más daño a enemigos con estabilidad o protección).",
+    "Invocación: {t:1732} (te quitás una condición al invocar una leyenda), {t:1760} y {t:1749} (lanzás una habilidad propia de la leyenda que invocás).",
+    "Justiciero: {t:2258}, {t:2243} y {t:2257}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:71490} suma potencia, dureza y vitalidad.",
+    "En el martillo, {i:81222} (poder al golpear) y {i:81227} (al impactar elimina una condición); en la espada, {i:21152} (aguante al cambiar de arma), y en el escudo, {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:100345}: después de esquivar en combate o evadir un ataque, tu siguiente golpe es crítico seguro. Con las esquivas del justiciero la activás seguido."
+   ]
+  },
+  "sc-pvp-revenant-condition-conduit-salvation-spear-mace-shield": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición para PvP con el conductor, con la línea de Salvación para aguantar: lanza en un juego, maza y escudo en el otro.",
+    "Alternás el demonio ({s:28494}) y el enano ({s:28419}). {s:77371} (F3) es la sabiduría cósmica. El F2, Liberar potencial, cambia con la leyenda.",
+    "La afinidad es tu motor: con {t:2407} la ganás al invocar una leyenda distinta, y con {t:2358} te cura, te da aguante y, al máximo, energía. Con {t:2352}, invocar una leyenda en combate da bendiciones a los aliados de la zona.",
+    "El tormento te sostiene: con {t:1720}, invocarlo te da resistencia y la resistencia te cura; {t:1727} lo aplica al congelar, y {t:1789} te da resistencia y te limpia con cada habilidad del demonio."
+   ],
+   "cc": [
+    "Una de las versiones de Liberar potencial, {s:78615}, atonta. La {i:101166} envenena a cada enemigo que inhabilitás.",
+    "Contra el control: con el enano, {s:28516} te da estabilidad y la élite {s:27975} rompe aturdimiento; con el demonio, {s:27322} rompe aturdimiento.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Tu barra cambia con la leyenda activa: curación, utilidades y élite son las de esa leyenda. Cuándo usar cada una está en la guía original."
+   ],
+   "traits": [
+    "Corrupción: {t:1789}, {t:1727} y {t:1720}.",
+    "Salvación: {t:1822} (al terminar de esquivar, los aliados cercanos pierden una condición), {t:1817} (barrera según cuántas bendiciones distintas tengas) y {t:1825} (menos daño de golpe un rato después de curarte, más si curás a un aliado).",
+    "Conductor: {t:2407}, {t:2358} y {t:2352}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (rabioso: 1200 de daño de condición, 900 de precisión y 900 de dureza), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21176} suma dureza y vitalidad.",
+    "En la lanza, {i:21150} (veneno en el siguiente ataque al cambiar de arma) y {i:81227} (al impactar elimina una condición); en la maza, {i:21152} (aguante al cambiar), y en el escudo, {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:101166}: tu veneno reduce más la curación de los enemigos, y cada inhabilitación los envenena."
+   ]
   }
  }
 }
