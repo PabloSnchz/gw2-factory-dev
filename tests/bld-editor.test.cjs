@@ -24,8 +24,8 @@ const SKILLS = [1, 2, 3, 4, 5, 6, 7].map((id) => ({ id, name: 'H' + id }));
 const REF = R.normalize({ prof: PROF, specs: SPECS, traits: TRAITS, skills: SKILLS });
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.3\.0 /);
-  assert.equal(E.version, '1.3.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-editor.js'), 'utf8'), /Versión: 1\.4\.0 /);
+  assert.equal(E.version, '1.4.0');
 });
 
 test('opciones de la barra: por casillero y solo las de la élite elegida', () => {
@@ -106,6 +106,36 @@ test('BLD-12/13: con bld-gear cargado, la ficha suma el panel de equipo y un AE2
   assert.equal(d.gear.WeaponA1.weaponType, 'Greatsword');
   assert.equal(d.gear.Helm.statId, 1077, 'poder en PvE: Berserker');
   delete globalThis.GNBldGear; delete globalThis.GNBldAe2;
+});
+
+test('EQ-9c: con el ref nuevo, la ficha del Editor es la misma que la de la Biblioteca (bld-traitview); sin él, la de antes', () => {
+  const st = E._state;
+  st.build = P.fresh(1); st.ref = REF; st.loading = false; st.error = ''; st.pick = null; st.title = ''; st.gear = null;
+  P.setSpec(st.build, REF, 0, 16); P.setSpec(st.build, REF, 2, 27);
+  st.build.skills.land = [12, 13, 14, 15, 17];
+  const seen = [];
+  globalThis.GNBldTraitView = { ready: (r) => r === REF, html: (m) => { seen.push(m); return '<div class="bld-tv">TV</div>'; }, ensureCss() {}, wire() {} };
+  let h = P.viewHTML();
+  assert.match(h, /<article class="bld-card bld-ed-sheet" aria-label="Así queda tu build"><header class="bld-ed-sh">/);
+  assert.match(h, /<b>S27 · tu build<\/b>/, 'sin nombre: la élite y «tu build»');
+  assert.match(h, /data-bld-act="copy">Copiar código<\/button><button type="button" class="bld-btn" data-bld-act="save">Guardar en Mis builds<\/button><\/div><div class="bld-tv">TV<\/div><\/article>/);
+  assert.equal(seen.length, 1);
+  assert.equal(seen[0].code, C.encode(st.build), 'el código de lo que estás armando');
+  assert.equal(seen[0].build, st.build);
+  assert.equal(seen[0].gear, null, 'las armas de la barra salen del código');
+  assert.deepEqual(seen[0].actions, ['share', 'gw2skills']);
+  assert.doesNotMatch(h, /class="bld-card bld-detail"/, 'no repite la ficha vieja');
+  st.title = '<t>';
+  h = P.viewHTML();
+  assert.match(h, /<b>&lt;t&gt;<\/b>/, 'el nombre se escapa');
+  globalThis.GNBldTraitView.ready = () => false;
+  h = P.viewHTML();
+  assert.match(h, /class="bld-card bld-detail"/, 'ref viejo: la ficha de antes');
+  assert.doesNotMatch(h, /bld-ed-sheet/);
+  delete globalThis.GNBldTraitView;
+  assert.match(P.CSS, /\.bld-ed-prev \.bld-tvl\{grid-template-columns:1fr\}/, 'en la columna angosta, las líneas en una columna');
+  assert.doesNotMatch(P.CSS, /:\s*#[0-9a-fA-F]{3,8}[;}]/, 'sin colores fijos nuevos');
+  st.title = '';
 });
 
 // BUI-3: elementos de mentira para simular clics sin navegador.
