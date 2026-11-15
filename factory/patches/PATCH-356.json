@@ -1,0 +1,126 @@
+{
+ "id": "PATCH-356",
+ "summary": "BL-084 EQ-9a: «Copiar AE2 (Alter Ego)» con el equipo real en la ficha (bld-ae2 1.1.0 fromSheet, bld-sheet 1.6.0)",
+ "files": [
+  {
+   "path": "js/bld-ae2.js",
+   "base_sha": "f0e92e7ec8ddded0bbb09bee633f6f05d69c299b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-28)\n",
+     "text": " * Versión: 1.1.0 (2026-11-15) · BL-084 EQ-9a: fromSheet() y fromSheetCode() arman el AE2 con el equipo real de la ficha\n *          (GNBldItems.sheet: estadísticas, runa, reliquia, armas y sigilos; en PvP solo armas y sigilos) · antes 1.0.0 (2026-10-28)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.0.0';",
+     "text": "var VERSION = '1.1.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  var api = { version: VERSION, MODES: MODES",
+     "text": "  // EQ-9a (BL-084): el equipo real de la ficha (GNBldItems.sheet) a lo que pide encode(). Puro.\n  // view = GNBldItems.sheet() o null; b = la build ({ code, mode: 'pve'|'wvw'|'pvp', sub }). null si no hay código.\n  // En PvP el amuleto se elige en el juego: AE2 lleva solo armas y sigilos.\n  var FROM_SLOT = { 'Casco': ['Helm'], 'Hombreras': ['Shoulders'], 'Pecho': ['Coat'], 'Guantes': ['Gloves'], 'Perneras': ['Leggings'], 'Botas': ['Boots'],\n    'Espalda': ['Backpack'], 'Accesorio': ['Accessory1', 'Accessory2'], 'Amuleto': ['Amulet'], 'Anillo': ['Ring1', 'Ring2'] };\n  var FROM_WEAPON = { LongBow: 'Longbow', ShortBow: 'Shortbow', Harpoon: 'Spear' };\n  function modeOf(b) {\n    var m = String((b && b.mode) || '').toLowerCase(), s = String((b && b.sub) || '').toLowerCase();\n    if (m === 'wvw') return 'WvW';\n    if (m === 'pvp') return 'PvP';\n    if (s === 'raids') return 'Raid';\n    if (s === 'fractals') return 'Fractal';\n    return 'PvE';\n  }\n  function fromSheet(view, b) {\n    if (!b || !b.code) return null;\n    var out = { code: b.code, mode: modeOf(b), gear: {}, runeId: 0, relicId: 0 };\n    if (!view) return out;\n    var sid = function (s) { return s && !s.missing && s.id ? s.id : 0; };\n    var used = {};\n    var put = function (label, statId) {\n      var k = (FROM_SLOT[label] || []).filter(function (x) { return !used[x]; })[0];\n      if (!k || !statId) return;\n      used[k] = 1; out.gear[k] = { statId: statId };\n    };\n    (view.armor || []).forEach(function (r) { put(r.slot, sid(r.stat)); });\n    (view.trinkets || []).forEach(function (r) { put(r.slot, sid(r.stat)); });\n    if (view.rune && view.rune.id) out.runeId = view.rune.id;\n    else if (view.runeMixed) {\n      var n = {}, best = 0;\n      (view.armor || []).forEach(function (r) {\n        var id = r.rune && r.rune.id;\n        if (!id) return;\n        n[id] = (n[id] || 0) + 1;\n        if (!best || n[id] > n[best]) best = id;\n      });\n      out.runeId = best;\n    }\n    if (view.relic && view.relic.id) out.relicId = view.relic.id;\n    (view.sets || []).forEach(function (set) {\n      var pre = String(set.n) === '1' ? 'WeaponA' : String(set.n) === '2' ? 'WeaponB' : '';\n      if (!pre) return;\n      (set.hands || []).forEach(function (h) {\n        var sub = (h.item && h.item.sub) || '', wt = FROM_WEAPON[sub] || sub;\n        if (!wt || !weaponId(wt)) wt = '';\n        var sg = (h.sigils || []).filter(function (x) { return x && x.id; }).map(function (x) { return x.id; });\n        var g = { statId: sid(h.stat) };\n        if (wt) g.weaponType = wt;\n        if (sg[0]) g.sigilId = sg[0];\n        if (sg[1]) g.sigil2Id = sg[1];\n        if (g.statId || g.weaponType || g.sigilId) out.gear[pre + (h.hand === 'o' ? '2' : '1')] = g;\n      });\n    });\n    return out;\n  }\n  // El AE2 de la ficha, o '' si no se puede (sin código o código inválido).\n  function fromSheetCode(view, b) {\n    var x = fromSheet(view, b);\n    if (!x) return '';\n    try { return encode(x); } catch (_) { return ''; }\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    _names: { stats: {}, items: {} } };",
+     "text": "    fromSheet: fromSheet, fromSheetCode: fromSheetCode, modeOf: modeOf,\n    _names: { stats: {}, items: {} } };"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-ae2.test.cjs",
+   "base_sha": "3ff19721862ae829c123be4f113f10989ac49caa",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "/Versión: 1\\.0\\.0 /);\n  assert.equal(A.version, '1.0.0');",
+     "text": "/Versión: 1\\.1\\.0 /);\n  assert.equal(A.version, '1.1.0');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\ntest('ficha de equipo escapada y en castellano'",
+     "text": "\ntest('EQ-9a: fromSheet pasa el equipo real de la ficha (GNBldItems.sheet) a AE2', () => {\n  const st = (id, missing) => ({ id, name: 'x', attrs: [], missing });\n  const view = {\n    armor: ['Casco', 'Hombreras', 'Pecho', 'Guantes', 'Perneras', 'Botas'].map((s, i) => ({ slot: s, item: { id: 10 + i }, stat: st(i === 2 ? 1066 : 1077, i === 5), rune: { id: i < 4 ? 24836 : 24800 } })),\n    rune: null, runeMixed: true,\n    trinkets: ['Espalda', 'Accesorio', 'Accesorio', 'Amuleto', 'Anillo', 'Anillo'].map((s) => ({ slot: s, item: { id: 1 }, stat: st(1077) })),\n    relic: { id: 100916 }, amulet: null,\n    sets: [{ n: 1, hands: [{ hand: 'm', item: { sub: 'LongBow' }, stat: st(1077), sigils: [{ id: 24615 }, { id: 24868 }] }] },\n      { n: 2, hands: [{ hand: 'm', item: { sub: 'Sword' }, stat: st(1077), sigils: [{ id: 24618 }] }, { hand: 'o', item: { sub: 'Harpoon' }, stat: null, sigils: [{ id: 24615, missing: true }] }] }]\n  };\n  const x = A.fromSheet(view, { code: LINK, mode: 'pve', sub: 'raids' });\n  assert.equal(x.mode, 'Raid');\n  assert.equal(x.runeId, 24836, 'runas mezcladas: la de más piezas');\n  assert.equal(x.relicId, 100916);\n  assert.equal(x.gear.Coat.statId, 1066);\n  assert.equal(x.gear.Boots, undefined, 'estadística que la API no conoce: no la invento');\n  assert.equal(x.gear.Accessory2.statId, 1077, 'el segundo accesorio va al segundo casillero');\n  assert.equal(x.gear.Ring2.statId, 1077);\n  assert.deepEqual(x.gear.WeaponA1, { statId: 1077, weaponType: 'Longbow', sigilId: 24615, sigil2Id: 24868 });\n  assert.deepEqual(x.gear.WeaponB2, { statId: 0, weaponType: 'Spear', sigilId: 24615 });\n  const d = A.decode(A.fromSheetCode(view, { code: LINK, mode: 'pve', sub: 'raids' }));\n  assert.equal(d.code, LINK);\n  assert.equal(d.mode, 'Raid');\n  assert.equal(Object.keys(d.gear).length, 14);\n  assert.equal(d.gear.WeaponA1.weaponType, 'Longbow');\n  assert.equal(d.runeId, 24836);\n  // modos y casos límite\n  assert.equal(A.modeOf({ mode: 'pve', sub: 'fractals' }), 'Fractal');\n  assert.equal(A.modeOf({ mode: 'pve', sub: 'open-world' }), 'PvE');\n  assert.equal(A.modeOf({ mode: 'wvw', sub: 'zerg' }), 'WvW');\n  assert.equal(A.modeOf({ mode: 'pvp' }), 'PvP');\n  assert.equal(A.fromSheet(view, {}), null, 'sin código, nada');\n  assert.deepEqual(A.fromSheet(null, { code: LINK, mode: 'pvp' }), { code: LINK, mode: 'PvP', gear: {}, runeId: 0, relicId: 0 });\n  assert.equal(A.fromSheetCode(view, { code: 'basura' }), '', 'código inválido: vacío, sin lanzar');\n  const pvp = A.decode(A.fromSheetCode({ armor: [], trinkets: [], sets: view.sets, relic: null, amulet: { id: 8 } }, { code: LINK, mode: 'pvp' }));\n  assert.equal(pvp.mode, 'PvP');\n  assert.deepEqual(Object.keys(pvp.gear), ['WeaponA1', 'WeaponB1', 'WeaponB2'], 'en PvP, solo armas y sigilos (el amuleto se elige en el juego)');\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/bld-sheet.js",
+   "base_sha": "11fb2a3624024cdf7a6c68ea26b019986b5f67d1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.5.1 (2026-10-31) · EQ-8:",
+     "text": " * Versión: 1.6.0 (2026-11-15) · EQ-9a: «Copiar AE2 (Alter Ego)» con el equipo real de la ficha (js/bld-ae2.js 1.1.0\n *          fromSheetCode), en la Biblioteca y en las propias basadas en una de ella · antes 1.5.1 (2026-10-31) · EQ-8:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.5.1';",
+     "text": "var VERSION = '1.6.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  // m = { b, nav, latest, bidx, gear }\n",
+     "text": "  // EQ-9a: copiar la build en AE2 (Alter Ego) con el equipo real: aparece cuando el equipo ya llegó.\n  function ae2BtnHTML(m) {\n    var A = root.GNBldAe2;\n    if (!A || typeof A.fromSheetCode !== 'function' || !m || !m.gear || !m.b) return '';\n    if (m.b.mine && !m.b.base) return '';\n    return '<button type=\"button\" class=\"bld-btn\" data-sheet=\"ae2\" title=\"Con estadísticas, runa, sigilos y reliquia, para el complemento Alter Ego\">Copiar AE2 (Alter Ego)</button>';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "'<button type=\"button\" class=\"bld-btn\" data-sheet=\"edit\">Editar en el Editor</button>' +",
+     "text": "'<button type=\"button\" class=\"bld-btn\" data-sheet=\"edit\">Editar en el Editor</button>' + ae2BtnHTML(m) +"
+    },
+    {
+     "op": "replace",
+     "anchor": "'<button type=\"button\" class=\"bld-btn\" data-bld-act=\"save\">Guardar en Mis builds</button>' +",
+     "text": "'<button type=\"button\" class=\"bld-btn\" data-bld-act=\"save\">Guardar en Mis builds</button>' + ae2BtnHTML(m) +"
+    },
+    {
+     "op": "replace",
+     "anchor": "    if (mine) return mineAct(ctx, k);\n",
+     "text": "    if (k === 'ae2') return ae2Act(ctx);\n    if (mine) return mineAct(ctx, k);\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  // EQ-3b: acciones de una build propia",
+     "text": "  // EQ-9a: el AE2 de la build que se está viendo, con el equipo ya traído ('' si no se puede).\n  function ae2Code() {\n    var b = current(), A = root.GNBldAe2;\n    if (!b || !A || typeof A.fromSheetCode !== 'function') return '';\n    return A.fromSheetCode(st.gear[b.id] || null, { code: b.code, mode: b.mode, sub: b.sub });\n  }\n  function ae2Act(ctx) {\n    var code = ae2Code(), toast = function (m, kind) { if (ctx && ctx.toast) ctx.toast(m, kind); };\n    if (!code) { toast('No pude armar el código AE2 de esta build.', 'err'); return 'ae2'; }\n    Promise.resolve(S() ? S().copy(code) : false).then(function (ok) {\n      toast(ok ? 'AE2 copiado: pegalo en Alter Ego (Build Library → Import).' : 'No pude copiar el AE2: probá de nuevo.', ok ? 'ok' : 'err');\n    });\n    return 'ae2';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "isMine: isMine, mineB: mineB, listFor: listFor, MINE_SECTIONS: MINE_SECTIONS },",
+     "text": "isMine: isMine, mineB: mineB, listFor: listFor, MINE_SECTIONS: MINE_SECTIONS, ae2Code: ae2Code, ae2BtnHTML: ae2BtnHTML },"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-sheet.test.cjs",
+   "base_sha": "db2d224eab47237847d622f7b5cc5ad373d06ce5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "/Versión: 1\\.5\\.1 /);\n  assert.equal(SH.version, '1.5.1');",
+     "text": "/Versión: 1\\.6\\.0 /);\n  assert.equal(SH.version, '1.6.0');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n// EQ-3b: la ficha de Mis builds (#/builds/ver/m:<id>).",
+     "text": "\ntest('EQ-9a: «Copiar AE2 (Alter Ego)» con el equipo real de la ficha', async () => {\n  globalThis.GNBldAe2 = require('../js/bld-ae2.js');\n  const I = globalThis.GNBldItems, C = globalThis.GNBldCode;\n  const b = CAT.builds.find((x) => GEAR[x.id] && GEAR[x.id].armor && GEAR[x.id].relic && x.mode === 'pve' && x.sub === 'raids');\n  const e = GEAR[b.id], need = I.ids(e);\n  const R = { items: Object.fromEntries(need.items.map((id) => [id, { id, name: 'x', icon: '', type: 'Weapon', sub: 'Sword' }])),\n    stats: Object.fromEntries(need.stats.map((id) => [id, { id, name: 'S' + id, attrs: [] }])), amulets: {} };\n  const v = I.sheet(e, R);\n  globalThis.GNBldLib = fakeLib([b]);\n  assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: undefined }), /data-sheet=\"ae2\"/, 'sin equipo todavía, sin botón');\n  assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /data-sheet=\"ae2\"/, 'build sin equipo, sin botón');\n  assert.match(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: v }), /<button type=\"button\" class=\"bld-btn\" data-sheet=\"ae2\"[^>]*>Copiar AE2 \\(Alter Ego\\)<\\/button>/);\n  assert.equal(P.ae2BtnHTML({ b: { mine: {}, base: null }, gear: v }), '', 'propia sin build de base: el AE2 sale del Editor');\n  SH._state.id = b.id; SH._state.gear[b.id] = v;\n  const d = globalThis.GNBldAe2.decode(P.ae2Code());\n  assert.equal(d.code, C.encode(C.decode(b.code)));\n  assert.equal(d.mode, 'Raid');\n  assert.equal(d.relicId, e.relic);\n  if (e.rune) assert.equal(d.runeId, e.rune);\n  assert.equal(d.gear.Helm.statId, e.armor[0][1]);\n  const w1 = (e.weapons || []).find((w) => w[0] === 1 && w[1] === 'm');\n  if (w1) {\n    assert.equal(d.gear.WeaponA1.weaponType, 'Sword');\n    if (w1[4] && w1[4][0]) assert.equal(d.gear.WeaponA1.sigilId, w1[4][0]);\n  }\n  const toasts = [];\n  const ctx = { go() {}, toast: (m, k) => toasts.push(k + ':' + m) };\n  assert.equal(P.onClick(ctx, { target: el({ 'data-sheet': 'ae2' }) }), 'ae2');\n  await new Promise((r) => setTimeout(r, 0));\n  await new Promise((r) => setTimeout(r, 0));\n  assert.equal(toasts.length, 1);\n  assert.match(toasts[0], /AE2/);\n  delete globalThis.GNBldAe2;\n  assert.equal(P.ae2Code(), '', 'sin el módulo, nada');\n  assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: v }), /data-sheet=\"ae2\"/, 'sin el módulo, sin botón');\n  delete SH._state.gear[b.id];\n  delete globalThis.GNBldLib;\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "2c004a2b1dceeb559c1dcf664c47e815cb1b0bab",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-ae2.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/bld-ae2.js\", \"v\": \"1.1.0\" }"
+    },
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-sheet.js\", \"v\": \"1.5.1\" }",
+     "text": "{ \"src\": \"js/bld-sheet.js\", \"v\": \"1.6.0\" }"
+    }
+   ]
+  }
+ ]
+}
