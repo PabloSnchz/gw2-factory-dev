@@ -38,8 +38,8 @@ function el(attrs, parent) {
 
 test('versión en la cabecera, en modules.json después de bld-lib, y la ruta #/builds/ver/<id> en bld-view', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-sheet.js'), 'utf8');
-  assert.match(src, /Versión: 1\.5\.1 /);
-  assert.equal(SH.version, '1.5.1');
+  assert.match(src, /Versión: 1\.6\.0 /);
+  assert.equal(SH.version, '1.6.0');
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-sheet.js') > mods.indexOf('js/bld-lib.js'), 'se carga después de la Biblioteca');
   assert.ok(mods.indexOf('js/bld-items.js') < mods.indexOf('js/bld-sheet.js'));
@@ -270,6 +270,45 @@ test('EQ-7: «Cómo se juega» lo pinta bld-play con la nota, si ya cargó, el r
   delete globalThis.GNBldPlay;
   assert.match(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /están en preparación/, 'sin el módulo, el aviso de antes');
   delete globalThis.GNBldNotes;
+  delete globalThis.GNBldLib;
+});
+
+test('EQ-9a: «Copiar AE2 (Alter Ego)» con el equipo real de la ficha', async () => {
+  globalThis.GNBldAe2 = require('../js/bld-ae2.js');
+  const I = globalThis.GNBldItems, C = globalThis.GNBldCode;
+  const b = CAT.builds.find((x) => GEAR[x.id] && GEAR[x.id].armor && GEAR[x.id].relic && x.mode === 'pve' && x.sub === 'raids');
+  const e = GEAR[b.id], need = I.ids(e);
+  const R = { items: Object.fromEntries(need.items.map((id) => [id, { id, name: 'x', icon: '', type: 'Weapon', sub: 'Sword' }])),
+    stats: Object.fromEntries(need.stats.map((id) => [id, { id, name: 'S' + id, attrs: [] }])), amulets: {} };
+  const v = I.sheet(e, R);
+  globalThis.GNBldLib = fakeLib([b]);
+  assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: undefined }), /data-sheet="ae2"/, 'sin equipo todavía, sin botón');
+  assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: null }), /data-sheet="ae2"/, 'build sin equipo, sin botón');
+  assert.match(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: v }), /<button type="button" class="bld-btn" data-sheet="ae2"[^>]*>Copiar AE2 \(Alter Ego\)<\/button>/);
+  assert.equal(P.ae2BtnHTML({ b: { mine: {}, base: null }, gear: v }), '', 'propia sin build de base: el AE2 sale del Editor');
+  SH._state.id = b.id; SH._state.gear[b.id] = v;
+  const d = globalThis.GNBldAe2.decode(P.ae2Code());
+  assert.equal(d.code, C.encode(C.decode(b.code)));
+  assert.equal(d.mode, 'Raid');
+  assert.equal(d.relicId, e.relic);
+  if (e.rune) assert.equal(d.runeId, e.rune);
+  assert.equal(d.gear.Helm.statId, e.armor[0][1]);
+  const w1 = (e.weapons || []).find((w) => w[0] === 1 && w[1] === 'm');
+  if (w1) {
+    assert.equal(d.gear.WeaponA1.weaponType, 'Sword');
+    if (w1[4] && w1[4][0]) assert.equal(d.gear.WeaponA1.sigilId, w1[4][0]);
+  }
+  const toasts = [];
+  const ctx = { go() {}, toast: (m, k) => toasts.push(k + ':' + m) };
+  assert.equal(P.onClick(ctx, { target: el({ 'data-sheet': 'ae2' }) }), 'ae2');
+  await new Promise((r) => setTimeout(r, 0));
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(toasts.length, 1);
+  assert.match(toasts[0], /AE2/);
+  delete globalThis.GNBldAe2;
+  assert.equal(P.ae2Code(), '', 'sin el módulo, nada');
+  assert.doesNotMatch(P.sheetHTML({ b, nav: P.navOf([b], b.id), gear: v }), /data-sheet="ae2"/, 'sin el módulo, sin botón');
+  delete SH._state.gear[b.id];
   delete globalThis.GNBldLib;
 });
 

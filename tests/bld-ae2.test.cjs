@@ -15,8 +15,8 @@ const GEAR = { Helm: { statId: 1077 }, Shoulders: { statId: 1077 }, Coat: { stat
   Amulet: { statId: 1077 }, Ring1: { statId: 1077 }, Ring2: { statId: 1077 } };
 
 test('versión en la cabecera', () => {
-  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ae2.js'), 'utf8'), /Versión: 1\.0\.0 /);
-  assert.equal(A.version, '1.0.0');
+  assert.match(fs.readFileSync(path.join(__dirname, '..', 'js', 'bld-ae2.js'), 'utf8'), /Versión: 1\.1\.0 /);
+  assert.equal(A.version, '1.1.0');
 });
 
 test('estructura binaria según la especificación v3', () => {
@@ -76,6 +76,45 @@ test('errores claros y parse que nunca lanza', () => {
   assert.equal(ok.ok, true);
   assert.equal(ok.ae2.mode, 'WvW');
   assert.equal(ok.build.profession, 1);
+});
+
+test('EQ-9a: fromSheet pasa el equipo real de la ficha (GNBldItems.sheet) a AE2', () => {
+  const st = (id, missing) => ({ id, name: 'x', attrs: [], missing });
+  const view = {
+    armor: ['Casco', 'Hombreras', 'Pecho', 'Guantes', 'Perneras', 'Botas'].map((s, i) => ({ slot: s, item: { id: 10 + i }, stat: st(i === 2 ? 1066 : 1077, i === 5), rune: { id: i < 4 ? 24836 : 24800 } })),
+    rune: null, runeMixed: true,
+    trinkets: ['Espalda', 'Accesorio', 'Accesorio', 'Amuleto', 'Anillo', 'Anillo'].map((s) => ({ slot: s, item: { id: 1 }, stat: st(1077) })),
+    relic: { id: 100916 }, amulet: null,
+    sets: [{ n: 1, hands: [{ hand: 'm', item: { sub: 'LongBow' }, stat: st(1077), sigils: [{ id: 24615 }, { id: 24868 }] }] },
+      { n: 2, hands: [{ hand: 'm', item: { sub: 'Sword' }, stat: st(1077), sigils: [{ id: 24618 }] }, { hand: 'o', item: { sub: 'Harpoon' }, stat: null, sigils: [{ id: 24615, missing: true }] }] }]
+  };
+  const x = A.fromSheet(view, { code: LINK, mode: 'pve', sub: 'raids' });
+  assert.equal(x.mode, 'Raid');
+  assert.equal(x.runeId, 24836, 'runas mezcladas: la de más piezas');
+  assert.equal(x.relicId, 100916);
+  assert.equal(x.gear.Coat.statId, 1066);
+  assert.equal(x.gear.Boots, undefined, 'estadística que la API no conoce: no la invento');
+  assert.equal(x.gear.Accessory2.statId, 1077, 'el segundo accesorio va al segundo casillero');
+  assert.equal(x.gear.Ring2.statId, 1077);
+  assert.deepEqual(x.gear.WeaponA1, { statId: 1077, weaponType: 'Longbow', sigilId: 24615, sigil2Id: 24868 });
+  assert.deepEqual(x.gear.WeaponB2, { statId: 0, weaponType: 'Spear', sigilId: 24615 });
+  const d = A.decode(A.fromSheetCode(view, { code: LINK, mode: 'pve', sub: 'raids' }));
+  assert.equal(d.code, LINK);
+  assert.equal(d.mode, 'Raid');
+  assert.equal(Object.keys(d.gear).length, 14);
+  assert.equal(d.gear.WeaponA1.weaponType, 'Longbow');
+  assert.equal(d.runeId, 24836);
+  // modos y casos límite
+  assert.equal(A.modeOf({ mode: 'pve', sub: 'fractals' }), 'Fractal');
+  assert.equal(A.modeOf({ mode: 'pve', sub: 'open-world' }), 'PvE');
+  assert.equal(A.modeOf({ mode: 'wvw', sub: 'zerg' }), 'WvW');
+  assert.equal(A.modeOf({ mode: 'pvp' }), 'PvP');
+  assert.equal(A.fromSheet(view, {}), null, 'sin código, nada');
+  assert.deepEqual(A.fromSheet(null, { code: LINK, mode: 'pvp' }), { code: LINK, mode: 'PvP', gear: {}, runeId: 0, relicId: 0 });
+  assert.equal(A.fromSheetCode(view, { code: 'basura' }), '', 'código inválido: vacío, sin lanzar');
+  const pvp = A.decode(A.fromSheetCode({ armor: [], trinkets: [], sets: view.sets, relic: null, amulet: { id: 8 } }, { code: LINK, mode: 'pvp' }));
+  assert.equal(pvp.mode, 'PvP');
+  assert.deepEqual(Object.keys(pvp.gear), ['WeaponA1', 'WeaponB1', 'WeaponB2'], 'en PvP, solo armas y sigilos (el amuleto se elige en el juego)');
 });
 
 test('ficha de equipo escapada y en castellano', () => {

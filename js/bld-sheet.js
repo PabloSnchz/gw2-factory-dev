@@ -1,6 +1,7 @@
 /*!
  * js/bld-sheet.js — Builds: la ficha de una build de la Biblioteca en su propia pantalla (BL-084 EQ-3)
- * Versión: 1.5.1 (2026-10-31) · EQ-8: le pasa el modo a «Cómo se juega» (en WvW y PvP el control es contra jugadores)
+ * Versión: 1.6.0 (2026-11-15) · EQ-9a: «Copiar AE2 (Alter Ego)» con el equipo real de la ficha (js/bld-ae2.js 1.1.0
+ *          fromSheetCode), en la Biblioteca y en las propias basadas en una de ella · antes 1.5.1 (2026-10-31) · EQ-8: le pasa el modo a «Cómo se juega» (en WvW y PvP el control es contra jugadores)
  *          · antes 1.5.0 EQ-7: «Cómo se juega» con js/bld-play.js (conceptos, apertura, bucle y control, con íconos
  *          en línea; sin nota, el enlace a la guía original) · antes 1.4.0 EQ-6: desplegables de notas con js/bld-notes.js (habilidades y rasgos al pie de «Rasgos y
  *          habilidades», equipo y reliquia al pie de «Equipo»), con la descripción oficial debajo · antes 1.3.0 EQ-5: «Rasgos y habilidades» como en el juego con js/bld-traitview.js (barra de armas y
@@ -21,7 +22,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.5.1';
+  var VERSION = '1.6.0';
   var MODES = { pve: 'PvE', wvw: 'WvW', pvp: 'PvP' };
   var SUB = { raids: 'raids y strikes', fractals: 'fractales', 'open-world': 'mundo abierto', accessibuilds: 'accesible', roaming: 'roaming', zerg: 'zerg', conquest: 'conquista' };
   var SECTIONS = [['gear', 'Equipo'], ['traits', 'Rasgos y habilidades'], ['play', 'Cómo se juega']];
@@ -145,11 +146,18 @@
       bench +
       '<div class="bld-acts"><button type="button" class="bld-btn is-primary" data-bld-act="copy">Copiar código</button>' +
       '<button type="button" class="bld-btn" data-bld-act="share">Copiar enlace</button>' +
-      '<button type="button" class="bld-btn" data-sheet="edit">Editar en el Editor</button>' +
+      '<button type="button" class="bld-btn" data-sheet="edit">Editar en el Editor</button>' + ae2BtnHTML(m) +
       '<button type="button" class="bld-btn" data-sheet="dup">Duplicar</button>' +
       '<button type="button" class="bld-btn" data-sheet="del">Borrar…</button></div>' + ask +
       MINE_SECTIONS.map(function (s) { return sectionHTML(s[0], s[1], body[s[0]]); }).join('') +
       '</article>';
+  }
+  // EQ-9a: copiar la build en AE2 (Alter Ego) con el equipo real: aparece cuando el equipo ya llegó.
+  function ae2BtnHTML(m) {
+    var A = root.GNBldAe2;
+    if (!A || typeof A.fromSheetCode !== 'function' || !m || !m.gear || !m.b) return '';
+    if (m.b.mine && !m.b.base) return '';
+    return '<button type="button" class="bld-btn" data-sheet="ae2" title="Con estadísticas, runa, sigilos y reliquia, para el complemento Alter Ego">Copiar AE2 (Alter Ego)</button>';
   }
   // m = { b, nav, latest, bidx, gear }
   function sheetHTML(m) {
@@ -167,7 +175,7 @@
       (b.source ? ' · <a href="' + esc(b.source.url) + '" target="_blank" rel="noopener">' + esc(b.source.name) + ' ↗</a>' : '') + '</p>' + tagsHTML(b, m.latest) + '</div></header>' +
       bench +
       '<div class="bld-acts"><button type="button" class="bld-btn is-primary" data-bld-act="copy">Copiar código</button>' +
-      '<button type="button" class="bld-btn" data-bld-act="save">Guardar en Mis builds</button>' +
+      '<button type="button" class="bld-btn" data-bld-act="save">Guardar en Mis builds</button>' + ae2BtnHTML(m) +
       '<button type="button" class="bld-btn" data-bld-act="share">Copiar enlace</button>' +
       (issue ? '<a class="bld-btn" href="' + esc(issue) + '" target="_blank" rel="noopener" title="Abre un aviso en GitHub ya escrito">Avisar que está vieja ↗</a>' : '') + '</div>' +
       SECTIONS.map(function (s) { return sectionHTML(s[0], s[1], body[s[0]]); }).join('') +
@@ -289,8 +297,23 @@
       if (to) { st.focusTitle = true; st.confirm = ''; ctx.go('sheet', to.id); return k; }
       return '';
     }
+    if (k === 'ae2') return ae2Act(ctx);
     if (mine) return mineAct(ctx, k);
     return '';
+  }
+  // EQ-9a: el AE2 de la build que se está viendo, con el equipo ya traído ('' si no se puede).
+  function ae2Code() {
+    var b = current(), A = root.GNBldAe2;
+    if (!b || !A || typeof A.fromSheetCode !== 'function') return '';
+    return A.fromSheetCode(st.gear[b.id] || null, { code: b.code, mode: b.mode, sub: b.sub });
+  }
+  function ae2Act(ctx) {
+    var code = ae2Code(), toast = function (m, kind) { if (ctx && ctx.toast) ctx.toast(m, kind); };
+    if (!code) { toast('No pude armar el código AE2 de esta build.', 'err'); return 'ae2'; }
+    Promise.resolve(S() ? S().copy(code) : false).then(function (ok) {
+      toast(ok ? 'AE2 copiado: pegalo en Alter Ego (Build Library → Import).' : 'No pude copiar el AE2: probá de nuevo.', ok ? 'ok' : 'err');
+    });
+    return 'ae2';
   }
   // EQ-3b: acciones de una build propia (Mis builds, js/bld-store.js).
   function mineAct(ctx, k) {
@@ -358,7 +381,7 @@
 
   var api = { version: VERSION, render: render,
     _pure: { navOf: navOf, crumb: crumb, sheetHTML: sheetHTML, gearHTML: gearHTML, navHTML: navHTML, missingHTML: missingHTML, onClick: onClick, CSS: CSS, SECTIONS: SECTIONS,
-      isMine: isMine, mineB: mineB, listFor: listFor, MINE_SECTIONS: MINE_SECTIONS },
+      isMine: isMine, mineB: mineB, listFor: listFor, MINE_SECTIONS: MINE_SECTIONS, ae2Code: ae2Code, ae2BtnHTML: ae2BtnHTML },
     _state: st };
   root.GNBldSheet = api;
   if (root.GNBld && typeof root.GNBld.register === 'function') root.GNBld.register('sheet', api);
