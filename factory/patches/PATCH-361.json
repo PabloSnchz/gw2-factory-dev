@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-361",
+ "summary": "BL-084 EQ-9c: docs (status y plan) — el Editor con la misma ficha; EQ-9 completo, sigue EQ-10",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "f684086262adfe4276047d1d55aee58db7b4bc1c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-9c: el Editor con la misma ficha.",
+     "text": "EQ-9c HECHO 2026-11-15 23:55Z: la ficha de la derecha del Editor es la misma que la de la Biblioteca e Importar: emblema y nombre (o «<élite> · tu build»), «Copiar código» y «Guardar en Mis builds», y «Rasgos y habilidades» como en el juego (js/bld-traitview.js; las armas de la barra salen del código), todo al instante mientras editás. Debajo sigue «Equipo y código AE2». Con un ref viejo, la ficha de antes. Columna de la ficha de 300–480 px (antes 280–420) y las líneas en una columna ahí. PATCH-360: js/bld-editor.js 1.4.0 (`7ec44af`, 32783 B), tests/bld-editor.test.cjs (`1299719`), modules.json (`f2b237b`); suite verde. Review: BAJO — en el Editor la barra de armas sale del código y no del panel de equipo (son formatos distintos). EQ-9 COMPLETO (9a AE2, 9b Importar, 9c Editor). Sigue EQ-10: revisión final (19 temas AA, teclado, celular, rendimiento, docs y panel)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-15 23:50Z",
+     "text": "Última actualización: 2026-11-15 23:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-9c: el Editor muestra la build que estás armando con la misma ficha (rasgos como en el juego y equipo);",
+     "text": "Próxima acción: BL-084 EQ-10: revisión final de la ficha (19 temas AA, teclado, celular, rendimiento < 200 ms, docs y panel);"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "e3676f4540d6ef4f4710b745160d62a4be9dd613",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-9 en curso (9a y 9b hechos; sigue 9c Editor con la misma ficha).",
+     "text": "EQ-9 completo (AE2 con el equipo real, Importar y Editor con la misma ficha). Sigue EQ-10 (revisión final)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-9c | HECHO 2026-11-15 23:55Z | El Editor con la misma ficha: emblema, nombre, «Copiar código», «Guardar» y Rasgos y habilidades como en el juego, al instante; debajo, «Equipo y código AE2». bld-editor 1.4.0 (`7ec44af`), PATCH-360 (con tests y modules.json); suite verde. EQ-9 COMPLETO; sigue EQ-10. |"
+    }
+   ]
+  }
+ ]
+}
