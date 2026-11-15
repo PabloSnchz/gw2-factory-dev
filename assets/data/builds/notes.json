@@ -2271,6 +2271,244 @@
    "relic": [
     "La {i:99997}: después de evadir un ataque, los rivales quedan con el Ojo de Isgarren y reciben más daño de golpe y más duración de condición."
    ]
+  },
+  "sc-pvp-thief-power-daredevil-shortbow-sword-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el temerario: arco corto en un juego, espada y daga en el otro.",
+    "{s:13014} (F1) es tu robo: con {t:1158} atonta al objetivo y recarga antes, con {t:1163} vos y los aliados cercanos ganan furia, poder y celeridad, y con {t:1277} les sacás bendiciones a los rivales y se las pasás a tus aliados.",
+    "Esquivar es parte del daño: {t:2047} cambia tu esquiva por Bote, que pega en área al evadir; {t:1295} te devuelve iniciativa al esquivar y evadir, y la {i:100345} asegura un crítico en el siguiente golpe."
+   ],
+   "cc": [
+    "Robar atonta gracias a {t:1158}. En el arco corto, {s:13024} atonta al caer.",
+    "Contra el control: {s:13002}, {s:13035} y {s:13064} rompen aturdimiento; {s:13035} además te saca la incapacitación, la congelación y la inmovilización. No tenés estabilidad en la barra.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:13021} (te limpia condiciones y rodás hacia atrás curándote y esquivando), {s:13002} (paso sombrío a una zona y vuelta), {s:13035} (te evadís hacia atrás y recuperás iniciativa), {s:13064} (pasiva: más iniciativa; activa: paso sombrío hasta el enemigo) y la élite {s:13085}, que gira reflejando proyectiles y lanza dagas a los cercanos."
+   ],
+   "traits": [
+    "Acrobacia: {t:1237} (al esquivar te quitás una condición), {t:1192} (poder, y más con espada) y {t:1295}.",
+    "Argucia: {t:1163}, {t:1277} y {t:1158}.",
+    "Temerario: {t:1933} (vitalidad según tu potencia y menos daño de los enemigos dentro del umbral de alcance), {t:1893} (más daño cuando tu aguante no está lleno) y {t:2047}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21194} suma potencia, ferocidad y vitalidad.",
+    "En el arco corto, {i:21152} (aguante al cambiar de arma) y {i:81254} (quitás una condición al cambiar); en la espada, {i:81245} (+5 % de daño a objetivos con menos de la mitad de salud), y en la daga, {i:81207} (al impactar sacás una bendición)."
+   ],
+   "relic": [
+    "La {i:100345}: después de esquivar en combate o evadir un ataque, tu siguiente golpe es crítico seguro. Va de la mano con {t:2047} y {t:1295}."
+   ]
+  },
+  "sc-pvp-thief-power-deadeye-rifle-sword-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el certero: rifle en un juego, espada y daga en el otro.",
+    "{s:43390} (F1) es la marca del certero. {s:41372} te saca toda la malicia, reinicia la marca al instante y te da iniciativa. Con {t:2136}, cada sortilegio te da una habilidad robada nueva, y las robadas pegan más.",
+    "El sigilo es tu defensa y tu recurso: {s:46335} y la élite {s:45508} te meten en sigilo; {t:1293} te quita condiciones al entrar o salir, {t:1300} ciega a los cercanos y {t:1135} te devuelve iniciativa. Con {t:2118}, si tu malicia pasa el umbral, la esquiva también te da el ataque sigiloso."
+   ],
+   "cc": [
+    "{s:46335} aleja a los enemigos cercanos antes de meterte en sigilo.",
+    "Contra el control: {s:13002} y {s:41372} rompen aturdimiento. No tenés estabilidad en la barra.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:13021} (te limpia condiciones y rodás hacia atrás curándote y esquivando), {s:46335}, {s:41372}, {s:13002} (paso sombrío a una zona y vuelta) y la élite {s:45508}, que te desvanece en sigilo."
+   ],
+   "traits": [
+    "Artes de las sombras: {t:1293}, {t:1300} y {t:1135}.",
+    "Argucia: {t:1163} (al robar, vos y los aliados cercanos ganan furia, poder y celeridad), {t:1277} y {t:1158}.",
+    "Certero: {t:2136}, {t:2118} y {t:2146} (las habilidades robadas dan más bendiciones a los aliados)."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (salteador: 1000 de potencia, 1000 de precisión, 500 de ferocidad y 500 de vitalidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21215} suma potencia y ferocidad.",
+    "En el rifle, {i:21152} (aguante al cambiar de arma) y {i:81254} (quitás una condición al cambiar); en la espada, {i:81209} (+5 % de daño a objetivos con el movimiento limitado), y en la daga, {i:81237} (+30 % de duración de aturdimiento y +3 % de daño contra aturdidos)."
+   ],
+   "relic": [
+    "La {i:100947} sube tu daño de golpe un rato cada vez que pegás con una habilidad de arma de 20 s de recarga o más; cada acumulación renueva la duración."
+   ]
+  },
+  "sc-pvp-thief-condition-specter-scepter-pistol-sword-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición para PvP con el espectro: cetro y pistola en un juego, espada y daga en el otro.",
+    "El veneno es tu daño: {t:1164} envenena con los ataques de dos armas, {t:1291} hace que el veneno pegue más y dure más, y {t:1292} inmoviliza a quien junta varias condiciones distintas y lo envenena.",
+    "Los pozos te mueven: {s:63230} y la élite {s:63275} empiezan con un paso sombrío, y con {t:2285} curás a los aliados a tu alrededor cada vez que das uno."
+   ],
+   "cc": [
+    "En la pistola, {s:13012} atonta. {s:63230} atonta y la élite {s:63275} arrastra a los enemigos al centro del pozo. Robar también atonta, gracias a {t:1158}.",
+    "Contra el control: {s:13002} rompe aturdimiento. No tenés estabilidad en la barra.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:13021} (te limpia condiciones y rodás hacia atrás curándote y esquivando), {s:13002}, {s:13026} (prepara la zona para envenenar a los enemigos), {s:63230} (el pozo quita condiciones a los aliados) y la élite {s:63275}."
+   ],
+   "traits": [
+    "Artes mortales: {t:1164}, {t:1292} y {t:1291}.",
+    "Argucia: {t:1163} (al robar, vos y los aliados cercanos ganan furia, poder y celeridad), {t:1277} y {t:1158}.",
+    "Espectro: {t:2299} (pasás condiciones al enemigo que elegís con Sifón, o se las sacás al aliado), {t:2285} y {t:2300} (en el sudario, sacás condiciones al aliado atado y a vos)."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (carroñero: 1200 de daño de condición, 900 de potencia y 900 de vitalidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:79983} suma potencia, daño de condición y +25 % de velocidad de movimiento.",
+    "En el cetro, {i:81234} (+25 % de duración del tormento); en la pistola, {i:21127} (+25 % de duración del veneno); en la espada, {i:81254} (quitás una condición al cambiar), y en la daga, {i:21152} (aguante al cambiar)."
+   ],
+   "relic": [
+    "La {i:102199}: cada veneno que aplicás te da acumulaciones de virulencia de Greer, y al llegar al máximo tu siguiente veneno trae un efecto extra (está en la descripción oficial)."
+   ]
+  },
+  "sc-pvp-thief-condition-antiquary-shortbow-spear": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición para PvP con el anticuario: arco corto en un juego y lanza en el otro.",
+    "Robar es tu motor: {t:1276} hace que el robo pegue y te cure, {t:1169} deja vulnerabilidad al robar y condiciones con el ataque sigiloso, y {t:1167} te deja usar dos veces cada habilidad robada y baja la recarga de las de apoyo.",
+    "El anticuario hurta artefactos con {s:77397}: {t:2409} te hace hurtar cada vez que gastás cierta iniciativa, {t:2431} hace que los artefactos rindan más y {t:2365} baja la recarga de {s:77397} cuando usás uno. {s:76966} (F4) es la remezcla.",
+    "Interrumpir paga: la {i:104849} castiga a quien interrumpís y el {i:81266} de la lanza le roba una bendición."
+   ],
+   "cc": [
+    "Robar atonta gracias a {t:1158}. En el arco corto, {s:13024} atonta al caer; en la lanza, {s:72927} atonta.",
+    "Contra el control: {s:13002} y {s:13064} rompen aturdimiento. No tenés estabilidad en la barra.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "{s:13002} (paso sombrío a una zona y vuelta) y {s:13064} (pasiva: más iniciativa; activa: paso sombrío hasta el enemigo).",
+    "La curación {s:76886}, {s:77230} y la élite {s:77255} son del anticuario; la API no trae su descripción en castellano, así que revisalas en el juego o en la guía original."
+   ],
+   "traits": [
+    "Argucia: {t:1163} (al robar, vos y los aliados cercanos ganan furia, poder y celeridad), {t:1277} y {t:1158}.",
+    "Artes mortales: {t:1276}, {t:1169} y {t:1167}.",
+    "Anticuario: {t:2365}, {t:2431} y {t:2409}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (carroñero: 1200 de daño de condición, 900 de potencia y 900 de vitalidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21201} suma daño de condición y dureza.",
+    "En el arco corto, {i:21152} (aguante al cambiar de arma) y {i:81254} (quitás una condición al cambiar); en la lanza, {i:81266} (robás una bendición al interrumpir) y {i:21152}."
+   ],
+   "relic": [
+    "La {i:104849}: los enemigos que interrumpís sufren la agonía del coro. Con el atontamiento de Robar y los de tus armas la activás seguido."
+   ]
+  },
+  "sc-pvp-elementalist-support-tempest-staff": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "Apoyo para PvP con la tempestad: curás, limpiás condiciones y protegés al equipo. El catálogo nombra báculo y lanza, pero el equipo de la build trae solo báculo: la nota sigue al equipo.",
+    "Tus sintonías (F1 {s:5492}, F2 {s:5493}, F3 {s:5494}, F4 {s:5495}) cambian las habilidades del báculo: cada habilidad que nombro es de una sintonía.",
+    "Las auras son tu apoyo: con {t:289} también dan protección, con {t:2015} regeneración y vigor, y con {t:1986} curan al aliado que las recibe. {t:348} te da aura de escarcha al curarte.",
+    "Entrar en agua limpia condiciones a los cercanos ({t:358}) y les da vigor ({t:1962}); entrar en tierra les da estabilidad ({t:281})."
+   ],
+   "cc": [
+    "En el báculo, {s:5671} (aire 5) aturde, {s:5553} (aire 3) rechaza y {s:81444} (tierra 5) atonta. El grito {s:30432} incapacita e inmoviliza a los enemigos a tu alrededor.",
+    "Estabilidad: la élite {s:29968} y la sintonía con la tierra con {t:281}. En la barra, la API no marca ninguna habilidad que rompa aturdimiento.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:29535} (cura a los aliados y les quita condiciones), {s:30432}, {s:5573} (reanima aliados), {s:5536} (te teletransportás a una zona) y la élite {s:29968}.",
+    "Tres de las cinco son gritos: la {i:100411} les saca una condición a los aliados cada vez que gritás."
+   ],
+   "traits": [
+    "Agua: {t:348}, {t:358} y {t:362} (los aliados a los que das regeneración pierden condiciones).",
+    "Tierra: {t:289}, {t:281} y {t:1674} (menos daño de golpe al entrar y salir de tierra).",
+    "Tempestad: {t:1962}, {t:2015} y {t:1986}, que además da aura de escarcha a los aliados cercanos con poca salud."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (avatar: 1000 de potencia, 1000 de precisión, 500 de curación y 500 de vitalidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21176} suma dureza y vitalidad.",
+    "Un solo juego de armas, el báculo, con {i:94901} (+20 % de curación a los aliados) y {i:21152} (aguante al cambiar de arma)."
+   ],
+   "relic": [
+    "La {i:100411}: cada grito les saca una condición a los aliados que alcanza."
+   ]
+  },
+  "sc-pvp-elementalist-fire-weaver-sword-focus": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición para PvP con el tejedor: espada y foco, con la quemadura como daño principal.",
+    "Tus sintonías (F1 {s:5492}, F2 {s:5493}, F3 {s:5494}, F4 {s:5495}) cambian las habilidades de arma: cada habilidad que nombro es de una sintonía. El tejedor combina dos: el 3 de la espada pasa a ser un ataque doble que depende de la combinación. {s:80231} (F5) es la habilidad del tejedor.",
+    "{t:2138} baja la recarga de sintonías y ataques dobles, {t:2115} te da resistencia al sintonizar un solo elemento y {t:2170} te da protección con cada postura.",
+    "Fuego: {t:296} alarga tu quemadura y hace que los críticos quemen, y {t:294} te da poder en sintonía con el fuego."
+   ],
+   "cc": [
+    "En el foco, {s:5490} (agua 5) atonta y {s:5562} (aire 5) derriba. Entre los ataques dobles de la espada, {s:46295} hace flotar.",
+    "Contra el control: {s:5535} rompe aturdimiento; {s:46447}, otro ataque doble, te da estabilidad. {t:1673} te da una bendición cada vez que inhabilitás a un enemigo.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:5503} (pasiva: salud con cada hechizo; activa: te curás), {s:5535} (te quita condiciones y quema a los enemigos, y ganás poder por cada condición), {s:5536} (te teletransportás a una zona), {s:40183} (pega según tu sintonía) y la élite {s:43638}, que baja la recarga de las sintonías un rato."
+   ],
+   "traits": [
+    "Fuego: {t:296}, {t:340} (las auras de fuego duran más y limpian condiciones) y {t:294}.",
+    "Arcano: {t:1487} (te curás al cambiar de sintonía), {t:1673} y {t:238} (al esquivar lanzás una habilidad según tu sintonía).",
+    "Tejedor: {t:2115}, {t:2170} y {t:2138}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (brujo: 1000 de potencia, 1000 de daño de condición, 500 de vitalidad y 500 de precisión), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21201} suma daño de condición y dureza.",
+    "Un solo juego de armas: la espada con {i:21152} (aguante al cambiar de arma) y el foco con {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:99997}: después de evadir un ataque, los rivales quedan con el Ojo de Isgarren y reciben más daño de golpe y más duración de condición."
+   ]
+  },
+  "sc-pvp-elementalist-power-catalyst-dagger-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de poder para PvP con el catalizador: daga en las dos manos.",
+    "Tus sintonías (F1 {s:5492}, F2 {s:5493}, F3 {s:5494}, F4 {s:5495}) cambian las habilidades de arma: cada habilidad que nombro es de una sintonía. La esfera de jade ({s:62940}, F5) es la mecánica del catalizador: cambia según tu sintonía.",
+    "Cambiar de sintonía te da energía y bendiciones ({t:2224}); {t:2234} agranda la esfera y hace que dé rapidez y una bendición más a los aliados, y {t:2233} te da un efecto extra al terminar un combo.",
+    "La élite {s:62725} acelera la recarga de las habilidades de tu sintonía actual, y con {t:257} también te lanza un Escudo arcano menor."
+   ],
+   "cc": [
+    "En las dagas, {s:5527} (aire 3) aturde, {s:5687} (aire 5) lanza y {s:5690} (tierra 4) derriba.",
+    "Contra el control: {s:5639} rompe aturdimiento y te da estabilidad; {s:5641} también rompe aturdimiento.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:21656} (una descarga en área que hace daño crítico y te cura), {s:5639} (protección, estabilidad y después barrera), {s:5641} (bloquea ataques y explota si bloquea tres), {s:5536} (te teletransportás a una zona) y la élite {s:62725}."
+   ],
+   "traits": [
+    "Fuego: {t:335} (lanzás un Fuego purificador menor cuando cargás varias condiciones), {t:340} (las auras de fuego duran más y limpian condiciones) y {t:294} (poder en sintonía con el fuego).",
+    "Arcano: {t:266} (vigor con los críticos), {t:257} y {t:263} (las habilidades arcanas, como {s:21656} y {s:5641}, dan ferocidad y efectos extra).",
+    "Catalizador: {t:2224}, {t:2234} y {t:2233}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (berserker: 1200 de potencia, 900 de precisión y 900 de ferocidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21210} suma vitalidad y potencia.",
+    "Un solo juego de armas: la daga principal con {i:21152} (aguante al cambiar de arma) y la secundaria con {i:81254} (quitás una condición al cambiar)."
+   ],
+   "relic": [
+    "La {i:100947} sube tu daño de golpe un rato cada vez que pegás con una habilidad de arma de 20 s de recarga o más; cada acumulación renueva la duración."
+   ]
+  },
+  "sc-pvp-elementalist-condition-evoker-dagger-dagger": {
+   "patch": "2026-09-29",
+   "concepts": [
+    "DPS de condición para PvP con el evocador: daga en las dos manos.",
+    "Tus sintonías (F1 {s:5492}, F2 {s:5493}, F3 {s:5494}, F4 {s:5495}) cambian las habilidades de arma: cada habilidad que nombro es de una sintonía. El familiar (F5) cambia con el elemento, por ejemplo {s:76643}; {t:2438} te da una carga de familiar al sintonizar con el elemento que elegiste, y {t:2335} hace que tu siguiente ataque después de usarlo dispare un relámpago en cadena.",
+    "Tus meditaciones ({s:77320} y la élite {s:76841}) dan bendiciones a los aliados cercanos gracias a {t:2415}. La élite invoca a los cuatro familiares con sus habilidades potenciadas."
+   ],
+   "cc": [
+    "En las dagas, {s:5527} (aire 3) aturde, {s:5687} (aire 5) lanza y {s:5690} (tierra 4) derriba. Entre los familiares, {s:76707} derriba y {s:76811} aturde.",
+    "Contra el control: {s:5639} rompe aturdimiento y te da estabilidad; con {t:281}, entrar en tierra da estabilidad a los aliados cercanos.",
+    "No pongo segundos ni recargas: la API oficial publica los valores de PvE, y en PvP muchos son distintos."
+   ],
+   "skills": [
+    "Curación {s:5507} (cada pulso te quita una condición y te cura), {s:5639} (protección, estabilidad y después barrera), {s:77320} (bloqueás los ataques y después golpeás a los cercanos con rocas), {s:5536} (te teletransportás a una zona) y la élite {s:76841}."
+   ],
+   "traits": [
+    "Tierra: {t:289} (tus auras dan protección), {t:281} y {t:1674} (menos daño de golpe al entrar y salir de tierra).",
+    "Arcano: {t:1487} (te curás al cambiar de sintonía), {t:257} (Escudo arcano menor con la élite) y {t:1511} (cargas al cambiar de sintonía y un estallido al llegar al máximo).",
+    "Evocador: {t:2415}, {t:2438} y {t:2335}."
+   ],
+   "gear": [
+    "En PvP no hay armadura ni abalorios: las estadísticas salen del amuleto (carroñero: 1200 de daño de condición, 900 de potencia y 900 de vitalidad), y la runa, los sigilos y la reliquia completan el equipo.",
+    "La {i:21206} suma dureza y daño de condición.",
+    "Un solo juego de armas: la daga principal con {i:81254} (quitás una condición al cambiar de arma) y la secundaria con {i:21152} (aguante al cambiar)."
+   ],
+   "relic": [
+    "La {i:106221} te da rapidez cada vez que inhabilitás a un enemigo; con los controles de las dagas y de los familiares la activás seguido."
+   ]
   }
  }
 }
