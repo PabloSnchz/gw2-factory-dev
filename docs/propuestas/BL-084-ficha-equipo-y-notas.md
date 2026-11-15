@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); EQ-8 PvP hecho (32 notas): EQ-8 completo, 104 notas en total. EQ-9 en curso (9a hecho; siguen 9b Importar y 9c Editor con la misma ficha).
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); EQ-8 PvP hecho (32 notas): EQ-8 completo, 104 notas en total. EQ-9 en curso (9a y 9b hechos; sigue 9c Editor con la misma ficha).
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -95,6 +95,7 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-8 PvP (4/5) | HECHO 2026-11-15 23:20Z | 6 notas de Hipnotizador y Nigromante PvP (100 en total), PATCH-352 (`df924fa`, 208305 B). RUN-279: 658 referencias PvP, 0 sin resolver. Falta Retornado (4). |
 | EQ-8 PvP (5/5) | HECHO 2026-11-15 23:30Z | 4 notas de Retornado PvP: las 32 de PvP completas, 104 en total (36 PvE, 36 WvW, 32 PvP), PATCH-354 (`b908038`, 217767 B). RUN-281: 746 referencias PvP, 0 sin resolver. Sondas y su librería borradas. EQ-8 COMPLETO; sigue EQ-9. |
 | EQ-9a | HECHO 2026-11-15 23:40Z | «Copiar AE2 (Alter Ego)» en la ficha con el equipo real (estadísticas, runa, reliquia, armas y sigilos; en PvP solo armas y sigilos). PATCH-356: bld-ae2 1.1.0 (`e3762e5`, fromSheet), bld-sheet 1.6.0 (`979ea9f`), tests y modules.json; suite verde. EQ-9 se partió en 9a (AE2), 9b (Importar) y 9c (Editor). |
+| EQ-9b | HECHO 2026-11-15 23:50Z | Importar con la misma ficha: emblema, Equipo y Rasgos y habilidades como en el juego; si el código es de la Biblioteca, su equipo, «Copiar AE2» y el enlace a su ficha. bld-import 1.1.0 (`a4c304e`), PATCH-358 (tests y modules.json); RUN-283 verde. |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
