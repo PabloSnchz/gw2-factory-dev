@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-359",
+ "summary": "BL-084 EQ-9b: docs (status y plan) — Importar con la misma ficha; sigue EQ-9c",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "bf02f1ed9810d98996410d3c6314b6b4ea217d23",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-9b: Importar con la misma ficha.",
+     "text": "EQ-9b HECHO 2026-11-15 23:50Z: Importar muestra la build con la misma ficha que la Biblioteca: emblema y nombre, «Copiar código» y «Guardar en Mis builds», sección «Equipo» y sección «Rasgos y habilidades» como en el juego (js/bld-traitview.js). Si el código es el de una build de la Biblioteca, trae su equipo (js/bld-gearview.js) y suma «Copiar AE2 (Alter Ego)» y «Ver su ficha en la Biblioteca»; si no, dice que el código del juego no trae equipo; con un código AE2, su lista de equipo; con un ref viejo, la vista de antes. js/bld-import.js 1.1.0 (`a4c304e`, 13285 B), tests/bld-mods.test.cjs (`c2bf580`), modules.json (`62272c2`) por PATCH-358. RUN-283: bld-mods, boot, bld-sheet, bld-ae2, bld-ui, bld-view y size-budget verdes. Sonda RUN-282 (tests/eq9-probe.smoke.cjs) ya borrada: los 104 códigos del catálogo están normalizados y no se repiten. Review: MEDIO (proceso) — publiqué bld-import.js directo y la suite quedó en rojo ~1 minuto (versión en bld-mods y boot) hasta PATCH-358: un módulo con versión en tests va con sus tests en el mismo parche; BAJO — un AE2 importado no se cruza con la Biblioteca (muestra su propia lista de equipo); BAJO — Importar carga el catálogo para reconocer la build (una vez por visita). Sigue EQ-9c: el Editor con la misma ficha."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-15 23:40Z",
+     "text": "Última actualización: 2026-11-15 23:50Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-9b: Importar muestra la build con la misma ficha (rasgos como en el juego y equipo); después EQ-9c: el Editor con la misma ficha;",
+     "text": "Próxima acción: BL-084 EQ-9c: el Editor muestra la build que estás armando con la misma ficha (rasgos como en el juego y equipo);"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "31d0a9275686b4646d5992b55a5020edab2d43fb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "EQ-9 en curso (9a hecho; siguen 9b Importar y 9c Editor con la misma ficha).",
+     "text": "EQ-9 en curso (9a y 9b hechos; sigue 9c Editor con la misma ficha)."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-9b | HECHO 2026-11-15 23:50Z | Importar con la misma ficha: emblema, Equipo y Rasgos y habilidades como en el juego; si el código es de la Biblioteca, su equipo, «Copiar AE2» y el enlace a su ficha. bld-import 1.1.0 (`a4c304e`), PATCH-358 (tests y modules.json); RUN-283 verde. |"
+    }
+   ]
+  }
+ ]
+}
