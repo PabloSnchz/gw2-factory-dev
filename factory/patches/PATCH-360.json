@@ -1,0 +1,74 @@
+{
+ "id": "PATCH-360",
+ "summary": "BL-084 EQ-9c: el Editor con la misma ficha (bld-editor 1.4.0, tests y modules.json)",
+ "files": [
+  {
+   "path": "js/bld-editor.js",
+   "base_sha": "7320b80ca53b32c3c889391f14a2b1674f2d080e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.3.0 (2026-10-29) · BUI-5:",
+     "text": " * Versión: 1.4.0 (2026-11-15) · BL-084 EQ-9c: la ficha de la derecha es la misma que la de la Biblioteca e Importar\n *          (emblema, nombre, «Copiar código» y «Guardar», y «Rasgos y habilidades» como en el juego con js/bld-traitview.js);\n *          con un ref viejo, la de antes · antes 1.3.0 (2026-10-29) · BUI-5:"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.3.0';",
+     "text": "var VERSION = '1.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "(err ? '<p class=\"bld-err\">' + esc(err) + '</p>' : root.GNBldShow.detailHTML(v, {",
+     "text": "(err ? '<p class=\"bld-err\">' + esc(err) + '</p>' : sheetOk(ref) ? sheetHTML(b, ref, v, checks, code) : root.GNBldShow.detailHTML(v, {"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  // BLD-12/13: equipo, sugerencia y AE2",
+     "text": "  // EQ-9c (BL-084): la misma ficha que la Biblioteca e Importar, con el ref nuevo (js/bld-traitview.js): emblema, nombre,\n  // «Copiar código» y «Guardar», y «Rasgos y habilidades» como en el juego (las armas salen del código). Sin él, la de antes.\n  function sheetOk(ref) { var TV = root.GNBldTraitView; return !!(TV && typeof TV.ready === 'function' && TV.ready(ref)); }\n  function sheetHTML(b, ref, v, checks, code) {\n    var S = root.GNBldShow, el = eliteId(b, ref), sp = el ? root.GNBldRef.specById(ref, el) : null;\n    var title = st.title || ((sp ? sp.name : (v.profName || 'Build')) + ' · tu build');\n    return '<article class=\"bld-card bld-ed-sheet\" aria-label=\"Así queda tu build\">' +\n      '<header class=\"bld-ed-sh\">' + (S.emblem ? S.emblem(b.profession, el, 48, { label: true }) : '') +\n      '<div><b>' + esc(title) + '</b><small class=\"bld-muted\">' + esc(v.profName || '') + (sp ? ' · ' + esc(sp.name) : '') + '</small></div></header>' +\n      '<div class=\"bld-acts\"><button type=\"button\" class=\"bld-btn is-primary\" data-bld-act=\"copy\">Copiar código</button>' +\n      '<button type=\"button\" class=\"bld-btn\" data-bld-act=\"save\">Guardar en Mis builds</button></div>' +\n      root.GNBldTraitView.html({ build: b, ref: ref, view: v, checks: checks, code: code, gear: null, title: title, actions: ['share', 'gw2skills'] }) +\n      '</article>';\n  }\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "minmax(280px,420px)",
+     "text": "minmax(300px,480px)"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '#buildsPanel .bld-ed-prev{position:sticky;top:12px;display:grid;gap:8px}'\n  ].join",
+     "text": "    '#buildsPanel .bld-ed-prev{position:sticky;top:12px;display:grid;gap:8px}',\n    '#buildsPanel .bld-ed-sheet{display:grid;gap:10px}#buildsPanel .bld-ed-sh{display:flex;gap:10px;align-items:center}#buildsPanel .bld-ed-sh div{display:grid;gap:2px}#buildsPanel .bld-ed-sh b{color:var(--tx-1)}',\n    '#buildsPanel .bld-ed-prev .bld-tvl{grid-template-columns:1fr}#buildsPanel .bld-ed-prev .bld-tvlh{grid-auto-flow:column;justify-content:start}'\n  ].join"
+    },
+    {
+     "op": "replace",
+     "anchor": "    ensureCss();\n    ctx.host = host;\n    if (!host._bldEd) {\n      host._bldEd = true;\n",
+     "text": "    if (root.GNBldTraitView) root.GNBldTraitView.ensureCss();\n    ensureCss();\n    ctx.host = host;\n    if (!host._bldEd) {\n      host._bldEd = true;\n      if (root.GNBldTraitView) root.GNBldTraitView.wire(host);\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-editor.test.cjs",
+   "base_sha": "d9a57311a5baa105fb1a9f5cd1adf5d9c346e152",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "/Versión: 1\\.3\\.0 /);\n  assert.equal(E.version, '1.3.0');",
+     "text": "/Versión: 1\\.4\\.0 /);\n  assert.equal(E.version, '1.4.0');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n// BUI-3: elementos de mentira",
+     "text": "\ntest('EQ-9c: con el ref nuevo, la ficha del Editor es la misma que la de la Biblioteca (bld-traitview); sin él, la de antes', () => {\n  const st = E._state;\n  st.build = P.fresh(1); st.ref = REF; st.loading = false; st.error = ''; st.pick = null; st.title = ''; st.gear = null;\n  P.setSpec(st.build, REF, 0, 16); P.setSpec(st.build, REF, 2, 27);\n  st.build.skills.land = [12, 13, 14, 15, 17];\n  const seen = [];\n  globalThis.GNBldTraitView = { ready: (r) => r === REF, html: (m) => { seen.push(m); return '<div class=\"bld-tv\">TV</div>'; }, ensureCss() {}, wire() {} };\n  let h = P.viewHTML();\n  assert.match(h, /<article class=\"bld-card bld-ed-sheet\" aria-label=\"Así queda tu build\"><header class=\"bld-ed-sh\">/);\n  assert.match(h, /<b>S27 · tu build<\\/b>/, 'sin nombre: la élite y «tu build»');\n  assert.match(h, /data-bld-act=\"copy\">Copiar código<\\/button><button type=\"button\" class=\"bld-btn\" data-bld-act=\"save\">Guardar en Mis builds<\\/button><\\/div><div class=\"bld-tv\">TV<\\/div><\\/article>/);\n  assert.equal(seen.length, 1);\n  assert.equal(seen[0].code, C.encode(st.build), 'el código de lo que estás armando');\n  assert.equal(seen[0].build, st.build);\n  assert.equal(seen[0].gear, null, 'las armas de la barra salen del código');\n  assert.deepEqual(seen[0].actions, ['share', 'gw2skills']);\n  assert.doesNotMatch(h, /class=\"bld-card bld-detail\"/, 'no repite la ficha vieja');\n  st.title = '<t>';\n  h = P.viewHTML();\n  assert.match(h, /<b>&lt;t&gt;<\\/b>/, 'el nombre se escapa');\n  globalThis.GNBldTraitView.ready = () => false;\n  h = P.viewHTML();\n  assert.match(h, /class=\"bld-card bld-detail\"/, 'ref viejo: la ficha de antes');\n  assert.doesNotMatch(h, /bld-ed-sheet/);\n  delete globalThis.GNBldTraitView;\n  assert.match(P.CSS, /\\.bld-ed-prev \\.bld-tvl\\{grid-template-columns:1fr\\}/, 'en la columna angosta, las líneas en una columna');\n  assert.doesNotMatch(P.CSS, /:\\s*#[0-9a-fA-F]{3,8}[;}]/, 'sin colores fijos nuevos');\n  st.title = '';\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "62272c2f15f2bf7a5ac5d345e732ecfb1281debb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-editor.js\", \"v\": \"1.3.0\" }",
+     "text": "{ \"src\": \"js/bld-editor.js\", \"v\": \"1.4.0\" }"
+    }
+   ]
+  }
+ ]
+}
