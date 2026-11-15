@@ -1,0 +1,33 @@
+{
+ "id": "PATCH-358",
+ "summary": "BL-084 EQ-9b: tests y modules.json de Importar con la misma ficha (bld-import 1.1.0)",
+ "files": [
+  {
+   "path": "tests/bld-mods.test.cjs",
+   "base_sha": "c7796c50905db0e016337dcb9849bdee19438adb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "['bld-import.js', I, '1.0.0']",
+     "text": "['bld-import.js', I, '1.1.0']"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\ntest('Mis builds: guarda, no duplica",
+     "text": "\ntest('EQ-9b: importar con la misma ficha (rasgos como en el juego; si es de la Biblioteca, su equipo, AE2 y su ficha)', async () => {\n  const code = I._pure.parseAny(THIEF).code;\n  let painted = '';\n  const host = { innerHTML: '', querySelector: (sel) => (sel === '#bldImpOut' ? { set innerHTML(v) { painted = v; } } : null) };\n  const went = [], toasts = [];\n  const ctx = { host, ref: { load: async () => ({ ok: 1 }), resolve: () => VIEW, check: () => [] }, go: (t, a) => went.push(t + ':' + a), toast: (m, k) => toasts.push(k + ':' + m) };\n  globalThis.GNBldShow = S;\n  const seen = [];\n  globalThis.GNBldTraitView = { ready: (r) => !!(r && r.ok), html: (m) => { seen.push(m); return '<div class=\"bld-tv\">TV</div>'; }, ensureCss() {}, wire() {} };\n  globalThis.GNBldGearView = { html: () => '<div class=\"bld-gv\">GV</div>', ensureCss() {}, wire() {} };\n  globalThis.GNBldLib = { _state: { cat: { builds: [{ id: 'sc-x', name: 'Ladrón <b>', code, mode: 'pve', sub: 'raids', source: null }] } } };\n  let loads = 0;\n  globalThis.GNBldItems = { load: async (id) => { loads++; assert.equal(id, 'sc-x'); return { view: { sets: [] } }; } };\n  globalThis.GNBldAe2 = { fromSheetCode: (v, b) => (v && b.mode === 'pve' && b.sub === 'raids' ? 'AE2:xyz' : ''), gearHTML: () => '', parse: () => ({ ok: false }) };\n  await I._pure.read(ctx, THIEF);\n  assert.equal(loads, 1);\n  assert.match(painted, /class=\"bld-card bld-imp-sheet\" aria-labelledby=\"bldImpTitle\"/);\n  assert.match(painted, /<h3 id=\"bldImpTitle\">Ladrón &lt;b&gt;<\\/h3>/, 'el nombre de la build de la Biblioteca, escapado');\n  assert.match(painted, /<h4 id=\"bldImpGear\">Equipo<\\/h4><p class=\"bld-muted bld-gsum\">Es «Ladrón &lt;b&gt;» de la Biblioteca \\(mismo código\\)[^<]*<\\/p><div class=\"bld-gv\">GV<\\/div>/);\n  assert.match(painted, /<h4 id=\"bldImpTraits\">Rasgos y habilidades<\\/h4><div class=\"bld-tv\">TV<\\/div>/);\n  assert.deepEqual(seen[seen.length - 1].gear, { sets: [] }, 'las armas de la barra salen del equipo');\n  assert.deepEqual(seen[seen.length - 1].actions, ['share', 'gw2skills', 'edit']);\n  for (const a of ['copy', 'save']) assert.match(painted, new RegExp('data-bld-act=\"' + a + '\"'));\n  assert.match(painted, /data-bld-imp=\"ae2\"[^>]*>Copiar AE2 \\(Alter Ego\\)<\\/button>/);\n  assert.match(painted, /data-bld-imp=\"open\">Ver su ficha en la Biblioteca<\\/button>/);\n  (painted.match(/<button\\b[^>]*/g) || []).forEach((x) => assert.match(x, /type=\"button\"/));\n  const el = (k) => ({ getAttribute: () => k, closest() { return this; } });\n  assert.equal(I._pure.onOut(ctx, { target: el('open') }), 'open');\n  assert.deepEqual(went, ['sheet:sc-x']);\n  assert.equal(I._pure.onOut(ctx, { target: el('ae2') }), 'ae2');\n  await new Promise((r) => setTimeout(r, 0));\n  assert.equal(toasts.length, 1);\n  assert.match(toasts[0], /AE2/);\n  await I._pure.read(ctx, GUARD);\n  assert.match(painted, /El código del juego no trae el equipo/, 'otra build: sin equipo, lo dice');\n  assert.doesNotMatch(painted, /data-bld-imp=\"(ae2|open)\"/);\n  assert.match(painted, /<h3 id=\"bldImpTitle\">Francotirador importada<\\/h3>/);\n  ctx.ref.load = async () => ({});\n  await I._pure.read(ctx, THIEF);\n  assert.match(painted, /class=\"bld-card bld-detail\"/, 'ref viejo: la vista de antes');\n  assert.doesNotMatch(I._pure.CSS, /:\\s*#[0-9a-fA-F]{3,8}/, 'sin colores fijos');\n  for (const k of ['GNBldShow', 'GNBldTraitView', 'GNBldGearView', 'GNBldLib', 'GNBldItems', 'GNBldAe2']) delete globalThis[k];\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "69b262de72e0213c29e75bbafcdd3bde01470aad",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-import.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/bld-import.js\", \"v\": \"1.1.0\" }"
+    }
+   ]
+  }
+ ]
+}
