@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); PvP en curso (4/5, 100 notas en total).
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); EQ-8 PvP hecho (32 notas): EQ-8 completo, 104 notas en total. Sigue EQ-9.
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -93,6 +93,7 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-8 PvP (2/5) | HECHO 2026-11-02 03:30Z | 7 notas de Ingeniero y Guardabosques PvP (86 en total), PATCH-348 (`fa0e611`, 174005 B). RUN-275: 322 referencias PvP, 0 sin resolver. Siguen Ladrón y Elementalista (8), Hipnotizador y Nigromante (6) y Retornado (4). |
 | EQ-8 PvP (3/5) | HECHO 2026-11-15 21:20Z | 8 notas de Ladrón y Elementalista PvP (94 en total), PATCH-350 (`bf69209`, 193504 B). RUN-277: 515 referencias PvP, 0 sin resolver. Siguen Hipnotizador y Nigromante (6) y Retornado (4). |
 | EQ-8 PvP (4/5) | HECHO 2026-11-15 23:20Z | 6 notas de Hipnotizador y Nigromante PvP (100 en total), PATCH-352 (`df924fa`, 208305 B). RUN-279: 658 referencias PvP, 0 sin resolver. Falta Retornado (4). |
+| EQ-8 PvP (5/5) | HECHO 2026-11-15 23:30Z | 4 notas de Retornado PvP: las 32 de PvP completas, 104 en total (36 PvE, 36 WvW, 32 PvP), PATCH-354 (`b908038`, 217767 B). RUN-281: 746 referencias PvP, 0 sin resolver. Sondas y su librería borradas. EQ-8 COMPLETO; sigue EQ-9. |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
