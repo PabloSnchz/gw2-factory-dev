@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-355",
+ "summary": "BL-084 EQ-8 PvP (5/5) y cierre de EQ-8: docs (status y plan) — 104 notas (36 PvE, 36 WvW, 32 PvP); sigue EQ-9",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c1bd5b1162b7d2968aa31592f94166bee7784ade",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-8 PvP (5/5): Retornado.",
+     "text": "EQ-8 PvP (5/5) HECHO 2026-11-15 23:30Z (Heraldo, Renegado, Justiciero y Conductor de PvP). EQ-8 COMPLETO: 104 notas (36 PvE, 36 WvW y 32 PvP), todas las builds de la Biblioteca. Sigue EQ-9: AE2 con el equipo real."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-15 23:20Z",
+     "text": "Última actualización: 2026-11-15 23:30Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-8 PvP (5/5): notas de Retornado PvP (4), las últimas de EQ-8;",
+     "text": "Próxima acción: BL-084 EQ-9: AE2 con el equipo real de la build, y Editor e Importar con la misma ficha;"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "BL-084 EQ-8 PvP (4/5) — notas de Hipnotizador y Nigromante PvP. HECHO.",
+     "text": "BL-084 EQ-8 PvP (5/5) — notas de Retornado PvP. HECHO. EQ-8 COMPLETO.\nArchivos:\n- assets/data/builds/notes.json (`b908038`, 217767 B: 104 notas = 36 PvE + 36 WvW + 32 PvP; nuevas Heraldo, Renegado, Justiciero y Conductor de PvP), por PATCH-354.\n- tests/bld-eq8w-lib.cjs: borrada (era la librería de las sondas; ya no queda ninguna sonda de EQ-8).\n\nAdemás: RUN-281: 746 referencias PvP (32 notas), 0 sin resolver; notes, play, sheet y size-budget verdes. Sondas RUN-280 (tests/bld-eq8p-26..29.smoke.cjs), ya borradas. En el Retornado la barra cambia con la leyenda activa: la nota nombra las leyendas de cada build y, de sus habilidades, solo las que la API marca para el control; el resto remite a la guía. Quedan los guardianes permanentes tests/bld-notes-refs-{pve,wvw,pvp}.smoke.cjs.\n\n"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "fb7fe7ea742757ff82c167e9909b1d0a957e55a4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "PvP en curso (4/5, 100 notas en total).",
+     "text": "EQ-8 PvP hecho (32 notas): EQ-8 completo, 104 notas en total. Sigue EQ-9."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-8 PvP (5/5) | HECHO 2026-11-15 23:30Z | 4 notas de Retornado PvP: las 32 de PvP completas, 104 en total (36 PvE, 36 WvW, 32 PvP), PATCH-354 (`b908038`, 217767 B). RUN-281: 746 referencias PvP, 0 sin resolver. Sondas y su librería borradas. EQ-8 COMPLETO; sigue EQ-9. |"
+    }
+   ]
+  }
+ ]
+}
