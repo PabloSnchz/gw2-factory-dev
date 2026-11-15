@@ -14,7 +14,7 @@ const THIEF = '[&DQUAAAAAAAAkDyQPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACLwB
 const GUARD = '[&DQEbNxAZKgoDAQMBihKKEv4S/hJ6FnoWtRIAAAAAAAAAAAAAAAAAAAAAAAA=]';
 
 test('versiones en la cabecera', () => {
-  for (const [f, m, v] of [['bld-show.js', S, '1.1.0'], ['bld-import.js', I, '1.0.0'], ['bld-store.js', T, '1.0.0']]) {
+  for (const [f, m, v] of [['bld-show.js', S, '1.1.0'], ['bld-import.js', I, '1.1.0'], ['bld-store.js', T, '1.0.0']]) {
     assert.match(fs.readFileSync(path.join(ROOT, 'js', f), 'utf8'), new RegExp('Versión: ' + v.replace(/\./g, '\\.') + ' '), f);
     assert.equal(m.version, v, f);
   }
@@ -83,6 +83,50 @@ test('importar: resuelve con bld-ref (simulado) y muestra la validación', async
   await I._pure.read(ctx, THIEF);
   assert.match(painted, /no pude traer los nombres: sin red\./);
   delete globalThis.GNBldShow;
+});
+
+test('EQ-9b: importar con la misma ficha (rasgos como en el juego; si es de la Biblioteca, su equipo, AE2 y su ficha)', async () => {
+  const code = I._pure.parseAny(THIEF).code;
+  let painted = '';
+  const host = { innerHTML: '', querySelector: (sel) => (sel === '#bldImpOut' ? { set innerHTML(v) { painted = v; } } : null) };
+  const went = [], toasts = [];
+  const ctx = { host, ref: { load: async () => ({ ok: 1 }), resolve: () => VIEW, check: () => [] }, go: (t, a) => went.push(t + ':' + a), toast: (m, k) => toasts.push(k + ':' + m) };
+  globalThis.GNBldShow = S;
+  const seen = [];
+  globalThis.GNBldTraitView = { ready: (r) => !!(r && r.ok), html: (m) => { seen.push(m); return '<div class="bld-tv">TV</div>'; }, ensureCss() {}, wire() {} };
+  globalThis.GNBldGearView = { html: () => '<div class="bld-gv">GV</div>', ensureCss() {}, wire() {} };
+  globalThis.GNBldLib = { _state: { cat: { builds: [{ id: 'sc-x', name: 'Ladrón <b>', code, mode: 'pve', sub: 'raids', source: null }] } } };
+  let loads = 0;
+  globalThis.GNBldItems = { load: async (id) => { loads++; assert.equal(id, 'sc-x'); return { view: { sets: [] } }; } };
+  globalThis.GNBldAe2 = { fromSheetCode: (v, b) => (v && b.mode === 'pve' && b.sub === 'raids' ? 'AE2:xyz' : ''), gearHTML: () => '', parse: () => ({ ok: false }) };
+  await I._pure.read(ctx, THIEF);
+  assert.equal(loads, 1);
+  assert.match(painted, /class="bld-card bld-imp-sheet" aria-labelledby="bldImpTitle"/);
+  assert.match(painted, /<h3 id="bldImpTitle">Ladrón &lt;b&gt;<\/h3>/, 'el nombre de la build de la Biblioteca, escapado');
+  assert.match(painted, /<h4 id="bldImpGear">Equipo<\/h4><p class="bld-muted bld-gsum">Es «Ladrón &lt;b&gt;» de la Biblioteca \(mismo código\)[^<]*<\/p><div class="bld-gv">GV<\/div>/);
+  assert.match(painted, /<h4 id="bldImpTraits">Rasgos y habilidades<\/h4><div class="bld-tv">TV<\/div>/);
+  assert.deepEqual(seen[seen.length - 1].gear, { sets: [] }, 'las armas de la barra salen del equipo');
+  assert.deepEqual(seen[seen.length - 1].actions, ['share', 'gw2skills', 'edit']);
+  for (const a of ['copy', 'save']) assert.match(painted, new RegExp('data-bld-act="' + a + '"'));
+  assert.match(painted, /data-bld-imp="ae2"[^>]*>Copiar AE2 \(Alter Ego\)<\/button>/);
+  assert.match(painted, /data-bld-imp="open">Ver su ficha en la Biblioteca<\/button>/);
+  (painted.match(/<button\b[^>]*/g) || []).forEach((x) => assert.match(x, /type="button"/));
+  const el = (k) => ({ getAttribute: () => k, closest() { return this; } });
+  assert.equal(I._pure.onOut(ctx, { target: el('open') }), 'open');
+  assert.deepEqual(went, ['sheet:sc-x']);
+  assert.equal(I._pure.onOut(ctx, { target: el('ae2') }), 'ae2');
+  await new Promise((r) => setTimeout(r, 0));
+  assert.equal(toasts.length, 1);
+  assert.match(toasts[0], /AE2/);
+  await I._pure.read(ctx, GUARD);
+  assert.match(painted, /El código del juego no trae el equipo/, 'otra build: sin equipo, lo dice');
+  assert.doesNotMatch(painted, /data-bld-imp="(ae2|open)"/);
+  assert.match(painted, /<h3 id="bldImpTitle">Francotirador importada<\/h3>/);
+  ctx.ref.load = async () => ({});
+  await I._pure.read(ctx, THIEF);
+  assert.match(painted, /class="bld-card bld-detail"/, 'ref viejo: la vista de antes');
+  assert.doesNotMatch(I._pure.CSS, /:\s*#[0-9a-fA-F]{3,8}/, 'sin colores fijos');
+  for (const k of ['GNBldShow', 'GNBldTraitView', 'GNBldGearView', 'GNBldLib', 'GNBldItems', 'GNBldAe2']) delete globalThis[k];
 });
 
 test('Mis builds: guarda, no duplica, edita, duplica y borra; valida el código', () => {
