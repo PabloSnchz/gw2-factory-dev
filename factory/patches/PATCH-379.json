@@ -1,0 +1,37 @@
+{
+ "id": "PATCH-379",
+ "summary": "BL-090 checkpoint: Pablo validó MC-3b (2026-11-16 22:44Z, «el cambio es impresionante») y pidió seguir: arranca MC-4. Nuevo BL-091: llevar la estética de la función (y mi presencia con el gato) a La Guarida, el Centro de decisiones y La Bóveda DEV",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "dbcb8c38a8a52610cecd238c37e77a121ea5705a",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## READY\n\n",
+     "text": "- [BL-091] [ALTO] La estética de la función en todo el ecosistema — pedido de Pablo (2026-11-16 22:44Z): «la estética es tan linda y relacionada con el ecosistema que ya quiero que migremos el estilo y lo repliquemos en la Guarida, en la Bóveda y en el Centro de decisiones, incorporando también la presencia tuya y del gato». Plan: un kit común «GN Escena» (fondos taller/noche/evolving con chispas, navegación en cápsula, mi globo con cara y el gato sentado encima, poses fundidas con el fondo) con su fuente en el repo shiruvana y una copia versionada en cada repo (nada se carga de otro sitio en tiempo de ejecución; un test compara la versión). Orden: 1) La Guarida (ya usa mis poses y caras, RG-7: el salto es corto); 2) Centro de decisiones (gw2-factory-dashboard; solo lo ve Pablo); 3) La Bóveda en DEV (gw2-factory-dev; la más grande y la de los jugadores: estética como ambiente, sin robar espacio a los datos; poses solo en bienvenida y estados vacíos; mi rincón global DEC-034 pasa a ser el globo con el gato). Cada uno arranca con una maqueta para que Pablo decida lo visual. PRD solo con orden de Pablo. Arranca al cerrar BL-090 (MC-4). · BL-090, DEC-034, DEC-048, DEC-049 — 2026-11-16\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "6dd17188fb2ef22ba361907c72abb65154fbe328",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 22:37Z",
+     "text": "Última actualización: 2026-11-16 22:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "MC-3b HECHO (una sola función, se queda «▶ Sola»; barra en cápsula y figura que se funde con el fondo; 43/43 tests), espera validación de Pablo; MC-4 no arranca sin su OK;",
+     "text": "MC-3b validado por Pablo (2026-11-16 22:44Z); MC-4 en curso (cifras vivas desde ai-memory con una Action cada 2 h y la escena «Hoy en la Factory»; es el último MC: la voz de MC-5 se descarta por poco valor y el enlace por escena ya existe); después BL-091;"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-090] Validación: MC-3b del sitio de Shiruvana. Mirá https://pablosnchz.github.io/shiruvana/ (Ctrl+F5) en la compu y en el celular: la barra de capítulos es una cápsula que ya no cruza la pantalla, mi figura entra entera debajo y sin el cuadro negro (sobre todo en Quién soy y el Vestidor), y no hay más «¿Quién sos?».\n"
+    }
+   ]
+  }
+ ]
+}
