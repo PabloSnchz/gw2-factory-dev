@@ -1,0 +1,33 @@
+{
+ "id": "PATCH-367",
+ "summary": "BL-089 IN_PROGRESS: el sitio de Shiruvana entra al ecosistema de La Guarida y la pose «con el gato» pasa al gato nuevo",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "5f4dfecd4ffe3c157d2cc2c66adfde3ff9203ebe",
+   "ops": [
+    {
+     "op": "insert_before",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-089] [BAJO] El sitio de Shiruvana dentro del ecosistema y la pose «con el gato» con el gato nuevo — pedido de Pablo (2026-11-16 01:00Z). (1) La Guarida: el sitio https://pablosnchz.github.io/shiruvana/ entra en «⋯ › Gato Negro» entre el Centro de decisiones y Link in Bio, con mi cara hola, y el portal lo encuentra por «Shiruvana» (data-portal). la-guarida e602632 (index.html ca6428c, tests/index.test.cjs cb11acf con el test BL-089, mutación cazada) y c223924 (README 3eb306a: atajos, cabecera y tabla Ecosistema). (2) Imagen: con la imagen nueva de Pablo armé 5 webp (sitio con-gato-480 480x640 35004 B blob 1bdb6ae; Guarida shiruvana-con-gato-320 9511b7f, -640 1dca765, -cara-128 9a06cd1, -cara-256 cfd39e4) con los mismos nombres para reemplazo directo. Por pedido de Pablo no se guarda ningún original: borré el .jpg viejo de la Guarida (58359f7) y no subo el nuevo. Bloqueado por Pablo: subir los 5 webp (la Factory no escribe binarios) y validar a la vista. · DEC-049, DEC-050 — 2026-11-16\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "974e7d6cdf9b24e339b9e4d4a9faa7fb3ff114da",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 00:50Z",
+     "text": "Última actualización: 2026-11-16 01:15Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "sin otra tarea en curso hasta que Pablo elija la próxima;",
+     "text": "BL-089 en curso: el sitio de Shiruvana ya está en La Guarida («⋯» y portal, la-guarida e602632/c223924/58359f7); espera que Pablo suba los 5 webp de «con el gato» (sitio con-gato-480; Guarida -320, -640, -cara-128, -cara-256) y valide;"
+    }
+   ]
+  }
+ ]
+}
