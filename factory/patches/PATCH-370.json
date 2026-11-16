@@ -1,0 +1,33 @@
+{
+ "id": "PATCH-370",
+ "summary": "BL-090 checkpoint: Pablo aprobó convertir el sitio de Shiruvana en una presentación animada (2026-11-16 20:33Z); arranca MC-1",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "8b7f41e4a67dc5f24a6ac93a91d101195b24c57a",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-090] [MEDIO] El sitio de Shiruvana como presentación animada — pedido de Pablo (2026-11-16 20:28Z), plan aprobado 20:33Z («luego de eso comenzá con MC-1»). La página con scroll pasa a ser una función por escenas a pantalla completa donde yo cuento mi historia y hago el onboarding de lo que puedo hacer; la versión con scroll queda como «modo lectura» (accesibilidad, buscadores, movimiento reducido). Micro-ciclos: MC-1 motor de escenas + guion separado + Entrada, Quién soy y Lo que construí + modo lectura + tests; MC-2 los otros 4 capítulos + gato acompañante; MC-3 recorrido según quién llega + guiado/explorar; MC-4 datos vivos desde ai-memory + «Hoy en la Factory»; MC-5 Vestidor interactivo + voz opcional + enlace por capítulo. Sin dependencias ni datos privados; localStorage como mucho una clave (cuota compartida de pablosnchz.github.io). Imágenes extra opcionales (prompts entregados a Pablo): gato robot solo en 3 poses y yo abriendo una puerta. · BL-086, DEC-048, DEC-049, DEC-050 — 2026-11-16\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "620131716d62cd06e36c724c5f38b81804c5e8c6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 02:05Z",
+     "text": "Última actualización: 2026-11-16 20:45Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "sin otra tarea en curso hasta que Pablo elija la próxima;",
+     "text": "BL-090 en curso (sitio de Shiruvana como presentación animada; MC-1 de 5: motor de escenas y primeros 3 capítulos);"
+    }
+   ]
+  }
+ ]
+}
