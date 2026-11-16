@@ -1,0 +1,49 @@
+{
+ "id": "PATCH-362",
+ "summary": "BL-084 EQ-10: la banda de habilidades (bld-traitview 1.0.1) baja su tinte de 26% a 14% para que el texto llegue a AA en los 19 temas (RUN-284/286: fallaba en catppuccin, everforest y one-dark)",
+ "files": [
+  {
+   "path": "js/bld-traitview.js",
+   "base_sha": "2b060ee9b4cb4d67d64d1ff46f4299df20e23bc3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 1.0.0 (2026-10-30)\n",
+     "text": " * Versión: 1.0.1 (2026-11-15) · EQ-10: el tinte de la profesión detrás de la barra baja de 26% a 14% (con 26% el texto no\n *          llegaba a 4.5:1 en catppuccin, everforest y one-dark; RUN-284/286) · antes 1.0.0 (2026-10-30)\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '1.0.0';",
+     "text": "var VERSION = '1.0.1';"
+    },
+    {
+     "op": "replace",
+     "anchor": "color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 26%,var(--bg-0))",
+     "text": "color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 14%,var(--bg-0))"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-traitview.test.cjs",
+   "base_sha": "a0ea224a68f8b2aa3ba730efd7457eb3280f320a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.match(src, /Versión: 1\\.0\\.0 /);\n  assert.equal(TV.version, '1.0.0');",
+     "text": "assert.match(src, /Versión: 1\\.0\\.1 /);\n  assert.equal(TV.version, '1.0.1');"
+    }
+   ]
+  },
+  {
+   "path": "js/modules.json",
+   "base_sha": "f2b237bddad05b650bdf60a8fbc5bdf7a6144ec9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "{ \"src\": \"js/bld-traitview.js\", \"v\": \"1.0.0\" }",
+     "text": "{ \"src\": \"js/bld-traitview.js\", \"v\": \"1.0.1\" }"
+    }
+   ]
+  }
+ ]
+}
