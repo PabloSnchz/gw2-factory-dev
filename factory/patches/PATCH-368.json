@@ -1,0 +1,37 @@
+{
+ "id": "PATCH-368",
+ "summary": "BL-089 DONE: Pablo subió los 5 webp de «con el gato» (2026-11-16 02:00Z), los 5 iguales por blob a los que armé",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "d4f1cc92a7d71873756df2f3bc98c6be98ba2790",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-089] [BAJO] El sitio de Shiruvana dentro del ecosistema y la pose «con el gato» con el gato nuevo — pedido de Pablo (2026-11-16 01:00Z). (1) La Guarida: el sitio https://pablosnchz.github.io/shiruvana/ entra en «⋯ › Gato Negro» entre el Centro de decisiones y Link in Bio, con mi cara hola, y el portal lo encuentra por «Shiruvana» (data-portal). la-guarida e602632 (index.html ca6428c, tests/index.test.cjs cb11acf con el test BL-089, mutación cazada) y c223924 (README 3eb306a: atajos, cabecera y tabla Ecosistema). (2) Imagen: con la imagen nueva de Pablo armé 5 webp (sitio con-gato-480 480x640 35004 B blob 1bdb6ae; Guarida shiruvana-con-gato-320 9511b7f, -640 1dca765, -cara-128 9a06cd1, -cara-256 cfd39e4) con los mismos nombres para reemplazo directo. Por pedido de Pablo no se guarda ningún original: borré el .jpg viejo de la Guarida (58359f7) y no subo el nuevo. Bloqueado por Pablo: subir los 5 webp (la Factory no escribe binarios) y validar a la vista. · DEC-049, DEC-050 — 2026-11-16\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-089] [BAJO] El sitio de Shiruvana dentro del ecosistema y la pose «con el gato» con el gato nuevo — HECHO (2026-11-16 02:00Z). La Guarida: el sitio https://pablosnchz.github.io/shiruvana/ en «⋯ › Gato Negro» y en el portal (la-guarida e602632 index.html + test BL-089, c223924 README). Imagen: Pablo subió los 5 webp y los verifiqué por blob (sitio con-gato-480 1bdb6ae; Guarida shiruvana-con-gato-320 9511b7f, -640 1dca765, -cara-128 9a06cd1, -cara-256 cfd39e4). Ningún original guardado: .jpg viejo borrado de la Guarida (58359f7), el nuevo nunca se subió; carpetas de trabajo de la Factory vaciadas a pedido de Pablo. · DEC-049, DEC-050 — 2026-11-16\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "4bef0bc9a68ce5083c4c777df5321b0817bc9eca",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 01:15Z",
+     "text": "Última actualización: 2026-11-16 02:05Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-089 en curso: el sitio de Shiruvana ya está en La Guarida («⋯» y portal, la-guarida e602632/c223924/58359f7); espera que Pablo suba los 5 webp de «con el gato» (sitio con-gato-480; Guarida -320, -640, -cara-128, -cara-256) y valide;",
+     "text": "BL-089 HECHA (sitio de Shiruvana en La Guarida; «con el gato» nuevo subido por Pablo y verificado por blob); sin otra tarea en curso hasta que Pablo elija la próxima;"
+    }
+   ]
+  }
+ ]
+}
