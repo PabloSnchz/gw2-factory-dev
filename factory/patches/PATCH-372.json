@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-372",
+ "summary": "BL-090 checkpoint: Pablo validó MC-1 («por ahora ok», 2026-11-16 21:10Z), aprobó MC-2 y entregó las 4 imágenes pedidas",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "595419fc7eea85a77dcd6ddb7b276b1195f55b24",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 20:55Z",
+     "text": "Última actualización: 2026-11-16 21:15Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-090 MC-1 HECHO (sitio de Shiruvana como presentación: Entrada, Quién soy y Lo que construí en escena; el resto en modo lectura), espera validación de Pablo; MC-2 no arranca sin su OK;",
+     "text": "BL-090 MC-1 validado por Pablo (2026-11-16 21:10Z); MC-2 en curso (los 4 capítulos que faltan, el gato acompañante y las transiciones);"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-090] Validación: https://pablosnchz.github.io/shiruvana/ ahora arranca como presentación (Ctrl+F5 si ves la página vieja). Mirá los 3 capítulos con clic, flechas o deslizando en el celular; «Modo lectura» y Esc vuelven a la página de siempre, y «▶ Ver la presentación» vuelve a la función. Contame qué ajustar antes de MC-2.\n"
+    }
+   ]
+  }
+ ]
+}
