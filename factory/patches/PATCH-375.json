@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-375",
+ "summary": "BL-090 MC-3 HECHO: la función de Shiruvana según quién llega (jugador/curioso/Pablo, ?para=) y modo que avanza sola (?sola=1); espera validación de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "989d6db25096f8b1b7317835b90164efa9a1266e",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "MC-5 queda en voz opcional y enlace para compartir.",
+     "text": " Pablo subió los 4 webp y validó MC-2 (2026-11-16 21:56Z). MC-3 HECHO (2026-11-16 22:10Z) en shiruvana: css/escenario.css e1ec29b, js/escenario.js 293fbf0 (motor 1.2.0: escena «¿Quién sos?» con tres públicos —jugador 15 escenas, curioso 21 (por defecto), Pablo 22 con escena propia y textos para él—, navegación que saltea lo que no es para ese público, pastillas apagadas, cuenta y progreso sobre lo visible; público y modo en la dirección con ?para=jugador|curioso|pablo y &sola=1 vía history.replaceState, sin almacenamiento; modo «que avance sola» con botón ▶ Sola/⏸ Pausa e interruptor en la elección: espera a que termine de hablar, min(9 s, 2,2 s + 30 ms por carácter), se pausa en el Vestidor, se frena en modo lectura y se apaga en los créditos), js/guion.js 8fb23f3 (guion 1.2.0: publicos, para y textos por público), tests/escenario.test.cjs 208cdec (suite 46/46, 20/20 mutaciones), README a671d01. Espera validación visual de Pablo; MC-4 (datos vivos de ai-memory y «Hoy en la Factory») no arranca sin su OK."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "f2d8d58593c0ff5c0a3c90f8fbce7d7495a6089e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 22:00Z",
+     "text": "Última actualización: 2026-11-16 22:12Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "MC-3 en curso (la función según quién llega y modo que avanza sola);",
+     "text": "MC-3 HECHO (la función según quién llega —?para=jugador|curioso|pablo— y modo que avanza sola —?sola=1—; 46/46 tests), espera validación de Pablo; MC-4 no arranca sin su OK;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-090] Validación MC-3: mirá https://pablosnchz.github.io/shiruvana/ (Ctrl+F5) y en la escena 2 elegí cada público; probá también los enlaces directos https://pablosnchz.github.io/shiruvana/?para=jugador (15 escenas, sin Cómo trabajo), https://pablosnchz.github.io/shiruvana/?para=pablo (22, con tu escena en Ecosistema) y https://pablosnchz.github.io/shiruvana/?sola=1 (avanza sola; ⏸ Pausa la frena), en la compu y en el celular.\n"
+    }
+   ]
+  }
+ ]
+}
