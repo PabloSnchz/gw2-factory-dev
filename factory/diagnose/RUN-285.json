@@ -1,0 +1,5 @@
+{
+ "id": "RUN-285",
+ "summary": "BL-084 EQ-10: sonda 2 (porcentaje seguro de la banda de habilidades y rendimiento de la ficha)",
+ "tests": ["tests/eq10-probe.smoke.cjs"]
+}
