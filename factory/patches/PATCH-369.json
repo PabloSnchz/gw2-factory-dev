@@ -1,0 +1,17 @@
+{
+ "id": "PATCH-369",
+ "summary": "BL-089: a pedido de Pablo («si no se usa borralo», 2026-11-16 02:08Z) borré los 6 .jpg originales de las poses de La Guarida",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "4da4191563fcb269869871d6d4b196dae0b1ec67",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "carpetas de trabajo de la Factory vaciadas a pedido de Pablo. · DEC-049, DEC-050 — 2026-11-16\n",
+     "text": "carpetas de trabajo de la Factory vaciadas a pedido de Pablo. Después (02:11Z, «si no se usa borralo»): RUN-290 no encontró ninguna referencia a los .jpg originales de las poses (la-guarida, shiruvana, gw2-factory-dev; el panel, la Bóveda y la bio usan sus propias imágenes) y borré los 6 de la-guarida assets/brand/shiruvana/ (explica, festeja, guiño, hola, ojo, pensando; ~12 MB; commits 690bb93 a bc514c8). Quedan solo los webp. · DEC-049, DEC-050 — 2026-11-16\n"
+    }
+   ]
+  }
+ ]
+}
