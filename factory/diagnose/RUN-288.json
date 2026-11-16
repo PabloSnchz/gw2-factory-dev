@@ -1,0 +1,5 @@
+{
+ "id": "RUN-288",
+ "summary": "Pasaje a PRD: diferencias blob a blob de DEV contra PRD (gw2-wallet-ligero) en lo que se publica",
+ "tests": ["tests/bl087-diff.smoke.cjs"]
+}
