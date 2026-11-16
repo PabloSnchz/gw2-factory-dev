@@ -1,0 +1,37 @@
+{
+ "id": "PATCH-366",
+ "summary": "BL-088 CERRADA: Pablo validó producción 13efe64 (2026-11-16 00:49Z, «perfecto, todo ok»)",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "7f9efd62087aed81add71ee3d067fa2f931ddc4c",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-088] [ALTO] Promoción a producción de BL-084 (ficha de build completa, FEAT-026) y BL-087 (una cara por tipo de mensaje) — pedido de Pablo (2026-11-16 00:14Z: «preparemos para llevar a prd todo lo que ya tenemos en dev y aun no promocionamos … via powershell»). Comparé blob a blob DEV con producción 73d1b09 (RUN-288): 451 idénticos, 25 movimientos (7 JS nuevos, 10 JS modificados, gear.json y notes.json, index.html y la curación semanal con el equipo: builds-watch.yml, bld-curate y bld-gear-scrape con sus tests). No van: analytics.js, meta-drops.json, watch.json (lo escribe la vigía de PRD) ni los scripts de la Factory. Manifiesto factory/promote/BL-088.txt. Espera que Pablo corra la línea de PowerShell; después, control blob a blob e informe. · DEC-036, DEC-041 — 2026-11-16\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-088] [ALTO] Promoción a producción de BL-084 (ficha de build completa, FEAT-026) y BL-087 (una cara por tipo de mensaje) — HECHO y validado por Pablo en PRD (2026-11-16 00:49Z: «perfecto, todo ok»). Vía PowerShell (DEC-036): manifiesto factory/promote/BL-088.txt, 25 movimientos sobre 73d1b09, DEV fijo c8ddd29; producción 13efe64, rollback/pre-bl-088 = 73d1b09. Control RUN-289: 25/25 iguales a DEV, nada fuera del manifiesto, analytics/meta-drops/watch.json de PRD intactos, Pages publicado. Informe ai-memory/missions/BL-088-informe-promocion.md. · DEC-036, DEC-041 — 2026-11-16\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "792317bde4ed800779026317a605ebfe127744e1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 00:45Z",
+     "text": "Última actualización: 2026-11-16 00:50Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-088 EN PRD (producción 13efe64, rollback/pre-bl-088 = 73d1b09; 25/25 iguales a DEV, Pages publicado; informe ai-memory/missions/BL-088-informe-promocion.md): esperar la validación de Pablo en Chrome y, con su OK, pasar BL-088 a DONE; el lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo en PRD;",
+     "text": "Próxima acción: BL-088 CERRADA (validada por Pablo en PRD 2026-11-16 00:49Z; producción 13efe64). El lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo (gear.json) en PRD y en DEV; sin otra tarea en curso hasta que Pablo elija la próxima;"
+    }
+   ]
+  }
+ ]
+}
