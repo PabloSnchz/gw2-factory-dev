@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-11-16 01:15Z
-Próxima acción: BL-088 CERRADA (validada por Pablo en PRD 2026-11-16 00:49Z; producción 13efe64). El lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo (gear.json) en PRD y en DEV; BL-089 en curso: el sitio de Shiruvana ya está en La Guarida («⋯» y portal, la-guarida e602632/c223924/58359f7); espera que Pablo suba los 5 webp de «con el gato» (sitio con-gato-480; Guarida -320, -640, -cara-128, -cara-256) y valide; luego EQ-9 (AE2 con el equipo real). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).
+Última actualización: 2026-11-16 02:05Z
+Próxima acción: BL-088 CERRADA (validada por Pablo en PRD 2026-11-16 00:49Z; producción 13efe64). El lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo (gear.json) en PRD y en DEV; BL-089 HECHA (sitio de Shiruvana en La Guarida; «con el gato» nuevo subido por Pablo y verificado por blob); sin otra tarea en curso hasta que Pablo elija la próxima; luego EQ-9 (AE2 con el equipo real). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).
 
 Micro-ciclo:
 BL-084 EQ-8 PvP (5/5) — notas de Retornado PvP. HECHO. EQ-8 COMPLETO.
