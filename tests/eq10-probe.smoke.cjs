@@ -1,11 +1,9 @@
-// Sonda temporal EQ-10: mezclas de color de los módulos de BL-084, contraste en los 19 temas, medias y tamaños. Se borra después.
+// Sonda temporal EQ-10 (2): porcentaje seguro del tinte de la banda de habilidades y rendimiento de la ficha. Se borra después.
 'use strict';
 const fs = require('node:fs');
 const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const read = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8');
-const MODS = ['bld-sheet.js', 'bld-gearview.js', 'bld-traitview.js', 'bld-notes.js', 'bld-play.js', 'bld-import.js', 'bld-editor.js', 'bld-show.js', 'bld-ae2.js', 'bld-items.js', 'bld-bench.js', 'bld-rows.js', 'bld-mine.js', 'bld-lib.js', 'bld-view.js'];
-const SRC = {}; MODS.forEach((f) => { SRC[f] = read('js/' + f); });
 function parse(v) {
   if (!v) return null; v = String(v).trim();
   let m = /^#([0-9a-f]{3,8})$/i.exec(v);
@@ -22,54 +20,49 @@ const THEMES = fs.readdirSync(DIR).filter((f) => f.endsWith('.css')).sort().map(
   const css = fs.readFileSync(path.join(DIR, f), 'utf8'); const block = css.slice(css.indexOf('{') + 1, css.indexOf('}')); const t = {};
   block.replace(/(--[\w-]+)\s*:\s*([^;]+);/g, (_, k, v) => { t[k] = v.trim(); return ''; }); return { id: f.replace(/\.css$/, ''), t };
 });
-const VIEW = SRC['bld-view.js'];
+const VIEW = read('js/bld-view.js');
 const COLOR = /var COLOR = '(#[0-9A-Fa-f]{6})'/.exec(VIEW)[1];
 const MODP = Number(/'\{--gn-mod:color-mix\(in srgb,' \+ COLOR \+ ' (\d+)%,var\(--tx-1\)\)/.exec(VIEW)[1]) / 100;
 const PROF = ((/var PROF_COLOR = \{([^}]*)\}/.exec(VIEW) || ['', ''])[1].match(/#[0-9A-Fa-f]{6}/g) || []);
-console.log('COLOR', COLOR, 'mod', MODP, 'prof', PROF.join(' '));
-const RE = /color-mix\(in srgb,(var\(--[\w-]+(?:,var\(--[\w-]+\))?\)|var\(--[\w-]+,#[0-9a-fA-F]+\)|#[0-9a-fA-F]{6}|' \+ COLOR \+ ') (\d+)%,(var\(--[\w-]+\)|transparent)\)/g;
-const found = [];
-MODS.slice(0, 9).forEach((f) => {
-  let m; while ((m = RE.exec(SRC[f]))) {
-    const i = m.index, ctx = SRC[f].slice(Math.max(0, SRC[f].lastIndexOf('{', i) - 70), i).replace(/\s+/g, ' ');
-    found.push({ f, a: m[1], p: +m[2] / 100, b: m[3], ctx: ctx.slice(-110) });
-  }
-});
-console.log('mezclas en módulos BL-084:', found.length);
-found.forEach((x) => console.log(' ', x.f, x.a, Math.round(x.p * 100) + '%', x.b, '←', x.ctx));
-// contraste: texto tx-1/tx-2 sobre cada mezcla cuyo fondo es bg-*, con color = gn-mod o cada profesión
-const bad = {};
-THEMES.forEach(({ id, t }) => {
-  const c = (k) => parse(t[k]);
-  const bg0 = over(c('--bg-0'), [255, 255, 255, 1]), bg1 = over(c('--bg-1'), bg0), bg2 = over(c('--bg-2'), bg1);
-  const BG = { '--bg-0': bg0, '--bg-1': bg1, '--bg-2': bg2 };
-  const tx1 = over(c('--tx-1'), bg1), tx2 = over(c('--tx-2'), bg1);
-  const mod = mix(parse(COLOR), tx1, MODP);
-  found.forEach((x) => {
-    const base = BG[(/var\((--bg-\d)\)/.exec(x.b) || [])[1]];
-    if (!base) return;
-    const cols = /bld-prof/.test(x.a) ? PROF.map(parse) : /gn-mod/.test(x.a) ? [mod] : /acc-1/.test(x.a) ? [over(c('--acc-1'), bg1)] : /COLOR/.test(x.a) ? [parse(COLOR)] : [];
-    cols.forEach((col, k) => {
-      const s = mix(col, base, x.p);
-      [['tx-1', tx1, 4.5], ['tx-2', tx2, 4.5]].forEach(([n, tx, min]) => {
-        const r = ratio(tx, s);
-        if (r < min) { const key = x.f + ' ' + x.a + ' ' + Math.round(x.p * 100) + '% ' + x.b + ' ' + n; (bad[key] = bad[key] || []).push(id + (PROF.length && /bld-prof/.test(x.a) ? '/' + PROF[k] : '') + ' ' + r.toFixed(2)); }
-      });
+for (let p = 26; p >= 6; p -= 2) {
+  let n = 0, worst = 99, who = '';
+  THEMES.forEach(({ id, t }) => {
+    const c = (k) => parse(t[k]); const bg0 = over(c('--bg-0'), [255, 255, 255, 1]), bg1 = over(c('--bg-1'), bg0);
+    const tx1 = over(c('--tx-1'), bg1), tx2 = over(c('--tx-2'), bg1), mod = mix(parse(COLOR), tx1, MODP);
+    PROF.map(parse).concat([mod]).forEach((col) => {
+      const s = mix(col, bg0, p / 100);
+      [tx1, tx2].forEach((tx) => { const r = ratio(tx, s); if (r < 4.5) n++; if (r < worst) { worst = r; who = id; } });
     });
   });
+  console.log('banda ' + p + '%: fallas ' + n + ' · peor ' + worst.toFixed(2) + ' (' + who + ')');
+}
+// rendimiento: ficha completa (equipo, notas, cómo se juega) de las 104 builds
+globalThis.GNBldCode = require('../js/bld-code.js');
+globalThis.GNBldShow = require('../js/bld-show.js');
+globalThis.GNBldItems = require('../js/bld-items.js');
+globalThis.GNBldGearView = require('../js/bld-gearview.js');
+globalThis.GNBldRef = require('../js/bld-ref.js');
+globalThis.GNBldTraitView = require('../js/bld-traitview.js');
+globalThis.GNBldNotes = require('../js/bld-notes.js');
+globalThis.GNBldPlay = require('../js/bld-play.js');
+globalThis.GNBldAe2 = require('../js/bld-ae2.js');
+const SH = require('../js/bld-sheet.js');
+const CAT = JSON.parse(read('assets/data/builds/catalog.json'));
+const GEAR = JSON.parse(read('assets/data/builds/gear.json')).gear;
+console.log('notes api', Object.keys(globalThis.GNBldNotes).join(','));
+globalThis.GNBldLib = { _state: { cat: CAT }, _pure: { stateOf: () => 'vigente', latestPatch: () => '', ROLES: {}, benchHTML: () => '', issueUrl: () => '' }, list: () => CAT.builds, byId: (id) => CAT.builds.find((b) => b.id === id) };
+const t0 = process.hrtime.bigint();
+let max = 0, maxId = '', total = 0;
+CAT.builds.forEach((b) => {
+  const a = process.hrtime.bigint();
+  const v = GEAR[b.id] ? globalThis.GNBldItems.sheet(GEAR[b.id], null) : null;
+  SH._state.gear[b.id] = v;
+  const h = SH._pure.sheetHTML({ b, nav: SH._pure.navOf(CAT.builds, b.id), latest: '', gear: v });
+  total += h.length;
+  const ms = Number(process.hrtime.bigint() - a) / 1e6;
+  if (ms > max) { max = ms; maxId = b.id; }
 });
-console.log('fallas de contraste (texto sobre mezcla):', Object.keys(bad).length);
-Object.keys(bad).forEach((k) => console.log('  ' + k + ' → ' + bad[k].length + ': ' + bad[k].slice(0, 6).join(', ')));
-// tx-2 sobre bg-0/1/2 crudos (por si un tema no llega)
-THEMES.forEach(({ id, t }) => {
-  const c = (k) => parse(t[k]); const bg0 = over(c('--bg-0'), [255, 255, 255, 1]), bg1 = over(c('--bg-1'), bg0), bg2 = over(c('--bg-2'), bg1);
-  const tx2 = over(c('--tx-2'), bg1); const r = Math.min(ratio(tx2, bg0), ratio(tx2, bg1), ratio(tx2, bg2)); if (r < 4.5) console.log('  tx-2 crudo', id, r.toFixed(2));
-});
-// medias, tamaños de letra, foco y controles
-MODS.slice(0, 7).forEach((f) => {
-  const s = SRC[f];
-  const fs_ = (s.match(/font-size:\.(\d+)rem/g) || []).map((x) => +('0.' + /\.(\d+)/.exec(x)[1])).filter((v) => v < 0.7);
-  console.log(f, 'bytes', s.length, '@media', (s.match(/@media[^{]*/g) || []).join(' | ') || '—', '· letra < .7rem:', fs_.join(',') || '—',
-    '· tabindex', (s.match(/tabindex=/g) || []).length, '· role=tooltip', (s.match(/role=\\?"tooltip/g) || []).length, '· Escape', /Escape/.test(s), '· focus-visible', /focus-visible/.test(s),
-    '· min-height:44', /min-height:44px/.test(s), '· lazy', (s.match(/loading=\\?"lazy/g) || []).length);
-});
+console.log('ficha x104: total ' + (Number(process.hrtime.bigint() - t0) / 1e6).toFixed(1) + ' ms · máx ' + max.toFixed(2) + ' ms (' + maxId + ') · html ' + (total / 1024).toFixed(0) + ' KB');
+const notes = read('assets/data/builds/notes.json');
+console.log('notes.json ' + (Buffer.byteLength(notes) / 1024).toFixed(1) + ' KB · gear.json ' + (Buffer.byteLength(read('assets/data/builds/gear.json')) / 1024).toFixed(1) + ' KB');
+const t1 = process.hrtime.bigint(); JSON.parse(notes); console.log('parse notes ' + (Number(process.hrtime.bigint() - t1) / 1e6).toFixed(1) + ' ms');
