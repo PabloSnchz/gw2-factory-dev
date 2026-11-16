@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-11-16 00:45Z
-Próxima acción: BL-088 EN PRD (producción 13efe64, rollback/pre-bl-088 = 73d1b09; 25/25 iguales a DEV, Pages publicado; informe ai-memory/missions/BL-088-informe-promocion.md): esperar la validación de Pablo en Chrome y, con su OK, pasar BL-088 a DONE; el lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo en PRD; luego EQ-9 (AE2 con el equipo real). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).
+Última actualización: 2026-11-16 00:50Z
+Próxima acción: BL-088 CERRADA (validada por Pablo en PRD 2026-11-16 00:49Z; producción 13efe64). El lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo (gear.json) en PRD y en DEV; sin otra tarea en curso hasta que Pablo elija la próxima; luego EQ-9 (AE2 con el equipo real). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).
 
 Micro-ciclo:
 BL-084 EQ-8 PvP (5/5) — notas de Retornado PvP. HECHO. EQ-8 COMPLETO.
