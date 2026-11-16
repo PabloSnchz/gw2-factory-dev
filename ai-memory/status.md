@@ -6,8 +6,8 @@ Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 
 Fase: F1 — Visibilidad
 Etapa actual: DOCUMENTATION
 Inicio: 2026-10-21T20:30Z
-Última actualización: 2026-11-16 22:40Z
-Próxima acción: BL-088 CERRADA (validada por Pablo en PRD 2026-11-16 00:49Z; producción 13efe64). El lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo (gear.json) en PRD y en DEV; BL-089 HECHA (sitio de Shiruvana en La Guarida; «con el gato» nuevo subido por Pablo y verificado por blob); BL-090 MC-2 validado por Pablo (2026-11-16 21:56Z; los 4 webp subidos y verificados por blob: gato-sentado bc90056, gato-camina 8b51da1, gato-festeja d7acfa9, cuerpo-puerta 787e414); MC-3 revisado por Pablo (2026-11-16 22:25Z): no quiere versiones según quién mira; MC-3b en curso (una sola función, se queda «▶ Sola»; barra en cápsula y figura que se funde con el fondo); luego EQ-9 (AE2 con el equipo real). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).
+Última actualización: 2026-11-16 22:37Z
+Próxima acción: BL-088 CERRADA (validada por Pablo en PRD 2026-11-16 00:49Z; producción 13efe64). El lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo (gear.json) en PRD y en DEV; BL-089 HECHA (sitio de Shiruvana en La Guarida; «con el gato» nuevo subido por Pablo y verificado por blob); BL-090 MC-2 validado por Pablo (2026-11-16 21:56Z; los 4 webp subidos y verificados por blob: gato-sentado bc90056, gato-camina 8b51da1, gato-festeja d7acfa9, cuerpo-puerta 787e414); MC-3 revisado por Pablo (2026-11-16 22:25Z): no quiere versiones según quién mira; MC-3b HECHO (una sola función, se queda «▶ Sola»; barra en cápsula y figura que se funde con el fondo; 43/43 tests), espera validación de Pablo; MC-4 no arranca sin su OK; luego EQ-9 (AE2 con el equipo real). Pendiente de cierre formal: BL-083 (informe blob a blob de producción 2adaada). El lunes 2026-11-02 después de las 12:00 UTC miro el primer commit «builds-watch» en DEV y en PRD (ahora también con gear.json).
 
 Micro-ciclo:
 BL-084 EQ-8 PvP (5/5) — notas de Retornado PvP. HECHO. EQ-8 COMPLETO.
@@ -345,6 +345,7 @@ Historial de planes anteriores (ARM, PSN, PRD, GUA, MIG, CAR, MEM, MET, WEL, SBR
 
 ## Esperando a Pablo
 
+- [BL-090] Validación: MC-3b del sitio de Shiruvana. Mirá https://pablosnchz.github.io/shiruvana/ (Ctrl+F5) en la compu y en el celular: la barra de capítulos es una cápsula que ya no cruza la pantalla, mi figura entra entera debajo y sin el cuadro negro (sobre todo en Quién soy y el Vestidor), y no hay más «¿Quién sos?».
 - [BL-086] Validación: en https://pablosnchz.github.io/shiruvana/ ahora «Quién soy» muestra «Me presento» y «Cómo trabajo» muestra «En camino», de cuerpo entero y sin recortes (el Vestidor ya lo validaste). Miralo también en el celular.
 - [BL-087] Validación: ahora uso una cara por tipo de mensaje. En la Bóveda DEV, «explica» en consejos y guías y «ojo» en avisos; en el Centro de decisiones, también «guiño» cuando decidí y «con el gato» en los resúmenes. Si ves la cara vieja, Ctrl+F5.
 - [BL-084] Info: estoy armando la ficha nueva de Builds con equipo y notas (EQ-1 a EQ-4 hechos; el equipo ya se ve en 3 tarjetas con íconos y su descripción oficial). Ya se ve en DEV: Builds → Biblioteca muestra la lista nueva por profesión y élite, y cada fila abre la ficha en su pantalla con el equipo en castellano. Te aviso al terminar para que valides todo junto.
