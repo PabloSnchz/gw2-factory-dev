@@ -1,6 +1,6 @@
 # BL-084 — Ficha de build con equipo y notas en castellano (estilo Snow Crows)
 
-- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); EQ-8 PvP hecho (32 notas): EQ-8 completo, 104 notas en total. EQ-9 completo (AE2 con el equipo real, Importar y Editor con la misma ficha). Sigue EQ-10 (revisión final).
+- Fecha: 2026-10-30 · Pedido de Pablo (con capturas de Snow Crows) · Estado: COMPLETA EN DEV, para evaluar (EQ-1 a EQ-10 hechos, 2026-11-16 00:10Z; aprobado 2026-10-30 00:47Z, «están perfectas ok arranca»). EQ-1 a EQ-7 hechos (con EQ-3b); EQ-8 PvE hecho (36 notas); EQ-8 WvW hecho (36 notas, 72 en total); EQ-8 PvP hecho (32 notas): EQ-8 completo, 104 notas en total. EQ-9 completo (AE2 con el equipo real, Importar y Editor con la misma ficha). EQ-10 hecho (revisión final): FEAT-026.
 - Maquetas: `docs/propuestas/bld2-maqueta.html` (ficha) y `docs/propuestas/bld2-biblioteca.html` (lista → ficha)
 - Base: Builds en PRD desde BL-083 (PRD 2adaada, 28 archivos = manifiesto).
 
@@ -97,6 +97,7 @@ Builds de MetaBattle (8, WvW): su equipo se carga a mano en EQ-8.
 | EQ-9a | HECHO 2026-11-15 23:40Z | «Copiar AE2 (Alter Ego)» en la ficha con el equipo real (estadísticas, runa, reliquia, armas y sigilos; en PvP solo armas y sigilos). PATCH-356: bld-ae2 1.1.0 (`e3762e5`, fromSheet), bld-sheet 1.6.0 (`979ea9f`), tests y modules.json; suite verde. EQ-9 se partió en 9a (AE2), 9b (Importar) y 9c (Editor). |
 | EQ-9b | HECHO 2026-11-15 23:50Z | Importar con la misma ficha: emblema, Equipo y Rasgos y habilidades como en el juego; si el código es de la Biblioteca, su equipo, «Copiar AE2» y el enlace a su ficha. bld-import 1.1.0 (`a4c304e`), PATCH-358 (tests y modules.json); RUN-283 verde. |
 | EQ-9c | HECHO 2026-11-15 23:55Z | El Editor con la misma ficha: emblema, nombre, «Copiar código», «Guardar» y Rasgos y habilidades como en el juego, al instante; debajo, «Equipo y código AE2». bld-editor 1.4.0 (`7ec44af`), PATCH-360 (con tests y modules.json); suite verde. EQ-9 COMPLETO; sigue EQ-10. |
+| EQ-10 | HECHO 2026-11-16 00:10Z | Revisión final. Contraste: la banda de habilidades (tinte de la profesión al 26 %) no llegaba a AA en catppuccin, everforest y one-dark; bajó al 14 % (bld-traitview 1.0.1, PATCH-362). Guarda tests/bld-eq10.test.cjs: AA en los 19 temas de toda mezcla de la ficha, letra, foco, controles, ficha de las 104 builds en 11 ms (tope 200 ms por ficha), topes de gear.json y notes.json. Sondas RUN-284 a 287 borradas. FEAT-026 y LES-045. BL-084 completa en DEV. |
 
 Cambios respecto del plan: el equipo vive en `gear.json` (no en `catalog.json`) y las referencias en `bld-items.js` (no en `bld-ref.js`), para no tocar módulos que ya funcionan. Snow Crows marcó la estadística 1967 (no existe) en 2 builds de WvW: se muestra la de la pieza.
 
