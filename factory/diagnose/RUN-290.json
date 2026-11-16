@@ -1,0 +1,5 @@
+{
+ "id": "RUN-290",
+ "summary": "BL-089: ¿algún repo del ecosistema usa los .jpg originales de las poses de La Guarida?",
+ "tests": ["tests/bl089-jpg.smoke.cjs"]
+}
