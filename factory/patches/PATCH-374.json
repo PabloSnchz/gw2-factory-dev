@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-374",
+ "summary": "BL-090 checkpoint: Pablo subió los 4 webp (verificados por blob) y validó MC-2 (2026-11-16 21:56Z); arranca MC-3",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "7121437e3e014acb8e2f269aa6f1a9f168f60c38",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 21:30Z",
+     "text": "Última actualización: 2026-11-16 22:00Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-090 MC-2 HECHO (los 7 capítulos en escena, gato acompañante, Vestidor interactivo y cortina), espera que Pablo suba 4 webp y valide; MC-3 no arranca sin su OK;",
+     "text": "BL-090 MC-2 validado por Pablo (2026-11-16 21:56Z; los 4 webp subidos y verificados por blob: gato-sentado bc90056, gato-camina 8b51da1, gato-festeja d7acfa9, cuerpo-puerta 787e414); MC-3 en curso (la función según quién llega y modo que avanza sola);"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-090] Acción: subí los 4 webp que te dejé (assets/gato/gato-sentado.webp, gato-camina.webp, gato-festeja.webp y assets/shiruvana/cuerpo-puerta.webp) al repo shiruvana, con esas mismas rutas. Validación: después mirá https://pablosnchz.github.io/shiruvana/ (Ctrl+F5) de punta a punta: los 7 capítulos, el gato sobre el globo (tocalo), el Vestidor (tocá un vestuario) y el cierre con puertas y créditos, en la compu y en el celular.\n"
+    }
+   ]
+  }
+ ]
+}
