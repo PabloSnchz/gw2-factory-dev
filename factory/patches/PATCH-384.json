@@ -1,0 +1,32 @@
+{
+ "id": "PATCH-384",
+ "summary": "BL-091 ESC-1 HECHO: el escenario de mi sitio en La Guarida (solo theme Gato Negro); espera validación y las 6 imágenes para ESC-2",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "a9cde5ed8a83128c16a656138c056977010f9395",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 23:50Z",
+     "text": "Última actualización: 2026-11-16 23:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-1 EN CURSO: el escenario sin imágenes nuevas (css/escena.css + js/escena.js: fondo Taller con chispas, secciones en cápsula, paneles translúcidos con el color de su sección), solo con el theme Gato Negro.",
+     "text": "ESC-1 HECHO 2026-11-16 23:44Z en la-guarida (main = publicado): css/escena.css 1.0.0 (8ffb8cb), js/escena.js 1.0.0 (9770a8f), tests/escena.test.cjs (9c25af4), tests/index.test.cjs (fb95398), index.html (bc49fa1, commit fc0d4b6); fondo Taller con chispas, secciones en cápsula, paneles translúcidos con el color de su sección y entrada escalonada; solo con el theme Gato Negro (toda regla cuelga de body[data-theme=\"gato\"], lo vigila un test); sin backdrop-filter ni transform en la cabecera para no mover los menús fixed del celular; 17/17 tests, 16/16 mutaciones. Vuelta atrás: quitar las dos líneas de index.html. Espera validación de Pablo."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero; ESC-0 validado (todas las ★); ESC-1 en curso (escenario, sin imágenes nuevas);",
+     "text": "BL-091 en curso: La Guarida primero; ESC-0 validado (todas las ★); ESC-1 HECHO, espera validación de Pablo; ESC-2 necesita las 6 imágenes;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-1 en tu Guarida, con el theme Gato Negro (Ctrl+F5): fondo «Taller» con chispas, las secciones en una cápsula con la activa en ámbar y los paneles con el color de su sección. Los otros 18 themes no cambian. Con tu OK sigo con ESC-2 (mi globo con el gato).\n- [BL-091] Acción: para ESC-2 y ESC-3 subí a la-guarida 6 imágenes del repo shiruvana: assets/gato/gato-sentado.webp, gato-camina.webp y gato-festeja.webp → la-guarida assets/brand/gato/; assets/shiruvana/cuerpo-sentada.webp, cuerpo-saluda.webp y cuerpo-pensando.webp → la-guarida assets/brand/shiruvana/ (mismos nombres).\n"
+    }
+   ]
+  }
+ ]
+}
