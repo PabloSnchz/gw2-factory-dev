@@ -1,0 +1,49 @@
+# BL-088: promoción a producción (gw2-wallet-ligero) de lo que está en DEV y no en PRD:
+#   BL-084 (FEAT-026: la ficha de build completa — equipo, rasgos como en el juego, 104 notas, cómo se juega, «Copiar AE2»,
+#   Importar y Editor con la misma ficha, Biblioteca en filas) y BL-087 (js/shiruvana.js 1.2.0: una cara por tipo de mensaje).
+# Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
+# Base de producción esperada: 73d1b09 (commit «builds-watch» del bot de PRD del 2026-11-09, sobre BL-083 2adaada).
+# Comparación blob a blob de DEV contra producción 73d1b09 (RUN-288): 451 archivos publicables idénticos, 0 solo en PRD.
+# No se tocan: js/analytics.js y assets/meta-drops.json (versión PRD); assets/data/builds/watch.json (lo escribe la vigía
+#   de PRD, es suyo); los scripts de la Factory (apply-patch, factory-*, decision-response) y sus workflows; el workflow propio
+#   de PRD github-metrics-to-ga4.yml; README/CHANGELOG, docs internos, tests/, tools/, factory/ y ai-memory/.
+# index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006).
+# Autoactualización (DEC-041/DEC-044): la curación semanal ahora también lee el equipo de Snow Crows (bld-gear-scrape) y
+#   commitea gear.json además de watch/bench/catalog; va con sus tests y corre sola en PRD (lunes 12:00 UTC).
+# Ojo: la vigía de PRD corre el lunes 2026-11-16 12:00 UTC; si commitea antes del pasaje, la base cambia y el script frena.
+# Totales: 7 JS nuevos + 10 de js/ modificados + 2 datos nuevos + 1 página + 5 de automatización = 25 copias; 0 bajas; 25 movimientos.
+
+# JS nuevos (7): la ficha de build (se cargan solo al entrar a #/builds, js/modules.json → routes)
+C js/bld-items.js
+C js/bld-rows.js
+C js/bld-gearview.js
+C js/bld-traitview.js
+C js/bld-notes.js
+C js/bld-play.js
+C js/bld-sheet.js
+
+# js/ modificados (10)
+C js/bld-ae2.js
+C js/bld-editor.js
+C js/bld-import.js
+C js/bld-lib.js
+C js/bld-mine.js
+C js/bld-ref.js
+C js/bld-view.js
+C js/boot.js
+C js/modules.json
+C js/shiruvana.js
+
+# Datos nuevos (2): equipo de las builds de Snow Crows y las 104 notas
+C assets/data/builds/gear.json
+C assets/data/builds/notes.json
+
+# Páginas (1)
+C index.html
+
+# Automatización (5): curación semanal con el equipo, sola en PRD
+C .github/workflows/builds-watch.yml
+C .github/scripts/bld-curate.cjs
+C .github/scripts/bld-curate.test.cjs
+C .github/scripts/bld-gear-scrape.cjs
+C .github/scripts/bld-gear-scrape.test.cjs
