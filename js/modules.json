@@ -55,7 +55,7 @@
       { "src": "js/bld-rows.js", "v": "1.0.0" },
       { "src": "js/bld-lib.js", "v": "1.9.0" },
       { "src": "js/bld-gearview.js", "v": "1.0.0" },
-      { "src": "js/bld-traitview.js", "v": "1.0.0" },
+      { "src": "js/bld-traitview.js", "v": "1.0.1" },
       { "src": "js/bld-notes.js", "v": "1.1.0" },
       { "src": "js/bld-play.js", "v": "1.2.0" },
       { "src": "js/bld-sheet.js", "v": "1.6.0" },

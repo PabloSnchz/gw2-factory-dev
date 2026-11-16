@@ -1,6 +1,7 @@
 /*!
  * js/bld-traitview.js — Builds: rasgos y habilidades de la ficha, como en el juego (BL-084 EQ-5)
- * Versión: 1.0.0 (2026-10-30)
+ * Versión: 1.0.1 (2026-11-15) · EQ-10: el tinte de la profesión detrás de la barra baja de 26% a 14% (con 26% el texto no
+ *          llegaba a 4.5:1 en catppuccin, everforest y one-dark; RUN-284/286) · antes 1.0.0 (2026-10-30)
  *
  * html(m) arma la sección «Rasgos y habilidades» de la ficha con los datos oficiales que trae js/bld-ref.js 1.3.0:
  *   1. La barra: armas 1–5 de cada juego (del equipo de la build o, si no lo hay, de las armas del código), curación,
@@ -15,7 +16,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '1.0.0';
+  var VERSION = '1.0.1';
   var TIER = ['Adepto', 'Maestro', 'Gran maestro'];
   var KEYS = { heal: '6', util: ['7', '8', '9'], elite: '0' };
   var OFFICIAL = 'Descripción oficial · API de Guild Wars 2 en castellano';
@@ -216,7 +217,7 @@
   var P_ = '#buildsPanel ';
   var CSS = [
     P_ + '.bld-tv{display:grid;gap:12px}',
-    P_ + '.bld-tvband{display:grid;gap:10px;padding:12px;border:1px solid var(--bd-1);border-radius:12px;background:linear-gradient(90deg,color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 26%,var(--bg-0)),var(--bg-1) 70%)}',
+    P_ + '.bld-tvband{display:grid;gap:10px;padding:12px;border:1px solid var(--bd-1);border-radius:12px;background:linear-gradient(90deg,color-mix(in srgb,var(--bld-prof,var(--gn-mod)) 14%,var(--bg-0)),var(--bg-1) 70%)}',
     P_ + '.bld-tvrow{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:flex-end}',
     P_ + '.bld-tvgrp{display:grid;gap:4px}' + P_ + '.bld-tvgrp>small{font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:var(--tx-2)}' + P_ + '.bld-tvgrp>p{margin:0;font-size:.85rem}',
     P_ + '.bld-tvbar{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}',

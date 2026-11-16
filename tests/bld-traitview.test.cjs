@@ -55,8 +55,8 @@ function gearSets(pairs) { return { sets: pairs.map((p, i) => ({ label: 'Juego d
 
 test('versión en la cabecera, en modules.json antes de la ficha y bld-ref 1.3.0', () => {
   const src = fs.readFileSync(path.join(ROOT, 'js', 'bld-traitview.js'), 'utf8');
-  assert.match(src, /Versión: 1\.0\.0 /);
-  assert.equal(TV.version, '1.0.0');
+  assert.match(src, /Versión: 1\.0\.1 /);
+  assert.equal(TV.version, '1.0.1');
   assert.doesNotMatch(src, /localStorage\.(get|set|remove)Item/);
   const mods = JSON.parse(fs.readFileSync(path.join(ROOT, 'js', 'modules.json'), 'utf8')).routes['#/builds'].map((m) => m.src);
   assert.ok(mods.indexOf('js/bld-ref.js') < mods.indexOf('js/bld-traitview.js') && mods.indexOf('js/bld-traitview.js') < mods.indexOf('js/bld-sheet.js'));
