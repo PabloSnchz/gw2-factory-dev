@@ -1,0 +1,5 @@
+{
+ "id": "RUN-289",
+ "summary": "BL-088: control blob a blob de producción 13efe64 contra DEV c8ddd29 y la base 73d1b09; Actions y Pages de PRD",
+ "tests": ["tests/bl088-check.smoke.cjs"]
+}
