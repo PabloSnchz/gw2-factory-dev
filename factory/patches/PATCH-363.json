@@ -1,0 +1,48 @@
+{
+ "id": "PATCH-363",
+ "summary": "BL-084 EQ-10: docs (status y plan) — revisión final hecha; BL-084 lista para evaluar en DEV",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "09c7c4e2ecc59f336c6eb5dbcd0d9d262647da03",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Sigue EQ-10: revisión final (19 temas AA, teclado, celular, rendimiento, docs y panel).",
+     "text": "EQ-10 HECHO 2026-11-16 00:10Z (revisión final). Sondas RUN-284 a 287 (ya borradas): de 17 mezclas de color de los módulos de la ficha, una no llegaba a AA — la banda de habilidades de js/bld-traitview.js, tinte de la profesión al 26 % sobre --bg-0: texto a 3.36:1 en one-dark, y por debajo de 4.5:1 también en catppuccin y everforest (12 combinaciones). ARREGLADO (ALTO) con PATCH-362: bld-traitview 1.0.1 (`4c8e385`) al 14 % (peor 4.63:1), test (`e6a5fbd`) y modules.json (`9f70716`). Guarda permanente nueva tests/bld-eq10.test.cjs (`5482ab8`, ensayada como sonda en RUN-287): contraste AA en los 19 temas de toda mezcla de color de la ficha (y comprueba que con el 26 % falla), letra ≥ .7rem, foco visible, botones nativos, tooltips con aria-describedby y Escape, celular, ficha de las 104 builds (11 ms en total, la más lenta 1,6 ms; tope 200 ms) con «Copiar AE2» en todas las que tienen equipo, gear.json < 64 KB (30,7) y notes.json < 300 KB (212,7, se pide al abrir una ficha) con una nota por build. Teclado y lector ya cubiertos por bld-ui (pestañas, foco, botones, avisos). FEAT-026 (ficha de build completa) y LES-045 (versión y tests en el mismo parche; ensayar un test nuevo como sonda) registrados. BL-084 COMPLETA EN DEV (EQ-1 a EQ-10): queda para que Pablo la evalúe."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-15 23:55Z",
+     "text": "Última actualización: 2026-11-16 00:10Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-084 EQ-10: revisión final de la ficha (19 temas AA, teclado, celular, rendimiento < 200 ms, docs y panel);",
+     "text": "Próxima acción: BL-084 completa en DEV: esperar la evaluación de Pablo (ficha, Importar, Editor y «Copiar AE2»);"
+    }
+   ]
+  },
+  {
+   "path": "docs/propuestas/BL-084-ficha-equipo-y-notas.md",
+   "base_sha": "f4d4d35d61e37616b5d180cc7eabb908603e38ac",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN CURSO (aprobado 00:47Z, «están perfectas ok arranca»).",
+     "text": "Estado: COMPLETA EN DEV, para evaluar (EQ-1 a EQ-10 hechos, 2026-11-16 00:10Z; aprobado 2026-10-30 00:47Z, «están perfectas ok arranca»)."
+    },
+    {
+     "op": "replace",
+     "anchor": "EQ-9 completo (AE2 con el equipo real, Importar y Editor con la misma ficha). Sigue EQ-10 (revisión final).",
+     "text": "EQ-9 completo (AE2 con el equipo real, Importar y Editor con la misma ficha). EQ-10 hecho (revisión final): FEAT-026."
+    },
+    {
+     "op": "insert_before",
+     "anchor": "\n\nCambios respecto del plan:",
+     "text": "\n| EQ-10 | HECHO 2026-11-16 00:10Z | Revisión final. Contraste: la banda de habilidades (tinte de la profesión al 26 %) no llegaba a AA en catppuccin, everforest y one-dark; bajó al 14 % (bld-traitview 1.0.1, PATCH-362). Guarda tests/bld-eq10.test.cjs: AA en los 19 temas de toda mezcla de la ficha, letra, foco, controles, ficha de las 104 builds en 11 ms (tope 200 ms por ficha), topes de gear.json y notes.json. Sondas RUN-284 a 287 borradas. FEAT-026 y LES-045. BL-084 completa en DEV. |"
+    }
+   ]
+  }
+ ]
+}
