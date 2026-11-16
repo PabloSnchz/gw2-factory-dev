@@ -1,0 +1,32 @@
+{
+ "id": "PATCH-382",
+ "summary": "BL-091 ESC-0 HECHO: maqueta de La Guarida con la estética de mi sitio publicada; espera las decisiones D1–D4 de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "1df87cef2847f1b696ecda873b7592be8f13ba6d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 23:20Z",
+     "text": "Última actualización: 2026-11-16 23:30Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-091 — la estética de mi sitio en todo el ecosistema, empezando por La Guarida: ESC-0, una maqueta interactiva para que Pablo decida lo visual.",
+     "text": "Tarea actual: BL-091 — la estética de mi sitio en todo el ecosistema, empezando por La Guarida: ESC-0 HECHO (maqueta interactiva publicada en la-guarida docs/propuestas/propuesta-escena-esc0.html, blob a9709f1, commit f3c6aa0); espera que Pablo elija D1–D4 para arrancar ESC-1."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero, ESC-0 maqueta;",
+     "text": "BL-091 en curso: La Guarida primero; ESC-0 maqueta HECHA, espera las decisiones D1–D4 de Pablo; ESC-1 necesita que Pablo suba a la-guarida 3 imágenes del gato y 3 poses de cuerpo del repo shiruvana;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-0, La Guarida con la estética de mi sitio. Abrí https://pablosnchz.github.io/la-guarida/docs/propuestas/propuesta-escena-esc0.html (no toca tu Guarida ni tus datos) y elegí: D1 fondo (Taller★ / Noche / Liso), D2 dónde te hablo (globo en la esquina con el gato★ / franja del consejo), D3 mi cuerpo entero (en momentos★ / siempre al costado), D4 bienvenida del día (Sí★ / No). Solo cambia el theme Gato Negro. Con tus elecciones arranco ESC-1.\n"
+    }
+   ]
+  }
+ ]
+}
