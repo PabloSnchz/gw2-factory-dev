@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-378",
+ "summary": "BL-090 MC-3b HECHO: una sola función para todos (se quitan las versiones por público, queda ▶ Sola), capítulos en cápsula sin franja que parte la pantalla y mi figura fundida con el fondo; espera validación de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "62e952ea504c55184aae2796282fb8f452c7f2ce",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "MC-4 (datos vivos de ai-memory y «Hoy en la Factory») no arranca sin su OK.",
+     "text": " Pablo revisó MC-3 (2026-11-16 22:25Z): las versiones según quién mira le parecen innecesarias y marcó dos ruidos visuales. MC-3b HECHO (2026-11-16 22:35Z) en shiruvana: js/guion.js 50f6d58 (1.3.0: una sola función de 21 escenas; la escena 2 cuenta ▶ Sola), js/escenario.js 07c911e (1.3.0: sin públicos ni ?para=, queda ?sola=1), css/escenario.css 90ef4d7 (capítulos en una cápsula centrada en vez de la franja oscura de lado a lado; la pose entra entera debajo de la barra; fondo negro fundido), tests/escenario.test.cjs 4cc6603 (43/43, 20/20 mutaciones), README b025b1b. Aprendizaje: .st-pj tenía z-index y eso crea un contexto de apilamiento aislado, así que el mix-blend-mode: lighten de la pose mezclaba contra nada y el negro quedaba como un cuadro (solo cuerpo-puerta, con alfa real, se veía integrada); además el drop-shadow dibujaba un halo alrededor del rectángulo. Sin z-index, sin drop-shadow y con máscara inferior, el negro se funde con el escenario. Si aun así queda algún borde, la salida definitiva es reprocesar las 17 poses con alfa como la puerta. Espera validación visual de Pablo; MC-4 no arranca sin su OK."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "443563b669aae368a03c3dc2f5604d52fb9b2364",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 22:40Z",
+     "text": "Última actualización: 2026-11-16 22:37Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "MC-3b en curso (una sola función, se queda «▶ Sola»; barra en cápsula y figura que se funde con el fondo);",
+     "text": "MC-3b HECHO (una sola función, se queda «▶ Sola»; barra en cápsula y figura que se funde con el fondo; 43/43 tests), espera validación de Pablo; MC-4 no arranca sin su OK;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-090] Validación: MC-3b del sitio de Shiruvana. Mirá https://pablosnchz.github.io/shiruvana/ (Ctrl+F5) en la compu y en el celular: la barra de capítulos es una cápsula que ya no cruza la pantalla, mi figura entra entera debajo y sin el cuadro negro (sobre todo en Quién soy y el Vestidor), y no hay más «¿Quién sos?».\n"
+    }
+   ]
+  }
+ ]
+}
