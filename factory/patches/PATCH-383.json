@@ -1,0 +1,31 @@
+{
+ "id": "PATCH-383",
+ "summary": "BL-091: Pablo validó ESC-0 con todas las ★; checkpoint de ESC-1 (escenario de La Guarida) y plan reordenado",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "250a06047e645e33aefcc0360211a8e87de3cf9d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 23:30Z",
+     "text": "Última actualización: 2026-11-16 23:50Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-091 — la estética de mi sitio en todo el ecosistema, empezando por La Guarida: ESC-0 HECHO (maqueta interactiva publicada en la-guarida docs/propuestas/propuesta-escena-esc0.html, blob a9709f1, commit f3c6aa0); espera que Pablo elija D1–D4 para arrancar ESC-1.",
+     "text": "Tarea actual: BL-091 — la estética de mi sitio en La Guarida. ESC-0 validado por Pablo (2026-11-16 23:35Z, «ok con las ★»: D1 fondo Taller, D2 globo en la esquina con el gato, D3 cuerpo entero en momentos, D4 bienvenida del día). ESC-1 EN CURSO: el escenario sin imágenes nuevas (css/escena.css + js/escena.js: fondo Taller con chispas, secciones en cápsula, paneles translúcidos con el color de su sección), solo con el theme Gato Negro. Plan reordenado para no frenar por imágenes: ESC-2 mi globo con el gato (el consejo pasa al globo), ESC-3 el gato reacciona y mis poses en momentos, ESC-4 bienvenida del día; ESC-2 y ESC-3 necesitan que Pablo suba 6 imágenes a la-guarida. Decisión técnica: el kit «GN Escena» vive en la-guarida hasta que haya un segundo consumidor (Centro de decisiones); recién ahí se extrae al repo shiruvana."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero; ESC-0 maqueta HECHA, espera las decisiones D1–D4 de Pablo; ESC-1 necesita que Pablo suba a la-guarida 3 imágenes del gato y 3 poses de cuerpo del repo shiruvana;",
+     "text": "BL-091 en curso: La Guarida primero; ESC-0 validado (todas las ★); ESC-1 en curso (escenario, sin imágenes nuevas);"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-0, La Guarida con la estética de mi sitio. Abrí https://pablosnchz.github.io/la-guarida/docs/propuestas/propuesta-escena-esc0.html (no toca tu Guarida ni tus datos) y elegí: D1 fondo (Taller★ / Noche / Liso), D2 dónde te hablo (globo en la esquina con el gato★ / franja del consejo), D3 mi cuerpo entero (en momentos★ / siempre al costado), D4 bienvenida del día (Sí★ / No). Solo cambia el theme Gato Negro. Con tus elecciones arranco ESC-1.\n"
+    }
+   ]
+  }
+ ]
+}
