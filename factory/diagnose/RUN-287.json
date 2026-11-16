@@ -1,0 +1,5 @@
+{
+ "id": "RUN-287",
+ "summary": "BL-084 EQ-10: ensayo de la guarda final (contraste, letra, foco, rendimiento, datos) + traitview y ui",
+ "tests": ["tests/eq10-probe.smoke.cjs", "tests/bld-traitview.test.cjs", "tests/bld-ui.test.cjs"]
+}
