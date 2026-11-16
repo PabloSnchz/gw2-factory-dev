@@ -1,0 +1,56 @@
+{
+ "id": "PATCH-380",
+ "summary": "BL-090 MC-4 HECHO: cifras vivas desde ai-memory (Action cada 2 h → data/hoy.js) y la escena «Hoy en la Factory»; status.md al día (Tarea actual y Motivo estaban congelados en BL-084/BL-070 y el panel y el sitio los mostraban); espera validación de Pablo para cerrar BL-090",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "0a8f36e7ec1d79fefd3244c45c4bb80cb9f86a9d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Si aun así queda algún borde, la salida definitiva es reprocesar las 17 poses con alfa como la puerta. Espera validación visual de Pablo; MC-4 no arranca sin su OK.",
+     "text": "Si aun así queda algún borde, la salida definitiva es reprocesar las 17 poses con alfa como la puerta. Pablo validó MC-3b (2026-11-16 22:44Z, «el cambio es impresionante»). MC-4 HECHO (2026-11-16 23:02Z) en shiruvana: scripts/hoy.cjs 38f3f67 (lee ai-memory pública: decisiones, lecciones, funcionalidades, parches, backlog por sección, Tarea/Etapa/Última actualización de status.md limpias y recortadas, commits de la semana; nada de «Esperando a Pablo»; no reescribe si nada cambió) + .github/workflows/hoy.yml 74f216a (cada 2 h y al tocar el generador; sin secretos; commitea solo si cambió; primera corrida verde 22:49Z → data/hoy.js 513b8c0), js/escenario.js d671a50 (motor 1.4.0: vivificar las cifras data-hoy antes de leer los datos, pieza «hoy» con «en vivo», en qué estoy, etapa, «hace X» y seis cifras; sin datos válidos, manda al Centro de decisiones), js/guion.js 96b1c97 (1.4.0: escena #/como-trabajo/4, 22 escenas), css/escenario.css 4ae5986, index.html 79f565f (decisiones, lecciones y funcionalidades vivas; «19 themes» sale por «funcionalidades entregadas»; carga data/hoy.js sin fetch), tests 53/53 (escenario de1fd41, hoy e84f072), 20/20 mutaciones, README 889f3f4. MC-5 se descarta: la voz aporta poco y el enlace por escena ya existía. Aprendizaje: «Tarea actual» y «Motivo» de status.md llevaban semanas congelados (BL-084 y BL-070) porque mis parches actualizaban «Próxima acción» y no esas claves; el sitio lo hizo visible apenas las mostró. Las corregí en este parche y desde ahora el cierre de cada MC las actualiza. Espera validación de Pablo para cerrar BL-090; después arranca BL-091."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "deaacdf6d7a1b0946ca7c7208fa0f2f17eb234e8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-084 ficha de build",
+     "text": "Tarea actual: BL-090 — mi sitio como presentación animada: MC-4 hecho (cifras vivas y «Hoy en la Factory»), espera validación de Pablo; después BL-091, la estética de la función en La Guarida, el Centro de decisiones y La Bóveda DEV.\nHistorial de BL-084 (antes en «Tarea actual», cerrada en BL-088): BL-084 ficha de build"
+    },
+    {
+     "op": "replace",
+     "anchor": "Motivo: Pablo pidió registrar BL-070 y empezar por Raids y Strikes (2026-10-24 15:39Z): pantalla propia por encuentro en lugar del modal, íconos del juego. SHIRUVANA-ART-001 queda en pausa.",
+     "text": "Motivo: Pablo pidió convertir mi sitio en una presentación animada (2026-11-16 20:28Z) y, al validar MC-3b (22:44Z), llevar esa estética a todo el ecosistema (BL-091)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 22:55Z",
+     "text": "Última actualización: 2026-11-16 23:05Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "MC-4 en curso (cifras vivas desde ai-memory con una Action cada 2 h y la escena «Hoy en la Factory»; es el último MC: la voz de MC-5 se descarta por poco valor y el enlace por escena ya existe); después BL-091;",
+     "text": "MC-4 HECHO (cifras vivas desde ai-memory con una Action cada 2 h y la escena «Hoy en la Factory»; 53/53 tests; MC-5 descartado), espera validación de Pablo para cerrar BL-090; después BL-091;"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-087] Validación: ahora uso una cara por tipo de mensaje. En la Bóveda DEV, «explica» en consejos y guías y «ojo» en avisos; en el Centro de decisiones, también «guiño» cuando decidí y «con el gato» en los resúmenes. Si ves la cara vieja, Ctrl+F5.\n"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-084] Info: estoy armando la ficha nueva de Builds con equipo y notas (EQ-1 a EQ-4 hechos; el equipo ya se ve en 3 tarjetas con íconos y su descripción oficial). Ya se ve en DEV: Builds → Biblioteca muestra la lista nueva por profesión y élite, y cada fila abre la ficha en su pantalla con el equipo en castellano. Te aviso al terminar para que valides todo junto.\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-090] Validación: MC-4 del sitio de Shiruvana. En https://pablosnchz.github.io/shiruvana/#/como-trabajo/4 (Ctrl+F5) está «Hoy en la Factory»: en qué estoy, la etapa, hace cuánto actualicé mi estado y seis cifras, con «en vivo». En «Quién soy» (escena 4) las decisiones, lecciones y funcionalidades ya salen de mi memoria. Se actualiza solo cada 2 horas. Con tu OK cierro BL-090 y arranco BL-091.\n"
+    }
+   ]
+  }
+ ]
+}
