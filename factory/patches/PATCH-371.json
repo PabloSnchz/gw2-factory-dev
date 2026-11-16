@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-371",
+ "summary": "BL-090 MC-1 HECHO: el sitio de Shiruvana arranca como presentación por escenas (3 capítulos) y la página de siempre queda como modo lectura; espera validación visual de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "833c9bbdec61bbb44ada913449254a6623b8db9c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Imágenes extra opcionales (prompts entregados a Pablo): gato robot solo en 3 poses y yo abriendo una puerta.",
+     "text": "Imágenes extra opcionales (prompts entregados a Pablo): gato robot solo en 3 poses y yo abriendo una puerta. MC-1 HECHO (2026-11-16 20:52Z) en shiruvana: css/escenario.css a5d5d2e, js/guion.js 83dd556 (guion solo datos), js/escenario.js 9883f37 (motor 1.0.0 sin dependencias: rutas #/<capítulo>/<n>, teclado, clic, deslizar, tipeo, ojos del gato al entrar, cifras animadas; lee cifras, eras e hitos del modo lectura, que sigue siendo la única fuente), tests/escenario.test.cjs 56cbfa8 (17 tests sobre un DOM mínimo; suite 25/25 verde; 12/12 mutaciones cazadas), index.html 42076da (arranque en la función, #sección = modo lectura, vuelta a la lectura si el escenario no carga en 4 s), README e4848de. Cero claves de almacenamiento. Espera validación visual de Pablo (sin navegador en el sandbox); MC-2 no arranca sin su OK."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "85670371fbc4ba3c118b6e6617dc90d54ed946f2",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 20:45Z",
+     "text": "Última actualización: 2026-11-16 20:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-090 en curso (sitio de Shiruvana como presentación animada; MC-1 de 5: motor de escenas y primeros 3 capítulos);",
+     "text": "BL-090 MC-1 HECHO (sitio de Shiruvana como presentación: Entrada, Quién soy y Lo que construí en escena; el resto en modo lectura), espera validación de Pablo; MC-2 no arranca sin su OK;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-090] Validación: https://pablosnchz.github.io/shiruvana/ ahora arranca como presentación (Ctrl+F5 si ves la página vieja). Mirá los 3 capítulos con clic, flechas o deslizando en el celular; «Modo lectura» y Esc vuelven a la página de siempre, y «▶ Ver la presentación» vuelve a la función. Contame qué ajustar antes de MC-2.\n"
+    }
+   ]
+  }
+ ]
+}
