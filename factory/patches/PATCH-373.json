@@ -1,0 +1,38 @@
+{
+ "id": "PATCH-373",
+ "summary": "BL-090 MC-2 HECHO: los 7 capítulos del sitio de Shiruvana en escena, gato acompañante, Vestidor interactivo y cortina entre capítulos; esperan que Pablo suba 4 webp y valide",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "174cbfdd5cb9730094051636ac0c6ba51227c3ee",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Espera validación visual de Pablo (sin navegador en el sandbox); MC-2 no arranca sin su OK.",
+     "text": "Pablo validó MC-1 (2026-11-16 21:10Z, «por ahora ok») y entregó las 4 imágenes. MC-2 HECHO (2026-11-16 21:28Z) en shiruvana: css/escenario.css a9ac953, js/escenario.js 55886d9 (motor 1.1.0: gato robot sentado sobre el globo que cambia de pose por escena y habla si lo tocan —al quinto toque se harta—, cortina con número al cambiar de capítulo, Vestidor interactivo que me cambia la ropa y lo dice, piezas pasos, regla, caras, puertas y créditos; todo leído del modo lectura; si falta una imagen del gato se esconde y si falta cuerpo-puerta uso cuerpo-espalda), js/guion.js 90a7218 (los 7 capítulos, 21 escenas), tests/escenario.test.cjs 29757cb (suite 35/35, 17/17 mutaciones), README f302510. Imágenes procesadas (fondo negro a transparente, webp): assets/gato/gato-sentado bc90056 (17730 B), gato-camina 8b51da1 (19744 B), gato-festeja d7acfa9 (18920 B), 320x320; assets/shiruvana/cuerpo-puerta 787e414 (44432 B), 640x954. Bloqueado por Pablo: subir los 4 webp (la Factory no escribe binarios) y validar a la vista. El Vestidor interactivo se adelantó de MC-5 a MC-2; MC-5 queda en voz opcional y enlace para compartir."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "0cb38e314146ba3e5c62d21dd3911e4b390a798e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 21:15Z",
+     "text": "Última actualización: 2026-11-16 21:30Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-090 MC-1 validado por Pablo (2026-11-16 21:10Z); MC-2 en curso (los 4 capítulos que faltan, el gato acompañante y las transiciones);",
+     "text": "BL-090 MC-2 HECHO (los 7 capítulos en escena, gato acompañante, Vestidor interactivo y cortina), espera que Pablo suba 4 webp y valide; MC-3 no arranca sin su OK;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-090] Acción: subí los 4 webp que te dejé (assets/gato/gato-sentado.webp, gato-camina.webp, gato-festeja.webp y assets/shiruvana/cuerpo-puerta.webp) al repo shiruvana, con esas mismas rutas. Validación: después mirá https://pablosnchz.github.io/shiruvana/ (Ctrl+F5) de punta a punta: los 7 capítulos, el gato sobre el globo (tocalo), el Vestidor (tocá un vestuario) y el cierre con puertas y créditos, en la compu y en el celular.\n"
+    }
+   ]
+  }
+ ]
+}
