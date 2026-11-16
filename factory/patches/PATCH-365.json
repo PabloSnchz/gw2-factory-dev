@@ -1,0 +1,22 @@
+{
+ "id": "PATCH-365",
+ "summary": "BL-088 en PRD (13efe64): control blob a blob OK; espera validación de Pablo en Chrome",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "54ff6d7fbce5daf5bdb8e6d6e3ccff32271ee125",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 00:20Z",
+     "text": "Última actualización: 2026-11-16 00:45Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-088 (pasaje a PRD de BL-084 y BL-087 vía PowerShell, manifiesto factory/promote/BL-088.txt, 25 movimientos sobre producción 73d1b09): Pablo corre la línea; después, control blob a blob e informe;",
+     "text": "Próxima acción: BL-088 EN PRD (producción 13efe64, rollback/pre-bl-088 = 73d1b09; 25/25 iguales a DEV, Pages publicado; informe ai-memory/missions/BL-088-informe-promocion.md): esperar la validación de Pablo en Chrome y, con su OK, pasar BL-088 a DONE; el lunes 2026-11-16 después de las 12:00 UTC, mirar la primera curación con equipo en PRD;"
+    }
+   ]
+  }
+ ]
+}
