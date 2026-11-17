@@ -1,0 +1,48 @@
+{
+  "id": "PATCH-420",
+  "summary": "BL-092 BV-2 HECHO: index.html carga css/universo.css?v=1.1.0 (solo cambia la versión) y status.md queda esperando la validación de Pablo",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "3852bb823a2bacdaa0a5670180ad734f98513626",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "href=\"css/universo.css?v=1.0.0\"",
+          "text": "href=\"css/universo.css?v=1.1.0\""
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "09c2128c96003bb44b0b3a6bd0df4b184fd42c3f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: EN CURSO\nTarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. Paso BV-2 EN CURSO: las cabeceras de los módulos (antetítulo del grupo y cifras en ámbar).",
+          "text": "Estado: ESPERANDO A PABLO\nTarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-2 HECHO (cabeceras de los módulos); esperando que Pablo lo mire en DEV antes de BV-3 (el globo con el gato)."
+        },
+        {
+          "op": "replace",
+          "anchor": "PATCH-418 rechazado: la línea de «Esperando a Pablo» no tenía clase (va con Info:, DEC-018).",
+          "text": "PATCH-418 rechazado: la línea de «Esperando a Pablo» no tenía clase (va con Info:, DEC-018). BV-2 HECHO 22:41Z: css/universo.css 1.1.0 (4a16fa8, commit 08f6353) — antetítulo del grupo en el color de su módulo (Tu oro, Lo diario, Lo semanal, Tu progreso, Tu cuenta, Bienvenida; ::before con texto alternativo vacío, fuera del nombre de la región), títulos en 800 y 1.45rem solo en la compu, cifras de los indicadores en ámbar #E8B34B en las 9 cabeceras; solo CSS sobre los ids de título de cada vista, sin tocar las vistas. Revisión: el rosa de la Armería (#E545CA) daba 4.14:1 sobre su cabecera teñida → #E868D4 (5.05:1); la regla común del antetítulo no lleva color porque :is() le ganaría por especificidad. tests/universo.test.cjs (b69d881): 12 tests (5 nuevos: grupo y color por módulo contra sidebar-nav.js, ids y clases existen en las vistas, contraste AA, tamaño solo en la compu), 13/13 mutantes. index.html ?v=1.1.0 por PATCH-420. La Cartera no tiene cifras en su cabecera: no agregué datos."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-17 22:50Z",
+          "text": "Última actualización: 2026-11-17 22:41Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Publicar BV-2 (universo.css 1.1.0, tests, ?v en index.html) y pedirle a Pablo que lo mire en DEV.",
+          "text": "Próxima acción: Esperar que Pablo mire BV-2 en DEV; después, BV-3 (el globo con el gato, con las imágenes que ya subió a assets/brand)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Info: BV-1 validado; BV-2 (cabeceras) en curso: te aviso cuando esté para mirar.",
+          "text": "- [BL-092] Validación: BV-2 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): arriba del título de cada módulo, su grupo en su color (Tu oro, Lo diario, Lo semanal, Tu progreso, Tu cuenta); títulos más firmes y las cifras de los 4 indicadores en ámbar. Los otros themes no cambian."
+        }
+      ]
+    }
+  ]
+}
