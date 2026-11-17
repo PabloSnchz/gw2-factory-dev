@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-401",
+ "summary": "BL-091: CD-0 APROBADO por Pablo con las cuatro ★; CD-1 EN CURSO (checkpoint)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "d13ca272cabbfaf28b52d8676f7fa3626e768065",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:35Z",
+     "text": "Última actualización: 2026-11-17 03:50Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Sin imágenes nuevas.",
+     "text": "Sin imágenes nuevas. CD-0 APROBADO por Pablo 2026-11-17 03:44Z («está espectacular, aprobada», «avanzá de acuerdo a tus decisiones»): D1 Mesa de mando, D2 globo con el gato, D3 botones a la vista, D4 «Centro de mando». CD-1 EN CURSO (fondo del universo y cabecera en el panel real)."
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: CD-0, la maqueta del Centro en mi universo (https://pablosnchz.github.io/gw2-factory-dashboard/docs/propuestas/propuesta-centro-cd0.html). Elegí D1..D4 (★ = lo que recomiendo), probá los botones de arriba y la vista Celular. Con tu OK arranco CD-1.\n"
+    }
+   ]
+  }
+ ]
+}
