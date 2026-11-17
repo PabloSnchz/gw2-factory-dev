@@ -1,0 +1,5 @@
+{
+ "id": "RUN-292",
+ "summary": "BL-092 BV-4: censo de las clases de pantallas vacías en js/ (sonda temporal)",
+ "tests": ["tests/zz-probe-bv4.smoke.cjs"]
+}
