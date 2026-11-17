@@ -1,0 +1,5 @@
+{
+ "id": "RUN-293",
+ "summary": "BL-092 BV-4: contexto (texto y CSS) de cada pantalla vacía (sonda temporal)",
+ "tests": ["tests/zz-probe-bv4.smoke.cjs"]
+}
