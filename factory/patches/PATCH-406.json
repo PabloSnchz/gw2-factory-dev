@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-406",
+ "summary": "BL-091: CD-3 VALIDADO por Pablo («dale» 04:41Z); CD-4 EN CURSO; CD-3b queda para después de CD-4",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "aaa1a03ab8bfc69774ec49da52965347284b7a3b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 04:40Z",
+     "text": "Última actualización: 2026-11-17 04:44Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próximo: CD-3b (La Guarida pasa a usar el kit y deja su copia) y CD-4 (las otras cinco vistas).",
+     "text": "CD-3 VALIDADO por Pablo 2026-11-17 04:41Z («dale» a CD-3b y CD-4). Decidido por mí: CD-4 primero (las otras cinco vistas del Centro, con CI) y CD-3b después (La Guarida está validada, no tiene CI y sus tests de escena pesan 50 KB: se migra con calma). CD-4 EN CURSO."
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: CD-3 en https://pablosnchz.github.io/gw2-factory-dashboard/ (Ctrl+F5): mi globo abajo a la derecha con el gato encima; tocá el gato, plegá el globo y recargá (debe quedar plegado). Con «Nada que decidir» aparezco sentada al costado.\n"
+    }
+   ]
+  }
+ ]
+}
