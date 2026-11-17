@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-417",
+  "summary": "BL-092: BV-0 validado (las ★) y BV-1 hecho (css/universo.css 1.0.0, test, index por PATCH-416); validación de BV-1 en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "030b2c3091b06299c1fea28c28db823518293d98",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. Paso BV-0: la maqueta con las decisiones visuales.",
+          "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. Paso BV-1 hecho (fondo, barra de arriba y barra lateral); sigue BV-2, las cabeceras."
+        },
+        {
+          "op": "replace",
+          "anchor": "BV-5 celular y revisión.",
+          "text": "BV-5 celular y revisión. BV-0 validado por Pablo 2026-11-17 22:22Z («arrancá con BV-1»: las ★ — D1 Taller, D2 globo con el gato, D3 antetítulo y cifras en ámbar, D4 poses en Inicio y vacíos). BV-1 HECHO 22:29Z: css/universo.css 1.0.0 (0ca005a; solo theme Gato Negro, sin JS ni módulo nuevo: modules.json ya tiene 39 de 40), tests/universo.test.cjs (20bd817, 7 tests, 9/9 mutantes), index.html 3852bb8 por PATCH-416 (el link va en la línea vacía 22: no se corre ninguna línea)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-17 22:10Z",
+          "text": "Última actualización: 2026-11-17 22:30Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo elija D1–D4 de BV-0; después, BV-1.",
+          "text": "Próxima acción: Esperar que Pablo mire BV-1 en DEV; después, BV-2 (cabeceras de los módulos)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-0, la maqueta de La Bóveda en mi universo (https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-boveda-bv0.html). Elegí D1 Fondo, D2 Dónde te hablo, D3 Cabecera de cada módulo y D4 Mis poses (★ = lo que recomiendo).",
+          "text": "- [BL-092] Validación: BV-1 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): fondo «Taller» con cuadrícula y chispas, barra de arriba y barra lateral con mi paleta; el módulo activo se tiñe con su color. Los otros themes no cambian."
+        }
+      ]
+    }
+  ]
+}
