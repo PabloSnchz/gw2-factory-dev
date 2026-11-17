@@ -1,0 +1,22 @@
+{
+ "id": "PATCH-410",
+ "summary": "BL-091: CD-3b HECHO redefinido (La Guarida conserva su escena; kit con CI y guardián de sincronía; CI 65/65). Reemplaza al PATCH-409, publicado sin base por error.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "1ea465c5cdd228b3ee2346c63f913e276830ab80",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 04:56Z",
+     "text": "Última actualización: 2026-11-17 05:03Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "CD-4 VALIDADO por Pablo 2026-11-17 04:54Z («dale»). CD-3b EN CURSO.",
+     "text": "CD-4 VALIDADO por Pablo 2026-11-17 04:54Z («dale»). CD-3b HECHO 2026-11-17 05:00Z, redefinido por mí: La Guarida conserva su escena (js/escena.js 1.5.0, validada) y NO pasa a usar el kit. Motivo: su globo tiene el consejo del día, la bienvenida, el buscador y las reacciones, 50 KB de tests propios y no tiene CI; migrarla reescribía su globo y su CSS y sumaba una dependencia en vivo de otro sitio a la página que Pablo abre todos los días, sin ningún cambio visible. Solución más simple: el kit es la versión compartida para los demás sitios y lo que comparten (recorte, vecinos, fraseGato, FRASES, QUEJA, UMBRAL, HUECO, POSES) tiene que ser idéntico. En el repo shiruvana: tests/sync.test.cjs (b85ebc8; compara el código y el resultado sobre imágenes de prueba, y verifica que existan las 13 imágenes que pide el kit; 11/11 mutaciones), .github/workflows/kit-ci.yml (e15843a; el repo shiruvana no tenía CI de tests: corre la suite en cada push y todos los días a las 09:41 UTC con una copia de la-guarida, informe en ci/ULTIMO.md sin fecha para no commitear de más), kit/escena-kit.js (1b317c7, solo el comentario; sigue 1.0.0). CI VERDE 65/65 (commit 08fba4b, La Guarida 4b6b362). Regla: un cambio al recorte se hace en los dos lugares en el mismo micro-ciclo. Sigue CD-5 (celular, revisión final, CHANGELOG 3.0.0 del panel)."
+    }
+   ]
+  }
+ ]
+}
