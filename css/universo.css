@@ -1,6 +1,7 @@
 /* ==========================================================================
    css/universo.css — La Bóveda en mi universo (BL-092, DEC-025)
-   Versión: 1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral
+   Versión: 1.3.0 (2026-11-17) · BV-4: mis poses sin fondo en Inicio y en las pantallas vacías
+            1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral
             1.1.0 (2026-11-17) · BV-2: cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)
             1.0.0 (2026-11-17) · BV-1: fondo «Taller», barra de arriba y barra lateral
 
@@ -144,7 +145,25 @@
   :root:is([data-theme="gato"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 200px; }
 }
 
-/* ---------- 7. Celular y movimiento ---------- */
+/* ---------- 7. Mis poses de cuerpo entero (BV-4, D4) ----------
+   js/shv-bubble.js 1.6.0 les saca el fondo con el recorte del kit y las deja en body como --svk-p-<pose>
+   con la clase svk-p-<pose>: hasta que no están listas estas reglas no aplican (nunca un rectángulo negro).
+   Inicio («Shiruvana te guía», también el saludo sin Key): saluda, en lugar del avatar redondo.
+   Pantallas vacías de verdad (no las de filtros ni las que cargan): la cola de la Armería, Cuentas sin
+   cuentas y Compras fijadas sin nada fijado: pensando. Nunca en saldos, tablas ni navegación. La pose va
+   al costado, con su lugar propio (padding), así no tapa el texto. */
+:root:is([data-theme="gato"],:not([data-theme])) body.svk-p-saluda #welcomePanel [data-shv-place="welcome"] {
+  grid-template-columns: minmax(0, 1fr); min-height: 270px; padding-right: 200px;
+  background-image: var(--svk-p-saluda); background-repeat: no-repeat; background-position: right 16px bottom 0; background-size: 170px auto;
+}
+:root:is([data-theme="gato"],:not([data-theme])) body.svk-p-saluda #welcomePanel [data-shv-place="welcome"] > .shv-voice__avatar { display: none; }
+:root:is([data-theme="gato"],:not([data-theme])) body.svk-p-pensando :is(.arm-qview > .arm-empty, .cv-empty, div.wvp-empty) {
+  min-height: 210px; padding-right: 170px; text-align: left;
+  background-image: var(--svk-p-pensando); background-repeat: no-repeat; background-position: right 12px bottom 0; background-size: 140px auto;
+}
+/* en el celular, más chicas: van en el bloque de 640 px de la sección 8 */
+
+/* ---------- 8. Celular y movimiento ---------- */
 @media (max-width: 640px) {
   /* la mitad de las chispas */
   :root:is([data-theme="gato"],:not([data-theme])) body::after {
@@ -153,6 +172,13 @@
       62vw 8vh 2px #E8B34B, 78vw 44vh 2px #9B82FF, 92vw 70vh 2px #E8B34B,
       8vw 180vh 2px #E8B34B, 26vw 122vh 2px #9B82FF, 44vw 160vh 2px #E8B34B,
       62vw 108vh 2px #E8B34B, 78vw 144vh 2px #9B82FF, 92vw 170vh 2px #E8B34B;
+  }
+  /* mis poses (sección 7), más chicas */
+  :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-saluda #welcomePanel [data-shv-place="welcome"] {
+    min-height: 180px; padding-right: 108px; background-size: 96px auto; background-position: right 8px bottom 0;
+  }
+  :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-pensando :is(.arm-qview > .arm-empty, .cv-empty, div.wvp-empty) {
+    min-height: 160px; padding-right: 100px; background-size: 88px auto; background-position: right 6px bottom 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {

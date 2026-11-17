@@ -1,6 +1,11 @@
 /*!
  * js/shv-bubble.js — Shiruvana que aparece: mi globo (BL-075 SHE-1, DEC-038)
- * Versión: 1.5.0
+ * Versión: 1.6.0
+ *
+ * 1.6.0 (BL-092 BV-4, D4): con el globo puesto también preparo mis poses de cuerpo entero sin fondo (saluda y
+ *   pensando) con el recorte del kit (posesSinFondo, una vez por imagen, desde assets/brand/shiruvana/): quedan en
+ *   body como --svk-p-<pose> y la clase svk-p-<pose>. css/universo.css 1.3.0 las pone en Inicio y en las pantallas
+ *   vacías. Mientras no están listas no se ve nada: nunca un rectángulo negro.
  *
  * 1.5.0 (BL-092 BV-3, D2): con el theme Gato Negro (el oficial; también sin data-theme, como css/universo.css)
  *   hablo desde mi globo con el gato, abajo a la derecha, en vez del rincón de la Sidebar. Cargo el kit de escena
@@ -46,7 +51,7 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '1.5.0';
+  var VERSION = '1.6.0';
   var SEEN_KEY = 'gn:shv:seen', QUIET_KEY = 'gn:shv:quiet';
   var DELAY = 2000, TTL = 12000, RETRY = 3000, RETRY_ROUTE = 400, MIN_LEFT = 3000, SEEN_MAX = 200, SEEN_DAYS = 60;
   var ID = 'shvBubble', LIVE_ID = 'shvBubbleLive', STYLE_ID = 'shv-bubble-css';
@@ -469,7 +474,8 @@
   // ------------------------------------------------------------------ BV-3: mi globo con el gato (theme Gato Negro)
   var KIT_V = '1.0.0', KIT_JS = 'js/escena-kit.js', KIT_CSS = 'css/escena-kit.css', BRAND = 'assets/brand/';
   var ESC_HOLA = 'Hola. Cuando tenga algo nuevo para vos, te aviso acá.';
-  var esc = { on: false, g: null, loading: false, failed: false, mo: null };
+  var esc = { on: false, g: null, loading: false, failed: false, mo: null, poses: false };
+  var POSES = ['saluda', 'pensando']; // BV-4: Inicio saluda; las pantallas vacías, pensando
 
   /** El theme oficial: data-theme="gato" o todavía sin data-theme (el primer pintado, igual que css/universo.css). */
   function gatoTheme() {
@@ -521,6 +527,8 @@
     if (pl) pl.addEventListener('click', onFold); // corre después del del kit: ya cambió de estado
     st.anchor = pl || null; // el punto de «sin leer» y el foco al cerrar van al botón de mi globo
     setUnread();
+    var K = root.ShiruvanaKit;
+    if (!esc.poses && typeof K.posesSinFondo === 'function') { esc.poses = true; K.posesSinFondo({ el: doc.body, base: BRAND, poses: POSES }); }
     return true;
   }
   function escenaOff() {

@@ -81,6 +81,7 @@ function fakeLS() {
 function fakeKit(win, calls) {
   return {
     VERSION: '1.0.0',
+    posesSinFondo(o) { calls.poses.push(o); },
     globo(o) {
       const doc = win.document;
       calls.globo.push(o);
@@ -111,7 +112,7 @@ function load(opts) {
   const mos = [];
   class MO { constructor(f) { this.f = f; mos.push(this); } observe(t, o) { this.t = t; this.o = o; } }
   const ls = fakeLS();
-  const calls = { globo: [], gato: [] };
+  const calls = { globo: [], gato: [], poses: [] };
   if (opts.dom) opts.dom(doc);
   const window = { console: { info() {} }, document: doc, localStorage: ls, innerWidth: opts.width || 1280, innerHeight: 800, CustomEvent: CE, MutationObserver: MO,
     addEventListener() {}, setTimeout: (f, ms) => { const id = ++seq; timers.set(id, { at: clock + ms, f }); return id; }, clearTimeout: (id) => { timers.delete(id); } };
@@ -291,6 +292,23 @@ test('si cambiás a otro theme vuelvo al rincón (lo que estaba a la vista queda
   assert.equal(t.doc.querySelectorAll('#shvKitJs').length, 1, 'el kit se baja una sola vez');
 });
 
+test('BV-4: con el globo preparo mis poses sin fondo una sola vez (saluda y pensando, desde la Bóveda); sin globo, no', () => {
+  const t = load();
+  t.kitLoads();
+  assert.equal(t.calls.poses.length, 1);
+  const o = t.calls.poses[0];
+  assert.equal(o.el, t.doc.body, 'quedan en body: css/universo.css las usa donde corresponde');
+  assert.equal(o.base, 'assets/brand/');
+  assert.deepEqual([...o.poses], ['saluda', 'pensando']);
+  t.setTheme('nord'); t.setTheme('gato');
+  assert.equal(t.calls.poses.length, 1, 'el recorte no se repite al volver al theme');
+  const u = load({ theme: 'dracula' });
+  assert.equal(u.calls.poses.length, 0);
+  const v = load();
+  v.kitLoads(false);
+  assert.equal(v.calls.poses.length, 0, 'sin kit no hay poses (ni rectángulos)');
+});
+
 // ------------------------------------------------------------------ la copia del kit y el CSS
 function blob(file) {
   const b = fs.readFileSync(path.join(ROOT, file));
@@ -326,11 +344,20 @@ test('universo.css: el rincón se oculta solo con el globo puesto, me aparto de 
   const m = css.slice(css.indexOf('@media (max-width: 900px)'));
   assert.match(m, /\.svk-globo \{[^}]*bottom: calc\(76px/, 'en el celular, sobre la barra de abajo');
   assert.ok(!/\[data-shv-place="corner"\]\s*\{[^}]*display:\s*none/.test(css.replace(S + ' body.shv-escena :is(#appSidebar,#sbrSheet) [data-shv-place="corner"] {', '')), 'el rincón no se oculta por otro lado');
-  assert.match(read('css/universo.css'), /Versión: 1\.2\.0/);
+  assert.match(read('css/universo.css'), /Versión: 1\.3\.0/);
+  // BV-4: mis poses solo cuando están listas (la clase la pone el recorte), al costado y con su lugar propio.
+  has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place="welcome"]', /background-image:\s*var\(--svk-p-saluda\)[\s\S]*/);
+  has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place="welcome"] > .shv-voice__avatar', /display:\s*none/);
+  has(S + ' body.svk-p-pensando :is(.arm-qview > .arm-empty, .cv-empty, div.wvp-empty)', /background-image:\s*var\(--svk-p-pensando\)/);
+  assert.ok(!/--svk-p-[\w-]+\)/.test(css.replace(/body\.svk-p-(saluda|pensando)[^{]*\{[^}]*\}/g, '')), 'ninguna pose sin su clase de «lista»');
+  for (const c of ['class="arm-qview"', 'class="arm-empty"', 'class="cv-empty"', 'class="wvp-empty"']) {
+    assert.ok(fs.readdirSync(path.join(ROOT, 'js')).some((f) => read('js/' + f).includes(c)), 'existe ' + c);
+  }
+  for (const p of ['saluda', 'pensando']) assert.ok(fs.existsSync(path.join(ROOT, 'assets/brand/shiruvana/cuerpo-' + p + '.webp')), 'existe la pose ' + p);
 });
 
 test('reglas de la casa: texto, nunca marcado; nada a la API; el kit se pide con su versión', () => {
-  assert.match(SRC, /Versión: 1\.5\.0/);
+  assert.match(SRC, /Versión: 1\.6\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC));
   assert.ok(!/fetch\(|GW2Api/.test(SRC));
   assert.ok(!/localStorage\.setItem\('gn:shv:globo|storageKey: '/.test(SRC), 'el globo no guarda nada');
