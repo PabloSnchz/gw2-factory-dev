@@ -1,0 +1,32 @@
+{
+ "id": "PATCH-386",
+ "summary": "BL-091 ESC-2 HECHO: mi globo con el gato en La Guarida (solo theme Gato Negro); espera validación",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "203d1c9766517666ced30555d578fc40f55bea5a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 00:30Z",
+     "text": "Última actualización: 2026-11-17 00:35Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-2 EN CURSO: mi globo abajo a la derecha con el gato sentado encima;",
+     "text": "ESC-2 HECHO 2026-11-17 00:25Z en la-guarida: css/escena.css 1.1.0 (0cb5079), js/escena.js 1.1.0 (303676a), tests/escena.test.cjs (82b050b), tests/escena-dom.test.cjs nuevo (6399724, DOM falso sin dependencias), index.html (c556afb, commit 397d5e1); 27/27 tests, 26/26 mutaciones. Mi globo abajo a la derecha con el gato sentado encima;"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero; ESC-0 y ESC-1 validados; imágenes subidas; ESC-2 en curso (globo con el gato);",
+     "text": "BL-091 en curso: La Guarida primero; ESC-0 y ESC-1 validados; ESC-2 HECHO (globo con el gato), espera validación de Pablo; después ESC-3 (el gato reacciona y mis poses en momentos);"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-2 en tu Guarida con el theme Gato Negro (Ctrl+F5): abajo a la derecha está mi globo con el gato sentado encima. Cuando haya consejo del día aparece adentro del globo (con otro theme vuelve a la franja de siempre); ⇲ lo pliega y se acuerda; tocá al gato. Con tu OK sigo con ESC-3.\n"
+    }
+   ]
+  }
+ ]
+}
