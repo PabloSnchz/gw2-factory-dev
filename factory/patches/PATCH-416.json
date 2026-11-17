@@ -1,0 +1,17 @@
+{
+  "id": "PATCH-416",
+  "summary": "BL-092 BV-1: index.html carga css/universo.css 1.0.0 después del theme, en la línea vacía que ya había (no se corre ninguna línea del archivo)",
+  "files": [
+    {
+      "path": "index.html",
+      "base_sha": "ccbdbba5001a631e1b453a0b4695a4f087c5727b",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/themes/gato.css?v=1.0.0\" id=\"themeStylesheet\">\n  \n",
+          "text": "<link rel=\"stylesheet\" href=\"css/themes/gato.css?v=1.0.0\" id=\"themeStylesheet\">\n  <link rel=\"stylesheet\" href=\"css/universo.css?v=1.0.0\"><!-- BL-092: mi universo, solo con el theme Gato Negro -->\n"
+        }
+      ]
+    }
+  ]
+}
