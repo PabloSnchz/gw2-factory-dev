@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-387",
+ "summary": "BL-091: Pablo validó ESC-2; checkpoint de ESC-3 (el gato reacciona y yo de cuerpo entero en La Guarida)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c7f94246c6f9b8c5003f1f093edf577f3310010d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 00:35Z",
+     "text": "Última actualización: 2026-11-17 01:05Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero; ESC-0 y ESC-1 validados; ESC-2 HECHO (globo con el gato), espera validación de Pablo; después ESC-3 (el gato reacciona y mis poses en momentos);",
+     "text": "BL-091 en curso: La Guarida primero; ESC-0, ESC-1 y ESC-2 validados (ESC-2: «OK segui con ESC-3», 2026-11-17 00:49Z); ESC-3 EN CURSO: el gato reacciona (festeja al guardar en el editor, al descargar backup y con avisos ok; camina con advertencias y errores) y yo de cuerpo entero en los estados vacíos (CSS) y en el buscador (saluda vacío, pensando al escribir; reemplaza el retrato solo con Gato Negro);"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-2 en tu Guarida con el theme Gato Negro (Ctrl+F5): abajo a la derecha está mi globo con el gato sentado encima. Cuando haya consejo del día aparece adentro del globo (con otro theme vuelve a la franja de siempre); ⇲ lo pliega y se acuerda; tocá al gato. Con tu OK sigo con ESC-3.\n"
+    }
+   ]
+  }
+ ]
+}
