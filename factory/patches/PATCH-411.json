@@ -1,0 +1,22 @@
+{
+ "id": "PATCH-411",
+ "summary": "BL-091: Pablo aceptó CD-3b redefinido («arrancá» 10:31Z); CD-5 EN CURSO (celular, revisión final, CHANGELOG 3.0.0)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "6a8cd70db43a65e941c7b6fae664b85f2785f39d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 05:03Z",
+     "text": "Última actualización: 2026-11-17 10:33Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Sigue CD-5 (celular, revisión final, CHANGELOG 3.0.0 del panel).",
+     "text": "Sigue CD-5 (celular, revisión final, CHANGELOG 3.0.0 del panel). Pablo aceptó CD-3b redefinido 2026-11-17 10:31Z («arrancá»). CD-5 EN CURSO."
+    }
+   ]
+  }
+ ]
+}
