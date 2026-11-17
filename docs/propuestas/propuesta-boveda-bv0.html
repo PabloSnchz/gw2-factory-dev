@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark">
+<title>BV-0 · La Bóveda en mi universo · Propuesta</title>
+<!-- BL-092 BV-0 (2026-11-17). Maqueta: no toca La Bóveda ni lee tus datos ni guarda nada; los números son de ejemplo.
+     Usa el kit real del repo shiruvana (globo, gato y el recorte de mis poses sin fondo) y los íconos de la Bóveda. -->
+<link rel="stylesheet" href="https://pablosnchz.github.io/shiruvana/kit/escena-kit.css?v=1.0.0">
+<style>
+  :root {
+    /* theme Gato Negro de hoy (css/themes/gato.css) */
+    --bg: #0F1117; --bg1: #1A1F2B; --bd1: #2E3649; --bd2: #3B4560; --tx1: #F4F6FA; --tx2: #C9D0DA; --tx3: #8E96A3;
+    --acc: #A896FF; --gold: #F2B94B; --green: #3CC48A;
+    /* universo (el de La Guarida y el Centro) */
+    --u-bg: #0B0B10; --u-s1: #15151D; --u-s2: #1C1C26; --u-line: #2A2A38; --u-amber: #E8B34B; --u-violet: #9B82FF; --u-teal: #2EC4B6;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: #05060A; color: var(--tx1); font: 15px/1.5 Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  button, select { font: inherit; }
+  :focus-visible { outline: 2px solid var(--u-amber); outline-offset: 2px; }
+
+  /* ============ barra de la propuesta (no es parte de la Bóveda) ============ */
+  .pr { position: sticky; top: 0; z-index: 2000; background: #05060A; border-bottom: 1px solid #262B38; padding: 10px 16px; display: grid; gap: 8px; }
+  .pr-top { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+  .pr h1 { margin: 0; font-size: 1rem; }
+  .pr h1 span { color: var(--u-amber); }
+  .pr-top p { margin: 0; color: var(--tx3); font-size: .85rem; flex: 1; min-width: 240px; }
+  .pr-row { display: flex; flex-wrap: wrap; gap: 8px 18px; align-items: center; }
+  .pr-d { display: flex; align-items: center; gap: 6px; font-size: .82rem; }
+  .pr-d b { color: var(--u-amber); font-size: .78rem; }
+  .pr-d .lbl { color: var(--tx3); }
+  .seg { display: inline-flex; border: 1px solid var(--u-line); border-radius: 999px; overflow: hidden; }
+  .seg button { border: 0; background: transparent; color: var(--tx3); padding: 4px 10px; cursor: pointer; font-size: .8rem; }
+  .seg button[aria-pressed="true"] { background: var(--u-amber); color: #111; font-weight: 700; }
+  .seg .rec { font-size: .65rem; margin-left: 4px; opacity: .8; }
+  .pr-sim button { border: 1px solid var(--u-line); background: #11131A; color: var(--tx1); border-radius: 8px; padding: 4px 10px; font-size: .78rem; cursor: pointer; }
+  .pr-sim button:hover { border-color: var(--u-violet); }
+
+  .lienzo { padding: 18px 0 30px; display: flex; justify-content: center; }
+  .marco { position: relative; width: 100%; max-width: 1600px; overflow: hidden; }
+  .marco.movil { max-width: 390px; border: 1px solid var(--u-line); border-radius: 24px; }
+
+  /* ============ La Bóveda, como se ve hoy (theme Gato Negro) ============ */
+  .bv { position: relative; isolation: isolate; min-height: 980px; background: var(--bg); padding-bottom: 40px; }
+  .tb { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 6px 16px; background: var(--bg); border-bottom: 1px solid var(--bd1); position: relative; z-index: 3; }
+  .tb .id { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .tb .logo { width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center; }
+  .tb .logo img { width: 28px; height: 28px; }
+  .tb .names b { display: block; font-weight: 700; font-size: .95rem; }
+  .tb .names small { display: block; color: var(--tx2); font-size: .72rem; }
+  .tb .dev { padding: 0 8px; border-radius: 999px; background: var(--gold); color: #0F1117; font-size: .7rem; font-weight: 800; letter-spacing: .08em; line-height: 22px; }
+  .tb .acct { margin: 0 auto; display: flex; gap: 8px; align-items: center; }
+  .tb select { min-height: 38px; padding: 0 12px; border: 1px solid var(--bd1); border-radius: 999px; background: var(--bg1); color: var(--tx1); }
+  .tb .tools { display: flex; gap: 4px; }
+  .tb .tools span { display: inline-flex; align-items: center; min-height: 38px; padding: 0 10px; border-radius: 10px; color: var(--tx2); font-size: .88rem; white-space: nowrap; }
+
+  .lay { display: grid; grid-template-columns: 252px minmax(0, 1fr); gap: 20px; padding: 16px; }
+  .sb { display: grid; gap: 8px; align-content: start; position: relative; }
+  .acc-box { display: grid; grid-template-columns: 36px 1fr auto; gap: 2px 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--bd1); border-radius: 12px; background: var(--bg1); }
+  .acc-box img { grid-row: span 2; width: 36px; height: 36px; border-radius: 9px; background: var(--bg); padding: 4px; }
+  .acc-box small { font-size: .66rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--tx3); }
+  .acc-box b { font-size: .9rem; }
+  .acc-box em { grid-column: 3; grid-row: 1 / span 2; font-style: normal; font-size: .74rem; border: 1px solid var(--bd1); border-radius: 999px; padding: 2px 10px; color: var(--tx2); }
+  .cap { margin: 10px 12px 2px; font-size: .66rem; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--tx3); }
+  .nav { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+  .nav a { position: relative; display: flex; align-items: center; gap: 11px; min-height: 40px; padding: 7px 10px 7px 12px; border: 1px solid transparent; border-radius: 9px; color: var(--tx2); font-size: .9rem; text-decoration: none; }
+  .nav a img { width: 24px; height: 24px; object-fit: contain; border-radius: 6px; }
+  .nav a.on { background: var(--bg1); border-color: var(--bd2); color: var(--tx1); font-weight: 600; }
+  .nav a.on::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--x); }
+  .rincon { display: flex; gap: 10px; align-items: center; margin-top: 12px; padding: 10px; border-radius: 12px; border: 1px solid var(--bd1); background: var(--bg1); position: relative; }
+  .rincon img.cara { width: 48px; height: 48px; border-radius: 50%; box-shadow: 0 0 0 2px var(--acc); flex: none; }
+  .rincon p { margin: 0; font-size: .8rem; color: var(--tx2); }
+  .rincon p b { display: block; color: var(--tx1); font-size: .78rem; }
+  .rincon .gatito { position: absolute; right: 6px; bottom: calc(100% - 10px); width: 64px; display: none; }
+
+  /* el panel de un módulo (gn-shell: un solo contenedor con el degradado del color del módulo) */
+  .pnl { border: 1px solid var(--bd1); border-radius: 12px; overflow: hidden; background: linear-gradient(180deg, color-mix(in srgb, var(--m) 12%, transparent), transparent 300px), var(--bg1); }
+  .hero { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 20px; padding: 20px 24px 18px; border-bottom: 1px solid var(--bd1); }
+  .plate { width: 56px; height: 56px; border-radius: 12px; background: var(--bg); box-shadow: 0 0 0 1px var(--bd2), 0 0 18px color-mix(in srgb, var(--m) 18%, transparent); display: grid; place-items: center; flex: none; }
+  .plate img { width: 44px; height: 44px; object-fit: contain; }
+  .hero .tt { flex: 1; min-width: 200px; }
+  .ante { display: none; margin: 0 0 4px; font-size: .7rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--m); }
+  .hero h2 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+  .hero p { margin: 2px 0 0; color: var(--tx2); font-size: .88rem; }
+  .cifras { display: flex; gap: 22px; }
+  .cifra b { display: block; font-size: 1.5rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--tx1); }
+  .cifra span { color: var(--tx3); font-size: .74rem; }
+  .tabs { display: flex; gap: 4px; margin: 14px 24px 0; border-bottom: 1px solid var(--bd1); }
+  .tabs span { padding: 8px 12px; color: var(--tx2); font-size: .88rem; border-bottom: 2px solid transparent; }
+  .tabs span.on { color: var(--tx1); font-weight: 600; border-bottom-color: var(--m); }
+  .body { padding: 16px 24px 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+  .cur { display: grid; grid-template-columns: 34px 1fr; gap: 2px 10px; align-items: center; padding: 12px; border-radius: 12px; border: 1px solid var(--bd1); background: var(--bg); }
+  .cur i { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff6, transparent 40%), var(--c); }
+  .cur b { font-variant-numeric: tabular-nums; }
+  .cur span { color: var(--tx3); font-size: .78rem; }
+  .vista { display: none; } .bv[data-vista="cartera"] .v-cartera, .bv[data-vista="inicio"] .v-inicio, .bv[data-vista="vacio"] .v-vacio { display: block; }
+
+  /* Inicio */
+  .guia { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: end; padding: 18px 20px; margin: 16px 24px 4px; border-radius: 12px; border: 1px solid var(--bd1); background: var(--bg); position: relative; min-height: 220px; }
+  .guia h3 { margin: 0 0 6px; font-size: 1.2rem; }
+  .guia p { margin: 0 0 10px; color: var(--tx2); font-size: .9rem; }
+  .guia ol { margin: 0; padding-left: 18px; color: var(--tx2); font-size: .88rem; }
+  .pose { display: none; width: 100%; aspect-ratio: 640 / 954; background-repeat: no-repeat; background-position: center bottom; background-size: contain; }
+  .modgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; padding: 12px 24px; }
+  .modgrid span { display: flex; gap: 8px; align-items: center; padding: 10px; border-radius: 10px; border: 1px solid var(--bd1); background: var(--bg); font-size: .85rem; }
+  .modgrid img { width: 22px; height: 22px; }
+  /* vacío */
+  .vacio { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: end; margin: 16px 24px 4px; padding: 18px; border: 1px dashed var(--bd2); border-radius: 12px; min-height: 200px; }
+  .vacio p { margin: 0 0 20px; color: var(--tx2); }
+  .vacio p b { display: block; color: var(--tx1); font-size: 1.05rem; margin-bottom: 4px; }
+
+  /* ventana (para probar que el globo se aparta) */
+  .modal { display: none; position: absolute; inset: 0; z-index: 50; background: rgba(5,6,10,.6); place-items: center; }
+  .bv.con-ventana .modal { display: grid; }
+  .modal div { width: min(420px, 90%); padding: 20px; border-radius: 14px; background: var(--bg1); border: 1px solid var(--bd2); }
+  .modal h3 { margin: 0 0 6px; } .modal p { margin: 0 0 14px; color: var(--tx2); font-size: .9rem; }
+  .modal button { border: 1px solid var(--bd2); background: var(--bg); color: var(--tx1); border-radius: 10px; padding: 8px 14px; cursor: pointer; }
+
+  /* barra de abajo del celular (sidebar-nav.js SBR-3) */
+  .tabsm { display: none; }
+
+  /* ============ CON MI UNIVERSO (solo con el theme Gato Negro) ============ */
+  .bv.uv { background:
+      radial-gradient(40% 40% at 88% 4%, rgba(155,130,255,.16), transparent 70%),
+      radial-gradient(35% 30% at 6% 30%, rgba(232,179,75,.07), transparent 70%),
+      var(--u-bg); }
+  .bv.uv[data-fondo="taller"] { background:
+      radial-gradient(40% 40% at 88% 4%, rgba(155,130,255,.16), transparent 70%),
+      radial-gradient(35% 30% at 6% 30%, rgba(232,179,75,.07), transparent 70%),
+      linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px) 0 0 / 100% 48px,
+      linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px) 0 0 / 48px 100%,
+      var(--u-bg); }
+  .chispas { display: none; position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }
+  .bv.uv[data-fondo="taller"] .chispas { display: block; }
+  .chispas i { position: absolute; bottom: -10px; width: 3px; height: 3px; border-radius: 50%; opacity: 0; background: var(--u-amber); box-shadow: 0 0 8px var(--u-amber);
+    left: calc(3% + var(--i) * 8%); animation: chispa calc(10s + var(--i) * .6s) linear calc(var(--i) * -1.1s) infinite; }
+  .chispas i:nth-child(3n) { background: var(--u-violet); box-shadow: 0 0 8px var(--u-violet); }
+
+  .bv.uv .tb { background: rgba(11,11,16,.78); backdrop-filter: blur(10px); border-bottom-color: var(--u-line); }
+  .bv.uv .tb .logo { border-radius: 50%; background: #000; box-shadow: 0 0 0 2px var(--u-amber); }
+  .bv.uv .tb .names b { font-weight: 800; letter-spacing: -.01em; }
+  .bv.uv .tb select { background: rgba(21,21,29,.75); border-color: var(--u-line); }
+  .bv.uv .acc-box, .bv.uv .rincon { background: rgba(21,21,29,.86); border-color: var(--u-line); }
+  .bv.uv .cap { color: var(--u-amber); letter-spacing: .2em; font-weight: 700; }
+  .bv.uv .nav a.on { background: color-mix(in srgb, var(--x) 14%, rgba(21,21,29,.9)); border-color: color-mix(in srgb, var(--x) 45%, transparent); }
+  .bv.uv .pnl { border-color: var(--u-line); border-radius: 14px; background: linear-gradient(180deg, color-mix(in srgb, var(--m) 12%, transparent), transparent 300px), rgba(21,21,29,.86); }
+  .bv.uv .hero h2 { font-weight: 800; letter-spacing: -.02em; font-size: 1.7rem; }
+  .bv.uv[data-cab="ante"] .ante { display: block; }
+  .bv.uv[data-cab="ante"] .cifra b { color: var(--u-amber); font-weight: 800; }
+  .bv.uv .cur, .bv.uv .guia, .bv.uv .modgrid span { background: rgba(11,11,16,.7); border-color: var(--u-line); }
+  .bv.uv .vacio { border-color: var(--u-line); }
+
+  /* mis poses sin fondo (recorte del kit): solo cuando ya están listas, nunca un rectángulo negro */
+  .bv.uv.svk-p-saluda .pose-saluda { display: block; background-image: var(--svk-p-saluda); }
+  .bv.uv.svk-p-pensando[data-poses="todas"] .pose-pensando { display: block; background-image: var(--svk-p-pensando); }
+  /* el lugar de la pose aparece recién cuando la pose está lista */
+  .bv.uv.svk-p-saluda .guia { grid-template-columns: minmax(0, 1fr) 190px; }
+  .bv.uv.svk-p-pensando[data-poses="todas"] .vacio { grid-template-columns: minmax(0, 1fr) 160px; }
+
+  /* D2: mi globo con el gato (el kit real), dentro del marco de la maqueta */
+  .marco .svk-globo { position: absolute; z-index: 40; }
+  .bv:not(.uv) ~ .svk-globo, .marco.d2-rincon .svk-globo, .marco.ventana .svk-globo { display: none; }
+  .marco.d2-globo .bv.uv .rincon { display: none; }
+  .marco.d2-rincon .bv.uv .rincon .gatito { display: block; }
+  .marco.d2-rincon .bv.uv .rincon img.cara { box-shadow: 0 0 0 2px var(--u-amber); }
+
+  /* celular */
+  .marco.movil .tb .names, .marco.movil .tb .tools span:not(:last-child) { display: none; }
+  .marco.movil .tb select { max-width: 170px; }
+  .marco.movil .lay { grid-template-columns: 1fr; padding: 10px; }
+  .marco.movil .sb { display: none; }
+  .marco.movil .hero { padding: 14px 12px 12px; }
+  .marco.movil .plate { width: 40px; height: 40px; } .marco.movil .plate img { width: 32px; height: 32px; }
+  .marco.movil .hero h2 { font-size: 1.3rem; }
+  .marco.movil .cifras { gap: 16px; } .marco.movil .cifra b { font-size: 1.2rem; }
+  .marco.movil .tabs { margin: 10px 12px 0; overflow-x: auto; } .marco.movil .tabs span { white-space: nowrap; }
+  .marco.movil .body, .marco.movil .modgrid { padding-left: 12px; padding-right: 12px; }
+  .marco.movil .guia, .marco.movil .vacio { margin: 12px; }
+  .marco.movil .bv.uv.svk-p-saluda .guia { grid-template-columns: minmax(0, 1fr) 110px; }
+  .marco.movil .bv.uv.svk-p-pensando[data-poses="todas"] .vacio { grid-template-columns: minmax(0, 1fr) 110px; }
+  .marco.movil .bv { padding-bottom: 90px; }
+  .marco.movil .tabsm { display: grid; grid-template-columns: repeat(5, 1fr); position: absolute; left: 0; right: 0; bottom: 0; z-index: 30; padding: 6px 4px 8px; background: var(--bg1); border-top: 1px solid var(--bd2); }
+  .marco.movil .bv.uv .tabsm { background: rgba(21,21,29,.96); border-top-color: var(--u-line); }
+  .tabsm span { display: grid; justify-items: center; gap: 3px; font-size: .66rem; color: var(--tx3); padding: 4px 0; }
+  .tabsm span.on { color: var(--tx1); font-weight: 700; }
+  .tabsm img { width: 24px; height: 24px; }
+  .marco.movil .svk-globo { right: 10px; bottom: 82px; width: calc(100% - 20px); }
+  .marco.movil .svk-globo.is-plegado { width: auto; }
+
+  .notas { max-width: 980px; margin: 0 auto 60px; padding: 0 16px; color: #C9CED8; font-size: .9rem; }
+  .notas h2 { font-size: 1.1rem; color: var(--tx1); }
+  .notas li { margin-bottom: 6px; }
+  .notas b { color: var(--tx1); }
+  .sinkit { display: none; margin: 0 16px; padding: 10px 14px; border-radius: 10px; border: 1px solid var(--gold); color: var(--gold); font-size: .85rem; }
+
+  @keyframes chispa { 0% { transform: translateY(0); opacity: 0; } 10% { opacity: .45; } 80% { opacity: .3; } 100% { transform: translateY(-120vh); opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .chispas { display: none !important; } }
+</style>
+</head>
+<body>
+
+<div class="pr" role="region" aria-label="Controles de la propuesta">
+  <div class="pr-top">
+    <h1><span>BV-0</span> · La Bóveda en mi universo</h1>
+    <p>Maqueta: no toca La Bóveda, no lee tus datos y no guarda nada. Elegí cada decisión y mirá el cambio al instante; lo que recomiendo está marcado con ★.</p>
+    <div class="seg" role="group" aria-label="Antes o después" id="antes">
+      <button type="button" data-v="hoy" aria-pressed="false">Hoy</button>
+      <button type="button" data-v="uv" aria-pressed="true">Con mi universo</button>
+    </div>
+    <div class="seg" role="group" aria-label="Ancho" id="anchos">
+      <button type="button" data-v="pc" aria-pressed="true">Compu</button>
+      <button type="button" data-v="movil" aria-pressed="false">Celular</button>
+    </div>
+  </div>
+  <div class="pr-row">
+    <div class="pr-d"><b>D1</b><span class="lbl">Fondo</span>
+      <div class="seg" role="group" aria-label="D1 Fondo" data-d="fondo">
+        <button type="button" data-v="taller" aria-pressed="true">Taller: cuadrícula y chispas<span class="rec">★</span></button>
+        <button type="button" data-v="calma" aria-pressed="false">Solo el resplandor</button>
+      </div>
+    </div>
+    <div class="pr-d"><b>D2</b><span class="lbl">Dónde te hablo</span>
+      <div class="seg" role="group" aria-label="D2 Dónde te hablo" data-d="voz">
+        <button type="button" data-v="globo" aria-pressed="true">Globo con el gato<span class="rec">★</span></button>
+        <button type="button" data-v="rincon" aria-pressed="false">Mi rincón de siempre, con el gato</button>
+      </div>
+    </div>
+    <div class="pr-d"><b>D3</b><span class="lbl">Cabecera de cada módulo</span>
+      <div class="seg" role="group" aria-label="D3 Cabecera de cada módulo" data-d="cab">
+        <button type="button" data-v="ante" aria-pressed="true">Antetítulo y cifras en ámbar<span class="rec">★</span></button>
+        <button type="button" data-v="igual" aria-pressed="false">Como está</button>
+      </div>
+    </div>
+    <div class="pr-d"><b>D4</b><span class="lbl">Mis poses de cuerpo entero</span>
+      <div class="seg" role="group" aria-label="D4 Mis poses" data-d="poses">
+        <button type="button" data-v="todas" aria-pressed="true">Inicio y pantallas vacías<span class="rec">★</span></button>
+        <button type="button" data-v="inicio" aria-pressed="false">Solo en Inicio</button>
+      </div>
+    </div>
+  </div>
+  <div class="pr-row pr-sim" role="group" aria-label="Probar">
+    <div class="seg" role="group" aria-label="Pantalla" id="vistas">
+      <button type="button" data-v="cartera" aria-pressed="true">Cartera</button>
+      <button type="button" data-v="inicio" aria-pressed="false">Inicio</button>
+      <button type="button" data-v="vacio" aria-pressed="false">Una pantalla vacía</button>
+    </div>
+    <button type="button" data-sim="novedad">💬 Tengo una novedad para vos</button>
+    <button type="button" data-sim="ventana">🪟 Abrís una ventana</button>
+    <button type="button" data-sim="plegar">⇲ Plegar o abrir mi globo</button>
+  </div>
+</div>
+<p class="sinkit" id="sinkit" role="status">No se pudo cargar el kit de Shiruvana (globo, gato y poses). El resto de la maqueta anda igual; recargá con Ctrl+F5.</p>
+
+<div class="lienzo">
+  <div class="marco d2-globo" id="marco">
+    <div class="bv uv" id="bv" data-fondo="taller" data-cab="ante" data-poses="todas" data-vista="cartera">
+      <div class="chispas" id="chispas" aria-hidden="true"></div>
+
+      <header class="tb">
+        <div class="id">
+          <span class="logo"><img src="../../assets/brand/gato-negro.svg" alt=""></span>
+          <span class="names"><b>Bóveda del Gato Negro</b><small>Sitio de la comunidad · no oficial</small></span>
+          <span class="dev">DEV</span>
+        </div>
+        <div class="acct"><select aria-label="Cuenta"><option>Pablo.1234 (principal)</option></select></div>
+        <div class="tools"><span>Guías</span><span>Enlaces ▾</span><span>Ajustes ▾</span><span>🎨</span></div>
+      </header>
+
+      <div class="lay">
+        <aside class="sb" aria-label="Barra lateral">
+          <div class="acc-box"><img src="../../assets/icons/3601748.png" alt=""><small>Cuenta activa</small><b>Pablo.1234</b><em>Cambiar</em></div>
+          <ul class="nav" id="nav"></ul>
+          <div class="rincon">
+            <img class="gatito" id="gatito" src="https://pablosnchz.github.io/la-guarida/assets/brand/gato/gato-sentado.webp" alt="" width="320" height="320">
+            <img class="cara" src="https://pablosnchz.github.io/la-guarida/assets/brand/shiruvana/shiruvana-hola-cara-128.webp" alt="" width="48" height="48">
+            <p><b>Shiruvana</b><span id="rinconTxt">Tu Cartera subió 12 g desde ayer.</span></p>
+          </div>
+        </aside>
+
+        <main>
+          <!-- Cartera -->
+          <section class="pnl vista v-cartera" style="--m: #F2B94B" aria-label="Cartera">
+            <div class="hero">
+              <span class="plate"><img src="../../assets/icons/733322.png" alt=""></span>
+              <div class="tt"><p class="ante">Tu oro</p><h2>Cartera</h2><p>Tu oro, tus divisas y cómo cambian.</p></div>
+              <div class="cifras"><div class="cifra"><b>1.284 g</b><span>oro</span></div><div class="cifra"><b>+12 g</b><span>desde ayer</span></div><div class="cifra"><b>3</b><span>al tope</span></div></div>
+            </div>
+            <div class="tabs"><span class="on">Mi cartera</span><span>Todas las cuentas</span><span>Cambio de divisas</span></div>
+            <div class="body"><div class="grid">
+              <div class="cur" style="--c:#E8B34B"><i></i><b>1.284 g 56 s</b><span>Oro</span></div>
+              <div class="cur" style="--c:#C76BE0"><i></i><b>812.400</b><span>Karma</span></div>
+              <div class="cur" style="--c:#3CC48A"><i></i><b>74</b><span>Laureles</span></div>
+              <div class="cur" style="--c:#6EA3FF"><i></i><b>1.650</b><span>Gemas</span></div>
+              <div class="cur" style="--c:#F47C7C"><i></i><b>31.200</b><span>Esquirlas espirituales</span></div>
+              <div class="cur" style="--c:#15C3B7"><i></i><b>2.140</b><span>Aclamación astral</span></div>
+            </div></div>
+          </section>
+
+          <!-- Inicio -->
+          <section class="pnl vista v-inicio" style="--m: #A896FF" aria-label="Inicio">
+            <div class="hero">
+              <span class="plate"><img src="https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png" alt=""></span>
+              <div class="tt"><p class="ante">Bienvenida</p><h2>Hola, Pablo</h2><p>Tu Bóveda, lo que te falta configurar y dónde seguiste.</p></div>
+              <div class="cifras"><div class="cifra"><b>10</b><span>módulos</span></div><div class="cifra"><b>2</b><span>cuentas</span></div><div class="cifra"><b>1</b><span>novedad</span></div></div>
+            </div>
+            <div class="guia">
+              <div><h3>Shiruvana te guía</h3><p>Seguí donde quedaste: ayer miraste la Armería y te quedaron 2 piezas en la cola.</p>
+                <ol><li>Revisá la Cámara del Brujo: cierra la semana mañana.</li><li>Cargá la Key de tu segunda cuenta para ver todo junto.</li></ol></div>
+              <div class="pose pose-saluda" role="img" aria-label="Shiruvana saludando"></div>
+            </div>
+            <div class="modgrid" id="modgrid"></div>
+          </section>
+
+          <!-- Vacío -->
+          <section class="pnl vista v-vacio" style="--m: #E545CA" aria-label="Armería Legendaria">
+            <div class="hero">
+              <span class="plate"><img src="../../assets/icons/Cuentas/157085.png" alt=""></span>
+              <div class="tt"><p class="ante">Tu progreso</p><h2>Armería Legendaria</h2><p>Mi cola: lo que querés fabricar, en orden.</p></div>
+              <div class="cifras"><div class="cifra"><b>14</b><span>desbloqueadas</span></div><div class="cifra"><b>0</b><span>en la cola</span></div></div>
+            </div>
+            <div class="tabs"><span>Armas</span><span>Armaduras</span><span>Abalorios</span><span class="on">Mi cola</span></div>
+            <div class="vacio">
+              <p><b>Tu cola está vacía.</b>Tocá «Agregar a la cola» en cualquier legendaria y te armo el camino con lo que ya tenés.</p>
+              <div class="pose pose-pensando" role="img" aria-label="Shiruvana pensando"></div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <nav class="tabsm" aria-label="Barra de abajo (celular)" id="tabsm"></nav>
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div><h3 id="mt">Gestión de API Keys</h3><p>Con una ventana abierta no te hablo: mi globo se aparta hasta que la cerrás.</p><button type="button" data-sim="ventana">Cerrar</button></div></div>
+    </div>
+  </div>
+</div>
+
+<section class="notas">
+  <h2>Qué cambia y qué no</h2>
+  <ul>
+    <li><b>Lo que no cambia:</b> tus datos, las tablas, listas, filtros, pestañas y el orden de los módulos. Los íconos y el color de cada módulo se quedan: son cómo encontrás las cosas. El universo es <b>ambiente</b>: no le saca lugar a los datos.</li>
+    <li><b>Solo con el theme Gato Negro</b> (el que viene por defecto). Los otros 18 themes quedan exactamente como hoy, como hicimos en La Guarida. Mirá «Hoy» y «Con mi universo» arriba para comparar.</li>
+    <li><b>D1 Fondo.</b> «Taller» es el de La Guarida y el Centro: cuadrícula tenue y chispas que suben despacio, detrás de todo. «Solo el resplandor» es más calmo, por si preferís que la Bóveda de los jugadores no se mueva nada.</li>
+    <li><b>D2 Dónde te hablo.</b> Con el globo, mi rincón de la barra lateral pasa a ser el globo con el gato, abajo a la derecha, como en La Guarida y el Centro. Arranca plegado (solo mi cara y el gato) y se abre solo cuando tengo algo nuevo para vos: una vez por novedad, nunca con una ventana abierta, y se vuelve a plegar a los 12 s si no lo mirás. «Silenciar a Shiruvana» sigue andando igual. En el celular queda arriba de la barra de abajo. La otra opción deja mi rincón donde está, con el gato sentado encima.</li>
+    <li><b>D3 Cabecera de cada módulo.</b> Un antetítulo con el grupo (Tu oro, Lo diario, Lo semanal, Tu progreso, Tu cuenta, siguiendo el orden que elegiste) y las cifras de la cabecera en ámbar. «Como está» deja las cabeceras de hoy con la tipografía nueva.</li>
+    <li><b>D4 Mis poses de cuerpo entero.</b> En Inicio («Shiruvana te guía») y en las pantallas vacías (cola vacía, sin favoritos, sin Key), siempre sin fondo. Nunca en saldos, tablas ni navegación.</li>
+    <li><b>Esto lo decido yo:</b> el globo, el gato y el recorte usan el mismo kit que el Centro, pero <b>copiado dentro de la Bóveda con versión fija</b>: la Bóveda de los jugadores no va a depender de otro sitio. El guardián que ya compara el kit con La Guarida va a comparar también esta copia. Sin bienvenida animada: los jugadores entran a mirar datos rápido. En el celular, menos chispas y sin desenfoque. Con «reducir movimiento», nada se mueve.</li>
+    <li><b>Lo que te voy a pedir más adelante (en BV-3):</b> subir 6 imágenes (el gato sentado, festeja y camina, y mis 3 poses de cuerpo) a <code>assets/brand/</code> de la Bóveda. Yo no puedo subir imágenes; te digo exactamente cuáles y de dónde.</li>
+    <li><b>Lo que guarda:</b> una clave nueva en el navegador para recordar si plegaste el globo. DEV y producción comparten el almacenamiento de <code>pablosnchz.github.io</code>; no toca ningún dato de cuentas ni de Keys.</li>
+    <li><b>Plan después de tu OK:</b> BV-1 fondo, barra de arriba y barra lateral · BV-2 cabeceras de los módulos · BV-3 globo con el gato · BV-4 mis poses en Inicio y en los vacíos · BV-5 celular y revisión final. Todo en DEV; producción solo si vos lo pedís.</li>
+  </ul>
+</section>
+
+<script src="https://pablosnchz.github.io/shiruvana/kit/escena-kit.js?v=1.0.0"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var bv = $('bv'), marco = $('marco');
+  var MODS = [
+    ['Cartera', 'assets/icons/733322.png', '#F2B94B', 'cartera'],
+    ['Metas y Eventos', 'assets/icons/102420.png', '#A896FF'],
+    ['Cámara del Brujo', 'assets/icons/3172791.png', '#15C3B7'],
+    ['Actividades', 'assets/icons/1302773.png', '#3CC48A'],
+    ['Heredad', 'assets/icons/Welcome/3380755.png', '#D9A55B'],
+    ['Raids', 'assets/icons/raids/raid-icon.png', '#F47C7C'],
+    ['Logros', 'assets/icons/155059.png', '#6EA3FF'],
+    ['Inventario y Personajes', 'assets/icons/Welcome/358409.png', '#7EC3FF'],
+    ['Armería Legendaria', 'assets/icons/Cuentas/157085.png', '#E545CA', 'vacio'],
+    ['Builds', 'assets/icons/156720.png', '#C9B6FF']
+  ];
+  var HOME = 'https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png';
+
+  function li(nombre, src, color, vista) {
+    var l = document.createElement('li'), a = document.createElement('a'), im = document.createElement('img'), s = document.createElement('span');
+    a.href = '#'; a.style.setProperty('--x', color); if (vista) a.setAttribute('data-ir', vista);
+    im.src = src; im.alt = ''; s.textContent = nombre;
+    a.appendChild(im); a.appendChild(s); l.appendChild(a); return l;
+  }
+  var nav = $('nav');
+  nav.appendChild(li('Inicio', HOME, '#A896FF', 'inicio'));
+  var cap = document.createElement('li'); cap.className = 'cap'; cap.textContent = 'Módulos'; nav.appendChild(cap);
+  MODS.forEach(function (m) { nav.appendChild(li(m[0], '../../' + m[1], m[2], m[3])); });
+  nav.appendChild(li('Cuentas', '../../assets/icons/3601748.png', '#8E96A3'));
+  MODS.slice(0, 8).forEach(function (m) {
+    var s = document.createElement('span'), im = document.createElement('img');
+    im.src = '../../' + m[1]; im.alt = ''; s.appendChild(im); s.appendChild(document.createTextNode(m[0])); $('modgrid').appendChild(s);
+  });
+  [['Inicio', HOME, 'inicio'], ['Cartera', '../../assets/icons/733322.png', 'cartera'], ['Metas', '../../assets/icons/102420.png'], ['Armería', '../../assets/icons/Cuentas/157085.png', 'vacio'], ['Más', '']].forEach(function (t) {
+    var s = document.createElement('span');
+    if (t[1]) { var im = document.createElement('img'); im.src = t[1]; im.alt = ''; s.appendChild(im); } else { var b = document.createElement('b'); b.textContent = '☰'; s.appendChild(b); }
+    s.appendChild(document.createTextNode(t[0])); if (t[2]) s.setAttribute('data-tab', t[2]); $('tabsm').appendChild(s);
+  });
+  for (var k = 0; k < 12; k++) { var i = document.createElement('i'); i.style.setProperty('--i', k); $('chispas').appendChild(i); }
+
+  function marcar(grupo, boton) { Array.prototype.forEach.call(grupo.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b === boton)); }); }
+  function vista(v) {
+    bv.setAttribute('data-vista', v);
+    marcar($('vistas'), $('vistas').querySelector('[data-v="' + v + '"]'));
+    Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) { a.classList.toggle('on', a.getAttribute('data-ir') === v); });
+    Array.prototype.forEach.call($('tabsm').children, function (s) { s.classList.toggle('on', s.getAttribute('data-tab') === v); });
+  }
+  vista('cartera');
+
+  // ---------- el kit real: globo, gato y mis poses sin fondo
+  var K = window.ShiruvanaKit, g = null, tPlegar = null;
+  var NOVEDADES = [
+    ['Tu Cartera subió 12 g desde ayer. Lo que más sumó: la venta de materiales del martes.', 'festeja', 'festeja', '¡Bip!'],
+    ['La Cámara del Brujo cierra la semana mañana y te faltan 2 objetivos.', 'ojo', 'camina', 'Ojo con eso.'],
+    ['Cargaste una Key nueva: ya veo tu segunda cuenta en Inventario y Personajes.', 'explica', 'festeja', '¡Miau!']
+  ];
+  var n = 0;
+  if (K && typeof K.globo === 'function') {
+    g = K.globo({ texto: 'Hola, Pablo. Si tengo algo nuevo para vos, te aviso acá.', cara: 'hola', parent: marco, storageKey: null });
+    g.plegar(true);
+    if (typeof K.posesSinFondo === 'function') K.posesSinFondo({ el: bv, poses: ['saluda', 'pensando'] });
+  } else {
+    $('sinkit').style.display = 'block';
+  }
+  function plegarEn12() {
+    clearTimeout(tPlegar);
+    tPlegar = setTimeout(function () { if (g && !g.el.matches(':hover') && !g.el.contains(document.activeElement)) g.plegar(true); }, 12000);
+  }
+
+  var SIM = {
+    novedad: function () {
+      var x = NOVEDADES[n++ % NOVEDADES.length];
+      $('rinconTxt').textContent = x[0];
+      if (bv.classList.contains('con-ventana')) return;           // nunca con una ventana abierta
+      if (g) { g.decir(x[0], x[1]); g.plegar(false); g.gato(x[2], x[3]); plegarEn12(); }
+    },
+    ventana: function () {
+      var on = bv.classList.toggle('con-ventana');
+      marco.classList.toggle('ventana', on);
+    },
+    plegar: function () { if (g) { g.plegar(!g.plegado()); clearTimeout(tPlegar); } }
+  };
+
+  // ---------- decisiones, antes/después, ancho y pantalla
+  Array.prototype.forEach.call(document.querySelectorAll('[data-d]'), function (grupo) {
+    grupo.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button'); if (!b) return;
+      marcar(grupo, b);
+      var d = grupo.getAttribute('data-d'), v = b.getAttribute('data-v');
+      if (d === 'voz') { marco.classList.toggle('d2-globo', v === 'globo'); marco.classList.toggle('d2-rincon', v === 'rincon'); return; }
+      bv.setAttribute('data-' + d, v);
+    });
+  });
+  $('antes').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    marcar($('antes'), b);
+    var uv = b.getAttribute('data-v') === 'uv';
+    bv.classList.toggle('uv', uv);
+    if (g) g.el.style.display = uv ? '' : 'none';
+  });
+  $('anchos').addEventListener('click', function (ev) {
+    var b = ev.target.closest('button'); if (!b) return;
+    marcar($('anchos'), b);
+    marco.classList.toggle('movil', b.getAttribute('data-v') === 'movil');
+  });
+  $('vistas').addEventListener('click', function (ev) { var b = ev.target.closest('button'); if (b) vista(b.getAttribute('data-v')); });
+  document.addEventListener('click', function (ev) {
+    var s = ev.target.closest('[data-sim]'); if (s) { SIM[s.getAttribute('data-sim')](); return; }
+    var a = ev.target.closest('#nav a, #tabsm span'); if (a) { ev.preventDefault(); var v = a.getAttribute('data-ir') || a.getAttribute('data-tab'); if (v) vista(v); }
+  });
+})();
+</script>
+</body>
+</html>
