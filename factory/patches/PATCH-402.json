@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-402",
+ "summary": "BL-091: CD-1 HECHO (fondo y cabecera del Centro de mando, CI 108/108); CD-2 EN CURSO",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "f720250b9391fa20e8f016219df3695c25b2ec97",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:50Z",
+     "text": "Última actualización: 2026-11-17 04:10Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "CD-1 EN CURSO (fondo del universo y cabecera en el panel real).",
+     "text": "CD-1 HECHO 2026-11-17 04:05Z en gw2-factory-dashboard (main): css/universo.css 1.0.0 nuevo (blob de1a464; paleta --uv-* del sitio, reasigna los colores del GDS en body.gds, fondo cuadrícula + resplandores + 12 chispas, cabecera en una línea con el gato en aro ámbar, pestañas en cápsula, latido), js/views.js de457ec (rótulo «Centro de mando», uv-logo, uv-pulso), index.html 81f99a7, tests/universo.test.mjs d1ec106 (6 tests, contraste AA de todos los pares del GDS con la paleta nueva; 15/15 mutaciones), tests/panel.test.mjs ac6b357 y tests/voice.test.mjs cbd3018 (esperan la hoja nueva y el rótulo nuevo). Se publicó por PR #1 (merge de Pablo); Pablo prefiere publicación directa en main: sin PR de acá en adelante. Herramienta nueva: .github/workflows/ci-report.yml (4f25ef2) deja la salida de la suite en ci/ULTIMO.md (FALLA con detalle o VERDE) porque la Factory no lee los logs de Actions. CI VERDE 108/108 (b72e031). Decidido por mí: el CHANGELOG del panel se actualiza una sola vez al cerrar CD-5 (3.0.0). CD-2 EN CURSO (vista Hoy como Mesa de mando), con el «avanzá» de Pablo 04:02Z."
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: CD-1 en https://pablosnchz.github.io/gw2-factory-dashboard/ (Ctrl+F5): fondo con cuadrícula y chispas, colores de mi sitio y cabecera «Centro de mando» con el gato en aro ámbar. CD-2 (vista Hoy) ya está en marcha.\n"
+    }
+   ]
+  }
+ ]
+}
