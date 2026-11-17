@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-397",
+ "summary": "BL-091: Pablo validó ESC-7 y cerró La Guarida; checkpoint de BIO-1 (Link in Bio al universo Shiruvana)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "2422c78b8412716458f5099bd0f53c1daf74a4cf",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:12Z",
+     "text": "Última actualización: 2026-11-17 03:20Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "; 77/77 tests y 18/18 mutaciones nuevas; espera validación de Pablo:",
+     "text": "; 77/77 tests y 18/18 mutaciones nuevas; validado por Pablo (2026-11-17 03:16Z, «cerrada la guarida»). LA GUARIDA CERRADA (ESC-0..7). BIO-1 EN CURSO (pedido de Pablo 03:16Z, antes del Centro de decisiones, «one shot»): Link in Bio (repo bio, main = publicado) al universo de mi sitio: paleta, antetítulos numerados, título 800, enlaces como «puertas» con brillo ámbar, el gato asomado (gato-sentado.webp de la-guarida, sin fondo), mi cara en una puerta nueva hacia mi sitio, entrada escalonada y movimiento reducido; mismos enlaces. ESC-7 fue:"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-7 en tu Guarida con Gato Negro (Ctrl+F5), en una pantalla de 1440 px o más: la cabecera es una sola línea (marca, saludo, pestañas con el buscador al lado y herramientas). El buscador dice solo «¿A dónde vamos?» con Ctrl K. Achicá la ventana: por debajo de 1440 px vuelven las dos filas. Con tu OK cierro La Guarida y sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
