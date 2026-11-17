@@ -1,6 +1,7 @@
 /* ==========================================================================
    css/universo.css — La Bóveda en mi universo (BL-092, DEC-025)
-   Versión: 1.0.0 (2026-11-17) · BV-1: fondo «Taller», barra de arriba y barra lateral
+   Versión: 1.1.0 (2026-11-17) · BV-2: cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)
+            1.0.0 (2026-11-17) · BV-1: fondo «Taller», barra de arriba y barra lateral
 
    Lo que Pablo eligió en BV-0 (2026-11-17, las ★): D1 fondo «Taller» (cuadrícula tenue y
    chispas que suben despacio), D2 globo con el gato, D3 antetítulo y cifras en ámbar,
@@ -78,7 +79,45 @@
 :root:is([data-theme="gato"],:not([data-theme])) #sbrTabs { background: rgba(21,21,29,.96); border-top-color: #2A2A38; }
 :root:is([data-theme="gato"],:not([data-theme])) #sbrSheet { background: #15151D; border-top-color: #2A2A38; }
 
-/* ---------- 5. Celular y movimiento ---------- */
+/* ---------- 5. Cabeceras de los módulos (BV-2, D3) ----------
+   Cada vista pone un id fijo en su título (lo vigila el test): arriba va el grupo en el orden
+   que eligió Pablo (Tu oro · Lo diario · Lo semanal · Tu progreso · Tu cuenta), en el color
+   del módulo, el mismo de la barra lateral. Es un ::before con texto alternativo vacío
+   (content: "…" / ""): se ve, pero no entra en el nombre de la región ni lo lee el lector
+   de pantalla. Un navegador sin texto alternativo descarta la regla entera: sin antetítulo,
+   nada más. Las cifras de los 4 indicadores van en ámbar; el «de N» y las notas, como estaban. */
+:root:is([data-theme="gato"],:not([data-theme])) :is(#walletTitle,#walletDashboardPanel .wn-hero .panel__title,#metaTitle,#wvxTitle,#avTitle,#hsTitle,#rvTitle,#achxTitle,#ivTitle,#armTitle,#bldTitle,#cvTitle,#welcomeTitle)::before {
+  display: block; margin: 0 0 4px; font-size: .7rem; font-weight: 700; line-height: 1.2;
+  letter-spacing: .2em; text-transform: uppercase;
+  /* sin color acá: :is() toma la especificidad de su selector más fuerte y le ganaría al de cada módulo */
+}
+:root:is([data-theme="gato"],:not([data-theme])) :is(#walletTitle,#walletDashboardPanel .wn-hero .panel__title)::before { content: "Tu oro" / ""; color: #F2B94B; }
+:root:is([data-theme="gato"],:not([data-theme])) #metaTitle::before { content: "Lo diario" / ""; color: #A896FF; }
+:root:is([data-theme="gato"],:not([data-theme])) #wvxTitle::before { content: "Lo diario" / ""; color: #15C3B7; }
+:root:is([data-theme="gato"],:not([data-theme])) #avTitle::before { content: "Lo diario" / ""; color: #3CC48A; }
+:root:is([data-theme="gato"],:not([data-theme])) #hsTitle::before { content: "Lo diario" / ""; color: #D9A55B; }
+:root:is([data-theme="gato"],:not([data-theme])) #rvTitle::before { content: "Lo semanal" / ""; color: #F47C7C; }
+:root:is([data-theme="gato"],:not([data-theme])) #achxTitle::before { content: "Tu progreso" / ""; color: #6EA3FF; }
+:root:is([data-theme="gato"],:not([data-theme])) #ivTitle::before { content: "Tu progreso" / ""; color: #7EC3FF; }
+:root:is([data-theme="gato"],:not([data-theme])) #armTitle::before { content: "Tu progreso" / ""; color: #E868D4; } /* #E545CA aclarado: AA sobre su cabecera teñida */
+:root:is([data-theme="gato"],:not([data-theme])) #bldTitle::before { content: "Tu progreso" / ""; color: #C9B6FF; }
+:root:is([data-theme="gato"],:not([data-theme])) #cvTitle::before { content: "Tu cuenta" / ""; color: #8E96A3; }
+:root:is([data-theme="gato"],:not([data-theme])) #welcomeTitle::before { content: "Bienvenida" / ""; color: #A896FF; }
+/* el título, con el peso del universo (en el celular cada vista conserva su tamaño) */
+:root:is([data-theme="gato"],:not([data-theme])) :is(#walletTitle,#walletDashboardPanel .wn-hero .panel__title,#metaTitle,#wvxTitle,#avTitle,#hsTitle,#rvTitle,#achxTitle,#ivTitle,#armTitle,#bldTitle,#cvTitle) {
+  font-weight: 800; letter-spacing: -.01em;
+}
+@media (min-width: 901px) {
+  :root:is([data-theme="gato"],:not([data-theme])) :is(#walletTitle,#walletDashboardPanel .wn-hero .panel__title,#metaTitle,#wvxTitle,#avTitle,#hsTitle,#rvTitle,#achxTitle,#ivTitle,#armTitle,#bldTitle,#cvTitle) {
+    font-size: 1.45rem;
+  }
+}
+/* las cifras de los indicadores (el «de N» va en un <span> con su propio color: no cambia) */
+:root:is([data-theme="gato"],:not([data-theme])) :is(.wvx-st,.achx-st,.rv-st,.av-st,.iv-st,.hs-st,.arm-st,.cv-st,#buildsPanel .bld-st) > b {
+  color: #E8B34B; font-weight: 800; font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 6. Celular y movimiento ---------- */
 @media (max-width: 640px) {
   /* la mitad de las chispas */
   :root:is([data-theme="gato"],:not([data-theme])) body::after {
