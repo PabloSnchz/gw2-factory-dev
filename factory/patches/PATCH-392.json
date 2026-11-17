@@ -1,0 +1,32 @@
+{
+ "id": "PATCH-392",
+ "summary": "BL-091 ESC-5 HECHO: La Guarida restyleada al universo Shiruvana y mis poses sin fondo; espera validación",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "1b9a114a3fe19dbaac4fb3ed4a8e47a689c98c10",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 02:30Z",
+     "text": "Última actualización: 2026-11-17 02:08Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-5 EN CURSO: css/universo.css nuevo",
+     "text": "ESC-5 HECHO 2026-11-17 02:06Z en la-guarida: css/universo.css 1.0.0 (e6a3a9c), js/escena.js 1.4.0 (77c1ef1), css/escena.css 1.4.0 (dd72ba2), index.html (bdf5b88), tests/escena.test.cjs (2b6dbbf), tests/escena-dom.test.cjs (6d08797), tests/universo.test.cjs nuevo (6016fb5), tests/index.test.cjs (208e637); 56/56 tests y 40/40 mutaciones. Recorte probado con arte real del mismo estilo: limpio, unos 120 ms por pose, corre detrás de la bienvenida. Sin navegador en el sandbox: la vista la valida Pablo. css/universo.css nuevo"
+    },
+    {
+     "op": "replace",
+     "anchor": "(sin mix-blend); después: cierre de La Guarida y Centro de decisiones;",
+     "text": "(sin mix-blend); espera validación de Pablo; después: cierre de La Guarida y Centro de decisiones;"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-5 en tu Guarida con el theme Gato Negro (Ctrl+F5): paleta y tipografía de mi sitio (antetítulos «01 · En vivo»…, títulos en 800 y contadores en ámbar), categorías y noticias como líneas de tiempo con puntos, lanzador como las puertas del Ecosistema, widgets como cifras, la barra del día bajo el saludo, y yo asomada arriba a la derecha de Favoritos, Categorías y Lanzador (el gato en Widgets). En Ctrl K ya no hay rectángulo negro: mi pose aparece recortada. Si algo no te cierra, decime qué panel; volver atrás es quitar css/universo.css de index.html. Con tu OK cierro La Guarida y sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
