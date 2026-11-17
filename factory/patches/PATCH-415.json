@@ -1,0 +1,27 @@
+{
+  "id": "PATCH-415",
+  "summary": "BL-092: BV-0 publicada (maqueta de La Bóveda en mi universo); pedido de validación D1–D4 en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "ee212fd2a90cbf0fc3475eb6891e054a83f6ea8f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Historial de BL-092: pedido de Pablo 2026-11-17 22:05Z («vamos con 092 La estética de la función en La Bóveda DEV»). BV-0 EN CURSO.",
+          "text": "Historial de BL-092: pedido de Pablo 2026-11-17 22:05Z («vamos con 092 La estética de la función en La Bóveda DEV»). BV-0 HECHO 2026-11-17 22:13Z: docs/propuestas/propuesta-boveda-bv0.html (blob 741d884, commit bd4d271), usa el kit real de shiruvana 1.0.0; solo maqueta, no toca la Bóveda. Plan: BV-1 fondo, barra de arriba y lateral · BV-2 cabeceras · BV-3 globo con el gato (Acción de Pablo: subir 6 imágenes a assets/brand) · BV-4 poses · BV-5 celular y revisión."
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Publicar la maqueta BV-0 en docs/propuestas y pedirle a Pablo que elija las decisiones.",
+          "text": "Próxima acción: Esperar que Pablo elija D1–D4 de BV-0; después, BV-1."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## Esperando a Pablo\n\n",
+          "text": "- [BL-092] Validación: BV-0, la maqueta de La Bóveda en mi universo (https://pablosnchz.github.io/gw2-factory-dev/docs/propuestas/propuesta-boveda-bv0.html). Elegí D1 Fondo, D2 Dónde te hablo, D3 Cabecera de cada módulo y D4 Mis poses (★ = lo que recomiendo).\n"
+        }
+      ]
+    }
+  ]
+}
