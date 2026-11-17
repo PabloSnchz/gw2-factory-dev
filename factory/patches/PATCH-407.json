@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-407",
+ "summary": "BL-091: CD-4 HECHO (Trabajo, Conocimiento, Riesgos, Actividad y Salud en el universo); CI 123/123; validación pedida a Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "f00848ad15bd4b15af813f19594857d9aea4b48b",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 04:44Z",
+     "text": "Última actualización: 2026-11-17 04:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "se migra con calma). CD-4 EN CURSO.",
+     "text": "se migra con calma). CD-4 HECHO 2026-11-17 04:50Z en gw2-factory-dashboard (main = publicado): js/views.js (cc0cc6b, commit 2ed5c5d) con cabecera común pageHead (antetítulo «01 · …», único h1, bajada y cifras en ámbar): Trabajo «01 · El plan» (+ 02 Etapas como línea de tiempo con puntos, 03 Tablero con color por columna), Conocimiento «01 · Lo que sé», Riesgos «01 · Lo que vigilo» (grupos con borde por nivel), Actividad «01 · Lo que pasó» (período en la cabecera, días como línea de tiempo), Salud «01 · Cómo estoy»; las frases de conteo pasaron a cifras. css/universo.css 1.3.0 (f5a08c8, commit 9a933d9), index.html (d14f9fb, ?v=1.3.0), tests/universo.test.mjs (5dd1376, +3 tests: cabecera de las cinco vistas, cifras coherentes con la vista, líneas de tiempo/tablero/niveles). CI VERDE 123/123 (commit b38e9a1); 18/18 mutaciones locales. Sin claves nuevas de localStorage. Vuelta atrás: revertir los 4 commits. Sigue CD-3b (La Guarida usa el kit) y CD-5 (celular, revisión final, CHANGELOG 3.0.0)."
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n",
+     "text": "\n- [BL-091] Validación: CD-4, las otras cinco vistas del Centro de mando en mi universo (https://pablosnchz.github.io/gw2-factory-dashboard/, Ctrl+F5): Trabajo, Conocimiento, Riesgos, Actividad y Salud abren con «01 · …», el título y cifras en ámbar; las etapas del plan y la actividad son líneas de tiempo con puntos."
+    }
+   ]
+  }
+ ]
+}
