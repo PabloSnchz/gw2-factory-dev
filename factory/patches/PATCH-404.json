@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-404",
+ "summary": "BL-091: CD-1 y CD-2 VALIDADOS por Pablo («dale» 04:24Z); CD-3 EN CURSO (checkpoint)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "84573345f417f28feede54afdd5e32ce2f5aba86",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 04:22Z",
+     "text": "Última actualización: 2026-11-17 04:26Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próximo: CD-3 globo y gato (kit de escena al repo shiruvana) con el OK de Pablo.",
+     "text": "CD-1 y CD-2 VALIDADOS por Pablo 2026-11-17 04:24Z («dale»). CD-3 EN CURSO: globo y gato (kit de escena al repo shiruvana)."
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: CD-1 y CD-2 en https://pablosnchz.github.io/gw2-factory-dashboard/ (Ctrl+F5): fondo y cabecera «Centro de mando», y Hoy como Mesa de mando (01 Ahora con cifras, dos columnas, 05 Entornos, 06 En números). Con tu OK sigo con CD-3 (globo y gato).\n"
+    }
+   ]
+  }
+ ]
+}
