@@ -541,7 +541,7 @@ test('1.4.0 (SHV-5a): lo que escribo en el módulo también dice de dónde lo s�
 });
 
 test('versión, reglas de la casa y el orden de carga', () => {
-  assert.match(SRC, /Versión: 1\.4\.0/);
+  assert.match(SRC, /Versión: 1\.5\.0/);
   assert.ok(!/innerHTML|insertAdjacentHTML/.test(SRC), 'texto, nunca HTML');
   assert.ok(!/fetch\(|GW2Api/.test(SRC), 'no pido nada a la API');
   const css = SRC.match(/var CSS = \[([\s\S]*?)\]\.join/)[1];

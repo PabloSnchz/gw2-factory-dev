@@ -1,6 +1,7 @@
 /* ==========================================================================
    css/universo.css — La Bóveda en mi universo (BL-092, DEC-025)
-   Versión: 1.1.0 (2026-11-17) · BV-2: cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)
+   Versión: 1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral
+            1.1.0 (2026-11-17) · BV-2: cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)
             1.0.0 (2026-11-17) · BV-1: fondo «Taller», barra de arriba y barra lateral
 
    Lo que Pablo eligió en BV-0 (2026-11-17, las ★): D1 fondo «Taller» (cuadrícula tenue y
@@ -16,6 +17,7 @@
    - No toca tokens (--bg, --tx-…): el contraste del theme lo sigue midiendo theme-gato.test.
    - Ambiente, no contenido: nada de esto le saca lugar ni clics a los datos (pointer-events:none).
    - Sin JS: el fondo y las chispas son seudo-elementos. No suma un módulo a js/modules.json.
+     El globo (BV-3) lo pone js/shv-bubble.js; acá solo se acomoda.
    - «Reducir movimiento» apaga las chispas; en el celular hay menos. Sin backdrop-filter.
    Paleta del universo (La Guarida y el Centro de mando): fondo #0B0B10, superficie #15151D,
    línea #2A2A38, ámbar #E8B34B, violeta #9B82FF.
@@ -117,7 +119,32 @@
   color: #E8B34B; font-weight: 800; font-variant-numeric: tabular-nums;
 }
 
-/* ---------- 6. Celular y movimiento ---------- */
+/* ---------- 6. Mi globo con el gato (BV-3, D2) ----------
+   js/shv-bubble.js 1.5.0 baja el kit de escena (css/escena-kit.css y js/escena-kit.js, copia fija del repo
+   shiruvana) solo con este theme, arma el globo abajo a la derecha y pone body.shv-escena. Mi rincón de la
+   barra lateral pasa a ser el globo; con una ventana abierta me aparto; los avisos suben para no taparme.
+   Sin body.shv-escena (el kit no cargó) el rincón sigue donde estaba. Contraste: texto del theme y ámbar
+   #E8B34B sobre el globo #15151D. */
+:root:is([data-theme="gato"],:not([data-theme])) body.shv-escena :is(#appSidebar,#sbrSheet) [data-shv-place="corner"] { display: none; }
+:root:is([data-theme="gato"],:not([data-theme])):is(.gn-mod-open,.gn-dlg-open) .svk-globo { visibility: hidden; }
+:root:is([data-theme="gato"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 150px; }
+:root:is([data-theme="gato"],:not([data-theme])) .svk-globo #shvBubble {
+  position: static; width: auto; margin: 0; border: 0; border-radius: 0; background: none; box-shadow: none; animation: none;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .svk-globo #shvBubble .shv-voice { margin: 0; padding: 0; border: 0; border-radius: 0; background: none; }
+:root:is([data-theme="gato"],:not([data-theme])) .svk-globo #shvBubble .shv-bub__x { display: none; }
+:root:is([data-theme="gato"],:not([data-theme])) .svk-globo.shv-hablando :is(.svk-nombre,.svk-texto) { display: none; }
+:root:is([data-theme="gato"],:not([data-theme])) .svk-globo #shvBubble .shv-voice__label {
+  color: #E8B34B; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;
+}
+@media (max-width: 900px) {
+  /* sobre la barra de abajo (#sbrTabs), como el globo de antes */
+  :root:is([data-theme="gato"],:not([data-theme])) .svk-globo { right: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: calc(100vw - 24px); }
+  :root:is([data-theme="gato"],:not([data-theme])) .svk-globo.is-plegado { width: auto; }
+  :root:is([data-theme="gato"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 200px; }
+}
+
+/* ---------- 7. Celular y movimiento ---------- */
 @media (max-width: 640px) {
   /* la mitad de las chispas */
   :root:is([data-theme="gato"],:not([data-theme])) body::after {
