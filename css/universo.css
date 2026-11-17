@@ -1,0 +1,98 @@
+/* ==========================================================================
+   css/universo.css — La Bóveda en mi universo (BL-092, DEC-025)
+   Versión: 1.0.0 (2026-11-17) · BV-1: fondo «Taller», barra de arriba y barra lateral
+
+   Lo que Pablo eligió en BV-0 (2026-11-17, las ★): D1 fondo «Taller» (cuadrícula tenue y
+   chispas que suben despacio), D2 globo con el gato, D3 antetítulo y cifras en ámbar,
+   D4 mis poses en Inicio y en los vacíos. Este archivo crece por pasos: BV-1 trae el fondo,
+   la barra de arriba y la barra lateral; BV-2 las cabeceras; BV-3 el globo; BV-4 las poses.
+
+   Reglas de este archivo (las vigila tests/universo.test.cjs):
+   - Solo con el theme Gato Negro, el oficial y el de por defecto. Todo selector empieza con
+     :root:is([data-theme="gato"],:not([data-theme])) — el «:not» cubre el primer pintado,
+     antes de que theme-selector.js ponga data-theme, para que no haya parpadeo. Los otros
+     18 themes quedan exactamente como estaban.
+   - No toca tokens (--bg, --tx-…): el contraste del theme lo sigue midiendo theme-gato.test.
+   - Ambiente, no contenido: nada de esto le saca lugar ni clics a los datos (pointer-events:none).
+   - Sin JS: el fondo y las chispas son seudo-elementos. No suma un módulo a js/modules.json.
+   - «Reducir movimiento» apaga las chispas; en el celular hay menos. Sin backdrop-filter.
+   Paleta del universo (La Guarida y el Centro de mando): fondo #0B0B10, superficie #15151D,
+   línea #2A2A38, ámbar #E8B34B, violeta #9B82FF.
+   ========================================================================== */
+
+/* ---------- 1. Fondo «Taller»: resplandores + cuadrícula, fijo detrás de todo ---------- */
+:root:is([data-theme="gato"],:not([data-theme])) { background: #0B0B10; }
+:root:is([data-theme="gato"],:not([data-theme])) body { background: transparent; }
+:root:is([data-theme="gato"],:not([data-theme])) body::before {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(40% 40% at 88% 4%, rgba(155,130,255,.16), transparent 70%),
+    radial-gradient(35% 30% at 6% 30%, rgba(232,179,75,.07), transparent 70%),
+    linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px) 0 0 / 100% 48px,
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px) 0 0 / 48px 100%,
+    #0B0B10;
+}
+
+/* ---------- 2. Chispas: dos tandas iguales, una debajo de la otra, que suben una pantalla
+   entera; cuando termina la vuelta la segunda quedó donde empezó la primera (sin salto). ---------- */
+:root:is([data-theme="gato"],:not([data-theme])) body::after {
+  content: ""; position: fixed; left: 0; top: 0; z-index: -1; pointer-events: none;
+  width: 3px; height: 3px; border-radius: 50%; opacity: .4;
+  box-shadow:
+    4vw 92vh 2px #E8B34B, 13vw 18vh 2px #E8B34B, 21vw 64vh 2px #9B82FF, 30vw 40vh 2px #E8B34B,
+    38vw 84vh 2px #E8B34B, 47vw 10vh 2px #9B82FF, 55vw 56vh 2px #E8B34B, 63vw 30vh 2px #E8B34B,
+    72vw 76vh 2px #9B82FF, 80vw 48vh 2px #E8B34B, 88vw 4vh 2px #E8B34B, 96vw 68vh 2px #9B82FF,
+    4vw 192vh 2px #E8B34B, 13vw 118vh 2px #E8B34B, 21vw 164vh 2px #9B82FF, 30vw 140vh 2px #E8B34B,
+    38vw 184vh 2px #E8B34B, 47vw 110vh 2px #9B82FF, 55vw 156vh 2px #E8B34B, 63vw 130vh 2px #E8B34B,
+    72vw 176vh 2px #9B82FF, 80vw 148vh 2px #E8B34B, 88vw 104vh 2px #E8B34B, 96vw 168vh 2px #9B82FF;
+  animation: gn-uv-chispas 60s linear infinite;
+}
+@keyframes gn-uv-chispas { from { transform: translateY(0); } to { transform: translateY(-100vh); } }
+
+/* ---------- 3. Barra de arriba (index.html header.gn-tb, conducta en js/gn-topbar.js) ---------- */
+:root:is([data-theme="gato"],:not([data-theme])) header.gn-tb {
+  /* sin backdrop-filter: la barra no es fija (no hay nada que desenfocar) y el filtro volvería
+     «contenedor» de lo fijo que tenga adentro */
+  background: rgba(11,11,16,.82); border-bottom-color: #2A2A38;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb .brand-logo-compact {
+  border-radius: 50%; background: #000; box-shadow: 0 0 0 2px #E8B34B;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb #keySelectGlobal { background-color: rgba(21,21,29,.8); border-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb__btn:hover,
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb__btn[aria-expanded="true"] { background: #15151D; border-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb__menu { background: #15151D; border-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb__menu [role="menuitem"]:hover,
+:root:is([data-theme="gato"],:not([data-theme])) .gn-tb__menu [role="menuitem"]:focus { background: #1C1C26; }
+
+/* ---------- 4. Barra lateral (js/sidebar-nav.js: #appSidebar, la barra #sbrTabs y la hoja #sbrSheet) ---------- */
+:root:is([data-theme="gato"],:not([data-theme])) #appSidebar .sbr-cap { color: #E8B34B; letter-spacing: .2em; font-weight: 700; }
+:root:is([data-theme="gato"],:not([data-theme])) :is(#appSidebar,#sbrSheet) .sbr-acct { background: rgba(21,21,29,.86); border-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) :is(#appSidebar,#sbrSheet) .sbr-acct img { background: #0B0B10; }
+:root:is([data-theme="gato"],:not([data-theme])) :is(#appSidebar,#sbrSheet) .sbr-list a:hover { background: rgba(21,21,29,.86); border-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) :is(#appSidebar,#sbrSheet) .sbr-list a.is-active {
+  background: color-mix(in srgb, var(--x, #A896FF) 14%, rgba(21,21,29,.92));
+  border-color: color-mix(in srgb, var(--x, #A896FF) 45%, transparent);
+}
+:root:is([data-theme="gato"],:not([data-theme])) #appSidebar .sbr-sep { background: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) #sbrTabs { background: rgba(21,21,29,.96); border-top-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) #sbrSheet { background: #15151D; border-top-color: #2A2A38; }
+
+/* ---------- 5. Celular y movimiento ---------- */
+@media (max-width: 640px) {
+  /* la mitad de las chispas */
+  :root:is([data-theme="gato"],:not([data-theme])) body::after {
+    box-shadow:
+      8vw 80vh 2px #E8B34B, 26vw 22vh 2px #9B82FF, 44vw 60vh 2px #E8B34B,
+      62vw 8vh 2px #E8B34B, 78vw 44vh 2px #9B82FF, 92vw 70vh 2px #E8B34B,
+      8vw 180vh 2px #E8B34B, 26vw 122vh 2px #9B82FF, 44vw 160vh 2px #E8B34B,
+      62vw 108vh 2px #E8B34B, 78vw 144vh 2px #9B82FF, 92vw 170vh 2px #E8B34B;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:is([data-theme="gato"],:not([data-theme])) body::after { display: none; animation: none; }
+}
+@media print {
+  :root:is([data-theme="gato"],:not([data-theme])) body::before,
+  :root:is([data-theme="gato"],:not([data-theme])) body::after { display: none; }
+}
