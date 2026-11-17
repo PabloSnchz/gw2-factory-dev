@@ -1,0 +1,25 @@
+{
+ "id": "PATCH-414",
+ "summary": "BL-092 EN CURSO por pedido de Pablo (2026-11-17 22:05Z, «vamos con 092»); BV-0, la maqueta, en curso",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "4977d8bb7ee1a7e2513980c9f2ce54e4c7d29640",
+   "ops": [
+    { "op": "replace", "anchor": "Estado: ESPERANDO A PABLO\n", "text": "Estado: EN CURSO\n" },
+    { "op": "replace", "anchor": "Tarea actual: Ninguna en curso. BL-091 cerrada por Pablo (2026-11-17 10:59Z); espero que elijas lo próximo.", "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. Paso BV-0: la maqueta con las decisiones visuales.\nHistorial de BL-092: pedido de Pablo 2026-11-17 22:05Z («vamos con 092 La estética de la función en La Bóveda DEV»). BV-0 EN CURSO." },
+    { "op": "replace", "anchor": "Motivo: Pablo validó el Centro de mando en el teléfono y cerró BL-091 (2026-11-17 10:59Z).", "text": "Motivo: Pablo eligió BL-092: llevar a La Bóveda el universo que ya tienen La Guarida y el Centro de mando." },
+    { "op": "replace", "anchor": "Etapa actual: DOCUMENTATION COMPLETADA\n", "text": "Etapa actual: PRODUCT\n" },
+    { "op": "replace", "anchor": "Última actualización: 2026-11-17 11:15Z", "text": "Última actualización: 2026-11-17 22:10Z" },
+    { "op": "replace", "anchor": "Próxima acción: Que Pablo elija lo próximo. Propongo BL-092 (la estética en La Bóveda DEV, empezando por una maqueta) o BL-060 (contraste AA en los 19 themes).", "text": "Próxima acción: Publicar la maqueta BV-0 en docs/propuestas y pedirle a Pablo que elija las decisiones." }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "8624b718ca1ba78e37f3fb3843fdc86043bc78fd",
+   "ops": [
+    { "op": "replace", "anchor": "- [BL-092] [MEDIO] La estética de la función en La Bóveda DEV — resto de BL-091:", "text": "- [BL-092] [MEDIO] La estética de la función en La Bóveda DEV — EN CURSO desde 2026-11-17 22:05Z (pedido de Pablo). Resto de BL-091:" }
+   ]
+  }
+ ]
+}
