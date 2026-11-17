@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-389",
+ "summary": "BL-091: Pablo validó ESC-3; checkpoint de ESC-4 (bienvenida del día en La Guarida)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "b46d9d84446068e68612c29021aeb345957b5c99",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 00:58Z",
+     "text": "Última actualización: 2026-11-17 01:20Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-3 HECHO, espera validación de Pablo; después ESC-4 (bienvenida del día) y cierre de La Guarida;",
+     "text": "ESC-3 validado (2026-11-17 01:07Z, «segui con ESC-4»); ESC-4 EN CURSO: bienvenida del día (pantalla negra, ojos ámbar del gato y saludo de la hora, unos 3 s, se pasa con un toque o una tecla; solo con Gato Negro y sin «reducir movimiento»; guarda el día en guarida:escena:v1, que pasa a { plegado, bienvenida } sin pisar lo anterior); con ESC-4 cierra La Guarida;"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-3 en tu Guarida con el theme Gato Negro (Ctrl+F5): guardá algo en el editor o descargá un backup y el gato festeja; con una advertencia camina inquieto. Abrí el buscador (Ctrl K): estoy de cuerpo entero al costado, saludando, y pienso cuando escribís (en pantallas de más de 1000 px). Si una sección queda vacía aparezco ahí con lo que conviene hacer. Con tu OK sigo con ESC-4 (bienvenida del día).\n"
+    }
+   ]
+  }
+ ]
+}
