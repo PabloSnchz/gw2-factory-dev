@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-394",
+ "summary": "BL-091: ESC-6 HECHO (cabecera que se esfuma, buscador protagonista, reinicios en su widget); espera validación de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "3e1274b5f2fed72bca5f51c4f3a0a162964adbe9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 02:55Z",
+     "text": "Última actualización: 2026-11-17 03:00Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-6 EN CURSO (Pablo eligió mis tres ★, 02:38Z):",
+     "text": "ESC-6 HECHO 2026-11-17 02:56Z en la-guarida (Pablo eligió mis tres ★, 02:38Z): js/widgets-ui.js 1.2.0 (d27ec6f), css/widgets.css 1.2.0 (911f372), js/escena.js 1.5.0 (2ecc52c), css/escena.css 1.5.0 (2bb64b0), css/universo.css 1.1.0 (55853c8), index.html (0e853c3), tests/widgets-ui.test.cjs (bec3005), tests/escena.test.cjs (b0d5beb), tests/escena-dom.test.cjs (960d84a), tests/universo.test.cjs (de90e2b); 76/76 tests y 26/26 mutaciones; espera validación de Pablo:"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-6 en tu Guarida con Gato Negro (Ctrl+F5): arriba de todo la cabecera no tiene fondo ni línea y, al bajar, aparece su fondo que se esfuma; el buscador queda centrado, con lupa ámbar y sin mi cara; mi globo dice el último backup en vez de «Ctrl K»; ya no están los relojes en la cabecera y el widget «Resets GW2» muestra diario, semanal y la temporada real (dorado cuando falta poco). Si no tenés ese widget, agregalo con «＋ Widget». Con tu OK cierro La Guarida y sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
