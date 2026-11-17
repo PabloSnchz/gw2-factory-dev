@@ -1,0 +1,32 @@
+{
+ "id": "PATCH-388",
+ "summary": "BL-091 ESC-3 HECHO: el gato reacciona y yo de cuerpo entero en La Guarida; espera validación",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "3ad9e65622dd82867f8a326ec05833ed0699c403",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 01:05Z",
+     "text": "Última actualización: 2026-11-17 00:58Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-3 EN CURSO: el gato reacciona",
+     "text": "ESC-3 HECHO 2026-11-17 00:57Z en la-guarida: css/escena.css 1.2.0 (5df52c2), js/escena.js 1.2.0 (b9ccd8b), tests/escena.test.cjs (f0a99e9), tests/escena-dom.test.cjs (151c30d), index.html (8938422, commit 8354a4c); 33/33 tests, 22/22 mutaciones nuevas y 26/26 de ESC-2. En la revisión corregí que reaccion('constructor') devolvía una función del prototipo (ahora hasOwnProperty). El gato reacciona"
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero; ESC-0, ESC-1 y ESC-2 validados",
+     "text": "BL-091 en curso: La Guarida primero; ESC-3 HECHO, espera validación de Pablo; después ESC-4 (bienvenida del día) y cierre de La Guarida; ESC-0, ESC-1 y ESC-2 validados"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-3 en tu Guarida con el theme Gato Negro (Ctrl+F5): guardá algo en el editor o descargá un backup y el gato festeja; con una advertencia camina inquieto. Abrí el buscador (Ctrl K): estoy de cuerpo entero al costado, saludando, y pienso cuando escribís (en pantallas de más de 1000 px). Si una sección queda vacía aparezco ahí con lo que conviene hacer. Con tu OK sigo con ESC-4 (bienvenida del día).\n"
+    }
+   ]
+  }
+ ]
+}
