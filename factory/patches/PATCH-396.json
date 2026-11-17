@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-396",
+ "summary": "BL-091: ESC-7 HECHO (cabecera en una sola línea en pantallas anchas); espera validación de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "5dcc6475ba6089ff4b0b05a696c06109eae48c36",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:15Z",
+     "text": "Última actualización: 2026-11-17 03:12Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "ESC-7 EN CURSO (OK de Pablo 03:03Z, a propuesta suya):",
+     "text": "ESC-7 HECHO 2026-11-17 03:10Z en la-guarida (OK de Pablo 03:03Z, a propuesta suya): css/universo.css 1.2.0 (a801c71), index.html (0201971), tests/universo.test.cjs (f8d17ff); 77/77 tests y 18/18 mutaciones nuevas; espera validación de Pablo:"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: ESC-7 en tu Guarida con Gato Negro (Ctrl+F5), en una pantalla de 1440 px o más: la cabecera es una sola línea (marca, saludo, pestañas con el buscador al lado y herramientas). El buscador dice solo «¿A dónde vamos?» con Ctrl K. Achicá la ventana: por debajo de 1440 px vuelven las dos filas. Con tu OK cierro La Guarida y sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
