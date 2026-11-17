@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-419",
+  "summary": "BL-092: BV-1 validado por Pablo (22:32Z, «seguí con BV-2»); checkpoint de BV-2 (cabeceras) EN CURSO. Reenvío de PATCH-418 (rechazado: la línea de «Esperando a Pablo» no tenía clase)",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "fa5dabdbba9cd1a92037d9294e3bdd6ecce74113",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. Paso BV-1 hecho (fondo, barra de arriba y barra lateral); sigue BV-2, las cabeceras.",
+          "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. Paso BV-2 EN CURSO: las cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)."
+        },
+        {
+          "op": "replace",
+          "anchor": "index.html 3852bb8 por PATCH-416 (el link va en la línea vacía 22: no se corre ninguna línea).",
+          "text": "index.html 3852bb8 por PATCH-416 (el link va en la línea vacía 22: no se corre ninguna línea). BV-1 validado por Pablo 2026-11-17 22:32Z («seguí con BV-2»); BV-2 EN CURSO 22:34Z (solo CSS en universo.css 1.1.0, con los ids de título de cada vista; sin tocar las vistas). PATCH-418 rechazado: la línea de «Esperando a Pablo» no tenía clase (va con Info:, DEC-018)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-17 22:30Z",
+          "text": "Última actualización: 2026-11-17 22:50Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-1 en DEV; después, BV-2 (cabeceras de los módulos).",
+          "text": "Próxima acción: Publicar BV-2 (universo.css 1.1.0, tests, ?v en index.html) y pedirle a Pablo que lo mire en DEV."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-1 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): fondo «Taller» con cuadrícula y chispas, barra de arriba y barra lateral con mi paleta; el módulo activo se tiñe con su color. Los otros themes no cambian.",
+          "text": "- [BL-092] Info: BV-1 validado; BV-2 (cabeceras) en curso: te aviso cuando esté para mirar."
+        }
+      ]
+    }
+  ]
+}
