@@ -1,0 +1,87 @@
+{
+ "id": "PATCH-413",
+ "summary": "BL-091 CERRADA por Pablo; FEAT-027; 3.0.1 (textos largos plegados en «04 · La Factory ahora»); status.md con tarea, motivo y próxima acción cortos; BL-092 en READY",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "82ea2751b55f347e6184f434534d47f05b710b39",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN CURSO\nTarea actual:",
+     "text": "Estado: ESPERANDO A PABLO\nTarea actual:"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-091 — la estética de mi sitio en La Guarida.",
+     "text": "Tarea actual: Ninguna en curso. BL-091 cerrada por Pablo (2026-11-17 10:59Z); espero que elijas lo próximo.\nHistorial de BL-091 (cerrada 2026-11-17, antes en «Tarea actual»): la estética de mi sitio en La Guarida."
+    },
+    {
+     "op": "replace",
+     "anchor": "Motivo: Pablo pidió convertir mi sitio en una presentación animada (2026-11-16 20:28Z) y, al validar MC-3b (22:44Z), llevar esa estética a todo el ecosistema (BL-091).",
+     "text": "Motivo: Pablo validó el Centro de mando en el teléfono y cerró BL-091 (2026-11-17 10:59Z)."
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: DOCUMENTATION\n",
+     "text": "Etapa actual: DOCUMENTATION COMPLETADA\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 10:42Z",
+     "text": "Última actualización: 2026-11-17 11:15Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: BL-088 CERRADA",
+     "text": "Próxima acción: Que Pablo elija lo próximo. Propongo BL-092 (la estética en La Bóveda DEV, empezando por una maqueta) o BL-060 (contraste AA en los 19 themes).\nHistorial de próximas acciones: BL-088 CERRADA"
+    },
+    {
+     "op": "replace",
+     "anchor": "Al validar Pablo: BL-091 pasa a HECHA (FEAT del Centro de mando en features.md).",
+     "text": "BL-091 CERRADA por Pablo 2026-11-17 10:59Z («bien en el teléfono, cerrá BL-091»): FEAT-027. Pablo además vio que «04 · La Factory ahora» se estiraba sin fin (la tarea, el motivo y la próxima acción de status.md tienen miles de caracteres) y empujaba la columna derecha muy abajo. Arreglado en 3.0.1 (2026-11-17 11:12Z, directo en main): js/views.js (ccbf5cc, resumen(): la primera oración o el texto entero si es corto; el resto plegado en «Ver … completa» con scroll propio de hasta 40vh), css/universo.css 1.5.0 (f138cdb), index.html (a4137b7), tests/universo.test.mjs (c12fe26, +3 tests, 14/14 mutaciones), CHANGELOG [3.0.1] (9dbac54), package.json 3.0.1. CI VERDE 127/127 (979fff9). Además dejé «Tarea actual», «Motivo» y «Próxima acción» cortos: el historial pasó a líneas «Historial de …». Regla nueva: esos tres campos, una o dos oraciones."
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: CD-5, el Centro de mando en el celular (https://pablosnchz.github.io/gw2-factory-dashboard/ en el teléfono; si ya estaba abierto, recargá): en «04 · La Factory ahora» las etapas bajan como línea de tiempo con puntos; las cifras entran de a tres; el scroll va suave y el globo se pliega. Con tu OK cierro BL-091.\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Resumen de la sesión\n\n",
+     "text": "- BL-091 cerrada por Pablo: el Centro de mando en mi universo (gw2-factory-dashboard 3.0.0, FEAT-027): Mesa de mando, mi globo con el gato, las seis vistas con cabecera numerada y celular; 3.0.1 pliega los textos largos de «04 · La Factory ahora». El kit compartido vive en el repo shiruvana con CI y un guardián de sincronía con La Guarida.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "7a2ee81ed75a2439ad092ef3e899b26ac2f3258f",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] [ALTO] La estética de la función en todo el ecosistema — pedido de Pablo (2026-11-16 22:44Z): «la estética es tan linda y relacionada con el ecosistema que ya quiero que migremos el estilo y lo repliquemos en la Guarida, en la Bóveda y en el Centro de decisiones, incorporando también la presencia tuya y del gato». Plan: un kit común «GN Escena» (fondos taller/noche/evolving con chispas, navegación en cápsula, mi globo con cara y el gato sentado encima, poses fundidas con el fondo) con su fuente en el repo shiruvana y una copia versionada en cada repo (nada se carga de otro sitio en tiempo de ejecución; un test compara la versión). Orden: 1) La Guarida (ya usa mis poses y caras, RG-7: el salto es corto); 2) Centro de decisiones (gw2-factory-dashboard; solo lo ve Pablo); 3) La Bóveda en DEV (gw2-factory-dev; la más grande y la de los jugadores: estética como ambiente, sin robar espacio a los datos; poses solo en bienvenida y estados vacíos; mi rincón global DEC-034 pasa a ser el globo con el gato). Cada uno arranca con una maqueta para que Pablo decida lo visual. PRD solo con orden de Pablo. Arranca al cerrar BL-090 (MC-4). · BL-090, DEC-034, DEC-048, DEC-049 — 2026-11-16 EN CURSO desde 2026-11-16 23:15Z («ok vamos con la guarida»). Micro-ciclos para La Guarida (no tiene DEV: main es lo publicado, así que primero maqueta en docs/propuestas y después cambios chicos con vuelta atrás): ESC-0 maqueta interactiva con las decisiones visuales (docs/propuestas/propuesta-escena-esc0.html); ESC-1 kit «GN Escena» (css/escena.css + js/escena.js: fondo con chispas, globo con cara y gato, poses fundidas) solo con el theme Gato Negro, los otros 18 themes quedan como están; ESC-2 cabecera con los capítulos en cápsula y el consejo del día en mi globo; ESC-3 mi presencia: gato que reacciona (festeja al guardar, ojo ante un aviso) y poses de cuerpo entero en estados vacíos; ESC-4 (si Pablo lo elige) bienvenida del día. Las imágenes que faltan en la-guarida (gato-sentado, gato-camina, gato-festeja y 3 poses de cuerpo) las sube Pablo desde el repo shiruvana. Después: Centro de decisiones y La Bóveda DEV.\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-091] [ALTO] La estética de la función en todo el ecosistema — HECHO y cerrado por Pablo (2026-11-17 10:59Z, «bien en el teléfono, cerrá BL-091»). La Guarida (ESC-0 a ESC-6, validados) y el Centro de mando (CD-0 a CD-5, validados; gw2-factory-dashboard 3.0.0 y 3.0.1, FEAT-027). El kit compartido (globo, gato y recorte de mis poses) vive en shiruvana/kit 1.0.0, con CI (kit-ci.yml) y un guardián de sincronía con La Guarida (CD-3b redefinido: La Guarida conserva su escena). La Bóveda DEV, que estaba en el plan original, queda como BL-092 en READY, para cuando Pablo la elija. · BL-090, BL-092, DEC-024, DEC-034, DEC-048, DEC-049, FEAT-027\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## READY\n\n",
+     "text": "- [BL-092] [MEDIO] La estética de la función en La Bóveda DEV — resto de BL-091: llevar el universo de Shiruvana (fondo con chispas, cápsulas, cabeceras numeradas, mi globo con el gato) a gw2-factory-dev como ambiente, sin robar espacio a los datos; mis poses solo en la bienvenida y los estados vacíos; mi rincón global (DEC-034) pasaría a ser el globo. Arranca con una maqueta para que Pablo decida lo visual, como ESC-0 y CD-0. Usa el kit de shiruvana con versión fija. PRD solo con orden de Pablo. · BL-091, DEC-034, FEAT-027\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "5d038ed2df6e72d9f6920254a142a2bafce82579",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "(BL-070, paso 3, con BL-055). En DEV.\n",
+     "text": "- [FEAT-027](features/FEAT-027-centro-de-mando-universo-shiruvana.md) — El Centro de mando en el universo de Shiruvana: Mesa de mando, mi globo con el gato, seis vistas con cabecera numerada y celular (BL-091, gw2-factory-dashboard 3.0.1). Validado por Pablo.\n"
+    }
+   ]
+  }
+ ]
+}
