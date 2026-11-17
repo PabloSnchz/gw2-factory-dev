@@ -1,0 +1,31 @@
+{
+ "id": "PATCH-385",
+ "summary": "BL-091: Pablo validó ESC-1 y subió las 6 imágenes; checkpoint de ESC-2 (mi globo con el gato en La Guarida)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "d618e0596191c1cf690e3509db11a9f6d10e8f59",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-16 23:55Z",
+     "text": "Última actualización: 2026-11-17 00:30Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Vuelta atrás: quitar las dos líneas de index.html. Espera validación de Pablo.",
+     "text": "Vuelta atrás: quitar las dos líneas de index.html. VALIDADO por Pablo 2026-11-17 00:16Z («esc 1 ok»); Pablo subió las 6 imágenes (verificadas por blob contra el repo shiruvana). ESC-2 EN CURSO: mi globo abajo a la derecha con el gato sentado encima; con Gato Negro el consejo del día (.gn-toast) pasa adentro del globo y con otro theme vuelve a #ghTip; plegable, recuerda el plegado en guarida:escena:v1 ({ plegado }, clave nueva de localStorage); el gato festeja al tocarlo."
+    },
+    {
+     "op": "replace",
+     "anchor": "BL-091 en curso: La Guarida primero; ESC-0 validado (todas las ★); ESC-1 HECHO, espera validación de Pablo; ESC-2 necesita las 6 imágenes;",
+     "text": "BL-091 en curso: La Guarida primero; ESC-0 y ESC-1 validados; imágenes subidas; ESC-2 en curso (globo con el gato);"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-1 en tu Guarida, con el theme Gato Negro (Ctrl+F5): fondo «Taller» con chispas, las secciones en una cápsula con la activa en ámbar y los paneles con el color de su sección. Los otros 18 themes no cambian. Con tu OK sigo con ESC-2 (mi globo con el gato).\n- [BL-091] Acción: para ESC-2 y ESC-3 subí a la-guarida 6 imágenes del repo shiruvana: assets/gato/gato-sentado.webp, gato-camina.webp y gato-festeja.webp → la-guarida assets/brand/gato/; assets/shiruvana/cuerpo-sentada.webp, cuerpo-saluda.webp y cuerpo-pensando.webp → la-guarida assets/brand/shiruvana/ (mismos nombres).\n"
+    }
+   ]
+  }
+ ]
+}
