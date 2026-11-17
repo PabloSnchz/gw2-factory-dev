@@ -1,0 +1,111 @@
+{
+  "id": "PATCH-421",
+  "summary": "BL-092 BV-3: mi globo con el gato con el theme Gato Negro (shv-bubble 1.5.0 carga la copia fija del kit de escena; universo.css 1.2.0 lo acomoda y oculta el rincón de la Sidebar); otros themes sin cambios",
+  "files": [
+    {
+      "path": "js/shv-bubble.js",
+      "base_sha": "b225f9f3a398297dae48ad12419fd94991317638",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.4.0\n *\n",
+          "text": " * Versión: 1.5.0\n *\n * 1.5.0 (BL-092 BV-3, D2): con el theme Gato Negro (el oficial; también sin data-theme, como css/universo.css)\n *   hablo desde mi globo con el gato, abajo a la derecha, en vez del rincón de la Sidebar. Cargo el kit de escena\n *   copiado en la Bóveda con versión fija (js/escena-kit.js y css/escena-kit.css 1.0.0, iguales byte a byte al del\n *   repo shiruvana: lo vigila tests/shv-escena.test.cjs) recién cuando hace falta, así los otros 18 themes no bajan\n *   nada y quedan como en 1.4.0. El globo arranca plegado (mi cara y el gato) y se abre solo con algo nuevo: mismas\n *   reglas de siempre (una vez por novedad, 2 s, nunca con una ventana abierta, 12 s, Escape, «Después», silenciar).\n *   Plegarlo con un mensaje a la vista lo da por leído; abrirlo con algo sin leer te lo muestra; abrirlo sin nada\n *   te dice lo que decía mi rincón. Mi cara sale de js/shiruvana.js (FACES: no pide nada a la red) y el gato de\n *   assets/brand/gato/. No guarda nada nuevo. Si el kit no carga o cambiás de theme, vuelvo al rincón.\n *\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var VERSION = '1.4.0';",
+          "text": "  var VERSION = '1.5.0';"
+        },
+        {
+          "op": "replace",
+          "anchor": "    var voice = C && C.render ? C.render(o, { doc: doc }) : null;",
+          "text": "    var voice = C && C.render ? C.render(o, { doc: doc, avatar: !esc.on }) : null; // en el globo, mi cara ya está"
+        },
+        {
+          "op": "replace",
+          "anchor": "    place(box);\n    doc.body.appendChild(box);\n",
+          "text": "    if (!escenaPut(box, o)) { place(box); doc.body.appendChild(box); }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    if (focus && x.focus) x.focus(); // solo si me abriste vos (reopen)",
+          "text": "    if (focus && x.focus && !esc.on) x.focus(); // solo si me abriste vos (reopen); en el globo el foco queda en su botón"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "    if (!c) return false;\n    markSeen(c);",
+          "text": "    escenaRest();\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    ensure();\n    paintQuiet();\n    setUnread();\n",
+          "text": "    ensure();\n    paintQuiet();\n    setUnread();\n    escenaWire();\n"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "  root.ShvBubble = {\n",
+          "text": "  // ------------------------------------------------------------------ BV-3: mi globo con el gato (theme Gato Negro)\n  var KIT_V = '1.0.0', KIT_JS = 'js/escena-kit.js', KIT_CSS = 'css/escena-kit.css', BRAND = 'assets/brand/';\n  var ESC_HOLA = 'Hola. Cuando tenga algo nuevo para vos, te aviso acá.';\n  var esc = { on: false, g: null, loading: false, failed: false, mo: null };\n\n  /** El theme oficial: data-theme=\"gato\" o todavía sin data-theme (el primer pintado, igual que css/universo.css). */\n  function gatoTheme() {\n    var r = doc && doc.documentElement, t = r && r.getAttribute ? r.getAttribute('data-theme') : null;\n    return t == null || t === 'gato';\n  }\n  function kitReady() { var K = root.ShiruvanaKit; return !!(K && typeof K.globo === 'function'); }\n  function face(kind) {\n    var S = root.Shiruvana;\n    return (S && S.FACES && S.FACES[kind]) || (S && S.AVATAR) || '';\n  }\n  /** Bajo el kit una sola vez (estilos y código, con su versión fija). done(true) si quedó listo. */\n  function loadKit(done) {\n    if (kitReady()) { done(true); return; }\n    if (esc.failed || esc.loading || !doc.createElement || !doc.head) return;\n    esc.loading = true;\n    var left = 2;\n    function one(ok) {\n      if (!ok) esc.failed = true;\n      if (--left) return;\n      esc.loading = false;\n      done(!esc.failed && kitReady());\n    }\n    var l = doc.createElement('link');\n    l.id = 'shvKitCss';\n    l.rel = 'stylesheet';\n    l.href = KIT_CSS + '?v=' + KIT_V;\n    l.onload = function () { one(true); };\n    l.onerror = function () { one(false); };\n    var s = doc.createElement('script');\n    s.id = 'shvKitJs';\n    s.async = false;\n    s.src = KIT_JS + '?v=' + KIT_V;\n    s.onload = function () { one(true); };\n    s.onerror = function () { one(false); };\n    doc.head.appendChild(l);\n    doc.head.appendChild(s);\n  }\n  function escenaOn() {\n    if (esc.on || !kitReady() || !gatoTheme() || !doc.body) return false;\n    var g = root.ShiruvanaKit.globo({ texto: ESC_HOLA, cara: 'hola', base: BRAND, storageKey: null });\n    var cara = g.el.querySelector('.svk-cara'), f = face('saluda');\n    if (cara && f) cara.src = f; // mi cara oficial de la Bóveda, sin pedirla a la red\n    g.plegar(true);\n    esc.g = g;\n    esc.on = true;\n    if (doc.body.classList) doc.body.classList.add('shv-escena');\n    var pl = g.el.querySelector('.svk-plegar');\n    if (pl) pl.addEventListener('click', onFold); // corre después del del kit: ya cambió de estado\n    st.anchor = pl || null; // el punto de «sin leer» y el foco al cerrar van al botón de mi globo\n    setUnread();\n    return true;\n  }\n  function escenaOff() {\n    if (!esc.on) return;\n    if (st.cur) close('later');\n    esc.g.destruir();\n    esc.g = null;\n    esc.on = false;\n    st.anchor = null;\n    if (doc.body && doc.body.classList) doc.body.classList.remove('shv-escena');\n    setUnread();\n  }\n  function escenaSync() {\n    if (!gatoTheme()) { escenaOff(); return; }\n    if (!esc.on) loadKit(function (ok) { if (ok) escenaOn(); });\n  }\n  function escenaWire() {\n    escenaSync();\n    var r = doc.documentElement;\n    if (typeof root.MutationObserver === 'function' && !esc.mo && r) {\n      esc.mo = new root.MutationObserver(escenaSync);\n      esc.mo.observe(r, { attributes: true, attributeFilter: ['data-theme'] });\n    }\n  }\n  /** Lo que decía mi rincón de la Sidebar (lo arma js/shiruvana-places.js), para cuando abrís el globo sin novedades. */\n  function cornerText() {\n    var b = doc.querySelector ? doc.querySelector('#appSidebar [data-shv-place=\"corner\"] .shv-voice__body') : null;\n    var ps = b && b.querySelectorAll ? b.querySelectorAll('p') : [], out = [];\n    for (var i = 0; i < ps.length; i++) if (ps[i].textContent) out.push(ps[i].textContent);\n    return out.join(' ');\n  }\n  // Tocaste el botón de mi globo (el kit ya lo plegó o lo abrió).\n  function onFold() {\n    if (!esc.g) return;\n    if (esc.g.plegado()) { if (st.cur) close('read'); return; } // plegarme con un mensaje a la vista = leído\n    if (st.cur) return;\n    if (st.unread.length) { reopen(); return; } // abrirme con algo sin leer = te lo muestro\n    var t = esc.g.el.querySelector('.svk-texto');\n    if (t) t.textContent = cornerText() || ESC_HOLA;\n  }\n  /** Pone el mensaje dentro de mi globo. false si no hay globo (otro theme o sin kit): sale como en 1.4.0. */\n  function escenaPut(box, o) {\n    var g = esc.on && esc.g, dice = g && g.el.querySelector('.svk-dice');\n    if (!dice) return false;\n    box.className += ' shv-bub--escena';\n    dice.appendChild(box);\n    if (g.el.classList) g.el.classList.add('shv-hablando');\n    var cara = g.el.querySelector('.svk-cara'), f = face(o.kind);\n    if (cara && f) { cara.hidden = false; cara.src = f; }\n    g.plegar(false);\n    g.gato(o.kind === 'explica' ? 'camina' : 'festeja', '');\n    return true;\n  }\n  /** Se fue el mensaje: vuelvo a mi cara de siempre y me pliego. */\n  function escenaRest() {\n    var g = esc.on && esc.g;\n    if (!g) return;\n    if (g.el.classList) g.el.classList.remove('shv-hablando');\n    var cara = g.el.querySelector('.svk-cara'), f = face('saluda');\n    if (cara && f) cara.src = f;\n    if (!g.plegado()) g.plegar(true);\n  }\n\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    _pure: { sig: sig, prune: prune }, _setStorage: function (L) { st.ls = L; }\n",
+          "text": "    _pure: { sig: sig, prune: prune }, _setStorage: function (L) { st.ls = L; },\n    escena: function () { return esc.on ? esc.g : null; }, KIT: { v: KIT_V, js: KIT_JS, css: KIT_CSS, base: BRAND }\n"
+        }
+      ]
+    },
+    {
+      "path": "css/universo.css",
+      "base_sha": "4a16fa801608db02565c0d4fbe559e115364d82e",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Versión: 1.1.0 (2026-11-17) · BV-2: cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)\n",
+          "text": "   Versión: 1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral\n            1.1.0 (2026-11-17) · BV-2: cabeceras de los módulos (antetítulo del grupo y cifras en ámbar)\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "   - Sin JS: el fondo y las chispas son seudo-elementos. No suma un módulo a js/modules.json.\n",
+          "text": "   - Sin JS: el fondo y las chispas son seudo-elementos. No suma un módulo a js/modules.json.\n     El globo (BV-3) lo pone js/shv-bubble.js; acá solo se acomoda.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "/* ---------- 6. Celular y movimiento ---------- */\n",
+          "text": "/* ---------- 6. Mi globo con el gato (BV-3, D2) ----------\n   js/shv-bubble.js 1.5.0 baja el kit de escena (css/escena-kit.css y js/escena-kit.js, copia fija del repo\n   shiruvana) solo con este theme, arma el globo abajo a la derecha y pone body.shv-escena. Mi rincón de la\n   barra lateral pasa a ser el globo; con una ventana abierta me aparto; los avisos suben para no taparme.\n   Sin body.shv-escena (el kit no cargó) el rincón sigue donde estaba. Contraste: texto del theme y ámbar\n   #E8B34B sobre el globo #15151D. */\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena :is(#appSidebar,#sbrSheet) [data-shv-place=\"corner\"] { display: none; }\n:root:is([data-theme=\"gato\"],:not([data-theme])):is(.gn-mod-open,.gn-dlg-open) .svk-globo { visibility: hidden; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 150px; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo #shvBubble {\n  position: static; width: auto; margin: 0; border: 0; border-radius: 0; background: none; box-shadow: none; animation: none;\n}\n:root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo #shvBubble .shv-voice { margin: 0; padding: 0; border: 0; border-radius: 0; background: none; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo #shvBubble .shv-bub__x { display: none; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo.shv-hablando :is(.svk-nombre,.svk-texto) { display: none; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo #shvBubble .shv-voice__label {\n  color: #E8B34B; font-size: .7rem; letter-spacing: .18em; text-transform: uppercase;\n}\n@media (max-width: 900px) {\n  /* sobre la barra de abajo (#sbrTabs), como el globo de antes */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo { right: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: calc(100vw - 24px); }\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo.is-plegado { width: auto; }\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 200px; }\n}\n\n/* ---------- 7. Celular y movimiento ---------- */\n"
+        }
+      ]
+    },
+    {
+      "path": "js/modules.json",
+      "base_sha": "9f70716b8b12fc3d349b3a571dd1a37977c50e4f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.4.0\" }",
+          "text": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.5.0\" }"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "0585c60333007da2a56f40cbf38e1192bda9e272",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.1.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.2.0\">"
+        }
+      ]
+    },
+    {
+      "path": "tests/shv-bubble.test.cjs",
+      "base_sha": "e6b05856d939b76ff00a0716f2b99248a7e7b465",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "assert.match(SRC, /Versión: 1\\.4\\.0/);",
+          "text": "assert.match(SRC, /Versión: 1\\.5\\.0/);"
+        }
+      ]
+    }
+  ]
+}
