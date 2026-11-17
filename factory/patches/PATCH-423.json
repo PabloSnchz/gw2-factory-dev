@@ -1,0 +1,112 @@
+{
+  "id": "PATCH-423",
+  "summary": "BL-092 BV-4: mis poses sin fondo (recorte del kit) en Inicio y en 3 pantallas vacías (cola de la Armería, Cuentas, Compras fijadas); shv-bubble 1.6.0, universo.css 1.3.0; solo theme Gato Negro",
+  "files": [
+    {
+      "path": "js/shv-bubble.js",
+      "base_sha": "325e6f477fa52384e338333a142c99f0691b343d",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.5.0\n *\n",
+          "text": " * Versión: 1.6.0\n *\n * 1.6.0 (BL-092 BV-4, D4): con el globo puesto también preparo mis poses de cuerpo entero sin fondo (saluda y\n *   pensando) con el recorte del kit (posesSinFondo, una vez por imagen, desde assets/brand/shiruvana/): quedan en\n *   body como --svk-p-<pose> y la clase svk-p-<pose>. css/universo.css 1.3.0 las pone en Inicio y en las pantallas\n *   vacías. Mientras no están listas no se ve nada: nunca un rectángulo negro.\n *\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var VERSION = '1.5.0';",
+          "text": "  var VERSION = '1.6.0';"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var esc = { on: false, g: null, loading: false, failed: false, mo: null };",
+          "text": "  var esc = { on: false, g: null, loading: false, failed: false, mo: null, poses: false };\n  var POSES = ['saluda', 'pensando']; // BV-4: Inicio saluda; las pantallas vacías, pensando"
+        },
+        {
+          "op": "replace",
+          "anchor": "    st.anchor = pl || null; // el punto de «sin leer» y el foco al cerrar van al botón de mi globo\n    setUnread();\n    return true;",
+          "text": "    st.anchor = pl || null; // el punto de «sin leer» y el foco al cerrar van al botón de mi globo\n    setUnread();\n    var K = root.ShiruvanaKit;\n    if (!esc.poses && typeof K.posesSinFondo === 'function') { esc.poses = true; K.posesSinFondo({ el: doc.body, base: BRAND, poses: POSES }); }\n    return true;"
+        }
+      ]
+    },
+    {
+      "path": "css/universo.css",
+      "base_sha": "1e59024d6891a6feda7ead40c5d0911961974fa0",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Versión: 1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral\n",
+          "text": "   Versión: 1.3.0 (2026-11-17) · BV-4: mis poses sin fondo en Inicio y en las pantallas vacías\n            1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "/* ---------- 7. Celular y movimiento ---------- */\n",
+          "text": "/* ---------- 7. Mis poses de cuerpo entero (BV-4, D4) ----------\n   js/shv-bubble.js 1.6.0 les saca el fondo con el recorte del kit y las deja en body como --svk-p-<pose>\n   con la clase svk-p-<pose>: hasta que no están listas estas reglas no aplican (nunca un rectángulo negro).\n   Inicio («Shiruvana te guía», también el saludo sin Key): saluda, en lugar del avatar redondo.\n   Pantallas vacías de verdad (no las de filtros ni las que cargan): la cola de la Armería, Cuentas sin\n   cuentas y Compras fijadas sin nada fijado: pensando. Nunca en saldos, tablas ni navegación. La pose va\n   al costado, con su lugar propio (padding), así no tapa el texto. */\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda #welcomePanel [data-shv-place=\"welcome\"] {\n  grid-template-columns: minmax(0, 1fr); min-height: 270px; padding-right: 200px;\n  background-image: var(--svk-p-saluda); background-repeat: no-repeat; background-position: right 16px bottom 0; background-size: 170px auto;\n}\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda #welcomePanel [data-shv-place=\"welcome\"] > .shv-voice__avatar { display: none; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-pensando :is(.arm-qview > .arm-empty, .cv-empty, div.wvp-empty) {\n  min-height: 210px; padding-right: 170px; text-align: left;\n  background-image: var(--svk-p-pensando); background-repeat: no-repeat; background-position: right 12px bottom 0; background-size: 140px auto;\n}\n@media (max-width: 640px) {\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda #welcomePanel [data-shv-place=\"welcome\"] {\n    min-height: 180px; padding-right: 108px; background-size: 96px auto; background-position: right 8px bottom 0;\n  }\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-pensando :is(.arm-qview > .arm-empty, .cv-empty, div.wvp-empty) {\n    min-height: 160px; padding-right: 100px; background-size: 88px auto; background-position: right 6px bottom 0;\n  }\n}\n\n/* ---------- 8. Celular y movimiento ---------- */\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/shv-escena.test.cjs",
+      "base_sha": "5d0abe3767b1c7ca3a59294089209adb7855339d",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "  const calls = { globo: [], gato: [] };",
+          "text": "  const calls = { globo: [], gato: [], poses: [] };"
+        },
+        {
+          "op": "replace",
+          "anchor": "    VERSION: '1.0.0',\n    globo(o) {",
+          "text": "    VERSION: '1.0.0',\n    posesSinFondo(o) { calls.poses.push(o); },\n    globo(o) {"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.match(SRC, /Versión: 1\\.5\\.0/);\n  assert.ok(!/innerHTML",
+          "text": "  assert.match(SRC, /Versión: 1\\.6\\.0/);\n  assert.ok(!/innerHTML"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.match(read('css/universo.css'), /Versión: 1\\.2\\.0/);\n",
+          "text": "  assert.match(read('css/universo.css'), /Versión: 1\\.3\\.0/);\n  // BV-4: mis poses solo cuando están listas (la clase la pone el recorte), al costado y con su lugar propio.\n  has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place=\"welcome\"]', /background-image:\\s*var\\(--svk-p-saluda\\)[\\s\\S]*/);\n  has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place=\"welcome\"] > .shv-voice__avatar', /display:\\s*none/);\n  has(S + ' body.svk-p-pensando :is(.arm-qview > .arm-empty, .cv-empty, div.wvp-empty)', /background-image:\\s*var\\(--svk-p-pensando\\)/);\n  assert.ok(!/--svk-p-[\\w-]+\\)/.test(css.replace(/body\\.svk-p-(saluda|pensando)[^{]*\\{[^}]*\\}/g, '')), 'ninguna pose sin su clase de «lista»');\n  for (const c of ['class=\"arm-qview\"', 'class=\"arm-empty\"', 'class=\"cv-empty\"', 'class=\"wvp-empty\"']) {\n    assert.ok(fs.readdirSync(path.join(ROOT, 'js')).some((f) => read('js/' + f).includes(c)), 'existe ' + c);\n  }\n  for (const p of ['saluda', 'pensando']) assert.ok(fs.existsSync(path.join(ROOT, 'assets/brand/shiruvana/cuerpo-' + p + '.webp')), 'existe la pose ' + p);\n"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "// ------------------------------------------------------------------ la copia del kit y el CSS\n",
+          "text": "test('BV-4: con el globo preparo mis poses sin fondo una sola vez (saluda y pensando, desde la Bóveda); sin globo, no', () => {\n  const t = load();\n  t.kitLoads();\n  assert.equal(t.calls.poses.length, 1);\n  const o = t.calls.poses[0];\n  assert.equal(o.el, t.doc.body, 'quedan en body: css/universo.css las usa donde corresponde');\n  assert.equal(o.base, 'assets/brand/');\n  assert.deepEqual([...o.poses], ['saluda', 'pensando']);\n  t.setTheme('nord'); t.setTheme('gato');\n  assert.equal(t.calls.poses.length, 1, 'el recorte no se repite al volver al theme');\n  const u = load({ theme: 'dracula' });\n  assert.equal(u.calls.poses.length, 0);\n  const v = load();\n  v.kitLoads(false);\n  assert.equal(v.calls.poses.length, 0, 'sin kit no hay poses (ni rectángulos)');\n});\n\n"
+        }
+      ]
+    },
+    {
+      "path": "js/modules.json",
+      "base_sha": "d712869d811053ae5c119b6d9651ca35463d70f2",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.5.0\" }",
+          "text": "{ \"src\": \"js/shv-bubble.js\", \"v\": \"1.6.0\" }"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "b181257a35b4efa346daa7aa2d586c177af3e9b0",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.2.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.3.0\">"
+        }
+      ]
+    },
+    {
+      "path": "tests/shv-bubble.test.cjs",
+      "base_sha": "eb5b37fbd2a77aa8e36200bc5eb4e7590c1cee09",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "assert.match(SRC, /Versión: 1\\.5\\.0/);",
+          "text": "assert.match(SRC, /Versión: 1\\.6\\.0/);"
+        }
+      ]
+    }
+  ]
+}
