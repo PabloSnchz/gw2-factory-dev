@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-422",
+  "summary": "BL-092: BV-2 validado (22:49Z, «seguí con bv3»); BV-3 HECHO (globo con el gato, PATCH-421, RUN-291 verde); validación de BV-3 en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "23b4b87de626f304f79cc03b8f4117b3cc2472c7",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-2 HECHO (cabeceras de los módulos); esperando que Pablo lo mire en DEV antes de BV-3 (el globo con el gato).",
+          "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-3 HECHO (mi globo con el gato en vez del rincón de la barra lateral); esperando que Pablo lo mire en DEV antes de BV-4 (mis poses)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "La Cartera no tiene cifras en su cabecera: no agregué datos.",
+          "text": " BV-2 validado por Pablo 2026-11-17 22:49Z («seguí con bv3»). BV-3 HECHO 2026-11-17 23:10Z (D2): copia fija del kit de escena 1.0.0 en js/escena-kit.js (blob 1b317c7) y css/escena-kit.css (blob fbbf4e7), iguales byte a byte a shiruvana kit/ (commit 9f77393); PATCH-421 APLICADO: js/shv-bubble.js 1.5.0 (325e6f4) baja el kit solo con el theme Gato Negro (o sin data-theme) y fuera del manifiesto (que sigue en 39/40), arma el globo abajo a la derecha plegado, con mi cara de js/shiruvana.js (FACES, sin red) y el gato de assets/brand/gato; mis mensajes salen adentro del globo con las mismas reglas de 1.4.0; plegarlo con un mensaje = leído, abrirlo con algo sin leer = te lo muestra, abrirlo sin nada = lo que decía mi rincón; si el kit (JS o CSS) no carga o cambiás de theme, vuelvo al rincón; css/universo.css 1.2.0 (1e59024): oculta el rincón solo con body.shv-escena, me aparto con .gn-mod-open/.gn-dlg-open, los avisos suben (150 px; 200 px en el celular), en el celular sobre la barra de abajo; index ?v=1.2.0 (b181257); modules.json shv-bubble 1.5.0 (d712869). Decisiones mías: sin clave nueva de localStorage (el globo arranca plegado siempre: en BV-0 había anunciado una, no hizo falta); el guardián de la copia vive en la Bóveda (blobs fijos en el test) en vez del CI de shiruvana. tests/shv-escena.test.cjs (5d0abe3): 10 tests, 15/15 mutantes; RUN-291 verde (shv-escena, shv-bubble, universo, boot, shv-modules, shv-recall, privacy, index-identity: 100 tests)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-17 22:41Z",
+          "text": "Última actualización: 2026-11-17 23:15Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-2 en DEV; después, BV-3 (el globo con el gato, con las imágenes que ya subió a assets/brand).",
+          "text": "Próxima acción: Esperar que Pablo mire BV-3 en DEV; después, BV-4 (mis poses sin fondo en Inicio y en las pantallas vacías)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-2 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): arriba del título de cada módulo, su grupo en su color (Tu oro, Lo diario, Lo semanal, Tu progreso, Tu cuenta); títulos más firmes y las cifras de los 4 indicadores en ámbar. Los otros themes no cambian.",
+          "text": "- [BL-092] Validación: BV-3 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): abajo a la derecha, mi globo plegado con mi cara y el gato sentado encima (el rincón de la barra lateral ya no está). Tocá ⇱ para abrirlo; el gato reacciona al tocarlo. Cuando tenga algo nuevo (por ejemplo en la Cartera) se abre solo, y a los 12 s se pliega. En el celular queda arriba de la barra de abajo. Con otro theme todo queda como antes."
+        }
+      ]
+    }
+  ]
+}
