@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-399",
+ "summary": "BL-091: BIO-1 VALIDADO por Pablo («quedó perfecta»); próximo: Centro de decisiones",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "e8b99fc62f613cde9cf5d0a069910323e1684bb1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:22Z",
+     "text": "Última actualización: 2026-11-17 03:26Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "script verificado), espera validación de Pablo; después: Centro de decisiones.",
+     "text": "script verificado). VALIDADO por Pablo 2026-11-17 03:24Z («quedó perfecta»; celebró la puerta «Conocé a Shiruvana» entre los enlaces). BIO-1 CERRADO; próximo: Centro de decisiones."
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: tu Link in Bio (https://pablosnchz.github.io/bio/, Ctrl+F5) en el universo Shiruvana: escenario con luz violeta, tu foto con aro ámbar, secciones numeradas, enlaces como puertas que brillan al pasar, el gato sentado sobre la tarjeta (tocalo) y una puerta nueva «Conocé a Shiruvana». Miralo también en el celular. Con tu OK sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
