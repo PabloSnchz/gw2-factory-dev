@@ -1,0 +1,5 @@
+{
+ "id": "RUN-294",
+ "summary": "BL-092 BV-4: shv-escena (11 tests) con el js/shiruvana.js real y los vecinos (shv-bubble, universo, boot, privacy, welcome-view, acc-view, wv-purchases-view)",
+ "tests": ["tests/shv-escena.test.cjs", "tests/shv-bubble.test.cjs", "tests/universo.test.cjs", "tests/boot.test.cjs", "tests/privacy.test.cjs", "tests/welcome-view.test.cjs", "tests/acc-view.test.cjs", "tests/wv-purchases-view.test.cjs"]
+}
