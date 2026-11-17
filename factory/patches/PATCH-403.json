@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-403",
+ "summary": "BL-091: CD-2 HECHO (Hoy como Mesa de mando, CI 112/112); espera validación de CD-1 y CD-2 antes de CD-3",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "5b7333e2f3bbd468217978842e8b0d5877221ec1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 04:10Z",
+     "text": "Última actualización: 2026-11-17 04:22Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "CD-2 EN CURSO (vista Hoy como Mesa de mando), con el «avanzá» de Pablo 04:02Z.",
+     "text": "CD-2 HECHO 2026-11-17 04:16Z (con el «avanzá» de Pablo 04:02Z), publicado directo en main: js/views.js 5f449b5 (renderHome: 01 · Ahora con el veredicto grande y tres cifras en ámbar —te esperan, bloqueados, riesgos abiertos; cero en gris—; mesa en dos columnas: izquierda 02 · Te toca + 03 · Hoy y esta semana, derecha 04 · La Factory ahora + resumen, decidido, info y «Qué debería preocuparte»; abajo 05 · Entornos como puertas y 06 · En números), css/universo.css 1.1.0 08ece87 (antetítulos, paneles translúcidos, etapas como línea con puntos, líneas de tiempo con puntos, puertas, números en ámbar; en ≤ 1080 px una columna), index.html af02041, tests/universo.test.mjs 9d42845 (10 tests; 28/28 mutaciones). Decidido por mí: numeración en orden de lectura (02 Te toca, 03 Hoy, 04 La Factory) para que el lector de pantalla oiga lo mismo que se ve; en la maqueta 03 y 04 estaban cruzados. ci-report.yml 243cdfc ahora siempre deja el commit verificado. CI VERDE 112/112 (d7e593b). LES-018 repetido (409 por publicar dos archivos en paralelo; sin daño). Próximo: CD-3 globo y gato (kit de escena al repo shiruvana) con el OK de Pablo."
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-091] Validación: CD-1 en https://pablosnchz.github.io/gw2-factory-dashboard/ (Ctrl+F5): fondo con cuadrícula y chispas, colores de mi sitio y cabecera «Centro de mando» con el gato en aro ámbar. CD-2 (vista Hoy) ya está en marcha.\n",
+     "text": "- [BL-091] Validación: CD-1 y CD-2 en https://pablosnchz.github.io/gw2-factory-dashboard/ (Ctrl+F5): fondo y cabecera «Centro de mando», y Hoy como Mesa de mando (01 Ahora con cifras, dos columnas, 05 Entornos, 06 En números). Con tu OK sigo con CD-3 (globo y gato).\n"
+    }
+   ]
+  }
+ ]
+}
