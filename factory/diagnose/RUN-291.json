@@ -1,0 +1,5 @@
+{
+ "id": "RUN-291",
+ "summary": "BL-092 BV-3: tests/shv-escena (nuevo) con el js/shiruvana.js real y los vecinos que tocan shv-bubble, universo.css, el manifiesto e index",
+ "tests": ["tests/shv-escena.test.cjs", "tests/shv-bubble.test.cjs", "tests/universo.test.cjs", "tests/boot.test.cjs", "tests/shv-modules.test.cjs", "tests/shv-recall.test.cjs", "tests/privacy.test.cjs", "tests/index-identity.test.cjs"]
+}
