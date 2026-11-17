@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-400",
+ "summary": "BL-091: CD-0 HECHO (maqueta del Centro en el universo Shiruvana); espera validación de Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "40c7d2ac635262ec83ab4d967168a1998acd5c1f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:26Z",
+     "text": "Última actualización: 2026-11-17 03:35Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "BIO-1 CERRADO; próximo: Centro de decisiones.",
+     "text": "BIO-1 CERRADO. CD-0 HECHO 2026-11-17 03:33Z (OK de Pablo 03:27Z «dale»): maqueta interactiva gw2-factory-dashboard docs/propuestas/propuesta-centro-cd0.html (blob 507bdb0, commit e51dee4); no toca el panel. Decisiones para Pablo: D1 Hoy Mesa de mando★/Una columna; D2 Globo con el gato★/Cara en cada tarjeta; D3 Botones a la vista★/Detrás de «Responder»; D4 nombre «Centro de mando»★/«Centro de decisiones». Decidido por mí: el kit de escena pasa al repo shiruvana con versión fija (2.º consumidor). Plan: CD-1 escenario y cabecera, CD-2 Hoy, CD-3 globo y gato, CD-4 las otras cinco vistas, CD-5 celular y revisión. Sin imágenes nuevas."
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: CD-0, la maqueta del Centro en mi universo (https://pablosnchz.github.io/gw2-factory-dashboard/docs/propuestas/propuesta-centro-cd0.html). Elegí D1..D4 (★ = lo que recomiendo), probá los botones de arriba y la vista Celular. Con tu OK arranco CD-1.\n"
+    }
+   ]
+  }
+ ]
+}
