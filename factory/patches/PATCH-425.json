@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-425",
+  "summary": "BL-092: BV-3 validado (23:24Z, «segui con bv4»); BV-4 HECHO (poses sin fondo, PATCH-424, RUN-294 verde); validación de BV-4 en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "c228418966432e2242988f3d0ed0eb7c7bbe0216",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-3 HECHO (mi globo con el gato en vez del rincón de la barra lateral); esperando que Pablo lo mire en DEV antes de BV-4 (mis poses).",
+          "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-4 HECHO (mis poses sin fondo en Inicio y en las pantallas vacías); esperando que Pablo lo mire en DEV antes de BV-5 (celular y revisión final)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "RUN-291 verde (shv-escena, shv-bubble, universo, boot, shv-modules, shv-recall, privacy, index-identity: 100 tests).",
+          "text": " BV-3 validado por Pablo 2026-11-17 23:24Z («segui con bv4»). BV-4 HECHO 2026-11-17 23:45Z (D4): censo de pantallas vacías por sondas RUN-292/293 (borradas, aa8b63f): elegí Inicio («Shiruvana te guía» y el saludo sin Key: pose saluda en lugar del avatar redondo) y 3 vacíos de verdad (.arm-qview > .arm-empty cola de la Armería, .cv-empty Cuentas sin cuentas, div.wvp-empty Compras fijadas sin nada: pose pensando); dejé afuera los vacíos chicos, de filtros o de carga (Metas, Logros, Cartera, Tienda) porque una pose de cuerpo entero taparía más de lo que ayuda. PATCH-423 RECHAZADO (puse un @media 640 nuevo antes del de las chispas y universo.test lee el primero) → PATCH-424 APLICADO: js/shv-bubble.js 1.6.0 (3795474) llama una vez a ShiruvanaKit.posesSinFondo (el recorte de La Guarida, assets/brand/shiruvana) al armar el globo; css/universo.css 1.3.0 (dd7748d) pone la pose como fondo al costado con padding propio solo con body.svk-p-<pose> (nunca un rectángulo negro), más chica en el celular dentro del bloque de 640 px; index ?v=1.3.0 (7994366); modules shv-bubble 1.6.0 (3247fca); tests/shv-escena.test.cjs (858ed36): 11 tests, 7/7 mutantes nuevos; RUN-294 verde (shv-escena, shv-bubble, universo, boot, privacy, welcome-view, acc-view, wv-purchases-view: 101 tests). Lección: en universo.css, un @media que ya existe se amplía, no se repite (los tests leen el primero)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-17 23:15Z",
+          "text": "Última actualización: 2026-11-17 23:50Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-3 en DEV; después, BV-4 (mis poses sin fondo en Inicio y en las pantallas vacías).",
+          "text": "Próxima acción: Esperar que Pablo mire BV-4 en DEV; después, BV-5 (celular y revisión final de BL-092)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-3 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): abajo a la derecha, mi globo plegado con mi cara y el gato sentado encima (el rincón de la barra lateral ya no está). Tocá ⇱ para abrirlo; el gato reacciona al tocarlo. Cuando tenga algo nuevo (por ejemplo en la Cartera) se abre solo, y a los 12 s se pliega. En el celular queda arriba de la barra de abajo. Con otro theme todo queda como antes.",
+          "text": "- [BL-092] Validación: BV-4 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): en Inicio, «Shiruvana te guía» con mi pose saludando de cuerpo entero, sin fondo, al costado del texto; con pose pensando en la cola vacía de la Armería, en Cuentas sin cuentas y en Compras fijadas sin nada fijado. Aparecen un instante después de cargar (las recorto en tu navegador). Con otro theme, como antes."
+        }
+      ]
+    }
+  ]
+}
