@@ -1,0 +1,11 @@
+{
+ "id": "PATCH-409",
+ "summary": "BL-091: CD-3b HECHO redefinido: La Guarida conserva su escena; el kit tiene CI propio y un guardián de sincronía con La Guarida; CI 65/65",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "PLACEHOLDER",
+   "ops": []
+  }
+ ]
+}
