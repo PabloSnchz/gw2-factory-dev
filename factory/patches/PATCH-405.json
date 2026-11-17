@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-405",
+ "summary": "BL-091: CD-3 HECHO (kit de escena compartido en shiruvana + mi globo con el gato en el Centro; CI 120/120); espera validación",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "5410d69b2339784a0bda618379cc737fd982499c",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 04:26Z",
+     "text": "Última actualización: 2026-11-17 04:40Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "CD-3 EN CURSO: globo y gato (kit de escena al repo shiruvana).",
+     "text": "CD-3 HECHO 2026-11-17 04:36Z. Repo shiruvana: kit/escena-kit.js 1.0.0 (ae7b389; window.ShiruvanaKit: globo() con decir/gato/plegar y plegado recordado por clave, posesSinFondo() → --svk-p-<pose>, recorte() idéntico al de La Guarida ESC-5), kit/escena-kit.css 1.0.0 (fbbf4e7; clases svk-*, colores en --svk-*, contraste AA medido), tests/kit.test.cjs (b7a634e; 9 tests, 17/17 mutaciones; se corre local, shiruvana no tiene CI de tests). Las imágenes siguen en la-guarida/assets/brand (mismo origen pablosnchz.github.io, el canvas puede recortarlas). Panel (directo en main): js/globo.js nuevo (2505adb; mensaje() según lo que te espera —respuesta fallida u riesgo crítico con cara ojo, decisiones con hola, tareas con explica, nada con festeja y en qué sigo—; reaccion() del gato: festeja si baja lo pendiente, camina si llega algo o hay un crítico; try/catch: sin kit el panel sigue igual), js/app.js c6851e7 (montarGlobo después de dibujar), index.html 99d6c95 (kit ?v=1.0.0), css/universo.css 1.2.0 9b8074a (lugar para el globo, D2: las tarjetas no repiten mi cara cuando el globo está, yo sentada sin fondo en «Nada que decidir»), tests/globo.test.mjs 0f0831b (8 tests, 17/17 mutaciones), tests/panel.test.mjs 3bfea6e. CI VERDE 120/120 (c66fa11). Clave nueva en localStorage: gfd:globo:v1 ({ plegado }). Próximo: CD-3b (La Guarida pasa a usar el kit y deja su copia) y CD-4 (las otras cinco vistas)."
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-091] Validación: CD-3 en https://pablosnchz.github.io/gw2-factory-dashboard/ (Ctrl+F5): mi globo abajo a la derecha con el gato encima; tocá el gato, plegá el globo y recargá (debe quedar plegado). Con «Nada que decidir» aparezco sentada al costado.\n"
+    }
+   ]
+  }
+ ]
+}
