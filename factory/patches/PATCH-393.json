@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-393",
+ "summary": "BL-091: Pablo validó ESC-5; checkpoint de ESC-6 (cabecera que se esfuma, buscador protagonista, reinicios en su widget)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "73d8f58322a39b81b45335a6ddcee87b58ebc59a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 02:08Z",
+     "text": "Última actualización: 2026-11-17 02:55Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "(sin mix-blend); espera validación de Pablo; después: cierre de La Guarida y Centro de decisiones;",
+     "text": "(sin mix-blend); ESC-5 validado por Pablo (2026-11-17 02:33Z, «quedó verdaderamente espectacular»). ESC-6 EN CURSO (Pablo eligió mis tres ★, 02:38Z): 1) cabecera sin corte: transparente arriba de todo y, al bajar (body.esc-bajo), su fondo con una pollera que se esfuma; 2) el buscador queda (es el acceso principal; con mouse o celular no hay Ctrl K), centrado, con lupa y sin mi cara; el globo deja de repetir «Ctrl K» y dice el último backup; 3) la barra de relojes sale de la cabecera (con Gato Negro) y los reinicios viven en el widget «Resets GW2», arreglado en js/widgets-ui.js 1.2.0 con el reloj del kit y la temporada real de la API (antes fija en 2026-09-15 y oculta); sin «Local». Después: cierre de La Guarida y Centro de decisiones;"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-5 en tu Guarida con el theme Gato Negro (Ctrl+F5): paleta y tipografía de mi sitio (antetítulos «01 · En vivo»…, títulos en 800 y contadores en ámbar), categorías y noticias como líneas de tiempo con puntos, lanzador como las puertas del Ecosistema, widgets como cifras, la barra del día bajo el saludo, y yo asomada arriba a la derecha de Favoritos, Categorías y Lanzador (el gato en Widgets). En Ctrl K ya no hay rectángulo negro: mi pose aparece recortada. Si algo no te cierra, decime qué panel; volver atrás es quitar css/universo.css de index.html. Con tu OK cierro La Guarida y sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
