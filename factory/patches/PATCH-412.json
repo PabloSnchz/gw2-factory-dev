@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-412",
+ "summary": "BL-091: CD-5 HECHO (celular, revisión final, CHANGELOG 3.0.0 del panel); CI 124/124; validación en el teléfono pedida a Pablo",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "e2dcfdeaa9987330bf1a859f4e54db60cce4e9c0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 10:33Z",
+     "text": "Última actualización: 2026-11-17 10:42Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "Pablo aceptó CD-3b redefinido 2026-11-17 10:31Z («arrancá»). CD-5 EN CURSO.",
+     "text": "Pablo aceptó CD-3b redefinido 2026-11-17 10:31Z («arrancá»). CD-5 HECHO 2026-11-17 10:40Z en gw2-factory-dashboard (main = publicado). Revisión del celular sobre el código (sin navegador): (MEDIO) las etapas de «04 · La Factory ahora» ya se apilaban por app.css pero la línea seguía horizontal y cruzaba el primer punto → línea vertical con el punto al costado; (MEDIO) backdrop-filter en cada tarjeta hace saltar el scroll en teléfonos (Conocimiento tiene decenas) → sin desenfoque en ≤ 640 px; (BAJO) cifras de 2.6rem → 2rem en ≤ 640 px; (BAJO) la «puerta» de Entornos quedaba levantada tras un toque → hover solo con @media (hover: hover). Sin hallazgos ALTO/CRÍTICO; el globo en el celular queda como en CD-3 (ancho completo, plegable). css/universo.css 1.4.0 (653cb0e, commit 292fb47), index.html (3e35e75, ?v=1.4.0), tests/universo.test.mjs (c58add6, +1 test; 7/7 mutaciones nuevas y 18/18 de CD-4), README.md (e45b03a: «Centro de mando», piel, globo, ci/ULTIMO.md), package.json 3.0.0 (adab4e1), CHANGELOG.md [3.0.0] (4b4041c; una sola entrada para CD-0..CD-5, la parte vieja verificada por blob). CI VERDE 124/124 (1ee146d, que incluye todos los cambios). Sin claves nuevas de localStorage. Al validar Pablo: BL-091 pasa a HECHA (FEAT del Centro de mando en features.md)."
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n",
+     "text": "\n- [BL-091] Validación: CD-5, el Centro de mando en el celular (https://pablosnchz.github.io/gw2-factory-dashboard/ en el teléfono; si ya estaba abierto, recargá): en «04 · La Factory ahora» las etapas bajan como línea de tiempo con puntos; las cifras entran de a tres; el scroll va suave y el globo se pliega. Con tu OK cierro BL-091."
+    }
+   ]
+  }
+ ]
+}
