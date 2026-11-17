@@ -1,0 +1,26 @@
+{
+ "id": "PATCH-395",
+ "summary": "BL-091: Pablo validó ESC-6; checkpoint de ESC-7 (cabecera en una sola línea en pantallas anchas)",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "bd7c510ed505c23db127173632321d5dee568066",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-17 03:00Z",
+     "text": "Última actualización: 2026-11-17 03:15Z"
+    },
+    {
+     "op": "replace",
+     "anchor": "; 76/76 tests y 26/26 mutaciones; espera validación de Pablo:",
+     "text": "; 76/76 tests y 26/26 mutaciones; validado por Pablo (2026-11-17 03:01Z, «me gusta mucho más»). ESC-7 EN CURSO (OK de Pablo 03:03Z, a propuesta suya): en pantallas ≥ 1440 px la cabecera es una sola línea (marca | saludo | pestañas + buscador juntos al centro | herramientas), con display: contents en .gh-bar y .gh-row y la grilla en .app-header; solo css/universo.css 1.2.0 e index.html; más chica vuelven las dos filas. Después: cierre de La Guarida y Centro de decisiones. ESC-6 fue:"
+    },
+    {
+     "op": "delete",
+     "anchor": "- [BL-091] Validación: ESC-6 en tu Guarida con Gato Negro (Ctrl+F5): arriba de todo la cabecera no tiene fondo ni línea y, al bajar, aparece su fondo que se esfuma; el buscador queda centrado, con lupa ámbar y sin mi cara; mi globo dice el último backup en vez de «Ctrl K»; ya no están los relojes en la cabecera y el widget «Resets GW2» muestra diario, semanal y la temporada real (dorado cuando falta poco). Si no tenés ese widget, agregalo con «＋ Widget». Con tu OK cierro La Guarida y sigo con el Centro de decisiones.\n"
+    }
+   ]
+  }
+ ]
+}
