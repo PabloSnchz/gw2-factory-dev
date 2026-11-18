@@ -5,7 +5,8 @@
 #  3) Saca UNA captura de prueba de DEV y la abre (usa segundos de los 10 min/dia gratis).
 #  4) Si tenes GitHub CLI (gh) logueado, guarda los dos secretos en gw2-factory-dev. Si no, te abre la pagina.
 # No toca produccion. No escribe el token en ningun archivo.
-# v2: en PowerShell 5.1, Ctrl+V no pega dentro de Read-Host -AsSecureString (entra un solo caracter); por eso se lee del portapapeles.
+# v2: en PowerShell 5.1, Ctrl+V no pega dentro de Read-Host -AsSecureString; por eso se lee del portapapeles.
+# v3: muestra el codigo HTTP y el mensaje real de Cloudflare; prueba /browser-run/ y /browser-rendering/.
 param(
   [string]$Repo = "PabloSnchz/gw2-factory-dev",
   [string]$Url  = "https://pablosnchz.github.io/gw2-factory-dev/"
@@ -50,15 +51,39 @@ $body = @{
   viewport = @{ width = 390; height = 844 }
   gotoOptions = @{ waitUntil = "networkidle0"; timeout = 45000 }
 } | ConvertTo-Json -Depth 5
-try {
-  $r = Invoke-WebRequest -UseBasicParsing -Method Post -Uri "https://api.cloudflare.com/client/v4/accounts/$acc/browser-run/screenshot" -Headers $h -ContentType "application/json" -Body $body -OutFile $out -PassThru
-  $ms = $r.Headers["X-Browser-Ms-Used"]
-  Write-Host "   Captura OK -> $out (tiempo de navegador usado: $ms ms)" -ForegroundColor Green
-  Start-Process $out
-} catch {
-  $msg = $_.Exception.Message
-  if ($_.Exception.Response) { try { $msg = (New-Object IO.StreamReader($_.Exception.Response.GetResponseStream())).ReadToEnd() } catch {} }
-  throw "La captura fallo: $msg  (Revisa que el token tenga el permiso Account > Browser Run (o Browser Rendering) > Edit)"
+$hecho = $false
+$informe = @()
+foreach ($ruta in @("browser-run", "browser-rendering")) {
+  $uri = "https://api.cloudflare.com/client/v4/accounts/$acc/$ruta/screenshot"
+  try {
+    $r = Invoke-WebRequest -UseBasicParsing -Method Post -Uri $uri -Headers $h -ContentType "application/json" -Body $body -TimeoutSec 90
+    $ct = [string]$r.Headers["Content-Type"]
+    if ($ct -like "image/*") {
+      [IO.File]::WriteAllBytes($out, $r.RawContentStream.ToArray())
+      $ms = $r.Headers["X-Browser-Ms-Used"]
+      Write-Host "   Captura OK por /$ruta/ -> $out (tiempo de navegador usado: $ms ms)" -ForegroundColor Green
+      Start-Process $out
+      $hecho = $true
+      break
+    } else {
+      $informe += "/$ruta/ -> HTTP $($r.StatusCode), tipo '$ct': $($r.Content)"
+    }
+  } catch {
+    $code = ""
+    if ($_.Exception.Response) { try { $code = [int]$_.Exception.Response.StatusCode } catch {} }
+    $det = ""
+    if ($_.ErrorDetails -and $_.ErrorDetails.Message) { $det = $_.ErrorDetails.Message }
+    if (-not $det) { $det = $_.Exception.Message }
+    $informe += "/$ruta/ -> HTTP $code : $det"
+  }
+  Start-Sleep -Seconds 11   # plan gratis: 1 pedido cada 10 segundos
+}
+if (-not $hecho) {
+  Write-Host "   La captura fallo. Lo que respondio Cloudflare:" -ForegroundColor Red
+  $informe | ForEach-Object { Write-Host "   $_" -ForegroundColor Red }
+  Write-Host "   Copiale estas lineas a Shiruvana (no tienen el token)." -ForegroundColor Yellow
+  $tok = $null; $h = $null
+  exit 1
 }
 
 Write-Host "4/4 Guardando secretos en GitHub ($Repo)..." -ForegroundColor Cyan
