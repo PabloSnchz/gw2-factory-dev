@@ -1,0 +1,5 @@
+{
+ "id": "RUN-295",
+ "summary": "BL-092 BV-5: shv-escena (12 tests) con universo.css 1.4.0 y los vecinos (universo, shv-bubble, sidebar-nav, boot, privacy, index-identity)",
+ "tests": ["tests/shv-escena.test.cjs", "tests/universo.test.cjs", "tests/shv-bubble.test.cjs", "tests/sidebar-nav.test.cjs", "tests/boot.test.cjs", "tests/privacy.test.cjs", "tests/index-identity.test.cjs"]
+}
