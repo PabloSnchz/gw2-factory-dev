@@ -48,7 +48,9 @@ test('el selector gana a la regla base de la Bienvenida sin !important (más esp
   assert.match(WP, /#welcomePanel \.wl-mod\{position:relative;display:flex;[^']*padding:12px 14px 12px 17px/);
 });
 
-test('theme-polish 2.4.1 en el archivo y en index.html (sin caché vieja)', () => {
-  assert.match(POL, /Theme Polish v2\.4\.1/);
-  assert.match(INDEX, /css\/theme-polish\.css\?v=2\.4\.1"/);
+test('index.html pide theme-polish con la versión que declara el archivo, 2.4.1 o más nueva (sin caché vieja)', () => {
+  const v = (POL.match(/Theme Polish v(\d+)\.(\d+)\.(\d+)/) || []).slice(1).map(Number);
+  assert.equal(v.length, 3, 'theme-polish declara su versión');
+  assert.ok(INDEX.includes('css/theme-polish.css?v=' + v.join('.') + '"'), 'index.html pide la ' + v.join('.'));
+  assert.ok(v[0] > 2 || (v[0] === 2 && (v[1] > 4 || (v[1] === 4 && v[2] >= 1))), 'la reserva llegó en la 2.4.1');
 });
