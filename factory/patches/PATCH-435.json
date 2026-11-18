@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-435",
+  "summary": "BL-093: BL-092 en PRD (987fad7, control 14/14); validación de Pablo en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "74b327249961c4f123427c2b2de9e2fa0d5dd122",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-093 — pasaje a PRD de BL-092 (mi universo en La Bóveda) vía PowerShell: manifiesto listo, esperando que Pablo corra la línea.",
+          "text": "Tarea actual: BL-093 — BL-092 (mi universo en La Bóveda) ya está en producción (987fad7, 14/14 iguales a DEV); esperando que Pablo lo valide en PRD."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Sin automatización nueva ni claves de localStorage nuevas.",
+          "text": " 2026-11-18 03:42Z Pablo corrió la línea (14 | 14 | 0, SI): producción = 987fad7f8f236dd283dcf22124158ea3cfe185dc (padre 6dca6a9), rollback/pre-bl-093 = 6dca6a9. RUN-302 (sonda borrada en 9147920): 14/14 iguales a DEV f2f72e0, 0 cambios fuera del manifiesto, analytics/meta-drops/watch.json/github-metrics-to-ga4 intactos, Pages de PRD success; el sitio sirve universo.css 1.5.0, gato.css 2.0.0, theme-selector 1.3.0 y theme-color #0B0B10. Informe: ai-memory/missions/BL-093-informe-promocion.md (ac8f3be)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 03:31Z",
+          "text": "Última actualización: 2026-11-18 03:46Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo corre la línea de PowerShell de BL-093 y me pasa el SHA de producción; yo controlo blob a blob, escribo el informe y le paso la lista de validación en PRD.",
+          "text": "Próxima acción: Pablo valida BL-092 en PRD (lista en el informe de BL-093); con su OK, BL-093 a DONE y FEAT-028 a «DISPONIBLE EN PRD»."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-093] Acción: correr en PowerShell la línea del pasaje a PRD de BL-092 (manifiesto factory/promote/BL-093.txt, 14 movimientos, DevSha f2f72e0, base PRD 6dca6a9) y pasarme el SHA de producción que muestra al final.",
+          "text": "- [BL-093] Validación: mi universo en producción, https://pablosnchz.github.io/gw2-wallet-ligero/ (Chrome, theme Gato Negro, recargar una vez): fondo con chispas, paneles oscuros con el color del módulo solo en el borde de arriba, antetítulos y cifras ámbar, mi globo con el gato abajo a la derecha y mis poses en Inicio y vacíos; con otro theme, como antes."
+        }
+      ]
+    }
+  ]
+}
