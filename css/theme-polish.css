@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Bóveda del Gato Negro — Theme Polish v2.4.1
+   Bóveda del Gato Negro — Theme Polish v2.4.2
    Componentes genéricos + piel unificada
    Todos los colores usan variables CSS (definidas en css/themes/*.css)
    ========================================================================== */
@@ -1590,4 +1590,10 @@ aside.col-side .panel-head img {
   #welcomePanel .wl-mod:has(.wl-tag) {
     padding-top: 12px;
   }
+}
+
+/* Barra de arriba: sin API Key el selector de cuenta queda vacío y se veía como una pastilla vacía
+ * (BL-096 OJ-2, lo vi en EYE-001). Sin cuentas no se muestra; con la primera Key vuelve. Keys sigue a la vista. */
+#keySelectGlobal:empty {
+  display: none;
 }
