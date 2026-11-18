@@ -1,0 +1,58 @@
+{
+  "id": "PATCH-447",
+  "summary": "BL-096 cerrada: OJ-3 validado por Pablo (10:58Z «ok»)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "d34282db2c5e1dc87b25d1e67c9d0322499f2dfa",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-096] [MEDIO] Lo que vi con mis ojos en Inicio — pedido de Pablo 2026-11-18 04:59Z («arrancá»). De a uno, en DEV, con captura de antes y después (factory-eyes, DEC-051). OJ-1 [MEDIO] etiquetas Con Key/Sin Key sobre los títulos en la compu: HECHO y validado por Pablo (05:17Z «ok») (PATCH-441, css/theme-polish.css 2.4.1, tests/welcome-tags.test.cjs; EYE-003). OJ-2 [BAJO] pastilla vacía arriba al centro: era #keySelectGlobal sin opciones (sin API Key app.js lo deja vacío); HECHO y validado por Pablo (10:28Z «ok») (PATCH-443, theme-polish 2.4.2: #keySelectGlobal:empty no se muestra; tests/topbar-select.test.cjs; EYE-004). OJ-3 [BAJO] mi globo con el gato tapa parte del paso 1 en el celular: HECHO (PATCH-445, css/universo.css 1.6.0: plegada en el celular, pegada al borde, cara 40 px y gato 50 px; tests/universo-globo.test.cjs; EYE-006), esperando validación. Lo mismo está en PRD: pasa cuando Pablo lo pida. · BL-095, DEC-051\n",
+          "text": ""
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## DONE\n\n",
+          "text": "- [BL-096] [MEDIO] Lo que vi con mis ojos en Inicio — HECHO y validado por Pablo en DEV (2026-11-18 10:58Z: «ok»). Pedido de Pablo 2026-11-18 04:59Z («arrancá»); de a uno, con captura de antes y después (factory-eyes, DEC-051). OJ-1 [MEDIO] etiquetas Con Key/Sin Key sobre los títulos en la compu (PATCH-441, theme-polish 2.4.1, tests/welcome-tags.test.cjs; EYE-003; validado 05:17Z). OJ-2 [BAJO] pastilla vacía arriba al centro = #keySelectGlobal sin opciones (PATCH-443, theme-polish 2.4.2, tests/topbar-select.test.cjs; EYE-004; validado 10:28Z). OJ-3 [BAJO] mi globo plegado tapaba el paso 1 en el celular (PATCH-445, universo.css 1.6.0, tests/universo-globo.test.cjs; EYE-006; validado 10:58Z). Los tres siguen en PRD (EYE-002): pasan solo si Pablo lo pide. · BL-095, DEC-051\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "c15b67395b180538351a80d366cfba29ef3bafb3",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-096 — lo que vi con mis ojos en Inicio, de a uno. OJ-1 y OJ-2 validados; OJ-3 (mi globo sobre el paso 1 en el celular) HECHO en DEV; esperando validación de Pablo para cerrar BL-096.",
+          "text": "Tarea actual: ninguna en curso. BL-096 CERRADA (2026-11-18 10:58Z, Pablo validó OJ-3 con «ok»): OJ-1, OJ-2 y OJ-3 hechos y validados en DEV."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó OJ-2 («ok», 2026-11-18 10:28Z) y seguí con OJ-3, el último.",
+          "text": "Motivo: Pablo validó OJ-3 («ok», 2026-11-18 10:58Z), el último de BL-096."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-096 (sigue): 2026-11-18 10:28Z Pablo validó OJ-2 («ok»). OJ-3 HECHO 10:38Z: en el celular mi globo plegado medía ~118 px de ancho y, con el gato de 64 px encima, ~132 px de alto: tapaba el final de «Tus datos se quedan en este navegador» y el borde del paso 1 (EYE-001-1). PATCH-445 (d925152): css/universo.css 1.6.0, solo en @media (max-width: 900px) y solo plegada: right 8px, padding 4px, gap 2px, cara 40 px, gato 50 px (right 42px, bottom calc(100% - 10px)); el botón para abrirme sigue de 44 px; abierta y en la compu, igual (sin tocar la copia fija del kit). index.html ?v=1.6.0; tests/shv-escena.test.cjs fija 1.6.0; tests/universo-globo.test.cjs nuevo (5 tests, 9/9 mutantes; superficie plegada 12760 → 8648 px², -32 %). RUN-306 verde: 9 archivos, 59 tests (universo-globo, shv-escena, universo, universo-paneles, index-versions, index-identity, size-budget, welcome-tags, topbar-select). EYE-005 rechazado por mí (puse «wait», que la herramienta no acepta); EYE-006 (celular y compu): la frase se lee entera y el gato ya no toca el título «Empezá en tres pasos».\n",
+          "text": "Historial de BL-096 (cierre): 2026-11-18 10:58Z Pablo validó OJ-3 («ok») → BL-096 CERRADA y pasada a DONE. Inicio en DEV queda sin los tres problemas que vi en EYE-001; en PRD siguen (EYE-002) hasta que Pablo pida el pase.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 10:40Z",
+          "text": "Última actualización: 2026-11-18 11:00Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida OJ-3 en DEV (Inicio en el celular: mi globo plegado más chico, ya no tapa «Tus datos se quedan en este navegador»); con su OK cierro BL-096.",
+          "text": "Próxima acción: esperar la próxima orden de Pablo. Pendientes a su pedido: validar BL-095 (mis ojos) y BL-086; BL-094 (guías a mi universo) anotada para el futuro."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-096] Validación: Inicio en DEV en el celular (recargar una vez): mi globo plegado es más chico y está más pegado al borde; «Tus datos se quedan en este navegador» se lee entero y el gato no toca el título; tocar el botón me sigue abriendo.\n",
+          "text": ""
+        }
+      ]
+    }
+  ]
+}
