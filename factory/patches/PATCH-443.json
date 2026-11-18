@@ -1,0 +1,33 @@
+{
+  "id": "PATCH-443",
+  "summary": "BL-096 OJ-2: sin API Key no se ve la pastilla vacía del selector de cuenta (theme-polish 2.4.2)",
+  "files": [
+    {
+      "path": "css/theme-polish.css",
+      "base_sha": "4b0fa21d16a9ab07fcba73f2fc5f71776be5e02a",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Bóveda del Gato Negro — Theme Polish v2.4.1",
+          "text": "   Bóveda del Gato Negro — Theme Polish v2.4.2"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "@media (max-width: 720px) {\n  #welcomePanel .wl-mod:has(.wl-tag) {\n    padding-top: 12px;\n  }\n}\n",
+          "text": "\n/* Barra de arriba: sin API Key el selector de cuenta queda vacío y se veía como una pastilla vacía\n * (BL-096 OJ-2, lo vi en EYE-001). Sin cuentas no se muestra; con la primera Key vuelve. Keys sigue a la vista. */\n#keySelectGlobal:empty {\n  display: none;\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "8b5900293ccb19f57880aa5cefb52ee200cc90f2",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/theme-polish.css?v=2.4.1\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/theme-polish.css?v=2.4.2\">"
+        }
+      ]
+    }
+  ]
+}
