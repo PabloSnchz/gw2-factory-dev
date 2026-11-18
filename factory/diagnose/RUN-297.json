@@ -1,0 +1,5 @@
+{
+ "id": "RUN-297",
+ "summary": "BL-092 BV-6a: theme Gato con la obsidiana del universo — tests de contraste, superficies y vistas que miden los 19 themes",
+ "tests": ["tests/theme-gato.test.cjs", "tests/gn-surface.test.cjs", "tests/index-identity.test.cjs", "tests/theme-selector.test.cjs", "tests/universo.test.cjs", "tests/acc-view.test.cjs", "tests/welcome-view.test.cjs", "tests/privacy.test.cjs", "tests/guides-identity.test.cjs", "tests/sidebar-nav.test.cjs", "tests/gn-topbar.test.cjs", "tests/shv-escena.test.cjs"]
+}
