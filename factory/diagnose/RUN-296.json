@@ -1,0 +1,5 @@
+{
+ "id": "RUN-296",
+ "summary": "BL-092 BV-6a: sonda — dónde están escritos a mano los colores del theme Gato Negro (paneles azulados) y qué tests leen gato.css",
+ "tests": ["tests/zz-probe-bv6.smoke.cjs", "tests/theme-gato.test.cjs"]
+}
