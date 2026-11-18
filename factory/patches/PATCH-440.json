@@ -1,0 +1,43 @@
+{
+  "id": "PATCH-440",
+  "summary": "BL-096 OJ-1: etiquetas Con Key/Sin Key sin montarse sobre los títulos (welcome-panel 2.4.1)",
+  "files": [
+    {
+      "path": "js/welcome-panel.js",
+      "base_sha": "4395acfdb483402f020b24b21867a85c2ceda382",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 2.4.0 (2026-10-25) · BL-058, propuesta WEL-0b aprobada por Pablo",
+          "text": " * Versión: 2.4.1 (2026-11-18) — BL-096 OJ-1: en la compu, las etiquetas Con Key/Sin Key ya no se montan sobre el\n *          título del módulo (la tarjeta les reserva su renglón; lo vi con mis ojos en EYE-001) · antes 2.4.0\n *          (2026-10-25) · BL-058, propuesta WEL-0b aprobada por Pablo"
+        },
+        {
+          "op": "replace",
+          "anchor": "  var VERSION = '2.4.0';",
+          "text": "  var VERSION = '2.4.1';"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "    '#welcomePanel .wl-tag--free{border-color:var(--color-green);color:var(--color-green)}',\n",
+          "text": "    '#welcomePanel .wl-mod:has(.wl-tag){padding-top:30px}', // BL-096 OJ-1: la etiqueta tiene su renglón; el título no queda debajo\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "      '#welcomePanel .wl-tag{position:static}' +",
+          "text": "      '#welcomePanel .wl-tag{position:static}' +\n      '#welcomePanel .wl-mod:has(.wl-tag){padding-top:12px}' +"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "82c1c913229059079927890806e52a778153df9e",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<script defer src=\"js/welcome-panel.js?v=2.4.0\"></script>",
+          "text": "<script defer src=\"js/welcome-panel.js?v=2.4.1\"></script>"
+        }
+      ]
+    }
+  ]
+}
