@@ -1,76 +1,54 @@
 // tests/welcome-tags.test.cjs — BL-096 OJ-1 (EYE-001/EYE-002): en la compu, las etiquetas
 // «Con Key / Sin Key» de «¿Qué puedo hacer aquí?» no se montan sobre el título del módulo.
-// La etiqueta sigue arriba a la derecha, pero la tarjeta le reserva su renglón (padding-top);
-// en el celular (≤720 px) la etiqueta ya va en el flujo y no hace falta reservar nada.
+// La etiqueta sigue arriba a la derecha (welcome-panel.js), y la tarjeta le reserva su renglón
+// con padding-top. La regla vive en css/theme-polish.css porque js/welcome-panel.js está a 46 bytes
+// de su techo de 48 KB (tools/size-budget.json): no puede crecer.
+// En el celular (≤720 px) la etiqueta ya va en el flujo y la tarjeta vuelve a su relleno de 12 px.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const vm = require('node:vm');
 
 const ROOT = path.join(__dirname, '..');
-const SRC = fs.readFileSync(path.join(ROOT, 'js', 'welcome-panel.js'), 'utf8');
+const WP = fs.readFileSync(path.join(ROOT, 'js', 'welcome-panel.js'), 'utf8');
+const POL = fs.readFileSync(path.join(ROOT, 'css', 'theme-polish.css'), 'utf8');
 const INDEX = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
 
-function el() {
-  const n = { children: [], attrs: {}, hidden: false, _html: '', className: '', style: { setProperty() {}, removeProperty() {} } };
-  n.setAttribute = (k, v) => { n.attrs[k] = String(v); };
-  n.removeAttribute = () => {};
-  n.appendChild = (c) => { n.children.push(c); return c; };
-  n.insertBefore = (c) => { n.children.unshift(c); return c; };
-  n.addEventListener = () => {};
-  n.querySelector = () => null;
-  Object.defineProperty(n, 'firstChild', { get: () => n.children[0] || null });
-  Object.defineProperty(n, 'innerHTML', { get: () => n._html, set: (v) => { n._html = v; } });
-  return n;
-}
-function load() {
-  const panel = el(), head = el();
-  const window = {
-    console: { info() {}, warn() {}, log() {} },
-    Storage: { STORAGE_KEYS: { ACCOUNT_KEYS: 'gn:account:keys', THEME: 'gn:theme' }, get: () => null, set() {} },
-    location: { hash: '' }, addEventListener() {},
-    getComputedStyle: () => ({ getPropertyValue: () => '' }),
-    MutationObserver: function () { this.observe = () => {}; },
-  };
-  window.document = {
-    readyState: 'complete', head, documentElement: { setAttribute() {} },
-    getElementById: (id) => (id === 'welcomePanel' ? panel : null),
-    createElement: () => el(), addEventListener() {},
-  };
-  vm.runInNewContext(SRC, { window, Date, JSON, Promise, Math });
-  return window.Welcome;
-}
-const W = load();
-const CSS = W._pure.CSS;
-const MQ = (() => { const i = CSS.indexOf('@media (max-width:720px)'); return CSS.slice(i, CSS.indexOf('\n', i)); })();
-const DESK = CSS.split('\n').filter((l) => l.indexOf('@media') < 0).join('\n');
+const SEL = '#welcomePanel .wl-mod:has(.wl-tag)';
+const mq = (() => {
+  const i = POL.indexOf('@media (max-width: 720px)');
+  if (i < 0) return '';
+  return POL.slice(i, POL.indexOf('}\n}', i) + 3);
+})();
+const desk = POL.replace(mq, '');
 
-test('la etiqueta sigue arriba a la derecha (posición absoluta) en la compu', () => {
-  assert.match(DESK, /#welcomePanel \.wl-tag\{position:absolute;top:8px;right:10px;/);
+test('la etiqueta sigue arriba a la derecha en la compu y en el flujo en el celular (welcome-panel.js)', () => {
+  assert.match(WP, /#welcomePanel \.wl-tag\{position:absolute;top:8px;right:10px;/);
+  const i = WP.indexOf('@media (max-width:720px)');
+  assert.ok(i > 0 && WP.indexOf('#welcomePanel .wl-tag{position:static}', i) > i, 'en el corte de 720 px la etiqueta va en el flujo');
 });
 
-test('en la compu la tarjeta con etiqueta reserva su renglón: el título queda debajo', () => {
-  const m = DESK.match(/#welcomePanel \.wl-mod:has\(\.wl-tag\)\{padding-top:(\d+)px\}/);
-  assert.ok(m, 'existe la regla de reserva');
-  // etiqueta: top 8px + ~16px de alto (0.66rem + 2px de padding + bordes) → hace falta >= 26px
-  assert.ok(Number(m[1]) >= 26, 'reserva al menos 26px, reserva ' + m[1]);
+test('en la compu la tarjeta con etiqueta reserva su renglón (≥ 26 px: top 8 + alto de la etiqueta)', () => {
+  const i = desk.indexOf(SEL + ' {');
+  assert.ok(i >= 0, 'existe la regla de reserva fuera del corte de celular');
+  const m = desk.slice(i, desk.indexOf('}', i)).match(/padding-top:\s*(\d+)px/);
+  assert.ok(m && Number(m[1]) >= 26, 'reserva al menos 26 px');
 });
 
-test('en el celular la etiqueta va en el flujo y la tarjeta vuelve a su relleno de siempre', () => {
-  assert.match(MQ, /#welcomePanel \.wl-tag\{position:static\}/);
-  assert.match(MQ, /#welcomePanel \.wl-mod:has\(\.wl-tag\)\{padding-top:12px\}/);
+test('en el celular la tarjeta vuelve a 12 px (gana a la reserva por estar en el mismo selector, después)', () => {
+  assert.ok(mq, 'hay corte a 720 px en theme-polish.css');
+  assert.match(mq, /#welcomePanel \.wl-mod:has\(\.wl-tag\) \{\s*padding-top:\s*12px;/);
+  assert.ok(POL.indexOf(mq) > POL.indexOf(SEL + ' {'), 'el corte va después de la regla de la compu');
 });
 
-test('las tarjetas sin Key y con Key llevan la etiqueta que activa la reserva', () => {
-  const html = W._pure.bodyHTML(W._pure.buildModel({ keys: [], selected: null }), []);
-  assert.match(html, /<a class="wl-mod"[^>]*>[\s\S]*?<i class="wl-tag wl-tag--free">Sin Key<\/i><\/a>/);
-  assert.match(html, /<i class="wl-tag wl-tag--key">Con Key<\/i><\/a>/);
+test('el selector gana a la regla base de la Bienvenida sin !important (más específico)', () => {
+  const block = POL.slice(POL.indexOf(SEL + ' {'));
+  assert.doesNotMatch(block.slice(0, block.indexOf('}')), /!important/);
+  assert.match(WP, /#welcomePanel \.wl-mod\{position:relative;display:flex;[^']*padding:12px 14px 12px 17px/);
 });
 
-test('versión 2.4.1 en el archivo y en index.html (sin caché vieja)', () => {
-  assert.match(SRC, /Versión: 2\.4\.1 \(2026-11-18\)/);
-  assert.equal(W.version, '2.4.1');
-  assert.match(INDEX, /js\/welcome-panel\.js\?v=2\.4\.1"/);
+test('theme-polish 2.4.1 en el archivo y en index.html (sin caché vieja)', () => {
+  assert.match(POL, /Theme Polish v2\.4\.1/);
+  assert.match(INDEX, /css\/theme-polish\.css\?v=2\.4\.1"/);
 });
