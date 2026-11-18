@@ -1,4 +1,4 @@
-// tests/factory-eyes.test.cjs — BL-095 CF-2: mis ojos en DEV (validación y seguridad).
+// tests/factory-eyes.test.cjs — BL-095 CF-2: mis ojos (alcance DEC-051, validación y seguridad).
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert');
@@ -29,12 +29,27 @@ function resp(status, ct, data, extra) {
 }
 const env = { account: ACC, token: TOKEN, sleep: async () => {} };
 
-test('solo apunta a DEV: base fija y nunca producción', () => {
+test('path es un atajo relativo a DEV', () => {
   assert.strictEqual(eyes.BASE, 'https://pablosnchz.github.io/gw2-factory-dev/');
-  const { errs, shots } = eyes.validate({ id: 'EYE-001', shots: [{ path: '' }] }, 'factory/eyes/EYE-001.json');
+  const { errs, shots } = eyes.validate({ id: 'EYE-001', shots: [{ path: '' }, {}] }, 'factory/eyes/EYE-001.json');
   assert.deepStrictEqual(errs, []);
-  assert.ok(shots[0].url.startsWith(eyes.BASE));
-  assert.ok(!shots[0].url.includes('gw2-wallet-ligero'));
+  assert.strictEqual(shots[0].url, eyes.BASE);
+  assert.strictEqual(shots[1].url, eyes.BASE);
+});
+
+test('alcance DEC-051: url puede mirar PRD, el ecosistema y sitios de afuera', () => {
+  const urls = ['https://pablosnchz.github.io/gw2-wallet-ligero/', 'https://pablosnchz.github.io/la-guarida/', 'https://wiki.guildwars2.com/wiki/Main_Page', 'http://example.com/a?b=1#c'];
+  const { errs, shots } = eyes.validate({ id: 'EYE-010', shots: urls.map((url) => ({ url })) }, 'EYE-010.json');
+  assert.deepStrictEqual(errs, []);
+  assert.deepStrictEqual(shots.map((s) => s.url), urls);
+});
+
+test('url rechaza credenciales, direcciones locales/privadas y otros protocolos', () => {
+  for (const u of ['https://user:pass@example.com/', 'http://localhost:8080/', 'http://127.0.0.1/', 'http://10.0.0.5/', 'http://192.168.1.1/', 'http://172.20.0.1/', 'http://169.254.169.254/latest/meta-data/', 'http://[::1]/', 'http://intranet/', 'http://algo.local/', 'file:///etc/passwd', 'javascript:alert(1)', 'ftp://example.com/', 'https://example.com/ con espacio', 42]) {
+    assert.strictEqual(eyes.publicUrl(u), null, 'debería rechazar ' + u);
+  }
+  assert.ok(eyes.validate({ id: 'EYE-011', shots: [{ url: 'http://localhost/' }] }, 'EYE-011.json').errs.length);
+  assert.ok(eyes.validate({ id: 'EYE-011', shots: [{ url: 'https://example.com/', path: '' }] }, 'EYE-011.json').errs.length);
 });
 
 test('rechaza paths que escapan de DEV', () => {

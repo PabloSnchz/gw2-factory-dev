@@ -1,9 +1,14 @@
-// factory-eyes.cjs — BL-095 CF-2 (Shiruvana). Mis ojos en DEV.
-// Lee factory/eyes/EYE-NNN.json sin respuesta, saca capturas de DEV con
+// factory-eyes.cjs — BL-095 CF-2 (Shiruvana). Mis ojos.
+// Lee factory/eyes/EYE-NNN.json sin respuesta, saca capturas con
 // Cloudflare Browser Run (plan gratis: 10 min/día, 1 pedido cada 10 s) y deja
 // factory/eyes/EYE-NNN-K.png + factory/eyes/EYE-NNN.md.
-// Seguridad: solo URLs de DEV (base fija, nunca PRD); máximo 4 capturas por
-// pedido; el token llega por variable de entorno y nunca se imprime.
+// Alcance (DEC-051, Pablo 2026-11-18): puedo MIRAR cualquier sitio público —
+// DEV, PRD, el resto del ecosistema y sitios de afuera—. Mirar no es tocar:
+// esto solo saca fotos, nunca escribe en ningún repo ni sitio.
+// `path` = atajo relativo a DEV; `url` = cualquier http(s) público.
+// Seguridad: sin credenciales en la URL ni direcciones locales/privadas;
+// máximo 4 capturas por pedido; el token llega por variable de entorno y
+// nunca se imprime.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -18,6 +23,21 @@ const DEVICES = {
 };
 const WAITS = ['load', 'domcontentloaded', 'networkidle0', 'networkidle2'];
 
+// Devuelve la URL normalizada o null si no es un sitio público http(s).
+function publicUrl(raw) {
+  if (typeof raw !== 'string' || raw.length > 2000 || /\s/.test(raw)) return null;
+  let u;
+  try { u = new URL(raw); } catch (e) { return null; }
+  if (u.protocol !== 'https:' && u.protocol !== 'http:') return null;
+  if (u.username || u.password) return null;
+  const h = u.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  if (!h.includes('.') && !h.includes(':')) return null;
+  if (h === 'localhost' || h.endsWith('.localhost') || h.endsWith('.local') || h.endsWith('.internal')) return null;
+  if (/^(0|10|127)\./.test(h) || /^169\.254\./.test(h) || /^192\.168\./.test(h) || /^172\.(1[6-9]|2\d|3[01])\./.test(h)) return null;
+  if (h.includes(':')) return null; // IPv6 literal: no la necesito
+  return u.href;
+}
+
 function validate(req, file) {
   const errs = [];
   const m = /^EYE-(\d{3,})\.json$/.exec(path.basename(file));
@@ -30,14 +50,19 @@ function validate(req, file) {
   shots.forEach((s, i) => {
     s = s && typeof s === 'object' ? s : {};
     const p = typeof s.path === 'string' ? s.path : '';
-    if (!/^[A-Za-z0-9._\-\/#?=&]*$/.test(p) || p.includes('..') || p.includes('//') || p.startsWith('/')) {
+    let url = BASE + p;
+    if (s.url !== undefined) {
+      if (s.path !== undefined) errs.push('shot ' + (i + 1) + ': usar path o url, no los dos');
+      url = publicUrl(s.url);
+      if (!url) errs.push('shot ' + (i + 1) + ': url inválida (solo http/https públicos, sin credenciales)');
+    } else if (!/^[A-Za-z0-9._\-\/#?=&]*$/.test(p) || p.includes('..') || p.includes('//') || p.startsWith('/')) {
       errs.push('shot ' + (i + 1) + ': path inválido');
     }
     const device = s.device || 'celular';
     if (!Object.prototype.hasOwnProperty.call(DEVICES, device)) errs.push('shot ' + (i + 1) + ': device debe ser celular o compu');
     const wait = s.wait || 'networkidle0';
     if (!WAITS.includes(wait)) errs.push('shot ' + (i + 1) + ': wait inválido');
-    out.push({ url: BASE + p, device, viewport: DEVICES[device], fullPage: s.fullPage === true, wait, note: typeof s.note === 'string' ? s.note.slice(0, 200) : '' });
+    out.push({ url, device, viewport: DEVICES[device], fullPage: s.fullPage === true, wait, note: typeof s.note === 'string' ? s.note.slice(0, 200) : '' });
   });
   return { errs, shots: out };
 }
@@ -93,7 +118,7 @@ async function run(root, env, fetchImpl) {
     let req = null;
     try { req = JSON.parse(fs.readFileSync(abs, 'utf8')); } catch (e) { req = null; }
     const { errs, shots } = validate(req, abs);
-    const lines = ['# ' + id + ' — capturas de DEV', '', 'Fecha: ' + new Date().toISOString(), ''];
+    const lines = ['# ' + id + ' — capturas', '', 'Fecha: ' + new Date().toISOString(), ''];
     if (errs.length) {
       lines.push('Estado: RECHAZADO', '', ...errs.map((e) => '- ' + e));
     } else {
@@ -123,7 +148,7 @@ async function run(root, env, fetchImpl) {
   return files;
 }
 
-module.exports = { validate, pending, body, shoot, run, BASE, DEVICES, MAX_SHOTS };
+module.exports = { validate, publicUrl, pending, body, shoot, run, BASE, DEVICES, MAX_SHOTS };
 
 if (require.main === module) {
   const account = process.env.CLOUDFLARE_ACCOUNT_ID || '';

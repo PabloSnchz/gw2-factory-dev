@@ -1,12 +1,14 @@
-# Mis ojos en DEV (BL-095, CF-2).
+# Mis ojos (BL-095, CF-2; alcance DEC-051).
 # La Factory pide capturas con factory/eyes/EYE-NNN.json y este workflow deja
 # factory/eyes/EYE-NNN-K.png + factory/eyes/EYE-NNN.md, usando Cloudflare
 # Browser Run en el plan gratis (10 min/día, 1 pedido cada 10 s, sin cobro).
 #
+# Alcance: puede mirar cualquier sitio público (DEV, PRD, ecosistema y afuera);
+# solo saca fotos, nunca escribe en ningún sitio.
 # Seguridad: solo en gw2-factory-dev y solo con pushes del dueño; el script
-# solo arma URLs de DEV (base fija, nunca PRD) y como máximo 4 capturas por
-# pedido; los secretos van por variables de entorno y nunca se imprimen; el
-# commit solo puede contener archivos factory/eyes/EYE-NNN(-K.png|.md).
+# rechaza credenciales en la URL y direcciones locales/privadas, y saca como
+# máximo 4 capturas por pedido; los secretos van por variables de entorno y
+# nunca se imprimen; el commit solo puede contener factory/eyes/EYE-NNN(-K.png|.md).
 
 name: factory-eyes
 
@@ -54,5 +56,5 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           xargs -r -d '\n' git add -- < "$RUNNER_TEMP/factory-eyes-files.txt"
           if git diff --cached --name-only | grep -vE '^factory/eyes/EYE-[0-9]{3,}(-[0-9]+\.png|\.md)$'; then echo "Cambios no esperados"; exit 1; fi
-          git commit -m "factory-eyes: capturas de DEV en factory/eyes"
+          git commit -m "factory-eyes: capturas en factory/eyes"
           git push origin HEAD:main || { git pull --rebase origin main && git push origin HEAD:main; }
