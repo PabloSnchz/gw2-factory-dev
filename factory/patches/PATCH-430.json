@@ -1,0 +1,91 @@
+{
+  "id": "PATCH-430",
+  "summary": "BL-092 BV-6a.1: el theme Gato Negro se pide con su versión (gato.css 2.0.0, theme-selector 1.3.0 con THEME_V; index ?v): el navegador seguía con los colores viejos de gato.css?v=1.0.0",
+  "files": [
+    {
+      "path": "css/themes/gato.css",
+      "base_sha": "c31a8c8e7054b8c91787172874fdd2560eaacd90",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   BV-6 (BL-092, 2026-11-18): la obsidiana es la de mi universo",
+          "text": "   Versión: 2.0.0 (2026-11-18) · la pide js/theme-selector.js (THEME_V) e index.html con ?v=2.0.0:\n   si cambia un color, sube la versión acá y allá, o el navegador sigue con la vieja.\n   BV-6 (BL-092, 2026-11-18): la obsidiana es la de mi universo"
+        }
+      ]
+    },
+    {
+      "path": "js/theme-selector.js",
+      "base_sha": "249684e971fba5d9a86768dcdc803c0015ce99b5",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": " * Versión: 1.2.0\n",
+          "text": " * Versión: 1.3.0\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": " *  - La etiqueta \"Activo\" elige el texto más legible sobre el acento de cada theme.\n",
+          "text": " *\n * 1.3.0 (BL-092 BV-6a): cada theme se pide con su versión (THEME_V). Antes todos iban con ?v=1.0.0 fijo,\n *  así que al cambiar los colores de Gato Negro el navegador seguía con los de antes.\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "  var OFFICIAL_MARK = 'gato-v1';\n",
+          "text": "  // Versión de cada CSS de theme (la dirección cambia cuando cambia el archivo). Los que no están: 1.0.0.\n  var THEME_V = { gato: '2.0.0' };\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "    link.href = 'css/themes/' + theme + '.css?v=1.0.0';",
+          "text": "    link.href = 'css/themes/' + theme + '.css?v=' + (THEME_V[theme] || '1.0.0');"
+        },
+        {
+          "op": "replace",
+          "anchor": "console.info(LOGT, 'OK v1.2.0 — Temas disponibles:'",
+          "text": "console.info(LOGT, 'OK v1.3.0 — Temas disponibles:'"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "adc5a90eff83c08eaf3dde08c820c0b35d4cee29",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/themes/gato.css?v=1.0.0\" id=\"themeStylesheet\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/themes/gato.css?v=2.0.0\" id=\"themeStylesheet\">"
+        },
+        {
+          "op": "replace",
+          "anchor": "<script defer src=\"js/theme-selector.js?v=1.2.0\"></script>",
+          "text": "<script defer src=\"js/theme-selector.js?v=1.3.0\"></script>"
+        }
+      ]
+    },
+    {
+      "path": "tests/theme-gato.test.cjs",
+      "base_sha": "eca37c073ff5f12ff2073644d59717f5ab8ecbfb",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "  assert.match(read('index.html'), new RegExp('<meta name=\"theme-color\" content=\"' + g['--bg'] + '\"/>'));\n});\n",
+          "text": "\ntest('caché: gato.css declara su versión y index.html y el selector la piden igual (si no, quedan los colores viejos)', () => {\n  const v = (GATO.match(/Versión: (\\d+\\.\\d+\\.\\d+)/) || [])[1];\n  assert.ok(v, 'gato.css declara su versión');\n  assert.notEqual(v, '1.0.0', 'cambió desde la 1.0.0: tiene que pedirse con otra dirección');\n  assert.match(read('index.html'), new RegExp('href=\"css/themes/gato\\\\.css\\\\?v=' + v.replace(/\\./g, '\\\\.') + '\" id=\"themeStylesheet\"'));\n  const sel = read('js/theme-selector.js');\n  assert.match(sel, new RegExp(\"THEME_V = \\\\{[^}]*gato: '\" + v.replace(/\\./g, '\\\\.') + \"'\"));\n  assert.match(sel, /link\\.href = 'css\\/themes\\/' \\+ theme \\+ '\\.css\\?v=' \\+ \\(THEME_V\\[theme\\] \\|\\| '1\\.0\\.0'\\);/);\n});\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/theme-selector.test.cjs",
+      "base_sha": "3d72868450bda0fd571690271034bf94dcd3cb6e",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "  assert.match(link.href, /^css\\/themes\\/gato\\.css\\?v=/);\n",
+          "text": "  assert.equal(link.href, 'css/themes/gato.css?v=2.0.0', 'Gato Negro con su versión (BV-6a: sus colores cambiaron)');\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "  assert.equal(again.api.getCurrentTheme(), 'boveda');\n",
+          "text": "  assert.equal(again.link.href, 'css/themes/boveda.css?v=1.0.0', 'los que no cambiaron siguen con la 1.0.0');\n"
+        }
+      ]
+    }
+  ]
+}
