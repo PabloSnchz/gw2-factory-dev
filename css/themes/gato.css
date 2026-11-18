@@ -3,6 +3,8 @@
    Construido con el Gato Design System (gw2-factory-dashboard/gds, DEC-010):
    obsidiana para fondos, niebla para texto, arcano para acción e identidad,
    ámbar para el oro y la marca. El contraste lo verifica tests/theme-gato.test.cjs.
+   Versión: 2.0.0 (2026-11-18) · la pide js/theme-selector.js (THEME_V) e index.html con ?v=2.0.0:
+   si cambia un color, sube la versión acá y allá, o el navegador sigue con la vieja.
    BV-6 (BL-092, 2026-11-18): la obsidiana es la de mi universo (La Guarida y el Centro de
    mando): fondo #0B0B10, superficie #15151D, línea #2A2A38. Antes era gris azulada
    (#0F1117 / #1A1F2B / #2E3649) y chocaba con el fondo y mi globo de css/universo.css.

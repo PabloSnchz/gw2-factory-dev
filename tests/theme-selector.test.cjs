@@ -38,6 +38,7 @@ test('un jugador nuevo ve el theme oficial Gato Negro', () => {
   assert.equal(api.getCurrentTheme(), 'gato');
   assert.equal(attrs['data-theme'], 'gato');
   assert.match(link.href, /^css\/themes\/gato\.css\?v=/);
+  assert.equal(link.href, 'css/themes/gato.css?v=2.0.0', 'Gato Negro con su versión (BV-6a: sus colores cambiaron)');
   assert.equal(store.get('gn:theme'), 'gato');
 });
 
@@ -52,6 +53,7 @@ test('si después elige Bóveda, se respeta en las próximas visitas', () => {
   first.api.applyTheme('boveda');
   const again = boot(Object.fromEntries(first.store));
   assert.equal(again.api.getCurrentTheme(), 'boveda');
+  assert.equal(again.link.href, 'css/themes/boveda.css?v=1.0.0', 'los que no cambiaron siguen con la 1.0.0');
 });
 
 test('quien eligió otro theme lo conserva', () => {

@@ -98,3 +98,13 @@ test('BV-6: la muestra del selector y la barra del navegador usan los colores nu
   assert.equal(sel[2], g['--panel']);
   assert.match(read('index.html'), new RegExp('<meta name="theme-color" content="' + g['--bg'] + '"/>'));
 });
+
+test('caché: gato.css declara su versión y index.html y el selector la piden igual (si no, quedan los colores viejos)', () => {
+  const v = (GATO.match(/Versión: (\d+\.\d+\.\d+)/) || [])[1];
+  assert.ok(v, 'gato.css declara su versión');
+  assert.notEqual(v, '1.0.0', 'cambió desde la 1.0.0: tiene que pedirse con otra dirección');
+  assert.match(read('index.html'), new RegExp('href="css/themes/gato\\.css\\?v=' + v.replace(/\./g, '\\.') + '" id="themeStylesheet"'));
+  const sel = read('js/theme-selector.js');
+  assert.match(sel, new RegExp("THEME_V = \\{[^}]*gato: '" + v.replace(/\./g, '\\.') + "'"));
+  assert.match(sel, /link\.href = 'css\/themes\/' \+ theme \+ '\.css\?v=' \+ \(THEME_V\[theme\] \|\| '1\.0\.0'\);/);
+});
