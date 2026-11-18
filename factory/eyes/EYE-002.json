@@ -1,0 +1,7 @@
+{
+  "id": "EYE-002",
+  "shots": [
+    { "url": "https://pablosnchz.github.io/gw2-wallet-ligero/", "device": "celular", "note": "PRD Inicio sin API Key (DEC-051: mirar no es tocar)" },
+    { "url": "https://pablosnchz.github.io/gw2-wallet-ligero/", "device": "compu", "note": "PRD Inicio sin API Key en la compu" }
+  ]
+}
