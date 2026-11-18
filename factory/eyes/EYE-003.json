@@ -1,0 +1,7 @@
+{
+  "id": "EYE-003",
+  "shots": [
+    { "path": "?v=oj1", "device": "compu", "note": "OJ-1 después: etiquetas Con Key/Sin Key sobre los títulos" },
+    { "path": "?v=oj1", "device": "celular", "fullPage": true, "note": "OJ-1 después: celular, página completa (que no cambie)" }
+  ]
+}
