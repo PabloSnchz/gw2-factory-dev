@@ -1,6 +1,7 @@
 /* ==========================================================================
    css/universo.css — La Bóveda en mi universo (BL-092, DEC-025)
-   Versión: 1.4.0 (2026-11-18) · BV-5: celular y revisión final (lugar para mi globo, botón de 44 px, mensajes largos,
+   Versión: 1.5.0 (2026-11-18) · BV-6b: los paneles de los módulos como los de La Guarida (color solo en el borde de arriba)
+            1.4.0 (2026-11-18) · BV-5: celular y revisión final (lugar para mi globo, botón de 44 px, mensajes largos,
                                   me corro mientras escribís en el celular, no salgo impreso)
             1.3.0 (2026-11-17) · BV-4: mis poses sin fondo en Inicio y en las pantallas vacías
             1.2.0 (2026-11-17) · BV-3: mi globo con el gato en vez del rincón de la barra lateral
@@ -174,9 +175,35 @@
   min-height: 210px; padding-right: 170px; text-align: left;
   background-image: var(--svk-p-pensando); background-repeat: no-repeat; background-position: right 12px bottom 0; background-size: 140px auto;
 }
-/* en el celular, más chicas: van en el bloque de 640 px de la sección 8 */
+/* en el celular, más chicas: van en el bloque de 640 px de la sección 9 */
 
-/* ---------- 8. Celular y movimiento ---------- */
+/* ---------- 8. Paneles de los módulos como los de La Guarida (BV-6b, pedido de Pablo 2026-11-18) ----------
+   El panel es oscuro (#1C1C26 a #15151D, como las tarjetas de La Guarida) y el color del módulo va solo en el
+   borde de arriba, con una luz leve que baja desde la esquina y un brillo suave sobre el borde. Antes el color
+   teñía todo el fondo (js/gn-shell.js y las cabeceras de cada vista): acá se apaga ese tinte, solo con este theme.
+   El color es el del botón del módulo en la barra lateral. Lo vigila tests/universo-paneles.test.cjs. */
+:root:is([data-theme="gato"],:not([data-theme])) :is(#welcomePanel,#walletPanel,#walletDashboardPanel,#metaPanel,#wvPanel,#activitiesPanel,#homesteadPanel,#raidTrackerPanel,#achievementsPanel,#inventoryPanel,#legendaryArmoryPanel,#buildsPanel,#accountsPanel) {
+  border: 1px solid #2A2A38; border-top: 3px solid #2A2A38; border-radius: 16px;
+  background: linear-gradient(180deg, #1C1C26, #15151D 320px);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
+/* la cabecera de cada vista sin su degradado de color: la luz ya la da el panel */
+:root:is([data-theme="gato"],:not([data-theme])) :is(#welcomePanel,#walletPanel,#walletDashboardPanel,#metaPanel,#wvPanel,#activitiesPanel,#homesteadPanel,#raidTrackerPanel,#achievementsPanel,#inventoryPanel,#legendaryArmoryPanel,#buildsPanel,#accountsPanel) :is(.wvx-hero,.achx-hero,.av-hero,.iv-hero,.rv-hero,.arm-hero,.mh-head,.wn-hero,.wl-head) { background: none; }
+:root:is([data-theme="gato"],:not([data-theme])) #welcomePanel { border-top-color: #A896FF; background: radial-gradient(70% 160px at 0 0, rgba(168,150,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(168,150,255,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #walletPanel { border-top-color: #F2B94B; background: radial-gradient(70% 160px at 0 0, rgba(242,185,75,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(242,185,75,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #walletDashboardPanel { border-top-color: #F2B94B; background: radial-gradient(70% 160px at 0 0, rgba(242,185,75,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(242,185,75,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #metaPanel { border-top-color: #A896FF; background: radial-gradient(70% 160px at 0 0, rgba(168,150,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(168,150,255,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #wvPanel { border-top-color: #15C3B7; background: radial-gradient(70% 160px at 0 0, rgba(21,195,183,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(21,195,183,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #activitiesPanel { border-top-color: #3CC48A; background: radial-gradient(70% 160px at 0 0, rgba(60,196,138,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(60,196,138,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #homesteadPanel { border-top-color: #D9A55B; background: radial-gradient(70% 160px at 0 0, rgba(217,165,91,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(217,165,91,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #raidTrackerPanel { border-top-color: #F47C7C; background: radial-gradient(70% 160px at 0 0, rgba(244,124,124,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(244,124,124,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #achievementsPanel { border-top-color: #6EA3FF; background: radial-gradient(70% 160px at 0 0, rgba(110,163,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(110,163,255,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #inventoryPanel { border-top-color: #7EC3FF; background: radial-gradient(70% 160px at 0 0, rgba(126,195,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(126,195,255,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #legendaryArmoryPanel { border-top-color: #E545CA; background: radial-gradient(70% 160px at 0 0, rgba(229,69,202,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(229,69,202,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #buildsPanel { border-top-color: #C9B6FF; background: radial-gradient(70% 160px at 0 0, rgba(201,182,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(201,182,255,.55), 0 18px 50px rgba(0,0,0,.35); }
+:root:is([data-theme="gato"],:not([data-theme])) #accountsPanel { border-top-color: #8E96A3; background: radial-gradient(70% 160px at 0 0, rgba(142,150,163,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(142,150,163,.55), 0 18px 50px rgba(0,0,0,.35); }
+
+/* ---------- 9. Celular y movimiento ---------- */
 @media (max-width: 640px) {
   /* la mitad de las chispas */
   :root:is([data-theme="gato"],:not([data-theme])) body::after {
