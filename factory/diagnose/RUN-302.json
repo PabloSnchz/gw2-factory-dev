@@ -1,0 +1,5 @@
+{
+ "id": "RUN-302",
+ "summary": "BL-093: control blob a blob de PRD 987fad7 contra DEV f2f72e0, cambios fuera del manifiesto, Pages y sitio publicado",
+ "tests": ["tests/zz-probe-prd-bl093-ctl.smoke.cjs"]
+}
