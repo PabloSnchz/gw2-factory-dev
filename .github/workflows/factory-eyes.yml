@@ -1,0 +1,58 @@
+# Mis ojos en DEV (BL-095, CF-2).
+# La Factory pide capturas con factory/eyes/EYE-NNN.json y este workflow deja
+# factory/eyes/EYE-NNN-K.png + factory/eyes/EYE-NNN.md, usando Cloudflare
+# Browser Run en el plan gratis (10 min/día, 1 pedido cada 10 s, sin cobro).
+#
+# Seguridad: solo en gw2-factory-dev y solo con pushes del dueño; el script
+# solo arma URLs de DEV (base fija, nunca PRD) y como máximo 4 capturas por
+# pedido; los secretos van por variables de entorno y nunca se imprimen; el
+# commit solo puede contener archivos factory/eyes/EYE-NNN(-K.png|.md).
+
+name: factory-eyes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'factory/eyes/EYE-*.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: factory-eyes
+  cancel-in-progress: false
+
+jobs:
+  shoot:
+    if: >-
+      github.repository == 'PabloSnchz/gw2-factory-dev' &&
+      github.actor == github.repository_owner
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sacar las capturas pedidas
+        id: eyes
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: node .github/scripts/factory-eyes.cjs
+
+      - name: Commit del resultado
+        if: steps.eyes.outputs.count != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          xargs -r -d '\n' git add -- < "$RUNNER_TEMP/factory-eyes-files.txt"
+          if git diff --cached --name-only | grep -vE '^factory/eyes/EYE-[0-9]{3,}(-[0-9]+\.png|\.md)$'; then echo "Cambios no esperados"; exit 1; fi
+          git commit -m "factory-eyes: capturas de DEV en factory/eyes"
+          git push origin HEAD:main || { git pull --rebase origin main && git push origin HEAD:main; }
