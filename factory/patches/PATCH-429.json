@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-429",
+  "summary": "BL-092: BV-6a HECHO (theme Gato Negro con la obsidiana del universo, PATCH-428, RUN-298 verde); validación de BV-5 y BV-6a en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "4b93ae024832ef154bab95311dbb6eab7287988b",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-5 HECHO (celular y revisión final): los 5 pasos están en DEV; esperando que Pablo lo mire en el teléfono para cerrar BL-092.",
+          "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-6a HECHO (los paneles del theme Gato Negro pasan a la obsidiana de mi universo, sin el gris azulado); esperando que Pablo lo mire en DEV antes de BV-6b (barrido de colores escritos a mano)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Sin JS nuevo, sin clave nueva de localStorage, solo theme Gato Negro.",
+          "text": " 2026-11-18 00:39Z Pablo preguntó si el color de los paneles chocaba con mi estilo: le dije que sí (paneles gris azulado #1A1F2B/#2E3649 contra el negro violáceo #0B0B10/#15151D/#2A2A38 del fondo y del globo) y le propuse cambiar el theme en su origen, no pintar encima desde universo.css (BV-6a tokens, BV-6b barrido). «arranca» 00:43Z. BV-6a HECHO 2026-11-18 00:55Z: sonda RUN-296 (tests/zz-probe-bv6.smoke.cjs, borrada en 0bb62a9) encontró los colores del theme escritos a mano en solo 14 archivos / 60 líneas: casi todo es gato.css; afuera, la muestra del selector, la meta theme-color, el distintivo de la bio (#232A3A, colores oficiales de la marca: no se tocan) y tests. PATCH-428 APLICADO: css/themes/gato.css (c31a8c8) fondo #0B0B10, paneles #15151D, internos #1C1C26, bordes #2A2A38/#3A3A4C, botón #1C1C26 con borde #72728C, tintes semánticos al 14 % sobre la superficie (verde #1A2E2C, ámbar #342C23, rojo #34232A, azul #21293D), Actividades y Heredad en la misma familia; textos y acentos iguales. js/theme-selector.js (muestra de Gato Negro), index.html meta theme-color #0B0B10; tests: theme-gato (8 tests, 3 nuevos), gn-surface (bandeja #0b0b10), index-identity. Contraste: todo sube (gris de notas 5.52→6.09 sobre panel; en las superficies calculadas por gn-surface la tarjeta queda #1f1f27 y todos los textos ganan). RUN-297 rechazado (12 > 10 tests) → RUN-298 verde: theme-gato, gn-surface, index-identity, theme-selector, universo, acc-view, welcome-view, privacy, guides-identity y gn-topbar, 91 tests. Caché: el selector pide css/themes/gato.css?v=1.0.0 fijo; GitHub Pages lo renueva en ~10 min o con Ctrl+F5. Lo que cambie acá también llega a PRD si Pablo un día promueve."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 00:30Z",
+          "text": "Última actualización: 2026-11-18 00:55Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-5 en el teléfono; con su OK, cerrar BL-092 (backlog DONE, FEAT en features.md, historial a «Historial de BL-092»).",
+          "text": "Próxima acción: Esperar que Pablo mire BV-5 y BV-6a; después, BV-6b (barrido de los colores azulados escritos a mano dentro de los módulos que se vean fuera de lugar) y el cierre de BL-092 (backlog DONE, FEAT en features.md)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-5 en el teléfono, https://pablosnchz.github.io/gw2-factory-dev/ (recargá, theme Gato Negro): bajá hasta el final de cualquier pantalla y lo último ya no queda debajo de mi globo; el botón del globo es más grande; al tocar un buscador me corro mientras escribís; un mensaje largo se desplaza adentro del globo. Si te cierra, doy por terminada BL-092.",
+          "text": "- [BL-092] Validación: BV-5 y BV-6a en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro). BV-6a: los paneles, tarjetas, bordes y botones ya no son gris azulado, son del mismo negro violáceo que el fondo y mi globo; los textos y colores de acento siguen iguales. BV-5 (en el teléfono): lo último de cada pantalla no queda debajo de mi globo, el botón del globo es más grande y me corro mientras escribís. Si ves algún rincón todavía azulado, decime dónde: va a BV-6b."
+        }
+      ]
+    }
+  ]
+}
