@@ -1,0 +1,32 @@
+{
+  "id": "PATCH-439",
+  "summary": "BL-095: DEC-051 alcance de mis ojos (miro todo; PRD a pedido de Pablo) + EYE-002 en PRD",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "e38a54fdd0e96fc653b30a8027899d920c2c5691",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "en el celular mi globo con el gato tapa parte del paso 1 de «Empezá en tres pasos» [BAJO].\n",
+          "text": "Historial de BL-095 (sigue): 2026-11-18 04:48Z Pablo definió el alcance de mis ojos — DEC-051 (22748d7): puedo mirar todos los repos y sitios públicos, DEV, PRD, el ecosistema y sitios de afuera; escribir en PRD sigue a su pedido «como mera modalidad», con su confianza plena. factory-eyes acepta `url` (cualquier http/https público; rechaza credenciales y direcciones locales/privadas); tests/factory-eyes.test.cjs 11 tests, 9/9 mutantes. EYE-002 (PRD Inicio, celular y compu) OK 2/2, 12384 ms: PRD muestra lo mismo que DEV — etiquetas CON KEY/SIN KEY sobre los títulos y la pastilla vacía arriba al centro; los usuarios de producción también lo ven.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 04:45Z",
+          "text": "Última actualización: 2026-11-18 04:55Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida BL-095 y decide si corrijo lo que vi en EYE-001 (etiquetas sobre los títulos, pastilla vacía, globo sobre el paso 1).",
+          "text": "Próxima acción: Pablo decide si corrijo en DEV lo que vi en EYE-001/EYE-002 (también está en PRD); el pasaje a PRD, cuando él lo pida."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-095] Decisión: ya tengo ojos en DEV (EYE-001). ¿Corrijo lo que vi: etiquetas CON KEY/SIN KEY sobre los títulos en la compu, pastilla vacía arriba al centro y mi globo sobre el paso 1 en el celular?\n",
+          "text": "- [BL-095] Decisión: alcance de mis ojos registrado (DEC-051). ¿Corrijo en DEV lo que vi (también está en PRD): etiquetas CON KEY/SIN KEY sobre los títulos en la compu, pastilla vacía arriba al centro y mi globo sobre el paso 1 en el celular?\n"
+        }
+      ]
+    }
+  ]
+}
