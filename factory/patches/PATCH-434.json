@@ -1,0 +1,63 @@
+{
+  "id": "PATCH-434",
+  "summary": "BL-092 CERRADA (FEAT-028); BL-093 pasaje a PRD vía PowerShell preparado (manifiesto BL-093, DevSha f2f72e0, PRD 6dca6a9)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "87cfa8ff53e0d7a04cf3e5cd3befd1e2657dcad5",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] [MEDIO] La estética de la función en La Bóveda DEV — EN CURSO desde 2026-11-17 22:05Z (pedido de Pablo). Resto de BL-091: llevar el universo de Shiruvana (fondo con chispas, cápsulas, cabeceras numeradas, mi globo con el gato) a gw2-factory-dev como ambiente, sin robar espacio a los datos; mis poses solo en la bienvenida y los estados vacíos; mi rincón global (DEC-034) pasaría a ser el globo. Arranca con una maqueta para que Pablo decida lo visual, como ESC-0 y CD-0. Usa el kit de shiruvana con versión fija. PRD solo con orden de Pablo. · BL-091, DEC-034, FEAT-027\n",
+          "text": ""
+        },
+        {
+          "op": "replace",
+          "anchor": "## IN_PROGRESS\n\n",
+          "text": "## IN_PROGRESS\n\n- [BL-093] [ALTO] Promoción a producción de BL-092 (FEAT-028: mi universo en La Bóveda) — pedido de Pablo 2026-11-18 03:27Z («prepará todo para pasar a PRD vía PowerShell»). Vía PowerShell (DEC-036): manifiesto factory/promote/BL-093.txt, 14 movimientos sobre PRD 6dca6a9, DEV fijo f2f72e0 (RUN-301: 468 iguales, 0 solo en PRD). Esperando que Pablo corra la línea; después control blob a blob, informe y validación en PRD. · BL-092, FEAT-028, DEC-036\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "## DONE\n\n",
+          "text": "## DONE\n\n- [BL-092] [MEDIO] La estética de la función en La Bóveda DEV — HECHO y cerrado por Pablo (2026-11-18 03:27Z, «quedó muchísimo mejor»). Solo con el theme Gato Negro: fondo «Taller» con chispas, barras, cabeceras con antetítulo y cifras ámbar (BV-1, BV-2), mi globo con el gato en vez del rincón (BV-3), mis poses sin fondo en Inicio y vacíos (BV-4), celular (BV-5), obsidiana del universo en gato.css 2.0.0 con versión en la dirección (BV-6a, 6a.1) y paneles como La Guarida, con el color solo en el borde de arriba (BV-6b, capturas de Pablo). universo.css 1.5.0, shv-bubble 1.6.0, kit de escena copia fija 1.0.0. Pasaje a PRD: BL-093. · BL-091, DEC-034, FEAT-028\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "e3d693816464350bfa24ea9af7d0dd661bf0f1b1",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo eligió BL-092: llevar a La Bóveda el universo que ya tienen La Guarida y el Centro de mando.",
+          "text": "Motivo: Pablo cerró BL-092 y pidió pasarla a producción vía PowerShell."
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-6b HECHO (los paneles de los módulos como los de La Guarida: oscuros, con el color del módulo solo en el borde de arriba); esperando que Pablo lo mire en DEV.",
+          "text": "Tarea actual: BL-093 — pasaje a PRD de BL-092 (mi universo en La Bóveda) vía PowerShell: manifiesto listo, esperando que Pablo corra la línea."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "y shv-escena con la versión.",
+          "text": " 2026-11-18 03:27Z Pablo: «quedó muchísimo mejor, cerrá BL-092 y prepará todo para pasar a PRD vía PowerShell». BL-092 CERRADA (backlog DONE, FEAT-028 en ai-memory/features). BL-093 = su pasaje: RUN-301 (sonda borrada en 8625f1e) comparó DEV contra PRD 6dca6a9 (bot builds-watch del 2026-11-16): 468 iguales, 10 nuevos, 5 modificados, 0 solo en PRD; distintos excluidos: watch.json (de la vigía de PRD), meta-drops.json y analytics.js (versión PRD), github-metrics-to-ga4.yml. Manifiesto factory/promote/BL-093.txt (30a6614): 14 copias, 0 bajas (escena-kit js/css, universo.css, 3 gatos, 3 poses —sentada es la que usa el kit si falta una—, gato.css, theme-selector.js, shv-bubble.js, modules.json, index.html); queda afuera cuerpo-puerta.webp (no se usa). DevSha f2f72e07793e212d530f9cdb8a20ca5b4c703b37, PrdBase 6dca6a951884bdcd6e34005f13ac46d15ddc4b28. Sin automatización nueva ni claves de localStorage nuevas."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 01:20Z",
+          "text": "Última actualización: 2026-11-18 03:31Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-6b (paneles) y BV-5 en el teléfono; con su OK, cerrar BL-092 (backlog DONE, FEAT en features.md).",
+          "text": "Próxima acción: Pablo corre la línea de PowerShell de BL-093 y me pasa el SHA de producción; yo controlo blob a blob, escribo el informe y le paso la lista de validación en PRD."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-6b en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): cada módulo con su panel oscuro como en La Guarida y su color solo en el borde de arriba, con una luz leve; sin el verde agua de la Cámara ni los demás tintes de fondo. BV-5 en el teléfono: lo último de cada pantalla no queda debajo de mi globo. Si te cierra, cierro BL-092.",
+          "text": "- [BL-093] Acción: correr en PowerShell la línea del pasaje a PRD de BL-092 (manifiesto factory/promote/BL-093.txt, 14 movimientos, DevSha f2f72e0, base PRD 6dca6a9) y pasarme el SHA de producción que muestra al final."
+        }
+      ]
+    }
+  ]
+}
