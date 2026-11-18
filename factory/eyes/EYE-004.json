@@ -1,0 +1,7 @@
+{
+  "id": "EYE-004",
+  "shots": [
+    { "path": "?v=oj2", "device": "compu", "note": "OJ-2 después: barra de arriba sin API Key" },
+    { "path": "?v=oj2", "device": "celular", "note": "OJ-2 después: barra de arriba en el celular" }
+  ]
+}
