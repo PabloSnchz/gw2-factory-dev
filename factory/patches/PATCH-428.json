@@ -1,0 +1,112 @@
+{
+  "id": "PATCH-428",
+  "summary": "BL-092 BV-6a: el theme Gato Negro pasa a la obsidiana de mi universo (fondo #0B0B10, paneles #15151D, bordes #2A2A38; sin el gris azulado); textos y acentos iguales; tintes al 14 %",
+  "files": [
+    {
+      "path": "css/themes/gato.css",
+      "base_sha": "672c21b7fde192fa93566c04bfc8cc761e9b1ddb",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Construido con el Gato Design System (gw2-factory-dashboard/gds, DEC-010):\n   obsidiana para fondos, niebla para texto, arcano para acción e identidad,\n   ámbar para el oro y la marca. El contraste lo verifica tests/theme-gato.test.cjs.\n",
+          "text": "   Construido con el Gato Design System (gw2-factory-dashboard/gds, DEC-010):\n   obsidiana para fondos, niebla para texto, arcano para acción e identidad,\n   ámbar para el oro y la marca. El contraste lo verifica tests/theme-gato.test.cjs.\n   BV-6 (BL-092, 2026-11-18): la obsidiana es la de mi universo (La Guarida y el Centro de\n   mando): fondo #0B0B10, superficie #15151D, línea #2A2A38. Antes era gris azulada\n   (#0F1117 / #1A1F2B / #2E3649) y chocaba con el fondo y mi globo de css/universo.css.\n   Textos y acentos no cambian; los tintes semánticos son el color al 14 % sobre la superficie.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --bg: #0F1117;\n  --bg-0: #0F1117;\n  --bg-1: #1A1F2B;\n  --bg-2: #1A1F2B;\n  --panel: #1A1F2B;\n  --panel-border: #2E3649;\n  --panel-outline: #232A3A;\n\n  /* Bordes */\n  --bd-1: #2E3649;\n  --bd-2: #3B4560;\n",
+          "text": "  --bg: #0B0B10;\n  --bg-0: #0B0B10;\n  --bg-1: #15151D;\n  --bg-2: #15151D;\n  --panel: #15151D;\n  --panel-border: #2A2A38;\n  --panel-outline: #1C1C26;\n\n  /* Bordes */\n  --bd-1: #2A2A38;\n  --bd-2: #3A3A4C;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --color-green-bg: #1D3436;\n  --color-amber: #F2B94B;\n  --color-amber-bg: #38352F;\n  --color-red: #F47C7C;\n  --color-red-bg: #392630;\n  --color-blue: #6EA3FF;\n  --color-blue-bg: #212E49;\n  --color-gray: #8E96A3;\n  --color-gray-bg: #232A3A;\n\n  /* Botones */\n  --btn: #232A3A;\n  --btn-border: #6B7690;\n  --btn-hover: #2E3649;\n",
+          "text": "  --color-green-bg: #1A2E2C;\n  --color-amber: #F2B94B;\n  --color-amber-bg: #342C23;\n  --color-red: #F47C7C;\n  --color-red-bg: #34232A;\n  --color-blue: #6EA3FF;\n  --color-blue-bg: #21293D;\n  --color-gray: #8E96A3;\n  --color-gray-bg: #1C1C26;\n\n  /* Botones */\n  --btn: #1C1C26;\n  --btn-border: #72728C;\n  --btn-hover: #2A2A38;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --shadow: 0 0 0 1px #232A3A inset;\n",
+          "text": "  --shadow: 0 0 0 1px #1C1C26 inset;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --scrollbar-color: #3B4560;\n",
+          "text": "  --scrollbar-color: #3A3A4C;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --gw-mining-bg: linear-gradient(180deg,#232A3A,#1A1F2B);\n  --gw-logging-bg: linear-gradient(180deg,#1E2A2B,#151C1F);\n  --gw-harvest-bg: linear-gradient(180deg,#22263A,#1A1F2B);\n\n  /* Activities */\n  --gw-card-bg: #1A1F2B;\n  --gw-card-borda: #2E3649;\n  --gw-card-borda-hover: #3B4560;\n",
+          "text": "  --gw-mining-bg: linear-gradient(180deg,#1C1C26,#15151D);\n  --gw-logging-bg: linear-gradient(180deg,#19221F,#111515);\n  --gw-harvest-bg: linear-gradient(180deg,#1F1C2C,#15151D);\n\n  /* Activities */\n  --gw-card-bg: #15151D;\n  --gw-card-borda: #2A2A38;\n  --gw-card-borda-hover: #3A3A4C;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --gw-chip-bg: linear-gradient(180deg,#232A3A,#1A1F2B);\n  --gw-chip-borda: #3B4560;\n",
+          "text": "  --gw-chip-bg: linear-gradient(180deg,#1C1C26,#15151D);\n  --gw-chip-borda: #3A3A4C;\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  --gw-shadow: 0 0 0 1px rgba(59,69,96,.6) inset, 0 2px 18px rgba(8,9,13,.6);\n",
+          "text": "  --gw-shadow: 0 0 0 1px rgba(58,58,76,.6) inset, 0 2px 18px rgba(5,5,8,.6);\n"
+        }
+      ]
+    },
+    {
+      "path": "js/theme-selector.js",
+      "base_sha": "8b8c8b7e827f4afbe86e39a74190ea39e4084feb",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "colors: ['#0F1117', '#1A1F2B', '#A896FF', '#F2B94B']",
+          "text": "colors: ['#0B0B10', '#15151D', '#A896FF', '#F2B94B']"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "7b306f9395846910e5321e129a868af49a7a8b29",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<meta name=\"theme-color\" content=\"#0F1117\"/>",
+          "text": "<meta name=\"theme-color\" content=\"#0B0B10\"/>"
+        }
+      ]
+    },
+    {
+      "path": "tests/theme-gato.test.cjs",
+      "base_sha": "c1a5f279dbe46fc420ede4433a8355ea70ab4c77",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "test('gato.css usa la paleta del Gato Design System', () => {\n  assert.equal(g['--bg'], '#0F1117', 'obsidiana-950');\n  assert.equal(g['--panel'], '#1A1F2B', 'obsidiana-900');\n",
+          "text": "test('gato.css usa la paleta del Gato Design System, con la obsidiana de mi universo (BV-6)', () => {\n  assert.equal(g['--bg'], '#0B0B10', 'obsidiana del universo: fondo');\n  assert.equal(g['--panel'], '#15151D', 'obsidiana del universo: superficie');\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "  assert.ok(ratio(g['--btn-border'], g['--bg']) >= 3, 'borde de botón sobre el fondo');\n});\n",
+          "text": "\n// BL-092 BV-6a: los paneles son de la misma familia que el fondo y mi globo de css/universo.css.\nconst UNI = read('css/universo.css');\nconst OLD = ['#0F1117', '#1A1F2B', '#2E3649', '#232A3A', '#3B4560', '#6B7690', '#1D3436', '#38352F', '#392630', '#212E49', '#1E2A2B', '#151C1F', '#22263A'];\nfunction mixHex(fg, bg, a) {\n  const p = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));\n  const f = p(fg), b = p(bg);\n  return f.map((v, i) => Math.round(b[i] + (v - b[i]) * a));\n}\n\ntest('BV-6: fondo, superficies y bordes son los de mi universo, sin el gris azulado de antes', () => {\n  for (const k of ['--bg', '--bg-0']) assert.equal(g[k], '#0B0B10', k);\n  for (const k of ['--bg-1', '--bg-2', '--panel', '--gw-card-bg']) assert.equal(g[k], '#15151D', k);\n  for (const k of ['--bd-1', '--panel-border', '--gw-card-borda']) assert.equal(g[k], '#2A2A38', k);\n  assert.match(UNI, /:root:is\\(\\[data-theme=\"gato\"\\],:not\\(\\[data-theme\\]\\)\\) \\{ background: #0B0B10; \\}/, 'el fondo del universo es el mismo');\n  assert.match(UNI, /--svk-bg|#15151D/, 'mi globo usa la misma superficie');\n  const left = OLD.filter((h) => GATO.toUpperCase().replace(/\\/\\*[\\s\\S]*?\\*\\//g, '').includes(h));\n  assert.deepEqual(left, [], 'no queda ningún color azulado de antes');\n});\n\ntest('BV-6: cada tinte semántico es su color al 14 % sobre la superficie (y se sigue leyendo)', () => {\n  for (const k of ['green', 'amber', 'red', 'blue']) {\n    const want = mixHex(g['--color-' + k], g['--panel'], 0.14);\n    const got = [1, 3, 5].map((i) => parseInt(g['--color-' + k + '-bg'].slice(i, i + 2), 16));\n    got.forEach((v, i) => assert.ok(Math.abs(v - want[i]) <= 1, '--color-' + k + '-bg canal ' + i + ': ' + v + ' vs ' + want[i]));\n  }\n});\n\ntest('BV-6: la muestra del selector y la barra del navegador usan los colores nuevos', () => {\n  const sel = read('js/theme-selector.js').match(/id: 'gato',[^\\n]*colors: \\['(#\\w+)', '(#\\w+)'/);\n  assert.ok(sel, 'muestra de Gato Negro en el selector');\n  assert.equal(sel[1], g['--bg']);\n  assert.equal(sel[2], g['--panel']);\n  assert.match(read('index.html'), new RegExp('<meta name=\"theme-color\" content=\"' + g['--bg'] + '\"/>'));\n});\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/gn-surface.test.cjs",
+      "base_sha": "d9952fe315d3f9e7ab8651438c2864757f4d1e31",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "assert.equal(gato['--gn-tray'], '#0f1117', 'en Gato Negro la bandeja es el fondo, como en la maqueta');",
+          "text": "assert.equal(gato['--gn-tray'], '#0b0b10', 'en Gato Negro la bandeja es el fondo, como en la maqueta (BV-6: obsidiana del universo)');"
+        }
+      ]
+    },
+    {
+      "path": "tests/index-identity.test.cjs",
+      "base_sha": "598a69b4f2ca349c977394086fd80e2809d00b49",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "assert.match(HTML, /<meta name=\"theme-color\" content=\"#0F1117\"\\/>/);",
+          "text": "assert.match(HTML, /<meta name=\"theme-color\" content=\"#0B0B10\"\\/>/); // BV-6: el fondo del theme (obsidiana del universo)"
+        }
+      ]
+    }
+  ]
+}
