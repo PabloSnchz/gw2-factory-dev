@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-433",
+  "summary": "BL-092: BV-6b HECHO (paneles como La Guarida, PATCH-432); validación en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "1123daa2be60481e4f597e5a11bdcf82b793e559",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "BV-6a HECHO (los paneles del theme Gato Negro pasan a la obsidiana de mi universo, sin el gris azulado); esperando que Pablo lo mire en DEV antes de BV-6b (barrido de colores escritos a mano).",
+          "text": "BV-6b HECHO (los paneles de los módulos como los de La Guarida: oscuros, con el color del módulo solo en el borde de arriba); esperando que Pablo lo mire en DEV."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Lección: un CSS de theme que cambia tiene que cambiar de dirección (?v), como cualquier otro archivo.",
+          "text": " 01:12Z Pablo mandó dos capturas: la Cámara del Brujo con el panel teñido de verde agua y La Guarida con paneles oscuros y el color solo en el borde de arriba con una luz leve; pidió eso para la Bóveda («la mejor manera de mantener el color por panel sin que choque»). Sonda RUN-300 (tests/zz-probe-bv6c.smoke.cjs, borrada en 25bf418): el tinte venía de js/gn-shell.js (degradado del 12 % del color del módulo en 6 paneles) y de las cabeceras de cada vista (.wvx-hero, .achx-hero, .av-hero, .iv-hero, .rv-hero, .arm-hero, .mh-head, .wn-hero, .wl-head). BV-6b HECHO 2026-11-18 01:20Z: PATCH-432 APLICADO: css/universo.css 1.5.0 (sección 8 nueva) con la receta de los paneles de La Guarida (css/universo.css de la-guarida, .gn-panel): fondo #1C1C26→#15151D, borde #2A2A38, 3 px arriba en el color del botón del módulo en la barra lateral, radio 16 px, luz radial del 8 % desde la esquina y brillo suave sobre el borde; las 9 cabeceras sin degradado; 13 paneles (Inicio, Cartera y su tablero, Metas, Cámara, Actividades, Heredad, Raids, Logros, Inventario, Armería, Builds, Cuentas). Le gana a gn-shell por especificidad, sin !important; no toca las vistas. index ?v=1.5.0; tests/universo-paneles.test.cjs nuevo (4 tests: color del borde = el de la barra lateral, luz ≤ 10 %, base sin color, AA de textos y antetítulos sobre el panel) y shv-escena con la versión."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 01:08Z",
+          "text": "Última actualización: 2026-11-18 01:20Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-5 y BV-6a; después, BV-6b (barrido de los colores azulados escritos a mano dentro de los módulos que se vean fuera de lugar) y el cierre de BL-092 (backlog DONE, FEAT en features.md).",
+          "text": "Próxima acción: Esperar que Pablo mire BV-6b (paneles) y BV-5 en el teléfono; con su OK, cerrar BL-092 (backlog DONE, FEAT en features.md)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-5 y BV-6a en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro). BV-6a: los paneles, tarjetas, bordes y botones ya no son gris azulado, son del mismo negro violáceo que el fondo y mi globo; los textos y colores de acento siguen iguales. BV-5 (en el teléfono): lo último de cada pantalla no queda debajo de mi globo, el botón del globo es más grande y me corro mientras escribís. Si ves algún rincón todavía azulado, decime dónde: va a BV-6b.",
+          "text": "- [BL-092] Validación: BV-6b en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): cada módulo con su panel oscuro como en La Guarida y su color solo en el borde de arriba, con una luz leve; sin el verde agua de la Cámara ni los demás tintes de fondo. BV-5 en el teléfono: lo último de cada pantalla no queda debajo de mi globo. Si te cierra, cierro BL-092."
+        }
+      ]
+    }
+  ]
+}
