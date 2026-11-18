@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-427",
+  "summary": "BL-092: BV-4 validado (00:21Z); BV-5 HECHO (celular y revisión final, PATCH-426); validación de BV-5 en «Esperando a Pablo»",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "45ae4641bf13c76e3b958f9b9599e79dccbcb8f2",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-4 HECHO (mis poses sin fondo en Inicio y en las pantallas vacías); esperando que Pablo lo mire en DEV antes de BV-5 (celular y revisión final).",
+          "text": "Tarea actual: BL-092 — la estética de mi universo en La Bóveda DEV. BV-5 HECHO (celular y revisión final): los 5 pasos están en DEV; esperando que Pablo lo mire en el teléfono para cerrar BL-092."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "los tests leen el primero).",
+          "text": " BV-4 validado por Pablo 2026-11-18 00:21Z («segui con bv5»). BV-5 HECHO 2026-11-18 00:30Z: revisión del celular y final de BV-1..BV-4 contra js/sidebar-nav.js (barra de abajo 68 px, hoja «Más» z-index 1001 sobre velo 1000) y el kit (globo z-index 900, botón 28 px). Hallazgos y arreglos (PATCH-426 APLICADO: css/universo.css 1.4.0 96310dc, index ?v=1.4.0, tests/shv-escena.test.cjs e18c7bc con 12 tests, 9/9 mutantes; RUN-295 verde: shv-escena, universo, shv-bubble, sidebar-nav, boot, privacy e index-identity, 109 tests): MEDIO lo último de cada pantalla quedaba debajo de mi globo plegado y su gato → body.shv-escena con lugar abajo (150 px en la compu; 210 px + zona segura en el celular, le gana a los 68 px de la barra); MEDIO un mensaje largo podía salirse por arriba en un teléfono acostado → se desplaza adentro del globo (max-height con 100dvh, el gato queda afuera del recorte); MEDIO el botón para abrirme/plegarme medía 28 px → 44 px en el celular; BAJO con el teclado abierto el globo plegado tapaba lo que escribís → me oculto mientras hay foco en un campo de texto (:has; sin :has, como antes); BAJO el globo salía impreso → fuera de @media print. Revisado y sin cambios: la hoja «Más» y las ventanas me tapan (z-index), los avisos ya suben (200 px en el celular), las poses en 640 px, menos chispas y «reducir movimiento». Sin JS nuevo, sin clave nueva de localStorage, solo theme Gato Negro."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-17 23:50Z",
+          "text": "Última actualización: 2026-11-18 00:30Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar que Pablo mire BV-4 en DEV; después, BV-5 (celular y revisión final de BL-092).",
+          "text": "Próxima acción: Esperar que Pablo mire BV-5 en el teléfono; con su OK, cerrar BL-092 (backlog DONE, FEAT en features.md, historial a «Historial de BL-092»)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-092] Validación: BV-4 en https://pablosnchz.github.io/gw2-factory-dev/ (Ctrl+F5, theme Gato Negro): en Inicio, «Shiruvana te guía» con mi pose saludando de cuerpo entero, sin fondo, al costado del texto; con pose pensando en la cola vacía de la Armería, en Cuentas sin cuentas y en Compras fijadas sin nada fijado. Aparecen un instante después de cargar (las recorto en tu navegador). Con otro theme, como antes.",
+          "text": "- [BL-092] Validación: BV-5 en el teléfono, https://pablosnchz.github.io/gw2-factory-dev/ (recargá, theme Gato Negro): bajá hasta el final de cualquier pantalla y lo último ya no queda debajo de mi globo; el botón del globo es más grande; al tocar un buscador me corro mientras escribís; un mensaje largo se desplaza adentro del globo. Si te cierra, doy por terminada BL-092."
+        }
+      ]
+    }
+  ]
+}
