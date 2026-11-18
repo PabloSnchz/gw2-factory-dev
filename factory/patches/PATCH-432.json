@@ -1,0 +1,54 @@
+{
+  "id": "PATCH-432",
+  "summary": "BL-092 BV-6b: los paneles de los módulos como los de La Guarida — oscuros, color del módulo solo en el borde de arriba con luz leve; sin el tinte de fondo (universo.css 1.5.0, solo theme Gato Negro)",
+  "files": [
+    {
+      "path": "css/universo.css",
+      "base_sha": "96310dc95a6dd4e263f64e6e0a59ebd4a6408f6f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Versión: 1.4.0 (2026-11-18) · BV-5:",
+          "text": "   Versión: 1.5.0 (2026-11-18) · BV-6b: los paneles de los módulos como los de La Guarida (color solo en el borde de arriba)\n            1.4.0 (2026-11-18) · BV-5:"
+        },
+        {
+          "op": "replace",
+          "anchor": "/* ---------- 8. Celular y movimiento ---------- */\n",
+          "text": "/* ---------- 8. Paneles de los módulos como los de La Guarida (BV-6b, pedido de Pablo 2026-11-18) ----------\n   El panel es oscuro (#1C1C26 a #15151D, como las tarjetas de La Guarida) y el color del módulo va solo en el\n   borde de arriba, con una luz leve que baja desde la esquina y un brillo suave sobre el borde. Antes el color\n   teñía todo el fondo (js/gn-shell.js y las cabeceras de cada vista): acá se apaga ese tinte, solo con este theme.\n   El color es el del botón del módulo en la barra lateral. Lo vigila tests/universo-paneles.test.cjs. */\n:root:is([data-theme=\"gato\"],:not([data-theme])) :is(#welcomePanel,#walletPanel,#walletDashboardPanel,#metaPanel,#wvPanel,#activitiesPanel,#homesteadPanel,#raidTrackerPanel,#achievementsPanel,#inventoryPanel,#legendaryArmoryPanel,#buildsPanel,#accountsPanel) {\n  border: 1px solid #2A2A38; border-top: 3px solid #2A2A38; border-radius: 16px;\n  background: linear-gradient(180deg, #1C1C26, #15151D 320px);\n  box-shadow: 0 18px 50px rgba(0,0,0,.35);\n}\n/* la cabecera de cada vista sin su degradado de color: la luz ya la da el panel */\n:root:is([data-theme=\"gato\"],:not([data-theme])) :is(#welcomePanel,#walletPanel,#walletDashboardPanel,#metaPanel,#wvPanel,#activitiesPanel,#homesteadPanel,#raidTrackerPanel,#achievementsPanel,#inventoryPanel,#legendaryArmoryPanel,#buildsPanel,#accountsPanel) :is(.wvx-hero,.achx-hero,.av-hero,.iv-hero,.rv-hero,.arm-hero,.mh-head,.wn-hero,.wl-head) { background: none; }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #welcomePanel { border-top-color: #A896FF; background: radial-gradient(70% 160px at 0 0, rgba(168,150,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(168,150,255,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #walletPanel { border-top-color: #F2B94B; background: radial-gradient(70% 160px at 0 0, rgba(242,185,75,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(242,185,75,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #walletDashboardPanel { border-top-color: #F2B94B; background: radial-gradient(70% 160px at 0 0, rgba(242,185,75,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(242,185,75,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #metaPanel { border-top-color: #A896FF; background: radial-gradient(70% 160px at 0 0, rgba(168,150,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(168,150,255,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #wvPanel { border-top-color: #15C3B7; background: radial-gradient(70% 160px at 0 0, rgba(21,195,183,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(21,195,183,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #activitiesPanel { border-top-color: #3CC48A; background: radial-gradient(70% 160px at 0 0, rgba(60,196,138,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(60,196,138,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #homesteadPanel { border-top-color: #D9A55B; background: radial-gradient(70% 160px at 0 0, rgba(217,165,91,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(217,165,91,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #raidTrackerPanel { border-top-color: #F47C7C; background: radial-gradient(70% 160px at 0 0, rgba(244,124,124,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(244,124,124,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #achievementsPanel { border-top-color: #6EA3FF; background: radial-gradient(70% 160px at 0 0, rgba(110,163,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(110,163,255,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #inventoryPanel { border-top-color: #7EC3FF; background: radial-gradient(70% 160px at 0 0, rgba(126,195,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(126,195,255,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #legendaryArmoryPanel { border-top-color: #E545CA; background: radial-gradient(70% 160px at 0 0, rgba(229,69,202,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(229,69,202,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #buildsPanel { border-top-color: #C9B6FF; background: radial-gradient(70% 160px at 0 0, rgba(201,182,255,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(201,182,255,.55), 0 18px 50px rgba(0,0,0,.35); }\n:root:is([data-theme=\"gato\"],:not([data-theme])) #accountsPanel { border-top-color: #8E96A3; background: radial-gradient(70% 160px at 0 0, rgba(142,150,163,.08), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px); box-shadow: 0 -2px 16px -8px rgba(142,150,163,.55), 0 18px 50px rgba(0,0,0,.35); }\n\n/* ---------- 9. Celular y movimiento ---------- */\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "/* en el celular, más chicas: van en el bloque de 640 px de la sección 8 */",
+          "text": "/* en el celular, más chicas: van en el bloque de 640 px de la sección 9 */"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "c27ef6994611697f45bf497d05ede2fabba0df20",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.4.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.5.0\">"
+        }
+      ]
+    },
+    {
+      "path": "tests/shv-escena.test.cjs",
+      "base_sha": "e18c7bcc13b78b1f0f7f5cb8e031fe239e69b1cc",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "  assert.match(read('css/universo.css'), /Versión: 1\\.4\\.0/);\n",
+          "text": "  assert.match(read('css/universo.css'), /Versión: 1\\.5\\.0/);\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  assert.match(read('index.html'), /css\\/universo\\.css\\?v=1\\.4\\.0/);\n",
+          "text": "  assert.match(read('index.html'), /css\\/universo\\.css\\?v=1\\.5\\.0/);\n"
+        }
+      ]
+    }
+  ]
+}
