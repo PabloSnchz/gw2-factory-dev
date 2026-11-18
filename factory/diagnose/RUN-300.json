@@ -1,0 +1,5 @@
+{
+ "id": "RUN-300",
+ "summary": "BL-092 BV-6b: sonda — qué tiñe cada panel de módulo (Pablo quiere el color solo en el borde, como La Guarida)",
+ "tests": ["tests/zz-probe-bv6c.smoke.cjs"]
+}
