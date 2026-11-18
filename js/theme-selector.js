@@ -26,7 +26,7 @@
   var OFFICIAL_MARK = 'gato-v1';
 
   var THEMES = [
-    { id: 'gato',            name: 'Gato Negro',      mood: 'oficial',    colors: ['#0F1117', '#1A1F2B', '#A896FF', '#F2B94B'] },
+    { id: 'gato',            name: 'Gato Negro',      mood: 'oficial',    colors: ['#0B0B10', '#15151D', '#A896FF', '#F2B94B'] },
     { id: 'boveda',          name: 'Bóveda',          mood: 'serio',      colors: ['#0e0e10', '#15151a', '#ffd966', '#7bc2ff'] },
     { id: 'catppuccin',      name: 'Catppuccin',      mood: 'pastel',     colors: ['#1e1e2e', '#28283a', '#f5c2e7', '#89b4fa'] },
     { id: 'cyberpunk',       name: 'Cyberpunk',       mood: 'agresivo',   colors: ['#0a0a0f', '#12121a', '#ff00ff', '#00ffff'] },

@@ -19,7 +19,7 @@ test('el logo de la cabecera, el pie y el favicon usan el gato oficial', () => {
 
 test('la página arranca con el theme oficial Gato Negro (sin parpadeo antes del JS)', () => {
   assert.match(HTML, /<link rel="stylesheet" href="css\/themes\/gato\.css\?v=[\d.]+" id="themeStylesheet">/);
-  assert.match(HTML, /<meta name="theme-color" content="#0F1117"\/>/);
+  assert.match(HTML, /<meta name="theme-color" content="#0B0B10"\/>/); // BV-6: el fondo del theme (obsidiana del universo)
 });
 
 test('el enlace a la bio usa los colores oficiales de Gato Negro, fijos y legibles', () => {

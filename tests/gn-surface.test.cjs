@@ -94,7 +94,7 @@ test('en los 19 themes: la tarjeta se despega de la bandeja, el borde se ve y la
   assert.deepEqual(bad, []);
   assert.ok(fullTrack >= 17, 'pista completa en ' + fullTrack + ' de 19');
   const gato = P.surfaces(THEMES.find((t) => t.id === 'gato').tokens);
-  assert.equal(gato['--gn-tray'], '#0f1117', 'en Gato Negro la bandeja es el fondo, como en la maqueta');
+  assert.equal(gato['--gn-tray'], '#0b0b10', 'en Gato Negro la bandeja es el fondo, como en la maqueta (BV-6: obsidiana del universo)');
   assert.ok(P.contrast(P.parse(gato['--bg-2']), P.parse(gato['--bg-1'])) >= 1.4, 'y la pista vuelve (hoy 1.00)');
   const mac = P.surfaces(THEMES.find((t) => t.id === 'macos').tokens);
   assert.equal(mac['--bg-1'], '#ffffff', 'en claro la tarjeta queda blanca y la bandeja se oscurece');
