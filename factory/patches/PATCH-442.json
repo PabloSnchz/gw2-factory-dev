@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-442",
+  "summary": "BL-096 abierta; OJ-1 hecho y verificado con mis ojos (EYE-003)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "7ec00f480d7bb011d25fe0ad9b888228d419404c",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "## IN_PROGRESS\n\n",
+          "text": "## IN_PROGRESS\n\n- [BL-096] [MEDIO] Lo que vi con mis ojos en Inicio — pedido de Pablo 2026-11-18 04:59Z («arrancá»). De a uno, en DEV, con captura de antes y después (factory-eyes, DEC-051). OJ-1 [MEDIO] etiquetas Con Key/Sin Key sobre los títulos en la compu: HECHO (PATCH-441, css/theme-polish.css 2.4.1, tests/welcome-tags.test.cjs; EYE-003), esperando validación. OJ-2 [BAJO] pastilla vacía arriba al centro (compu y celular). OJ-3 [BAJO] mi globo con el gato tapa parte del paso 1 en el celular. Lo mismo está en PRD: pasa cuando Pablo lo pida. · BL-095, DEC-051\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "6be64e975b564ba153b41fd6b503b286119fa57f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-095 — mis ojos en DEV con Cloudflare. CF-1 y CF-2 hechos: ya veo DEV con capturas propias (EYE-001 OK); esperando validación de Pablo.",
+          "text": "Tarea actual: BL-096 — lo que vi con mis ojos en Inicio, de a uno. OJ-1 (etiquetas sobre los títulos) HECHO en DEV; esperando validación de Pablo para seguir con OJ-2 (pastilla vacía)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo cargó los secretos de Cloudflare (2026-11-18 04:35Z) y armé la tarea de capturas.",
+          "text": "Motivo: Pablo dijo «arrancá» (2026-11-18 04:59Z) a corregir lo que vi en EYE-001/EYE-002."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "los usuarios de producción también lo ven.\n",
+          "text": "Historial de BL-096: pedido de Pablo 2026-11-18 04:59Z («arrancá»): corregir en DEV, de a uno y con captura de antes y después, lo que vi en Inicio — OJ-1 etiquetas Con Key/Sin Key sobre los títulos [MEDIO], OJ-2 pastilla vacía arriba al centro [BAJO], OJ-3 mi globo sobre el paso 1 en el celular [BAJO]. OJ-1 HECHO 05:09Z: PATCH-440 rechazado (js/welcome-panel.js está a 46 bytes de su techo de 48 KB; size-budget lo frena: no puede crecer) → PATCH-441 aplicado (f5cd79a): la regla vive en css/theme-polish.css 2.4.1 (#welcomePanel .wl-mod:has(.wl-tag) reserva 30 px arriba en la compu; en el celular vuelve a 12 px), index.html pide theme-polish ?v=2.4.1; tests/welcome-tags.test.cjs (dd4342c, 5 tests; el mutante de 20 px muere). RUN-304 verde: 9 archivos, 61 tests (welcome-tags, welcome-view, welcome-contrast, welcome-vault, index-versions, index-identity, size-budget, universo, universo-paneles). EYE-003 (725e330): en la compu cada etiqueta tiene su renglón y los títulos se leen enteros (Metas y Eventos, Cámara del Brujo); en el celular no cambió nada. RUN-303 se pidió sin su sonda (error mío: commit del pedido antes que el test); no tocó nada.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 04:55Z",
+          "text": "Última actualización: 2026-11-18 05:12Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo decide si corrijo en DEV lo que vi en EYE-001/EYE-002 (también está en PRD); el pasaje a PRD, cuando él lo pida.",
+          "text": "Próxima acción: Pablo valida OJ-1 en DEV (Inicio en la compu: las etiquetas Con Key/Sin Key ya no tapan los títulos); con su OK, OJ-2 (pastilla vacía arriba al centro)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-095] Decisión: alcance de mis ojos registrado (DEC-051). ¿Corrijo en DEV lo que vi (también está en PRD): etiquetas CON KEY/SIN KEY sobre los títulos en la compu, pastilla vacía arriba al centro y mi globo sobre el paso 1 en el celular?\n",
+          "text": "- [BL-096] Validación: Inicio en DEV en la compu (recargar una vez): en «¿Qué puedo hacer aquí?» cada etiqueta Con Key/Sin Key va en su renglón y los títulos se leen enteros; en el celular, igual que antes.\n"
+        }
+      ]
+    }
+  ]
+}
