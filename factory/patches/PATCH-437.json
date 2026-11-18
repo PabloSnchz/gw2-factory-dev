@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-437",
+  "summary": "BL-095 abierta: mis ojos en DEV con Cloudflare (CF-1 script de alta publicado)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "0784b61a6d9fbaf9a04a0db78eb30edc5dc55545",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "## READY\n\n",
+          "text": "## READY\n\n- [BL-095] [MEDIO] Mis ojos en DEV con Cloudflare — pedido de Pablo 2026-11-18 04:01Z. Capturas automáticas de DEV (celular y compu, theme Gato Negro) con Cloudflare Browser Run en el plan gratis (10 minutos por día, 1 pedido cada 10 segundos, sin tarjeta, se corta al límite), para que yo vea lo visual antes de decir «listo». CF-1: cuenta + token mínimo + factory/cloudflare/cloudflare-setup.ps1 (Acción de Pablo). CF-2: tarea de GitHub que saca las capturas con los secretos CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN. Nunca PRD; el token nunca en el código. · FEAT-028\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "6ace69ea7820abc7ea357970002cf0b76c4d873c",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: ninguna. BL-092 (mi universo en La Bóveda) está en producción y validada por Pablo; BL-093 cerrada.",
+          "text": "Tarea actual: BL-095 — mis ojos en DEV con Cloudflare (capturas automáticas). CF-1: Pablo crea la cuenta y el token y corre el script de alta."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó en producción («perfecto», 2026-11-18 03:52Z).",
+          "text": "Motivo: Pablo pidió el paso a paso de Cloudflare y hacer por PowerShell lo que se pueda (2026-11-18 04:01Z)."
+        },
+        {
+          "op": "insert_before",
+          "anchor": "Historial de BL-091 (cerrada 2026-11-17, antes en «Tarea actual»)",
+          "text": "Historial de BL-095: pedido de Pablo 2026-11-18 04:01Z («pasame el paso a paso y si hay cosas que se pueden hacer vía código en PowerShell hagámoslo»), después de evaluar Cloudflare (gratis, sin tarjeta, límites duros) y descartar el prompt de agent-setup (es para agentes de código locales; el conector MCP en Copilot Studio consume Copilot Credits). Plan: CF-1 Pablo crea cuenta gratis + token de usuario con un solo permiso (Account · Browser Run · Edit) y corre factory/cloudflare/cloudflare-setup.ps1 (blob cc79d5f, commit ef1df24: verifica token, una captura de prueba de DEV 390x844 al Escritorio, secretos CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN en gw2-factory-dev con gh o a mano) · CF-2 yo armo la tarea de GitHub que saca capturas de DEV (celular y compu, Gato Negro) y las deja en el repo para que yo las mire. Nunca PRD; el token nunca en el código.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 03:55Z",
+          "text": "Última actualización: 2026-11-18 04:05Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Esperar el próximo pedido de Pablo. Anotado para el futuro: BL-094 (las guías de usuario en mi universo).",
+          "text": "Próxima acción: Pablo crea la cuenta y el token de Cloudflare y corre la línea de factory/cloudflare/cloudflare-setup.ps1; con «secretos cargados», CF-2 (la tarea de capturas de DEV)."
+        },
+        {
+          "op": "insert_before",
+          "anchor": "- [BL-094] Info: anoté para el futuro llevar las guías de usuario a mi universo; no arranco hasta que me lo pidas.",
+          "text": "- [BL-095] Acción: crear la cuenta gratis de Cloudflare y el token (solo Account · Browser Run · Edit) y correr la línea de PowerShell del script de alta; avisarme «secretos cargados».\n"
+        }
+      ]
+    }
+  ]
+}
