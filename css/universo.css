@@ -1,6 +1,7 @@
 /* ==========================================================================
    css/universo.css — La Bóveda en mi universo (BL-092, DEC-025)
-   Versión: 1.5.0 (2026-11-18) · BV-6b: los paneles de los módulos como los de La Guarida (color solo en el borde de arriba)
+   Versión: 1.6.0 (2026-11-18) · BL-096 OJ-3: plegada, en el celular ocupo menos lugar (EYE-001: tapaba el paso 1 de Inicio)
+            1.5.0 (2026-11-18) · BV-6b: los paneles de los módulos como los de La Guarida (color solo en el borde de arriba)
             1.4.0 (2026-11-18) · BV-5: celular y revisión final (lugar para mi globo, botón de 44 px, mensajes largos,
                                   me corro mientras escribís en el celular, no salgo impreso)
             1.3.0 (2026-11-17) · BV-4: mis poses sin fondo en Inicio y en las pantallas vacías
@@ -148,7 +149,10 @@
 @media (max-width: 900px) {
   /* sobre la barra de abajo (#sbrTabs), como el globo de antes */
   :root:is([data-theme="gato"],:not([data-theme])) .svk-globo { right: 12px; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); width: calc(100vw - 24px); }
-  :root:is([data-theme="gato"],:not([data-theme])) .svk-globo.is-plegado { width: auto; }
+  :root:is([data-theme="gato"],:not([data-theme])) .svk-globo.is-plegado { width: auto; right: 8px; gap: 2px; padding: 4px; }
+  /* BL-096 OJ-3 (EYE-001): plegada ocupo menos y tapo menos lo de abajo; el botón para abrirme sigue de 44 px */
+  :root:is([data-theme="gato"],:not([data-theme])) .svk-globo.is-plegado .svk-cara { width: 40px; height: 40px; }
+  :root:is([data-theme="gato"],:not([data-theme])) .svk-globo.is-plegado .svk-gato { right: 42px; bottom: calc(100% - 10px); width: 50px; }
   :root:is([data-theme="gato"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 200px; }
   /* BV-5: la barra de abajo (68 px) más mi globo plegado con el gato encima */
   :root:is([data-theme="gato"],:not([data-theme])) body.shv-escena { padding-bottom: calc(210px + env(safe-area-inset-bottom, 0px)); }

@@ -344,7 +344,7 @@ test('universo.css: el rincón se oculta solo con el globo puesto, me aparto de 
   const m = css.slice(css.indexOf('@media (max-width: 900px)'));
   assert.match(m, /\.svk-globo \{[^}]*bottom: calc\(76px/, 'en el celular, sobre la barra de abajo');
   assert.ok(!/\[data-shv-place="corner"\]\s*\{[^}]*display:\s*none/.test(css.replace(S + ' body.shv-escena :is(#appSidebar,#sbrSheet) [data-shv-place="corner"] {', '')), 'el rincón no se oculta por otro lado');
-  assert.match(read('css/universo.css'), /Versión: 1\.5\.0/);
+  assert.match(read('css/universo.css'), /Versión: 1\.6\.0/);
   // BV-4: mis poses solo cuando están listas (la clase la pone el recorte), al costado y con su lugar propio.
   has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place="welcome"]', /background-image:\s*var\(--svk-p-saluda\)[\s\S]*/);
   has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place="welcome"] > .shv-voice__avatar', /display:\s*none/);
@@ -392,7 +392,7 @@ test('BV-5 celular: lugar para mi globo, botón de 44 px, mensajes largos, me co
   assert.ok(!/\.svk-globo[^{]*\{[^}]*z-index/.test(css), 'no me subo arriba de la hoja ni de las ventanas');
   // impreso: ni fondo, ni chispas, ni globo
   assert.match(block('@media print'), /\.svk-globo \{\s*display:\s*none/);
-  assert.match(read('index.html'), /css\/universo\.css\?v=1\.5\.0/);
+  assert.match(read('index.html'), /css\/universo\.css\?v=1\.6\.0/);
 });
 
 test('reglas de la casa: texto, nunca marcado; nada a la API; el kit se pide con su versión', () => {
