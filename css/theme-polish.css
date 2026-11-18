@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Bóveda del Gato Negro — Theme Polish v2.4.0
+   Bóveda del Gato Negro — Theme Polish v2.4.1
    Componentes genéricos + piel unificada
    Todos los colores usan variables CSS (definidas en css/themes/*.css)
    ========================================================================== */
@@ -1578,4 +1578,16 @@ aside.col-side .panel-head img {
 .cv-delivery {
   border: 1px solid var(--bd-1);
   border-radius: 8px;
+}
+
+/* Bienvenida: la etiqueta Con Key / Sin Key de cada módulo tiene su renglón arriba y no se monta
+ * sobre el título (BL-096 OJ-1, lo vi en EYE-001). Va acá porque js/welcome-panel.js está en su
+ * techo de 48 KB. En el celular la etiqueta ya va en el flujo: vuelve a 12 px. */
+#welcomePanel .wl-mod:has(.wl-tag) {
+  padding-top: 30px;
+}
+@media (max-width: 720px) {
+  #welcomePanel .wl-mod:has(.wl-tag) {
+    padding-top: 12px;
+  }
 }
