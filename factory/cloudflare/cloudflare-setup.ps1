@@ -1,10 +1,11 @@
 # cloudflare-setup.ps1 - BL-095 (Shiruvana). Windows PowerShell 5.1.
 # Que hace:
-#  1) Pide Account ID y token (el token NO se muestra ni se guarda en disco).
+#  1) Pide Account ID y lee el token DEL PORTAPAPELES (no se muestra, no se guarda en disco, y despues vacia el portapapeles).
 #  2) Verifica el token contra la API de Cloudflare.
 #  3) Saca UNA captura de prueba de DEV y la abre (usa segundos de los 10 min/dia gratis).
 #  4) Si tenes GitHub CLI (gh) logueado, guarda los dos secretos en gw2-factory-dev. Si no, te abre la pagina.
 # No toca produccion. No escribe el token en ningun archivo.
+# v2: en PowerShell 5.1, Ctrl+V no pega dentro de Read-Host -AsSecureString (entra un solo caracter); por eso se lee del portapapeles.
 param(
   [string]$Repo = "PabloSnchz/gw2-factory-dev",
   [string]$Url  = "https://pablosnchz.github.io/gw2-factory-dev/"
@@ -15,10 +16,22 @@ $ErrorActionPreference = "Stop"
 Write-Host "1/4 Datos de Cloudflare" -ForegroundColor Cyan
 $acc = (Read-Host "Pega tu Account ID").Trim()
 if ($acc -notmatch '^[0-9a-fA-F]{32}$') { throw "El Account ID debe tener 32 caracteres hexadecimales. Revisalo." }
-$sec = Read-Host "Pega el token (no se va a ver en pantalla)" -AsSecureString
-$bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec)
-try { $tok = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr).Trim() } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
-if ($tok.Length -lt 20) { throw "El token parece incompleto." }
+
+Write-Host "Ahora COPIA el token de Cloudflare (Ctrl+C en la pagina del token) y volve aca." -ForegroundColor Yellow
+[void](Read-Host "Cuando lo tengas copiado, apreta Enter (no pegues nada)")
+$tok = ""
+try { $tok = ((Get-Clipboard -Raw) -as [string]) } catch { $tok = "" }
+if ($tok) { $tok = $tok.Trim() }
+if (-not $tok -or $tok.Length -lt 20 -or $tok -match '\s') {
+  Write-Host "En el portapapeles no hay un token valido." -ForegroundColor Yellow
+  Write-Host "Plan B: pegalo con CLIC DERECHO (no Ctrl+V) y Enter." -ForegroundColor Yellow
+  $sec = Read-Host "Token" -AsSecureString
+  $bstr = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($sec)
+  try { $tok = [Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr).Trim() } finally { [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr) }
+}
+if ($tok.Length -lt 20) { throw "El token parece incompleto ($($tok.Length) caracteres). Copialo de nuevo y volve a correr la linea." }
+try { Set-Clipboard -Value " " } catch {}
+Write-Host "   Token leido ($($tok.Length) caracteres, empieza con $($tok.Substring(0,5))...). Portapapeles vaciado." -ForegroundColor Green
 $h = @{ Authorization = "Bearer $tok" }
 
 Write-Host "2/4 Verificando el token..." -ForegroundColor Cyan
@@ -62,7 +75,7 @@ if ($ok) {
 } else {
   Write-Host "No pude usar GitHub CLI (gh). Te abro la pagina: crea dos 'New repository secret':" -ForegroundColor Yellow
   Write-Host "   CLOUDFLARE_ACCOUNT_ID = $acc"
-  Write-Host "   CLOUDFLARE_API_TOKEN  = (el token que pegaste)"
+  Write-Host "   CLOUDFLARE_API_TOKEN  = (el token; copialo de nuevo desde Cloudflare si hace falta)"
   Start-Process "https://github.com/$Repo/settings/secrets/actions/new"
 }
 $tok = $null; $h = $null
