@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-444",
+  "summary": "BL-096: OJ-1 validado; OJ-2 hecho y verificado con mis ojos (EYE-004)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "369cbe1c72923450f1070930957fd84822493f18",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "OJ-1 [MEDIO] etiquetas Con Key/Sin Key sobre los títulos en la compu: HECHO (PATCH-441, css/theme-polish.css 2.4.1, tests/welcome-tags.test.cjs; EYE-003), esperando validación. OJ-2 [BAJO] pastilla vacía arriba al centro (compu y celular).",
+          "text": "OJ-1 [MEDIO] etiquetas Con Key/Sin Key sobre los títulos en la compu: HECHO y validado por Pablo (05:17Z «ok») (PATCH-441, css/theme-polish.css 2.4.1, tests/welcome-tags.test.cjs; EYE-003). OJ-2 [BAJO] pastilla vacía arriba al centro: era #keySelectGlobal sin opciones (sin API Key app.js lo deja vacío); HECHO (PATCH-443, theme-polish 2.4.2: #keySelectGlobal:empty no se muestra; tests/topbar-select.test.cjs; EYE-004), esperando validación."
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "b59d46caff3677103dda2465529586f0414099f7",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-096 — lo que vi con mis ojos en Inicio, de a uno. OJ-1 (etiquetas sobre los títulos) HECHO en DEV; esperando validación de Pablo para seguir con OJ-2 (pastilla vacía).",
+          "text": "Tarea actual: BL-096 — lo que vi con mis ojos en Inicio, de a uno. OJ-1 validado; OJ-2 (pastilla vacía) HECHO en DEV; esperando validación de Pablo para seguir con OJ-3 (mi globo sobre el paso 1 en el celular)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo dijo «arrancá» (2026-11-18 04:59Z) a corregir lo que vi en EYE-001/EYE-002.",
+          "text": "Motivo: Pablo validó OJ-1 («ok», 2026-11-18 05:17Z) y seguí con OJ-2."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "RUN-303 se pidió sin su sonda (error mío: commit del pedido antes que el test); no tocó nada.\n",
+          "text": "Historial de BL-096 (sigue): 2026-11-18 05:17Z Pablo validó OJ-1 («ok»). OJ-2 HECHO 05:22Z: la pastilla vacía era el selector de cuenta #keySelectGlobal sin opciones (index.html lo trae vacío y app.js refreshSelects() hace innerHTML = '' y no agrega nada sin Keys). PATCH-443 (bb15998): css/theme-polish.css 2.4.2 con #keySelectGlobal:empty { display: none } (con la primera Key vuelve solo; el botón Keys sigue a la vista), index.html ?v=2.4.2; tests/topbar-select.test.cjs (5 tests; el mutante sin :empty mata 3) y tests/welcome-tags.test.cjs ya no fija la versión exacta (8f64cff). RUN-305 verde: 8 archivos, 58 tests (topbar-select, welcome-tags, gn-topbar, index-versions, index-identity, size-budget, welcome-view, universo). EYE-004 (de00b94): sin la pastilla en la compu y en el celular; Keys sigue en su lugar.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 05:12Z",
+          "text": "Última actualización: 2026-11-18 05:25Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida OJ-1 en DEV (Inicio en la compu: las etiquetas Con Key/Sin Key ya no tapan los títulos); con su OK, OJ-2 (pastilla vacía arriba al centro).",
+          "text": "Próxima acción: Pablo valida OJ-2 en DEV (barra de arriba sin API Key: ya no hay pastilla vacía al lado de Keys); con su OK, OJ-3 (mi globo sobre el paso 1 en el celular)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-096] Validación: Inicio en DEV en la compu (recargar una vez): en «¿Qué puedo hacer aquí?» cada etiqueta Con Key/Sin Key va en su renglón y los títulos se leen enteros; en el celular, igual que antes.\n",
+          "text": "- [BL-096] Validación: barra de arriba en DEV sin API Key (recargar una vez), en la compu y en el celular: ya no aparece la pastilla vacía al lado de Keys; con una Key cargada, el selector de cuenta se ve como siempre.\n"
+        }
+      ]
+    }
+  ]
+}
