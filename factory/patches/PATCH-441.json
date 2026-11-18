@@ -1,0 +1,33 @@
+{
+  "id": "PATCH-441",
+  "summary": "BL-096 OJ-1: etiquetas Con Key/Sin Key sin montarse sobre los títulos (theme-polish 2.4.1; welcome-panel.js está en su techo)",
+  "files": [
+    {
+      "path": "css/theme-polish.css",
+      "base_sha": "f0ca08c96bb7c382316d5114353d61c8a3c300d0",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Bóveda del Gato Negro — Theme Polish v2.4.0",
+          "text": "   Bóveda del Gato Negro — Theme Polish v2.4.1"
+        },
+        {
+          "op": "insert_after",
+          "anchor": ".cv-delivery {\n  border: 1px solid var(--bd-1);\n  border-radius: 8px;\n}\n",
+          "text": "\n/* Bienvenida: la etiqueta Con Key / Sin Key de cada módulo tiene su renglón arriba y no se monta\n * sobre el título (BL-096 OJ-1, lo vi en EYE-001). Va acá porque js/welcome-panel.js está en su\n * techo de 48 KB. En el celular la etiqueta ya va en el flujo: vuelve a 12 px. */\n#welcomePanel .wl-mod:has(.wl-tag) {\n  padding-top: 30px;\n}\n@media (max-width: 720px) {\n  #welcomePanel .wl-mod:has(.wl-tag) {\n    padding-top: 12px;\n  }\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "82c1c913229059079927890806e52a778153df9e",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/theme-polish.css?v=2.4.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/theme-polish.css?v=2.4.1\">"
+        }
+      ]
+    }
+  ]
+}
