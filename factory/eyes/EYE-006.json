@@ -1,0 +1,7 @@
+{
+  "id": "EYE-006",
+  "shots": [
+    { "path": "?v=oj3", "device": "celular", "note": "OJ-3 después: Inicio en el celular, mi globo plegado (antes: EYE-001-1)" },
+    { "path": "?v=oj3", "device": "compu", "note": "OJ-3: en la compu el globo plegado no cambia" }
+  ]
+}
