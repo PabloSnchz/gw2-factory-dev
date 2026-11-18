@@ -1,0 +1,49 @@
+{
+ "id": "PATCH-445",
+ "summary": "BL-096 OJ-3: en el celular, plegada ocupo menos (pegada al borde, cara 40 px, gato 50 px) y no tapo el paso 1 de Inicio; universo.css 1.6.0",
+ "files": [
+  {
+   "path": "css/universo.css",
+   "base_sha": "6af1e63ff0f585fb93e97bbb8de900e256d00b21",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Versión: 1.5.0 (2026-11-18) · BV-6b",
+     "text": "Versión: 1.6.0 (2026-11-18) · BL-096 OJ-3: plegada, en el celular ocupo menos lugar (EYE-001: tapaba el paso 1 de Inicio)\n            1.5.0 (2026-11-18) · BV-6b"
+    },
+    {
+     "op": "replace",
+     "anchor": "  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo.is-plegado { width: auto; }\n",
+     "text": "  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo.is-plegado { width: auto; right: 8px; gap: 2px; padding: 4px; }\n  /* BL-096 OJ-3 (EYE-001): plegada ocupo menos y tapo menos lo de abajo; el botón para abrirme sigue de 44 px */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo.is-plegado .svk-cara { width: 40px; height: 40px; }\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo.is-plegado .svk-gato { right: 42px; bottom: calc(100% - 10px); width: 50px; }\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "2219f3261b07ebc425f5287189dc75a9b5a10c4d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "css/universo.css?v=1.5.0",
+     "text": "css/universo.css?v=1.6.0"
+    }
+   ]
+  },
+  {
+   "path": "tests/shv-escena.test.cjs",
+   "base_sha": "f2e2567594a28f15f97664b37d850fc475127780",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "assert.match(read('css/universo.css'), /Versión: 1\\.5\\.0/);",
+     "text": "assert.match(read('css/universo.css'), /Versión: 1\\.6\\.0/);"
+    },
+    {
+     "op": "replace",
+     "anchor": "assert.match(read('index.html'), /css\\/universo\\.css\\?v=1\\.5\\.0/);",
+     "text": "assert.match(read('index.html'), /css\\/universo\\.css\\?v=1\\.6\\.0/);"
+    }
+   ]
+  }
+ ]
+}
