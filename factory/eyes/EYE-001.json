@@ -1,0 +1,7 @@
+{
+  "id": "EYE-001",
+  "shots": [
+    { "path": "", "device": "celular", "note": "Inicio sin API Key, theme por defecto (Gato Negro)" },
+    { "path": "", "device": "compu", "note": "Inicio sin API Key en la compu" }
+  ]
+}
