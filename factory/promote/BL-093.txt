@@ -1,0 +1,36 @@
+# BL-093: promoción a producción (gw2-wallet-ligero) de BL-092 (FEAT-028: mi universo en La Bóveda, solo con el theme Gato Negro):
+#   fondo «Taller» con chispas, barra de arriba y lateral, cabeceras con antetítulo y cifras ámbar, mi globo con el gato,
+#   mis poses sin fondo en Inicio y vacíos, celular, obsidiana del universo en el theme y paneles como los de La Guarida.
+# Formato: C ruta = copiar de DEV a la misma ruta | M origen destino = copiar con otro nombre | D ruta = borrar en producción
+# Base de producción esperada: 6dca6a9 (commit «builds-watch» del bot de PRD del 2026-11-16, sobre BL-088 13efe64).
+# Comparación blob a blob de DEV contra producción 6dca6a9 (RUN-301): 468 archivos publicables idénticos, 0 solo en PRD,
+#   10 nuevos y 5 modificados; de los nuevos queda afuera assets/brand/shiruvana/cuerpo-puerta.webp (la Bóveda no la usa).
+# No se tocan: js/analytics.js y assets/meta-drops.json (versión PRD); assets/data/builds/watch.json (lo escribe la vigía
+#   de PRD); el workflow propio de PRD github-metrics-to-ga4.yml; los scripts y workflows de la Factory; README/CHANGELOG,
+#   docs internos, tests/, tools/, factory/ y ai-memory/.
+# index.html va tal cual: el GA (G-LB782QT9TR) se carga solo en pablosnchz.github.io/gw2-wallet-ligero (DEC-006); la marca DEV
+#   solo aparece cuando corre desde gw2-factory-dev (js/gn-topbar.js).
+# Caché: index.html pide css/themes/gato.css?v=2.0.0, css/universo.css?v=1.5.0 y js/theme-selector.js?v=1.3.0; shv-bubble 1.6.0
+#   por js/modules.json; el kit de escena se pide con su versión (1.0.0). Sin claves nuevas de localStorage.
+# Sin automatización nueva: nada que correr solo en PRD.
+# Totales: 9 nuevos + 5 modificados = 14 copias; 0 bajas; 14 movimientos.
+
+# Nuevos: kit de escena (copia fija de shiruvana/kit 1.0.0) y el CSS de mi universo (3)
+C js/escena-kit.js
+C css/escena-kit.css
+C css/universo.css
+
+# Nuevos: el gato del globo y mis poses (6; sentada es la que usa el kit si una pose no existe)
+C assets/brand/gato/gato-sentado.webp
+C assets/brand/gato/gato-festeja.webp
+C assets/brand/gato/gato-camina.webp
+C assets/brand/shiruvana/cuerpo-saluda.webp
+C assets/brand/shiruvana/cuerpo-pensando.webp
+C assets/brand/shiruvana/cuerpo-sentada.webp
+
+# Modificados (5)
+C css/themes/gato.css
+C js/theme-selector.js
+C js/shv-bubble.js
+C js/modules.json
+C index.html
