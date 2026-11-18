@@ -1,0 +1,22 @@
+{
+  "id": "PATCH-431",
+  "summary": "BL-092 BV-6a.1: registro la causa (caché de gato.css?v=1.0.0) y el arreglo (PATCH-430)",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "9307875fe4dd3ca21b50fba65ec61a97a62d3e35",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "Lo que cambie acá también llega a PRD si Pablo un día promueve.",
+          "text": " 01:00Z Pablo: «los paneles de los módulos no cambiaron». Sonda RUN-299 (tests/zz-probe-bv6b.smoke.cjs, borrada en 2faeacc): todos los paneles toman el fondo de los tokens del theme (.panel var(--panel), gn-surface, vistas) y solo quedan chips chicos con colores fijos en main.css; el problema era la caché: el selector y index.html pedían css/themes/gato.css?v=1.0.0, la misma dirección de siempre, y el navegador seguía con los colores viejos. PATCH-430 APLICADO (BV-6a.1): gato.css declara Versión 2.0.0; js/theme-selector.js 1.3.0 con THEME_V { gato: 2.0.0 } (los demás siguen con 1.0.0); index.html pide gato.css?v=2.0.0 y theme-selector.js?v=1.3.0; tests theme-gato (9) y theme-selector vigilan que la versión de gato.css, el selector e index.html coincidan. Lección: un CSS de theme que cambia tiene que cambiar de dirección (?v), como cualquier otro archivo."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 00:55Z",
+          "text": "Última actualización: 2026-11-18 01:08Z"
+        }
+      ]
+    }
+  ]
+}
