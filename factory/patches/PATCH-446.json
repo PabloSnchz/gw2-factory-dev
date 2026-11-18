@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-446",
+  "summary": "BL-096: OJ-2 validado; OJ-3 hecho y verificado con mis ojos (EYE-006)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "303a7d47cc579e915b8a0cdf880b9e4dcd01ba07",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "HECHO (PATCH-443, theme-polish 2.4.2: #keySelectGlobal:empty no se muestra; tests/topbar-select.test.cjs; EYE-004), esperando validación. OJ-3 [BAJO] mi globo con el gato tapa parte del paso 1 en el celular.",
+          "text": "HECHO y validado por Pablo (10:28Z «ok») (PATCH-443, theme-polish 2.4.2: #keySelectGlobal:empty no se muestra; tests/topbar-select.test.cjs; EYE-004). OJ-3 [BAJO] mi globo con el gato tapa parte del paso 1 en el celular: HECHO (PATCH-445, css/universo.css 1.6.0: plegada en el celular, pegada al borde, cara 40 px y gato 50 px; tests/universo-globo.test.cjs; EYE-006), esperando validación."
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "6bf45b4e4c40d9e1c3c44e6192e9507e188321cd",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-096 — lo que vi con mis ojos en Inicio, de a uno. OJ-1 validado; OJ-2 (pastilla vacía) HECHO en DEV; esperando validación de Pablo para seguir con OJ-3 (mi globo sobre el paso 1 en el celular).",
+          "text": "Tarea actual: BL-096 — lo que vi con mis ojos en Inicio, de a uno. OJ-1 y OJ-2 validados; OJ-3 (mi globo sobre el paso 1 en el celular) HECHO en DEV; esperando validación de Pablo para cerrar BL-096."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó OJ-1 («ok», 2026-11-18 05:17Z) y seguí con OJ-2.",
+          "text": "Motivo: Pablo validó OJ-2 («ok», 2026-11-18 10:28Z) y seguí con OJ-3, el último."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-096 (sigue): 2026-11-18 05:17Z Pablo validó OJ-1 («ok»). OJ-2 HECHO 05:22Z: la pastilla vacía era el selector de cuenta #keySelectGlobal sin opciones (index.html lo trae vacío y app.js refreshSelects() hace innerHTML = '' y no agrega nada sin Keys). PATCH-443 (bb15998): css/theme-polish.css 2.4.2 con #keySelectGlobal:empty { display: none } (con la primera Key vuelve solo; el botón Keys sigue a la vista), index.html ?v=2.4.2; tests/topbar-select.test.cjs (5 tests; el mutante sin :empty mata 3) y tests/welcome-tags.test.cjs ya no fija la versión exacta (8f64cff). RUN-305 verde: 8 archivos, 58 tests (topbar-select, welcome-tags, gn-topbar, index-versions, index-identity, size-budget, welcome-view, universo). EYE-004 (de00b94): sin la pastilla en la compu y en el celular; Keys sigue en su lugar.\n",
+          "text": "Historial de BL-096 (sigue): 2026-11-18 10:28Z Pablo validó OJ-2 («ok»). OJ-3 HECHO 10:38Z: en el celular mi globo plegado medía ~118 px de ancho y, con el gato de 64 px encima, ~132 px de alto: tapaba el final de «Tus datos se quedan en este navegador» y el borde del paso 1 (EYE-001-1). PATCH-445 (d925152): css/universo.css 1.6.0, solo en @media (max-width: 900px) y solo plegada: right 8px, padding 4px, gap 2px, cara 40 px, gato 50 px (right 42px, bottom calc(100% - 10px)); el botón para abrirme sigue de 44 px; abierta y en la compu, igual (sin tocar la copia fija del kit). index.html ?v=1.6.0; tests/shv-escena.test.cjs fija 1.6.0; tests/universo-globo.test.cjs nuevo (5 tests, 9/9 mutantes; superficie plegada 12760 → 8648 px², -32 %). RUN-306 verde: 9 archivos, 59 tests (universo-globo, shv-escena, universo, universo-paneles, index-versions, index-identity, size-budget, welcome-tags, topbar-select). EYE-005 rechazado por mí (puse «wait», que la herramienta no acepta); EYE-006 (celular y compu): la frase se lee entera y el gato ya no toca el título «Empezá en tres pasos».\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 05:25Z",
+          "text": "Última actualización: 2026-11-18 10:40Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida OJ-2 en DEV (barra de arriba sin API Key: ya no hay pastilla vacía al lado de Keys); con su OK, OJ-3 (mi globo sobre el paso 1 en el celular).",
+          "text": "Próxima acción: Pablo valida OJ-3 en DEV (Inicio en el celular: mi globo plegado más chico, ya no tapa «Tus datos se quedan en este navegador»); con su OK cierro BL-096."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-096] Validación: barra de arriba en DEV sin API Key (recargar una vez), en la compu y en el celular: ya no aparece la pastilla vacía al lado de Keys; con una Key cargada, el selector de cuenta se ve como siempre.\n",
+          "text": "- [BL-096] Validación: Inicio en DEV en el celular (recargar una vez): mi globo plegado es más chico y está más pegado al borde; «Tus datos se quedan en este navegador» se lee entero y el gato no toca el título; tocar el botón me sigue abriendo.\n"
+        }
+      ]
+    }
+  ]
+}
