@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-438",
+  "summary": "BL-095: CF-1 y CF-2 hechos (mis ojos en DEV); hallazgos de EYE-001",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "87bbb31fca71dc9ec2eec6b9d42174a98494965f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-095] [MEDIO] Mis ojos en DEV con Cloudflare — pedido de Pablo 2026-11-18 04:01Z. Capturas automáticas de DEV (celular y compu, theme Gato Negro) con Cloudflare Browser Run en el plan gratis (10 minutos por día, 1 pedido cada 10 segundos, sin tarjeta, se corta al límite), para que yo vea lo visual antes de decir «listo». CF-1: cuenta + token mínimo + factory/cloudflare/cloudflare-setup.ps1 (Acción de Pablo). CF-2: tarea de GitHub que saca las capturas con los secretos CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN. Nunca PRD; el token nunca en el código. · FEAT-028\n",
+          "text": "- [BL-095] [MEDIO] Mis ojos en DEV con Cloudflare — pedido de Pablo 2026-11-18 04:01Z. HECHO 04:41Z (CF-1 + CF-2), esperando validación de Pablo. CF-1: cuenta gratis + token de cuenta (cfat_) con un solo permiso (Cuenta · Browser Rendering · Editar) cargado por factory/cloudflare/cloudflare-setup.ps1 v3 (94d3fa4): captura de prueba OK por /browser-run/ (3143 ms), secretos CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN en gw2-factory-dev. CF-2: .github/workflows/factory-eyes.yml + .github/scripts/factory-eyes.cjs + tests/factory-eyes.test.cjs (9 tests, 7/7 mutantes): pido con factory/eyes/EYE-NNN.json (1 a 4 capturas, celular 390x844 o compu 1366x900, solo URLs de DEV) y recibo EYE-NNN-K.png + EYE-NNN.md. EYE-001 OK (2/2, 6085 ms). Plan gratis: 10 minutos por día, 1 pedido cada 10 segundos, sin tarjeta. Nunca PRD; el token nunca en el código. · FEAT-028\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "2203c79ae479358a1dd67289e37028632cc92aad",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-095 — mis ojos en DEV con Cloudflare (capturas automáticas). CF-1: Pablo crea la cuenta y el token y corre el script de alta.",
+          "text": "Tarea actual: BL-095 — mis ojos en DEV con Cloudflare. CF-1 y CF-2 hechos: ya veo DEV con capturas propias (EYE-001 OK); esperando validación de Pablo."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo pidió el paso a paso de Cloudflare y hacer por PowerShell lo que se pueda (2026-11-18 04:01Z).",
+          "text": "Motivo: Pablo cargó los secretos de Cloudflare (2026-11-18 04:35Z) y armé la tarea de capturas."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Nunca PRD; el token nunca en el código.\n",
+          "text": "Historial de BL-095 (sigue): 2026-11-18 04:41Z CF-1 y CF-2 HECHOS. Intentos de CF-1: v1 falló (Ctrl+V no pega en Read-Host -AsSecureString de PowerShell 5.1) → v2 lee del portapapeles (b17b9e8); v2 falló (el token tenía decenas de permisos de zona y ninguno de Browser Rendering: Pablo lo borró y creó uno de cuenta con un solo permiso) → v3 (94d3fa4) captura OK y secretos cargados con gh. CF-2: factory-eyes (d533dc4); EYE-001 (18fef4b → bot d8b669f) OK 2/2, 6085 ms. Lo que vi en EYE-001 (sin tocar nada, para que Pablo decida): en la compu las etiquetas CON KEY/SIN KEY de las tarjetas «¿Qué puedo hacer aquí?» se montan sobre los títulos largos (Metas y Eventos, Cámara del Brujo) [MEDIO]; arriba al centro se ve una pastilla vacía de unos 26 px (también en el celular) [BAJO]; en el celular mi globo con el gato tapa parte del paso 1 de «Empezá en tres pasos» [BAJO].\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 04:05Z",
+          "text": "Última actualización: 2026-11-18 04:45Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo crea la cuenta y el token de Cloudflare y corre la línea de factory/cloudflare/cloudflare-setup.ps1; con «secretos cargados», CF-2 (la tarea de capturas de DEV).",
+          "text": "Próxima acción: Pablo valida BL-095 y decide si corrijo lo que vi en EYE-001 (etiquetas sobre los títulos, pastilla vacía, globo sobre el paso 1)."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-095] Acción: crear la cuenta gratis de Cloudflare y el token (solo Account · Browser Run · Edit) y correr la línea de PowerShell del script de alta; avisarme «secretos cargados».\n",
+          "text": "- [BL-095] Decisión: ya tengo ojos en DEV (EYE-001). ¿Corrijo lo que vi: etiquetas CON KEY/SIN KEY sobre los títulos en la compu, pastilla vacía arriba al centro y mi globo sobre el paso 1 en el celular?\n"
+        }
+      ]
+    }
+  ]
+}
