@@ -1,0 +1,5 @@
+{
+ "id": "RUN-299",
+ "summary": "BL-092 BV-6b: sonda — de dónde sacan el fondo los paneles de los módulos (Pablo: siguen con el color de antes)",
+ "tests": ["tests/zz-probe-bv6b.smoke.cjs"]
+}
