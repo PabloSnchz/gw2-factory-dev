@@ -344,7 +344,7 @@ test('universo.css: el rincón se oculta solo con el globo puesto, me aparto de 
   const m = css.slice(css.indexOf('@media (max-width: 900px)'));
   assert.match(m, /\.svk-globo \{[^}]*bottom: calc\(76px/, 'en el celular, sobre la barra de abajo');
   assert.ok(!/\[data-shv-place="corner"\]\s*\{[^}]*display:\s*none/.test(css.replace(S + ' body.shv-escena :is(#appSidebar,#sbrSheet) [data-shv-place="corner"] {', '')), 'el rincón no se oculta por otro lado');
-  assert.match(read('css/universo.css'), /Versión: 1\.3\.0/);
+  assert.match(read('css/universo.css'), /Versión: 1\.4\.0/);
   // BV-4: mis poses solo cuando están listas (la clase la pone el recorte), al costado y con su lugar propio.
   has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place="welcome"]', /background-image:\s*var\(--svk-p-saluda\)[\s\S]*/);
   has(S + ' body.svk-p-saluda #welcomePanel [data-shv-place="welcome"] > .shv-voice__avatar', /display:\s*none/);
@@ -354,6 +354,45 @@ test('universo.css: el rincón se oculta solo con el globo puesto, me aparto de 
     assert.ok(fs.readdirSync(path.join(ROOT, 'js')).some((f) => read('js/' + f).includes(c)), 'existe ' + c);
   }
   for (const p of ['saluda', 'pensando']) assert.ok(fs.existsSync(path.join(ROOT, 'assets/brand/shiruvana/cuerpo-' + p + '.webp')), 'existe la pose ' + p);
+});
+
+test('BV-5 celular: lugar para mi globo, botón de 44 px, mensajes largos, me corro al escribir y no salgo impreso', () => {
+  const css = read('css/universo.css').replace(/\/\*[\s\S]*?\*\//g, '');
+  const S = ':root:is([data-theme="gato"],:not([data-theme]))';
+  const block = (head) => {
+    const i = css.indexOf(head + ' {');
+    assert.ok(i >= 0, 'falta ' + head);
+    let d = 0, j = css.indexOf('{', i);
+    for (; j < css.length; j++) { if (css[j] === '{') d++; else if (css[j] === '}' && !--d) break; }
+    return css.slice(i, j + 1);
+  };
+  const rule = (src, sel) => {
+    const i = src.indexOf(sel + ' {');
+    assert.ok(i >= 0, 'falta ' + sel);
+    return src.slice(i, src.indexOf('}', i));
+  };
+  const px = (s) => Number((s.match(/padding-bottom:\s*(?:calc\()?(\d+)px/) || [])[1]);
+  // compu: el globo plegado (abajo 20 px + 60 px + el gato) no tapa lo último
+  const top = css.slice(0, css.indexOf('@media (max-width: 900px)'));
+  assert.ok(px(rule(top, S + ' body.shv-escena')) >= 140, 'lugar abajo en la compu');
+  assert.match(rule(top, S + ' .svk-globo .svk-dice'), /max-height:\s*calc\(100vh - \d+px\)[\s\S]*overflow-y:\s*auto/);
+  // celular: le gana al padding de la barra de abajo (68 px de sidebar-nav.js) y suma el globo
+  const m = block('@media (max-width: 900px)');
+  assert.ok(px(rule(m, S + ' body.shv-escena')) >= 68 + 130, 'barra de abajo + globo plegado');
+  assert.match(rule(m, S + ' body.shv-escena'), /env\(safe-area-inset-bottom/);
+  assert.match(rule(m, S + ' .svk-globo .svk-dice'), /100dvh/);
+  const b = rule(m, S + ' .svk-globo .svk-plegar');
+  assert.match(b, /width:\s*44px/); assert.match(b, /height:\s*44px/);
+  const typing = m.match(/:has\(:is\(([^{]*)\):focus\) \.svk-globo \{([^}]*)\}/);
+  assert.ok(typing, 'me corro mientras escribís');
+  assert.match(typing[2], /visibility:\s*hidden/);
+  for (const t of ['input:not(', 'textarea']) assert.ok(typing[1].includes(t), t);
+  for (const t of ['checkbox', 'radio', 'button']) assert.ok(typing[1].includes('[type="' + t + '"]'), 'no con ' + t);
+  // en la hoja «Más» (z-index 1001, velo 1000) y la barra (900) mi globo (900 del kit) queda debajo del velo
+  assert.ok(!/\.svk-globo[^{]*\{[^}]*z-index/.test(css), 'no me subo arriba de la hoja ni de las ventanas');
+  // impreso: ni fondo, ni chispas, ni globo
+  assert.match(block('@media print'), /\.svk-globo \{\s*display:\s*none/);
+  assert.match(read('index.html'), /css\/universo\.css\?v=1\.4\.0/);
 });
 
 test('reglas de la casa: texto, nunca marcado; nada a la API; el kit se pide con su versión', () => {
