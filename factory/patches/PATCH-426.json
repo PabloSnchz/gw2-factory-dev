@@ -1,0 +1,59 @@
+{
+  "id": "PATCH-426",
+  "summary": "BL-092 BV-5: celular y revisión final — universo.css 1.4.0 (lugar abajo para el globo, botón de 44 px, mensajes largos con scroll, me corro mientras escribís en el celular, globo fuera de la impresión); solo theme Gato Negro",
+  "files": [
+    {
+      "path": "css/universo.css",
+      "base_sha": "dd7748de095b394ca3eeebbc9f247d2167baf332",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Versión: 1.3.0 (2026-11-17) · BV-4: mis poses sin fondo en Inicio y en las pantallas vacías\n",
+          "text": "   Versión: 1.4.0 (2026-11-18) · BV-5: celular y revisión final (lugar para mi globo, botón de 44 px, mensajes largos,\n                                  me corro mientras escribís en el celular, no salgo impreso)\n            1.3.0 (2026-11-17) · BV-4: mis poses sin fondo en Inicio y en las pantallas vacías\n"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "@media (max-width: 900px) {\n  /* sobre la barra de abajo (#sbrTabs), como el globo de antes */\n",
+          "text": "/* BV-5: lo último de cada pantalla no queda debajo de mi globo plegado ni de su gato (se puede bajar un poco más) */\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena { padding-bottom: 150px; }\n/* BV-5: un mensaje largo no se sale de la pantalla: se desplaza adentro (el gato queda afuera del recorte) */\n:root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo .svk-dice { max-height: calc(100vh - 150px); overflow-y: auto; overscroll-behavior: contain; }\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  :root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 200px; }\n}\n",
+          "text": "  :root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena #toasts.gn-ui { bottom: 200px; }\n  /* BV-5: la barra de abajo (68 px) más mi globo plegado con el gato encima */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.shv-escena { padding-bottom: calc(210px + env(safe-area-inset-bottom, 0px)); }\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo .svk-dice { max-height: calc(100vh - 250px); max-height: calc(100dvh - 250px); }\n  /* el botón para abrirme y plegarme, a medida del dedo */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo .svk-plegar { width: 44px; height: 44px; }\n  /* mientras escribís, me corro: con el teclado abierto queda poco lugar */\n  :root:is([data-theme=\"gato\"],:not([data-theme])):has(:is(input:not([type=\"checkbox\"],[type=\"radio\"],[type=\"range\"],[type=\"button\"],[type=\"submit\"],[type=\"reset\"],[type=\"color\"],[type=\"file\"],[type=\"hidden\"]),textarea,[contenteditable=\"true\"]):focus) .svk-globo { visibility: hidden; }\n}\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "  :root:is([data-theme=\"gato\"],:not([data-theme])) body::after { display: none; }\n}\n",
+          "text": "  :root:is([data-theme=\"gato\"],:not([data-theme])) body::after,\n  :root:is([data-theme=\"gato\"],:not([data-theme])) .svk-globo { display: none; }\n}\n"
+        }
+      ]
+    },
+    {
+      "path": "tests/shv-escena.test.cjs",
+      "base_sha": "858ed3629281ddcbb218bc65a8805714a0d9af25",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "  assert.match(read('css/universo.css'), /Versión: 1\\.3\\.0/);\n",
+          "text": "  assert.match(read('css/universo.css'), /Versión: 1\\.4\\.0/);\n"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "test('reglas de la casa: texto, nunca marcado; nada a la API; el kit se pide con su versión', () => {\n",
+          "text": "test('BV-5 celular: lugar para mi globo, botón de 44 px, mensajes largos, me corro al escribir y no salgo impreso', () => {\n  const css = read('css/universo.css').replace(/\\/\\*[\\s\\S]*?\\*\\//g, '');\n  const S = ':root:is([data-theme=\"gato\"],:not([data-theme]))';\n  const block = (head) => {\n    const i = css.indexOf(head + ' {');\n    assert.ok(i >= 0, 'falta ' + head);\n    let d = 0, j = css.indexOf('{', i);\n    for (; j < css.length; j++) { if (css[j] === '{') d++; else if (css[j] === '}' && !--d) break; }\n    return css.slice(i, j + 1);\n  };\n  const rule = (src, sel) => {\n    const i = src.indexOf(sel + ' {');\n    assert.ok(i >= 0, 'falta ' + sel);\n    return src.slice(i, src.indexOf('}', i));\n  };\n  const px = (s) => Number((s.match(/padding-bottom:\\s*(?:calc\\()?(\\d+)px/) || [])[1]);\n  // compu: el globo plegado (abajo 20 px + 60 px + el gato) no tapa lo último\n  const top = css.slice(0, css.indexOf('@media (max-width: 900px)'));\n  assert.ok(px(rule(top, S + ' body.shv-escena')) >= 140, 'lugar abajo en la compu');\n  assert.match(rule(top, S + ' .svk-globo .svk-dice'), /max-height:\\s*calc\\(100vh - \\d+px\\)[\\s\\S]*overflow-y:\\s*auto/);\n  // celular: le gana al padding de la barra de abajo (68 px de sidebar-nav.js) y suma el globo\n  const m = block('@media (max-width: 900px)');\n  assert.ok(px(rule(m, S + ' body.shv-escena')) >= 68 + 130, 'barra de abajo + globo plegado');\n  assert.match(rule(m, S + ' body.shv-escena'), /env\\(safe-area-inset-bottom/);\n  assert.match(rule(m, S + ' .svk-globo .svk-dice'), /100dvh/);\n  const b = rule(m, S + ' .svk-globo .svk-plegar');\n  assert.match(b, /width:\\s*44px/); assert.match(b, /height:\\s*44px/);\n  const typing = m.match(/:has\\(:is\\(([^{]*)\\):focus\\) \\.svk-globo \\{([^}]*)\\}/);\n  assert.ok(typing, 'me corro mientras escribís');\n  assert.match(typing[2], /visibility:\\s*hidden/);\n  for (const t of ['input:not(', 'textarea']) assert.ok(typing[1].includes(t), t);\n  for (const t of ['checkbox', 'radio', 'button']) assert.ok(typing[1].includes('[type=\"' + t + '\"]'), 'no con ' + t);\n  // en la hoja «Más» (z-index 1001, velo 1000) y la barra (900) mi globo (900 del kit) queda debajo del velo\n  assert.ok(!/\\.svk-globo[^{]*\\{[^}]*z-index/.test(css), 'no me subo arriba de la hoja ni de las ventanas');\n  // impreso: ni fondo, ni chispas, ni globo\n  assert.match(block('@media print'), /\\.svk-globo \\{\\s*display:\\s*none/);\n  assert.match(read('index.html'), /css\\/universo\\.css\\?v=1\\.4\\.0/);\n});\n\n"
+        }
+      ]
+    },
+    {
+      "path": "index.html",
+      "base_sha": "799436676f6bf1aa7e9298610976c00868c5d1eb",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.3.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"css/universo.css?v=1.4.0\">"
+        }
+      ]
+    }
+  ]
+}
