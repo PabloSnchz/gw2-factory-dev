@@ -1,6 +1,8 @@
 /* ==========================================================================
    css/guias.css — Las guías de usuario en mi universo (BL-094, FEAT-028)
-   Versión: 1.1.0 (2026-11-18) · GU-2: «Guía por módulo» (docs/user-guide-avanzado.html): cada módulo
+   Versión: 1.2.0 (2026-11-18) · GU-3: mis poses sin fondo en momentos puntuales (js/guias-escena.js):
+                                 bienvenida (saluda), un consejo (pensando) y el cierre (sentada)
+            1.1.0 (2026-11-18) · GU-2: «Guía por módulo» (docs/user-guide-avanzado.html): cada módulo
                                  un panel, el índice como botones, chips de permisos y claves
             1.0.0 (2026-11-18) · GU-1: «Primeros pasos» (docs/user-guide.html)
 
@@ -111,10 +113,35 @@
 :root:is([data-theme="gato"],:not([data-theme])) .keys code { color: #E8B34B; background: rgba(11,11,16,.55); }
 :root:is([data-theme="gato"],:not([data-theme])) .modsec .none { color: #8E96A3; font-style: italic; }
 
-/* ---------- 5. Celular e impresión ---------- */
+/* ---------- 5. Mis poses (GU-3) ----------
+   js/guias-escena.js las deja sin fondo en body como --svk-p-<pose> con la clase svk-p-<pose>: hasta que no
+   están listas estas reglas no aplican (nunca un rectángulo negro). Van al costado, abajo a la derecha del
+   panel, con su lugar propio (padding), así no tapan el texto. Nunca en tablas, pasos ni enlaces.
+   Primeros pasos: «Qué es la Bóveda» saluda, «Tus datos» pensando (los consejos), «Comunidad y apoyo» sentada.
+   Guía por módulo: la intro saluda y «Ajustes» (el último) sentada. */
+:root:is([data-theme="gato"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby="que-es"], .wrap > .box) {
+  padding-right: 190px; min-height: 230px; background-image: var(--svk-p-saluda), radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #E8B34B) 8%, transparent), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);
+  background-repeat: no-repeat; background-position: right 18px bottom 0, 0 0, 0 0; background-size: 150px auto, auto, auto;
+}
+:root:is([data-theme="gato"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby="datos"] {
+  padding-right: 180px; min-height: 230px; background-image: var(--svk-p-pensando), radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #A896FF) 9%, transparent), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);
+  background-repeat: no-repeat; background-position: right 16px bottom 0, 0 0, 0 0; background-size: 140px auto, auto, auto;
+}
+:root:is([data-theme="gato"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby="comunidad"], #mod-settings) {
+  padding-right: 190px; min-height: 240px; background-image: var(--svk-p-sentada), radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #A896FF) 9%, transparent), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);
+  background-repeat: no-repeat; background-position: right 18px bottom 0, 0 0, 0 0; background-size: 160px auto, auto, auto;
+}
+
+/* ---------- 6. Celular e impresión ---------- */
 @media (max-width: 600px) {
   :root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec) { margin: 16px 0; padding: 2px 14px 14px; border-radius: 14px; }
   :root:is([data-theme="gato"],:not([data-theme])) .modsec { padding-top: 14px; }
+  /* mis poses, más chicas: el texto conserva al menos 230 px de ancho */
+  :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby="que-es"], .wrap > .box),
+  :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby="datos"],
+  :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby="comunidad"], #mod-settings) {
+    padding-right: 92px; min-height: 160px; background-position: right 6px bottom 0, 0 0, 0 0; background-size: 80px auto, auto, auto;
+  }
 }
 @media print {
   :root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec, .wrap > .box) { box-shadow: none; background: none; }
