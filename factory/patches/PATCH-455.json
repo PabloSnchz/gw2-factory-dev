@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-455",
+  "summary": "BL-094: GU-2 validado por Pablo; checkpoint de inicio de GU-3",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "bf58ab20bd61e48d0551ff5ccebc9d8000102649",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "GU-2 HECHO 2026-11-19 01:15Z, esperando validación de Pablo:",
+          "text": "GU-2 HECHO 2026-11-19 01:15Z y validado por Pablo (01:26Z: «ok sigue con gu3»):"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "40a464aca66cc87d0897c3e35298a693ec08d052",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: ESPERANDO A PABLO",
+          "text": "Estado: EN CURSO"
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-2 HECHO en DEV (la «Guía por módulo» en mi universo); esperando validación de Pablo.",
+          "text": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-3 en curso: mis poses en las guías."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó GU-1 y pidió GU-2 (2026-11-19 01:08Z, «perfecto continua gu2»).",
+          "text": "Motivo: Pablo validó GU-2 y pidió GU-3 (2026-11-19 01:26Z, «ok sigue con gu3»)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 01:16Z",
+          "text": "Última actualización: 2026-11-19 01:30Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida GU-2 en DEV; con su OK sigo con GU-3 (mis poses en las guías).",
+          "text": "Próxima acción: terminar GU-3 (js/guias-escena.js con el recorte del kit, css/guias.css 1.2.0, tests) con captura de antes y después."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] Validación: GU-2 en DEV — abrí https://pablosnchz.github.io/gw2-factory-dev/docs/user-guide-avanzado.html (Ctrl+F5) con el theme Gato Negro: intro en panel ámbar, el índice como botones, cada módulo en su panel con su color arriba, permisos en chips y claves en ámbar. Miralo también en el celular.\n",
+          "text": ""
+        }
+      ]
+    }
+  ]
+}
