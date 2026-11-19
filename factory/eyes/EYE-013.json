@@ -1,0 +1,8 @@
+{
+  "id": "EYE-013",
+  "shots": [
+    { "path": "docs/user-guide.html?v=gu3c", "device": "celular", "note": "GU-3 después del ajuste: Primeros pasos en el celular, la pose debajo del texto" },
+    { "path": "docs/user-guide.html?v=gu3c", "device": "celular", "fullPage": true, "note": "GU-3: Primeros pasos entera en el celular (saluda, pensando, sentada)" },
+    { "path": "docs/user-guide-avanzado.html?v=gu3c", "device": "celular", "note": "GU-3: Guía por módulo en el celular, la intro con mi saludo" }
+  ]
+}

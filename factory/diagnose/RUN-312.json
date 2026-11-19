@@ -1,0 +1,4 @@
+{
+  "id": "RUN-312",
+  "tests": ["tests/guias-escena.test.cjs", "tests/guias-universo.test.cjs", "tests/guides-identity.test.cjs", "tests/guides-content.test.cjs", "tests/shv-escena.test.cjs", "tests/universo.test.cjs"]
+}
