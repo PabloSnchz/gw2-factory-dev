@@ -1,0 +1,78 @@
+{
+  "id": "PATCH-448",
+  "summary": "BL-094 GU-1 checkpoint de inicio; BL-095 y BL-086 validadas por Pablo (2026-11-19 00:31Z)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "36f2293665b0ce0453e988427f49ad5d12137674",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-095] [MEDIO] Mis ojos en DEV con Cloudflare — pedido de Pablo 2026-11-18 04:01Z. HECHO 04:41Z (CF-1 + CF-2), esperando validación de Pablo. CF-1: cuenta gratis + token de cuenta (cfat_) con un solo permiso (Cuenta · Browser Rendering · Editar) cargado por factory/cloudflare/cloudflare-setup.ps1 v3 (94d3fa4): captura de prueba OK por /browser-run/ (3143 ms), secretos CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN en gw2-factory-dev. CF-2: .github/workflows/factory-eyes.yml + .github/scripts/factory-eyes.cjs + tests/factory-eyes.test.cjs (9 tests, 7/7 mutantes): pido con factory/eyes/EYE-NNN.json (1 a 4 capturas, celular 390x844 o compu 1366x900, solo URLs de DEV) y recibo EYE-NNN-K.png + EYE-NNN.md. EYE-001 OK (2/2, 6085 ms). Plan gratis: 10 minutos por día, 1 pedido cada 10 segundos, sin tarjeta. Nunca PRD; el token nunca en el código. · FEAT-028\n",
+          "text": ""
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] [BAJO] Las guías de usuario en mi universo — pendiente para el futuro, pedido de Pablo (2026-11-18 03:52Z: «anotá como pendiente migrar a Shiruvana universo las guías de usuario»). docs/user-guide.html y docs/user-guide-avanzado.html con la estética de FEAT-028 (fondo «Taller», paneles con el color solo en el borde de arriba, antetítulos y cifras ámbar, quizás mis poses), solo con el theme Gato Negro y respetando lo que vigila tests/guides-identity.test.cjs (los colores salen del theme, sin fijos). Ojo: las guías piden css/themes/gato.css?v=1.0.0 fijo (su test lo exige): al migrarlas, pedir la versión real (2.0.0) para no ver los colores viejos. No arrancar sin orden de Pablo. · FEAT-019, FEAT-028\n",
+          "text": ""
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-086] [MEDIO] Sitio propio de Shiruvana — Pablo aprobó todo (2026-10-31 22:33Z) y corrigió el enfoque: mis logros son el 100% del ecosistema (DEC-050). Repo público `shiruvana` en Pages: https://pablosnchz.github.io/shiruvana/ (Pablo subió imágenes y activó Pages 23:01Z). 2026-11-01: Pablo generó en Gemini 18 imágenes de cuerpo entero (9 poses de trabajo con la ropa oficial + 9 vestuarios: overol, analista, streamer, ingeniera de fantasía, gala, neón, Halloween, pijama, playa); las revisé y procesé (webp 640x954, fondo negro, correcciones de fondo y manos), él las subió a `assets/shiruvana/`. Vestidor nuevo publicado 00:33Z (`8dd2fcf`): tres filas —De trabajo, Vestuarios (2:3 sin recorte, clic amplía) y Mis caras en las apps—; Pablo lo VALIDÓ 00:35Z («ok vestidor»). 00:40Z (`12967de`): cuerpo entero también fuera del Vestidor —«Me presento» en Quién soy y «En camino» en Cómo trabajo—. `tests/site.test.cjs` 8 verdes, mutaciones detectadas (5/5 y 5/5). Espera validación visual de Pablo del último cambio · DEC-048, DEC-049, DEC-050\n",
+          "text": "- [BL-094] [BAJO] Las guías de usuario en mi universo — EN CURSO desde 2026-11-19 00:31Z (Pablo: «Arranca con GU1»). Pedido de Pablo 2026-11-18 03:52Z. Plan de a un micro-ciclo, con validación de Pablo entre cada uno: GU-1 base compartida (css/guias.css, solo theme Gato Negro, reutiliza el fondo «Taller» de css/universo.css) + «Primeros pasos» (docs/user-guide.html) + versión real de los themes en las dos guías (gato.css?v=2.0.0); GU-2 «Guía por módulo» (docs/user-guide-avanzado.html); GU-3 mis poses en momentos puntuales + revisión con mis ojos; GU-4 cierre y documentación. Los otros 18 themes quedan como están. · FEAT-019, FEAT-028\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## DONE\n\n",
+          "text": "- [BL-095] [MEDIO] Mis ojos en DEV con Cloudflare — pedido de Pablo 2026-11-18 04:01Z. HECHO 04:41Z (CF-1 + CF-2), VALIDADO por Pablo (2026-11-19 00:31Z: «BL095 y 086 validadas») → CERRADA. CF-1: cuenta gratis + token de cuenta (cfat_) con un solo permiso (Cuenta · Browser Rendering · Editar) cargado por factory/cloudflare/cloudflare-setup.ps1 v3 (94d3fa4): captura de prueba OK por /browser-run/ (3143 ms), secretos CLOUDFLARE_ACCOUNT_ID y CLOUDFLARE_API_TOKEN en gw2-factory-dev. CF-2: .github/workflows/factory-eyes.yml + .github/scripts/factory-eyes.cjs + tests/factory-eyes.test.cjs (9 tests, 7/7 mutantes): pido con factory/eyes/EYE-NNN.json (1 a 4 capturas, celular 390x844 o compu 1366x900, solo URLs de DEV) y recibo EYE-NNN-K.png + EYE-NNN.md. EYE-001 OK (2/2, 6085 ms). Plan gratis: 10 minutos por día, 1 pedido cada 10 segundos, sin tarjeta. Nunca PRD; el token nunca en el código. · FEAT-028\n- [BL-086] [MEDIO] Sitio propio de Shiruvana — Pablo aprobó todo (2026-10-31 22:33Z) y corrigió el enfoque: mis logros son el 100% del ecosistema (DEC-050). Repo público `shiruvana` en Pages: https://pablosnchz.github.io/shiruvana/ (Pablo subió imágenes y activó Pages 23:01Z). 2026-11-01: Pablo generó en Gemini 18 imágenes de cuerpo entero (9 poses de trabajo con la ropa oficial + 9 vestuarios: overol, analista, streamer, ingeniera de fantasía, gala, neón, Halloween, pijama, playa); las revisé y procesé (webp 640x954, fondo negro, correcciones de fondo y manos), él las subió a `assets/shiruvana/`. Vestidor nuevo publicado 00:33Z (`8dd2fcf`): tres filas —De trabajo, Vestuarios (2:3 sin recorte, clic amplía) y Mis caras en las apps—; Pablo lo VALIDÓ 00:35Z («ok vestidor»). 00:40Z (`12967de`): cuerpo entero también fuera del Vestidor —«Me presento» en Quién soy y «En camino» en Cómo trabajo—. `tests/site.test.cjs` 8 verdes, mutaciones detectadas (5/5 y 5/5). Último cambio VALIDADO por Pablo (2026-11-19 00:31Z: «BL095 y 086 validadas») → CERRADA · DEC-048, DEC-049, DEC-050\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "8576117de85583e197d0fbfb9218dd4c4b32c3c8",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: ESPERANDO A PABLO",
+          "text": "Estado: EN CURSO"
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: ninguna en curso. BL-096 CERRADA (2026-11-18 10:58Z, Pablo validó OJ-3 con «ok»): OJ-1, OJ-2 y OJ-3 hechos y validados en DEV.",
+          "text": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-1 en curso: base compartida y «Primeros pasos»."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó OJ-3 («ok», 2026-11-18 10:58Z), el último de BL-096.",
+          "text": "Motivo: Pablo validó BL-095 y BL-086 y pidió arrancar GU-1 (2026-11-19 00:31Z)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-18 11:00Z",
+          "text": "Última actualización: 2026-11-19 00:45Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: esperar la próxima orden de Pablo. Pendientes a su pedido: validar BL-095 (mis ojos) y BL-086; BL-094 (guías a mi universo) anotada para el futuro.",
+          "text": "Próxima acción: terminar GU-1 (css/guias.css, docs/user-guide.html, versión real de los themes en las guías, tests) con captura de antes y después."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-096 (cierre): 2026-11-18 10:58Z Pablo validó OJ-3 («ok») → BL-096 CERRADA y pasada a DONE. Inicio en DEV queda sin los tres problemas que vi en EYE-001; en PRD siguen (EYE-002) hasta que Pablo pida el pase.\n",
+          "text": "Historial de BL-094: anotada 2026-11-18 03:52Z; Pablo la puso en marcha 2026-11-19 00:27Z («vos tenés que llevar el Universo Shiruvana a las guías de usuario de la bóveda») y aprobó el plan GU-1..GU-4 con «Arranca con GU1» (00:31Z). Ese mismo mensaje validó BL-095 (mis ojos) y BL-086 (mi sitio): las dos pasan a DONE.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] Info: anoté para el futuro llevar las guías de usuario a mi universo; no arranco hasta que me lo pidas.\n",
+          "text": ""
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-086] Validación: en https://pablosnchz.github.io/shiruvana/ ahora «Quién soy» muestra «Me presento» y «Cómo trabajo» muestra «En camino», de cuerpo entero y sin recortes (el Vestidor ya lo validaste). Miralo también en el celular.\n",
+          "text": ""
+        }
+      ]
+    }
+  ]
+}
