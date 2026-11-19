@@ -1,6 +1,7 @@
 /* ==========================================================================
    css/guias.css — Las guías de usuario en mi universo (BL-094, FEAT-028)
-   Versión: 1.2.0 (2026-11-18) · GU-3: mis poses sin fondo en momentos puntuales (js/guias-escena.js):
+   Versión: 1.2.1 (2026-11-18) · GU-3 (EYE-012): en el celular mis poses van debajo del texto, que usa todo el ancho
+            1.2.0 (2026-11-18) · GU-3: mis poses sin fondo en momentos puntuales (js/guias-escena.js):
                                  bienvenida (saluda), un consejo (pensando) y el cierre (sentada)
             1.1.0 (2026-11-18) · GU-2: «Guía por módulo» (docs/user-guide-avanzado.html): cada módulo
                                  un panel, el índice como botones, chips de permisos y claves
@@ -136,11 +137,11 @@
 @media (max-width: 600px) {
   :root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec) { margin: 16px 0; padding: 2px 14px 14px; border-radius: 14px; }
   :root:is([data-theme="gato"],:not([data-theme])) .modsec { padding-top: 14px; }
-  /* mis poses, más chicas: el texto conserva al menos 230 px de ancho */
+  /* mis poses, más chicas y debajo del texto: el texto usa todo el ancho (EYE-012: al costado lo angostaba) */
   :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby="que-es"], .wrap > .box),
   :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby="datos"],
   :root:is([data-theme="gato"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby="comunidad"], #mod-settings) {
-    padding-right: 92px; min-height: 160px; background-position: right 6px bottom 0, 0 0, 0 0; background-size: 80px auto, auto, auto;
+    padding-right: 14px; padding-bottom: 128px; min-height: 0; background-position: right 12px bottom 0, 0 0, 0 0; background-size: 80px auto, auto, auto;
   }
 }
 @media print {
