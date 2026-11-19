@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-451",
+  "summary": "BL-094 GU-1 HECHO: documentación y validación pendiente",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "9457e3f0fd6066215226cb3ea60e6d20cca2c924",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] [BAJO] Las guías de usuario en mi universo — EN CURSO desde 2026-11-19 00:31Z (Pablo: «Arranca con GU1»). Pedido de Pablo 2026-11-18 03:52Z. Plan de a un micro-ciclo, con validación de Pablo entre cada uno: GU-1 base compartida (css/guias.css, solo theme Gato Negro, reutiliza el fondo «Taller» de css/universo.css) + «Primeros pasos» (docs/user-guide.html) + versión real de los themes en las dos guías (gato.css?v=2.0.0); GU-2 «Guía por módulo» (docs/user-guide-avanzado.html); GU-3 mis poses en momentos puntuales + revisión con mis ojos; GU-4 cierre y documentación. Los otros 18 themes quedan como están. · FEAT-019, FEAT-028\n",
+          "text": "- [BL-094] [BAJO] Las guías de usuario en mi universo — EN CURSO desde 2026-11-19 00:31Z (Pablo: «Arranca con GU1»). Pedido de Pablo 2026-11-18 03:52Z. Plan de a un micro-ciclo, con validación de Pablo entre cada uno: GU-1 base compartida (css/guias.css, solo theme Gato Negro, reutiliza el fondo «Taller» de css/universo.css) + «Primeros pasos» (docs/user-guide.html) + versión real de los themes en las dos guías (gato.css?v=2.0.0); GU-2 «Guía por módulo» (docs/user-guide-avanzado.html); GU-3 mis poses en momentos puntuales + revisión con mis ojos; GU-4 cierre y documentación. Los otros 18 themes quedan como están. GU-1 HECHO 2026-11-19 00:45Z, esperando validación de Pablo: css/guias.css 1.0.0 (84b1f0e), docs/user-guide.html (25756b2, 7 capítulos en paneles numerados), versión real del theme en las dos guías (PATCH-450), tests/guias-universo.test.cjs (9e0f45c, 7 tests) y tests/guides-identity.test.cjs (3124775, lee THEME_V); RUN-307 verde (10 archivos, 77 tests); EYE-007 antes / EYE-008 después. · FEAT-019, FEAT-028\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "63cd9ae405d9a8afc55aeea3cab9ce8d5baacd63",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: EN CURSO",
+          "text": "Estado: ESPERANDO A PABLO"
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-1 en curso: base compartida y «Primeros pasos».",
+          "text": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-1 HECHO en DEV («Primeros pasos» en mi universo); esperando validación de Pablo."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 00:45Z",
+          "text": "Última actualización: 2026-11-19 00:50Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: terminar GU-1 (css/guias.css, docs/user-guide.html, versión real de los themes en las guías, tests) con captura de antes y después.",
+          "text": "Próxima acción: Pablo valida GU-1 en DEV; con su OK sigo con GU-2 (la Guía por módulo en mi universo)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-094: anotada 2026-11-18 03:52Z; Pablo la puso en marcha 2026-11-19 00:27Z («vos tenés que llevar el Universo Shiruvana a las guías de usuario de la bóveda») y aprobó el plan GU-1..GU-4 con «Arranca con GU1» (00:31Z). Ese mismo mensaje validó BL-095 (mis ojos) y BL-086 (mi sitio): las dos pasan a DONE.\n",
+          "text": "Historial de BL-094 (sigue): GU-1 HECHO 2026-11-19 00:45Z. css/guias.css 1.0.0 (blob 84b1f0e, commit 1394890): solo con el theme Gato Negro (mismo alcance que universo.css), cabecera con el gato en aro ámbar y antetítulo «Guía de la Bóveda», cada capítulo como panel de La Guarida (color solo en el borde de arriba, luz leve), número del capítulo, pasos, antetítulos h3 y encabezados de tabla en ámbar #E8B34B, módulos con el color arriba. El fondo «Taller» y las chispas NO se copian: la guía carga css/universo.css?v=1.6.0 (una sola fuente; el test exige la misma versión que index.html). docs/user-guide.html (blob 25756b2, commit 36fbe97): 7 capítulos en <section class=\"sec\" style=\"--x:…\" aria-labelledby>, número en <span class=\"num\">, fecha 18 de noviembre de 2026; contenido igual. Arreglo de BL-094: las dos guías pedían todos los themes con ?v=1.0.0 fijo y Gato Negro se veía con los colores de antes de BV-6; ahora usan V = { gato: '2.0.0' } igual que THEME_V (Primeros pasos en el commit, Guía por módulo por PATCH-450 → blob 5aefcbe; PATCH-449 rechazado porque el test viejo exigía 1.0.0: primero subí el test). tests/guides-identity.test.cjs (3124775): lee THEME_V de js/theme-selector.js y exige esa versión en el primer pintado y en cada theme. tests/guias-universo.test.cjs (9e0f45c, 7 tests): alcance, sin tokens/!important, universo una sola fuente, antetítulo fuera del nombre, orden y versión de los <link>, paneles numerados, AA. RUN-307 verde: 10 archivos, 77 tests (guias-universo, guides-identity, guides-content, universo, universo-paneles, theme-selector, theme-gato, privacy, size-budget, index-versions). EYE-007 antes / EYE-008 después (compu, celular y página entera): se ve el Taller, los 7 paneles y el ámbar; nada se sale en el celular. Cambio visual también en la Guía por módulo: ahora toma los colores reales de Gato Negro (obsidiana), sin el resto del universo hasta GU-2.\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## Esperando a Pablo\n\n",
+          "text": "- [BL-094] Validación: GU-1 en DEV — abrí https://pablosnchz.github.io/gw2-factory-dev/docs/user-guide.html (Ctrl+F5) con el theme Gato Negro: fondo «Taller», cada capítulo en un panel con su color arriba, números y antetítulos en ámbar. Miralo también en el celular. La Guía por módulo solo tomó los colores reales de Gato Negro: su rediseño es GU-2.\n"
+        }
+      ]
+    }
+  ]
+}
