@@ -1,0 +1,4 @@
+{
+  "id": "RUN-307",
+  "tests": ["tests/guias-universo.test.cjs", "tests/guides-identity.test.cjs", "tests/guides-content.test.cjs", "tests/universo.test.cjs", "tests/universo-paneles.test.cjs", "tests/theme-selector.test.cjs", "tests/theme-gato.test.cjs", "tests/privacy.test.cjs", "tests/size-budget.test.cjs", "tests/index-versions.test.cjs"]
+}

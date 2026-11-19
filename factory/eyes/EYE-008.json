@@ -1,0 +1,8 @@
+{
+  "id": "EYE-008",
+  "shots": [
+    { "path": "docs/user-guide.html?v=gu1b", "device": "compu", "note": "GU-1 después: Primeros pasos en la compu (antes: EYE-007-1)" },
+    { "path": "docs/user-guide.html?v=gu1b", "device": "celular", "note": "GU-1 después: Primeros pasos en el celular (antes: EYE-007-2)" },
+    { "path": "docs/user-guide.html?v=gu1b", "device": "compu", "fullPage": true, "note": "GU-1 después: la guía entera, los 7 paneles" }
+  ]
+}
