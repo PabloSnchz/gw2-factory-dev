@@ -1,0 +1,4 @@
+{
+  "id": "RUN-309",
+  "tests": ["tests/guias-escena.test.cjs", "tests/guias-universo.test.cjs", "tests/guides-identity.test.cjs", "tests/guides-content.test.cjs", "tests/shv-escena.test.cjs", "tests/universo.test.cjs", "tests/theme-gato.test.cjs", "tests/privacy.test.cjs", "tests/size-budget.test.cjs", "tests/index-versions.test.cjs", "tests/boot.test.cjs", "tests/legacy-census.test.cjs"]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "EYE-012",
+  "shots": [
+    { "path": "docs/user-guide.html?v=gu3b", "device": "compu", "note": "GU-3 después: Primeros pasos, saludo en «Qué es la Bóveda» (antes: EYE-011-1)" },
+    { "path": "docs/user-guide.html?v=gu3b", "device": "compu", "fullPage": true, "note": "GU-3 después: Primeros pasos entera (saluda, pensando, sentada)" },
+    { "path": "docs/user-guide.html?v=gu3b", "device": "celular", "note": "GU-3 después: Primeros pasos en el celular" },
+    { "path": "docs/user-guide-avanzado.html?v=gu3b", "device": "compu", "note": "GU-3 después: Guía por módulo, saludo en la intro (antes: EYE-011-2)" }
+  ]
+}
