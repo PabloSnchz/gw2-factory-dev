@@ -75,18 +75,33 @@ test('cada pose que pido tiene su lugar en css/guias.css, solo cuando está list
   });
 });
 
-test('las poses van al costado con su lugar propio, también en el celular', () => {
-  const reglas = [...CSS.matchAll(/([^{}]*body\.svk-p-\w+[^{]*)\{([^}]*)\}/g)];
-  assert.ok(reglas.length >= 4, 'reglas de poses (compu y celular)');
+// Las poses miden 640 × 954: al ancho w ocupan w × 954 / 640 de alto.
+const ALTO = (w) => Math.ceil(w * 954 / 640);
+const CEL = CSS.indexOf('@media (max-width: 600px)');
+const reglasPose = (css) => [...css.matchAll(/([^{}]*body\.svk-p-\w+[^{]*)\{([^}]*)\}/g)];
+
+test('en la compu las poses van al costado con su lugar propio (no tapan el texto)', () => {
+  const reglas = reglasPose(CSS.slice(0, CEL));
+  assert.ok(reglas.length >= 3, 'una regla por pose');
   reglas.forEach((m) => {
-    assert.match(m[2], /padding-right:\s*\d+px/, 'lugar propio: ' + m[1].trim());
     assert.match(m[2], /background-position:\s*right/, 'al costado: ' + m[1].trim());
     const pad = +m[2].match(/padding-right:\s*(\d+)px/)[1];
     const size = +m[2].match(/background-size:\s*(\d+)px/)[1];
     assert.ok(pad >= size + 10, 'la pose (' + size + ' px) entra en su lugar (' + pad + ' px)');
   });
-  const cel = CSS.slice(CSS.indexOf('@media (max-width: 600px)'));
-  assert.match(cel, /body\.svk-p-saluda[\s\S]*padding-right:\s*92px/, 'en el celular, más chicas');
+});
+
+test('en el celular las poses van debajo del texto, más chicas, y el texto usa todo el ancho (EYE-012)', () => {
+  const cel = CSS.slice(CEL, CSS.indexOf('}\n}', CEL) + 3);
+  const reglas = reglasPose(cel);
+  assert.equal(reglas.length, 1, 'una regla para las tres poses');
+  const b = reglas[0][2];
+  G.POSES.forEach((p) => assert.match(reglas[0][1], new RegExp('body\\.svk-p-' + p + ' '), p));
+  const size = +b.match(/background-size:\s*(\d+)px/)[1];
+  assert.ok(size <= 96, 'más chica');
+  assert.ok(+b.match(/padding-right:\s*(\d+)px/)[1] <= 22, 'el texto no pierde ancho');
+  assert.ok(+b.match(/padding-bottom:\s*(\d+)px/)[1] >= ALTO(size) + 6, 'la pose (' + ALTO(size) + ' px de alto) entra debajo del texto');
+  assert.match(b, /background-position:\s*right \d+px bottom 0/);
 });
 
 test('los lugares de las poses existen en las guías y las dos guías cargan el script con su versión', () => {
