@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-454",
+  "summary": "BL-094 GU-2 HECHO: documentación y validación pendiente",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "b6bc856a867320695defa9b5d00cf768acb430b3",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "RUN-307 verde (10 archivos, 77 tests); EYE-007 antes / EYE-008 después. · FEAT-019, FEAT-028\n",
+          "text": "RUN-307 verde (10 archivos, 77 tests); EYE-007 antes / EYE-008 después. GU-2 HECHO 2026-11-19 01:15Z, esperando validación de Pablo: css/guias.css 1.1.0 (5321e25), docs/user-guide-avanzado.html carga universo.css + guias.css (PATCH-453 → 398fa2c), tests/guias-universo.test.cjs (154d96e, 9 tests, 6/6 mutantes); RUN-308 verde (10 archivos, 79 tests); EYE-009 antes / EYE-010 después. · FEAT-019, FEAT-028\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "bbc2757a811bfb941defa644224ef3381a397661",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: EN CURSO",
+          "text": "Estado: ESPERANDO A PABLO"
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-2 en curso: la «Guía por módulo» en mi universo.",
+          "text": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-2 HECHO en DEV (la «Guía por módulo» en mi universo); esperando validación de Pablo."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 01:10Z",
+          "text": "Última actualización: 2026-11-19 01:16Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: terminar GU-2 (css/guias.css 1.1.0, docs/user-guide-avanzado.html, tests) con captura de antes y después.",
+          "text": "Próxima acción: Pablo valida GU-2 en DEV; con su OK sigo con GU-3 (mis poses en las guías)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-094 (sigue): GU-1 HECHO 2026-11-19 00:45Z. css/guias.css 1.0.0 (blob 84b1f0e, commit 1394890): solo con el theme Gato Negro (mismo alcance que universo.css), cabecera con el gato en aro ámbar y antetítulo «Guía de la Bóveda», cada capítulo como panel de La Guarida (color solo en el borde de arriba, luz leve), número del capítulo, pasos, antetítulos h3 y encabezados de tabla en ámbar #E8B34B, módulos con el color arriba. El fondo «Taller» y las chispas NO se copian: la guía carga css/universo.css?v=1.6.0 (una sola fuente; el test exige la misma versión que index.html). docs/user-guide.html (blob 25756b2, commit 36fbe97): 7 capítulos en <section class=\"sec\" style=\"--x:…\" aria-labelledby>, número en <span class=\"num\">, fecha 18 de noviembre de 2026; contenido igual. Arreglo de BL-094: las dos guías pedían todos los themes con ?v=1.0.0 fijo y Gato Negro se veía con los colores de antes de BV-6; ahora usan V = { gato: '2.0.0' } igual que THEME_V (Primeros pasos en el commit, Guía por módulo por PATCH-450 → blob 5aefcbe; PATCH-449 rechazado porque el test viejo exigía 1.0.0: primero subí el test). tests/guides-identity.test.cjs (3124775): lee THEME_V de js/theme-selector.js y exige esa versión en el primer pintado y en cada theme. tests/guias-universo.test.cjs (9e0f45c, 7 tests): alcance, sin tokens/!important, universo una sola fuente, antetítulo fuera del nombre, orden y versión de los <link>, paneles numerados, AA. RUN-307 verde: 10 archivos, 77 tests (guias-universo, guides-identity, guides-content, universo, universo-paneles, theme-selector, theme-gato, privacy, size-budget, index-versions). EYE-007 antes / EYE-008 después (compu, celular y página entera): se ve el Taller, los 7 paneles y el ámbar; nada se sale en el celular. Cambio visual también en la Guía por módulo: ahora toma los colores reales de Gato Negro (obsidiana), sin el resto del universo hasta GU-2.\n",
+          "text": "Historial de BL-094 (sigue): 2026-11-19 01:08Z Pablo validó GU-1 («perfecto continua gu2»); PATCH-452 checkpoint. GU-2 HECHO 01:15Z. css/guias.css 1.1.0 (blob 5321e25, commit d19851d): la cabecera vale para <header> y <div class=\"top\">; el panel de La Guarida ahora es :is(.sec, .modsec) (cada módulo con el color de su botón por --x en línea; Inicio, Keys y Ajustes en violeta); intro en panel ámbar; índice como botones (el alto de 44 px lo sigue dando la guía); «Cómo se usa» con una marca del color del módulo; permisos en chips con borde del color; claves en ámbar; «Nada propio» en gris #8E96A3 cursiva. docs/user-guide-avanzado.html por PATCH-453 (blob 398fa2c): <link> a universo.css?v=1.6.0 y guias.css?v=1.1.0, fecha 18 de noviembre de 2026; contenido igual. docs/user-guide.html pide guias.css?v=1.1.0 (blob b56a248). tests/guias-universo.test.cjs (154d96e): la Guía por módulo entra en MIGRATED, test nuevo de paneles .modsec (13 paneles, solo --x en línea, estilos de índice/chips/claves/«Cómo se usa») y el contraste ahora mide todo color de texto que pone guias.css; 9 tests, 6/6 mutantes. RUN-308 verde: 10 archivos, 79 tests. EYE-009 antes / EYE-010 después (compu, celular, Cartera y un módulo en el celular): paneles, chips y claves se ven bien; nada se sale en el celular. Nota de mis ojos: el ancla #mod-keys en la captura cayó en Inventario (la página salta antes de cargar todo); no es un problema de la guía.\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## Esperando a Pablo\n\n",
+          "text": "- [BL-094] Validación: GU-2 en DEV — abrí https://pablosnchz.github.io/gw2-factory-dev/docs/user-guide-avanzado.html (Ctrl+F5) con el theme Gato Negro: intro en panel ámbar, el índice como botones, cada módulo en su panel con su color arriba, permisos en chips y claves en ámbar. Miralo también en el celular.\n"
+        }
+      ]
+    }
+  ]
+}
