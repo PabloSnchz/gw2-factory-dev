@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-458",
+  "summary": "BL-094 GU-3 HECHO: documentación y validación pendiente",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "680483de25b5a5d62a85edaa52290fda8758111e",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "EYE-009 antes / EYE-010 después. · FEAT-019, FEAT-028\n",
+          "text": "EYE-009 antes / EYE-010 después. GU-3 HECHO 2026-11-19 01:40Z, esperando validación de Pablo: js/guias-escena.js 1.0.0 (a93b3ce; baja la copia fija del kit solo con Gato Negro y pide las poses sin fondo), css/guias.css 1.2.1 (fd0bab6; saluda, pensando y sentada en momentos puntuales; en el celular debajo del texto), las dos guías por PATCH-456/457 (c9afd72 / 7108c74), tests/guias-escena.test.cjs (abdf49b, 7 tests, 10/10 mutantes); RUN-312 + RUN-313 verdes (12 archivos, 105 tests); EYE-011 antes / EYE-012 y EYE-013 después. · FEAT-019, FEAT-028\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "946671e9b64f531e966fbcadfc9b08a9dfcccc8b",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: EN CURSO",
+          "text": "Estado: ESPERANDO A PABLO"
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-3 en curso: mis poses en las guías.",
+          "text": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-3 HECHO en DEV (mis poses en las guías); esperando validación de Pablo."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 01:30Z",
+          "text": "Última actualización: 2026-11-19 01:42Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: terminar GU-3 (js/guias-escena.js con el recorte del kit, css/guias.css 1.2.0, tests) con captura de antes y después.",
+          "text": "Próxima acción: Pablo valida GU-3 en DEV; con su OK hago GU-4 (cierre: FEAT, decisión y panel)."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-094 (sigue): 2026-11-19 01:08Z Pablo validó GU-1 («perfecto continua gu2»); PATCH-452 checkpoint. GU-2 HECHO 01:15Z. css/guias.css 1.1.0 (blob 5321e25, commit d19851d): la cabecera vale para <header> y <div class=\"top\">; el panel de La Guarida ahora es :is(.sec, .modsec) (cada módulo con el color de su botón por --x en línea; Inicio, Keys y Ajustes en violeta); intro en panel ámbar; índice como botones (el alto de 44 px lo sigue dando la guía); «Cómo se usa» con una marca del color del módulo; permisos en chips con borde del color; claves en ámbar; «Nada propio» en gris #8E96A3 cursiva. docs/user-guide-avanzado.html por PATCH-453 (blob 398fa2c): <link> a universo.css?v=1.6.0 y guias.css?v=1.1.0, fecha 18 de noviembre de 2026; contenido igual. docs/user-guide.html pide guias.css?v=1.1.0 (blob b56a248). tests/guias-universo.test.cjs (154d96e): la Guía por módulo entra en MIGRATED, test nuevo de paneles .modsec (13 paneles, solo --x en línea, estilos de índice/chips/claves/«Cómo se usa») y el contraste ahora mide todo color de texto que pone guias.css; 9 tests, 6/6 mutantes. RUN-308 verde: 10 archivos, 79 tests. EYE-009 antes / EYE-010 después (compu, celular, Cartera y un módulo en el celular): paneles, chips y claves se ven bien; nada se sale en el celular. Nota de mis ojos: el ancla #mod-keys en la captura cayó en Inventario (la página salta antes de cargar todo); no es un problema de la guía.\n",
+          "text": "Historial de BL-094 (sigue): 2026-11-19 01:26Z Pablo validó GU-2 («ok sigue con gu3»); PATCH-455 checkpoint. GU-3 HECHO 01:40Z. Decisión mía: sin imágenes nuevas; las guías usan el mismo recorte que La Bóveda (kit de escena 1.0.0, posesSinFondo) sobre assets/brand/shiruvana/cuerpo-*.webp, así nunca hay rectángulo negro y no hace falta que Pablo suba binarios. js/guias-escena.js 1.0.0 (blob a93b3ce, commit fb08a95): solo con data-theme gato o sin data-theme, baja js/escena-kit.js?v=1.0.0 una vez y pide saluda, pensando y sentada; con los otros 18 themes no baja nada; no guarda nada. css/guias.css 1.2.0 (PATCH-456) → 1.2.1 (PATCH-457, blob fd0bab6): Primeros pasos: «Qué es la Bóveda» saluda, «Tus datos» pensando, «Comunidad y apoyo» sentada; Guía por módulo: la intro saluda y «Ajustes» sentada; en la compu al costado con su lugar propio (padding-right ≥ ancho + 10); EYE-012 mostró que en el celular la pose al costado angostaba todo el panel → 1.2.1 la pone debajo del texto (padding-bottom 128 px, pose 80 px) y el texto usa todo el ancho. Guías: <script defer src=\"../js/guias-escena.js?v=1.0.0\"> y guias.css?v=1.2.1 (blobs c9afd72 y 7108c74). tests/guias-escena.test.cjs (abdf49b, 7 tests; 10/10 mutantes entre las dos rondas). RUN-309 rechazado (12 > 10 tests por pedido: partir en dos). RUN-312 + RUN-313 verdes: 12 archivos, 105 tests (guias-escena, guias-universo, guides-identity, guides-content, shv-escena, universo, theme-gato, privacy, size-budget, index-versions, boot, legacy-census). EYE-011 antes; EYE-012 (compu: poses limpias al costado) y EYE-013 (celular: debajo del texto, página entera revisada) después.\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## Esperando a Pablo\n\n",
+          "text": "- [BL-094] Validación: GU-3 en DEV — en las dos guías (Ctrl+F5, theme Gato Negro) aparezco de cuerpo entero y sin fondo en momentos puntuales: saludo al empezar, pienso en «Tus datos» y me siento al final. En la compu voy al costado; en el celular, debajo del texto.\n"
+        }
+      ]
+    }
+  ]
+}
