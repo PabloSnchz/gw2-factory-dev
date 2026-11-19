@@ -8,14 +8,15 @@
        js/welcome-panel.js; las claves son las reales de js/. Lo vigila tests/guides-content.test.cjs.
        Identidad Gato Negro (DEC-025): favicon oficial y el theme que eligió el jugador. -->
   <link rel="icon" type="image/svg+xml" href="../assets/brand/gato-negro.svg"/>
-  <link rel="stylesheet" href="../css/themes/gato.css?v=1.0.0" id="themeStylesheet">
+  <link rel="stylesheet" href="../css/themes/gato.css?v=2.0.0" id="themeStylesheet">
   <script>
     (function () {
       try {
+        var V = { gato: '2.0.0' }; // igual que THEME_V de js/theme-selector.js; los demás themes van en 1.0.0
         var t = localStorage.getItem('gn:theme') || localStorage.getItem('gn_theme');
         if (t && t.charAt(0) === '"') t = JSON.parse(t);
         if (!t || !/^[a-z0-9-]+$/.test(t)) t = 'gato';
-        document.getElementById('themeStylesheet').href = '../css/themes/' + t + '.css?v=1.0.0';
+        document.getElementById('themeStylesheet').href = '../css/themes/' + t + '.css?v=' + (V[t] || '1.0.0');
         document.documentElement.setAttribute('data-theme', t);
       } catch (_) {}
     })();
