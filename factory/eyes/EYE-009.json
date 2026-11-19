@@ -1,0 +1,7 @@
+{
+  "id": "EYE-009",
+  "shots": [
+    { "path": "docs/user-guide-avanzado.html?v=gu2a", "device": "compu", "note": "GU-2 antes: Guía por módulo en la compu" },
+    { "path": "docs/user-guide-avanzado.html?v=gu2a", "device": "celular", "note": "GU-2 antes: Guía por módulo en el celular" }
+  ]
+}
