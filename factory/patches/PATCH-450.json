@@ -1,0 +1,27 @@
+{
+  "id": "PATCH-450",
+  "summary": "BL-094 GU-1: la Guía por módulo pide cada theme con su versión real (gato.css?v=2.0.0, THEME_V); reenvío de PATCH-449 con tests/guides-identity ya al día",
+  "files": [
+    {
+      "path": "docs/user-guide-avanzado.html",
+      "base_sha": "966d17274b1420237532b734737583676cfcdabd",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"../css/themes/gato.css?v=1.0.0\" id=\"themeStylesheet\">",
+          "text": "<link rel=\"stylesheet\" href=\"../css/themes/gato.css?v=2.0.0\" id=\"themeStylesheet\">"
+        },
+        {
+          "op": "insert_before",
+          "anchor": "        var t = localStorage.getItem('gn:theme') || localStorage.getItem('gn_theme');\n",
+          "text": "        var V = { gato: '2.0.0' }; // igual que THEME_V de js/theme-selector.js; los demás themes van en 1.0.0\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "document.getElementById('themeStylesheet').href = '../css/themes/' + t + '.css?v=1.0.0';",
+          "text": "document.getElementById('themeStylesheet').href = '../css/themes/' + t + '.css?v=' + (V[t] || '1.0.0');"
+        }
+      ]
+    }
+  ]
+}
