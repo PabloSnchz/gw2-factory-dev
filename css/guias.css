@@ -1,0 +1,84 @@
+/* ==========================================================================
+   css/guias.css — Las guías de usuario en mi universo (BL-094, FEAT-028)
+   Versión: 1.0.0 (2026-11-18) · GU-1: «Primeros pasos» (docs/user-guide.html)
+
+   El fondo «Taller» y las chispas no están acá: las guías cargan css/universo.css, el mismo
+   de La Bóveda (una sola fuente; lo vigila tests/guias-universo.test.cjs). Este archivo solo
+   trae lo propio de las guías: la cabecera con el gato, cada capítulo como un panel de
+   La Guarida (el color solo en el borde de arriba), antetítulos y cifras en ámbar.
+
+   Reglas (las mismas que css/universo.css):
+   - Solo con el theme Gato Negro, el oficial y el de por defecto. Todo selector empieza con
+     :root:is([data-theme="gato"],:not([data-theme])). Con los otros 18 themes la guía queda
+     exactamente como estaba (sus estilos en línea siguen saliendo del theme).
+   - No toca tokens (--bg, --tx-…) ni usa !important.
+   - El color de cada capítulo es su --x en línea (el único estilo en línea permitido).
+   - Contraste AA: el texto del theme y el ámbar #E8B34B sobre el panel #15151D.
+   Paleta del universo: fondo #0B0B10, superficie #15151D, panel #1C1C26, línea #2A2A38,
+   ámbar #E8B34B, violeta #9B82FF.
+   ========================================================================== */
+
+/* ---------- 1. Cabecera: el gato con su aro ámbar y el antetítulo sobre el título ---------- */
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > header img {
+  border-radius: 50%; background: #000; box-shadow: 0 0 0 2px #E8B34B, 0 0 24px rgba(232,179,75,.25);
+}
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > header h1 { font-weight: 800; letter-spacing: -.01em; }
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > header h1::before {
+  content: "Guía de la Bóveda" / ""; display: block; margin: 0 0 4px;
+  font-size: .7rem; font-weight: 700; line-height: 1.2; letter-spacing: .2em; text-transform: uppercase; color: #E8B34B;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .nav a { text-decoration: none; border-bottom: 1px solid #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .nav a:hover { color: #E8B34B; border-bottom-color: #E8B34B; }
+
+/* ---------- 2. Cada capítulo, un panel de La Guarida ----------
+   Oscuro (#1C1C26 a #15151D), el color del capítulo solo en el borde de arriba, con una luz leve
+   que baja desde la esquina. El número del capítulo va en ámbar y el título ya no lleva raya. */
+:root:is([data-theme="gato"],:not([data-theme])) .sec {
+  position: relative; margin: 22px 0; padding: 4px 22px 18px;
+  border: 1px solid #2A2A38; border-top: 3px solid var(--x, #A896FF); border-radius: 16px;
+  background:
+    radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #A896FF) 9%, transparent), transparent 70%),
+    linear-gradient(180deg, #1C1C26, #15151D 320px);
+  box-shadow: 0 -2px 16px -8px color-mix(in srgb, var(--x, #A896FF) 55%, transparent), 0 18px 50px rgba(0,0,0,.35);
+}
+:root:is([data-theme="gato"],:not([data-theme])) .sec > h2 {
+  margin: 16px 0 10px; padding-bottom: 0; border-bottom: 0; font-weight: 800; letter-spacing: -.01em;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .sec > h2 .num {
+  color: #E8B34B; font-variant-numeric: tabular-nums; margin-right: 4px;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .sec h3 {
+  font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #E8B34B; margin: 20px 0 8px;
+}
+
+/* ---------- 3. Lo de adentro de cada panel: un escalón más oscuro ---------- */
+:root:is([data-theme="gato"],:not([data-theme])) .sec :is(.box, .steps > li, .mod, .links a) {
+  background: rgba(11,11,16,.55); border-color: #2A2A38;
+}
+:root:is([data-theme="gato"],:not([data-theme])) .sec code { background: #2A2A38; }
+/* los pasos: el número en ámbar, como las cifras de La Bóveda */
+:root:is([data-theme="gato"],:not([data-theme])) .steps > li::before {
+  background: #0B0B10; border-color: #E8B34B; color: #E8B34B; font-variant-numeric: tabular-nums;
+}
+/* las tablas: encabezado como antetítulo, filas con la línea del universo */
+:root:is([data-theme="gato"],:not([data-theme])) .sec :is(th, td) { border-bottom-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .sec th { color: #E8B34B; font-size: .72rem; letter-spacing: .16em; }
+/* los módulos: el color también arriba, como los paneles de La Bóveda */
+:root:is([data-theme="gato"],:not([data-theme])) .sec .mod {
+  border-left-width: 1px; border-top: 3px solid var(--x, #A896FF);
+}
+:root:is([data-theme="gato"],:not([data-theme])) .sec .mod:hover {
+  border-color: #2A2A38; border-top-color: var(--x, #A896FF);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--x, #A896FF) 55%, transparent);
+}
+:root:is([data-theme="gato"],:not([data-theme])) .sec .plate { background: #0B0B10; }
+:root:is([data-theme="gato"],:not([data-theme])) .sec .links a:hover { border-color: #E8B34B; color: #E8B34B; }
+:root:is([data-theme="gato"],:not([data-theme])) footer { border-top-color: #2A2A38; }
+
+/* ---------- 4. Celular e impresión ---------- */
+@media (max-width: 600px) {
+  :root:is([data-theme="gato"],:not([data-theme])) .sec { margin: 16px 0; padding: 2px 14px 14px; border-radius: 14px; }
+}
+@media print {
+  :root:is([data-theme="gato"],:not([data-theme])) .sec { box-shadow: none; background: none; }
+}
