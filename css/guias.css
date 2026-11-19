@@ -1,6 +1,8 @@
 /* ==========================================================================
    css/guias.css — Las guías de usuario en mi universo (BL-094, FEAT-028)
-   Versión: 1.0.0 (2026-11-18) · GU-1: «Primeros pasos» (docs/user-guide.html)
+   Versión: 1.1.0 (2026-11-18) · GU-2: «Guía por módulo» (docs/user-guide-avanzado.html): cada módulo
+                                 un panel, el índice como botones, chips de permisos y claves
+            1.0.0 (2026-11-18) · GU-1: «Primeros pasos» (docs/user-guide.html)
 
    El fondo «Taller» y las chispas no están acá: las guías cargan css/universo.css, el mismo
    de La Bóveda (una sola fuente; lo vigila tests/guias-universo.test.cjs). Este archivo solo
@@ -19,11 +21,12 @@
    ========================================================================== */
 
 /* ---------- 1. Cabecera: el gato con su aro ámbar y el antetítulo sobre el título ---------- */
-:root:is([data-theme="gato"],:not([data-theme])) .wrap > header img {
+/* «Primeros pasos» usa <header>; la «Guía por módulo», <div class="top"> */
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > :is(header, .top) img {
   border-radius: 50%; background: #000; box-shadow: 0 0 0 2px #E8B34B, 0 0 24px rgba(232,179,75,.25);
 }
-:root:is([data-theme="gato"],:not([data-theme])) .wrap > header h1 { font-weight: 800; letter-spacing: -.01em; }
-:root:is([data-theme="gato"],:not([data-theme])) .wrap > header h1::before {
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > :is(header, .top) h1 { font-weight: 800; letter-spacing: -.01em; }
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > :is(header, .top) h1::before {
   content: "Guía de la Bóveda" / ""; display: block; margin: 0 0 4px;
   font-size: .7rem; font-weight: 700; line-height: 1.2; letter-spacing: .2em; text-transform: uppercase; color: #E8B34B;
 }
@@ -33,7 +36,7 @@
 /* ---------- 2. Cada capítulo, un panel de La Guarida ----------
    Oscuro (#1C1C26 a #15151D), el color del capítulo solo en el borde de arriba, con una luz leve
    que baja desde la esquina. El número del capítulo va en ámbar y el título ya no lleva raya. */
-:root:is([data-theme="gato"],:not([data-theme])) .sec {
+:root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec) {
   position: relative; margin: 22px 0; padding: 4px 22px 18px;
   border: 1px solid #2A2A38; border-top: 3px solid var(--x, #A896FF); border-radius: 16px;
   background:
@@ -47,7 +50,7 @@
 :root:is([data-theme="gato"],:not([data-theme])) .sec > h2 .num {
   color: #E8B34B; font-variant-numeric: tabular-nums; margin-right: 4px;
 }
-:root:is([data-theme="gato"],:not([data-theme])) .sec h3 {
+:root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec) h3 {
   font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #E8B34B; margin: 20px 0 8px;
 }
 
@@ -55,7 +58,7 @@
 :root:is([data-theme="gato"],:not([data-theme])) .sec :is(.box, .steps > li, .mod, .links a) {
   background: rgba(11,11,16,.55); border-color: #2A2A38;
 }
-:root:is([data-theme="gato"],:not([data-theme])) .sec code { background: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec) code { background: #2A2A38; }
 /* los pasos: el número en ámbar, como las cifras de La Bóveda */
 :root:is([data-theme="gato"],:not([data-theme])) .steps > li::before {
   background: #0B0B10; border-color: #E8B34B; color: #E8B34B; font-variant-numeric: tabular-nums;
@@ -75,10 +78,44 @@
 :root:is([data-theme="gato"],:not([data-theme])) .sec .links a:hover { border-color: #E8B34B; color: #E8B34B; }
 :root:is([data-theme="gato"],:not([data-theme])) footer { border-top-color: #2A2A38; }
 
-/* ---------- 4. Celular e impresión ---------- */
+/* ---------- 4. «Guía por módulo» (GU-2) ----------
+   La intro y el índice van en un panel ámbar (el color de la marca); cada módulo ya es un .modsec:
+   toma el panel de la sección 2 con el color de su botón de la barra lateral (--x en línea). */
+:root:is([data-theme="gato"],:not([data-theme])) .wrap > .box {
+  border: 1px solid #2A2A38; border-top: 3px solid #E8B34B; border-radius: 16px;
+  background: radial-gradient(70% 160px at 0 0, rgba(232,179,75,.07), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);
+}
+/* el índice: un botón por módulo, a medida del dedo (44 px) */
+:root:is([data-theme="gato"],:not([data-theme])) .toc { gap: 8px; margin: 16px 0 6px; }
+:root:is([data-theme="gato"],:not([data-theme])) .toc a {
+  padding: 0 14px; text-decoration: none; border: 1px solid #2A2A38; border-radius: 12px; background: rgba(21,21,29,.86);
+}
+:root:is([data-theme="gato"],:not([data-theme])) .toc a:hover { border-color: #E8B34B; color: #E8B34B; }
+/* la cabecera del módulo: placa, nombre en 800 y la línea del universo */
+:root:is([data-theme="gato"],:not([data-theme])) .modsec { padding-top: 18px; scroll-margin-top: 16px; }
+:root:is([data-theme="gato"],:not([data-theme])) .modhead { border-bottom-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .modhead h2 { font-weight: 800; letter-spacing: -.01em; }
+:root:is([data-theme="gato"],:not([data-theme])) .modsec .plate {
+  background: #0B0B10; box-shadow: 0 0 18px -6px color-mix(in srgb, var(--x, #A896FF) 70%, transparent);
+}
+/* «Cómo se usa»: cada caso con una marca del color del módulo */
+:root:is([data-theme="gato"],:not([data-theme])) .uso dt { padding-left: 10px; border-left: 2px solid var(--x, #A896FF); }
+:root:is([data-theme="gato"],:not([data-theme])) .uso dd { padding-left: 12px; }
+/* permisos: chips con el borde del color del módulo */
+:root:is([data-theme="gato"],:not([data-theme])) .chips code {
+  display: inline-block; padding: 3px 10px; border-radius: 999px; background: rgba(11,11,16,.55);
+  border: 1px solid color-mix(in srgb, var(--x, #A896FF) 55%, #2A2A38);
+}
+/* lo que guarda: la clave en ámbar, como un dato */
+:root:is([data-theme="gato"],:not([data-theme])) .keys li { border-bottom-color: #2A2A38; }
+:root:is([data-theme="gato"],:not([data-theme])) .keys code { color: #E8B34B; background: rgba(11,11,16,.55); }
+:root:is([data-theme="gato"],:not([data-theme])) .modsec .none { color: #8E96A3; font-style: italic; }
+
+/* ---------- 5. Celular e impresión ---------- */
 @media (max-width: 600px) {
-  :root:is([data-theme="gato"],:not([data-theme])) .sec { margin: 16px 0; padding: 2px 14px 14px; border-radius: 14px; }
+  :root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec) { margin: 16px 0; padding: 2px 14px 14px; border-radius: 14px; }
+  :root:is([data-theme="gato"],:not([data-theme])) .modsec { padding-top: 14px; }
 }
 @media print {
-  :root:is([data-theme="gato"],:not([data-theme])) .sec { box-shadow: none; background: none; }
+  :root:is([data-theme="gato"],:not([data-theme])) :is(.sec, .modsec, .wrap > .box) { box-shadow: none; background: none; }
 }
