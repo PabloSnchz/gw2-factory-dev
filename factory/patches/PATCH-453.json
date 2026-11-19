@@ -1,0 +1,33 @@
+{
+  "id": "PATCH-453",
+  "summary": "BL-094 GU-2: la Guía por módulo carga css/universo.css y css/guias.css 1.1.0 (fecha 18 de noviembre); Primeros pasos pide guias.css?v=1.1.0",
+  "files": [
+    {
+      "path": "docs/user-guide-avanzado.html",
+      "base_sha": "5aefcbef4960f6bd021dcdc0b3b42d2f0b0d5463",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "  </script>\n  <style>\n",
+          "text": "  </script>\n  <link rel=\"stylesheet\" href=\"../css/universo.css?v=1.6.0\">\n  <link rel=\"stylesheet\" href=\"../css/guias.css?v=1.1.0\">\n  <style>\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Actualizada el 26 de octubre de 2026",
+          "text": "Actualizada el 18 de noviembre de 2026"
+        }
+      ]
+    },
+    {
+      "path": "docs/user-guide.html",
+      "base_sha": "25756b2224245d3012aa6f6e9ee7c6b589e26f9d",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.0.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.1.0\">"
+        }
+      ]
+    }
+  ]
+}
