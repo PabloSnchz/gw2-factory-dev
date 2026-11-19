@@ -1,0 +1,7 @@
+{
+  "id": "EYE-011",
+  "shots": [
+    { "path": "docs/user-guide.html?v=gu3a", "device": "compu", "note": "GU-3 antes: Primeros pasos sin poses" },
+    { "path": "docs/user-guide-avanzado.html?v=gu3a", "device": "compu", "note": "GU-3 antes: Guía por módulo sin poses" }
+  ]
+}
