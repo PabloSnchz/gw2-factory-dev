@@ -1,0 +1,44 @@
+{
+  "id": "PATCH-457",
+  "summary": "BL-094 GU-3 (EYE-012): en el celular mis poses van debajo del texto (css/guias.css 1.2.1)",
+  "files": [
+    {
+      "path": "css/guias.css",
+      "base_sha": "0fe8ef30852957d31040213c4327fabafde074ec",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Versión: 1.2.0 (2026-11-18) · GU-3:",
+          "text": "   Versión: 1.2.1 (2026-11-18) · GU-3 (EYE-012): en el celular mis poses van debajo del texto, que usa todo el ancho\n            1.2.0 (2026-11-18) · GU-3:"
+        },
+        {
+          "op": "replace",
+          "anchor": "  /* mis poses, más chicas: el texto conserva al menos 230 px de ancho */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby=\"que-es\"], .wrap > .box),\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby=\"datos\"],\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby=\"comunidad\"], #mod-settings) {\n    padding-right: 92px; min-height: 160px; background-position: right 6px bottom 0, 0 0, 0 0; background-size: 80px auto, auto, auto;\n  }\n",
+          "text": "  /* mis poses, más chicas y debajo del texto: el texto usa todo el ancho (EYE-012: al costado lo angostaba) */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby=\"que-es\"], .wrap > .box),\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby=\"datos\"],\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby=\"comunidad\"], #mod-settings) {\n    padding-right: 14px; padding-bottom: 128px; min-height: 0; background-position: right 12px bottom 0, 0 0, 0 0; background-size: 80px auto, auto, auto;\n  }\n"
+        }
+      ]
+    },
+    {
+      "path": "docs/user-guide.html",
+      "base_sha": "42ef3819a858a9f34e6072fcc1fc053151808a94",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.2.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.2.1\">"
+        }
+      ]
+    },
+    {
+      "path": "docs/user-guide-avanzado.html",
+      "base_sha": "cbd20fb81bea587845dfa6c36217cade5df579b2",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.2.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.2.1\">"
+        }
+      ]
+    }
+  ]
+}
