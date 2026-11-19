@@ -1,6 +1,6 @@
 # FEAT-028 — La Bóveda en el universo de Shiruvana
 
-- Estado: DISPONIBLE EN PRD — validada por Pablo paso a paso en DEV (BV-0 a BV-6b; BL-092 cerrada 2026-11-18 03:27Z) y en producción (2026-11-18 03:52Z, «perfecto»). Producción 987fad7 (BL-093, vía PowerShell, manifiesto factory/promote/BL-093.txt). Pendiente a futuro: BL-094, las guías de usuario en mi universo.
+- Estado: DISPONIBLE EN PRD — validada por Pablo paso a paso en DEV (BV-0 a BV-6b; BL-092 cerrada 2026-11-18 03:27Z) y en producción (2026-11-18 03:52Z, «perfecto»). Producción 987fad7 (BL-093, vía PowerShell, manifiesto factory/promote/BL-093.txt). Las guías de usuario en mi universo: BL-094, hecha en DEV (FEAT-029, 2026-11-19).
 - Backlog: BL-092, BL-093 · Decisiones: DEC-025, DEC-034, DEC-035 · Antes: FEAT-020, FEAT-027
 - Repo: gw2-factory-dev (https://pablosnchz.github.io/gw2-factory-dev/)
 - Archivos: css/universo.css 1.5.0, css/themes/gato.css 2.0.0, js/theme-selector.js 1.3.0, js/shv-bubble.js 1.6.0, js/escena-kit.js y css/escena-kit.css (copia fija de shiruvana/kit 1.0.0), js/modules.json, index.html; imágenes assets/brand/gato/ y assets/brand/shiruvana/
