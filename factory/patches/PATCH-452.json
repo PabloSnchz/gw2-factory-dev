@@ -1,0 +1,53 @@
+{
+  "id": "PATCH-452",
+  "summary": "BL-094: GU-1 validado por Pablo; checkpoint de inicio de GU-2",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "546fc2651c54348469bf7102ed6c59c6b176a046",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "GU-1 HECHO 2026-11-19 00:45Z, esperando validación de Pablo:",
+          "text": "GU-1 HECHO 2026-11-19 00:45Z y validado por Pablo (01:08Z: «perfecto continua gu2»):"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "239c252059de12df9169f1196082e33545db622e",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Estado: ESPERANDO A PABLO",
+          "text": "Estado: EN CURSO"
+        },
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-1 HECHO en DEV («Primeros pasos» en mi universo); esperando validación de Pablo.",
+          "text": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-2 en curso: la «Guía por módulo» en mi universo."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó BL-095 y BL-086 y pidió arrancar GU-1 (2026-11-19 00:31Z).",
+          "text": "Motivo: Pablo validó GU-1 y pidió GU-2 (2026-11-19 01:08Z, «perfecto continua gu2»)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 00:50Z",
+          "text": "Última actualización: 2026-11-19 01:10Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida GU-1 en DEV; con su OK sigo con GU-2 (la Guía por módulo en mi universo).",
+          "text": "Próxima acción: terminar GU-2 (css/guias.css 1.1.0, docs/user-guide-avanzado.html, tests) con captura de antes y después."
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] Validación: GU-1 en DEV — abrí https://pablosnchz.github.io/gw2-factory-dev/docs/user-guide.html (Ctrl+F5) con el theme Gato Negro: fondo «Taller», cada capítulo en un panel con su color arriba, números y antetítulos en ámbar. Miralo también en el celular. La Guía por módulo solo tomó los colores reales de Gato Negro: su rediseño es GU-2.\n",
+          "text": ""
+        }
+      ]
+    }
+  ]
+}
