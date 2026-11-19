@@ -1,4 +1,6 @@
 // Guías de usuario con la identidad Gato Negro (DEC-025): gato oficial, favicon y el theme que eligió el jugador.
+// BL-094 GU-1: cada theme se pide con su versión real, la misma de js/theme-selector.js (THEME_V). Antes iban
+// todas con ?v=1.0.0 fijo y el navegador mostraba Gato Negro con los colores de antes de BV-6.
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -12,6 +14,15 @@ const GUIDES = ['docs/user-guide.html', 'docs/user-guide-avanzado.html'];
 
 const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const styleOf = (html) => html.slice(html.indexOf('<style>'), html.indexOf('</style>'));
+
+// Las versiones que pide La Bóveda: THEME_V de js/theme-selector.js (los que no figuran, 1.0.0).
+function themeVersions() {
+  const m = read('js/theme-selector.js').match(/var THEME_V = (\{[^}]*\});/);
+  assert.ok(m, 'THEME_V en js/theme-selector.js');
+  return vm.runInNewContext('(' + m[1] + ')');
+}
+const THEME_V = themeVersions();
+const ver = (t) => THEME_V[t] || '1.0.0';
 
 // Ejecuta el script del theme con un localStorage simulado y devuelve el CSS y el data-theme elegidos.
 function themeFor(html, stored) {
@@ -43,9 +54,17 @@ for (const guide of GUIDES) {
   });
 
   test(`${guide}: aplica el theme guardado por La Bóveda y cae en Gato Negro si no hay o es inválido`, () => {
-    assert.deepEqual(themeFor(html, { 'gn:theme': 'dracula' }), { href: '../css/themes/dracula.css?v=1.0.0', theme: 'dracula' });
-    assert.deepEqual(themeFor(html, { 'gn:theme': '"nord"' }), { href: '../css/themes/nord.css?v=1.0.0', theme: 'nord' });
-    assert.deepEqual(themeFor(html, {}), { href: '../css/themes/gato.css?v=1.0.0', theme: 'gato' });
+    assert.deepEqual(themeFor(html, { 'gn:theme': 'dracula' }), { href: '../css/themes/dracula.css?v=' + ver('dracula'), theme: 'dracula' });
+    assert.deepEqual(themeFor(html, { 'gn:theme': '"nord"' }), { href: '../css/themes/nord.css?v=' + ver('nord'), theme: 'nord' });
+    assert.deepEqual(themeFor(html, {}), { href: '../css/themes/gato.css?v=' + ver('gato'), theme: 'gato' });
+    assert.deepEqual(themeFor(html, { 'gn:theme': 'gato' }), { href: '../css/themes/gato.css?v=' + ver('gato'), theme: 'gato' });
     assert.equal(themeFor(html, { 'gn:theme': '../../evil' }).theme, 'gato');
+  });
+
+  test(`${guide}: pide cada theme con la versión de js/theme-selector.js (BL-094)`, () => {
+    const first = html.match(/href="\.\.\/css\/themes\/gato\.css\?v=([\d.]+)" id="themeStylesheet"/)[1];
+    assert.equal(first, ver('gato'), 'el primer pintado ya con la versión real de Gato Negro');
+    Object.keys(THEME_V).forEach((t) => assert.equal(themeFor(html, { 'gn:theme': t }).href, '../css/themes/' + t + '.css?v=' + THEME_V[t], t));
+    assert.notEqual(ver('gato'), '1.0.0', 'si Gato Negro vuelve a 1.0.0, revisá este test');
   });
 }
