@@ -1,0 +1,9 @@
+{
+  "id": "EYE-010",
+  "shots": [
+    { "path": "docs/user-guide-avanzado.html?v=gu2b", "device": "compu", "note": "GU-2 después: Guía por módulo en la compu (antes: EYE-009-1)" },
+    { "path": "docs/user-guide-avanzado.html?v=gu2b", "device": "celular", "note": "GU-2 después: Guía por módulo en el celular (antes: EYE-009-2)" },
+    { "path": "docs/user-guide-avanzado.html?v=gu2b#mod-cards", "device": "compu", "note": "GU-2 después: un módulo (Cartera) con chips y claves" },
+    { "path": "docs/user-guide-avanzado.html?v=gu2b#mod-keys", "device": "celular", "note": "GU-2 después: Keys en el celular (7 chips y claves)" }
+  ]
+}
