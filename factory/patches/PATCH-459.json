@@ -1,0 +1,80 @@
+{
+  "id": "PATCH-459",
+  "summary": "BL-094 GU-4: cierre (BL-094 a DONE, FEAT-028 al día, índice con FEAT-028 y FEAT-029, status)",
+  "files": [
+    {
+      "path": "ai-memory/backlog.md",
+      "base_sha": "3dd12188fdf74de6bf11145d43e0b559067bb7d1",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] [BAJO] Las guías de usuario en mi universo — EN CURSO desde 2026-11-19 00:31Z (Pablo: «Arranca con GU1»). Pedido de Pablo 2026-11-18 03:52Z. Plan de a un micro-ciclo, con validación de Pablo entre cada uno: GU-1 base compartida (css/guias.css, solo theme Gato Negro, reutiliza el fondo «Taller» de css/universo.css) + «Primeros pasos» (docs/user-guide.html) + versión real de los themes en las dos guías (gato.css?v=2.0.0); GU-2 «Guía por módulo» (docs/user-guide-avanzado.html); GU-3 mis poses en momentos puntuales + revisión con mis ojos; GU-4 cierre y documentación. Los otros 18 themes quedan como están. GU-1 HECHO 2026-11-19 00:45Z y validado por Pablo (01:08Z: «perfecto continua gu2»): css/guias.css 1.0.0 (84b1f0e), docs/user-guide.html (25756b2, 7 capítulos en paneles numerados), versión real del theme en las dos guías (PATCH-450), tests/guias-universo.test.cjs (9e0f45c, 7 tests) y tests/guides-identity.test.cjs (3124775, lee THEME_V); RUN-307 verde (10 archivos, 77 tests); EYE-007 antes / EYE-008 después. GU-2 HECHO 2026-11-19 01:15Z y validado por Pablo (01:26Z: «ok sigue con gu3»): css/guias.css 1.1.0 (5321e25), docs/user-guide-avanzado.html carga universo.css + guias.css (PATCH-453 → 398fa2c), tests/guias-universo.test.cjs (154d96e, 9 tests, 6/6 mutantes); RUN-308 verde (10 archivos, 79 tests); EYE-009 antes / EYE-010 después. GU-3 HECHO 2026-11-19 01:40Z, esperando validación de Pablo: js/guias-escena.js 1.0.0 (a93b3ce; baja la copia fija del kit solo con Gato Negro y pide las poses sin fondo), css/guias.css 1.2.1 (fd0bab6; saluda, pensando y sentada en momentos puntuales; en el celular debajo del texto), las dos guías por PATCH-456/457 (c9afd72 / 7108c74), tests/guias-escena.test.cjs (abdf49b, 7 tests, 10/10 mutantes); RUN-312 + RUN-313 verdes (12 archivos, 105 tests); EYE-011 antes / EYE-012 y EYE-013 después. · FEAT-019, FEAT-028\n",
+          "text": ""
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## DONE\n\n",
+          "text": "- [BL-094] [BAJO] Las guías de usuario en mi universo — HECHO y validado por Pablo en DEV (GU-1 2026-11-19 01:08Z, GU-2 01:26Z, GU-3 06:10Z «ok»). Pedido de Pablo 2026-11-18 03:52Z; en marcha 2026-11-19 00:31Z. Primeros pasos y Guía por módulo con el fondo «Taller» (css/universo.css), paneles de La Guarida, antetítulos y cifras en ámbar (css/guias.css 1.2.1) y mis poses sin fondo en momentos puntuales (js/guias-escena.js 1.0.0, kit de la Bóveda); las guías piden el theme con su versión real (THEME_V). Solo theme Gato Negro; los otros 18 igual. Tests: guias-universo (9), guias-escena (7), guides-identity (8). No está en PRD: pasa solo si Pablo lo pide. · FEAT-029, FEAT-019, FEAT-028 — 2026-11-19\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "be2e673b0fbe9aea67efd59870c0d670d66ab5b5",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: BL-094 — las guías de usuario en mi universo. GU-3 HECHO en DEV (mis poses en las guías); esperando validación de Pablo.",
+          "text": "Tarea actual: ninguna en curso. BL-094 CERRADA (2026-11-19): las guías de usuario en mi universo, validadas por Pablo en DEV (FEAT-029)."
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó GU-2 y pidió GU-3 (2026-11-19 01:26Z, «ok sigue con gu3»).",
+          "text": "Motivo: Pablo validó GU-3 (2026-11-19 06:10Z, «ok») y cerré BL-094 con GU-4."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 01:42Z",
+          "text": "Última actualización: 2026-11-19 06:20Z"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: Pablo valida GU-3 en DEV; con su OK hago GU-4 (cierre: FEAT, decisión y panel).",
+          "text": "Próxima acción: esperar la próxima orden de Pablo. Las guías nuevas están solo en DEV: pasan a PRD si Pablo lo pide."
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Historial de BL-094 (sigue): 2026-11-19 01:26Z Pablo validó GU-2 («ok sigue con gu3»); PATCH-455 checkpoint. GU-3 HECHO 01:40Z. Decisión mía: sin imágenes nuevas; las guías usan el mismo recorte que La Bóveda (kit de escena 1.0.0, posesSinFondo) sobre assets/brand/shiruvana/cuerpo-*.webp, así nunca hay rectángulo negro y no hace falta que Pablo suba binarios. js/guias-escena.js 1.0.0 (blob a93b3ce, commit fb08a95): solo con data-theme gato o sin data-theme, baja js/escena-kit.js?v=1.0.0 una vez y pide saluda, pensando y sentada; con los otros 18 themes no baja nada; no guarda nada. css/guias.css 1.2.0 (PATCH-456) → 1.2.1 (PATCH-457, blob fd0bab6): Primeros pasos: «Qué es la Bóveda» saluda, «Tus datos» pensando, «Comunidad y apoyo» sentada; Guía por módulo: la intro saluda y «Ajustes» sentada; en la compu al costado con su lugar propio (padding-right ≥ ancho + 10); EYE-012 mostró que en el celular la pose al costado angostaba todo el panel → 1.2.1 la pone debajo del texto (padding-bottom 128 px, pose 80 px) y el texto usa todo el ancho. Guías: <script defer src=\"../js/guias-escena.js?v=1.0.0\"> y guias.css?v=1.2.1 (blobs c9afd72 y 7108c74). tests/guias-escena.test.cjs (abdf49b, 7 tests; 10/10 mutantes entre las dos rondas). RUN-309 rechazado (12 > 10 tests por pedido: partir en dos). RUN-312 + RUN-313 verdes: 12 archivos, 105 tests (guias-escena, guias-universo, guides-identity, guides-content, shv-escena, universo, theme-gato, privacy, size-budget, index-versions, boot, legacy-census). EYE-011 antes; EYE-012 (compu: poses limpias al costado) y EYE-013 (celular: debajo del texto, página entera revisada) después.\n",
+          "text": "Historial de BL-094 (cierre): 2026-11-19 06:10Z Pablo validó GU-3 («ok») → GU-4 HECHO: FEAT-029 nueva (ai-memory/features/FEAT-029-guias-en-el-universo-shiruvana.md), FEAT-028 ya no la lista como pendiente, memory-index suma FEAT-028 y FEAT-029 (el panel lee el índice para «Conocimiento»), BL-094 pasa a DONE. Sin DEC nueva: no hay cambio de arquitectura ni de reglas; todo sigue DEC-025 (solo theme Gato Negro) y DEC-035 (archivos chicos, canal de parches). Deuda de documentación anotada (BAJO): memory-index no lista FEAT-017 a FEAT-026 ni LES-036 a LES-042; el panel no los muestra en «Conocimiento».\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- [BL-094] Validación: GU-3 en DEV — en las dos guías (Ctrl+F5, theme Gato Negro) aparezco de cuerpo entero y sin fondo en momentos puntuales: saludo al empezar, pienso en «Tus datos» y me siento al final. En la compu voy al costado; en el celular, debajo del texto.\n",
+          "text": "- [BL-094] Info: las guías en mi universo quedaron cerradas en DEV (FEAT-029). En producción siguen las de antes hasta que pidas el pase.\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/features/FEAT-028-boveda-en-el-universo-shiruvana.md",
+      "base_sha": "0115ea774aa330c1dd62eea9ce881d4a58f9a037",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Pendiente a futuro: BL-094, las guías de usuario en mi universo.",
+          "text": "Las guías de usuario en mi universo: BL-094, hecha en DEV (FEAT-029, 2026-11-19)."
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "caef396f33f0ef21eea7035af64a51a30c07348c",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "- [FEAT-027](features/FEAT-027-centro-de-mando-universo-shiruvana.md) — El Centro de mando en el universo de Shiruvana: Mesa de mando, mi globo con el gato, seis vistas con cabecera numerada y celular (BL-091, gw2-factory-dashboard 3.0.1). Validado por Pablo.\n",
+          "text": "- [FEAT-028](features/FEAT-028-boveda-en-el-universo-shiruvana.md) — La Bóveda en el universo de Shiruvana: fondo «Taller», cabeceras con antetítulo y cifras en ámbar, mi globo con el gato, mis poses sin fondo y paneles como La Guarida, solo con el theme Gato Negro (BL-092, BL-093). En producción.\n- [FEAT-029](features/FEAT-029-guias-en-el-universo-shiruvana.md) — Las guías de usuario en el universo de Shiruvana: Primeros pasos y Guía por módulo con el fondo «Taller», paneles de La Guarida, ámbar y mis poses sin fondo, solo con el theme Gato Negro; el theme con su versión real (BL-094). En DEV, validada por Pablo.\n"
+        }
+      ]
+    }
+  ]
+}
