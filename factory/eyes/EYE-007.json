@@ -1,0 +1,7 @@
+{
+  "id": "EYE-007",
+  "shots": [
+    { "path": "docs/user-guide.html?v=gu1a", "device": "compu", "note": "GU-1 antes: Primeros pasos en la compu" },
+    { "path": "docs/user-guide.html?v=gu1a", "device": "celular", "note": "GU-1 antes: Primeros pasos en el celular" }
+  ]
+}
