@@ -1,7 +1,7 @@
 // BL-094: las guías de usuario en mi universo, solo con el theme Gato Negro (FEAT-028).
 // Vigila css/guias.css (mismas reglas que css/universo.css: todo con el theme oficial, nada en los otros 18,
 // sin tocar tokens) y que cada guía migrada cargue el universo con la versión real de cada archivo.
-// GU-1: «Primeros pasos». GU-2 suma la «Guía por módulo» a MIGRATED.
+// GU-1: «Primeros pasos». GU-2: la «Guía por módulo» (cada módulo ya es un .modsec con el color de su botón).
 'use strict';
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -13,7 +13,7 @@ const read = (p) => fs.readFileSync(path.join(ROOT, p), 'utf8');
 const CSS = read('css/guias.css');
 const UNIVERSO = read('css/universo.css');
 const SCOPE = ':root:is([data-theme="gato"],:not([data-theme]))';
-const MIGRATED = ['docs/user-guide.html'];
+const MIGRATED = ['docs/user-guide.html', 'docs/user-guide-avanzado.html'];
 const version = (css) => (css.match(/Versión: ([\d.]+)/) || [])[1];
 
 // Reglas de estilo (selector + cuerpo), entrando en @media; sin comentarios ni @keyframes.
@@ -89,7 +89,7 @@ for (const guide of MIGRATED) {
     assert.ok(read('index.html').includes('href="css/universo.css?v=' + uni[1] + '"'), 'misma versión que index.html');
   });
 
-  test(`${guide}: cada capítulo es un panel con su color y su título, numerado en orden`, () => {
+  if (guide === 'docs/user-guide.html') test(`${guide}: cada capítulo es un panel con su color y su título, numerado en orden`, () => {
     const secs = [...html.matchAll(/<section class="sec" style="--x:(#[0-9A-F]{6})" aria-labelledby="([\w-]+)">([\s\S]*?)<\/section>/g)];
     const h2 = (html.match(/<h2[ >]/g) || []).length;
     assert.ok(secs.length >= 5, 'hay capítulos');
@@ -99,6 +99,20 @@ for (const guide of MIGRATED) {
       assert.ok(m[3].includes('<h2 id="' + id + '"><span class="num">' + (i + 1) + '.</span> '), id + ': el panel se nombra con su título y el número ' + (i + 1));
       assert.equal((m[3].match(/<h2[ >]/g) || []).length, 1, id + ': un solo título por panel');
     });
+  });
+
+  if (guide === 'docs/user-guide-avanzado.html') test(`${guide}: cada módulo es un panel del universo con el color de su botón`, () => {
+    const secs = [...html.matchAll(/<section class="modsec" id="mod-(\w+)"([^>]*)>/g)];
+    assert.ok(secs.length >= 13, 'Inicio, los 10 módulos, Keys y Ajustes');
+    assert.equal(secs.length, (html.match(/<h2[ >]/g) || []).length, 'cada título va en su panel');
+    secs.forEach((m) => assert.match(m[2], /^( style="--x:#[0-9A-F]{6}")?$/, m[1] + ': solo el color del módulo en línea'));
+    const panel = rules(CSS).find((r) => /:is\(\.sec, \.modsec\)$/.test(r.sel) && /border-top:\s*3px solid var\(--x/.test(r.body));
+    assert.ok(panel, 'guias.css pinta .modsec como panel de La Guarida');
+    assert.match(panel.body, /linear-gradient\(180deg, #1C1C26, #15151D/);
+    ['.wrap > .box', '.toc a', '.chips code', '.keys code', '.uso dt'].forEach((s) =>
+      assert.ok(rules(CSS).some((r) => r.sel.endsWith(s)), 'falta el estilo de ' + s));
+    const toc = rules(CSS).find((r) => r.sel.endsWith('.toc a'));
+    assert.doesNotMatch(toc.body, /min-height|display/, 'el alto de 44 px lo da la guía: no se pisa');
   });
 }
 
@@ -113,7 +127,10 @@ const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) +
 test('contraste AA: el texto del theme Gato Negro y el ámbar sobre el panel, el código y la página', () => {
   const tok = (k) => read('css/themes/gato.css').match(new RegExp(k + ':\\s*(#[0-9A-Fa-f]{6})'))[1];
   const fondos = ['#1C1C26', '#15151D', '#2A2A38', '#0B0B10'];
-  [tok('--tx-1'), tok('--tx-2'), '#E8B34B'].forEach((c) => fondos.forEach((bg) => {
+  // todo color de texto que pone guias.css (no los bordes ni los fondos), más el texto del theme
+  const textos = [...new Set(rules(CSS).flatMap((r) => [...r.body.matchAll(/(?:^|[;\s])color:\s*(#[0-9A-Fa-f]{6})/g)].map((m) => m[1].toUpperCase())))];
+  assert.ok(textos.length >= 2, 'guias.css pone colores de texto');
+  [tok('--tx-1'), tok('--tx-2')].concat(textos).forEach((c) => fondos.forEach((bg) => {
     assert.ok(ratio(c, bg) >= 4.5, c + ' sobre ' + bg + ' da ' + ratio(c, bg).toFixed(2));
   }));
   assert.match(CSS, /#E8B34B/, 'el ámbar del universo');
