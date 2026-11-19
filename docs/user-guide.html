@@ -5,20 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Primeros pasos · Bóveda del Gato Negro · sitio de la comunidad de Guild Wars 2 (no oficial)</title>
   <!-- BL-071 GUI-2: «Primeros pasos». La lista de módulos y la tabla de permisos salen de MODULES y SCOPES de js/welcome-panel.js;
-       las vigila tests/guides-content.test.cjs. Identidad Gato Negro (DEC-025): favicon oficial y el theme que eligió el jugador. -->
+       las vigila tests/guides-content.test.cjs. Identidad Gato Negro (DEC-025): favicon oficial y el theme que eligió el jugador.
+       BL-094 GU-1: con el theme Gato Negro, la guía va en mi universo (css/universo.css + css/guias.css); cada theme se pide
+       con su versión real, la misma de js/theme-selector.js (THEME_V). Lo vigila tests/guias-universo.test.cjs. -->
   <link rel="icon" type="image/svg+xml" href="../assets/brand/gato-negro.svg"/>
-  <link rel="stylesheet" href="../css/themes/gato.css?v=1.0.0" id="themeStylesheet">
+  <link rel="stylesheet" href="../css/themes/gato.css?v=2.0.0" id="themeStylesheet">
   <script>
     (function () {
       try {
+        var V = { gato: '2.0.0' }; // igual que THEME_V de js/theme-selector.js; los demás themes van en 1.0.0
         var t = localStorage.getItem('gn:theme') || localStorage.getItem('gn_theme');
         if (t && t.charAt(0) === '"') t = JSON.parse(t);
         if (!t || !/^[a-z0-9-]+$/.test(t)) t = 'gato';
-        document.getElementById('themeStylesheet').href = '../css/themes/' + t + '.css?v=1.0.0';
+        document.getElementById('themeStylesheet').href = '../css/themes/' + t + '.css?v=' + (V[t] || '1.0.0');
         document.documentElement.setAttribute('data-theme', t);
       } catch (_) {}
     })();
   </script>
+  <link rel="stylesheet" href="../css/universo.css?v=1.6.0">
+  <link rel="stylesheet" href="../css/guias.css?v=1.0.0">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: var(--bg-0, #0F1117); color: var(--tx-2, #C9D0DA); font: 16px/1.6 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; padding: 32px 16px 48px; }
@@ -72,14 +77,15 @@
     <img src="../assets/brand/gato-negro.svg" alt="">
     <h1>Primeros pasos</h1>
   </header>
-  <p class="meta">Bóveda del Gato Negro · sitio de la comunidad, no oficial · Se lee en 5 minutos · Actualizada el 26 de octubre de 2026</p>
+  <p class="meta">Bóveda del Gato Negro · sitio de la comunidad, no oficial · Se lee en 5 minutos · Actualizada el 18 de noviembre de 2026</p>
   <nav class="nav" aria-label="En esta guía">
     <a href="../index.html#/welcome">Volver a la Bóveda</a>
     <a href="user-guide-avanzado.html">Guía por módulo</a>
     <a href="../privacy.html">Privacidad</a>
   </nav>
 
-  <h2 id="que-es">1. Qué es la Bóveda</h2>
+  <section class="sec" style="--x:#A896FF" aria-labelledby="que-es">
+  <h2 id="que-es"><span class="num">1.</span> Qué es la Bóveda</h2>
   <p>Es un tablero para tu cuenta de Guild Wars 2: tus divisas, tus metas del día, la Cámara del Brujo, tus raids de la semana, tus legendarias y todo lo que tenés guardado, en un solo lugar.</p>
   <div class="box">
     <ul>
@@ -88,8 +94,10 @@
       <li><strong>Solo lee.</strong> La Bóveda no puede cambiar nada de tu cuenta ni del juego.</li>
     </ul>
   </div>
+  </section>
 
-  <h2 id="api-key">2. Creá tu API Key</h2>
+  <section class="sec" style="--x:#F2B94B" aria-labelledby="api-key">
+  <h2 id="api-key"><span class="num">2.</span> Creá tu API Key</h2>
   <p>La API Key es el permiso que le das a la Bóveda para leer tu cuenta. Se crea en tu cuenta de ArenaNet y la podés borrar cuando quieras.</p>
   <ol class="steps">
     <li>Entrá a <a href="https://account.arena.net/applications" target="_blank" rel="noopener">account.arena.net/applications<span class="visually-hidden"> (se abre en otra pestaña)</span></a> con tu cuenta de Guild Wars 2.</li>
@@ -109,16 +117,20 @@
         <tr><td><code>characters</code></td><td>Tus personajes.</td><td>Inventario y Personajes</td></tr>
     </tbody>
   </table></div>
+  </section>
 
-  <h2 id="cargar">3. Cargala en la Bóveda</h2>
+  <section class="sec" style="--x:#15C3B7" aria-labelledby="cargar">
+  <h2 id="cargar"><span class="num">3.</span> Cargala en la Bóveda</h2>
   <ol class="steps">
     <li>Arriba, tocá <strong>Keys</strong>.</li>
     <li>Pegá tu Key y agregala. La Bóveda la revisa con ArenaNet y te dice si le falta algún permiso.</li>
     <li>Si tenés más de una cuenta, agregá una Key por cuenta. Para cambiar de cuenta, usá el selector de cuenta que está al lado de Keys: todos los módulos pasan a mostrar esa cuenta.</li>
   </ol>
   <p>Metas y Eventos anda sin Key. El Llavero de Cuentas tampoco la necesita: guarda tus contraseñas cifradas en tu PC.</p>
+  </section>
 
-  <h2 id="moverte">4. Moverte por la Bóveda</h2>
+  <section class="sec" style="--x:#6EA3FF" aria-labelledby="moverte">
+  <h2 id="moverte"><span class="num">4.</span> Moverte por la Bóveda</h2>
   <h3>En la computadora</h3>
   <ul>
     <li><strong>La barra de arriba.</strong> El logo te lleva a Inicio. En el medio están la cuenta activa y Keys. A la derecha, Guías, Enlaces (la wiki, los foros, el sitio oficial) y Ajustes (tema, copia de ajustes y caché).</li>
@@ -142,8 +154,10 @@
       <li><a class="mod" href="../index.html#/account/legendary-armory" style="--x:#E545CA"><span class="plate"><img src="../assets/icons/Cuentas/157085.png" alt="" width="32" height="32"></span><span><b>Armería Legendaria</b><small>Las 206 legendarias, recetas y lo que te falta</small></span><i class="tag">Con Key</i></a></li>
       <li><a class="mod" href="../index.html#/account/accounts" style="--x:#8E96A3"><span class="plate"><img src="../assets/icons/3601748.png" alt="" width="32" height="32"></span><span><b>Cuentas</b><small>Tus cuentas y Keys, cifradas en tu PC</small></span><i class="tag">En tu PC</i></a></li>
   </ul>
+  </section>
 
-  <h2 id="dia">5. Tu día y tu semana</h2>
+  <section class="sec" style="--x:#3CC48A" aria-labelledby="dia">
+  <h2 id="dia"><span class="num">5.</span> Tu día y tu semana</h2>
   <p>Una ronda rápida para no olvidarte de nada:</p>
   <div class="table"><table>
     <thead><tr><th>Cuándo</th><th>Dónde</th><th>Qué mirar</th></tr></thead>
@@ -158,8 +172,10 @@
     </tbody>
   </table></div>
   <p>Actividades te muestra cuánto falta para cada reinicio. Lo demás (Cartera, Logros, Inventario, Armería y Cuentas) lo usás cuando lo necesites.</p>
+  </section>
 
-  <h2 id="datos">6. Tus datos</h2>
+  <section class="sec" style="--x:#8E96A3" aria-labelledby="datos">
+  <h2 id="datos"><span class="num">6.</span> Tus datos</h2>
   <ul>
     <li><strong>Guardar una copia:</strong> Ajustes → «Guardar copia de ajustes». Te sirve para pasar tus Keys, marcas y preferencias a otro navegador. <strong>Incluye tus API Keys sin cifrar:</strong> guardala como una contraseña.</li>
     <li><strong>Restaurar:</strong> Ajustes → «Restaurar una copia». Antes de escribir nada te pregunta.</li>
@@ -167,8 +183,10 @@
     <li><strong>Tus contraseñas:</strong> van en el <a href="../index.html#/account/accounts">Llavero de Cuentas</a>, cifradas con una contraseña que solo sabés vos. Si la perdés, no hay forma de abrirlo.</li>
     <li><strong>El tema:</strong> Ajustes → «Cambiar el tema». Hay 19 y estas guías usan el que elijas.</li>
   </ul>
+  </section>
 
-  <h2 id="comunidad">7. Comunidad y apoyo</h2>
+  <section class="sec" style="--x:#E868D4" aria-labelledby="comunidad">
+  <h2 id="comunidad"><span class="num">7.</span> Comunidad y apoyo</h2>
   <p><strong>¿Algo no anda o tenés una idea?</strong> Escribinos en Discord, que es donde respondemos primero. También podés abrir un reporte en GitHub.</p>
   <ul class="links">
     <li><a href="https://discord.gg/ZGNsfsqyKe" target="_blank" rel="noopener">Discord<span class="visually-hidden"> (se abre en otra pestaña)</span></a></li>
@@ -184,6 +202,7 @@
     <li><a href="https://www.paypal.com/paypalme/pblsnchz" target="_blank" rel="noopener">PayPal<span class="visually-hidden"> (se abre en otra pestaña)</span></a></li>
   </ul>
   <p>¿Querés saber qué hace cada módulo en detalle? Seguí con la <a href="user-guide-avanzado.html">Guía por módulo</a>.</p>
+  </section>
 
   <footer>
     <p>Sitio de la comunidad, no oficial: no está afiliado a ArenaNet ni a NCSOFT. Las imágenes y los datos del juego son de sus dueños y se leen de la API pública.</p>
