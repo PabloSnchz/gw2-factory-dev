@@ -1,0 +1,49 @@
+{
+  "id": "PATCH-456",
+  "summary": "BL-094 GU-3: css/guias.css 1.2.0 (mis poses en momentos puntuales) y las dos guías cargan js/guias-escena.js",
+  "files": [
+    {
+      "path": "css/guias.css",
+      "base_sha": "5321e259ccc70cf8d9876b767e6804815f1e522f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "   Versión: 1.1.0 (2026-11-18) · GU-2:",
+          "text": "   Versión: 1.2.0 (2026-11-18) · GU-3: mis poses sin fondo en momentos puntuales (js/guias-escena.js):\n                                 bienvenida (saluda), un consejo (pensando) y el cierre (sentada)\n            1.1.0 (2026-11-18) · GU-2:"
+        },
+        {
+          "op": "replace",
+          "anchor": "/* ---------- 5. Celular e impresión ---------- */",
+          "text": "/* ---------- 5. Mis poses (GU-3) ----------\n   js/guias-escena.js las deja sin fondo en body como --svk-p-<pose> con la clase svk-p-<pose>: hasta que no\n   están listas estas reglas no aplican (nunca un rectángulo negro). Van al costado, abajo a la derecha del\n   panel, con su lugar propio (padding), así no tapan el texto. Nunca en tablas, pasos ni enlaces.\n   Primeros pasos: «Qué es la Bóveda» saluda, «Tus datos» pensando (los consejos), «Comunidad y apoyo» sentada.\n   Guía por módulo: la intro saluda y «Ajustes» (el último) sentada. */\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby=\"que-es\"], .wrap > .box) {\n  padding-right: 190px; min-height: 230px; background-image: var(--svk-p-saluda), radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #E8B34B) 8%, transparent), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);\n  background-repeat: no-repeat; background-position: right 18px bottom 0, 0 0, 0 0; background-size: 150px auto, auto, auto;\n}\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby=\"datos\"] {\n  padding-right: 180px; min-height: 230px; background-image: var(--svk-p-pensando), radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #A896FF) 9%, transparent), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);\n  background-repeat: no-repeat; background-position: right 16px bottom 0, 0 0, 0 0; background-size: 140px auto, auto, auto;\n}\n:root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby=\"comunidad\"], #mod-settings) {\n  padding-right: 190px; min-height: 240px; background-image: var(--svk-p-sentada), radial-gradient(70% 160px at 0 0, color-mix(in srgb, var(--x, #A896FF) 9%, transparent), transparent 70%), linear-gradient(180deg, #1C1C26, #15151D 320px);\n  background-repeat: no-repeat; background-position: right 18px bottom 0, 0 0, 0 0; background-size: 160px auto, auto, auto;\n}\n\n/* ---------- 6. Celular e impresión ---------- */"
+        },
+        {
+          "op": "replace",
+          "anchor": "  :root:is([data-theme=\"gato\"],:not([data-theme])) .modsec { padding-top: 14px; }\n",
+          "text": "  :root:is([data-theme=\"gato\"],:not([data-theme])) .modsec { padding-top: 14px; }\n  /* mis poses, más chicas: el texto conserva al menos 230 px de ancho */\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-saluda :is(.sec[aria-labelledby=\"que-es\"], .wrap > .box),\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-pensando .sec[aria-labelledby=\"datos\"],\n  :root:is([data-theme=\"gato\"],:not([data-theme])) body.svk-p-sentada :is(.sec[aria-labelledby=\"comunidad\"], #mod-settings) {\n    padding-right: 92px; min-height: 160px; background-position: right 6px bottom 0, 0 0, 0 0; background-size: 80px auto, auto, auto;\n  }\n"
+        }
+      ]
+    },
+    {
+      "path": "docs/user-guide.html",
+      "base_sha": "b56a248abc0c370192f67091c2e09ee268b44803",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.1.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.2.0\">\n  <script defer src=\"../js/guias-escena.js?v=1.0.0\"></script>"
+        }
+      ]
+    },
+    {
+      "path": "docs/user-guide-avanzado.html",
+      "base_sha": "398fa2c17ac80d5d6a47827347ca3efdc6e9d2f1",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.1.0\">",
+          "text": "<link rel=\"stylesheet\" href=\"../css/guias.css?v=1.2.0\">\n  <script defer src=\"../js/guias-escena.js?v=1.0.0\"></script>"
+        }
+      ]
+    }
+  ]
+}
