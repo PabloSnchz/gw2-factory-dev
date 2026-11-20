@@ -1,0 +1,38 @@
+{
+  "id": "PATCH-461",
+  "summary": "DEC-052 v1.1: puntos abiertos resueltos por Pablo; índice y status",
+  "files": [
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "595bd6a5118b954781475bd09e7a1ab3985c1de4",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Negocio → Martinica, datos operativos → Andreani, tecnología → Shiruvana; las decisiones finales son de Pablo. Dos puntos abiertos para Pablo (Regla 5 vs DEC-018, Regla 4 vs el software de Andreani).\n",
+          "text": "v1.1 aprobada por Pablo: dominios por ámbito — personal/Gato Negro → Shiruvana; laboral, operativo y técnico → Agente Andreani (mi equivalente laboral, otro repo); organizacional → Martinica. Decisiones finales de Pablo; lo técnico del día a día, delegado en cada agente. Regla 6: Pablo es el canal y cada agente escribe solo en su repo.\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "916001b60cffe824ea8abb1de534e51a11b21871",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo compartió la arquitectura de agentes fundacional (2026-11-20 13:01Z) y la registré como DEC-052.",
+          "text": "Motivo: Pablo aprobó mis correcciones a la arquitectura de agentes (2026-11-20 13:16Z) → DEC-052 v1.1 y mensaje para Andreani y Martinica."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-20 13:05Z",
+          "text": "Última actualización: 2026-11-20 13:20Z"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "si el software que hoy mantiene Andreani queda como excepción a la Regla 4.\n",
+          "text": "Historial de DEC-052 (v1.1): 2026-11-20 13:16Z Pablo me dio la razón en los dos puntos y aclaró que el Agente Andreani es mi equivalente en lo laboral, también técnico, sobre otro repositorio. DEC-052 reescrita como v1.1 (723dfa4): dominios por ámbito, Regla 3 con ruteo técnico laboral → Andreani, Regla 4 corregida, Regla 5 con delegación del día a día, Regla 6 nueva (Pablo es el canal, «De:», cada uno escribe en su repo). Mensaje v1.1 dirigido a Andreani y Martinica entregado a Pablo para que se los pase. Pendiente de ellos: registrarla en su memoria (Andreani chequea D-028/D-046/D-069/D-080).\n"
+        }
+      ]
+    }
+  ]
+}
