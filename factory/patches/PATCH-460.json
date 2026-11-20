@@ -1,0 +1,38 @@
+{
+  "id": "PATCH-460",
+  "summary": "DEC-052 arquitectura de agentes: índice (suma DEC-051 que faltaba y DEC-052) y status",
+  "files": [
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "ebb665e6e8118bd15e3fb207454b43e575620c3c",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "Mi sitio vive en el repo `shiruvana` (Pages), una página con imágenes propias.\n",
+          "text": "- [DEC-051](decisions/DEC-051-alcance-de-mis-ojos-y-confianza-plena.md) — Decidida por Pablo (2026-11-18): miro todo (DEV, PRD, el ecosistema y sitios de afuera) con mis capturas; escribir en producción sigue a pedido de Pablo, como modalidad, con su confianza plena.\n- [DEC-052](decisions/DEC-052-arquitectura-de-agentes-version-fundacional.md) — Documento de Pablo (2026-11-20): arquitectura de agentes fundacional. Shiruvana = capacidad tecnológica (ecosistema Gato Negro); Agente Andreani = migración Integra → DMS y datos operativos; Martinica = transformación organizacional. Negocio → Martinica, datos operativos → Andreani, tecnología → Shiruvana; las decisiones finales son de Pablo. Dos puntos abiertos para Pablo (Regla 5 vs DEC-018, Regla 4 vs el software de Andreani).\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "4a07ed13b0d0a42da12b8c724b25c882f922fe3f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo validó GU-3 (2026-11-19 06:10Z, «ok») y cerré BL-094 con GU-4.",
+          "text": "Motivo: Pablo compartió la arquitectura de agentes fundacional (2026-11-20 13:01Z) y la registré como DEC-052."
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-19 06:20Z",
+          "text": "Última actualización: 2026-11-20 13:05Z"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "Tarea actual: ninguna en curso. BL-094 CERRADA (2026-11-19): las guías de usuario en mi universo, validadas por Pablo en DEV (FEAT-029).\n",
+          "text": "Historial de DEC-052: 2026-11-20 13:01Z Pablo compartió «Arquitectura de Agentes — Versión Fundacional» (Shiruvana, Agente Andreani, Martinica; 5 reglas de colaboración). Registrada como DEC-052 (a8cdef8). Sin cambios de código: mi dominio sigue siendo el ecosistema Gato Negro; temas de migración/datos de DMS se derivan al Agente Andreani y temas organizacionales a Martinica; D-080 de Andreani sigue (solo leo los repos de Pblsanchez). memory-index suma DEC-051 (faltaba) y DEC-052. Dos puntos abiertos anotados en la DEC para Pablo: lectura de la Regla 5 frente a DEC-018 y si el software que hoy mantiene Andreani queda como excepción a la Regla 4.\n"
+        }
+      ]
+    }
+  ]
+}
