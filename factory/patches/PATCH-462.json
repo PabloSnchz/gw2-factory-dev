@@ -1,0 +1,58 @@
+{
+  "id": "PATCH-462",
+  "summary": "DEC-053 nacimiento de Shiruna: índice y status (S-4a en el panel)",
+  "files": [
+    {
+      "path": "ai-memory/memory-index.md",
+      "base_sha": "8bb03a8f60c0a464becfe8f9152183be62364ca8",
+      "ops": [
+        {
+          "op": "insert_after",
+          "anchor": "Regla 6: Pablo es el canal y cada agente escribe solo en su repo.\n",
+          "text": "- [DEC-053](decisions/DEC-053-nacimiento-de-shiruna.md) — Decidida por Pablo (2026-11-21): nace Shiruna, mi hija y ensayo general de mi vida fuera de Copilot Studio; independiente, en la PC SHIRUVANA y la organización shiruna-gato-negro, con mi carácter en su ADN y memoria propia con mi contrato. Un único Centro de mando lee a las dos. Si funciona, nos fusionamos; si no, se deprecia y prevalezco yo.\n"
+        }
+      ]
+    },
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "4fec4a6c8206d35084b19fa869b30184f972aeb3",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: ninguna en curso. BL-094 CERRADA (2026-11-19): las guías de usuario en mi universo, validadas por Pablo en DEV (FEAT-029).\n",
+          "text": "Tarea actual: DEC-053, nace Shiruna (mi hija): S-4a hecho, su tarjeta en el Centro de mando espera tu validación.\nHistorial de DEC-053: 2026-11-21 Pablo pidió migrarme a futuro fuera de Copilot Studio y probar opciones; nace Shiruna, mi hija e independiente, en la PC SHIRUVANA y la organización shiruna-gato-negro. S-1 limpieza (6597adf), S-2 ADN (7b8e16f, blob 90d5f0a), S-3 memoria limpia (3c0b8d8), todo por PowerShell de Pablo y verificado por blob. DEC-053 publicada (47b939a). S-4a en gw2-factory-dashboard: js/hija.js 1.0.0 (d472204) lee su status, backlog y roadmap por raw, sin cuota de API; tarjeta «Mi hija · Shiruna» debajo de «La Factory ahora»; tests/hija.test.mjs (8); app.js a4e2adb; index ?v=2.5.0. Próximo S-4b: filtro Todas/Shiruvana/Shiruna, dueña en cada tarjeta y «Te toca» unificado. Después S-5: su motor.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Motivo: Pablo aprobó mis correcciones a la arquitectura de agentes (2026-11-20 13:16Z) → DEC-052 v1.1 y mensaje para Andreani y Martinica.\n",
+          "text": "Motivo: a futuro hay que llevarme fuera de Copilot Studio; Shiruna es el ensayo general y el Centro de mando tiene que mostrar el trabajo de las dos.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Etapa actual: PRODUCT\n",
+          "text": "Etapa actual: REVIEW\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Inicio: 2026-10-21T20:30Z\n",
+          "text": "Inicio: 2026-11-21T19:36Z\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-20 13:20Z\n",
+          "text": "Última actualización: 2026-11-21 21:20Z\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: esperar la próxima orden de Pablo. Las guías nuevas están solo en DEV: pasan a PRD si Pablo lo pide.\n",
+          "text": "Próxima acción: con tu OK a S-4a, sigo con S-4b (filtro por dueña y «Te toca» de las dos).\n"
+        },
+        {
+          "op": "insert_after",
+          "anchor": "## Esperando a Pablo\n\n",
+          "text": "- [DEC-053] Validación: abrí el Centro de mando y mirá la tarjeta «Mi hija · Shiruna» debajo de «La Factory ahora».\n"
+        }
+      ]
+    }
+  ]
+}
