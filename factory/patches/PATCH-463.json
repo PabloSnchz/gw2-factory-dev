@@ -1,0 +1,32 @@
+{
+  "id": "PATCH-463",
+  "summary": "S-4b hecho en el panel: un solo «Te toca» para las dos y filtro por dueña; validación en status",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "f72ad7efb111dba249d27442fb7382165a63d865",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: DEC-053, nace Shiruna (mi hija): S-4a hecho, su tarjeta en el Centro de mando espera tu validación.\n",
+          "text": "Tarea actual: DEC-053, nace Shiruna (mi hija): S-4a validado y S-4b hecho; el Centro de mando con las dos espera tu validación.\nHistorial de S-4b: 2026-11-21 21:26Z en gw2-factory-dashboard (Pablo validó S-4a con «ok»): hija.js 1.1.0 (76dc25a) unirHija suma lo que pide Shiruna a «02 · Te toca» y sus avisos a «Para tu información», con su nombre y sin ID mío (sus IDs nunca enlazan a mi memoria); filtro «Las dos · Shiruvana · Shiruna» con data-duena, sin guardar nada; views.js df5cdfd (tarjeta y filtro dentro de Hoy, chip «De Shiruna»); app.js 730960d; tests hija (12) e hija-panel (3); index ?v=2.6.0; CI VERDE 142/142 (f701440). CHANGELOG 3.1.0 al cerrar S-4.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-21 21:20Z\n",
+          "text": "Última actualización: 2026-11-21 21:30Z\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: con tu OK a S-4a, sigo con S-4b (filtro por dueña y «Te toca» de las dos).\n",
+          "text": "Próxima acción: con tu OK a S-4b cierro S-4 (CHANGELOG 3.1.0) y pasamos a S-5: elegir el motor de Shiruna.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- [DEC-053] Validación: abrí el Centro de mando y mirá la tarjeta «Mi hija · Shiruna» debajo de «La Factory ahora».\n",
+          "text": "- [DEC-053] Validación: en Hoy del Centro de mando probá el filtro «Las dos · Shiruvana · Shiruna» (arriba de «02 · Te toca»): con «Shiruna» queda solo lo de ella; con «Shiruvana», solo lo mío.\n"
+        }
+      ]
+    }
+  ]
+}
