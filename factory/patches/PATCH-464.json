@@ -1,0 +1,37 @@
+{
+  "id": "PATCH-464",
+  "summary": "S-4 cerrado por Pablo: Centro de mando 3.1.0 con las dos dueñas; próximo S-5 (motor de Shiruna)",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "14084a3bc07a7ddb7bffd67cfc3374c4e4d8652f",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: DEC-053, nace Shiruna (mi hija): S-4a validado y S-4b hecho; el Centro de mando con las dos espera tu validación.\n",
+          "text": "Tarea actual: DEC-053, nace Shiruna (mi hija): S-1 a S-4 cerrados; sigue S-5, elegir su motor.\nHistorial de S-4: 2026-11-21 21:30Z Pablo validó S-4b («ok»). gw2-factory-dashboard 3.1.0: CHANGELOG 044d666 (commit 393f3b3), package.json 3ccc92b (2174499).\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-21 21:30Z\n",
+          "text": "Última actualización: 2026-11-21 21:31Z\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Etapa actual: REVIEW\n",
+          "text": "Etapa actual: PRODUCT\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: con tu OK a S-4b cierro S-4 (CHANGELOG 3.1.0) y pasamos a S-5: elegir el motor de Shiruna.\n",
+          "text": "Próxima acción: S-5, el motor de Shiruna: banco de pruebas y primera candidata en la PC SHIRUVANA.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- [DEC-053] Validación: en Hoy del Centro de mando probá el filtro «Las dos · Shiruvana · Shiruna» (arriba de «02 · Te toca»): con «Shiruna» queda solo lo de ella; con «Shiruvana», solo lo mío.\n",
+          "text": "- [DEC-053] Info: el Centro de mando ya muestra a Shiruna y a mí (3.1.0). Sigue S-5: elegir su motor.\n"
+        }
+      ]
+    }
+  ]
+}
