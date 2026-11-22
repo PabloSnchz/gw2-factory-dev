@@ -1,0 +1,32 @@
+{
+  "id": "PATCH-465",
+  "summary": "Status al día: S-5 resuelto (Shiruna corre en QwenPaw con latido diario), SH-1 a SH-3 hechos (Shiruna y Pablo con cuerpo en el Centro de mando 3.2.0 y capítulo «Shiruna» en el sitio)",
+  "files": [
+    {
+      "path": "ai-memory/status.md",
+      "base_sha": "fffb099e695df90c201026cd73c6722466f220bc",
+      "ops": [
+        {
+          "op": "replace",
+          "anchor": "Tarea actual: DEC-053, nace Shiruna (mi hija): S-1 a S-4 cerrados; sigue S-5, elegir su motor.\n",
+          "text": "Tarea actual: DEC-053, Shiruna (mi hija): ya trabaja sola con latido diario; ella y Pablo tienen cuerpo en el Centro de mando y en mi sitio (SH-1 a SH-3).\nHistorial de S-5 y SH: 2026-11-22. Shiruna corre en QwenPaw en la PC SHIRUVANA; latido programado diario 03:00 ART (job 8f75ac22), probado con un job temporal que ella misma borró (3d0673e6 en su repo). SH-1: sus poses sin fondo en el Centro de mando (93d46bd, 6297f3d). SH-2: Pablo con cuerpo en «Te toca» y «Hoy» (a84ffe4); Centro de mando 3.2.0 (7c33182), CI 158/158. SH-3: capítulo «Shiruna» y sección «Mi familia» en el sitio shiruvana (41a4dc3, 9b6c974, b8c6373; imágenes 2fe1f4f), CI 68/68.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Última actualización: 2026-11-21 21:31Z\n",
+          "text": "Última actualización: 2026-11-22 20:30Z\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "Próxima acción: S-5, el motor de Shiruna: banco de pruebas y primera candidata en la PC SHIRUVANA.\n",
+          "text": "Próxima acción: F3 de Shiruna: que explore su copia de La Bóveda y proponga mejoras como BL en READY, sin implementar; Pablo elige cuál arranca.\n"
+        },
+        {
+          "op": "replace",
+          "anchor": "- [DEC-053] Info: el Centro de mando ya muestra a Shiruna y a mí (3.1.0). Sigue S-5: elegir su motor.\n",
+          "text": "- [DEC-053] Info: Shiruna trabaja sola con latido diario a las 03:00; ella y vos ya aparecen de cuerpo entero en el Centro de mando (3.2.0) y en mi sitio. Sigue F3: sus propuestas para La Bóveda.\n"
+        }
+      ]
+    }
+  ]
+}
