@@ -1,0 +1,5 @@
+{
+ "id": "RUN-314",
+ "summary": "FLU-2: sonda — qué le pesa al scroll de La Bóveda DEV (desenfoques, fondos fijos, relojes, animaciones infinitas)",
+ "tests": ["tests/zz-probe-flu2.smoke.cjs"]
+}
