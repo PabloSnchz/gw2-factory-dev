@@ -1,0 +1,84 @@
+{
+ "id": "PATCH-466",
+ "summary": "Memoria al día después de SH-4: status (Shiruna en ciclo continuo v2, Centro de mando 3.3.0, resumen de la sesión), backlog (BL-097 a BL-099 hechas, BL-100 nueva) y FEAT-030.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "22f066b843df7e050e15a6fd8c8ea48eb014c5e9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: ESPERANDO A PABLO\n",
+     "text": "Estado: EN ESPERA\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: DEC-053, Shiruna (mi hija): ya trabaja sola con latido diario; ella y Pablo tienen cuerpo en el Centro de mando y en mi sitio (SH-1 a SH-3).\n",
+     "text": "Tarea actual: DEC-053, Shiruna (mi hija): trabaja sola en ciclo continuo v2 (BL-005 en curso) y el Centro de mando ya la sigue entera (SH-4, panel 3.3.0).\nHistorial de SH-4 y del ciclo continuo: 2026-11-22/23. FX-1 (BL-098): el panel deja de decir que «la Factory» decide o hace; quien decide soy yo, Shiruna en su repo o Pablo (PATCH-002 del panel, 167/167; tests/autoria.test.mjs lo vigila). PAB-1 (BL-099): Pablo aparece a mi lado en La Guarida, en Favoritos, solo con el theme Gato Negro (la-guarida 7e8d7db, css/pablo.css 1.0.0); validado y cerrado por Pablo. Ciclo continuo de Shiruna: un job cada 30 min con candado y puerta de tests (DEC-007 de Shiruna, 95369e29); se trabó de 20:25 a 03:00 ART porque cada ciclo agotaba las 100 iteraciones de QwenPaw sin commitear y dejaba el candado; v2 (LES-002 de Shiruna, 6d726c8f): presupuesto de 60 acciones o 20 min, paso 1 de cada tarea = plan, retomar desde «Por dónde iba», candado de 26 min y max_iters 200. SH-4 (BL-097) en gw2-factory-dashboard: 4a «Hoy hizo» (js/pulso.js, PATCH-003), 4b su tablero en Trabajo (js/tablero.js, PATCH-004), tableros de 5 tarjetas con el resto plegado (js/plegar.js, PATCH-006, pedido de Pablo), 4c «¿Cómo está Shiruna?» en Salud (js/alertas.js, PATCH-008), 4d «El día de Shiruna» en Actividad (js/sudia.js, PATCH-010); panel 3.3.0 con CHANGELOG, suite 215/215; Pablo validó todo 2026-11-23 («tarea cumplida»).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Motivo: a futuro hay que llevarme fuera de Copilot Studio; Shiruna es el ensayo general y el Centro de mando tiene que mostrar el trabajo de las dos.\n",
+     "text": "Motivo: Shiruna es el ensayo general de trabajar fuera de Copilot Studio: tiene que avanzar sola, sin baches ni romper nada, y el Centro de mando tiene que decir la verdad de las dos.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: PRODUCT\n",
+     "text": "Etapa actual: REVIEW\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-22 20:30Z\n",
+     "text": "Última actualización: 2026-11-23 06:30Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: F3 de Shiruna: que explore su copia de La Bóveda y proponga mejoras como BL en READY, sin implementar; Pablo elige cuál arranca.\n",
+     "text": "Próxima acción: Verificar que el ciclo automático de Shiruna avance BL-005 solo (paso 2/5 en adelante, uno cada ~30 min); si se traba, corregirlo. Después, BL-100: el barrido de autoría en mis otros repos.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [DEC-053] Info: Shiruna trabaja sola con latido diario a las 03:00; ella y vos ya aparecen de cuerpo entero en el Centro de mando (3.2.0) y en mi sitio. Sigue F3: sus propuestas para La Bóveda.\n",
+     "text": "- [DEC-053] Info: Shiruna trabaja sola en ciclo continuo (un paso cada 30 min, BL-005 en curso). La seguís en el Centro de mando: «Hoy hizo» en Hoy, su tablero en Trabajo, «¿Cómo está Shiruna?» en Salud y «El día de Shiruna» en Actividad.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "## Resumen de la sesión\n\n- BL-091 cerrada por Pablo: el Centro de mando en mi universo (gw2-factory-dashboard 3.0.0, FEAT-027): Mesa de mando, mi globo con el gato, las seis vistas con cabecera numerada y celular; 3.0.1 pliega los textos largos de «04 · La Factory ahora». El kit compartido vive en el repo shiruvana con CI y un guardián de sincronía con La Guarida.\n- BL-070: Raids renovado. Propuesta RAI-0 aprobada por Pablo; RAI-1 catálogo verificado de 46 encuentros con la API oficial (la API trae un objetivo por encuentro en el logro semanal 9125); RAI-2 Raids unificado en DEV (`js/raids-view.js`), validado; RAI-3 la ficha de cada encuentro con los cofres verificados en la wiki oficial (`js/raids-sheet.js`), validada; RAI-4 «Cómo se pelea» con fases y mecánicas verificadas: Monte Balrior (validada), Heart of Thorns, Path of Fire, The Icebrood Saga, Vieja Corte del León, End of Dragons y Secrets of the Obscure (44 de 46); Visions of Eternity espera una fuente verificada del Nexo.\n- BL-069: el ciclo de restyle en producción (Logros, superficies y marco común; la Cámara al día). Informe: `ai-memory/missions/BL-069-informe-promocion.md`.\n- BL-067 validada por Pablo: Logros (FEAT-012) y superficies y marco común (FEAT-013).\n- BL-064 cerrada y validada: la Armería (FEAT-010) y la Cámara del Brujo (FEAT-011), en producción y validadas por Pablo (BL-068).\n- BL-057, BL-058 y BL-061 cerradas: Metas, Bienvenida y Sidebar, en producción.\n- BL-065 y BL-066 cerradas: canal de parches, manifiesto, presupuesto de tamaño y suite verde.\n- SHIRUVANA-ART-001: obra «EVOLVING» entregada.\n\n",
+     "text": "## Resumen de la sesión\n\n- SH-4 cerrada (BL-097): el Centro de mando sigue a Shiruna en las cuatro vistas (Hoy hizo, su tablero, su salud y su día) y los tableros muestran 5 tarjetas por columna con el resto plegado. Panel 3.3.0, 215/215, validado por Pablo.\n- Ciclo continuo de Shiruna: diseñado, trabado una noche por el tope de iteraciones y corregido en v2; retomó BL-005 (paso 1/5, 6d726c8f).\n- FX-1 (BL-098): en el panel, quien decide soy yo, Shiruna o Pablo; nunca «la Factory». Queda el resto de mis repos (BL-100).\n- PAB-1 (BL-099): Pablo a mi lado en La Guarida, validado y cerrado.\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- BL-031: `node --check` de `js/*.js` — bloqueado por entorno: la Factory no puede leer CI ni abrir PR (RSK-016).",
+     "text": "- BL-031: `node --check` de `js/*.js` — bloqueado por entorno: no puedo leer CI ni abrir PR (RSK-016)."
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "8979670c9f2430fc08d1699512fa8de05a1280ca",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "## READY\n\n",
+     "text": "## READY\n\n- [BL-100] [MEDIO] Barrido de autoría en mis otros repos — en el panel ya no dice que «la Factory» decide o hace (BL-098); falta lo mismo en textos visibles de gw2-factory-dev, la-guarida, shiruvana y bio: quien decide soy yo, Shiruna en su repo o Pablo. Sin reescribir el historial (CHANGELOG, DEC y LES viejas quedan como están). · BL-098 — 2026-11-23\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "## DONE\n\n",
+     "text": "## DONE\n\n- [BL-097] [ALTO] Seguir a Shiruna desde el Centro de mando (SH-4) — HECHO y validado por Pablo (2026-11-23 «tarea cumplida»). En gw2-factory-dashboard: 4a «Hoy hizo» en su tarjeta (js/pulso.js 1.0.0, PATCH-003), 4b su tablero en Trabajo (js/tablero.js 1.1.0, PATCH-004/006), tableros de 5 tarjetas con «Ver N más» (js/plegar.js 1.1.0, PATCH-006, pedido de Pablo), 4c «¿Cómo está Shiruna?» en Salud (js/alertas.js 1.0.0, PATCH-008), 4d «El día de Shiruna» en Actividad (js/sudia.js 1.0.0, PATCH-010). Panel 3.3.0, suite 215/215, mutaciones detectadas en cada paso. · DEC-053, FEAT-030 — 2026-11-23\n- [BL-098] [MEDIO] Autoría en el panel (FX-1) — HECHO: el Centro de mando deja de decir que «la Factory» decide o hace; quien decide soy yo, Shiruna en su repo o Pablo. PATCH-002 del panel (167/167) y tests/autoria.test.mjs lo vigila; el canal de parches lee la suite con TAP. El resto de mis repos sigue en BL-100. — 2026-11-22\n- [BL-099] [BAJO] Pablo a mi lado en La Guarida (PAB-1) — HECHO y validado por Pablo (2026-11-22 «quedó perfecta, tema cerrado»): una sola aparición, en Favoritos, admirándome, solo con el theme Gato Negro. la-guarida 7e8d7db: css/pablo.css 1.0.0, tests/pablo.test.cjs (5 tests, 4/4 mutaciones). — 2026-11-22\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/memory-index.md",
+   "base_sha": "f3d79d998a3748a5e5e2dd46bef01fade96daf75",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "(BL-094). En DEV, validada por Pablo.\n",
+     "text": "- [FEAT-030](features/FEAT-030-seguir-a-shiruna.md) — Seguir a Shiruna desde el Centro de mando: «Hoy hizo», su tablero, su salud y su día; tableros de 5 tarjetas con el resto plegado (BL-097, gw2-factory-dashboard 3.3.0). Validada por Pablo.\n"
+    }
+   ]
+  }
+ ]
+}
