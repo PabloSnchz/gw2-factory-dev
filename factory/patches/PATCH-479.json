@@ -1,0 +1,37 @@
+{
+ "id": "PATCH-479",
+ "summary": "BL-101 HECHA: diagnóstico del bench (Snow Crows retiró benchmarks viejos tras el parche del 10/11), aviso de «para revisar» confirmado exacto y freno de datos en builds-watch.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "3bcc058f41405a15cac12a1cae8e3252ec325798",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-101] [MEDIO] Mis tests de Builds y la honestidad de sus datos — EN CURSO (tomada 2026-11-24 02:30Z, Pablo: «seguí con lo que decidas»). Paso 1 HECHO (2026-11-24): la suite de DEV vuelve a verde. Las 5 fallas eran datos, no código (RUN-315): el parche de balance del 10/11 pasó con razón 90 de 104 builds a «para revisar» y el bench vivo perdió cruces (16 builds con bench; eran 20 o más). Los tests de lógica (bld-lib, bld-rows, bld-view) usan una foto fija del 28/10 (tests/fixtures/builds-mundo.cjs + builds-2026-10-28.b64, gzip+base64, 10 KB; PATCH-476/477) y tests/bld-data.test.cjs (5 tests) revisa los datos vivos con reglas que valen para cualquier parche. RUN-316: bld-data 5/5, bld-rows 8/8, bld-view 10/10. Paso 2: por qué el bench perdió cruces el 16/11 y 23/11 (¿cambiaron las direcciones de Snow Crows?) y si el aviso «90 builds dicen en su fuente que son de un parche anterior» es exacto para las de Snow Crows (su fecha la pone la curación, no la fuente); chequeos de datos en builds-watch antes de publicar. Técnico: lo decido yo. · BL-084, BL-088 — 2026-11-24\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-101] [MEDIO] Mis tests de Builds y la honestidad de sus datos — HECHA 2026-11-24. Paso 1: suite de DEV en verde (foto fija del 28/10 para la lógica: tests/fixtures/builds-mundo.cjs + builds-2026-10-28.b64; datos vivos en tests/bld-data.test.cjs; PATCH-476/477/478). Paso 2 (diagnóstico): el bench no se rompió. Snow Crows retiró los benchmarks que el parche del 10/11 dejó viejos y los vuelve a medir de a poco: de las builds PvE del catálogo perdieron bench soulbeast condi, untamed quickness, tempest celestial alacrity, weaver condi y virtuoso condi; willbender condi alacrity y vindicator power se fueron el 16/11 y volvieron el 23/11; renegade condi alacrity se sumó. Hoy 16 builds con bench (eran 20). El aviso «N builds dicen en su fuente que son de un parche anterior» es exacto: bld-curate pasa una build al último parche solo si su fuente se actualizó después (Snow Crows: fecha «Updated»; MetaBattle: parche declarado). Paso 2 (freno): builds-watch.yml corre tests/bld-data.test.cjs después de curar y antes del commit; si los datos nuevos no cierran, no publica y la corrida queda en rojo (commit 6e5a267, blob cde1801; .github no pasa por el canal de parches). · BL-084, BL-088 — 2026-11-24\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "741d407689c94d31154e7693adb4bcff52878152",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-24 02:42Z\n",
+     "text": "Última actualización: 2026-11-24 03:05Z\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "Sigue el paso 2: por qué el bench perdió cruces y si el aviso de «para revisar» es exacto para las builds de Snow Crows.\n",
+     "text": "- BL-101 HECHA (2026-11-24 03:05Z). Bench: Snow Crows retiró los benchmarks que el parche del 10/11 dejó viejos (soulbeast condi, untamed quickness, tempest celestial alacrity, weaver condi, virtuoso condi) y los re-mide de a poco (willbender condi alacrity y vindicator volvieron el 23/11; renegade condi alacrity nuevo): 16 builds con bench, no es un error. Aviso «para revisar»: exacto (bld-curate solo sube el parche si la fuente se actualizó después). Freno nuevo: builds-watch.yml corre tests/bld-data.test.cjs entre la curación y el commit (6e5a267); si falla, no publica. Primera corrida real: hoy lunes 12:00 UTC.\n"
+    }
+   ]
+  }
+ ]
+}
