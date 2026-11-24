@@ -1,0 +1,1 @@
+{"id":"RUN-317","summary":"BL-103: verificar que los tests nuevos de «Con Key» corren y pasan, y el presupuesto de tamaño","tests":["tests/sidebar-nav.test.cjs","tests/size-budget.test.cjs"]}
