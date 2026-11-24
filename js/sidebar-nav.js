@@ -1,6 +1,7 @@
 /*!
  * js/sidebar-nav.js — La Sidebar: la navegación de la Bóveda (BL-061)
- * Versión: 2.3.1 (2026-10-30) · BL-082 BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720)
+ * Versión: 2.4.0 (2026-11-24) · BL-103: «Con Key» sin Key activa (idea de Shiruna, su BL-007)
+ *          2.3.1 (2026-10-30) · BL-082 BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720)
  *          2.3.0 (2026-10-28) · BL-082 BLD-1: Builds en la lista, antes de Cuentas (EXTRA)
  *          2.2.6 (2026-10-25) · propuesta SBR-0 aprobada por Pablo (Sidebar a la izquierda)
  *
@@ -47,13 +48,13 @@
  */
 (function (root) {
   'use strict';
-  var VERSION = '2.3.1';
+  var VERSION = '2.4.0';
   var LOG = '[SidebarNav]';
 
   // Respaldo idéntico a Welcome._pure.MODULES (lo vigila tests/sidebar-nav.test.cjs).
   var MODULES_FALLBACK = [
     { id: 'cards', name: 'Cartera', href: '#/cards', icon: 'assets/icons/733322.png', color: '#F2B94B' },
-    { id: 'meta', name: 'Metas y Eventos', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF' },
+    { id: 'meta', name: 'Metas y Eventos', href: '#/meta', icon: 'assets/icons/102420.png', color: '#A896FF', free: true },
     { id: 'wv', name: 'Cámara del Brujo', href: '#/account/wizards-vault', icon: 'assets/icons/3172791.png', color: '#15C3B7' },
     { id: 'activities', name: 'Actividades', href: '#/activities', icon: 'assets/icons/1302773.png', color: '#3CC48A' },
     { id: 'homestead', name: 'Heredad', href: '#/account/homestead', icon: 'assets/icons/Welcome/3380755.png', color: '#D9A55B' },
@@ -61,7 +62,7 @@
     { id: 'achievements', name: 'Logros', href: '#/account/achievements', icon: 'assets/icons/155059.png', color: '#6EA3FF' },
     { id: 'characters', name: 'Inventario y Personajes', href: '#/account/characters', icon: 'assets/icons/Welcome/358409.png', color: '#7EC3FF' },
     { id: 'armory', name: 'Armería Legendaria', href: '#/account/legendary-armory', icon: 'assets/icons/Cuentas/157085.png', color: '#E545CA' },
-    { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3' }
+    { id: 'accounts', name: 'Cuentas', href: '#/account/accounts', icon: 'assets/icons/3601748.png', color: '#8E96A3', local: true }
   ];
   var HOME = { id: 'home', name: 'Inicio', href: '#/welcome', icon: 'https://render.guildwars2.com/file/32633AF8ADEA696A1EF56D3AE32D617B10D3AC57/157353.png', color: 'var(--acc-1)' };
   // Ids y data-view que ya usaban el router y otros módulos.
@@ -118,6 +119,9 @@
     SIDE + ' .sbr-w{margin-left:auto;width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--gn-gold,var(--color-amber))}',
     SIDE + ' .sbr-new{margin-left:auto;flex-shrink:0;font-size:.6rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;' +
       'color:var(--gn-gold,var(--color-amber));border:1px solid var(--gn-gold,var(--color-amber));border-radius:999px;padding:0 6px;line-height:1.5}',
+    SIDE + ' .sbr-key{margin-left:auto;flex-shrink:0;font-size:.6rem;font-style:normal;font-weight:700;letter-spacing:.04em;' +
+      'color:var(--tx-3);border:1px solid var(--bd-1);border-radius:999px;padding:0 6px;line-height:1.5}',
+    '#sbrTabs .sbr-key{display:none}',
     '.sbr-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}',
     // SBR-3: celular. La barra y la hoja solo existen hasta 900 px.
     '#sbrTabs,#sbrSheet,#sbrScrim{display:none}',
@@ -167,12 +171,12 @@
   function modules() {
     var W = root.Welcome;
     var list = W && W._pure && Array.isArray(W._pure.MODULES) && W._pure.MODULES.length ? W._pure.MODULES : MODULES_FALLBACK;
-    return withExtra(list).map(function (m) { return { id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color }; });
+    return withExtra(list).map(function (m) { return { id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color, free: !!m.free, local: !!m.local }; });
   }
 
   // BL-082 BLD-1: módulos que la Bienvenida todavía no lista (welcome-panel.js no tiene lugar: 48 KB).
   // Van antes de Cuentas y una sola vez: si algún día la Bienvenida los suma, no se repiten.
-  var EXTRA = [{ id: 'builds', name: 'Builds', href: '#/builds', icon: 'assets/icons/156720.png', color: '#C9B6FF' }];
+  var EXTRA = [{ id: 'builds', name: 'Builds', href: '#/builds', icon: 'assets/icons/156720.png', color: '#C9B6FF', free: true }];
   function withExtra(list) {
     var out = list.filter(function (m) { return m.id !== 'accounts'; }), tail = list.filter(function (m) { return m.id === 'accounts'; });
     EXTRA.forEach(function (x) { if (!list.some(function (m) { return m.id === x.id; })) out.push(x); });
@@ -561,9 +565,12 @@
     var missing = {};
     ((m && m.state === 'back' && m.activeMods) || []).forEach(function (id) { missing[id] = true; });
     var fresh = newModules(state.news);
+    // BL-103: sin Key activa, «Con Key» en lo que muestra datos de la cuenta. Sin modelo (falta la Bienvenida) no marco.
+    var noKey = !!m && m.state !== 'back', free = { home: true };
+    modules().forEach(function (x) { if (x.free || x.local) free[x.id] = true; });
     allLinks().forEach(function (a) {
       Array.prototype.slice.call(a.children || []).forEach(function (c) {
-        if (/\bsbr-(w|new|sr)\b/.test(c.className || '')) a.removeChild(c);
+        if (/\bsbr-(w|new|key|sr)\b/.test(c.className || '')) a.removeChild(c);
       });
       a.removeAttribute('title');
       var id = a.getAttribute('data-mod');
@@ -577,6 +584,17 @@
         a.appendChild(w);
         a.appendChild(sr);
         a.setAttribute('title', 'A tu API Key le falta un permiso para este módulo');
+      } else if (noKey && !free[id]) {
+        var k = d.createElement('i');
+        k.className = 'sbr-key';
+        k.setAttribute('aria-hidden', 'true');
+        k.textContent = 'Con Key';
+        var srk = d.createElement('span');
+        srk.className = 'sbr-sr';
+        srk.textContent = ' (necesita API Key)';
+        a.appendChild(k);
+        a.appendChild(srk);
+        a.setAttribute('title', 'Este módulo muestra datos de tu cuenta: necesita una API Key');
       } else if (fresh[id]) {
         var n = d.createElement('i');
         n.className = 'sbr-new';

@@ -19,7 +19,8 @@
     "index.html": { "nota": "Salió de congelados en BL-070 TOP-4 (retiro de Gist: de 54034 a 41949 bytes). Módulos nuevos van a js/modules.json (FP-5). No puede volver a pasar 48 KB." },
     "js/welcome-panel.js": { "nota": "Bienvenida; bajó de 48 KB en BL-070 RAI-5a («Raids y Strikes» pasa a «Raids»). No puede volver a pasar 48 KB." },
     "js/converter-modal.js": { "nota": "Cartera (BL-056); se achicó de 68 KB a 48 KB en CAR-2A." },
-    "css/theme-polish.css": { "nota": "Capa visual común; se achica en el marco común (BL-064, paso 8)." }
+    "css/theme-polish.css": { "nota": "Capa visual común; se achica en el marco común (BL-064, paso 8)." },
+    "js/sidebar-nav.js": { "nota": "Sidebar; pasó los 40 KB en BL-103 («Con Key», 2.4.0). Lo próximo que crezca va en un archivo aparte. No puede pasar 48 KB." }
   },
   "excepciones": {
     "js/legendary-data.js": { "motivo": "Datos generados por tools/legendary (DEC-035): se regeneran, no se editan a mano." },

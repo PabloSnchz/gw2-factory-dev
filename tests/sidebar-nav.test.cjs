@@ -128,10 +128,10 @@ const ready = (x) => { x.fire('DOMContentLoaded'); return x; };
 const same = (a, b, msg) => assert.deepEqual(JSON.parse(JSON.stringify(a)), b, msg);
 const hrefs = (x) => x.document.querySelectorAll('#sbrNav a').map((a) => a.getAttribute('href'));
 
-test('versión 2.3.1', () => {
+test('versión 2.4.0', () => {
   const x = setup();
-  assert.match(SRC, /Versión: 2\.3\.1/);
-  assert.equal(x.S().version, '2.3.1');
+  assert.match(SRC, /Versión: 2\.4\.0/);
+  assert.equal(x.S().version, '2.4.0');
 });
 
 test('BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del héroe (156720), el mismo que la cabecera', () => {
@@ -143,7 +143,7 @@ test('BLD-ICON: Builds con el ícono oficial de la pestaña Build del Panel del 
 
 test('una sola lista: el respaldo es idéntico a los módulos de la Bienvenida (orden, nombre, ruta, ícono y color)', () => {
   const x = ready(setup());
-  const W = x.window.Welcome._pure.MODULES.map((m) => ({ id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color }));
+  const W = x.window.Welcome._pure.MODULES.map((m) => ({ id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color, free: m.free, local: m.local }));
   same(x.S()._pure.MODULES_FALLBACK, JSON.parse(JSON.stringify(W)));
 });
 
@@ -365,6 +365,36 @@ test('«Nuevo»: en los módulos con una novedad de 14 días o menos; el aviso d
   assert.equal(x.document.getElementById('navLegendaryArmory').querySelector('.sbr-new'), null, 'una novedad vieja no');
   assert.equal(x.fetched.filter((u) => /welcome-news/.test(u)).length, 1);
   same(x.S()._pure.newModules([{ module: 'wv', isNew: true }, { module: 'raids', isNew: false }, null]), { wv: true });
+});
+
+// BL-103 (idea de Shiruna, su BL-007): sin Key activa, «Con Key» en los módulos que muestran datos de la cuenta.
+test('«Con Key»: sin Key activa, en los módulos con datos de la cuenta (Sidebar y hoja); no en Inicio, Metas, Builds ni Cuentas', () => {
+  const x = ready(setup({ token: '' }));
+  const con = x.document.querySelectorAll('#sbrNav a').filter((a) => a.querySelector('.sbr-key')).map((a) => a.getAttribute('data-mod'));
+  same(con, ['cards', 'wv', 'activities', 'homestead', 'raids', 'achievements', 'characters', 'armory']);
+  const c = x.document.getElementById('navCards');
+  assert.equal(c.querySelector('.sbr-key').textContent, 'Con Key');
+  assert.equal(c.querySelector('.sbr-key').getAttribute('aria-hidden'), 'true');
+  assert.equal(c.querySelector('.sbr-sr').textContent, ' (necesita API Key)');
+  assert.match(c.getAttribute('title'), /necesita una API Key/);
+  const sh = x.document.querySelectorAll('#sbrSheet a').filter((a) => a.querySelector('.sbr-key')).map((a) => a.getAttribute('data-mod'));
+  same(sh, ['wv', 'activities', 'homestead', 'raids', 'achievements', 'characters']);
+  assert.match(x.S()._pure.CSS, /#sbrTabs \.sbr-key\{display:none\}/, 'en la barra del celular no: «Más» ya avisa');
+  same(x.S()._pure.EXTRA.map((m) => m.free), [true], 'Builds no necesita Key');
+});
+
+test('«Con Key»: con Key activa no aparece; al cargar la primera Key se va sin dejar rastros', () => {
+  const x = ready(setup({ token: '' }));
+  x.store['gn:account:keys'] = [{ label: 'Main', value: 'A', perms: ALL }];
+  x.store['gn:account:selected'] = 'A';
+  x.fire('gn:tokenchange');
+  assert.equal(x.document.querySelectorAll('.sbr-key').length, 0);
+  assert.equal(x.document.getElementById('navCards').querySelectorAll('.sbr-sr').length, 0);
+  assert.equal(x.document.getElementById('navCards').getAttribute('title'), null);
+  x.S().refresh();
+  assert.equal(x.document.querySelectorAll('.sbr-key').length, 0, 'refrescar no lo trae de vuelta');
+  const none = ready(setup({ welcome: 'none' }));
+  assert.equal(none.document.querySelectorAll('.sbr-key').length, 0, 'sin la Bienvenida no sé si hay Key: no marco');
 });
 
 test('al cambiar la Key (gn:tokenchange) rearmo tarjeta y avisos sin duplicar', () => {
