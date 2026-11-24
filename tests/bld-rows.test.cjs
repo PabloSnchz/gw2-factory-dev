@@ -10,7 +10,9 @@ globalThis.GNBldCode = require('../js/bld-code.js');
 globalThis.GNBldShow = require('../js/bld-show.js');
 const R = require('../js/bld-rows.js');
 const RP = R._pure;
-const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
+// BL-101: la lógica se prueba contra una foto fija de los datos (tests/fixtures/builds-mundo.cjs, 2026-10-28), no contra
+// los datos vivos que la vigía cambia cada semana; los datos vivos los revisa tests/bld-data.test.cjs.
+const { CAT } = require('./fixtures/builds-mundo.cjs');
 const BENCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/bench.json'), 'utf8'));
 
 function libPure() { return require('../js/bld-lib.js')._pure; }

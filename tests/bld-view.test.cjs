@@ -79,8 +79,7 @@ test('CSS: solo tokens de los themes y foco visible', () => {
 });
 
 test('BUI-4 cabecera: marco de Raids con 4 indicadores, píldora del parche y contadores en las pestañas', () => {
-  const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
-  const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));
+  const { CAT, WATCH } = require('./fixtures/builds-mundo.cjs'); // BL-101: foto fija de los datos, no los vivos
   globalThis.GNBldCode = require('../js/bld-code.js');
   const L = require('../js/bld-lib.js');
   const s = P.statsModel({ cat: CAT, watch: WATCH, mine: 3, lib: L._pure });

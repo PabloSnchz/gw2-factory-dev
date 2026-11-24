@@ -11,8 +11,9 @@ globalThis.GNBldShow = require('../js/bld-show.js');
 const L = require('../js/bld-lib.js');
 const M = require('../js/bld-mine.js');
 const C = globalThis.GNBldCode, P = L._pure;
-const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));
-const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));
+// BL-101: la lógica se prueba contra una foto fija de los datos (tests/fixtures/builds-mundo.cjs, 2026-10-28), no contra
+// los datos vivos que la vigía cambia cada semana; los datos vivos los revisa tests/bld-data.test.cjs.
+const { CAT, WATCH } = require('./fixtures/builds-mundo.cjs');
 const BENCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/bench.json'), 'utf8'));
 // Las 36 élites (API oficial /v2/specializations, 2026-10-28) y su profesión.
 const ELITES = { 1: [27, 62, 65, 81], 2: [18, 61, 68, 74], 3: [43, 57, 70, 75], 4: [5, 55, 72, 78], 5: [7, 58, 71, 77],
