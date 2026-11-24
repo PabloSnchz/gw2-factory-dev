@@ -6,6 +6,9 @@
 #      catalog.review. Nunca borra builds. Ver .github/scripts/bld-curate.cjs.
 #      También el equipo de cada build de Snow Crows (gear.json, BL-084).
 #   3. si la curación cambió algo, la vigía vuelve a mirar (avisa a Discord que la biblioteca cambió).
+#   4. BL-101: si la curación cambió algo, tests/bld-data.test.cjs revisa los datos nuevos (códigos que el juego acepta,
+#      36 élites cubiertas, fechas coherentes, bench sano). Si falla, no se publica nada: queda lo de la semana anterior
+#      y la corrida en rojo avisa.
 # Portátil: no depende del nombre del repo ni de la rama; commitea solo esos 4 archivos en la rama por defecto del
 # repo donde corre. Publicación: si el repo publica con dev-pages.yml (DEV) lo dispara; si publica Pages desde la rama
 # (PRD), el push alcanza. Requisitos del repo: Actions con permiso de escritura (Settings → Actions → General →
@@ -65,6 +68,11 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: node .github/scripts/bld-watch.cjs
+
+      # BL-101: los datos nuevos se revisan antes del commit; si algo no cierra, la corrida falla y no publica.
+      - name: Revisar los datos curados antes de publicar
+        if: steps.curate.outputs.changed == 'true' && hashFiles('tests/bld-data.test.cjs') != ''
+        run: node --test tests/bld-data.test.cjs
 
       - name: Commit de los datos de builds
         id: commit
