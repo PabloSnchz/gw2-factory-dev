@@ -1,0 +1,5 @@
+{
+ "id": "RUN-316",
+ "summary": "BL-101: verificar los tests de Builds con la foto fija (bld-lib, bld-rows, bld-view) y los datos vivos (bld-data)",
+ "tests": ["tests/bld-data.test.cjs", "tests/bld-lib.test.cjs", "tests/bld-rows.test.cjs", "tests/bld-view.test.cjs"]
+}
