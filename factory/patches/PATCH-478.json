@@ -1,0 +1,37 @@
+{
+ "id": "PATCH-478",
+ "summary": "BL-101 paso 1 hecho (suite de DEV en verde); BL-101 pasa a EN CURSO con el paso 2 definido.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "01601c4145d1d32dc42d6ec1fa41eeda5732a3e2",
+   "ops": [
+    {
+     "op": "delete",
+     "anchor": "- [BL-101] [MEDIO] Mis 5 tests de Builds en rojo desde el parche del 2026-11-10 — bld-lib (3), bld-rows y bld-view fijan el mundo del 2026-09-29 (36 PvE vigentes, «para revisar» solo MetaBattle); desde la curación del 16/11 97 de 104 builds quedan «para revisar» y la suite de DEV está en rojo. Diagnóstico del 20/11: no es un error de lógica. Plan: tests de lógica con datos fijos propios y chequeos de datos que corren en builds-watch antes de publicar; revisar cómo se ve «para revisar» masivo. Técnico: lo decido yo. · BL-084, BL-088 — 2026-11-23\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-101] [MEDIO] Mis tests de Builds y la honestidad de sus datos — EN CURSO (tomada 2026-11-24 02:30Z, Pablo: «seguí con lo que decidas»). Paso 1 HECHO (2026-11-24): la suite de DEV vuelve a verde. Las 5 fallas eran datos, no código (RUN-315): el parche de balance del 10/11 pasó con razón 90 de 104 builds a «para revisar» y el bench vivo perdió cruces (16 builds con bench; eran 20 o más). Los tests de lógica (bld-lib, bld-rows, bld-view) usan una foto fija del 28/10 (tests/fixtures/builds-mundo.cjs + builds-2026-10-28.b64, gzip+base64, 10 KB; PATCH-476/477) y tests/bld-data.test.cjs (5 tests) revisa los datos vivos con reglas que valen para cualquier parche. RUN-316: bld-data 5/5, bld-rows 8/8, bld-view 10/10. Paso 2: por qué el bench perdió cruces el 16/11 y 23/11 (¿cambiaron las direcciones de Snow Crows?) y si el aviso «90 builds dicen en su fuente que son de un parche anterior» es exacto para las de Snow Crows (su fecha la pone la curación, no la fuente); chequeos de datos en builds-watch antes de publicar. Técnico: lo decido yo. · BL-084, BL-088 — 2026-11-24\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "e685e34b70e904ce31c456288ad8da2a6ee2898f",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-24 02:30Z\n",
+     "text": "Última actualización: 2026-11-24 02:42Z\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "Pablo: «seguí con lo que decidas» → tomo BL-101 (mis 5 tests de Builds en rojo).\n",
+     "text": "- BL-101 paso 1 HECHO (2026-11-24 02:40Z): suite de DEV de nuevo en verde después de 14 días en rojo. Diagnóstico RUN-315: las 5 fallas eran datos (parche de balance del 10/11 → 90 de 104 builds «para revisar»; bench vivo con 16 cruces en vez de 20 o más), no código. Lógica con foto fija del 28/10 (tests/fixtures/builds-mundo.cjs 01f6271 + builds-2026-10-28.b64 f88bf41) vía PATCH-476/477; datos vivos en tests/bld-data.test.cjs bb4c827 (5 tests). RUN-316: bld-data 5/5, bld-rows 8/8, bld-view 10/10, bld-lib 18/19 antes de PATCH-477 (que corrigió la última). Sigue el paso 2: por qué el bench perdió cruces y si el aviso de «para revisar» es exacto para las builds de Snow Crows.\n"
+    }
+   ]
+  }
+ ]
+}
