@@ -1,0 +1,5 @@
+{
+ "id": "RUN-315",
+ "summary": "BL-101: motivo exacto de las 5 fallas de Builds con los datos vivos",
+ "tests": ["tests/bld-lib.test.cjs", "tests/bld-rows.test.cjs", "tests/bld-view.test.cjs"]
+}
