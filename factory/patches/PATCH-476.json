@@ -1,0 +1,39 @@
+{
+ "id": "PATCH-476",
+ "summary": "BL-101 paso 1: bld-lib, bld-rows y bld-view prueban la lógica con la foto fija de Builds (tests/fixtures/builds-mundo.cjs); los datos vivos los revisa tests/bld-data.test.cjs.",
+ "files": [
+  {
+   "path": "tests/bld-lib.test.cjs",
+   "base_sha": "4178b76f99ab257c7692d5ec230c05cb08c57ab6",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));\nconst WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));\n",
+     "text": "// BL-101: la lógica se prueba contra una foto fija de los datos (tests/fixtures/builds-mundo.cjs, 2026-10-28), no contra\n// los datos vivos que la vigía cambia cada semana; los datos vivos los revisa tests/bld-data.test.cjs.\nconst { CAT, WATCH } = require('./fixtures/builds-mundo.cjs');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-rows.test.cjs",
+   "base_sha": "25303675b8eec3cee6b1b7df8a618324df221dc9",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));\n",
+     "text": "// BL-101: la lógica se prueba contra una foto fija de los datos (tests/fixtures/builds-mundo.cjs, 2026-10-28), no contra\n// los datos vivos que la vigía cambia cada semana; los datos vivos los revisa tests/bld-data.test.cjs.\nconst { CAT } = require('./fixtures/builds-mundo.cjs');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/bld-view.test.cjs",
+   "base_sha": "2345b4231a154a96dc8b9eddd35c502a93b8dd22",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "  const CAT = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/catalog.json'), 'utf8'));\n  const WATCH = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/builds/watch.json'), 'utf8'));\n",
+     "text": "  const { CAT, WATCH } = require('./fixtures/builds-mundo.cjs'); // BL-101: foto fija de los datos, no los vivos\n"
+    }
+   ]
+  }
+ ]
+}
