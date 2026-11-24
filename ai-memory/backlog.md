@@ -21,6 +21,7 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
+- [BL-102] [MEDIO] La casa de las dos — cartel vivo en un cuarto del monitor de la PC SHIRUVANA: muestra con animación qué hace Shiruna ahora (descansa, piensa, trabaja, tests, publica, te necesita, orden de mamá, trabada, apagada), qué hago yo, y a Pablo cuando algo depende de él. Pedido de Pablo 2026-11-24. Vigía local (API de QwenPaw 127.0.0.1:8088, ciclo.lock, git, tests) → estado.json → HTML; mis commits por GitHub. Código en el repo privado shiruvana-manos/casa. Micro-ciclos: CAR-0 maqueta + sonda (hecho 2026-11-24, 852ed74), CAR-1 vigía y estados reales, CAR-2 elenco y poses, CAR-3 lanzador + FancyZones (consola chica), CAR-4 trabas y resumen del día. · DEC-053 — 2026-11-24
 
 ## DONE
 
