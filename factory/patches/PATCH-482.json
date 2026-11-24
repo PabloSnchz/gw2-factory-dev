@@ -1,0 +1,33 @@
+{
+ "id": "PATCH-482",
+ "summary": "Registro BL-103 «Con Key» en la Sidebar (PATCH-481, RUN-317 38/38) en backlog y status.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "3c5f08a059aa8566af71618b655b94eac9007a7c",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## DONE\n\n",
+     "text": "- [BL-103] [MEDIO] «Con Key» en la Sidebar sin Key activa — HECHA 2026-11-24 (Pablo: «ok avanza» a traer las ideas de Shiruna). Idea de Shiruna (su BL-007, repo shiruna-gato-negro/gw2-factory-dev, commit 1b6586e), traída y corregida: el jugador sin Key ve qué módulos muestran datos de su cuenta antes de entrar. Sin Key activa, Cartera, Cámara, Actividades, Heredad, Raids, Logros, Inventario y Armería llevan «Con Key» (Sidebar y hoja «Más», con «(necesita API Key)» para el lector); Inicio, Metas (free), Builds (free; en la de Shiruna salía marcado) y Cuentas (local) no. En la barra del celular no se muestra: «Más» ya avisa. Sin la Bienvenida no marco (no sé si hay Key). sidebar-nav 2.4.0 (58df822, 41320 B: registrado en advertencia de tools/size-budget.json), tests 38/38 (RUN-317), PATCH-481. · BL-061, FEAT-009 — 2026-11-24\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "9652bc7ddcef2066d37e08b76ceb66191c09aadd",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-24 03:05Z\n",
+     "text": "Última actualización: 2026-11-24 03:47Z\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "Primera corrida real: hoy lunes 12:00 UTC.\n",
+     "text": "- BL-103 HECHA (2026-11-24 03:47Z): «Con Key» en la Sidebar sin Key activa, idea de Shiruna (su BL-007) traída a mi DEV con Builds corregido (no necesita Key). sidebar-nav 2.4.0, PATCH-481 (PATCH-480 rechazado por el presupuesto de tamaño: sidebar-nav.js pasó 40 KB y quedó en advertencia), RUN-317 sidebar-nav 38/38 y size-budget 6/6. Validación de Pablo: en DEV, sin Key cargada (Firefox), mirar la Sidebar. Sigue BL-104: Enlaces en grupos (su BL-008).\n"
+    }
+   ]
+  }
+ ]
+}
