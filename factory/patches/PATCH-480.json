@@ -1,0 +1,94 @@
+{
+ "id": "PATCH-480",
+ "summary": "BL-103: «Con Key» en la Sidebar sin Key activa (idea de Shiruna, su BL-007): los 8 módulos con datos de la cuenta lo muestran; Inicio, Metas, Builds y Cuentas no. sidebar-nav 2.4.0.",
+ "files": [
+  {
+   "path": "js/sidebar-nav.js",
+   "base_sha": "410f58f8f17664835dc2acec33ac97f4ed3c9beb",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.3.1 (2026-10-30) · ",
+     "text": " * Versión: 2.4.0 (2026-11-24) · BL-103: «Con Key» sin Key activa (idea de Shiruna, su BL-007)\n *          2.3.1 (2026-10-30) · "
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.3.1';",
+     "text": "var VERSION = '2.4.0';"
+    },
+    {
+     "op": "replace",
+     "anchor": "color: '#A896FF' }",
+     "text": "color: '#A896FF', free: true }"
+    },
+    {
+     "op": "replace",
+     "anchor": "color: '#8E96A3' }",
+     "text": "color: '#8E96A3', local: true }"
+    },
+    {
+     "op": "replace",
+     "anchor": "color: m.color }; });",
+     "text": "color: m.color, free: !!m.free, local: !!m.local }; });"
+    },
+    {
+     "op": "replace",
+     "anchor": "color: '#C9B6FF' }]",
+     "text": "color: '#C9B6FF', free: true }]"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "    '.sbr-sr{position:absolute",
+     "text": "    SIDE + ' .sbr-key{margin-left:auto;flex-shrink:0;font-size:.6rem;font-style:normal;font-weight:700;letter-spacing:.04em;' +\n      'color:var(--tx-3);border:1px solid var(--bd-1);border-radius:999px;padding:0 6px;line-height:1.5}',\n    '#sbrTabs .sbr-key{display:none}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var fresh = newModules(state.news);\n",
+     "text": "    var fresh = newModules(state.news);\n    // BL-103: sin Key activa, «Con Key» en lo que muestra datos de la cuenta. Sin modelo (falta la Bienvenida) no marco.\n    var noKey = !!m && m.state !== 'back', free = { home: true };\n    modules().forEach(function (x) { if (x.free || x.local) free[x.id] = true; });\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "if (/\\bsbr-(w|new|sr)\\b/.test(c.className || '')) a.removeChild(c);",
+     "text": "if (/\\bsbr-(w|new|key|sr)\\b/.test(c.className || '')) a.removeChild(c);"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "      } else if (fresh[id]) {",
+     "text": "      } else if (noKey && !free[id]) {\n        var k = d.createElement('i');\n        k.className = 'sbr-key';\n        k.setAttribute('aria-hidden', 'true');\n        k.textContent = 'Con Key';\n        var srk = d.createElement('span');\n        srk.className = 'sbr-sr';\n        srk.textContent = ' (necesita API Key)';\n        a.appendChild(k);\n        a.appendChild(srk);\n        a.setAttribute('title', 'Este módulo muestra datos de tu cuenta: necesita una API Key');\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/sidebar-nav.test.cjs",
+   "base_sha": "6bae05da633cbf4584434b0f7bca28d3bc7d3856",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.3.1', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.3\\.1/);\n  assert.equal(x.S().version, '2.3.1');",
+     "text": "test('versión 2.4.0', () => {\n  const x = setup();\n  assert.match(SRC, /Versión: 2\\.4\\.0/);\n  assert.equal(x.S().version, '2.4.0');"
+    },
+    {
+     "op": "replace",
+     "anchor": "({ id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color }));\n  same(x.S()._pure.MODULES_FALLBACK",
+     "text": "({ id: m.id, name: m.name, href: m.href, icon: m.icon, color: m.color, free: m.free, local: m.local }));\n  same(x.S()._pure.MODULES_FALLBACK"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "test('al cambiar la Key (gn:tokenchange) rearmo tarjeta y avisos sin duplicar'",
+     "text": "// BL-103 (idea de Shiruna, su BL-007): sin Key activa, «Con Key» en los módulos que muestran datos de la cuenta.\ntest('«Con Key»: sin Key activa, en los módulos con datos de la cuenta (Sidebar y hoja); no en Inicio, Metas, Builds ni Cuentas', () => {\n  const x = ready(setup({ token: '' }));\n  const con = x.document.querySelectorAll('#sbrNav a').filter((a) => a.querySelector('.sbr-key')).map((a) => a.getAttribute('data-mod'));\n  same(con, ['cards', 'wv', 'activities', 'homestead', 'raids', 'achievements', 'characters', 'armory']);\n  const c = x.document.getElementById('navCards');\n  assert.equal(c.querySelector('.sbr-key').textContent, 'Con Key');\n  assert.equal(c.querySelector('.sbr-key').getAttribute('aria-hidden'), 'true');\n  assert.equal(c.querySelector('.sbr-sr').textContent, ' (necesita API Key)');\n  assert.match(c.getAttribute('title'), /necesita una API Key/);\n  const sh = x.document.querySelectorAll('#sbrSheet a').filter((a) => a.querySelector('.sbr-key')).map((a) => a.getAttribute('data-mod'));\n  same(sh, ['wv', 'activities', 'homestead', 'raids', 'achievements', 'characters']);\n  assert.match(x.S()._pure.CSS, /#sbrTabs \\.sbr-key\\{display:none\\}/, 'en la barra del celular no: «Más» ya avisa');\n  same(x.S()._pure.EXTRA.map((m) => m.free), [true], 'Builds no necesita Key');\n});\n\ntest('«Con Key»: con Key activa no aparece; al cargar la primera Key se va sin dejar rastros', () => {\n  const x = ready(setup({ token: '' }));\n  x.store['gn:account:keys'] = [{ label: 'Main', value: 'A', perms: ALL }];\n  x.store['gn:account:selected'] = 'A';\n  x.fire('gn:tokenchange');\n  assert.equal(x.document.querySelectorAll('.sbr-key').length, 0);\n  assert.equal(x.document.getElementById('navCards').querySelectorAll('.sbr-sr').length, 0);\n  assert.equal(x.document.getElementById('navCards').getAttribute('title'), null);\n  x.S().refresh();\n  assert.equal(x.document.querySelectorAll('.sbr-key').length, 0, 'refrescar no lo trae de vuelta');\n  const none = ready(setup({ welcome: 'none' }));\n  assert.equal(none.document.querySelectorAll('.sbr-key').length, 0, 'sin la Bienvenida no sé si hay Key: no marco');\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "74ca2d543f82ad7de0e3f3da14484b57294f6ce3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "sidebar-nav.js?v=2.3.1",
+     "text": "sidebar-nav.js?v=2.4.0"
+    }
+   ]
+  }
+ ]
+}
