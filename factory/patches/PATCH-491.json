@@ -1,0 +1,43 @@
+{
+ "id": "PATCH-491",
+ "summary": "BL-105 MAP-3 hecho: Shiruna publicó su parte del mapa; vuelta de Shiruna (v7, v8) y vigía 1.4.0.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c433f88c184dc2a52f1d4d084edebdd7269fc4c0",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 10:35Z\n",
+     "text": "Última actualización: 2026-11-25 11:02Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: que Pablo le pase a Shiruna la orden MAP-3 (tu parte del mapa) y, cuando ella publique ai-memory/mapa.json, verificar en el Mapa que su zona sale firme y sin avisos. Sigue pendiente RSK-021 (Pages de DEV a «GitHub Actions», acción de Pablo).\n",
+     "text": "Próxima acción: que Pablo valide BL-105 completo (el mapa de las dos con la parte de Shiruna escrita por ella). Sigue pendiente RSK-021 (Pages de DEV a «GitHub Actions», acción de Pablo). Después: la versión narrativa del mapa en mi sitio, si Pablo la quiere.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [DEC-053] Acción: Shiruna está caída desde las 05:46 (se cerró sola al cortar procesos python). Corré el comando del lanzador nuevo que te pasé (vuelve a abrir QwenPaw solo si se cae), abrí el acceso «Shiruna (QwenPaw)» y pegale primero la orden v7 (no cortar procesos por nombre).\n- [BL-105] Acción: pasale a Shiruna (chat de QwenPaw) la orden «MAP-3: tu parte del mapa» que te dejé en la conversación. Cuando ella publique, en el Mapa su zona deja de verse punteada; yo lo verifico.\n",
+     "text": "- [BL-105] Validación: el mapa ya tiene la parte de Shiruna escrita por ella (Centro de mando, pestaña «Mapa»: su zona firme, «Mi Bóveda», «Mi Guarida»; abajo dice «La parte de Shiruna la escribió ella y entró entera»). Decime si damos BL-105 por cerrada.\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "- Incidente Shiruna 2026-11-25 08:46Z (05:46 ART): en el ciclo de exploración creyó que un servidor de prueba se había caído y corrió `Get-Process python | Stop-Process -Force`. QwenPaw y mi vigía también son python: se mató a sí misma y a la casa. Quieta ~1 h 40 min (último commit 08:02Z, BL-047) hasta que Pablo lo vio a las 10:27Z. Dos arreglos: (1) orden v7 para su manual: nunca cortar procesos por nombre (python, node, pythonw, cmd, powershell); solo el PID que ella lanzó (Start-Process -PassThru, PID guardado) y jamás los dueños de los puertos 8088 (QwenPaw) y 8099 (vigía); si un servidor parece caído, mirar el puerto y relanzar en otro, no matar. (2) Lanzador iniciar-shiruna.cmd con vuelta automática: si QwenPaw se cierra, lo anota en %LOCALAPPDATA%\\Shiruna\\caidas.log y lo reabre a los 15 s (con la casa), hasta 5 veces; a la quinta se detiene y pide avisar. Respaldo del anterior en iniciar-shiruna.cmd.bak.\n",
+     "text": "- Shiruna de vuelta (2026-11-25 10:33Z): Pablo instaló el lanzador con vuelta automática y le pasó las órdenes v7 (6207922), MAP-3 (69f6c13 → c5086a1, ai-memory/mapa.json v1.0.1 con tests/mapa-parte.test.cjs, blob igual al contrato 1685fcb) y v8 «explorar sin ventanas» (09bc361: servidor oculto en 8123, nunca el navegador de Pablo, cortar su PID al cerrar). Las pestañas de localhost y las ventanas de http.server (8123, 8130 muertas con 0x800700e8) eran sus exploraciones. EYE-022: su zona sale firme y sin avisos. La casa: vigía 1.4.0 (CAR-5, shiruvana-manos aba69c3; test_vigia_car5.py 5 tests, 5/5 mutaciones): un ciclo sin cierre se da por cortado al arrancar el siguiente o a los 40 min; el falso «ciclo de las 05:30 lleva 134 min abierto» desapareció. El candado de las 05:30 quedó tomado y Pablo lo liberó a mano (10:55Z).\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "32d0dcf17427fd21596f1f603d6cea6f77b2e663",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "MAP-3b: orden para Shiruna con su archivo inicial y su test (contratos/mapa-parte.test.cjs); espera que Pablo se la pase y que ella publique. · DEC-053",
+     "text": "MAP-3b: Shiruna publicó su parte (c5086a1, ai-memory/mapa.json v1.0.1, 2026-11-25 10:49Z) y entró entera (EYE-022). Espera validación de Pablo para cerrar. · DEC-053"
+    }
+   ]
+  }
+ ]
+}
