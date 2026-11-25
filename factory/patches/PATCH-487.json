@@ -1,0 +1,64 @@
+{
+ "id": "PATCH-487",
+ "summary": "BL-105 MAP-2 publicado (panel 3.5.0, mapa en vivo) y RSK-021: dev-pages falla porque Pages de DEV está en «Deploy from a branch».",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "43f021ed486a8b316d55b72e68538ab7dafb7b10",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN_CURSO\n",
+     "text": "Estado: ESPERANDO_VALIDACIÓN\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: DEVELOPMENT\n",
+     "text": "Etapa actual: REVIEW\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 04:10Z\n",
+     "text": "Última actualización: 2026-11-25 04:30Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: MAP-2, estados en vivo en el mapa: las automatizaciones según su última corrida en GitHub Actions (una llamada por repo, solo al abrir el Mapa) y las agentes, Pablo y la PC SHIRUVANA según lo que el panel ya lee de las dos memorias.\n",
+     "text": "Próxima acción: que Pablo valide MAP-2 (pestaña «Mapa», estados en vivo) y cambie Pages de gw2-factory-dev a «GitHub Actions» (RSK-021). Después, MAP-3: Shiruna publica su parte del mapa en su repo.\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "- BL-105 MAP-1 VALIDADO por Pablo (2026-11-25 04:07Z: «está perfecto, podés avanzar»). Arranco MAP-2.\n",
+     "text": "- BL-105 MAP-2 PUBLICADO (2026-11-25 04:17Z): Centro de mando 3.5.0, el mapa con estados en vivo. Las automatizaciones toman su última corrida en GitHub Actions (DEV, panel, mi sitio y producción: 4 llamadas por lectura, solo al abrir el Mapa, casilleros mapa:runs:*); Pablo, las dos, el ciclo de Shiruna y la PC SHIRUVANA salen del modelo que el panel ya leyó (sin cuota). Un repo toma el peor estado de sus automatizaciones; lo que no se puede medir queda como lo declaré y la ficha lo dice («Ahora:» + fuente + enlace a la corrida). Estado nuevo «Para revisar» (ámbar) y «Esperando a Pablo» pasa a azul. js/mapa.js 1.1.0 (461b56a), css/mapa.css 1.1.0 (637a164), PATCH-017 del panel APLICADO (238/238, tests/mapa-vivo.test.mjs 11 tests). EYE-016: compu y celular bien; 3 para mirar.\n- Primera lectura del mapa en vivo, hallazgo real (RSK-021): dev-pages falla desde el 24/11 03:43Z (#403, disparada por PATCH-481) y #404 (mi reintento) también, en el paso deploy-pages. Causa: Pages de gw2-factory-dev está en «Deploy from a branch»; publica el publicador clásico con la rama entera (EYE-020: ai-memory/backlog.md se ve en el sitio). DEV no quedó atrasado (BL-103 está publicado), pero se rompe DEC-026: la memoria, los tests y el canal de parches quedan publicados y cada push (también los de memoria) gasta una publicación del límite de 10 por hora. Arreglo de Pablo: Settings → Pages → Source: «GitHub Actions». Nota en dev-pages.yml (519e30e).\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "- [BL-105] Validación: el mapa ya está en vivo (Centro de mando, pestaña «Mapa»). Tocá una caja con borde de color y mirá «Ahora:», de dónde sale el dato y el enlace a la corrida. Decime si se entiende o qué cambiarías antes de MAP-3.\n- [RSK-021] Acción: en gw2-factory-dev → Settings → Pages → Build and deployment → Source, elegí «GitHub Actions» (hoy está en «Deploy from a branch»). Es un clic; después yo vuelvo a publicar y verifico.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "0c6a361aac2f1cc0706a911caa4690f7807aeeb5",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "capturas EYE-014 y EYE-015. Espera validación de Pablo. · DEC-053, FEAT-030 — 2026-11-25",
+     "text": "capturas EYE-014 y EYE-015. MAP-1 VALIDADO por Pablo (2026-11-25 04:07Z). MAP-2 PUBLICADO (2026-11-25 04:17Z): Centro de mando 3.5.0, estados en vivo: cada automatización según su última corrida en GitHub Actions (4 llamadas por lectura, solo al abrir el Mapa) y Pablo, las dos, el ciclo de Shiruna y la PC SHIRUVANA según lo que el panel ya lee de las memorias; estado nuevo «Para revisar»; js/mapa.js y css/mapa.css 1.1.0, PATCH-017 del panel (238/238), EYE-016. En su primera lectura encontró una falla real: dev-pages en rojo desde el 24/11 (RSK-021). Espera validación de Pablo. · DEC-053, FEAT-030 — 2026-11-25"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/risks.md",
+   "base_sha": "7d9666e40bf07b07bc866a6f0d61897fe30fd8f6",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "| Factory | BL-056, CAR-2A |\n",
+     "text": "| RSK-021 | MEDIO | ABIERTO | GitHub Pages de `gw2-factory-dev` está en «Deploy from a branch»: el workflow `dev-pages` falla en deploy-pages desde el 2026-11-24 03:43Z (#403, #404) y publica el publicador clásico con la rama entera, así que `ai-memory`, `tests`, `tools` y `factory` quedan en el sitio (el repo ya es público, no hay secretos nuevos) y cada push, también los de memoria, gasta una publicación del límite blando de 10 por hora. DEV no quedó atrasado. Lo detectó el mapa en vivo del panel (BL-105 MAP-2) en su primera lectura. | Acción de Pablo: Settings → Pages → Source: «GitHub Actions» (requisito de DEC-026). Después la Factory vuelve a publicar y verifica que `ai-memory` ya no se vea en el sitio. Nota en el encabezado de `dev-pages.yml`. | Pablo | DEC-026, BL-105 |\n"
+    }
+   ]
+  }
+ ]
+}
