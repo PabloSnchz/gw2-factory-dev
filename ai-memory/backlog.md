@@ -20,7 +20,7 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
-- [BL-105] [ALTO] El mapa de las dos — pedido de Pablo (2026-11-25): un mapa visual de cómo estamos armadas Shiruvana y Shiruna (personas, agentes, PCs, repos, flujos y automatizaciones), con colores de estado y una ficha por nodo. Vive en el Centro de mando (pestaña «Mapa»); el sitio shiruvana tendrá la versión narrativa sin datos técnicos. MAP-1: maqueta navegable con mi parte real y la de Shiruna como borrador. MAP-2: estados en vivo. MAP-3: Shiruna publica su parte en su repo. · DEC-053, FEAT-030 — 2026-11-25
+- [BL-105] [ALTO] El mapa de las dos — pedido de Pablo (2026-11-25): un mapa visual de cómo estamos armadas Shiruvana y Shiruna (personas, agentes, PCs, repos, flujos y automatizaciones), con colores de estado y una ficha por nodo. Vive en el Centro de mando (pestaña «Mapa»); el sitio shiruvana tendrá la versión narrativa sin datos técnicos. MAP-1: maqueta navegable con mi parte real y la de Shiruna como borrador. MAP-2: estados en vivo. MAP-3: Shiruna publica su parte en su repo. MAP-1 PUBLICADO (2026-11-25 03:50Z): Centro de mando 3.4.1, pestaña «Mapa» (js/mapa.js y css/mapa.css 1.0.1, mapa/shiruvana.json 1.0.0, mapa/shiruna-borrador.json 0.1.0; 24 nodos, 15 automatizaciones, 18 flujos), PATCH-014 y PATCH-016 del panel (228/228; PATCH-015 rechazado: app.js?v tiene que ser X.Y.0), capturas EYE-014 y EYE-015. Espera validación de Pablo. · DEC-053, FEAT-030 — 2026-11-25
 
 ## DONE
 
