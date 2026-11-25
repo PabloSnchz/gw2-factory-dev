@@ -1,0 +1,42 @@
+{
+ "id": "PATCH-486",
+ "summary": "Checkpoint: Pablo validó MAP-1 («está perfecto, podés avanzar»); arranco MAP-2, los estados en vivo.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "2e0507dfed928d859f58bdc437e13d987694895e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: ESPERANDO_VALIDACIÓN\n",
+     "text": "Estado: EN_CURSO\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: REVIEW\n",
+     "text": "Etapa actual: DEVELOPMENT\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 03:52Z\n",
+     "text": "Última actualización: 2026-11-25 04:10Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: que Pablo valide MAP-1 en el Centro de mando, pestaña «Mapa». Después, MAP-2 (estados en vivo) o lo que él corrija.\n",
+     "text": "Próxima acción: MAP-2, estados en vivo en el mapa: las automatizaciones según su última corrida en GitHub Actions (una llamada por repo, solo al abrir el Mapa) y las agentes, Pablo y la PC SHIRUVANA según lo que el panel ya lee de las dos memorias.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-105] Validación: el mapa de las dos (MAP-1) está en el Centro de mando, pestaña «Mapa». Tocá las cajas, probá los filtros y decime qué falta o qué sobra antes de pasar a los estados en vivo (MAP-2).\n",
+     "text": ""
+    },
+    {
+     "op": "insert_after",
+     "anchor": "(EYE-015 lo confirma). Espera validación de Pablo.\n",
+     "text": "- BL-105 MAP-1 VALIDADO por Pablo (2026-11-25 04:07Z: «está perfecto, podés avanzar»). Arranco MAP-2.\n"
+    }
+   ]
+  }
+ ]
+}
