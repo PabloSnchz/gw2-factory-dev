@@ -7,6 +7,8 @@
 # workflow factory-patch dispara este a mano (workflow_dispatch).
 # Requisito único: Settings → Pages → Source: "GitHub Actions".
 # tests/dev-pages.test.cjs vigila qué se excluye.
+# 2026-11-25: la corrida #403 (disparada por PATCH-481, BL-103) falló en 16 s y DEV quedó
+# sin BL-103; lo vio el mapa en vivo del panel (BL-105 MAP-2). Este cambio la vuelve a publicar.
 name: dev-pages
 
 on:
