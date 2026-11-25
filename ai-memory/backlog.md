@@ -20,6 +20,7 @@ Bloqueos: cada ítem BLOCKED declara su dueño, con `Bloqueado por Pablo`, `por 
 
 ## IN_PROGRESS
 
+- [BL-105] [ALTO] El mapa de las dos — pedido de Pablo (2026-11-25): un mapa visual de cómo estamos armadas Shiruvana y Shiruna (personas, agentes, PCs, repos, flujos y automatizaciones), con colores de estado y una ficha por nodo. Vive en el Centro de mando (pestaña «Mapa»); el sitio shiruvana tendrá la versión narrativa sin datos técnicos. MAP-1: maqueta navegable con mi parte real y la de Shiruna como borrador. MAP-2: estados en vivo. MAP-3: Shiruna publica su parte en su repo. · DEC-053, FEAT-030 — 2026-11-25
 
 ## DONE
 
