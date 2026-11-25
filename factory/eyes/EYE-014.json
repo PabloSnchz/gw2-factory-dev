@@ -1,0 +1,8 @@
+{
+  "id": "EYE-014",
+  "shots": [
+    { "url": "https://pablosnchz.github.io/gw2-factory-dashboard/?v=map1#/mapa", "device": "compu", "note": "MAP-1: el mapa en la compu" },
+    { "url": "https://pablosnchz.github.io/gw2-factory-dashboard/?v=map1#/mapa", "device": "compu", "fullPage": true, "note": "MAP-1: la vista entera (mapa, ficha y lista)" },
+    { "url": "https://pablosnchz.github.io/gw2-factory-dashboard/?v=map1#/mapa", "device": "celular", "note": "MAP-1: en el celular (el mapa se desplaza de costado)" }
+  ]
+}
