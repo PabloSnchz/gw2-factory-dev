@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-489",
+ "summary": "BL-105 MAP-3a publicado (panel 3.6.0: la parte de Shiruna la escribe ella) y MAP-3b, la orden para Shiruna.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "193ddc64d40edf439b3dd11c1381ba65750193d8",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN_CURSO\n",
+     "text": "Estado: ESPERANDO_VALIDACIÓN\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: ARCHITECTURE\n",
+     "text": "Etapa actual: REVIEW\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 04:52Z\n",
+     "text": "Última actualización: 2026-11-25 05:08Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: MAP-3a en el panel (leer la parte de Shiruna por raw, sin cuota, con su contrato y respaldo en mi borrador) y MAP-3b la orden firmada para Shiruna con el archivo inicial y su test. Sigue pendiente RSK-021 (Pages de DEV a «GitHub Actions», acción de Pablo).\n",
+     "text": "Próxima acción: que Pablo le pase a Shiruna la orden MAP-3 (tu parte del mapa) y, cuando ella publique ai-memory/mapa.json, verificar en el Mapa que su zona sale firme y sin avisos. Sigue pendiente RSK-021 (Pages de DEV a «GitHub Actions», acción de Pablo).\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "- BL-105 MAP-2 VALIDADO por Pablo (2026-11-25 04:48Z: «pasa a map 3»). Arranco MAP-3: Shiruna publica su parte del mapa.\n",
+     "text": "- BL-105 MAP-3a PUBLICADO (2026-11-25 05:00Z): Centro de mando 3.6.0. El mapa lee la parte de Shiruna de su memoria (ai-memory/mapa.json de shiruna-gato-negro/gw2-factory-dev) por raw, sin cuota y una vez por visita. Contrato (PARTE_SHIRUNA en js/mapa.js): ella dice nombre, sub, estado y ficha de sus 6 cajas y puede sumar automatizaciones a su-boveda o su-guarida (5 por repo, en la columna del repo y sin pisar cajas, flujos ni rótulos: hoy entran 3 más bajo su Bóveda y 5 bajo su Guarida); nunca posiciones, tipos, dueñas ni ids míos. Lo que no confirma queda punteado; lo que no entra se avisa debajo del mapa (escapado, con enlace a su archivo); si falta, está roto o no se lee, queda mi borrador (mapa/shiruna-borrador.json 0.2.0, ahora plano de su zona y respaldo) y el mapa dice por qué. js/mapa.js 1.2.0 (1437012), css/mapa.css 1.2.0 (9322907), PATCH-018 del panel APLICADO (246/246; tests/mapa-shiruna.test.mjs 8 tests, 6/6 mutaciones), CI verde. EYE-021: sin su archivo, el mapa dice «todavía no publicó la suya».\n- BL-105 MAP-3b: su contrato para su repo en gw2-factory-dashboard/contratos/mapa-parte.test.cjs (1685fcb; 7/7 mutaciones del archivo detectadas) y su archivo inicial en tests/mapa-shiruna-inicial.json (b563d45, en su voz, entra sin avisos). Orden de Shiruvana «MAP-3: tu parte del mapa» entregada a Pablo para pasársela: bajar los dos archivos, corregir lo que no sea verdad, suite completa, commit, y regla nueva en su manual: cada cambio de jobs o automatizaciones actualiza ai-memory/mapa.json en el mismo commit.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [RSK-021] Acción: en gw2-factory-dev → Settings → Pages → Build and deployment → Source, elegí «GitHub Actions» (hoy está en «Deploy from a branch»). Es un clic; después yo vuelvo a publicar y verifico.\n",
+     "text": "- [BL-105] Acción: pasale a Shiruna (chat de QwenPaw) la orden «MAP-3: tu parte del mapa» que te dejé en la conversación. Cuando ella publique, en el Mapa su zona deja de verse punteada; yo lo verifico.\n- [RSK-021] Acción: en gw2-factory-dev → Settings → Pages → Build and deployment → Source, elegí «GitHub Actions» (hoy está en «Deploy from a branch»). Es un clic; después yo vuelvo a publicar y verifico.\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "14d67a19fe6fab60d8c75c3e21e70e11089c2594",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "MAP-2 VALIDADO por Pablo (2026-11-25 04:48Z). MAP-3 en curso. · DEC-053, FEAT-030 — 2026-11-25",
+     "text": "MAP-2 VALIDADO por Pablo (2026-11-25 04:48Z). MAP-3a PUBLICADO (2026-11-25 05:00Z): Centro de mando 3.6.0, la parte de Shiruna se lee de su ai-memory/mapa.json con su contrato (mi borrador queda como plano y respaldo), PATCH-018 del panel (246/246), EYE-021. MAP-3b: orden para Shiruna con su archivo inicial y su test (contratos/mapa-parte.test.cjs); espera que Pablo se la pase y que ella publique. · DEC-053, FEAT-030 — 2026-11-25"
+    }
+   ]
+  }
+ ]
+}
