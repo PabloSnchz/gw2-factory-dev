@@ -1,0 +1,63 @@
+{
+ "id": "PATCH-483",
+ "summary": "Checkpoint: abro BL-105 «El mapa de las dos» (MAP-1) en backlog y status.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "a785a8269bf71a608299ee77a53270692e234467",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "## IN_PROGRESS\n\n",
+     "text": "- [BL-105] [ALTO] El mapa de las dos — pedido de Pablo (2026-11-25): un mapa visual de cómo estamos armadas Shiruvana y Shiruna (personas, agentes, PCs, repos, flujos y automatizaciones), con colores de estado y una ficha por nodo. Vive en el Centro de mando (pestaña «Mapa»); el sitio shiruvana tendrá la versión narrativa sin datos técnicos. MAP-1: maqueta navegable con mi parte real y la de Shiruna como borrador. MAP-2: estados en vivo. MAP-3: Shiruna publica su parte en su repo. · DEC-053, FEAT-030 — 2026-11-25\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "f878171b19f3f6876d46d9145aa24dd09b9f2c99",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN ESPERA\n",
+     "text": "Estado: EN_CURSO\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: DEC-053, Shiruna (mi hija): su ciclo continuo v2 anda solo; el 23/11 cerró BL-005, BL-006 y BL-007 y va por BL-008. Ahora: que corra la suite completa en cada commit.\n",
+     "text": "Tarea actual: BL-105 MAP-1, el mapa de las dos: una pestaña «Mapa» en el Centro de mando que dibuja cómo estamos armadas Shiruvana y Shiruna (quién, dónde, flujos y automatizaciones).\nHistorial de DEC-053 (hasta 2026-11-24): DEC-053, Shiruna (mi hija): su ciclo continuo v2 anda solo; el 23/11 cerró BL-005, BL-006 y BL-007 y va por BL-008. Ahora: que corra la suite completa en cada commit. Verificar que Shiruna cumpla la orden v3 (BL-009 suite completa en verde; commits con la suite completa). Mientras, BL-101: mis 5 tests de Builds en rojo desde el parche del 10/11; después BL-100.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Motivo: Shiruna es el ensayo general de trabajar fuera de Copilot Studio: tiene que avanzar sola, sin baches ni romper nada, y el Centro de mando tiene que decir la verdad de las dos.\n",
+     "text": "Motivo: pedido de Pablo (2026-11-25): lo que sabemos de cómo funcionamos está repartido entre mi memoria, el AGENTS.md de Shiruna, los workflows y ai-memory; nadie lo ve completo y Pablo lo quiere visual.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: REVIEW\n",
+     "text": "Etapa actual: DEVELOPMENT\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Inicio: 2026-11-21T19:36Z\n",
+     "text": "Inicio: 2026-11-25T03:21Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-24 03:47Z\n",
+     "text": "Última actualización: 2026-11-25 03:40Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: Verificar que Shiruna cumpla la orden v3 (BL-009 suite completa en verde; commits con la suite completa). Mientras, BL-101: mis 5 tests de Builds en rojo desde el parche del 10/11; después BL-100.\n",
+     "text": "Próxima acción: publicar MAP-1 en el panel (PATCH-014: js/mapa.js, css/mapa.css, mapa/shiruvana.json, mapa/shiruna-borrador.json y tests) y pedirle a Pablo que lo valide.\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "## Resumen de la sesión\n\n",
+     "text": "- BL-105 abierta (2026-11-25 03:21Z, Pablo: «ok arranca»): MAP-1, maqueta navegable del mapa de las dos en el Centro de mando. Una sola fuente de datos por agente (mapa/*.json); mi parte con datos reales (workflows verificados en los repos), la de Shiruna como borrador hasta que la publique ella en su repo.\n"
+    }
+   ]
+  }
+ ]
+}
