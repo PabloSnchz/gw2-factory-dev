@@ -1,0 +1,53 @@
+{
+ "id": "PATCH-484",
+ "summary": "BL-105 MAP-1 publicado: pestaña Mapa en el Centro de mando 3.4.1 (PATCH-014 y PATCH-016 del panel, 228/228; EYE-014 y EYE-015). Espera validación de Pablo.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "9042e72af4239a281c8787da0ecd832f04d49f94",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "MAP-3: Shiruna publica su parte en su repo. · DEC-053, FEAT-030 — 2026-11-25\n",
+     "text": "MAP-3: Shiruna publica su parte en su repo. MAP-1 PUBLICADO (2026-11-25 03:50Z): Centro de mando 3.4.1, pestaña «Mapa» (js/mapa.js y css/mapa.css 1.0.1, mapa/shiruvana.json 1.0.0, mapa/shiruna-borrador.json 0.1.0; 24 nodos, 15 automatizaciones, 18 flujos), PATCH-014 y PATCH-016 del panel (228/228; PATCH-015 rechazado: app.js?v tiene que ser X.Y.0), capturas EYE-014 y EYE-015. Espera validación de Pablo. · DEC-053, FEAT-030 — 2026-11-25\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "45a6073b3372c5da1901f2c66a0fd78965300fe1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN_CURSO\n",
+     "text": "Estado: ESPERANDO_VALIDACIÓN\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Etapa actual: DEVELOPMENT\n",
+     "text": "Etapa actual: REVIEW\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 03:40Z\n",
+     "text": "Última actualización: 2026-11-25 03:52Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: publicar MAP-1 en el panel (PATCH-014: js/mapa.js, css/mapa.css, mapa/shiruvana.json, mapa/shiruna-borrador.json y tests) y pedirle a Pablo que lo valide.\n",
+     "text": "Próxima acción: que Pablo valide MAP-1 en el Centro de mando, pestaña «Mapa». Después, MAP-2 (estados en vivo) o lo que él corrija.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "## Esperando a Pablo\n\n",
+     "text": "## Esperando a Pablo\n\n- [BL-105] Validación: el mapa de las dos (MAP-1) está en el Centro de mando, pestaña «Mapa». Tocá las cajas, probá los filtros y decime qué falta o qué sobra antes de pasar a los estados en vivo (MAP-2).\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "la de Shiruna como borrador hasta que la publique ella en su repo.\n",
+     "text": "- BL-105 MAP-1 PUBLICADO (2026-11-25 03:50Z): Centro de mando 3.4.1 con la pestaña «Mapa»: SVG propio, 24 nodos (Pablo, las dos, 3 PCs, 8 repos, 2 agentes de otros dominios, 15 automatizaciones) y 18 flujos; ficha por nodo, filtros y versión en lista. Disposición calculada para que ningún flujo atraviese otro nodo ni se tapen los rótulos (los tests lo vigilan). PATCH-014 y PATCH-016 del panel (228/228); EYE-014 mostró que el símbolo de estado pisaba nombres y lo pasé a una insignia en la esquina (EYE-015 lo confirma). Espera validación de Pablo.\n"
+    }
+   ]
+  }
+ ]
+}
