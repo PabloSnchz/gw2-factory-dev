@@ -1,0 +1,7 @@
+{
+  "id": "EYE-016",
+  "shots": [
+    { "url": "https://pablosnchz.github.io/gw2-factory-dashboard/?v=map4#/mapa", "device": "compu", "note": "MAP-2 3.5.0: estados en vivo" },
+    { "url": "https://pablosnchz.github.io/gw2-factory-dashboard/?v=map4#/mapa", "device": "celular", "note": "MAP-2 3.5.0 en el celular" }
+  ]
+}
