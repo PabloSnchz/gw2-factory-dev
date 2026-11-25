@@ -1,0 +1,7 @@
+{
+  "id": "EYE-020",
+  "shots": [
+    { "url": "https://github.com/PabloSnchz/gw2-factory-dev/actions/workflows/pages/pages-build-deployment", "device": "compu", "note": "corridas del publicador clásico" },
+    { "url": "https://pablosnchz.github.io/gw2-factory-dev/ai-memory/backlog.md", "device": "compu", "note": "si se ve, Pages publica la rama entera (ai-memory incluida)" }
+  ]
+}
