@@ -1,0 +1,6 @@
+{
+  "id": "EYE-018",
+  "shots": [
+    { "url": "https://github.com/PabloSnchz/gw2-factory-dev/actions/workflows/dev-pages.yml", "device": "compu", "note": "corrida #404 después de la falla de #403" }
+  ]
+}
