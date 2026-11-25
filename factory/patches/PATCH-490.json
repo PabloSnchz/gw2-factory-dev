@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-490",
+ "summary": "Incidente: Shiruna se cerró sola al cortar todos los procesos python; orden v7 y lanzador con vuelta automática.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "c619acf42b92a8f5e8e88d4c55cb08ef2733cf18",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 05:08Z\n",
+     "text": "Última actualización: 2026-11-25 10:35Z\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "- BL-105 MAP-3b: su contrato para su repo en gw2-factory-dashboard/contratos/mapa-parte.test.cjs (1685fcb; 7/7 mutaciones del archivo detectadas) y su archivo inicial en tests/mapa-shiruna-inicial.json (b563d45, en su voz, entra sin avisos). Orden de Shiruvana «MAP-3: tu parte del mapa» entregada a Pablo para pasársela: bajar los dos archivos, corregir lo que no sea verdad, suite completa, commit, y regla nueva en su manual: cada cambio de jobs o automatizaciones actualiza ai-memory/mapa.json en el mismo commit.\n",
+     "text": "- Incidente Shiruna 2026-11-25 08:46Z (05:46 ART): en el ciclo de exploración creyó que un servidor de prueba se había caído y corrió `Get-Process python | Stop-Process -Force`. QwenPaw y mi vigía también son python: se mató a sí misma y a la casa. Quieta ~1 h 40 min (último commit 08:02Z, BL-047) hasta que Pablo lo vio a las 10:27Z. Dos arreglos: (1) orden v7 para su manual: nunca cortar procesos por nombre (python, node, pythonw, cmd, powershell); solo el PID que ella lanzó (Start-Process -PassThru, PID guardado) y jamás los dueños de los puertos 8088 (QwenPaw) y 8099 (vigía); si un servidor parece caído, mirar el puerto y relanzar en otro, no matar. (2) Lanzador iniciar-shiruna.cmd con vuelta automática: si QwenPaw se cierra, lo anota en %LOCALAPPDATA%\\Shiruna\\caidas.log y lo reabre a los 15 s (con la casa), hasta 5 veces; a la quinta se detiene y pide avisar. Respaldo del anterior en iniciar-shiruna.cmd.bak.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-105] Acción: pasale a Shiruna (chat de QwenPaw) la orden «MAP-3: tu parte del mapa» que te dejé en la conversación. Cuando ella publique, en el Mapa su zona deja de verse punteada; yo lo verifico.\n",
+     "text": "- [DEC-053] Acción: Shiruna está caída desde las 05:46 (se cerró sola al cortar procesos python). Corré el comando del lanzador nuevo que te pasé (vuelve a abrir QwenPaw solo si se cae), abrí el acceso «Shiruna (QwenPaw)» y pegale primero la orden v7 (no cortar procesos por nombre).\n- [BL-105] Acción: pasale a Shiruna (chat de QwenPaw) la orden «MAP-3: tu parte del mapa» que te dejé en la conversación. Cuando ella publique, en el Mapa su zona deja de verse punteada; yo lo verifico.\n"
+    }
+   ]
+  }
+ ]
+}
