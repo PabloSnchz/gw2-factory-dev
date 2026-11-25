@@ -1,0 +1,28 @@
+{
+ "id": "PATCH-485",
+ "summary": "Corrijo las cifras de MAP-1 que anoté mal en PATCH-484: son 30 nodos y 2 PCs.",
+ "files": [
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "c838f761614b3830427c70944063200626a8924e",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "mapa/shiruna-borrador.json 0.1.0; 24 nodos, 15 automatizaciones, 18 flujos)",
+     "text": "mapa/shiruna-borrador.json 0.1.0; 30 nodos, 15 de ellos automatizaciones, y 18 flujos)"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "a0555eba775ebcde7eb7e8d9bbfd808fff196baa",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "SVG propio, 24 nodos (Pablo, las dos, 3 PCs, 8 repos, 2 agentes de otros dominios, 15 automatizaciones) y 18 flujos;",
+     "text": "SVG propio, 30 nodos (Pablo, las dos, 2 PCs, 8 repos, 2 agentes de otros dominios, 15 automatizaciones) y 18 flujos;"
+    }
+   ]
+  }
+ ]
+}
