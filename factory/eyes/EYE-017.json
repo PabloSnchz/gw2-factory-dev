@@ -1,0 +1,6 @@
+{
+  "id": "EYE-017",
+  "shots": [
+    { "url": "https://github.com/PabloSnchz/gw2-factory-dev/actions/workflows/dev-pages.yml", "device": "compu", "note": "¿dev-pages.yml falla de verdad?" }
+  ]
+}
