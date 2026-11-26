@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-494",
+ "summary": "CAR-7 en marcha: Pablo configuró el webhook de Discord y llegó la prueba.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "fdae9da8b2890e2856c3a49b0811277802345a0d",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-26 02:20Z\n",
+     "text": "Última actualización: 2026-11-26 02:35Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- Acción: (la casa, CAR-7) en la PC SHIRUVANA, crear el webhook de Discord (Ajustes del servidor → Integraciones → Webhooks → Nuevo webhook → Copiar URL), guardarlo con el comando que te pasé (no me pases la URL) y reiniciar la casa: tiene que decir «Version: 1.6.0» y llegar el mensaje de prueba.\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "`vigia.py --probar-discord` manda una prueba.\n",
+     "text": "`vigia.py --probar-discord` manda una prueba. Pablo lo configuró el 2026-11-26 02:30Z: llegó la prueba a Discord (vigía 1.6.0 con webhook activo).\n"
+    }
+   ]
+  }
+ ]
+}
