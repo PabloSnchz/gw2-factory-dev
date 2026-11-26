@@ -1,0 +1,27 @@
+{
+ "id": "PATCH-492",
+ "summary": "Incidente 401 de Kilo (9 ciclos), vigía 1.5.0 (CAR-6) y 1.6.0 (CAR-7: lo último con qué y dónde; avisos a Discord).",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "21160d3e82eb9bf014e836bd5d27c15fda3f39f4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-25 11:02Z\n",
+     "text": "Última actualización: 2026-11-26 02:20Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "\n- SH-4 cerrada (BL-097): el Centro de mando sigue",
+     "text": "\n- Incidente Shiruna 2026-11-25 21:00Z–01:30Z (18:00–22:30 ART): 9 ciclos seguidos terminaron en 4 s con «openai.AuthenticationError 401 INVALID_TOKEN» de Kilo («Please sign in again»); la casa solo decía «terminó mal». Pablo sacó una API key nueva en app.kilo.ai y la pegó en QwenPaw (Models → Kilo Code); el ciclo de las 22:30 ART volvió a andar. Las keys de Kilo no vencen por plazo: el servidor las invalida ante cambios de la cuenta (reset de key, bloqueo); no se puede prever. `qwenpaw cron run <id>` respondió «Job not found» (le falta el agente). Respuesta: vigía 1.5.0 (CAR-6, shiruvana-manos 6c798af): aviso «Se venció la sesión del modelo (N ciclos desde las HH:MM): entrá a Kilo y pegá la API key nueva en QwenPaw». Vigía 1.6.0 (CAR-7, a9fbb64; vigia.py bc3aab3, test_vigia_car7.py e73a70b, test_vigia.py db38573; 60/60 tests, 7/7 mutaciones): (1) mi globo en la casa dice qué hice y dónde («Lo último, hace 2 h: … (en la casa)»), sin número de parche ni capturas EYE, y shiruvana-manos entra a la ronda (Pablo: «siempre dice gw2-factory-dev»); (2) si existe %LOCALAPPDATA%\\Shiruna\\discord-webhook.txt en la PC SHIRUVANA (fuera de todo repo), cada aviso nuevo llega a Discord, uno por tipo, y avisa cuando la sesión vuelve; `vigia.py --probar-discord` manda una prueba.\n- SH-4 cerrada (BL-097): el Centro de mando sigue"
+    },
+    {
+     "op": "replace",
+     "anchor": "\n- [RSK-021] Acción: en gw2-factory-dev → Settings",
+     "text": "\n- [CAR-7] Acción: en la PC SHIRUVANA, crear el webhook de Discord (Ajustes del servidor → Integraciones → Webhooks → Nuevo webhook → Copiar URL), guardarlo con el comando que te pasé (no me pases la URL) y reiniciar la casa: tiene que decir «Version: 1.6.0» y llegar el mensaje de prueba.\n- [RSK-021] Acción: en gw2-factory-dev → Settings"
+    }
+   ]
+  }
+ ]
+}
