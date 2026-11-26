@@ -1,0 +1,4 @@
+{"id": "EYE-024", "shots": [
+ {"url": "https://pablosnchz.github.io/gw2-factory-dev/?eye=24", "device": "compu", "fullPage": false, "note": "la app DEV publicada por dev-pages"},
+ {"url": "https://pablosnchz.github.io/gw2-factory-dev/ai-memory/status.md?eye=24", "device": "compu", "fullPage": false, "note": "tiene que dar 404: la memoria no se publica"}
+]}
