@@ -1,0 +1,32 @@
+{
+ "id": "PATCH-496",
+ "summary": "Shiruna recibió la orden v9 (dos carriles) y existe su laboratorio.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "592c8bb2e04e410ea7ccecda39315c781a97cd39",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-26 02:50Z\n",
+     "text": "Última actualización: 2026-11-26 03:20Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: que Pablo le pase la orden v9 a Shiruna y cree el repo shiruna-gato-negro/laboratorio; después yo sumo al panel el carril y el balance B/N de sus commits y al mapa el nodo «laboratorio».\n",
+     "text": "Próxima acción: ver su primer ciclo [N] (exploración T1) y, con el OK de Pablo, sumar al panel el carril y el balance B/N de sus commits y al mapa el nodo «laboratorio».\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- Acción: (orden v9) pasale a Shiruna la orden «Dos carriles» y creá el repo público shiruna-gato-negro/laboratorio con README y Pages desde la rama main.\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "- Orden v9 «Dos carriles» para Shiruna afinada (2026-11-26): alternancia [B]/[N] con balance de 7 días ±1; moldes cerrados (5º indicador y switches «Solo …»), cancelar BL-062, 1 tarea MEDIO por exploración; F2b cerrada, F2c «Bóveda con criterio» y F2n «Laboratorio»; carril N SEÑAL → FICHA (OP-NNN) → PROTOTIPO → PILOTO → GRADUACIÓN (Pablo) o ARCHIVO, filtro de 5 condiciones, puntaje 1-3 en dolor, frecuencia, hueco y facilidad (9 o más y ningún 1), territorios T1-T4 rotando, GW2 solo en B; sin laboratorio avanza con fichas; ante 401 o error del modelo libera el candado y cierra; balance semanal en «Info:».\n",
+     "text": "- Orden v9 «Dos carriles» para Shiruna afinada (2026-11-26): alternancia [B]/[N] con balance de 7 días ±1; moldes cerrados (5º indicador y switches «Solo …»), cancelar BL-062, 1 tarea MEDIO por exploración; F2b cerrada, F2c «Bóveda con criterio» y F2n «Laboratorio»; carril N SEÑAL → FICHA (OP-NNN) → PROTOTIPO → PILOTO → GRADUACIÓN (Pablo) o ARCHIVO, filtro de 5 condiciones, puntaje 1-3 en dolor, frecuencia, hueco y facilidad (9 o más y ningún 1), territorios T1-T4 rotando, GW2 solo en B; sin laboratorio avanza con fichas; ante 401 o error del modelo libera el candado y cierra; balance semanal en «Info:».\n- Orden v9 RECIBIDA (2026-11-26 03:13Z, verificado en su repo): f7af4f0 «orden: v9 dos carriles — recibida» y 610d601 «— primer ciclo — tests 1310/1316»; roadmap con F2b CERRADA y F2c y F2n PENDIENTES; READY vacío; BL-062 en CANCELLED, aunque su código ya había salido en 0a67826 (03:09Z, ciclo de las 00:00 ART, antes de leer la orden) y queda en DEV como está. Pablo creó shiruna-gato-negro/laboratorio (público, 03:03Z).\n"
+    }
+   ]
+  }
+ ]
+}
