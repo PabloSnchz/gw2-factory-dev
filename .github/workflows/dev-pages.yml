@@ -10,6 +10,7 @@
 # 2026-11-25 (RSK-021): #403 y #404 fallan en deploy-pages porque Pages está en «Deploy from a branch»:
 # publica el publicador clásico (pages-build-deployment) con la rama entera, ai-memory incluida.
 # Arreglo: el requisito de arriba (solo Pablo puede cambiarlo). Lo detectó el mapa en vivo (BL-105 MAP-2).
+# 2026-11-26: Pablo pasó Source a «GitHub Actions». Este cambio de cabecera vuelve a publicar (push a main).
 name: dev-pages
 
 on:
