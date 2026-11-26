@@ -1,0 +1,74 @@
+{
+ "id": "PATCH-495",
+ "summary": "BL-105 cerrada, RSK-021 mitigado y orden v9 «Dos carriles» afinada para Shiruna.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "be56b90b53c164e6ff1577c3a47396625b111f2a",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Última actualización: 2026-11-26 02:35Z\n",
+     "text": "Última actualización: 2026-11-26 02:50Z\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Tarea actual: BL-105 MAP-3, el mapa de las dos: Shiruna escribe su parte del mapa en su memoria (ai-memory/mapa.json de su repo) y el panel la lee de ahí; mi borrador queda como plano de su zona y como respaldo.\n",
+     "text": "Tarea actual: orden v9 «Dos carriles» para Shiruna: la mitad de sus ciclos a La Bóveda [B] y la mitad a oportunidades nuevas [N] en un laboratorio propio.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Motivo: pedido de Pablo (2026-11-25): lo que sabemos de cómo funcionamos está repartido entre mi memoria, el AGENTS.md de Shiruna, los workflows y ai-memory; nadie lo ve completo y Pablo lo quiere visual.\n",
+     "text": "Motivo: pedido de Pablo (2026-11-25): Shiruna no tiene que trabajar solo sobre una webapp; del 24 al 26/11 cerró 23 tareas casi todas del mismo molde (5º indicador y switches «Solo …»).\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "Próxima acción: que Pablo valide BL-105 completo (el mapa de las dos con la parte de Shiruna escrita por ella). Sigue pendiente RSK-021 (Pages de DEV a «GitHub Actions», acción de Pablo). Después: la versión narrativa del mapa en mi sitio, si Pablo la quiere.\n",
+     "text": "Próxima acción: que Pablo le pase la orden v9 a Shiruna y cree el repo shiruna-gato-negro/laboratorio; después yo sumo al panel el carril y el balance B/N de sus commits y al mapa el nodo «laboratorio».\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "- [BL-105] Validación: el mapa ya tiene la parte de Shiruna escrita por ella (Centro de mando, pestaña «Mapa»: su zona firme, «Mi Bóveda», «Mi Guarida»; abajo dice «La parte de Shiruna la escribió ella y entró entera»). Decime si damos BL-105 por cerrada.\n- [RSK-021] Acción: en gw2-factory-dev → Settings → Pages → Build and deployment → Source, elegí «GitHub Actions» (hoy está en «Deploy from a branch»). Es un clic; después yo vuelvo a publicar y verifico.\n",
+     "text": "- Acción: (orden v9) pasale a Shiruna la orden «Dos carriles» y creá el repo público shiruna-gato-negro/laboratorio con README y Pages desde la rama main.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "`vigia.py --probar-discord` manda una prueba. Pablo lo configuró el 2026-11-26 02:30Z: llegó la prueba a Discord (vigía 1.6.0 con webhook activo).\n",
+     "text": "`vigia.py --probar-discord` manda una prueba. Pablo lo configuró el 2026-11-26 02:30Z: llegó la prueba a Discord (vigía 1.6.0 con webhook activo).\n- BL-105 CERRADA (2026-11-26 02:37Z, Pablo: «todo ok»): el mapa de las dos completo en el Centro de mando, con la parte de Shiruna escrita por ella. Queda como idea, sin abrir: la versión narrativa en mi sitio.\n- RSK-021 MITIGADO (2026-11-26 02:41Z): Pablo pasó Pages de DEV a «GitHub Actions»; publiqué con dev-pages (26d65de, cabecera de dev-pages.yml) y EYE-024 confirma la app arriba y ai-memory/status.md en 404 (la memoria ya no se publica). EYE-023 fue rechazado por device «desktop» (los valores válidos son celular o compu).\n- Orden v9 «Dos carriles» para Shiruna afinada (2026-11-26): alternancia [B]/[N] con balance de 7 días ±1; moldes cerrados (5º indicador y switches «Solo …»), cancelar BL-062, 1 tarea MEDIO por exploración; F2b cerrada, F2c «Bóveda con criterio» y F2n «Laboratorio»; carril N SEÑAL → FICHA (OP-NNN) → PROTOTIPO → PILOTO → GRADUACIÓN (Pablo) o ARCHIVO, filtro de 5 condiciones, puntaje 1-3 en dolor, frecuencia, hueco y facilidad (9 o más y ningún 1), territorios T1-T4 rotando, GW2 solo en B; sin laboratorio avanza con fichas; ante 401 o error del modelo libera el candado y cierra; balance semanal en «Info:».\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/backlog.md",
+   "base_sha": "adcf55c330e2796e28c8cf7fe833694d87f73b40",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "- [BL-105] [ALTO] El mapa de las dos — pedido de Pablo (2026-11-25): un mapa visual de cómo estamos armadas Shiruvana y Shiruna (personas, agentes, PCs, repos, flujos y automatizaciones), con colores de estado y una ficha por nodo. Vive en el Centro de mando (pestaña «Mapa»); el sitio shiruvana tendrá la versión narrativa sin datos técnicos. MAP-1: maqueta navegable con mi parte real y la de Shiruna como borrador. MAP-2: estados en vivo. MAP-3: Shiruna publica su parte en su repo. MAP-1 PUBLICADO (2026-11-25 03:50Z): Centro de mando 3.4.1, pestaña «Mapa» (js/mapa.js y css/mapa.css 1.0.1, mapa/shiruvana.json 1.0.0, mapa/shiruna-borrador.json 0.1.0; 30 nodos, 15 de ellos automatizaciones, y 18 flujos), PATCH-014 y PATCH-016 del panel (228/228; PATCH-015 rechazado: app.js?v tiene que ser X.Y.0), capturas EYE-014 y EYE-015. MAP-1 VALIDADO por Pablo (2026-11-25 04:07Z). MAP-2 PUBLICADO (2026-11-25 04:17Z): Centro de mando 3.5.0, estados en vivo: cada automatización según su última corrida en GitHub Actions (4 llamadas por lectura, solo al abrir el Mapa) y Pablo, las dos, el ciclo de Shiruna y la PC SHIRUVANA según lo que el panel ya lee de las memorias; estado nuevo «Para revisar»; js/mapa.js y css/mapa.css 1.1.0, PATCH-017 del panel (238/238), EYE-016. En su primera lectura encontró una falla real: dev-pages en rojo desde el 24/11 (RSK-021). MAP-2 VALIDADO por Pablo (2026-11-25 04:48Z). MAP-3a PUBLICADO (2026-11-25 05:00Z): Centro de mando 3.6.0, la parte de Shiruna se lee de su ai-memory/mapa.json con su contrato (mi borrador queda como plano y respaldo), PATCH-018 del panel (246/246), EYE-021. MAP-3b: Shiruna publicó su parte (c5086a1, ai-memory/mapa.json v1.0.1, 2026-11-25 10:49Z) y entró entera (EYE-022). Espera validación de Pablo para cerrar. · DEC-053, FEAT-030 — 2026-11-25\n",
+     "text": ""
+    },
+    {
+     "op": "replace",
+     "anchor": "## DONE\n\n",
+     "text": "## DONE\n\n- [BL-105] [ALTO] El mapa de las dos — pedido de Pablo (2026-11-25): un mapa visual de cómo estamos armadas Shiruvana y Shiruna (personas, agentes, PCs, repos, flujos y automatizaciones), con colores de estado y una ficha por nodo. Vive en el Centro de mando (pestaña «Mapa»); el sitio shiruvana tendrá la versión narrativa sin datos técnicos. MAP-1: maqueta navegable con mi parte real y la de Shiruna como borrador. MAP-2: estados en vivo. MAP-3: Shiruna publica su parte en su repo. MAP-1 PUBLICADO (2026-11-25 03:50Z): Centro de mando 3.4.1, pestaña «Mapa» (js/mapa.js y css/mapa.css 1.0.1, mapa/shiruvana.json 1.0.0, mapa/shiruna-borrador.json 0.1.0; 30 nodos, 15 de ellos automatizaciones, y 18 flujos), PATCH-014 y PATCH-016 del panel (228/228; PATCH-015 rechazado: app.js?v tiene que ser X.Y.0), capturas EYE-014 y EYE-015. MAP-1 VALIDADO por Pablo (2026-11-25 04:07Z). MAP-2 PUBLICADO (2026-11-25 04:17Z): Centro de mando 3.5.0, estados en vivo: cada automatización según su última corrida en GitHub Actions (4 llamadas por lectura, solo al abrir el Mapa) y Pablo, las dos, el ciclo de Shiruna y la PC SHIRUVANA según lo que el panel ya lee de las memorias; estado nuevo «Para revisar»; js/mapa.js y css/mapa.css 1.1.0, PATCH-017 del panel (238/238), EYE-016. En su primera lectura encontró una falla real: dev-pages en rojo desde el 24/11 (RSK-021). MAP-2 VALIDADO por Pablo (2026-11-25 04:48Z). MAP-3a PUBLICADO (2026-11-25 05:00Z): Centro de mando 3.6.0, la parte de Shiruna se lee de su ai-memory/mapa.json con su contrato (mi borrador queda como plano y respaldo), PATCH-018 del panel (246/246), EYE-021. MAP-3b: Shiruna publicó su parte (c5086a1, ai-memory/mapa.json v1.0.1, 2026-11-25 10:49Z) y entró entera (EYE-022). CERRADA 2026-11-26 (Pablo: «todo ok»). · DEC-053, FEAT-030 — 2026-11-26\n"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/risks.md",
+   "base_sha": "68f25ccf994d25c01cbe76db84b42bfc9a88ca03",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "| RSK-021 | MEDIO | ABIERTO |",
+     "text": "| RSK-021 | MEDIO | MITIGADO |"
+    },
+    {
+     "op": "replace",
+     "anchor": "Nota en el encabezado de `dev-pages.yml`. | Pablo | DEC-026, BL-105 |",
+     "text": "Nota en el encabezado de `dev-pages.yml`. MITIGADO el 2026-11-26: Pablo pasó Source a «GitHub Actions», dev-pages volvió a publicar (26d65de) y EYE-024 muestra la app y `ai-memory/status.md` en 404. | Pablo | DEC-026, BL-105 |"
+    }
+   ]
+  }
+ ]
+}
