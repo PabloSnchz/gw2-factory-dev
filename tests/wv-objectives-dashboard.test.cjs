@@ -70,9 +70,9 @@ const fire = (x, type, attrs, extra) => {
 };
 const rowNames = (h) => (h.match(/<th scope="row" class="wvd-acc"><span class="wvd-an"><img[^>]*><span>[^<]*/g) || []).map((s) => s.replace(/^.*<span>/, ''));
 
-test('versión 2.0.0 y index.html la pide con el mismo ?v; dentro de los 40 KB', () => {
-  assert.match(SRC, /\* Versión: 2\.0\.0 /);
-  assert.match(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /src="js\/wv-objectives-dashboard\.js\?v=2\.0\.0"/);
+test('versión 2.1.0 y index.html la pide con el mismo ?v; dentro de los 40 KB', () => {
+  assert.match(SRC, /\* Versión: 2\.1\.0 /);
+  assert.match(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /src="js\/wv-objectives-dashboard\.js\?v=2\.1\.0"/);
   assert.ok(Buffer.byteLength(SRC) <= 40 * 1024);
 });
 
@@ -214,6 +214,28 @@ test('sin cuentas lo dice y ofrece reintentar; todas al día; sin objetivos', as
   assert.match(x.panel.innerHTML, /Todas las cuentas tienen todo reclamado esta semana\./);
   const { P } = load();
   assert.equal(P.matrixHTML([], []), '<p class="wvd-empty">Ninguna cuenta tiene objetivos semanales todavía.</p>');
+});
+
+// BL-106 P1a (idea de Shiruna, su BL-063): en el celular, una tarjeta por cuenta en vez de la tabla.
+test('celular: una tarjeta por cuenta con sus objetivos; la tabla queda para escritorio (BL-106 P1a)', () => {
+  const { P } = load();
+  const A = [
+    { name: 'Gato.1234', tag: 'main', objectives: P.normalizeObjectives(WEEK.K1) },
+    { name: 'Alter.5678', tag: 'alter', objectives: P.normalizeObjectives(WEEK.K2) },
+    { name: '<b>Rota</b>', error: '403', objectives: [] }
+  ];
+  const objs = P.mergeObjectives(A);
+  const h = P.matrixHTML(A, objs);
+  assert.match(h, /^<div class="wvd-matrix"><div class="wvd-wrap"><table/);
+  assert.match(h, /<\/table><\/div><div class="wvd-cards">.*<\/div><\/div>$/);
+  const c = P.cardsHTML(A, objs);
+  assert.equal((c.match(/<article class="wvd-card/g) || []).length, 3);
+  assert.match(c, /<span class="wvd-card-name"><span>Alter\.5678<\/span><small>alter<\/small><\/span><span class="wvd-card-tot">0 \/ 3 · <b class="wvd-gold">1 listo<\/b><\/span>/);
+  assert.match(c, /<li class="wvd-card-row wvd-card-row--run"><i class="wvd-mini" aria-hidden="true"><i style="width:33%"><\/i><\/i><span class="wvd-card-title">Capturá una torre<span class="wvd-sr"> · En curso<\/span><\/span><span class="wvd-card-prog">1 \/ 3<\/span>/);
+  assert.match(c, /<article class="wvd-card wvd-card--err">.*&lt;b&gt;Rota&lt;\/b&gt;.*<p class="wvd-warn">No se pudo leer<\/p><\/article>/);
+  assert.doesNotMatch(c, /<b>Rota<\/b>/);
+  assert.match(P.CSS, /\.wvd-cards\{display:none\}/, 'en escritorio no se ven');
+  assert.match(P.CSS, /@media \(max-width:900px\)\{[^\n]*\n[^\n]*\.wvd-wrap\{display:none\}\.wvd-cards\{display:block\}\}/, 'en el celular, tarjetas en vez de tabla');
 });
 
 test('reglas: escapa nombres; sin endpoints nuevos; la única lectura cruda es la tolerada de gw2_keys; celular', () => {

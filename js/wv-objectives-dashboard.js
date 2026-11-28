@@ -1,7 +1,10 @@
 /*!
  * js/wv-objectives-dashboard.js — Cámara del Brujo: Todas las cuentas → Objetivos semanales (BL-064, CAM-4)
  * Proyecto: Bóveda del Gato Negro
- * Versión: 2.0.0 (2026-10-24)
+ * Versión: 2.1.0 (2026-11-28)
+ *
+ * 2.1.0 (BL-106 P1a, idea de Shiruna, su BL-063): en pantallas angostas (≤ 900 px) la matriz se ve
+ *   como una tarjeta por cuenta (objetivos con estado, progreso y AA); en escritorio sigue la tabla.
  *
  * Matriz de objetivos semanales de todas las cuentas: filas = cuentas, columnas =
  * objetivos, celdas = estado. API de siempre para router.js y wv-view.js:
@@ -21,7 +24,7 @@
 (function (root) {
   'use strict';
 
-  var VERSION = '2.0.0';
+  var VERSION = '2.1.0';
   var LOG = '[WV-ObjDashboard]';
   var MAX_PARALLEL = 3;
   var MODE_LABEL = { pve: 'PvE', pvp: 'PvP', wvw: 'WvW' };
@@ -200,10 +203,37 @@
     return '<td class="wvd-c wvd-c--' + st + '" title="' + esc(lbl) + '">' + mark + '<span class="wvd-sr">' + esc(lbl) + '</span></td>';
   }
 
+  // Celular (BL-106 P1a): una tarjeta por cuenta con la misma información que su fila de la tabla.
+  function cardsHTML(rows, objectives) {
+    var h = ['<div class="wvd-cards">'];
+    (rows || []).forEach(function (a) {
+      var s = accountSummary(a, objectives);
+      h.push('<article class="wvd-card' + (a.error ? ' wvd-card--err' : '') + '"><header class="wvd-card-h">' +
+        '<img src="' + esc(accountIcon(a.tag, a.token)) + '" alt="" width="24" height="24" loading="lazy">' +
+        '<span class="wvd-card-name"><span>' + esc(a.name) + '</span>' + (TAG_LABEL[a.tag] ? '<small>' + TAG_LABEL[a.tag] + '</small>' : '') + '</span>' +
+        '<span class="wvd-card-tot">' + (a.error ? '—' : s.claimed + ' / ' + s.total + (s.ready ? ' · <b class="wvd-gold">' + s.ready + (s.ready === 1 ? ' listo' : ' listos') + '</b>' : '')) + '</span></header>');
+      if (a.error) { h.push('<p class="wvd-warn">No se pudo leer</p></article>'); return; }
+      h.push('<ul class="wvd-card-obj">');
+      (objectives || []).forEach(function (o) {
+        var c = cellOf(a, o), st = statusOf(c);
+        var prog = st === 'nodata' ? '—' : (c.total ? c.progress + ' / ' + c.total : String(c.progress));
+        var mark = st === 'run'
+          ? '<i class="wvd-mini" aria-hidden="true"><i style="width:' + c.pct + '%"></i></i>'
+          : '<i class="wvd-dot wvd-dot--' + st + '" aria-hidden="true"></i>';
+        h.push('<li class="wvd-card-row wvd-card-row--' + st + '">' + mark +
+          '<span class="wvd-card-title">' + esc(o.title) + '<span class="wvd-sr"> · ' + STATUS_TXT[st] + '</span></span>' +
+          '<span class="wvd-card-prog">' + esc(prog) + '</span>' + (o.acclaim ? '<span class="wvd-oa">' + aa(o.acclaim) + '</span>' : '<span></span>') + '</li>');
+      });
+      h.push('</ul></article>');
+    });
+    h.push('</div>');
+    return h.join('');
+  }
+
   function matrixHTML(rows, objectives) {
     if (!objectives.length) return '<p class="wvd-empty">Ninguna cuenta tiene objetivos semanales todavía.</p>';
     if (!rows.length) return '<p class="wvd-empty">Todas las cuentas tienen todo reclamado esta semana.</p>';
-    var h = ['<div class="wvd-wrap"><table class="wvd-t"><caption class="wvd-sr">Objetivos semanales de todas las cuentas</caption><thead><tr><th scope="col" class="wvd-acc">Cuenta</th>'];
+    var h = ['<div class="wvd-matrix"><div class="wvd-wrap"><table class="wvd-t"><caption class="wvd-sr">Objetivos semanales de todas las cuentas</caption><thead><tr><th scope="col" class="wvd-acc">Cuenta</th>'];
     objectives.forEach(function (o) {
       h.push('<th scope="col" title="' + esc(o.title) + '"><span class="wvd-md wvd-md--' + o.mode + '">' + MODE_LABEL[o.mode] + '</span>' +
         '<span class="wvd-ot">' + esc(o.title) + '</span>' + (o.acclaim ? '<span class="wvd-oa">' + aa(o.acclaim) + '</span>' : '') + '</th>');
@@ -224,7 +254,7 @@
       rows.forEach(function (a) { if (!a.error && statusOf(cellOf(a, o)) === 'ready') n++; });
       h.push('<td class="wvd-c">' + (n ? '<b class="wvd-gold">' + n + '</b>' : '<span aria-hidden="true">·</span><span class="wvd-sr">ninguno</span>') + '</td>');
     });
-    h.push('<td class="wvd-tot"></td></tr></tfoot></table></div>');
+    h.push('<td class="wvd-tot"></td></tr></tfoot></table></div>' + cardsHTML(rows, objectives) + '</div>');
     return h.join('');
   }
 
@@ -291,8 +321,18 @@
     '.wvd-t tbody tr:hover>*{background:var(--bg-2)}',
     '.wvd-t tfoot th,.wvd-t tfoot td{border-bottom:0;font-size:.8rem;color:var(--tx-2)}',
     '.wvd button:focus-visible,.wvd select:focus-visible{outline:2px solid var(--acc-1);outline-offset:2px}',
+    '.wvd-cards{display:none}',
+    '.wvd-card{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px;margin:0 0 10px}',
+    '.wvd-card--err{border-color:var(--color-amber,#F2B94B)}',
+    '.wvd-card-h{display:flex;align-items:center;gap:10px;margin:0 0 8px}.wvd-card-h img{border-radius:6px;flex-shrink:0}',
+    '.wvd-card-name{flex:1;min-width:0;display:flex;flex-direction:column}.wvd-card-name span{font-weight:600;color:var(--tx-1)}',
+    '.wvd-card-name small{font-size:.7rem;color:var(--tx-2)}.wvd-card-tot{font-size:.82rem;font-weight:600;color:var(--tx-1);white-space:nowrap}',
+    '.wvd-card-obj{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}',
+    '.wvd-card-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:8px;align-items:center;font-size:.84rem;min-height:32px}',
+    '.wvd-card-row>.wvd-dot{justify-self:center}.wvd-card-title{color:var(--tx-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+    '.wvd-card-prog{color:var(--tx-2);font-variant-numeric:tabular-nums;white-space:nowrap}.wvd-card-row .wvd-oa{margin:0;white-space:nowrap}',
     '@media (max-width:900px){.wvd-stats{grid-template-columns:1fr 1fr;gap:6px}.wvd-st{padding:8px 10px}.wvd-st b{font-size:1.05rem}',
-    '.wvd-chip{min-height:40px}.wvd-sync{margin-left:0;flex-basis:100%}.wvd-acc{min-width:128px}.wvd-t thead th{min-width:84px}}'
+    '.wvd-chip{min-height:40px}.wvd-sync{margin-left:0;flex-basis:100%}.wvd-acc{min-width:128px}.wvd-t thead th{min-width:84px}.wvd-wrap{display:none}.wvd-cards{display:block}}'
   ].join('\n');
 
   // ------------------------------------------------------------------ estado y DOM
@@ -428,7 +468,7 @@
     _debug: function () { return state; },
     _pure: { normalizeObjectives: normalizeObjectives, statusOf: statusOf, mergeObjectives: mergeObjectives, accountSummary: accountSummary,
       summarize: summarize, arrangeRows: arrangeRows, accountIcon: accountIcon, statsHTML: statsHTML, matrixHTML: matrixHTML,
-      cellHTML: cellHTML, viewHTML: viewHTML, CSS: CSS }
+      cardsHTML: cardsHTML, cellHTML: cellHTML, viewHTML: viewHTML, CSS: CSS }
   };
   if (root.console && root.console.info) root.console.info(LOG, 'ready v' + VERSION);
 })(typeof window !== 'undefined' ? window : this);
