@@ -1,0 +1,69 @@
+{
+ "id": "PATCH-501",
+ "summary": "BL-106 P1b (idea de Shiruna, su BL-065): botón «Copiar lo que falta» en Materiales totales de la Armería (una línea por material, «Nombre x Cantidad»). legendary-tree-ui 2.3.0; el tracker congelado no cambia.",
+ "files": [
+  {
+   "path": "js/legendary-tree-ui.js",
+   "base_sha": "0195a1be61fbaf772f7e1d8a01935df3514649b5",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": " * legendary-tree-ui.js — el árbol de fabricación y los totales, pintados.\n",
+     "text": " * v2.3.0 (2026-11-28) - BL-106 P1b (idea de Shiruna, su BL-065): «Copiar lo que falta» en\n *   Materiales totales copia al portapapeles una línea por material faltante («Nombre x Cantidad»),\n *   para pegar en el chat del juego o en una planilla. Escucha el clic acá: el tracker no cambia.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    '.lt-sum strong{color:var(--tx-1,#eceef5)}',\n",
+     "text": "    '.lt-sum strong{color:var(--tx-1,#eceef5)}',\n    '.lt-copy{display:flex;justify-content:flex-end;margin-top:10px}',\n    '.lt-copy button{padding:6px 14px;border-radius:999px;border:1px solid var(--bd-1,rgba(255,255,255,.14));background:var(--bg-2,rgba(255,255,255,.04));color:var(--tx-1,#eceef5);font:inherit;font-size:.8rem;cursor:pointer}',\n    '.lt-copy button:hover{border-color:var(--accent,#9b7bff)}.lt-copy button:focus-visible{outline:2px solid var(--accent,#9b7bff);outline-offset:2px}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var totF = 0, completos = 0;\n",
+     "text": "    var totF = 0, completos = 0, faltantes = [];\n"
+    },
+    {
+     "op": "insert_after",
+     "anchor": "      var nombre = (info && info.name) || r.name;\n",
+     "text": "      if (falta) faltantes.push(nombre + ' x ' + falta);\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "      '<span>Faltan <strong>' + _num(totF) + '</strong> unidades</span></div>';\n    return h + '</div>';\n",
+     "text": "      '<span>Faltan <strong>' + _num(totF) + '</strong> unidades</span></div>';\n    _faltantes = faltantes;\n    if (faltantes.length) {\n      h += '<div class=\"lt-copy\"><button type=\"button\" data-lt-copy-missing=\"1\" aria-live=\"polite\">Copiar lo que falta</button></div>';\n    }\n    return h + '</div>';\n"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  // 7. FICHA DE PANTALLA COMPLETA (v2.1.0)\n",
+     "text": "  // 6 bis. COPIAR LO QUE FALTA (BL-106 P1b, idea de Shiruna, su BL-065)\n  // ==========================================================================\n\n  // La lista sale de los últimos Materiales totales pintados (un renglón por\n  // material: «Nombre x Cantidad»), así el tracker no cambia.\n  var _faltantes = [];\n\n  function _copiar(texto) {\n    var nav = root.navigator;\n    if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function') {\n      return nav.clipboard.writeText(texto).then(function () { return true; }, function () { return _copiarViejo(texto); });\n    }\n    return Promise.resolve(_copiarViejo(texto));\n  }\n\n  function _copiarViejo(texto) {\n    if (typeof document === 'undefined' || !document.body || !document.createElement) return false;\n    var t = document.createElement('textarea');\n    t.value = texto;\n    t.setAttribute('readonly', '');\n    t.style.cssText = 'position:fixed;left:-9999px;top:0';\n    document.body.appendChild(t);\n    t.select();\n    var ok = false;\n    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }\n    document.body.removeChild(t);\n    return ok;\n  }\n\n  function copiarFaltantes() {\n    if (!_faltantes.length) return Promise.resolve(false);\n    return _copiar(_faltantes.join('\\n'));\n  }\n\n  // El botón confirma en su propio texto (lo anuncia por aria-live) y vuelve a los 2 s.\n  if (typeof document !== 'undefined' && document.addEventListener) {\n    document.addEventListener('click', function (e) {\n      var b = e.target && e.target.closest ? e.target.closest('[data-lt-copy-missing]') : null;\n      if (!b) return;\n      copiarFaltantes().then(function (ok) {\n        b.textContent = ok ? 'Copiado ✓' : 'No pude copiar';\n        setTimeout(function () { b.textContent = 'Copiar lo que falta'; }, 2000);\n      });\n    });\n  }\n\n  // ==========================================================================\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    renderIconStatusHTML: renderIconStatusHTML,\n",
+     "text": "    renderIconStatusHTML: renderIconStatusHTML,\n    copiarFaltantes: copiarFaltantes,\n    _faltantesTexto: function () { return _faltantes.join('\\n'); },\n"
+    }
+   ]
+  },
+  {
+   "path": "tests/legendary-tree-ui.test.cjs",
+   "base_sha": "4da2f293b2b4be5953aa6f5006d916a3c6a7f13c",
+   "ops": [
+    {
+     "op": "insert_after",
+     "anchor": "  assert.match(f, /role=\"status\"/);\n});\n",
+     "text": "\n// ---- Copiar lo que falta (BL-106 P1b, idea de Shiruna, su BL-065) ------------\ntest('totales: «Copiar lo que falta» arma una línea por material faltante; sin faltantes no hay botón', async () => {\n  const h = UI.renderTotalsHTML(ejemplo(), { 21: 3, 31: 100 }, { esc, de });\n  assert.match(h, /<div class=\"lt-copy\"><button type=\"button\" data-lt-copy-missing=\"1\" aria-live=\"polite\">Copiar lo que falta<\\/button><\\/div>/);\n  assert.equal(UI._faltantesTexto(), 'Lingote de mithril x 150\\nPegote de ectoplasma x 2400');\n  const todo = UI.renderTotalsHTML(ejemplo(), { 21: 1, 31: 250, 32: 2400 }, { esc });\n  assert.doesNotMatch(todo, /data-lt-copy-missing/);\n  assert.equal(UI._faltantesTexto(), '');\n  assert.equal(await UI.copiarFaltantes(), false, 'sin faltantes no copia nada');\n  assert.doesNotMatch(h, /class=\"lt-back\" data-lt-copy/, 'no usa la clase de Volver');\n  assert.match(UI.CSS, /\\.lt-copy button:focus-visible\\{outline:2px solid/);\n});\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "b71c57b8cc809fc439e8193c6d2792eb81ee17d1",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "legendary-tree-ui.js?v=2.2.0",
+     "text": "legendary-tree-ui.js?v=2.3.0"
+    }
+   ]
+  }
+ ]
+}
