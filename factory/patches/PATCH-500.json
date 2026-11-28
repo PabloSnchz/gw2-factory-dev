@@ -1,0 +1,90 @@
+{
+ "id": "PATCH-500",
+ "summary": "BL-106 P1a (idea de Shiruna, su BL-063): en el celular los objetivos semanales de todas las cuentas se ven como una tarjeta por cuenta; en escritorio sigue la tabla. wv-objectives-dashboard 2.1.0.",
+ "files": [
+  {
+   "path": "js/wv-objectives-dashboard.js",
+   "base_sha": "2899f0c1ced1ac15e8df2e3b1fdbce0e8c792ee7",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": " * Versión: 2.0.0 (2026-10-24)\n",
+     "text": " * Versión: 2.1.0 (2026-11-28)\n *\n * 2.1.0 (BL-106 P1a, idea de Shiruna, su BL-063): en pantallas angostas (≤ 900 px) la matriz se ve\n *   como una tarjeta por cuenta (objetivos con estado, progreso y AA); en escritorio sigue la tabla.\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "var VERSION = '2.0.0';",
+     "text": "var VERSION = '2.1.0';"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "  function matrixHTML(rows, objectives) {\n",
+     "text": "  // Celular (BL-106 P1a): una tarjeta por cuenta con la misma información que su fila de la tabla.\n  function cardsHTML(rows, objectives) {\n    var h = ['<div class=\"wvd-cards\">'];\n    (rows || []).forEach(function (a) {\n      var s = accountSummary(a, objectives);\n      h.push('<article class=\"wvd-card' + (a.error ? ' wvd-card--err' : '') + '\"><header class=\"wvd-card-h\">' +\n        '<img src=\"' + esc(accountIcon(a.tag, a.token)) + '\" alt=\"\" width=\"24\" height=\"24\" loading=\"lazy\">' +\n        '<span class=\"wvd-card-name\"><span>' + esc(a.name) + '</span>' + (TAG_LABEL[a.tag] ? '<small>' + TAG_LABEL[a.tag] + '</small>' : '') + '</span>' +\n        '<span class=\"wvd-card-tot\">' + (a.error ? '—' : s.claimed + ' / ' + s.total + (s.ready ? ' · <b class=\"wvd-gold\">' + s.ready + (s.ready === 1 ? ' listo' : ' listos') + '</b>' : '')) + '</span></header>');\n      if (a.error) { h.push('<p class=\"wvd-warn\">No se pudo leer</p></article>'); return; }\n      h.push('<ul class=\"wvd-card-obj\">');\n      (objectives || []).forEach(function (o) {\n        var c = cellOf(a, o), st = statusOf(c);\n        var prog = st === 'nodata' ? '—' : (c.total ? c.progress + ' / ' + c.total : String(c.progress));\n        var mark = st === 'run'\n          ? '<i class=\"wvd-mini\" aria-hidden=\"true\"><i style=\"width:' + c.pct + '%\"></i></i>'\n          : '<i class=\"wvd-dot wvd-dot--' + st + '\" aria-hidden=\"true\"></i>';\n        h.push('<li class=\"wvd-card-row wvd-card-row--' + st + '\">' + mark +\n          '<span class=\"wvd-card-title\">' + esc(o.title) + '<span class=\"wvd-sr\"> · ' + STATUS_TXT[st] + '</span></span>' +\n          '<span class=\"wvd-card-prog\">' + esc(prog) + '</span>' + (o.acclaim ? '<span class=\"wvd-oa\">' + aa(o.acclaim) + '</span>' : '<span></span>') + '</li>');\n      });\n      h.push('</ul></article>');\n    });\n    h.push('</div>');\n    return h.join('');\n  }\n\n"
+    },
+    {
+     "op": "replace",
+     "anchor": "    var h = ['<div class=\"wvd-wrap\"><table",
+     "text": "    var h = ['<div class=\"wvd-matrix\"><div class=\"wvd-wrap\"><table"
+    },
+    {
+     "op": "replace",
+     "anchor": "    h.push('<td class=\"wvd-tot\"></td></tr></tfoot></table></div>');",
+     "text": "    h.push('<td class=\"wvd-tot\"></td></tr></tfoot></table></div>' + cardsHTML(rows, objectives) + '</div>');"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "    '@media (max-width:900px){.wvd-stats",
+     "text": "    '.wvd-cards{display:none}',\n    '.wvd-card{border:1px solid var(--bd-1);border-radius:12px;background:var(--bg-1);padding:10px 12px;margin:0 0 10px}',\n    '.wvd-card--err{border-color:var(--color-amber,#F2B94B)}',\n    '.wvd-card-h{display:flex;align-items:center;gap:10px;margin:0 0 8px}.wvd-card-h img{border-radius:6px;flex-shrink:0}',\n    '.wvd-card-name{flex:1;min-width:0;display:flex;flex-direction:column}.wvd-card-name span{font-weight:600;color:var(--tx-1)}',\n    '.wvd-card-name small{font-size:.7rem;color:var(--tx-2)}.wvd-card-tot{font-size:.82rem;font-weight:600;color:var(--tx-1);white-space:nowrap}',\n    '.wvd-card-obj{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}',\n    '.wvd-card-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto auto;gap:8px;align-items:center;font-size:.84rem;min-height:32px}',\n    '.wvd-card-row>.wvd-dot{justify-self:center}.wvd-card-title{color:var(--tx-1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',\n    '.wvd-card-prog{color:var(--tx-2);font-variant-numeric:tabular-nums;white-space:nowrap}.wvd-card-row .wvd-oa{margin:0;white-space:nowrap}',\n"
+    },
+    {
+     "op": "replace",
+     "anchor": ".wvd-t thead th{min-width:84px}}'",
+     "text": ".wvd-t thead th{min-width:84px}.wvd-wrap{display:none}.wvd-cards{display:block}}'"
+    },
+    {
+     "op": "replace",
+     "anchor": "      cellHTML: cellHTML, viewHTML: viewHTML, CSS: CSS }",
+     "text": "      cardsHTML: cardsHTML, cellHTML: cellHTML, viewHTML: viewHTML, CSS: CSS }"
+    }
+   ]
+  },
+  {
+   "path": "tests/wv-objectives-dashboard.test.cjs",
+   "base_sha": "06e83d576a5919742073c3a9b3120192918973f4",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "test('versión 2.0.0 y index.html la pide con el mismo ?v; dentro de los 40 KB', () => {\n  assert.match(SRC, /\\* Versión: 2\\.0\\.0 /);\n  assert.match(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /src=\"js\\/wv-objectives-dashboard\\.js\\?v=2\\.0\\.0\"/);",
+     "text": "test('versión 2.1.0 y index.html la pide con el mismo ?v; dentro de los 40 KB', () => {\n  assert.match(SRC, /\\* Versión: 2\\.1\\.0 /);\n  assert.match(fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8'), /src=\"js\\/wv-objectives-dashboard\\.js\\?v=2\\.1\\.0\"/);"
+    },
+    {
+     "op": "insert_before",
+     "anchor": "test('reglas: escapa nombres; sin endpoints nuevos;",
+     "text": "// BL-106 P1a (idea de Shiruna, su BL-063): en el celular, una tarjeta por cuenta en vez de la tabla.\ntest('celular: una tarjeta por cuenta con sus objetivos; la tabla queda para escritorio (BL-106 P1a)', () => {\n  const { P } = load();\n  const A = [\n    { name: 'Gato.1234', tag: 'main', objectives: P.normalizeObjectives(WEEK.K1) },\n    { name: 'Alter.5678', tag: 'alter', objectives: P.normalizeObjectives(WEEK.K2) },\n    { name: '<b>Rota</b>', error: '403', objectives: [] }\n  ];\n  const objs = P.mergeObjectives(A);\n  const h = P.matrixHTML(A, objs);\n  assert.match(h, /^<div class=\"wvd-matrix\"><div class=\"wvd-wrap\"><table/);\n  assert.match(h, /<\\/table><\\/div><div class=\"wvd-cards\">.*<\\/div><\\/div>$/);\n  const c = P.cardsHTML(A, objs);\n  assert.equal((c.match(/<article class=\"wvd-card/g) || []).length, 3);\n  assert.match(c, /<span class=\"wvd-card-name\"><span>Alter\\.5678<\\/span><small>alter<\\/small><\\/span><span class=\"wvd-card-tot\">0 \\/ 3 · <b class=\"wvd-gold\">1 listo<\\/b><\\/span>/);\n  assert.match(c, /<li class=\"wvd-card-row wvd-card-row--run\"><i class=\"wvd-mini\" aria-hidden=\"true\"><i style=\"width:33%\"><\\/i><\\/i><span class=\"wvd-card-title\">Capturá una torre<span class=\"wvd-sr\"> · En curso<\\/span><\\/span><span class=\"wvd-card-prog\">1 \\/ 3<\\/span>/);\n  assert.match(c, /<article class=\"wvd-card wvd-card--err\">.*&lt;b&gt;Rota&lt;\\/b&gt;.*<p class=\"wvd-warn\">No se pudo leer<\\/p><\\/article>/);\n  assert.doesNotMatch(c, /<b>Rota<\\/b>/);\n  assert.match(P.CSS, /\\.wvd-cards\\{display:none\\}/, 'en escritorio no se ven');\n  assert.match(P.CSS, /@media \\(max-width:900px\\)\\{[^\\n]*\\n[^\\n]*\\.wvd-wrap\\{display:none\\}\\.wvd-cards\\{display:block\\}\\}/, 'en el celular, tarjetas en vez de tabla');\n});\n\n"
+    }
+   ]
+  },
+  {
+   "path": "index.html",
+   "base_sha": "411ec7586413f6ca6eb1fa12ac41afa901b1a7ff",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "wv-objectives-dashboard.js?v=2.0.0",
+     "text": "wv-objectives-dashboard.js?v=2.1.0"
+    }
+   ]
+  },
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "d791091031b65caec72c0fbaf2ff24881c530f96",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: ESPERANDO_VALIDACIÓN\nTarea actual: ",
+     "text": "Estado: EN_CURSO\nTarea actual: BL-106 «Traer lo bueno de Shiruna», lote P1 (Pablo dio el OK el 2026-11-28): P1a tarjetas por cuenta en Objetivos semanales (PATCH-500, su BL-063) → P1b «Copiar lo que falta» en la Armería (su BL-065) → P1c resumen de la cola de crafteo (su BL-064) → P1d marcar a mano «Hecho» en Metas (su BL-072). Descarto BL-068 (repite lo que ya dice la línea de AA de la Tienda) y BL-070 (mi grilla de la Armería ya se adapta: auto-fill 210 px y 1 columna bajo 560 px). meta.js y render-catologo.js están congelados (DEC-035): lo nuevo va en archivos aparte o compensando bytes, nunca subiendo la base como hizo ella. Tarea anterior: "
+    }
+   ]
+  }
+ ]
+}
