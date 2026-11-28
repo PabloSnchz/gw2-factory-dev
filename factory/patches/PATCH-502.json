@@ -1,0 +1,17 @@
+{
+ "id": "PATCH-502",
+ "summary": "status: BL-106 P1a (PATCH-500) y P1b (PATCH-501) hechos con la suite verde; esperan la validación de Pablo en DEV antes de P1c y P1d.",
+ "files": [
+  {
+   "path": "ai-memory/status.md",
+   "base_sha": "0e9cf4d3d18d78a12e0f45aad878e34d07c8ebc3",
+   "ops": [
+    {
+     "op": "replace",
+     "anchor": "Estado: EN_CURSO\nTarea actual: BL-106 «Traer lo bueno de Shiruna», lote P1 (Pablo dio el OK el 2026-11-28): ",
+     "text": "Estado: ESPERANDO_VALIDACIÓN\nTarea actual: BL-106 «Traer lo bueno de Shiruna», lote P1 (Pablo dio el OK el 2026-11-28). HECHOS P1a (PATCH-500: wv-objectives-dashboard 2.1.0, tarjetas por cuenta en el celular) y P1b (PATCH-501: legendary-tree-ui 2.3.0, «Copiar lo que falta»), suite verde. Validar en DEV: Cámara del Brujo → Todas las cuentas → Objetivos semanales en el celular; Armería → una legendaria → Materiales totales → «Copiar lo que falta». Después: P1c y P1d. Plan: "
+    }
+   ]
+  }
+ ]
+}
