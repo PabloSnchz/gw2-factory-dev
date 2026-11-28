@@ -188,3 +188,16 @@ test('pantalla: aviso de íconos — nada si están, "cargando" mientras llegan,
   assert.match(f, /<button type="button" data-lt-icons-retry="1">Reintentar<\/button>/);
   assert.match(f, /role="status"/);
 });
+
+// ---- Copiar lo que falta (BL-106 P1b, idea de Shiruna, su BL-065) ------------
+test('totales: «Copiar lo que falta» arma una línea por material faltante; sin faltantes no hay botón', async () => {
+  const h = UI.renderTotalsHTML(ejemplo(), { 21: 3, 31: 100 }, { esc, de });
+  assert.match(h, /<div class="lt-copy"><button type="button" data-lt-copy-missing="1" aria-live="polite">Copiar lo que falta<\/button><\/div>/);
+  assert.equal(UI._faltantesTexto(), 'Lingote de mithril x 150\nPegote de ectoplasma x 2400');
+  const todo = UI.renderTotalsHTML(ejemplo(), { 21: 1, 31: 250, 32: 2400 }, { esc });
+  assert.doesNotMatch(todo, /data-lt-copy-missing/);
+  assert.equal(UI._faltantesTexto(), '');
+  assert.equal(await UI.copiarFaltantes(), false, 'sin faltantes no copia nada');
+  assert.doesNotMatch(h, /class="lt-back" data-lt-copy/, 'no usa la clase de Volver');
+  assert.match(UI.CSS, /\.lt-copy button:focus-visible\{outline:2px solid/);
+});

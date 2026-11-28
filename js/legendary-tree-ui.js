@@ -1,5 +1,8 @@
 /**
  * legendary-tree-ui.js — el árbol de fabricación y los totales, pintados.
+ * v2.3.0 (2026-11-28) - BL-106 P1b (idea de Shiruna, su BL-065): «Copiar lo que falta» en
+ *   Materiales totales copia al portapapeles una línea por material faltante («Nombre x Cantidad»),
+ *   para pegar en el chat del juego o en una planilla. Escucha el clic acá: el tracker no cambia.
  * v2.2.0 (2026-10-22) - La legendaria como PANTALLA dentro de la Armería
  *   (BL-049, pedido de Pablo: la ficha en diálogo todavía quedaba chica).
  *   Estilos `.lt-ficha`: botón "Volver", cabecera grande con ícono de 80 px,
@@ -168,6 +171,9 @@
     '.lt-miss{color:var(--color-red,#e0855c);font-weight:600}',
     '.lt-sum{display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:10px;font-size:.78rem;color:var(--tx-3,#8a91a8)}',
     '.lt-sum strong{color:var(--tx-1,#eceef5)}',
+    '.lt-copy{display:flex;justify-content:flex-end;margin-top:10px}',
+    '.lt-copy button{padding:6px 14px;border-radius:999px;border:1px solid var(--bd-1,rgba(255,255,255,.14));background:var(--bg-2,rgba(255,255,255,.04));color:var(--tx-1,#eceef5);font:inherit;font-size:.8rem;cursor:pointer}',
+    '.lt-copy button:hover{border-color:var(--accent,#9b7bff)}.lt-copy button:focus-visible{outline:2px solid var(--accent,#9b7bff);outline-offset:2px}',
     // ---- Ficha de pantalla completa (v2.1.0) ----
     '.lt-hero{display:flex;align-items:center;gap:16px;min-width:0}',
     '.lt-hero__ic{width:64px;height:64px;flex-shrink:0;border-radius:12px;box-shadow:0 0 0 2px rgba(151,78,255,.55),0 0 22px rgba(151,78,255,.35)}',
@@ -396,7 +402,7 @@
       '<th scope="col">Material</th><th scope="col">Tengo</th><th scope="col">Necesito</th><th scope="col">Falta</th>' +
       '</tr></thead><tbody>';
 
-    var totF = 0, completos = 0;
+    var totF = 0, completos = 0, faltantes = [];
     rows.forEach(function (r) {
       var tengo = Number(owned[r.itemId]) || 0;
       var necesito = Number(r.need) || 0;
@@ -406,6 +412,7 @@
       if (!falta) completos++;
       var info = opts.de ? opts.de(r.itemId) : null;
       var nombre = (info && info.name) || r.name;
+      if (falta) faltantes.push(nombre + ' x ' + falta);
       var cls = !falta ? 'lt-done' : (tengo > 0 ? 'lt-part' : 'lt-miss');
       h += '<tr><td title="' + esc(nombre) + '"><div class="lt-mat">' +
         (info && info.icon
@@ -422,7 +429,58 @@
     h += '</tbody></table>';
     h += '<div class="lt-sum"><span>Completo: <strong>' + completos + '</strong> de ' + rows.length + ' materiales</span>' +
       '<span>Faltan <strong>' + _num(totF) + '</strong> unidades</span></div>';
+    _faltantes = faltantes;
+    if (faltantes.length) {
+      h += '<div class="lt-copy"><button type="button" data-lt-copy-missing="1" aria-live="polite">Copiar lo que falta</button></div>';
+    }
     return h + '</div>';
+  }
+
+  // ==========================================================================
+  // 6 bis. COPIAR LO QUE FALTA (BL-106 P1b, idea de Shiruna, su BL-065)
+  // ==========================================================================
+
+  // La lista sale de los últimos Materiales totales pintados (un renglón por
+  // material: «Nombre x Cantidad»), así el tracker no cambia.
+  var _faltantes = [];
+
+  function _copiar(texto) {
+    var nav = root.navigator;
+    if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function') {
+      return nav.clipboard.writeText(texto).then(function () { return true; }, function () { return _copiarViejo(texto); });
+    }
+    return Promise.resolve(_copiarViejo(texto));
+  }
+
+  function _copiarViejo(texto) {
+    if (typeof document === 'undefined' || !document.body || !document.createElement) return false;
+    var t = document.createElement('textarea');
+    t.value = texto;
+    t.setAttribute('readonly', '');
+    t.style.cssText = 'position:fixed;left:-9999px;top:0';
+    document.body.appendChild(t);
+    t.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(t);
+    return ok;
+  }
+
+  function copiarFaltantes() {
+    if (!_faltantes.length) return Promise.resolve(false);
+    return _copiar(_faltantes.join('\n'));
+  }
+
+  // El botón confirma en su propio texto (lo anuncia por aria-live) y vuelve a los 2 s.
+  if (typeof document !== 'undefined' && document.addEventListener) {
+    document.addEventListener('click', function (e) {
+      var b = e.target && e.target.closest ? e.target.closest('[data-lt-copy-missing]') : null;
+      if (!b) return;
+      copiarFaltantes().then(function (ok) {
+        b.textContent = ok ? 'Copiado ✓' : 'No pude copiar';
+        setTimeout(function () { b.textContent = 'Copiar lo que falta'; }, 2000);
+      });
+    });
   }
 
   // ==========================================================================
@@ -542,6 +600,8 @@
     renderHeroHTML: renderHeroHTML,
     renderSheetHTML: renderSheetHTML,
     renderIconStatusHTML: renderIconStatusHTML,
+    copiarFaltantes: copiarFaltantes,
+    _faltantesTexto: function () { return _faltantes.join('\n'); },
     NIVEL_ABIERTO_POR_DEFECTO: NIVEL_ABIERTO_POR_DEFECTO,
     _resetCache: _resetCache,
     _num: _num,
